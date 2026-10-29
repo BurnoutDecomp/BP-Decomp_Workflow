@@ -1,0 +1,989 @@
+{
+  "schema": 1,
+  "reviewer": "Root Codex GPT-6.1 Sol",
+  "utc": "2026-10-29T20:53:57.661089+00:00",
+  "verdict": "pass_thirty_unique_bounded_site_dispositions",
+  "accepted_unique_new_sites": 30,
+  "accepted": {
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0051": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Layer 0 density",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0051",
+        "alias": "E51",
+        "caption": "Layer 0 density",
+        "lookup_path": "Environment/Clouds/Layer 0 density",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 276, \"Clouds\", \"Layer 0 density\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mafCloudLayerDensity[0], \"Clouds\", \"Layer 0 density\", 0.0f, 1.0f, 0.02f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnGraphics::Im3dSkyDome::SetConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0055": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Layer 0 opacity",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0055",
+        "alias": "E55",
+        "caption": "Layer 0 opacity",
+        "lookup_path": "Environment/Clouds/Layer 0 opacity",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 292, \"Clouds\", \"Layer 0 opacity\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mafCloudLayerOpacity[0], \"Clouds\", \"Layer 0 opacity\", 0.0f, 1.0f, 0.02f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnGraphics::Im3dSkyDome::SetConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0057": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Layer 0 dark R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0057",
+        "alias": "E57",
+        "caption": "Layer 0 dark R",
+        "lookup_path": "Environment/Clouds/Layer 0 dark R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 300, \"Clouds\", \"Layer 0 dark R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourR, \"Clouds\", \"Layer 0 dark R\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0058": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Layer 0 dark G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0058",
+        "alias": "E58",
+        "caption": "Layer 0 dark G",
+        "lookup_path": "Environment/Clouds/Layer 0 dark G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 304, \"Clouds\", \"Layer 0 dark G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourG, \"Clouds\", \"Layer 0 dark G\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0059": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Layer 0 dark B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0059",
+        "alias": "E59",
+        "caption": "Layer 0 dark B",
+        "lookup_path": "Environment/Clouds/Layer 0 dark B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 308, \"Clouds\", \"Layer 0 dark B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourB, \"Clouds\", \"Layer 0 dark B\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0066": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Keyfill colour R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0066",
+        "alias": "E66",
+        "caption": "Keyfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 176, \"Irradiance rig\", \"Keyfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_r, \"Irradiance rig\", \"Keyfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0067": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Keyfill colour G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0067",
+        "alias": "E67",
+        "caption": "Keyfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 180, \"Irradiance rig\", \"Keyfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_g, \"Irradiance rig\", \"Keyfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_remainder"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0068": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Keyfill colour B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0068",
+        "alias": "E68",
+        "caption": "Keyfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 184, \"Irradiance rig\", \"Keyfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_b, \"Irradiance rig\", \"Keyfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0072": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Leftfill colour R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0072",
+        "alias": "E72",
+        "caption": "Leftfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 212, \"Irradiance rig\", \"Leftfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_r, \"Irradiance rig\", \"Leftfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0073": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Leftfill colour G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0073",
+        "alias": "E73",
+        "caption": "Leftfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 216, \"Irradiance rig\", \"Leftfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_g, \"Irradiance rig\", \"Leftfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0074": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Leftfill colour B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0074",
+        "alias": "E74",
+        "caption": "Leftfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 220, \"Irradiance rig\", \"Leftfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_b, \"Irradiance rig\", \"Leftfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0075": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Rightfill colour R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0075",
+        "alias": "E75",
+        "caption": "Rightfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 200, \"Irradiance rig\", \"Rightfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_r, \"Irradiance rig\", \"Rightfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0076": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Rightfill colour G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0076",
+        "alias": "E76",
+        "caption": "Rightfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 204, \"Irradiance rig\", \"Rightfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_g, \"Irradiance rig\", \"Rightfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0077": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Rightfill colour B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0077",
+        "alias": "E77",
+        "caption": "Rightfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 208, \"Irradiance rig\", \"Rightfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_b, \"Irradiance rig\", \"Rightfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0078": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Upfill colour R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0078",
+        "alias": "E78",
+        "caption": "Upfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 224, \"Irradiance rig\", \"Upfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_r, \"Irradiance rig\", \"Upfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0079": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Upfill colour G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0079",
+        "alias": "E79",
+        "caption": "Upfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 228, \"Irradiance rig\", \"Upfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_g, \"Irradiance rig\", \"Upfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0080": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Upfill colour B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0080",
+        "alias": "E80",
+        "caption": "Upfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 232, \"Irradiance rig\", \"Upfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_b, \"Irradiance rig\", \"Upfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_finish"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0081": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Downfill colour R",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0081",
+        "alias": "E81",
+        "caption": "Downfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 236, \"Irradiance rig\", \"Downfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_r, \"Irradiance rig\", \"Downfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_last3"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0082": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Downfill colour G",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0082",
+        "alias": "E82",
+        "caption": "Downfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 240, \"Irradiance rig\", \"Downfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_g, \"Irradiance rig\", \"Downfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_last3"
+    },
+    "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0083": {
+      "state": "verified",
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim.",
+      "caption": "Downfill colour B",
+      "kind": "environment_scalar_PNR",
+      "source": {
+        "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+        "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+        "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+      },
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0083",
+        "alias": "E83",
+        "caption": "Downfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 244, \"Irradiance rig\", \"Downfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_b, \"Irradiance rig\", \"Downfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "evidence_case": "next_native_batch_20261029_last3"
+    },
+    "CgsResource::DebugComponent::InitWindows#0005": {
+      "state": "verified",
+      "scope": "Selected OpenWorldGr type list shows populated Summary groups and Detailed named rows/counts with nonzero memory totals. Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_003703.bmp",
+          "bb_004195.bmp",
+          "bb_008358.bmp"
+        ],
+        "observed_effect": "Selected OpenWorldGr type list shows populated Summary groups and Detailed named rows/counts with nonzero memory totals.",
+        "new_unique_credit": true,
+        "status": "verified",
+        "restore_observation": "Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\WINDOWS_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0004": {
+      "state": "verified",
+      "scope": "Selected OpenWorldGr histogram panel tail bins include nonzero counts; upper rows obscured by overlapping panels. Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_003703.bmp",
+          "bb_004195.bmp",
+          "bb_008358.bmp"
+        ],
+        "observed_effect": "Selected OpenWorldGr histogram panel tail bins include nonzero counts; upper rows obscured by overlapping panels.",
+        "new_unique_credit": true,
+        "status": "verified",
+        "restore_observation": "Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\WINDOWS_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0006": {
+      "state": "verified",
+      "scope": "Indexed Summary->Detailed->Raw changes; Summary-to-Detailed category/name change visible. Raw lane distinctions bounded by zero third totals/occluded headings. Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_003703.bmp",
+          "bb_004195.bmp",
+          "bb_004753.bmp",
+          "bb_005322.bmp",
+          "bb_008358.bmp"
+        ],
+        "observed_effect": "Indexed Summary->Detailed->Raw changes; Summary-to-Detailed category/name change visible. Raw lane distinctions bounded by zero third totals/occluded headings.",
+        "new_unique_credit": true,
+        "status": "verified",
+        "restore_observation": "Exact captured baseline restored at raw indices27713..27725; all Resource panels absent in bb_008149 and bb_008358."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\WINDOWS_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0015": {
+      "state": "verified",
+      "scope": "Original DumpStats callback produced1315-byte native Pool Stats table containing27 actual live pools, includingFonts/Sound/OpenWorldGr; copied/hash-verified and deleted under exact dump mutex. No control latch retained; original dump output removed only after hash match under mutex; source/normal files unchanged.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_003205.bmp",
+          "bb_003435.bmp"
+        ],
+        "observed_effect": "Original DumpStats callback produced1315-byte native Pool Stats table containing27 actual live pools, includingFonts/Sound/OpenWorldGr; copied/hash-verified and deleted under exact dump mutex.",
+        "dump_sha256": "f4efadff3aa104b0d41224449e2ea7ac5e5267c9c6b8914687844c02b1f2360f",
+        "dump_pool_count": 27,
+        "status": "verified",
+        "restore_observation": "No control latch retained; original dump output removed only after hash match under mutex; source/normal files unchanged."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0018": {
+      "state": "verified",
+      "scope": "ShowShareTRUE renders Share Test Results with4358440/44015224/0; FALSE removes the overlay. CapturedFALSE restoredFALSE; results absent in final frame.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "restore_observation": "CapturedFALSE restoredFALSE; results absent in final frame.",
+        "share_totals": [
+          4358440,
+          44015224,
+          0
+        ],
+        "observed_effect": "ShowShareTRUE renders Share Test Results with4358440/44015224/0; FALSE removes the overlay.",
+        "status": "verified",
+        "frame_names": [
+          "bb_003919.bmp",
+          "bb_005274.bmp",
+          "bb_006522.bmp"
+        ]
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "BrnResource::DebugComponent::OnActivate#0003": {
+      "state": "verified",
+      "scope": "Slots Free setter rejected by exact native read-only error at zero-based line18319; subsequent typed raw Used0/Free96 unchanged from fresh initialized context. Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_005702.bmp",
+          "bb_006121.bmp",
+          "bb_006522.bmp"
+        ],
+        "status": "verified",
+        "readonly_write_rejected": true,
+        "readonly_rejection_line_index": 18319,
+        "limitation": "Used baseline0 and SET0 equality alone is not rejection proof; explicit native error is the witness. Early preinitialization Free0 is not the fresh capacity context.",
+        "observed_effect": "Slots Free setter rejected by exact native read-only error at zero-based line18319; subsequent typed raw Used0/Free96 unchanged from fresh initialized context.",
+        "restore_observation": "Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+        "slots_used": 0,
+        "slots_free": 96
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0017": {
+      "state": "verified",
+      "scope": "Selector1 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts. Initial capturedFonts restoredFonts with ShowShareFALSE.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "share_totals": [
+          4358440,
+          44015224,
+          0
+        ],
+        "status": "verified",
+        "restored_selector_value": "Fonts",
+        "frame_names": [
+          "bb_003919.bmp",
+          "bb_004826.bmp",
+          "bb_006522.bmp"
+        ],
+        "observed_effect": "Selector1 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts.",
+        "initial_selector_value": "Fonts",
+        "counterfactual_share_totals": [
+          0,
+          0,
+          0
+        ],
+        "restore_observation": "Initial capturedFonts restoredFonts with ShowShareFALSE."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "BrnResource::DebugComponent::OnActivate#0001": {
+      "state": "verified",
+      "scope": "ShowHUDTRUE displays24 visible allocator rows with type/size/current/max columns; separateFALSE phase removesHUD. InitialTRUE restoredTRUE, so allocator table correctly visible again in final frame; no false final-off claim.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_003435.bmp",
+          "bb_005702.bmp",
+          "bb_006121.bmp",
+          "bb_006522.bmp"
+        ],
+        "initial_hud_value": "TRUE",
+        "status": "verified",
+        "restored_off": false,
+        "restored_to_baseline": true,
+        "observed_effect": "ShowHUDTRUE displays24 visible allocator rows with type/size/current/max columns; separateFALSE phase removesHUD.",
+        "restore_observation": "InitialTRUE restoredTRUE, so allocator table correctly visible again in final frame; no false final-off claim.",
+        "restored_hud_value": "TRUE",
+        "allocator_rows": 24,
+        "off_observed": true
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "BrnResource::DebugComponent::OnActivate#0002": {
+      "state": "verified",
+      "scope": "Slots Used setter rejected by exact native read-only error at zero-based line18318; subsequent typed raw Used0/Free96 unchanged from fresh initialized context. Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "frame_names": [
+          "bb_005702.bmp",
+          "bb_006121.bmp",
+          "bb_006522.bmp"
+        ],
+        "status": "verified",
+        "readonly_write_rejected": true,
+        "readonly_rejection_line_index": 18318,
+        "limitation": "Used baseline0 and SET0 equality alone is not rejection proof; explicit native error is the witness. Early preinitialization Free0 is not the fresh capacity context.",
+        "observed_effect": "Slots Used setter rejected by exact native read-only error at zero-based line18318; subsequent typed raw Used0/Free96 unchanged from fresh initialized context.",
+        "restore_observation": "Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+        "slots_used": 0,
+        "slots_free": 96
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    },
+    "CgsResource::DebugComponent::InitWindows#0016": {
+      "state": "verified",
+      "scope": "Selector0 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts. Initial capturedFonts restoredFonts with ShowShareFALSE.",
+      "kind": "resource_native_bounded",
+      "source": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+      "exe_sha256": "34dd9dad3c532fb06cc219709e6ebbd0a2b5b570757fc3ca25355e2cde2fbfcc",
+      "site_facts": {
+        "share_totals": [
+          4358440,
+          44015224,
+          0
+        ],
+        "status": "verified",
+        "restored_selector_value": "Fonts",
+        "frame_names": [
+          "bb_003919.bmp",
+          "bb_004374.bmp",
+          "bb_006522.bmp"
+        ],
+        "observed_effect": "Selector0 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts.",
+        "initial_selector_value": "Fonts",
+        "counterfactual_share_totals": [
+          0,
+          0,
+          0
+        ],
+        "restore_observation": "Initial capturedFonts restoredFonts with ShowShareFALSE."
+      },
+      "peer": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_v7_readonly_concrete_review_20261029\\STATS10_ALL_FRAMES_PEER_REVIEW.json"
+    }
+  },
+  "normal_build_changed": false,
+  "original_noops_added": 0,
+  "environment": {
+    "selected": 24,
+    "accepted": 20,
+    "pending": [
+      "0052",
+      "0053",
+      "0054",
+      "0056"
+    ],
+    "root_raw_review_sha256": "d8cdaa5012515f8b5b0cf92b68f804b2449f51c390f257bac2d0b0bf0d80ef3f",
+    "root_personally_viewed_all60_PNR_contact_tiles": true,
+    "peer_aggregate": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_result\\AGGREGATE_REVIEW.json",
+    "cohort": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_result\\COHORT_RESULT.json",
+    "cohort_sha256": "d99bb6eaaa52b5b815fdbdc84cabe9f31dc2287c2ca19def146741cd0fc52231",
+    "source32_to41_eight_original_consumer_blobs_identical": true
+  },
+  "resource": {
+    "new_unique": 10,
+    "prior_Heap_and_Bundle_excluded": true,
+    "root_personal_pixels": [
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_native30_credit_20261029\\resource_windows_ROOT_PIXEL_REVIEW.json",
+        "sha256": "9f04be38c37885dc2142f7da47dda2a58e7d1191b4d4ceadd0bd48cbda1434a0",
+        "frames": 20
+      },
+      {
+        "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\root_native30_credit_20261029\\resource_stats_allocator_ROOT_PIXEL_REVIEW.json",
+        "sha256": "9d0d3e3ff7e582ceb87b4306221b21b5669fb20d8321680210dee34ef8c13fdc",
+        "frames": 18
+      }
+    ],
+    "delivery": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_native_delivery_20261029_resume\\DELIVERY.json",
+    "delivery_sha256": "d053f4932ab5f68fef50730743c7b6f93ac7cf987251c20dabee40ae789b10f1",
+    "root_personally_viewed38_contact_tiles_and6_original_size_frames": true
+  },
+  "limits": [
+    "Every credited outcome is bounded to its exact recorded input/readback and consumer/scene; no full numeric-domain, hardware, all-menu or installed-normal equivalence claim.",
+    "Earlier aggregate failures, bad console-close witnesses, invalid2560image, D9Stats773asserts and all malformed/protocol attempts remain failed, not overwritten.",
+    "Resource new set excludes already-final Heap/Bundle and deferred Texture/Queue/PartialFixups sites.",
+    "Env layered-cloud52/54/56 remain pending; no original-noop inferred from absent pixels. Feather53 remains pending because natural1.1 baseline clamps to1.0 through original setter.",
+    "Native source32/private474 and private00830/34dd are explicitly distinct from installed source41/5d2.",
+    "No game configuration, save, language asset, normal runtime or unrelated WIP was modified for these decisions."
+  ]
+}

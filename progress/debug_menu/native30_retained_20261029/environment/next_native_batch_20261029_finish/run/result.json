@@ -1,0 +1,58 @@
+{
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\Case.ps1",
+  "asserts": 0,
+  "flow_exit": 0,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01",
+  "phase": "DRIVING",
+  "checks": [
+    {
+      "kind": "TerminalFlow",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "pass": true,
+      "name": "original strict flow completed and owned game exited"
+    },
+    {
+      "kind": "NewAsserts",
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "pass": true,
+      "name": "no new assertions"
+    },
+    {
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "pass": true,
+      "name": "no exceptions"
+    },
+    {
+      "kind": "Mark",
+      "detail": "final phase DRIVING, want DRIVING",
+      "pass": true,
+      "name": "normal title route reached DRIVING"
+    },
+    {
+      "kind": "Script",
+      "detail": "status=fail frames=35 phases=35 site_credit=0",
+      "pass": false,
+      "name": "exact selected restorable controls native P/N/R and cleanup complete; pixels require independent review"
+    }
+  ],
+  "provenance": {
+    "b5_head": "d85e2d5e2",
+    "exe_sha": "474ba5bb1a72",
+    "exe_size": 11701760,
+    "b5_dirty": 4,
+    "exe_mtime": "2026-10-29T10:12:42.4038115+01:00",
+    "exe_mtime_before_lock": "2026-10-29T10:12:42.4038115+01:00",
+    "exe_b5": "abbc9047",
+    "parent_head": "a0123c9c5"
+  },
+  "as_expected": false,
+  "slot": 62181,
+  "area": "debug-menu",
+  "case": "environment24_cloud_layers_irradiance_channels_62181",
+  "bug": "Twenty-four pending original cloud and irradiance controls need separate native consumer positive/negative/restore witnesses.",
+  "verdict": "FAIL",
+  "label": "Environment24 cohort unfinished13 controls; private source32; stationary PNR;43frame cap640x360;64MiB log; RootV8 normal41 guard and V5 concurrency",
+  "when": "2026-10-29T20:56:03.6054180+01:00",
+  "expected": "PASS"
+}

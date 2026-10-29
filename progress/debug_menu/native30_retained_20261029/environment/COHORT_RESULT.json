@@ -1,0 +1,3325 @@
+{
+  "status": "independently_reviewed_bounded_native_cohort_ready_for_Root_canonical_publication",
+  "candidate": {
+    "b5": "abbc9047d850a4665d959993012261c55205e5e5",
+    "workflow": "546872226e9b23f30ffb8b72b105378a66cba31e",
+    "exe_sha256": "474ba5bb1a72efe0f06ccf71aae98b1b332ca7399715af83da2fa4c4d2666a44"
+  },
+  "selected_controls": 24,
+  "unique_completed_PNR_controls": 23,
+  "proposed_verified": 20,
+  "pending": 4,
+  "original_noop": 0,
+  "sites": [
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0051",
+      "caption": "Layer 0 density",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0051",
+        "alias": "E51",
+        "caption": "Layer 0 density",
+        "lookup_path": "Environment/Clouds/Layer 0 density",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 276, \"Clouds\", \"Layer 0 density\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mafCloudLayerDensity[0], \"Clouds\", \"Layer 0 density\", 0.0f, 1.0f, 0.02f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnGraphics::Im3dSkyDome::SetConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "0.85",
+          "typed_native_triplet": {
+            "value_line": 48882,
+            "path": "Environment/Clouds/Layer 0 density",
+            "alias": "E51",
+            "ack_before": 48881,
+            "ack_after": 48883,
+            "value": "0.850"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0051_positive.cfg",
+          "phase_script_sha256": "275ef6d7ecfd58b6717a0721b68195bd4874783ec043ec15a4562bca069b8c85",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0051_positive",
+          "frame": {
+            "phase": "0051_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_013640.bmp",
+            "name": "bb_013640.bmp",
+            "bytes": 921654,
+            "sha256": "995a057c54e9b4cd0b81f31c4f5b913ef2e943c8ea01694488059eb2b3a9bfae",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 3,
+            "present": 13640,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=3 present=13640 file=bb_013640.bmp",
+            "ack_index": 50406,
+            "request_cursor": 50390,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "13640,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 9930 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 50329,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0.15",
+          "typed_native_triplet": {
+            "value_line": 50473,
+            "path": "Environment/Clouds/Layer 0 density",
+            "alias": "E51",
+            "ack_before": 50472,
+            "ack_after": 50474,
+            "value": "0.150"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0051_negative.cfg",
+          "phase_script_sha256": "45d4d912155c04785ee585ef562546cd6e934f540614ceebbe3e9bda64a0ef94",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0051_negative",
+          "frame": {
+            "phase": "0051_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_014026.bmp",
+            "name": "bb_014026.bmp",
+            "bytes": 921654,
+            "sha256": "d959314822b7e5c1a1f2a754571bcf3acb6ef5100cfc3b56e10f67c43d2d8903",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 4,
+            "present": 14026,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=4 present=14026 file=bb_014026.bmp",
+            "ack_index": 52207,
+            "request_cursor": 52194,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "14026,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 10290 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 51916,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "1.000",
+          "typed_native_triplet": {
+            "value_line": 52277,
+            "path": "Environment/Clouds/Layer 0 density",
+            "alias": "E51",
+            "ack_before": 52276,
+            "ack_after": 52278,
+            "value": "1.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0051_restore.cfg",
+          "phase_script_sha256": "965523e77571eb30c85a32c597f20b29b3d3e71d303e2e65fcda2481bd223a91",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0051_restore",
+          "frame": {
+            "phase": "0051_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_014356.bmp",
+            "name": "bb_014356.bmp",
+            "bytes": 921654,
+            "sha256": "8ac5071554d96ca7733f2c71179a72da2b0bfb8f912dcde4a884984079862cbb",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 5,
+            "present": 14356,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=5 present=14356 file=bb_014356.bmp",
+            "ack_index": 53736,
+            "request_cursor": 53714,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "14356,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 10650 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 53487,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0055",
+      "caption": "Layer 0 opacity",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0055",
+        "alias": "E55",
+        "caption": "Layer 0 opacity",
+        "lookup_path": "Environment/Clouds/Layer 0 opacity",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 292, \"Clouds\", \"Layer 0 opacity\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mafCloudLayerOpacity[0], \"Clouds\", \"Layer 0 opacity\", 0.0f, 1.0f, 0.02f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData pair -> GenerateShaderConstants -> BrnGraphics::Im3dSkyDome::SetConstants g_layerCloudiness/g_layerInvFeather/g_layerAlphas -> sky sampler pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "0.85",
+          "typed_native_triplet": {
+            "value_line": 64852,
+            "path": "Environment/Clouds/Layer 0 opacity",
+            "alias": "E55",
+            "ack_before": 64851,
+            "ack_after": 64853,
+            "value": "0.850"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0055_positive.cfg",
+          "phase_script_sha256": "7655f5b9c9b67f65a3060a67cfc77b0467c5920117fdff58689a3781e5db6be8",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0055_positive",
+          "frame": {
+            "phase": "0055_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_017238.bmp",
+            "name": "bb_017238.bmp",
+            "bytes": 921654,
+            "sha256": "5f4f71da7dbfa6126078c5cb9baff5ca3f4dc1fb928a40088281ede67afb8370",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 12,
+            "present": 17238,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=12 present=17238 file=bb_017238.bmp",
+            "ack_index": 66982,
+            "request_cursor": 66957,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "17238,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 13320 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 66848,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0.15",
+          "typed_native_triplet": {
+            "value_line": 67106,
+            "path": "Environment/Clouds/Layer 0 opacity",
+            "alias": "E55",
+            "ack_before": 67105,
+            "ack_after": 67107,
+            "value": "0.150"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0055_negative.cfg",
+          "phase_script_sha256": "36576b324fb4d3d9c46d223fe9e3128ef9d0d2ce91bfbe047d095daa77e51214",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0055_negative",
+          "frame": {
+            "phase": "0055_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_017731.bmp",
+            "name": "bb_017731.bmp",
+            "bytes": 921654,
+            "sha256": "c1b182f105c672bb51cf1165dfffab6e0637b321a2094848e4f9c870e8936ec8",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 13,
+            "present": 17731,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=13 present=17731 file=bb_017731.bmp",
+            "ack_index": 69202,
+            "request_cursor": 69179,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "17731,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 13710 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 69060,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "0.500",
+          "typed_native_triplet": {
+            "value_line": 69335,
+            "path": "Environment/Clouds/Layer 0 opacity",
+            "alias": "E55",
+            "ack_before": 69334,
+            "ack_after": 69336,
+            "value": "0.500"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0055_restore.cfg",
+          "phase_script_sha256": "623a2966ce6cb0feccb98e79db21bbd169c4301f44b56bedcd6eee126bce98d5",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0055_restore",
+          "frame": {
+            "phase": "0055_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_018295.bmp",
+            "name": "bb_018295.bmp",
+            "bytes": 921654,
+            "sha256": "f6929908094577d603a60393fce6877a49baf3f092e8b4c44af17f1390c1df91",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 14,
+            "present": 18295,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=14 present=18295 file=bb_018295.bmp",
+            "ack_index": 71726,
+            "request_cursor": 71708,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "18295,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 14130 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 71440,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0057",
+      "caption": "Layer 0 dark R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0057",
+        "alias": "E57",
+        "caption": "Layer 0 dark R",
+        "lookup_path": "Environment/Clouds/Layer 0 dark R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 300, \"Clouds\", \"Layer 0 dark R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourR, \"Clouds\", \"Layer 0 dark R\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "states": {
+        "positive": {
+          "requested": "0.85",
+          "typed_native_triplet": {
+            "value_line": 79350,
+            "path": "Environment/Clouds/Layer 0 dark R",
+            "alias": "E57",
+            "ack_before": 79349,
+            "ack_after": 79351,
+            "value": "0.850"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0057_positive.cfg",
+          "phase_script_sha256": "f131e052675d41683739921514e65bf3223e26a2f47809c05acdff2c6f67c744",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0057_positive",
+          "frame": {
+            "phase": "0057_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_020600.bmp",
+            "name": "bb_020600.bmp",
+            "bytes": 921654,
+            "sha256": "13494bbb80549d6bd6a36bb5a4d070537d30cea2cb4dd34ed0806f4b436b975c",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 18,
+            "present": 20600,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=18 present=20600 file=bb_020600.bmp",
+            "ack_index": 82128,
+            "request_cursor": 82093,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "20600,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 15990 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 81744,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0.15",
+          "typed_native_triplet": {
+            "value_line": 82299,
+            "path": "Environment/Clouds/Layer 0 dark R",
+            "alias": "E57",
+            "ack_before": 82298,
+            "ack_after": 82300,
+            "value": "0.150"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0057_negative.cfg",
+          "phase_script_sha256": "9f8904b94b856fdba3ad33c59e77b9002ee1686b8cc9f5aa7562474165caf326",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0057_negative",
+          "frame": {
+            "phase": "0057_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_021206.bmp",
+            "name": "bb_021206.bmp",
+            "bytes": 921654,
+            "sha256": "bf6f7d05b5683744fda27725ac1d8850077ae488953aa5f69f88e2a4e8b2f4e5",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 19,
+            "present": 21206,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=19 present=21206 file=bb_021206.bmp",
+            "ack_index": 84821,
+            "request_cursor": 84795,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "21206,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 16500 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 84658,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "1.000",
+          "typed_native_triplet": {
+            "value_line": 84973,
+            "path": "Environment/Clouds/Layer 0 dark R",
+            "alias": "E57",
+            "ack_before": 84972,
+            "ack_after": 84974,
+            "value": "1.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0057_restore.cfg",
+          "phase_script_sha256": "6bf44fcb0fea44fbf26e2f995e559e69b37fffa381d5283ede50bb193d6e4ee3",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0057_restore",
+          "frame": {
+            "phase": "0057_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_021862.bmp",
+            "name": "bb_021862.bmp",
+            "bytes": 921654,
+            "sha256": "449d58303af1302053d7ba4ba4c0461a90ed33f1010ac0f64a000f6886168b61",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 20,
+            "present": 21862,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=20 present=21862 file=bb_021862.bmp",
+            "ack_index": 87758,
+            "request_cursor": 87727,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "21862,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 17040 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 87577,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0058",
+      "caption": "Layer 0 dark G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0058",
+        "alias": "E58",
+        "caption": "Layer 0 dark G",
+        "lookup_path": "Environment/Clouds/Layer 0 dark G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 304, \"Clouds\", \"Layer 0 dark G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourG, \"Clouds\", \"Layer 0 dark G\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "states": {
+        "positive": {
+          "requested": "0.85",
+          "typed_native_triplet": {
+            "value_line": 87911,
+            "path": "Environment/Clouds/Layer 0 dark G",
+            "alias": "E58",
+            "ack_before": 87910,
+            "ack_after": 87912,
+            "value": "0.850"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0058_positive.cfg",
+          "phase_script_sha256": "77797e687460e4ade5f23fb1caf2c93ca1f5ed67c4d46f9e755e5b0022aa12d7",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0058_positive",
+          "frame": {
+            "phase": "0058_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_022448.bmp",
+            "name": "bb_022448.bmp",
+            "bytes": 921654,
+            "sha256": "8393b580e0198fa2edcb08aaa54547924a2d2581bd686a11f3d0f12d73c15128",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 21,
+            "present": 22448,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=21 present=22448 file=bb_022448.bmp",
+            "ack_index": 90420,
+            "request_cursor": 90394,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "22448,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 17520 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 89999,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0.15",
+          "typed_native_triplet": {
+            "value_line": 90556,
+            "path": "Environment/Clouds/Layer 0 dark G",
+            "alias": "E58",
+            "ack_before": 90555,
+            "ack_after": 90557,
+            "value": "0.150"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0058_negative.cfg",
+          "phase_script_sha256": "d8ef03a0e9aa51029843ad810585e2caafe1aec00a2ef0489a3213f5139f5de9",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0058_negative",
+          "frame": {
+            "phase": "0058_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_022971.bmp",
+            "name": "bb_022971.bmp",
+            "bytes": 921654,
+            "sha256": "0f915565ad71b80c94aaf0b3b05a2e61aaeda05e6a027ac4dd9f631802aee2f5",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 22,
+            "present": 22971,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=22 present=22971 file=bb_022971.bmp",
+            "ack_index": 92796,
+            "request_cursor": 92770,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "22971,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 18060 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 92630,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "0.985",
+          "typed_native_triplet": {
+            "value_line": 92975,
+            "path": "Environment/Clouds/Layer 0 dark G",
+            "alias": "E58",
+            "ack_before": 92974,
+            "ack_after": 92976,
+            "value": "0.985"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0058_restore.cfg",
+          "phase_script_sha256": "06d8535740abe32a70338e9190a7161e8108729c0a33ae8fddfbc90a02cf7047",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0058_restore",
+          "frame": {
+            "phase": "0058_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_023630.bmp",
+            "name": "bb_023630.bmp",
+            "bytes": 921654,
+            "sha256": "e499f0e3d7394071b18bf97ba19b61973b71ef33d49813581f2d9da729282d62",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 23,
+            "present": 23630,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=23 present=23630 file=bb_023630.bmp",
+            "ack_index": 95782,
+            "request_cursor": 95748,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "23630,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 18630 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 95649,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0059",
+      "caption": "Layer 0 dark B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0059",
+        "alias": "E59",
+        "caption": "Layer 0 dark B",
+        "lookup_path": "Environment/Clouds/Layer 0 dark B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 1.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 308, \"Clouds\", \"Layer 0 dark B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfCloudLayerDarkColourB, \"Clouds\", \"Layer 0 dark B\", 0.0f, 1.0f, 0.05f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 0.85,
+        "negative": 0.15,
+        "consumer": "DebugToManager -> CloudsData.mav3LayerDarkColour[0] RGB lane -> GenerateShaderConstants CloudDarkColour0 (white-level RGB scale) -> SkyDomeManager colour x2 -> BrnGraphics::Im3dSkyDome::SetConstants handle[11]/g_darkColour -> actual cloud sky pixels",
+        "roi": [
+          0,
+          0,
+          1,
+          0.6
+        ],
+        "mapping_note": "Precise colour-uniform chain; historical scope used the cloud-family scalar-uniform summary."
+      },
+      "states": {
+        "positive": {
+          "requested": "0.85",
+          "typed_native_triplet": {
+            "value_line": 95957,
+            "path": "Environment/Clouds/Layer 0 dark B",
+            "alias": "E59",
+            "ack_before": 95956,
+            "ack_after": 95958,
+            "value": "0.850"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0059_positive.cfg",
+          "phase_script_sha256": "62717d8af8bddad426da976322fe1e1b01f148c35f2d9b0e0b7ff7f6f4a93779",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0059_positive",
+          "frame": {
+            "phase": "0059_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_024329.bmp",
+            "name": "bb_024329.bmp",
+            "bytes": 921654,
+            "sha256": "bc2ff0add21e646b0f42d1374a82e2f10855de514c7c8d664898f8722e88fcd1",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 24,
+            "present": 24329,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=24 present=24329 file=bb_024329.bmp",
+            "ack_index": 98924,
+            "request_cursor": 98895,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "24329,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 19200 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 98821,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0.15",
+          "typed_native_triplet": {
+            "value_line": 99097,
+            "path": "Environment/Clouds/Layer 0 dark B",
+            "alias": "E59",
+            "ack_before": 99096,
+            "ack_after": 99098,
+            "value": "0.150"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0059_negative.cfg",
+          "phase_script_sha256": "160463df5298a622449daf299ba2d9d57d6963c897a02aaa6a7a85df6d8b1c15",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0059_negative",
+          "frame": {
+            "phase": "0059_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_025067.bmp",
+            "name": "bb_025067.bmp",
+            "bytes": 921654,
+            "sha256": "9359f54d5e5dd3d8503dcb4185eb5f0e777b6ae778167d5daf6487b14e077016",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 25,
+            "present": 25067,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=25 present=25067 file=bb_025067.bmp",
+            "ack_index": 102195,
+            "request_cursor": 102163,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "25067,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 19710 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 101694,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "0.924",
+          "typed_native_triplet": {
+            "value_line": 102389,
+            "path": "Environment/Clouds/Layer 0 dark B",
+            "alias": "E59",
+            "ack_before": 102388,
+            "ack_after": 102390,
+            "value": "0.924"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0059_restore.cfg",
+          "phase_script_sha256": "4c04f5f40a2f81f547c96205a8c5fe4abebb48c63377da249b7207b0a5d84b44",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0059_restore",
+          "frame": {
+            "phase": "0059_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_025797.bmp",
+            "name": "bb_025797.bmp",
+            "bytes": 921654,
+            "sha256": "24be6940e702fa330cf2b6f3a49adb593555c46138cf01c9377b648140345ebb",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 26,
+            "present": 25797,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=26 present=25797 file=bb_025797.bmp",
+            "ack_index": 105435,
+            "request_cursor": 105401,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "25797,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 20310 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 104913,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0066",
+      "caption": "Keyfill colour R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0066",
+        "alias": "E66",
+        "caption": "Keyfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 176, \"Irradiance rig\", \"Keyfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_r, \"Irradiance rig\", \"Keyfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value_line": 105620,
+            "path": "Environment/Irradiance rig/Keyfill colour R",
+            "alias": "E66",
+            "ack_before": 105619,
+            "ack_after": 105621,
+            "value": "6.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0066_positive.cfg",
+          "phase_script_sha256": "1016f82ccd049576a42227b73004db0357ad999f180d9dac7bdad6a37ee12d1a",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0066_positive",
+          "frame": {
+            "phase": "0066_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_026453.bmp",
+            "name": "bb_026453.bmp",
+            "bytes": 921654,
+            "sha256": "e695f3685fb0e52510af924a9d176d43ef21e94420764382f1ac1acb104c7e3d",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 27,
+            "present": 26453,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=27 present=26453 file=bb_026453.bmp",
+            "ack_index": 108373,
+            "request_cursor": 108343,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "26453,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 20910 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 108240,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value_line": 108982,
+            "path": "Environment/Irradiance rig/Keyfill colour R",
+            "alias": "E66",
+            "ack_before": 108981,
+            "ack_after": 108983,
+            "value": "0.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0066_negative.cfg",
+          "phase_script_sha256": "7fa157bc3eaa94e019dedff87bb673b15f88e38b0934d1fae308804ed341d3f4",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0066_negative",
+          "frame": {
+            "phase": "0066_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_027268.bmp",
+            "name": "bb_027268.bmp",
+            "bytes": 921654,
+            "sha256": "d5cc8de51377a265871cc247db330c21111c2f9fc7d4cea16f545f301db440be",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 28,
+            "present": 27268,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=28 present=27268 file=bb_027268.bmp",
+            "ack_index": 111988,
+            "request_cursor": 111957,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "27268,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 21540 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 111822,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "0.851",
+          "typed_native_triplet": {
+            "value_line": 112527,
+            "path": "Environment/Irradiance rig/Keyfill colour R",
+            "alias": "E66",
+            "ack_before": 112526,
+            "ack_after": 112528,
+            "value": "0.851"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0066_restore.cfg",
+          "phase_script_sha256": "b497d6f6c6ff2d1b1348b319c71ad61988c013151b08ab8ec5bbbd2984152543",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0066_restore",
+          "frame": {
+            "phase": "0066_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_028140.bmp",
+            "name": "bb_028140.bmp",
+            "bytes": 921654,
+            "sha256": "2653a49f18be6fed3592f40c1a2992abfb816d5a6dfc43d158bb04a8410de3a6",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 29,
+            "present": 28140,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=29 present=28140 file=bb_028140.bmp",
+            "ack_index": 115877,
+            "request_cursor": 115847,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "28140,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 22170 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 115335,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0067",
+      "caption": "Keyfill colour G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_remainder",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0067",
+        "alias": "E67",
+        "caption": "Keyfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 180, \"Irradiance rig\", \"Keyfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_g, \"Irradiance rig\", \"Keyfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value_line": 116091,
+            "path": "Environment/Irradiance rig/Keyfill colour G",
+            "alias": "E67",
+            "ack_before": 116090,
+            "ack_after": 116092,
+            "value": "6.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0067_positive.cfg",
+          "phase_script_sha256": "e24304865201dd7e6e8f117b4b90ae992f4dd0cfcb24521b40fe715053528aee",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0067_positive",
+          "frame": {
+            "phase": "0067_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_028949.bmp",
+            "name": "bb_028949.bmp",
+            "bytes": 921654,
+            "sha256": "4c5e9b8678850088094c5e878c6ed1cfc32f5dd4d6239f3ec3aa1d76a6451307",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 30,
+            "present": 28949,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=30 present=28949 file=bb_028949.bmp",
+            "ack_index": 119467,
+            "request_cursor": 119431,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "28949,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 22800 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 119005,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value_line": 119672,
+            "path": "Environment/Irradiance rig/Keyfill colour G",
+            "alias": "E67",
+            "ack_before": 119671,
+            "ack_after": 119673,
+            "value": "0.000"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0067_negative.cfg",
+          "phase_script_sha256": "7fc0e3525b944c9ad0a3690fbfe7d27a8d23cf9b9ec9e4c90916c61a5247e025",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0067_negative",
+          "frame": {
+            "phase": "0067_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_029847.bmp",
+            "name": "bb_029847.bmp",
+            "bytes": 921654,
+            "sha256": "a4728fb4ac95234c88c99fa3a04fe21dd28af2ef358cbab079be114a442c161e",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 31,
+            "present": 29847,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=31 present=29847 file=bb_029847.bmp",
+            "ack_index": 123443,
+            "request_cursor": 123404,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "29847,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 23460 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 122922,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        },
+        "restore": {
+          "requested": "0.973",
+          "typed_native_triplet": {
+            "value_line": 123682,
+            "path": "Environment/Irradiance rig/Keyfill colour G",
+            "alias": "E67",
+            "ack_before": 123681,
+            "ack_after": 123683,
+            "value": "0.973"
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\phase_0067_restore.cfg",
+          "phase_script_sha256": "3fc5f1934fabc7c76b02bc600ce8b670061a9fb9f603a719ffb5c53968e41a8a",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\driver-result.json#phases/0067_restore",
+          "frame": {
+            "phase": "0067_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\bb_030714.bmp",
+            "name": "bb_030714.bmp",
+            "bytes": 921654,
+            "sha256": "a6e93033371ba75a52f71a2e59dfe373282bc97f2935287d0d8b44f7ddcea5ab",
+            "pid": 72668,
+            "slot": 62180,
+            "sequence": 32,
+            "present": 30714,
+            "ack": "[frame-request] pid=72668 slot=62180 seq=32 present=30714 file=bb_030714.bmp",
+            "ack_index": 127255,
+            "request_cursor": 127221,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "30714,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,296,2998.261,0.895,-1847.767,-0.1203,-0.4690,5.5564,0,0,0.0000,2998.488,2.077,-1846.510,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 24090 pos 2998.487793 2.077459 -1846.509644 at -0.353306 0.279952 0.892637 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.180188 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 126684,
+            "pose": [
+              2998.488,
+              2.077,
+              -1846.51
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": null,
+          "raw_snapshot_hash": null
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0068",
+      "caption": "Keyfill colour B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0068",
+        "alias": "E68",
+        "caption": "Keyfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Keyfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 184, \"Irradiance rig\", \"Keyfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfKeyFillColour_b, \"Irradiance rig\", \"Keyfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Keyfill colour B",
+            "value_line": 34831,
+            "ack_before": 34830,
+            "alias": "E68",
+            "ack_after": 34832
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0068_positive.cfg",
+          "phase_script_sha256": "35b1fb45356baa854ab2f17eb79c57aaf7e4576dbc41b5044f0d70b493a10ce8",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0068_positive",
+          "frame": {
+            "phase": "0068_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_010384.bmp",
+            "name": "bb_010384.bmp",
+            "bytes": 921654,
+            "sha256": "752547d642f34dec12b315be725e97339128878415c2a35f4d3d48e0835ed284",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 3,
+            "present": 10384,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=3 present=10384 file=bb_010384.bmp",
+            "ack_index": 35264,
+            "request_cursor": 35250,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "10384,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6000 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 35219,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6516069,
+          "raw_snapshot_hash": "06-0A-A2-3A-3D-CE-21-BD-38-3D-62-9E-58-39-2E-9F-C8-48-2B-49-85-B4-2C-DA-A7-A2-67-2A-92-89-7D-96"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Keyfill colour B",
+            "value_line": 35359,
+            "ack_before": 35358,
+            "alias": "E68",
+            "ack_after": 35360
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0068_negative.cfg",
+          "phase_script_sha256": "1ef397a3e874aada80c3a409f0de2e0fdd4c1cb511ebae99c1769507456e96dd",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0068_negative",
+          "frame": {
+            "phase": "0068_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_010492.bmp",
+            "name": "bb_010492.bmp",
+            "bytes": 921654,
+            "sha256": "1f7fe885b579f55a404e393140ecf7f0378a795d5e455729405244e628970bae",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 4,
+            "present": 10492,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=4 present=10492 file=bb_010492.bmp",
+            "ack_index": 35824,
+            "request_cursor": 35810,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "10492,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6090 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 35779,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6604076,
+          "raw_snapshot_hash": "2A-05-77-0D-83-C6-0B-26-4F-94-C6-16-93-6B-10-0E-D8-A0-2C-B7-98-8E-E4-A7-9E-11-75-74-12-FF-11-9E"
+        },
+        "restore": {
+          "requested": "0.958",
+          "typed_native_triplet": {
+            "value": "0.958",
+            "path": "Environment/Irradiance rig/Keyfill colour B",
+            "value_line": 35916,
+            "ack_before": 35915,
+            "alias": "E68",
+            "ack_after": 35917
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0068_restore.cfg",
+          "phase_script_sha256": "f37cb44b2939d6a4a18eff697b5c61cc7fa7739a4d0f15a76d42fdf75ec84102",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0068_restore",
+          "frame": {
+            "phase": "0068_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_010681.bmp",
+            "name": "bb_010681.bmp",
+            "bytes": 921654,
+            "sha256": "3006f5e410d185272e333bcfd5bcaecd8360e820d0b1d1246a7d54de203d65a2",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 5,
+            "present": 10681,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=5 present=10681 file=bb_010681.bmp",
+            "ack_index": 36722,
+            "request_cursor": 36709,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "10681,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6180 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 36332,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6699042,
+          "raw_snapshot_hash": "4D-EA-B2-51-88-28-3F-1C-B7-8F-B4-C9-E3-B2-9A-58-41-72-1E-D5-1A-E6-A1-89-77-57-E4-F3-8A-66-E4-CF"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0072",
+      "caption": "Leftfill colour R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0072",
+        "alias": "E72",
+        "caption": "Leftfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 212, \"Irradiance rig\", \"Leftfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_r, \"Irradiance rig\", \"Leftfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Leftfill colour R",
+            "value_line": 36814,
+            "ack_before": 36813,
+            "alias": "E72",
+            "ack_after": 36815
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0072_positive.cfg",
+          "phase_script_sha256": "72ec7dfc976c21629bf6b4b333fda80ce41f21ea78a8bf1444549fe012d0492e",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0072_positive",
+          "frame": {
+            "phase": "0072_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_010814.bmp",
+            "name": "bb_010814.bmp",
+            "bytes": 921654,
+            "sha256": "c13763ac4621246978029d9102c3ba44d9352fbf729e81c20f597829403424bb",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 6,
+            "present": 10814,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=6 present=10814 file=bb_010814.bmp",
+            "ack_index": 37375,
+            "request_cursor": 37367,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "10814,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6330 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 37310,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6861073,
+          "raw_snapshot_hash": "9C-A0-32-A2-C1-40-F3-64-67-AC-20-79-05-7C-53-DA-B2-CF-06-ED-50-49-5C-77-D7-23-FD-A6-9F-49-01-91"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Leftfill colour R",
+            "value_line": 37464,
+            "ack_before": 37463,
+            "alias": "E72",
+            "ack_after": 37465
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0072_negative.cfg",
+          "phase_script_sha256": "cdc9522213863ac34d9573757d4bd04cf5494aa3646dd1e42f775f3a69ad1f5c",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0072_negative",
+          "frame": {
+            "phase": "0072_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_010947.bmp",
+            "name": "bb_010947.bmp",
+            "bytes": 921654,
+            "sha256": "7f3941b529ca04442d32d16fa75de052968f53f031b490d2d02be834da647bd1",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 7,
+            "present": 10947,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=7 present=10947 file=bb_010947.bmp",
+            "ack_index": 38029,
+            "request_cursor": 38020,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "10947,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6420 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 37924,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6973607,
+          "raw_snapshot_hash": "71-FD-ED-E2-C0-CC-2D-2B-67-DC-99-89-C2-C2-86-52-3C-6F-DA-52-82-71-C3-DF-0A-40-24-F0-AC-F2-6D-32"
+        },
+        "restore": {
+          "requested": "0.641",
+          "typed_native_triplet": {
+            "value": "0.641",
+            "path": "Environment/Irradiance rig/Leftfill colour R",
+            "value_line": 38124,
+            "ack_before": 38123,
+            "alias": "E72",
+            "ack_after": 38125
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0072_restore.cfg",
+          "phase_script_sha256": "4c7195e2e9737beed5fe517075634361f250507f6d917df0c2edc2e087f5d17a",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0072_restore",
+          "frame": {
+            "phase": "0072_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011130.bmp",
+            "name": "bb_011130.bmp",
+            "bytes": 921654,
+            "sha256": "f19f3fc282dbc20e2e873e6be68a5ee7c144d48b42c785e67af649ca8e217bcf",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 8,
+            "present": 11130,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=8 present=11130 file=bb_011130.bmp",
+            "ack_index": 38945,
+            "request_cursor": 38931,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11130,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6510 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 38551,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7088720,
+          "raw_snapshot_hash": "47-4F-92-5D-AB-C1-9F-D1-95-4B-E6-87-1A-FF-07-05-98-FB-6D-4E-11-DC-85-11-12-68-25-06-A3-F6-ED-70"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0073",
+      "caption": "Leftfill colour G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0073",
+        "alias": "E73",
+        "caption": "Leftfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 216, \"Irradiance rig\", \"Leftfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_g, \"Irradiance rig\", \"Leftfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Leftfill colour G",
+            "value_line": 39060,
+            "ack_before": 39059,
+            "alias": "E73",
+            "ack_after": 39061
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0073_positive.cfg",
+          "phase_script_sha256": "9272d1a248bc92a4280453e2e0838ab3368024dec9dfc7ef50486af3faa9c6d7",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0073_positive",
+          "frame": {
+            "phase": "0073_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011223.bmp",
+            "name": "bb_011223.bmp",
+            "bytes": 921654,
+            "sha256": "b53ee7a39b48bd6eac8aad1b12b62ec37cffb3ec653b0bf7b42bc0dc697d2b03",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 9,
+            "present": 11223,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=9 present=11223 file=bb_011223.bmp",
+            "ack_index": 39441,
+            "request_cursor": 39429,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11223,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6660 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 39394,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7251597,
+          "raw_snapshot_hash": "74-A5-8F-B1-3F-DD-4F-8D-05-94-9C-EA-13-37-3E-96-FE-A8-F2-F8-56-A3-CA-A2-23-1D-31-C5-21-3B-05-01"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Leftfill colour G",
+            "value_line": 39547,
+            "ack_before": 39546,
+            "alias": "E73",
+            "ack_after": 39548
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0073_negative.cfg",
+          "phase_script_sha256": "1451e39f58744c6b7efa021095f67ca5db6997e4064eca78a5985276ae305965",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0073_negative",
+          "frame": {
+            "phase": "0073_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011343.bmp",
+            "name": "bb_011343.bmp",
+            "bytes": 921654,
+            "sha256": "2af8fea4dbcc3b1e8f11e06ee4721cf585f2cea0187b691e097e7561d67fdade",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 10,
+            "present": 11343,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=10 present=11343 file=bb_011343.bmp",
+            "ack_index": 40049,
+            "request_cursor": 40040,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11343,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6750 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 40001,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7333993,
+          "raw_snapshot_hash": "34-28-DB-90-16-89-A3-BC-8D-14-1B-8C-B5-6B-55-18-24-B9-09-88-C1-AA-24-20-0D-B6-31-BA-3F-C3-4D-66"
+        },
+        "restore": {
+          "requested": "0.724",
+          "typed_native_triplet": {
+            "value": "0.724",
+            "path": "Environment/Irradiance rig/Leftfill colour G",
+            "value_line": 40151,
+            "ack_before": 40150,
+            "alias": "E73",
+            "ack_after": 40152
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0073_restore.cfg",
+          "phase_script_sha256": "60fd8a97bbe83fabece602e1463be0320eb3a709768f1b11dd5c7831f74b41ff",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0073_restore",
+          "frame": {
+            "phase": "0073_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011542.bmp",
+            "name": "bb_011542.bmp",
+            "bytes": 921654,
+            "sha256": "2a9ae710434609cdde5dabdbd9c71415856ec1c1d0e7ef00e2aacb559acbdc78",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 11,
+            "present": 11542,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=11 present=11542 file=bb_011542.bmp",
+            "ack_index": 40980,
+            "request_cursor": 40963,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11542,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6840 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 40617,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7435016,
+          "raw_snapshot_hash": "D3-F2-A9-4D-36-E7-AC-58-A0-C2-39-4E-17-B4-BA-31-FE-A8-5B-32-5B-E7-9D-26-B6-23-28-E5-DD-00-C7-A2"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0074",
+      "caption": "Leftfill colour B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0074",
+        "alias": "E74",
+        "caption": "Leftfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Leftfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 220, \"Irradiance rig\", \"Leftfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfLeftFillColour_b, \"Irradiance rig\", \"Leftfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Leftfill colour B",
+            "value_line": 41099,
+            "ack_before": 41098,
+            "alias": "E74",
+            "ack_after": 41100
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0074_positive.cfg",
+          "phase_script_sha256": "0f2bc5f02cf0b57eed94bc070a1c25fb03575bb30adba688f46f172feeac5bec",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0074_positive",
+          "frame": {
+            "phase": "0074_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011673.bmp",
+            "name": "bb_011673.bmp",
+            "bytes": 921654,
+            "sha256": "31ea90cc3d96f0814e1bd15509e594144da6861456f0f796fdad184c6164b310",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 12,
+            "present": 11673,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=12 present=11673 file=bb_011673.bmp",
+            "ack_index": 41621,
+            "request_cursor": 41608,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11673,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6990 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 41573,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7608488,
+          "raw_snapshot_hash": "52-47-62-58-F4-EF-E6-0F-0E-73-B1-91-05-F0-2A-C1-E9-F5-56-56-A0-C2-54-CA-0E-5B-03-DF-5C-40-E8-7E"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Leftfill colour B",
+            "value_line": 41743,
+            "ack_before": 41742,
+            "alias": "E74",
+            "ack_after": 41744
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0074_negative.cfg",
+          "phase_script_sha256": "0cbf1846e4dcd9474949c3f615b526cc1b28c890f4e2a78cad0bf313177f7251",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0074_negative",
+          "frame": {
+            "phase": "0074_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_011804.bmp",
+            "name": "bb_011804.bmp",
+            "bytes": 921654,
+            "sha256": "23ba53b6acbda4ce5a35c9984f02e4943458005c16cf60e74a127a82e358919c",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 13,
+            "present": 11804,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=13 present=11804 file=bb_011804.bmp",
+            "ack_index": 42272,
+            "request_cursor": 42255,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "11804,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7080 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 42194,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7719218,
+          "raw_snapshot_hash": "03-0E-3E-66-FF-14-E5-2D-B6-F8-25-D9-36-A4-A3-38-0D-6E-45-10-A5-76-A4-68-F7-55-0A-5D-C7-F3-9C-F5"
+        },
+        "restore": {
+          "requested": "0.723",
+          "typed_native_triplet": {
+            "value": "0.723",
+            "path": "Environment/Irradiance rig/Leftfill colour B",
+            "value_line": 42395,
+            "ack_before": 42394,
+            "alias": "E74",
+            "ack_after": 42396
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0074_restore.cfg",
+          "phase_script_sha256": "a1c37ee09aaf72c4c85f11cc9a5a609faa31561c6e74c1d0996bc7e4f8d6b6c4",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0074_restore",
+          "frame": {
+            "phase": "0074_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012010.bmp",
+            "name": "bb_012010.bmp",
+            "bytes": 921654,
+            "sha256": "720dd091f918c8ed8c1da92feffbd3f931455c531b93b63caaebbfb5c5d5e35f",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 14,
+            "present": 12010,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=14 present=12010 file=bb_012010.bmp",
+            "ack_index": 43236,
+            "request_cursor": 43219,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12010,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7170 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 42808,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7833773,
+          "raw_snapshot_hash": "A8-EE-6F-01-56-B6-5E-5E-E7-5F-33-36-5A-CB-28-20-BB-E3-E4-72-66-7D-1A-CA-53-58-06-58-D4-90-87-41"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0075",
+      "caption": "Rightfill colour R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0075",
+        "alias": "E75",
+        "caption": "Rightfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 200, \"Irradiance rig\", \"Rightfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_r, \"Irradiance rig\", \"Rightfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Rightfill colour R",
+            "value_line": 43351,
+            "ack_before": 43350,
+            "alias": "E75",
+            "ack_after": 43352
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0075_positive.cfg",
+          "phase_script_sha256": "0235a7b6742fcf0a8abc3eb75d20bf4416873f573220bca99bcbea798f549afd",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0075_positive",
+          "frame": {
+            "phase": "0075_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012125.bmp",
+            "name": "bb_012125.bmp",
+            "bytes": 921654,
+            "sha256": "224111b49f4a14500507bf8651fddad593613cf62fadca92ba9be9ef71f88221",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 15,
+            "present": 12125,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=15 present=12125 file=bb_012125.bmp",
+            "ack_index": 43844,
+            "request_cursor": 43826,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12125,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7320 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 43785,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8006443,
+          "raw_snapshot_hash": "DD-29-0E-D9-04-DC-2F-E5-DA-94-1A-2C-30-41-0F-64-73-95-93-D7-D1-04-90-F5-C5-4D-65-E0-75-0C-65-BE"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Rightfill colour R",
+            "value_line": 43974,
+            "ack_before": 43973,
+            "alias": "E75",
+            "ack_after": 43975
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0075_negative.cfg",
+          "phase_script_sha256": "f085c0968cc03d1685fee68e6d683cf19c5a79ca056620a130b6f22fc3dbbe99",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0075_negative",
+          "frame": {
+            "phase": "0075_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012252.bmp",
+            "name": "bb_012252.bmp",
+            "bytes": 921654,
+            "sha256": "07b2717080806b2e38109077ec8e31064645351637e2ce6e014a54e8f011d211",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 16,
+            "present": 12252,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=16 present=12252 file=bb_012252.bmp",
+            "ack_index": 44480,
+            "request_cursor": 44466,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12252,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7410 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 44408,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8108855,
+          "raw_snapshot_hash": "E1-59-77-DC-3F-1E-F9-A8-33-7A-B1-82-9D-A0-94-4E-72-C7-2E-36-04-D8-46-8B-F3-AF-68-B5-89-C0-F2-8B"
+        },
+        "restore": {
+          "requested": "0.627",
+          "typed_native_triplet": {
+            "value": "0.627",
+            "path": "Environment/Irradiance rig/Rightfill colour R",
+            "value_line": 44596,
+            "ack_before": 44595,
+            "alias": "E75",
+            "ack_after": 44597
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0075_restore.cfg",
+          "phase_script_sha256": "d60ff3ec666573cec190564eee581377c807490eada3030014977cf8dad4e581",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0075_restore",
+          "frame": {
+            "phase": "0075_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012459.bmp",
+            "name": "bb_012459.bmp",
+            "bytes": 921654,
+            "sha256": "c29aa652b31ebfc24d76cabba611cb224c9e40a0334579b0502a6cb344d6ed62",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 17,
+            "present": 12459,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=17 present=12459 file=bb_012459.bmp",
+            "ack_index": 45454,
+            "request_cursor": 45437,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12459,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7500 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 45013,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8217739,
+          "raw_snapshot_hash": "27-4F-12-B8-F8-61-3C-9A-38-D7-E5-0B-54-CF-11-78-04-01-4B-B3-D4-57-A2-60-7E-53-EF-61-A4-F9-D5-10"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0076",
+      "caption": "Rightfill colour G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0076",
+        "alias": "E76",
+        "caption": "Rightfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 204, \"Irradiance rig\", \"Rightfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_g, \"Irradiance rig\", \"Rightfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Rightfill colour G",
+            "value_line": 45571,
+            "ack_before": 45570,
+            "alias": "E76",
+            "ack_after": 45572
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0076_positive.cfg",
+          "phase_script_sha256": "b21e2f68b95b2d05bc23fb27aa1e452149de8c23a9e63b060c00fc59fa128a97",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0076_positive",
+          "frame": {
+            "phase": "0076_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012571.bmp",
+            "name": "bb_012571.bmp",
+            "bytes": 921654,
+            "sha256": "f81c43bdf275df48f11484609ac98150095d5ad104d835a150e9df6499b6d85c",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 18,
+            "present": 12571,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=18 present=12571 file=bb_012571.bmp",
+            "ack_index": 46029,
+            "request_cursor": 46012,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12571,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7650 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 45974,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8393046,
+          "raw_snapshot_hash": "10-AA-89-03-77-E7-8E-C0-5F-F4-84-80-DD-DC-B5-42-71-EE-67-FA-B1-95-A2-D3-7E-27-38-83-4F-02-AC-18"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Rightfill colour G",
+            "value_line": 46161,
+            "ack_before": 46160,
+            "alias": "E76",
+            "ack_after": 46162
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0076_negative.cfg",
+          "phase_script_sha256": "0eb7ef209dd628af9a619e9bfcb8aac50b42725d100483268faeeab329d3fd20",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0076_negative",
+          "frame": {
+            "phase": "0076_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012702.bmp",
+            "name": "bb_012702.bmp",
+            "bytes": 921654,
+            "sha256": "9e9571f2c7463a9f2b0d63766eb82ba944c8066858d0436b41a37cc950d37c87",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 19,
+            "present": 12702,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=19 present=12702 file=bb_012702.bmp",
+            "ack_index": 46676,
+            "request_cursor": 46659,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12702,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7740 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 46588,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8495257,
+          "raw_snapshot_hash": "7C-5D-9C-84-2D-B8-13-43-9A-10-22-7D-3E-F5-8F-AA-10-41-35-4E-88-56-59-4E-F2-D2-2A-D0-BF-0C-52-74"
+        },
+        "restore": {
+          "requested": "0.712",
+          "typed_native_triplet": {
+            "value": "0.712",
+            "path": "Environment/Irradiance rig/Rightfill colour G",
+            "value_line": 46810,
+            "ack_before": 46809,
+            "alias": "E76",
+            "ack_after": 46811
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0076_restore.cfg",
+          "phase_script_sha256": "d5cf87bb56b47b0490b4f8dff51978db91f71199df94a9a1d73086b100fb5487",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0076_restore",
+          "frame": {
+            "phase": "0076_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_012912.bmp",
+            "name": "bb_012912.bmp",
+            "bytes": 921654,
+            "sha256": "96c0a243f87d7066a33a08d62a1893df5f018010a0a8941966191130fd088480",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 20,
+            "present": 12912,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=20 present=12912 file=bb_012912.bmp",
+            "ack_index": 47667,
+            "request_cursor": 47649,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "12912,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7830 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 47200,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8607425,
+          "raw_snapshot_hash": "F2-85-DB-7A-53-81-E7-E1-31-42-F2-18-4F-92-84-3F-41-AD-A8-6F-0A-B3-CC-AE-26-74-EF-76-7C-A6-EC-61"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0077",
+      "caption": "Rightfill colour B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0077",
+        "alias": "E77",
+        "caption": "Rightfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Rightfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 208, \"Irradiance rig\", \"Rightfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfRightFillColour_b, \"Irradiance rig\", \"Rightfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Rightfill colour B",
+            "value_line": 47813,
+            "ack_before": 47812,
+            "alias": "E77",
+            "ack_after": 47814
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0077_positive.cfg",
+          "phase_script_sha256": "87bb5129120a051070856e6db788cbb513140436fca6519d26b63ea5c0aa934b",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0077_positive",
+          "frame": {
+            "phase": "0077_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013029.bmp",
+            "name": "bb_013029.bmp",
+            "bytes": 921654,
+            "sha256": "04ed046bfeb5bc4832c073d912c11101f678ad31af1b0f65f37998e4ef34f9d5",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 21,
+            "present": 13029,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=21 present=13029 file=bb_013029.bmp",
+            "ack_index": 48252,
+            "request_cursor": 48233,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13029,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 7980 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 48178,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8787893,
+          "raw_snapshot_hash": "F6-D8-10-80-F7-B1-EE-E5-0D-61-8A-B0-D8-CE-06-FF-C7-C6-61-0C-5C-E8-8A-3C-F0-A6-DB-F3-0B-D5-8E-54"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Rightfill colour B",
+            "value_line": 48376,
+            "ack_before": 48375,
+            "alias": "E77",
+            "ack_after": 48377
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0077_negative.cfg",
+          "phase_script_sha256": "5cbb0d682412d3e4275fa05b0c7802548f664f7cf21ea7755363aa4412c1460b",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0077_negative",
+          "frame": {
+            "phase": "0077_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013155.bmp",
+            "name": "bb_013155.bmp",
+            "bytes": 921654,
+            "sha256": "49ce15ed6642e3c4cf58a38c5808b219ed0e20a07807444692d774f90a0b2ed9",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 22,
+            "present": 13155,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=22 present=13155 file=bb_013155.bmp",
+            "ack_index": 48873,
+            "request_cursor": 48856,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13155,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8070 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 48789,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8885156,
+          "raw_snapshot_hash": "D5-EB-A1-43-BE-19-D4-C1-00-62-E8-A3-9B-49-3D-E9-C6-57-B0-7E-39-57-53-7D-74-7E-DE-08-FF-0E-2C-BD"
+        },
+        "restore": {
+          "requested": "0.724",
+          "typed_native_triplet": {
+            "value": "0.724",
+            "path": "Environment/Irradiance rig/Rightfill colour B",
+            "value_line": 49004,
+            "ack_before": 49003,
+            "alias": "E77",
+            "ack_after": 49005
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0077_restore.cfg",
+          "phase_script_sha256": "f87d6d63ad6d71b12b51d766a15baeda7a3409c38d35fe4aec2e09c905f5888f",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0077_restore",
+          "frame": {
+            "phase": "0077_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013360.bmp",
+            "name": "bb_013360.bmp",
+            "bytes": 921654,
+            "sha256": "1da89e8cd16b379ae19e44bc33d0cac398ddd08475e7f2e3861a8babb605a688",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 23,
+            "present": 13360,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=23 present=13360 file=bb_013360.bmp",
+            "ack_index": 49849,
+            "request_cursor": 49835,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13360,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8160 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 49410,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 8994361,
+          "raw_snapshot_hash": "C5-33-37-B2-50-A7-2C-B0-C6-E6-4A-15-49-2B-D2-08-93-D4-2D-4B-29-1C-8A-F3-65-66-44-9C-E7-9B-D8-D6"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0078",
+      "caption": "Upfill colour R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0078",
+        "alias": "E78",
+        "caption": "Upfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 224, \"Irradiance rig\", \"Upfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_r, \"Irradiance rig\", \"Upfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Upfill colour R",
+            "value_line": 49978,
+            "ack_before": 49977,
+            "alias": "E78",
+            "ack_after": 49979
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0078_positive.cfg",
+          "phase_script_sha256": "aae33323bb18e2eae3400b5d2c3a2b190c8e7652b9b3ae05b6acd1668bfec4e3",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0078_positive",
+          "frame": {
+            "phase": "0078_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013487.bmp",
+            "name": "bb_013487.bmp",
+            "bytes": 921654,
+            "sha256": "a94529fc62ce44ef80628e54a14cb377f7edf78dab98582deef1b1271136c99b",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 24,
+            "present": 13487,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=24 present=13487 file=bb_013487.bmp",
+            "ack_index": 50488,
+            "request_cursor": 50475,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13487,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8310 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 50368,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9170324,
+          "raw_snapshot_hash": "A3-32-9C-20-DA-83-EA-11-D1-85-52-55-B0-95-27-0A-D3-E6-F4-8A-79-EE-C3-9D-26-0C-F5-14-FC-F6-08-84"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Upfill colour R",
+            "value_line": 50642,
+            "ack_before": 50641,
+            "alias": "E78",
+            "ack_after": 50643
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0078_negative.cfg",
+          "phase_script_sha256": "cec02f91436ce1454de2f96d9d935db97360b697cd7c3ae764bd9243223d467f",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0078_negative",
+          "frame": {
+            "phase": "0078_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013600.bmp",
+            "name": "bb_013600.bmp",
+            "bytes": 921654,
+            "sha256": "a83b5c1704ab6bd3d9f9d5ccb7d14c2426eb1788da760026bdea82537b181a39",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 25,
+            "present": 13600,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=25 present=13600 file=bb_013600.bmp",
+            "ack_index": 51054,
+            "request_cursor": 51038,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13600,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8400 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 50982,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9285479,
+          "raw_snapshot_hash": "B0-6D-8F-99-A7-A3-08-D9-DB-80-56-63-AC-5E-8B-D0-F0-6D-54-CD-BE-78-78-45-E1-9F-D9-16-3B-4F-CD-2D"
+        },
+        "restore": {
+          "requested": "0.256",
+          "typed_native_triplet": {
+            "value": "0.256",
+            "path": "Environment/Irradiance rig/Upfill colour R",
+            "value_line": 51189,
+            "ack_before": 51188,
+            "alias": "E78",
+            "ack_after": 51190
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0078_restore.cfg",
+          "phase_script_sha256": "b32c8a98a929a41a2741fc6851a06d5c027705b53e5daaa9260b7c9b9e117115",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0078_restore",
+          "frame": {
+            "phase": "0078_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013795.bmp",
+            "name": "bb_013795.bmp",
+            "bytes": 921654,
+            "sha256": "1072323facb96964aa6ef84facc76b72d98b7d7e9f7842ed5f0bb45679b67f78",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 26,
+            "present": 13795,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=26 present=13795 file=bb_013795.bmp",
+            "ack_index": 52009,
+            "request_cursor": 51991,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13795,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8490 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 51619,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9379150,
+          "raw_snapshot_hash": "F2-53-B5-52-AF-09-86-49-BA-9F-93-AA-85-D2-F0-FC-49-34-7A-B8-CB-7F-B7-B1-4F-53-E1-59-2C-86-E1-B2"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0079",
+      "caption": "Upfill colour G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0079",
+        "alias": "E79",
+        "caption": "Upfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 228, \"Irradiance rig\", \"Upfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_g, \"Irradiance rig\", \"Upfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Upfill colour G",
+            "value_line": 52170,
+            "ack_before": 52169,
+            "alias": "E79",
+            "ack_after": 52171
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0079_positive.cfg",
+          "phase_script_sha256": "18272ef41bcf54b338e3cfe3c2db3693c07a1c00b17b4889c994525780c652c8",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0079_positive",
+          "frame": {
+            "phase": "0079_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_013929.bmp",
+            "name": "bb_013929.bmp",
+            "bytes": 921654,
+            "sha256": "493cb551c64f9675b01c9e21a2f53b59113e8fa800389a154c2635408232dc69",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 27,
+            "present": 13929,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=27 present=13929 file=bb_013929.bmp",
+            "ack_index": 52683,
+            "request_cursor": 52671,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "13929,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8640 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 52567,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9555293,
+          "raw_snapshot_hash": "A5-23-BF-B6-47-97-E8-90-00-B7-98-35-3A-E8-5F-C6-2B-0A-03-A1-41-7E-24-CD-1A-A1-A3-2A-AA-43-F1-E7"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Upfill colour G",
+            "value_line": 52812,
+            "ack_before": 52811,
+            "alias": "E79",
+            "ack_after": 52813
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0079_negative.cfg",
+          "phase_script_sha256": "bccc85272657e22d3bdd8661349f3e997d20bc3519ed51d130c2cb502da99dd9",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0079_negative",
+          "frame": {
+            "phase": "0079_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_014039.bmp",
+            "name": "bb_014039.bmp",
+            "bytes": 921654,
+            "sha256": "3f4bfe49d3098438406f6be014a01b6b20195678345a8f42deae7865587c6a8c",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 28,
+            "present": 14039,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=28 present=14039 file=bb_014039.bmp",
+            "ack_index": 53249,
+            "request_cursor": 53232,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "14039,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8730 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 53201,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9666031,
+          "raw_snapshot_hash": "EA-C1-F2-33-6A-26-F5-75-17-07-41-4E-7E-15-CA-94-7E-94-F7-5C-FD-B2-98-AE-CA-75-A4-EE-51-3C-ED-99"
+        },
+        "restore": {
+          "requested": "0.247",
+          "typed_native_triplet": {
+            "value": "0.247",
+            "path": "Environment/Irradiance rig/Upfill colour G",
+            "value_line": 53389,
+            "ack_before": 53388,
+            "alias": "E79",
+            "ack_after": 53390
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0079_restore.cfg",
+          "phase_script_sha256": "8ecdd586e2c756771e314b2cee36582c7f1a55bc340b55732fc027fe49944aa0",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0079_restore",
+          "frame": {
+            "phase": "0079_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_014225.bmp",
+            "name": "bb_014225.bmp",
+            "bytes": 921654,
+            "sha256": "1ce22cb33e9701c82ced845aab54893b36ea4f5e89a69b8ef47f39e55ac75d3e",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 29,
+            "present": 14225,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=29 present=14225 file=bb_014225.bmp",
+            "ack_index": 54154,
+            "request_cursor": 54136,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "14225,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8820 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 53829,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9762563,
+          "raw_snapshot_hash": "F1-08-63-35-42-B4-B6-29-B9-FA-75-9B-BA-68-4F-7C-C1-22-5A-1A-74-6B-8A-F5-2E-82-39-B8-EF-B1-27-A6"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0080",
+      "caption": "Upfill colour B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_finish",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0080",
+        "alias": "E80",
+        "caption": "Upfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Upfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 232, \"Irradiance rig\", \"Upfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfUpFillColour_b, \"Irradiance rig\", \"Upfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "path": "Environment/Irradiance rig/Upfill colour B",
+            "value_line": 54298,
+            "ack_before": 54297,
+            "alias": "E80",
+            "ack_after": 54299
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0080_positive.cfg",
+          "phase_script_sha256": "e08961f252152de354fff002928a4d73ff90621197d1495e75baf6d0fa5521e3",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0080_positive",
+          "frame": {
+            "phase": "0080_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_014356.bmp",
+            "name": "bb_014356.bmp",
+            "bytes": 921654,
+            "sha256": "dae81335db5538716104e03a26f1b26104cf17c47f073543497d950a265cf37e",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 30,
+            "present": 14356,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=30 present=14356 file=bb_014356.bmp",
+            "ack_index": 54810,
+            "request_cursor": 54794,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "14356,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 8970 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 54754,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 9925118,
+          "raw_snapshot_hash": "26-4C-09-44-AA-11-0D-DF-DF-71-C3-AA-04-4D-7C-F3-3D-A4-63-0E-D4-D1-A3-61-70-80-9B-33-9C-DE-54-5E"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "path": "Environment/Irradiance rig/Upfill colour B",
+            "value_line": 54944,
+            "ack_before": 54943,
+            "alias": "E80",
+            "ack_after": 54945
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0080_negative.cfg",
+          "phase_script_sha256": "da93148c2eb8b27b2d443ff54b763bd82ff724591478d045d892d0416d6dff39",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0080_negative",
+          "frame": {
+            "phase": "0080_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_014481.bmp",
+            "name": "bb_014481.bmp",
+            "bytes": 921654,
+            "sha256": "7a08f6a04564fd6383cbbe2b07ef77e9d59c956c1a7a29373a2cf32f890a9646",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 31,
+            "present": 14481,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=31 present=14481 file=bb_014481.bmp",
+            "ack_index": 55443,
+            "request_cursor": 55439,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "14481,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 9060 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 55360,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 10037538,
+          "raw_snapshot_hash": "A9-A5-E0-7A-B5-88-75-24-43-42-0B-FB-5D-1B-16-0A-96-9D-4D-67-D1-8E-91-A9-5B-DE-38-A0-DC-C1-DE-72"
+        },
+        "restore": {
+          "requested": "0.231",
+          "typed_native_triplet": {
+            "value": "0.231",
+            "path": "Environment/Irradiance rig/Upfill colour B",
+            "value_line": 55642,
+            "ack_before": 55641,
+            "alias": "E80",
+            "ack_after": 55643
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\phase_0080_restore.cfg",
+          "phase_script_sha256": "bf17b829ba29e216aeae9f3a80e6ef694690b8e6ce6ff8375fba5b7eeb2a3f5a",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\driver-result.json#phases/0080_restore",
+          "frame": {
+            "phase": "0080_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_014690.bmp",
+            "name": "bb_014690.bmp",
+            "bytes": 921654,
+            "sha256": "5a32671408a10f69009c846439dfea9498f23eabf7a979eed4ae60aad0ddd2c4",
+            "pid": 18216,
+            "slot": 62181,
+            "sequence": 32,
+            "present": 14690,
+            "ack": "[frame-request] pid=18216 slot=62181 seq=32 present=14690 file=bb_014690.bmp",
+            "ack_index": 56426,
+            "request_cursor": 56408,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\frames.csv",
+            "csv_row": "14690,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,303,3001.484,-0.413,-1852.285,0.1735,-0.3722,6.4395,0,0,0.0000,2999.809,0.435,-1851.896,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 9180 pos 2999.809082 0.434746 -1851.896362 at -0.577778 0.189255 0.793949 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.127554 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 56135,
+            "pose": [
+              2999.809,
+              0.435,
+              -1851.896
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 10159981,
+          "raw_snapshot_hash": "18-3A-34-63-90-B0-3C-AC-19-10-AD-66-8A-C5-64-DD-B3-36-F4-76-87-CC-B3-36-5D-BC-19-F1-F3-45-C4-03"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0081",
+      "caption": "Downfill colour R",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_last3",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0081",
+        "alias": "E81",
+        "caption": "Downfill colour R",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour R",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 236, \"Irradiance rig\", \"Downfill colour R\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_r, \"Irradiance rig\", \"Downfill colour R\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "ack_before": 34232,
+            "path": "Environment/Irradiance rig/Downfill colour R",
+            "alias": "E81",
+            "value_line": 34233,
+            "ack_after": 34234
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0081_positive.cfg",
+          "phase_script_sha256": "7558c162a4f8e40553d1cf06f4313bc9d339fb722163fa157f48f1c021b4c66b",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0081_positive",
+          "frame": {
+            "phase": "0081_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010076.bmp",
+            "name": "bb_010076.bmp",
+            "bytes": 921654,
+            "sha256": "214db5a3e2a0d5b7e76aa2584ac86e25098b894d0dc9c7cf878fc2cf27f89f73",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 3,
+            "present": 10076,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=3 present=10076 file=bb_010076.bmp",
+            "ack_index": 35145,
+            "request_cursor": 35132,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10076,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 5910 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 34717,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6386091,
+          "raw_snapshot_hash": "51-16-72-95-DF-F9-5C-07-F9-17-FB-00-F1-B1-21-A2-12-3C-E8-EB-79-7E-7A-C4-2A-59-2E-AC-DA-DB-B9-26"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "ack_before": 35262,
+            "path": "Environment/Irradiance rig/Downfill colour R",
+            "alias": "E81",
+            "value_line": 35263,
+            "ack_after": 35264
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0081_negative.cfg",
+          "phase_script_sha256": "18da7f4a350787b00850c8bf39ca469ac54f3fc9b58fc63b7cbc09781b306e02",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0081_negative",
+          "frame": {
+            "phase": "0081_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010189.bmp",
+            "name": "bb_010189.bmp",
+            "bytes": 921654,
+            "sha256": "67d37aa17c77c78ab20f9ec0953320b4b139c123f3b4fae48557b1384dbe0857",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 4,
+            "present": 10189,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=4 present=10189 file=bb_010189.bmp",
+            "ack_index": 35715,
+            "request_cursor": 35706,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10189,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6060 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 35680,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6573934,
+          "raw_snapshot_hash": "A8-2B-2A-9D-33-EC-65-9A-DC-F6-C5-FF-79-AC-1E-4E-05-F9-15-8A-BA-FC-5D-F7-E7-7E-E5-B6-E4-33-02-0A"
+        },
+        "restore": {
+          "requested": "0.693",
+          "typed_native_triplet": {
+            "value": "0.693",
+            "ack_before": 35837,
+            "path": "Environment/Irradiance rig/Downfill colour R",
+            "alias": "E81",
+            "value_line": 35838,
+            "ack_after": 35839
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0081_restore.cfg",
+          "phase_script_sha256": "5be29057314f45f7ef2503010d58fe683afb672b90caca61168d09949bf263f5",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0081_restore",
+          "frame": {
+            "phase": "0081_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010319.bmp",
+            "name": "bb_010319.bmp",
+            "bytes": 921654,
+            "sha256": "9410b6b56ca504649dbce49780bbf816432bdebf9c0547c44c265a8f4d029762",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 5,
+            "present": 10319,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=5 present=10319 file=bb_010319.bmp",
+            "ack_index": 36344,
+            "request_cursor": 36332,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10319,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6150 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 36287,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6673208,
+          "raw_snapshot_hash": "FE-43-15-1A-E6-56-11-3A-50-FA-A6-92-AB-81-20-42-F7-C7-EE-BD-9D-EA-95-4A-0D-5A-29-A9-46-ED-7E-DD"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0082",
+      "caption": "Downfill colour G",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_last3",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0082",
+        "alias": "E82",
+        "caption": "Downfill colour G",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour G",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 240, \"Irradiance rig\", \"Downfill colour G\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_g, \"Irradiance rig\", \"Downfill colour G\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "ack_before": 36452,
+            "path": "Environment/Irradiance rig/Downfill colour G",
+            "alias": "E82",
+            "value_line": 36453,
+            "ack_after": 36454
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0082_positive.cfg",
+          "phase_script_sha256": "7786a6d6884117d93a23c7f255a01942856d3240510ce57f8f44078d3a8edd8e",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0082_positive",
+          "frame": {
+            "phase": "0082_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010508.bmp",
+            "name": "bb_010508.bmp",
+            "bytes": 921654,
+            "sha256": "0a1bf42ac45a6a0f41c231ff578e9fc88af4f7133e1fe732d9a5ec227b9ecb64",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 6,
+            "present": 10508,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=6 present=10508 file=bb_010508.bmp",
+            "ack_index": 37267,
+            "request_cursor": 37254,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10508,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6240 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 36895,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6779461,
+          "raw_snapshot_hash": "8B-2A-D6-5F-95-B7-A9-EE-29-A8-D7-87-6A-F4-1D-BC-E0-4F-51-1C-1A-E2-AA-59-4F-FB-5D-3E-AE-09-2A-31"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "ack_before": 37395,
+            "path": "Environment/Irradiance rig/Downfill colour G",
+            "alias": "E82",
+            "value_line": 37396,
+            "ack_after": 37397
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0082_negative.cfg",
+          "phase_script_sha256": "3ba0c56bb7d8ecfce8a0a89fd4c77b378e1b497f641c8a242a30ddc678658fe1",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0082_negative",
+          "frame": {
+            "phase": "0082_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010650.bmp",
+            "name": "bb_010650.bmp",
+            "bytes": 921654,
+            "sha256": "4b86c76e90cb1e735c300a99eb29cbc6ec0ca9d974fe7307a26d7caac594182a",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 7,
+            "present": 10650,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=7 present=10650 file=bb_010650.bmp",
+            "ack_index": 37957,
+            "request_cursor": 37949,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10650,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6390 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 37893,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 6946089,
+          "raw_snapshot_hash": "D1-65-EB-67-3D-2B-A6-85-AA-F8-95-F2-8B-98-07-66-97-A9-CC-4D-AF-A8-0D-2B-C2-68-F4-D9-52-D9-2A-E6"
+        },
+        "restore": {
+          "requested": "0.838",
+          "typed_native_triplet": {
+            "value": "0.838",
+            "ack_before": 38062,
+            "path": "Environment/Irradiance rig/Downfill colour G",
+            "alias": "E82",
+            "value_line": 38063,
+            "ack_after": 38064
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0082_restore.cfg",
+          "phase_script_sha256": "3eb5e6afeeb34866dd79cac8e8880fc123047184c94ee2fe7d0ac3b5aed7f1dd",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0082_restore",
+          "frame": {
+            "phase": "0082_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010766.bmp",
+            "name": "bb_010766.bmp",
+            "bytes": 921654,
+            "sha256": "7994e9d6faf64a9c735a795307aefed5ca0b9417379c5c867ea72131705563be",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 8,
+            "present": 10766,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=8 present=10766 file=bb_010766.bmp",
+            "ack_index": 38541,
+            "request_cursor": 38527,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10766,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6480 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 38509,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7062277,
+          "raw_snapshot_hash": "D4-44-E7-3B-65-5D-9D-2D-58-0A-DA-5F-BF-75-36-2E-32-D8-27-3F-96-36-53-86-0C-F0-C3-31-EF-55-8A-F1"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0083",
+      "caption": "Downfill colour B",
+      "proposed_state": "verified",
+      "case": "next_native_batch_20261029_last3",
+      "source_registration": {
+        "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0083",
+        "alias": "E83",
+        "caption": "Downfill colour B",
+        "lookup_path": "Environment/Irradiance rig/Downfill colour B",
+        "type": "f32",
+        "range_min": 0.0,
+        "range_max": 10.0,
+        "original_call": "CgsDev::DebugComponent::RegisterVariable(v0, v0 + 244, \"Irradiance rig\", \"Downfill colour B\")",
+        "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B2408.json",
+        "source_call": "RegisterFloat(&mfDownFillColour_b, \"Irradiance rig\", \"Downfill colour B\", 0.0f, 10.0f, 0.1f);",
+        "source_commit": "abbc9047d850a4665d959993012261c55205e5e5",
+        "source_path": "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp",
+        "positive": 6.0,
+        "negative": 0.0,
+        "consumer": "DebugToManager -> LightingData named fill channel -> GenerateShaderConstants -> ComputeIrradiance direction,key,shadow,right,left,up,down -> RGB irradiance matrices -> world/vehicle lighting",
+        "roi": [
+          0.08,
+          0.25,
+          0.92,
+          0.95
+        ]
+      },
+      "states": {
+        "positive": {
+          "requested": "6",
+          "typed_native_triplet": {
+            "value": "6.000",
+            "ack_before": 38651,
+            "path": "Environment/Irradiance rig/Downfill colour B",
+            "alias": "E83",
+            "value_line": 38652,
+            "ack_after": 38653
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0083_positive.cfg",
+          "phase_script_sha256": "af75a4e235c0d1ebd89a45c1c6be1481e86bc26d9ee75f6b8cf43490eeacc723",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0083_positive",
+          "frame": {
+            "phase": "0083_positive",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_010952.bmp",
+            "name": "bb_010952.bmp",
+            "bytes": 921654,
+            "sha256": "d3d754a6aa36ba1057df23a5617e88124600095ae9c259f65f6c6cab273e4077",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 9,
+            "present": 10952,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=9 present=10952 file=bb_010952.bmp",
+            "ack_index": 39417,
+            "request_cursor": 39405,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "10952,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6570 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 39128,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7163438,
+          "raw_snapshot_hash": "58-BE-09-A8-64-58-65-0F-50-D2-1D-E4-87-8B-A0-15-3C-38-08-DF-42-E5-47-29-85-E9-42-3D-37-90-D6-B7"
+        },
+        "negative": {
+          "requested": "0",
+          "typed_native_triplet": {
+            "value": "0.000",
+            "ack_before": 39545,
+            "path": "Environment/Irradiance rig/Downfill colour B",
+            "alias": "E83",
+            "value_line": 39546,
+            "ack_after": 39547
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0083_negative.cfg",
+          "phase_script_sha256": "035a717915dd13930a91dd3fa86c2f91ca5a900ab033c6a03579221c277516e0",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0083_negative",
+          "frame": {
+            "phase": "0083_negative",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_011069.bmp",
+            "name": "bb_011069.bmp",
+            "bytes": 921654,
+            "sha256": "7d5f27854eea188545467056b1d91ec995e4e9e832c59203e334c2a902963255",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 10,
+            "present": 11069,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=10 present=11069 file=bb_011069.bmp",
+            "ack_index": 39997,
+            "request_cursor": 39984,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "11069,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6690 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 39906,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7324609,
+          "raw_snapshot_hash": "D5-61-E9-71-12-72-FF-5A-E4-B9-83-6E-7D-C4-A2-67-35-C6-D2-C9-88-AF-AD-F8-B6-85-52-1E-BB-4F-D7-84"
+        },
+        "restore": {
+          "requested": "0.895",
+          "typed_native_triplet": {
+            "value": "0.895",
+            "ack_before": 40117,
+            "path": "Environment/Irradiance rig/Downfill colour B",
+            "alias": "E83",
+            "value_line": 40118,
+            "ack_after": 40119
+          },
+          "phase_script": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\phase_0083_restore.cfg",
+          "phase_script_sha256": "ad8e32882941e9ae9756fc5de82c4f30fb2914376709ca95eb00f901f7bd89ca",
+          "all_companion_triplets_reference": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\driver-result.json#phases/0083_restore",
+          "frame": {
+            "phase": "0083_restore",
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\bb_011183.bmp",
+            "name": "bb_011183.bmp",
+            "bytes": 921654,
+            "sha256": "2dfa10b107aa8229392679488a9a1f3c85cbaab27003fad33fbe46fc865abd0a",
+            "pid": 56816,
+            "slot": 62180,
+            "sequence": 11,
+            "present": 11183,
+            "ack": "[frame-request] pid=56816 slot=62180 seq=11 present=11183 file=bb_011183.bmp",
+            "ack_index": 40571,
+            "request_cursor": 40558,
+            "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\frames\\frames.csv",
+            "csv_row": "11183,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,298,3002.841,-1.166,-1856.153,0.1439,-0.3679,7.3269,0,0,0.0000,3001.087,-0.400,-1855.902,514",
+            "car_engine_state": 2,
+            "boost_effect_mask": 514,
+            "motion_line": "[motion] n 6780 pos 3001.086670 -0.399587 -1855.901855 at -0.704057 0.095973 0.703628 vel 0.000000 0.000000 0.000000 |v| 0.000000 mph -0.065815 gear 0 rpm 4600.000000 gas 0.000000 steer -0.000000 engine 2",
+            "motion_index": 40518,
+            "pose": [
+              3001.087,
+              -0.4,
+              -1855.902
+            ],
+            "displacement_from_baseline": 0.0
+          },
+          "raw_snapshot_bytes": 7423150,
+          "raw_snapshot_hash": "3F-9B-4E-28-0D-81-26-63-EC-11-39-85-17-8A-BF-B1-E1-FF-9D-AF-F5-DC-74-F6-E5-8D-F2-88-6B-F3-17-A1"
+        }
+      },
+      "scope": "This completed P/N/R contrast, captured scene and original consumer only; no entire-domain/hardware/fullmenu claim."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0052",
+      "caption": "Layer 1 density",
+      "proposed_state": "pending",
+      "reason": "No observable layer1 density effect even with explicit opacity companion; original-noop closure not established."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0053",
+      "caption": "Layer 0 feathering",
+      "proposed_state": "pending",
+      "reason": "Loaded1.100 exceeds original0..1 setter range; original restore clamped1.000. Later runs never SET this alias."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0054",
+      "caption": "Layer 1 feathering",
+      "proposed_state": "pending",
+      "reason": "No observable layer1 feather effect even with explicit opacity companion; original-noop closure not established."
+    },
+    {
+      "id": "BrnWorld::EnvironmentSettings::DebugComponent::OnActivate#0056",
+      "caption": "Layer 1 opacity",
+      "proposed_state": "pending",
+      "reason": "No observable layer1 opacity effect even with explicit density companion; original-noop closure not established."
+    }
+  ],
+  "cases": [
+    {
+      "id": "next_native_batch_20261029_remainder",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder",
+      "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01",
+      "slot": 62180,
+      "pid": 72668,
+      "start_ticks": "639288994691862790",
+      "manifest": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\MANIFEST.json",
+      "manifest_sha256": "35828bba30a57ad04acca066730c54df931968a6fe6053d4b202f471e98a6da6",
+      "raw_log": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\stage\\slot\\BrnGame.log",
+      "raw_log_sha256": "92f54789929b8cdbe37b365084a831611026cf81bbe8dd40c2d6b93005c91942",
+      "raw_log_bytes": 27106614,
+      "driver_status": "fail",
+      "driver_error": "bounded Director driver deadline",
+      "frame_count": 34,
+      "canonical_result": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\result.json",
+      "canonical_report": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\REPORT.md",
+      "run_exit": {
+        "exit_code": 1,
+        "asset_handles_held": 5622,
+        "profile_restored": true
+      },
+      "normal36_unchanged": true,
+      "normal_postcheck": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\NORMAL_POSTCHECK.json",
+      "peer_receipts": {
+        "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01\\INDEPENDENT_REVIEW_environment21_native_review.json": "b5fa1ecfefe9d873e788bdb27438439bb15171d9e0b5b6978caa6d00d3c548c4"
+      },
+      "full_aggregate_pass": false
+    },
+    {
+      "id": "next_native_batch_20261029_finish",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish",
+      "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01",
+      "slot": 62181,
+      "pid": 18216,
+      "start_ticks": "639289003218424783",
+      "manifest": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\MANIFEST.json",
+      "manifest_sha256": "967d1297c08e4473772930bf980c9408695313306ec0e68d676c2fac7652f8e9",
+      "raw_log": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\stage\\slot\\BrnGame.log",
+      "raw_log_sha256": "9636b4ff7d63316050591e07c85a9470ed91e3b1ed4eef7169f0200db369656f",
+      "raw_log_bytes": 26239979,
+      "driver_status": "fail",
+      "driver_error": "Capture violated640x360 storage contract",
+      "frame_count": 35,
+      "canonical_result": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\result.json",
+      "canonical_report": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\REPORT.md",
+      "run_exit": {
+        "exit_code": 1,
+        "asset_handles_held": 5622,
+        "profile_restored": true
+      },
+      "normal36_unchanged": true,
+      "normal_postcheck": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\NORMAL_POSTCHECK.json",
+      "peer_receipts": {
+        "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\INDEPENDENT_REVIEW_environment21_native_review.json": "93bf4030a3b13e296a2b8b703323ce507ec1ad54f125b85460838b501ea1addc",
+        "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\INDEPENDENT_CLOSED_RAW_TEN_SITES_REVALIDATION.json": "b02401ed5712efec79bcb21118870eff8f69f3f0c7acb1edacaada17c72a44fa"
+      },
+      "full_aggregate_pass": false
+    },
+    {
+      "id": "next_native_batch_20261029_last3",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3",
+      "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01",
+      "slot": 62180,
+      "pid": 56816,
+      "start_ticks": "639289007989280535",
+      "manifest": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\MANIFEST.json",
+      "manifest_sha256": "129a7a574723641566141daa4b82675a47894229bb2fec8bbb6e6a10cd266930",
+      "raw_log": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\stage\\slot\\BrnGame.log",
+      "raw_log_sha256": "c9d946f0a29fb2710f76ccddfe80f0e0772a14c156b3bc8dadb4c3f15fe8727a",
+      "raw_log_bytes": 8037462,
+      "driver_status": "machine_complete_awaiting_independent_pixels",
+      "driver_error": "",
+      "frame_count": 13,
+      "canonical_result": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\result.json",
+      "canonical_report": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\REPORT.md",
+      "run_exit": {
+        "exit_code": 0,
+        "asset_handles_held": 5622,
+        "profile_restored": true
+      },
+      "normal36_unchanged": true,
+      "normal_postcheck": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\NORMAL_POSTCHECK.json",
+      "peer_receipts": {
+        "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_last3\\run_62180_game01\\INDEPENDENT_REVIEW_environment21_native_review.json": "f22f2b8429fcebf3955450ca6f6c2793e6df79ce110b40402f8d0dfc9e5245f0"
+      },
+      "full_aggregate_pass": true
+    }
+  ],
+  "source_git_blob_sha256": {
+    "src/GameSource/World/DebugComponents/BrnSkyDebugComponent.cpp": "45b479d4509924bb1772c671a548e6d09ef4327fb9cad687fcec8d4878f7d5c5",
+    "src/GameSource/World/EnvironmentManager/BrnEnvironmentManager.cpp": "b89c4efe5cb715aab1baf469bf1eb91cfcddd75b9a9161bd58f9df96670c6d0e",
+    "src/GameSource/World/EnvironmentManager/BrnGlobalIrradianceManager.cpp": "0a2162ddbe9134555958fd591a98b3b19a71f2306e9060519916cb8a29742d79",
+    "src/GameSource/Graphics/ImmediateMode/BrnIm3d.cpp": "ddb6afc87a11742906760e72fd82352aeae889803d9e52cc2885a003e539c987",
+    "src/GameSource/Graphics/BrnSkyDomeManager.cpp": "a24689b36c7d5b588a269ff955d160533e49cd71ae58a9e69f6e9e308561825a",
+    "src/GameSource/World/BrnWorldModule.cpp": "a1173e56f5391a75668af78ae597c6ddadcde87e5cfc2e0574f7ac0ed4cfdfa1",
+    "src/GameSource/Graphics/BrnRendererModule.cpp": "b2a930384616e4cdd72a4c8c74383a1bce3a2b055352f1dc422e0615d4867a36",
+    "src/pc/gcm/renderengine/device.cpp": "b82912732978b2da54b51ee2024e395079fdcf964f94f18dc1d57aee7800682a"
+  },
+  "original_export_sha256": {
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827B2408.json": "a8f6a14f47f428f29c3b88e5b07d532513f4858ea1f764b962845413bb543bf1",
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827B3B28.json": "b54020a35a231054c62659213fee37b87f92f17be0a780f92093bb0ccda9ba7f",
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827BFC80.json": "1bb56b67165aaac14af2c7fe8dc29f216d4666d26d72fd48ea5cbbf39b65dba4",
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827C7760.json": "29ca6b9c9e8d8011cf4667c0b231d56ea9a1d5b25998a3e32c92dfbf62a52f27",
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827D0098.json": "00280961758a660d382d19f60fc0137e9c60c0c91c80e29f99912301856cdfc3",
+    "D:\\Reverse\\BP-Decomp_Workflow\\.ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x827D1410.json": "392ac6db67d51ca2467f4b3c2703b8c9be11b7135e99c1bab4be7530cc58c56e"
+  },
+  "already_canonical_verified_at_handoff": [],
+  "canonical_mutation_by_this_task": false,
+  "game_source_changed": false,
+  "normal_installed_or_written_by_this_task": false,
+  "normal_history": "Normal41 authorized external payload transition recorded in scene/AUTHORIZED_NORMAL_TRANSITION.json. A later normalProfile AFDC->D706 delta occurred between completed own runs; explicitly snapshotted, never overwritten. All three primary retained/final runs preserve their respective fresh normal36.",
+  "failure_history": [
+    "original62180 intro508assert beforetargetwrites",
+    "skipvideo62181 wrongCRIGcategory beforetargetwrites",
+    "aliasfix62180 mistakenCSVboostmask-as-engineguard",
+    "scene62181 E53out-of-range restoreclamp",
+    "remainder62180 bounded235sdeadline",
+    "finish62181 unexpected2560x1440 frame81restore"
+  ],
+  "invalid_image_preserved": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_finish\\run_62181_game01\\frames\\bb_015146.bmp",
+  "limits": "Private source32/exe474 only. Prior FAILs remain FAIL. Last3 is canonical GREEN. No duplicated51 or retained refresh credit; pendinglayer1 controls are not originalnoops."
+}
