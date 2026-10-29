@@ -3780,6 +3780,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector.cpp"
+  echo "%SRC%\GameSource\Director\BrnDirectorDevTools.cpp"
   rem  MOUNTED 2026-08-02 (camera parameter-chain wave). BrnDirectorVehicleInputInterface --
   rem  the world -> director "a car entered the simulation" seam (Construct /
   rem  GetNewVehicleEventQueue / NewVehicle @0x822CBA90). It is the first link that actually
@@ -3895,6 +3896,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   echo "%SRC%\GameSource\Director\Camera\ICECameraMover.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_09.cpp"
   echo "%SRC%\SDKs\Packages\ICE\ICEWrapper_wG_11.cpp"
+  echo "%SRC%\SDKs\Packages\ICE\ICEWrapper.cpp"
   rem ---- THE PAUSE / CRASH-NAV ICE CAMERA, OWNERLIST 2026-09-27 lane L5: the SDK ICECameraMover per-frame update - Update, UpdateFrameBegin, UpdateFrameEnd @0x8253D988 and its eight sub-updates - and MainDirector::UpdateICE @0x82238FC0, which ICEWrapper::Update feeds.
   echo "%SRC%\SDKs\Packages\ICE\ICECameraMover.cpp"
   echo "%SRC%\GameSource\Director\BrnMainDirector_wM_01.cpp"
