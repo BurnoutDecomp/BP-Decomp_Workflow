@@ -1,0 +1,100 @@
+{
+  "verdict": "PASS",
+  "provenance": {
+    "exe_mtime_before_lock": "2026-10-31T00:19:00.5071060+01:00",
+    "exe_size": 11794944,
+    "exe_sha": "39b62961b592",
+    "exe_b5": "3f4f9c06",
+    "b5_dirty": 4,
+    "parent_head": "1897884e8",
+    "exe_mtime": "2026-10-31T00:19:00.5071060+01:00",
+    "b5_head": "e3d773c6c"
+  },
+  "asserts": 0,
+  "flow_exit": 0,
+  "phase": "DRIVING",
+  "case": "clean_minimap_boot_drive_62188",
+  "expected": "PASS",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\minimap_regression_20261030\\native_clean_62188\\runs\\fixed_62188_f055af4fd49241aa823a301322926a8c",
+  "label": "clean reviewed minimap boot/drive regression",
+  "when": "2026-10-31T00:20:10.7816132+01:00",
+  "as_expected": true,
+  "area": "gui-lifecycle",
+  "checks": [
+    {
+      "name": "original strict flow completed and owned game exited",
+      "pass": true,
+      "kind": "TerminalFlow",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True"
+    },
+    {
+      "name": "no NEW assert families",
+      "pass": true,
+      "kind": "NewAsserts",
+      "detail": "0 assert family(ies), all known (0 lines)"
+    },
+    {
+      "name": "assert lines (info: known noise counts too)",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 0]"
+    },
+    {
+      "name": "no exceptions",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]"
+    },
+    {
+      "name": "reached DRIVING",
+      "pass": true,
+      "kind": "Mark",
+      "detail": "final phase DRIVING, want DRIVING"
+    },
+    {
+      "name": "the car moved (teleport seat -> first respawn, > 20 m)",
+      "pass": true,
+      "kind": "Script",
+      "detail": "path=234,7m net=233,6m samples 43..129 teleported=True later respawns=0"
+    },
+    {
+      "name": "info: GAMEWRECKED hud messages (gameplay, never fails)",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "1 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]"
+    },
+    {
+      "name": "actual GameData GameTalk owner completed startup exactly once",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "1 line(s) match /\\[GameData\\] GameTalk ready owner=[0-9A-Fa-fx]+ manager=[0-9A-Fa-fx]+/, want [1, 1]"
+    },
+    {
+      "name": "real owner and real singleton existed before GUI registration",
+      "pass": true,
+      "kind": "Script",
+      "detail": "owner=00007FF73B294CF8 singleton=000000001A1BA650 readyAt=8639 guiAt=24786"
+    },
+    {
+      "name": "no repeat of first native GUI registration exception",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]|GameTalkManager::RegisterMessageHandler \\+.*\\[rva/, want [-inf, 0]"
+    },
+    {
+      "name": "real FLApt root finished within the native owner",
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "1 line(s) match /FLApt: allocated (948656|958000)b runtime data for file/, want [1, 1]"
+    },
+    {
+      "name": "actual current profile load",
+      "pass": true,
+      "kind": "Script",
+      "detail": "actual profile load pass=True"
+    }
+  ],
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\minimap_regression_20261030\\native_clean_62188\\fixed\\Case.ps1",
+  "bug": "Console byte capacity for bank66 exhausted on widened native Flapt arrays",
+  "slot": 62188
+}

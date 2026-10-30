@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "reviewed_utc": "2026-10-30T22:40:56.519112+00:00",
+  "scope": "Original packet and frozen manifest; no subsequent runner edits",
+  "production_b5": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+  "baseline_b5": "e3d773c6cc9020ddf1e5f867a7cdadf094348192",
+  "workflow_evidence": "38a0ec8384e9fb96a2b6df2497fc0a2f3f5eb00f",
+  "manifest_sha256": "7453b8d84609462269c22d56c8bdc3229b0fb5d6936259862183e71ae6d895b4",
+  "production_source_verdict": "PASS",
+  "production_source_defects": [],
+  "runtime_data_preservation_plan_verdict": "PASS",
+  "native_runner_design_verdict": "PASS",
+  "runtime_verification_plan_verdict": "FAIL",
+  "runtime_verification_plan_fail_scope": "Sufficient evidence to conclude repair of the reported visual transient",
+  "native_runtime_result": "UNVERIFIED_NOT_LAUNCHED",
+  "visual_fix_proven": false,
+  "diagnostic_binaries_shipping_candidates": false,
+  "findings": [
+    {
+      "id": "V1",
+      "priority": "P2",
+      "scope": "visual verification",
+      "title": "Reactive 250ms captures and uncorrelated tuples can miss the reported transient",
+      "evidence": [
+        "native_pair/old/Capture.ps1:47-79",
+        "native_pair/Postcheck.py:62-75",
+        "dense_18_22.png:21.5625/21.6875/21.8125"
+      ],
+      "minimum_remedy": "Capture native frames before/during/after an actual old jump with a renderer/presentation correlation; compare a fixed run over equivalent observed trajectory."
+    }
+  ],
+  "independent_checks": {
+    "freeze_collect_exact_match": true,
+    "runner_files_hashed": 31,
+    "external_dependencies_hashed": 6,
+    "diagnostic_artifacts_hashed": 30,
+    "both_v4_patches_applied_in_memory_and_source_receipts_match": true,
+    "production_subject_hashes_match_compile_receipt": true,
+    "offline_test_main": "PASS; temporary fixture directory redirected into reviewer output directory",
+    "profile_gate_test": "PASS",
+    "live_save_checksum_and_decoded_summary": "PASS",
+    "no_pair_launch_artifacts": true
+  },
+  "tests_not_run": [
+    "No game launch",
+    "No new C++ compilation",
+    "No rerun of queue_test.exe",
+    "No native visual/parity claim"
+  ],
+  "limitations": [
+    "Queue test reproduces interpreter forwarding rather than invoking the interpreter",
+    "C++ compilation/full-link evidence is inspected receipt evidence",
+    "Current storage constraint prevents actual native run",
+    "Report applies only to original frozen manifest"
+  ],
+  "report_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\minimap_sol_review_20261030\\REVIEW.md",
+  "report_sha256": "5a211120b216c884c2d75e2f032239943bfb871863eec9ff04c748c43ac4258f"
+}

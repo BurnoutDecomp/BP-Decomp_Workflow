@@ -1,0 +1,9 @@
+# Native minimap event repair
+
+The native model-to-view event declared a 48-byte console payload while the PC payload is 64 bytes. The route pointer and two map flags were not forwarded. Source 3f4f9c06 uses the existing typed wrapper to forward the native size; it changes no map-transform algorithm. Source/assembly review and the actual native queue experiment support this repair.
+
+The fix is on dev and installed as EXE 39b62961b592 in build/game. In paired diagnostic runs, all 2,106 old payloads had tail corruption and all 2,500 fixed payloads preserved the instrumented fields. The separate clean binary passed 12 startup, current-save and driving checks, with 234.667 m travel, one gameplay wreck and no asserts or exceptions. Only three runtime files were replaced; all 15 match the tested artifact, while 21 config/profile/log files and unrelated shared WIP stayed unchanged.
+
+The brief visual glitch is still unverified. The original paired screenshot checker remains FAIL because the requested 0.25-second interval was not achieved; the runs also diverged in their crash timing. Neither those contacts nor the clean five-frame baseline closes the recorded transient. No debug-site disposition is added.
+
+[Final evidence and decision](native_20261031/ROOT_DECISION.json), [native data review](native_20261031/NATIVE_DATA_REVIEW.md), [clean delivery review](native_20261031/CLEAN_DELIVERY_REVIEW.md), [raw paired archive](native_20261031/NATIVE_PAIR_ARCHIVE.json), [clean archive](native_20261031/CLEAN_NATIVE_ARCHIVE.json). All 53 original frames have verified archives outside the repository; no saves, configs, assets or binaries are included. Historical diagnostic attempts and failures are retained below. The initial PROOF describes the superseded 3,000-record witness; the executed v4 diagnostic used a 20,000-record cap. These diagnostic patches are reference evidence only and are absent from the shipped binary.
