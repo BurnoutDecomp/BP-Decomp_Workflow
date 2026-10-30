@@ -1,0 +1,58 @@
+--- a/src/GameSource/Gui/SatNav/BrnSatNavComponent.cpp
++++ b/src/GameSource/Gui/SatNav/BrnSatNavComponent.cpp
+@@ -27,6 +27,7 @@
+ #include "GameShared/GameClasses/Gui/CgsGuiEvent.h"                      // CgsGui::GuiEvent<212> (the render record head)
+ #include "SharedClasses/Gui/SatNav/BrnMapUtils.h"                        // BrnGui::MapTransform (the zoomed view install)
+ 
++#include <cstdlib>  // temporary opt-in witness
+ #include <cmath>     // sinf/cosf (the XMMatrixRotationY fold)
+ 
+ #include <cstring>   // strncmp / memset
+@@ -443,6 +444,22 @@
+         UpdateFreeRoaming();
+     }
+ 
++    // Temporary opt-in witness; remove before publishing.
++    if (std::getenv("BRN_SATNAV_EVENT_WITNESS") && CgsDev::Log::gpDebugPrint)
++    {
++        static unsigned suWitnessCount = 0;
++        if (suWitnessCount++ < 3000)
++            *CgsDev::Log::gpDebugPrint << "[satnav-event-witness] sender seq=" << static_cast<s32>(suWitnessCount) << " pos="
++                << mRenderSatNavEvent.mv3CarPosition.x << "," << mRenderSatNavEvent.mv3CarPosition.z
++                << " angle=" << mRenderSatNavEvent.mfCarOrientation
++                << " speed=" << mRenderSatNavEvent.mfCarSpeedMph
++                << " zoom=" << mRenderSatNavEvent.miZoomLevel
++                << " map=" << mRenderSatNavEvent.mpMapTexture
++                << " mask=" << mRenderSatNavEvent.mpMaskTexture
++                << " route=" << mRenderSatNavEvent.mpRouteSegmentTexture
++                << " rotate=" << static_cast<s32>(mRenderSatNavEvent.mbRotateMap)
++                << " trajectory=" << static_cast<s32>(mRenderSatNavEvent.mbUseTrajectory) << "\n";
++    }
+     // Post the render payload on the view-state channel (X360 record {48, 212, 16},
+     // ch41, 64 bytes -- native-width here per the PlayAptMovie precedent).
+     CGS_ASSERT(mpStateInterface != 0, " state interface is invalid ");   // :333 (non-gating)
+--- a/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp
++++ b/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp
+@@ -471,6 +471,22 @@
+         // typed assignment instead (the PlayAptMovie width precedent).
+         mRenderSatNavEvent =
+             *reinterpret_cast<const GuiEventRenderSatNav*>(lpEvent); // +0x60
++        // Temporary opt-in witness; remove before publishing.
++        if (std::getenv("BRN_SATNAV_EVENT_WITNESS") && CgsDev::Log::gpDebugPrint)
++        {
++            static unsigned suWitnessCount = 0;
++            if (suWitnessCount++ < 3000)
++                *CgsDev::Log::gpDebugPrint << "[satnav-event-witness] receiver seq=" << static_cast<s32>(suWitnessCount) << " pos="
++                    << mRenderSatNavEvent.mv3CarPosition.x << "," << mRenderSatNavEvent.mv3CarPosition.z
++                    << " angle=" << mRenderSatNavEvent.mfCarOrientation
++                    << " speed=" << mRenderSatNavEvent.mfCarSpeedMph
++                    << " zoom=" << mRenderSatNavEvent.miZoomLevel
++                    << " map=" << mRenderSatNavEvent.mpMapTexture
++                << " mask=" << mRenderSatNavEvent.mpMaskTexture
++                << " route=" << mRenderSatNavEvent.mpRouteSegmentTexture
++                    << " rotate=" << static_cast<s32>(mRenderSatNavEvent.mbRotateMap)
++                    << " trajectory=" << static_cast<s32>(mRenderSatNavEvent.mbUseTrajectory) << "\n";
++        }
+         // [DIAG] NOT IN THE X360 BINARY -- [satnav-diag] the first two 212 payloads.
+         {
+             static s32 siLeft = 2;
