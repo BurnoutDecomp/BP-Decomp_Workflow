@@ -1,0 +1,13 @@
+[msvc_env] using probed: "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+old_component.cpp
+old_renderer.cpp
+fixed_component.cpp
+fixed_renderer.cpp
+format_test.cpp
+CgsStrStream.cpp
+old A: 0xABCDEF01 1.000000
+old B: 0xABCDEF01 1.000000
+new A: prefix=3F800000,00000000,00000000,00000000,00000000,00000000,00000000,11111111ABCDEF01,0000000000000000 tail=0000000000000000,00,00
+new B: prefix=3F800001,00000000,00000000,00000000,00000000,00000000,00000000,22222222ABCDEF01,0000000000000000 tail=0000000000000000,00,00
+PASS: old formatter collides; exact formatter distinguishes each pointer/float and preserves raw flag byte
+PASS: identical tails pair FIFO; corruption counted; ambiguous tails, missing and FIFO gaps rejected

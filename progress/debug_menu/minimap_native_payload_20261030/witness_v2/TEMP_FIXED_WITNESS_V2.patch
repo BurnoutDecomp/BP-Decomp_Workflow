@@ -1,0 +1,93 @@
+--- a/src/GameSource/Gui/SatNav/BrnSatNavComponent.cpp
++++ b/src/GameSource/Gui/SatNav/BrnSatNavComponent.cpp
+@@ -16,6 +16,7 @@
+ // in BrnMapUtils.cpp. The TU is MOUNTED.
+ // ===================================================================================
+ #include "GameSource/Gui/SatNav/BrnSatNavComponent.h"
++#include "GameSource/Gui/SatNav/SatNavWitnessFormat.h" // temporary diagnostic
+ 
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                      // CGS_ASSERT
+ #include "GameShared/GameClasses/Core/CgsStringUtils.h"                 // CgsCore::SPrintf
+@@ -27,6 +28,7 @@
+ #include "GameShared/GameClasses/Gui/CgsGuiEvent.h"                      // CgsGui::GuiEvent<212> (the render record head)
+ #include "SharedClasses/Gui/SatNav/BrnMapUtils.h"                        // BrnGui::MapTransform (the zoomed view install)
+ 
++#include <cstdlib> // temporary opt-in witness
+ #include <cmath>     // sinf/cosf (the XMMatrixRotationY fold)
+ 
+ #include <cstring>   // strncmp / memset
+@@ -443,6 +445,18 @@
+         UpdateFreeRoaming();
+     }
+ 
++    // TEMPORARY, NOT SHIPPING. Receiver snapshots queue bytes before typed assignment.
++    if (std::getenv("BRN_SATNAV_EVENT_WITNESS") && CgsDev::Log::gpDebugPrint)
++    {
++        static unsigned suCount = 0;
++        if (suCount < 3000)
++        {
++            char lacWitness[256];
++            if (SatNavWitness::Format(mRenderSatNavEvent, lacWitness, sizeof(lacWitness)))
++                *CgsDev::Log::gpDebugPrint << "[satnav-event-witness] sender seq="
++                    << static_cast<s32>(++suCount) << " " << lacWitness << "\n";
++        }
++    }
+     // ARTIST824696A8..D0 boxes the render payload for channel 41. The
+     // wrapper records sizeof(payload) and its native offset: the interpreter
+     // uses that size when it forwards the payload to the view queue.
+--- a/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp
++++ b/src/GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.cpp
+@@ -20,6 +20,7 @@
+ // Begin/Fire/End sequence with the recovered literal expression + the original file/line.
+ 
+ #include "GameSource/Gui/CustomRenderer/Renderers/BrnSatNavRenderer.h"
++#include "GameSource/Gui/SatNav/SatNavWitnessFormat.h" // temporary diagnostic
+ 
+ #include "GameSource/Gui/BrnGuiCache.h"                 // BrnGui::GuiCache, BrnGui::PresetEvent
+ #include "GameSource/Gui/BrnGuiEventTypeDefs.h"         // BrnGui::GuiEventJunctionInfo (the case-311 typed read)
+@@ -469,6 +470,18 @@
+         // The X360 memcpy's the 48-byte record; the record is native-width on this host
+         // (three 8-byte texture pointers), so a fixed 48-byte copy would truncate it --
+         // typed assignment instead (the PlayAptMovie width precedent).
++        // TEMPORARY, NOT SHIPPING. Receiver snapshots queue bytes before typed assignment.
++        if (std::getenv("BRN_SATNAV_EVENT_WITNESS") && CgsDev::Log::gpDebugPrint)
++        {
++            static unsigned suCount = 0;
++            if (suCount < 3000)
++            {
++                char lacWitness[256];
++                if (SatNavWitness::Format(*reinterpret_cast<const GuiEventRenderSatNav*>(lpEvent), lacWitness, sizeof(lacWitness)))
++                    *CgsDev::Log::gpDebugPrint << "[satnav-event-witness] receiver seq="
++                        << static_cast<s32>(++suCount) << " " << lacWitness << "\n";
++            }
++        }
+         mRenderSatNavEvent =
+             *reinterpret_cast<const GuiEventRenderSatNav*>(lpEvent); // +0x60
+         // [DIAG] NOT IN THE X360 BINARY -- [satnav-diag] the first two 212 payloads.
+--- /dev/null
++++ b/src/GameSource/Gui/SatNav/SatNavWitnessFormat.h
+@@ -0,0 +1,24 @@
++#pragma once
++// TEMPORARY DIAGNOSTIC ONLY: never include in shipping source.
++#include "GameSource/Gui/SatNav/BrnSatNavComponent.h"
++#include <cstdint>
++#include <cstdio>
++#include <cstring>
++namespace SatNavWitness {
++inline std::uint32_t Bits32(const void* p) { std::uint32_t v; std::memcpy(&v,p,sizeof(v)); return v; }
++inline std::uint64_t Bits64(const void* p) { std::uint64_t v; std::memcpy(&v,p,sizeof(v)); return v; }
++inline unsigned Bits8(const void* p) { unsigned char v; std::memcpy(&v,p,sizeof(v)); return v; }
++inline bool Format(const BrnGui::GuiEventRenderSatNav& p, char* out, size_t capacity) {
++    static_assert(sizeof(void*) == 8 && sizeof(float) == 4, "native x64 witness");
++    const int n = std::snprintf(out, capacity,
++        "prefix=%08X,%08X,%08X,%08X,%08X,%08X,%08X,%016llX,%016llX tail=%016llX,%02X,%02X",
++        Bits32(&p.mv3CarPosition.x), Bits32(&p.mv3CarPosition.y),
++        Bits32(&p.mv3CarPosition.z), Bits32(&p.mv3CarPosition.w),
++        Bits32(&p.mfCarOrientation), Bits32(&p.mfCarSpeedMph), Bits32(&p.miZoomLevel),
++        static_cast<unsigned long long>(Bits64(&p.mpMapTexture)),
++        static_cast<unsigned long long>(Bits64(&p.mpMaskTexture)),
++        static_cast<unsigned long long>(Bits64(&p.mpRouteSegmentTexture)),
++        Bits8(&p.mbRotateMap), Bits8(&p.mbUseTrajectory));
++    return n >= 0 && static_cast<size_t>(n) < capacity;
++}
++}
