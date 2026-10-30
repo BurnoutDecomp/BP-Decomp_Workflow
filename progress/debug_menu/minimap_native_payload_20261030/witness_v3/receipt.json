@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-30T21:27:10.979127+00:00",
+  "python": "3.12.6 (tags/v3.12.6:a4a2d2b, Sep  6 2024, 20:11:23) [MSC v.1940 64 bit (AMD64)]",
+  "cases": [
+    {
+      "case": "v2_interleaved",
+      "exit": 0,
+      "pairs": 1,
+      "errors": []
+    },
+    {
+      "case": "v3_interleaved",
+      "exit": 1,
+      "pairs": 0,
+      "errors": [
+        "line 1: malformed witness",
+        "line 2: receiver 1 has no available sender with this prefix",
+        "no paired records"
+      ]
+    },
+    {
+      "case": "v2_suffix",
+      "exit": 0,
+      "pairs": 1,
+      "errors": []
+    },
+    {
+      "case": "v3_suffix",
+      "exit": 1,
+      "pairs": 0,
+      "errors": [
+        "line 1: malformed witness",
+        "line 2: receiver 1 has no available sender with this prefix",
+        "no paired records"
+      ]
+    }
+  ],
+  "subjects_sha256": {
+    "pair_witness.py": "1546d2518cc8c7d7148460ae590cbdb4e17a2172ceed416d193fe0ec18291775",
+    "pair_test.py": "1fdd458e8726b61ecb8f242284f783510bfe6cc29180f36081de65429c5a74b1",
+    "interleaved_sender_fixture.txt": "4c1f912a0bb619aa684764fd0eb0df25b70c2f3953afc39c9a66a7fd7cac83be",
+    "malformed_suffix_fixture.txt": "71e8dc41bba1b2953d9671efd0166795bf5e756efab0705b97d2b0255dcc9312",
+    "unexpected_prefix_fixture.txt": "3abe8f8609fa1b2e62590a18b36e51727e58e81d108120457ab18033d14c46b8",
+    "V2_DIAGNOSTIC_REVIEW.md": "7a12c58facc47885da957fcd94c9470fd45001aca9c8b6528c63e5994ca90cd2",
+    "V2_DIAGNOSTIC_REVIEW.json": "8fcfc6336653093c1a54cee1b88c2b464fcb62bc6a881a8dcc21b080902f0dcd",
+    "parser_test_receipt.txt": "cd6f90ecc2cfffa9e74bd3360c4b4e58aa3f945b2eca2925d16d526d6e163fa6"
+  }
+}
