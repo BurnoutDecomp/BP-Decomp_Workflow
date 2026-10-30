@@ -1,0 +1,142 @@
+{
+  "label": "Source45 unbypassed startup current profile road baseline",
+  "run_dir": "C:\\Users\\adri1\\Documents\\Codex\\source45_native_20261030\\run_62185_87e1a84185c94861bbc8164712a4326a",
+  "flow_exit": 0,
+  "verdict": "PASS",
+  "area": "gui-lifecycle",
+  "asserts": 0,
+  "phase": "DRIVING",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\source45_native_62185_20261030\\Case.ps1",
+  "checks": [
+    {
+      "pass": true,
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "kind": "TerminalFlow",
+      "name": "original strict flow completed and owned game exited"
+    },
+    {
+      "pass": true,
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "kind": "NewAsserts",
+      "name": "no NEW assert families"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /\\[ASSERT \\d+\\]/, want [-inf, 200]",
+      "kind": "LogCount",
+      "name": "assert lines (info: known noise counts too)"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "kind": "LogCount",
+      "name": "no exceptions"
+    },
+    {
+      "pass": true,
+      "detail": "final phase DRIVING, want DRIVING",
+      "kind": "Mark",
+      "name": "reached DRIVING"
+    },
+    {
+      "pass": true,
+      "detail": "path=236,8m net=234,6m samples 41..149 teleported=True later respawns=0",
+      "kind": "Script",
+      "name": "the car moved (teleport seat -> first respawn, > 20 m)"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /STARTING MESSAGE NAMED \"GAMEWRECKED/, want [-inf, +inf]",
+      "kind": "LogCount",
+      "name": "info: GAMEWRECKED hud messages (gameplay, never fails)"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /\\[GameData\\] GameTalk ready owner=[0-9A-Fa-fx]+ manager=[0-9A-Fa-fx]+/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "actual GameData GameTalk owner completed startup exactly once"
+    },
+    {
+      "pass": true,
+      "detail": "owner=00007FF7C9724CF8 singleton=000000001A1BA650 readyAt=8639 guiAt=24786",
+      "kind": "Script",
+      "name": "real owner and real singleton existed before GUI registration"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /\\[EXCEPTION\\]|GameTalkManager::RegisterMessageHandler \\+.*\\[rva/, want [-inf, 0]",
+      "kind": "LogCount",
+      "name": "no repeat of first native GUI registration exception"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /FLApt: allocated (948656|958000)b runtime data for file/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "real FLApt root finished within the native owner"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /\\[BootLegal\\] stage -?\\d+ -> 7/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "real main title movie reached legal title-ready state"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /\\[BootProfile\\] stage 3 -> 4/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "real profile serialization returned before BootProfile running"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /\\[Movie\\] prepared .*EAFRANCHISE/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "EA actual decoder prepared"
+    },
+    {
+      "pass": true,
+      "detail": "1 line(s) match /\\[Movie\\] prepared .*CRITERION/, want [1, 1]",
+      "kind": "LogCount",
+      "name": "Criterion actual decoder prepared"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /GUI_OUT_UNEXPECTED.*(508|509)/, want [-inf, 0]",
+      "kind": "LogCount",
+      "name": "video outer event reached movie manager"
+    },
+    {
+      "pass": true,
+      "detail": "EA=35782 Criterion=43594 title=45538 510between=1 510afterCriterion=1",
+      "kind": "Script",
+      "name": "both ordinary logo510 completions precede the legal title"
+    },
+    {
+      "pass": true,
+      "detail": "actual profile load pass=True",
+      "kind": "Script",
+      "name": "actual current profile progression load"
+    },
+    {
+      "pass": true,
+      "detail": "10 owned hash/ACK/phase-bound captures and exact owned phase-stop; labels=drive_8s,drive_15s,car_select,ea_movie_2s,criterion_movie_2s,title_ready,drive_25s,world_exit,ea_movie_5s,profile_ready",
+      "kind": "Script",
+      "name": "exact owned startup captures and requested phase stop"
+    }
+  ],
+  "case": "private_source45_boot_profile_world_drive_62185",
+  "slot": 62185,
+  "as_expected": true,
+  "when": "2026-10-30T20:48:10.7970489+01:00",
+  "expected": "PASS",
+  "bug": "Console byte capacity for bank66 exhausted on widened native Flapt arrays",
+  "provenance": {
+    "b5_dirty": 4,
+    "exe_mtime": "2026-10-30T20:46:49.4742852+01:00",
+    "exe_mtime_before_lock": "2026-10-30T20:46:49.4742852+01:00",
+    "b5_head": "d85e2d5e2",
+    "exe_sha": "e0635b4d424d",
+    "exe_b5": "e3d773c6",
+    "exe_size": 11794944,
+    "parent_head": "9ad7cf56e"
+  }
+}

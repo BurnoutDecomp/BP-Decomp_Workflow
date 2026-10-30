@@ -1,0 +1,9 @@
+# Source45 startup and driving baseline — October 30
+
+Source45 B5 `e3d773c6cc9020ddf1e5f867a7cdadf094348192`, build workflow `eae680840642ae417662a2b9408344f76e7fffcf`, executable SHA-256 `e0635b4d424d589409ee13b0b5c32d3850e778c8edec74dfc46eae8500f90992`. The canonical 3,019-TU build completed with 174 compiled, 2,845 cached, zero warnings and zero errors. The initial thin-checkout build.cmd attempt failed and is retained separately; the successful build is in [BUILD_RECEIPT.json](BUILD_RECEIPT.json).
+
+Before installation, private slot 62185 passed 18 case checks plus strict terminal, with zero asserts and exceptions. The unbypassed EA and Criterion movies, title, current copied profile and world were observed; the profile held 202 medals, 120 events, PUSMC02, rank 5 and catalog 85. Supporting place-on-track preceded 236.781 m measured driving; one later wreck occurred. The profile-ready capture was black and the load claim comes from native log evidence. [Native report](NATIVE_REPORT.md), [independent review](NATIVE_REVIEW.md), [frame receipts](NATIVE_CAPTURES.json), [Root-viewed contact sheet](ROOT_VIEWED_ALL_TEN.png).
+
+The retained original archive and its hash are in [ARCHIVE_RECEIPT.json](ARCHIVE_RECEIPT.json). This baseline was run before installation; a verified matching payload install establishes the same binary, not a test on normal user data. No Replay record/play, complete game, hardware controller or audio certification follows from this test.
+
+The matching build is now installed in `build/game`. All15 payloads match; five changed files were replaced with the executable last. All21 protected config/save/log paths and the shared source WIP are unchanged. See [delivery](DELIVERY.json), [actual installation](NORMAL_INSTALL_EXECUTION.json) and [post-install verification](POST_INSTALL_VERIFICATION.json). No data or language assets were converted.
