@@ -1,0 +1,9 @@
+# Source45 private startup baseline result
+
+PASS for this bounded startup/profile/world/driving baseline. B5 `e3d773c6cc9020ddf1e5f867a7cdadf094348192`, build workflow `eae680840642ae417662a2b9408344f76e7fffcf`, exe SHA-256 `e0635b4d424d589409ee13b0b5c32d3850e778c8edec74dfc46eae8500f90992`. Run `C:/Users/adri1/Documents/Codex/source45_native_20261030/run_62185_87e1a84185c94861bbc8164712a4326a`, slot 62185, exact owned PID 61208 start `2026-10-30T19:46:55.7559897Z`.
+
+All 18 case checks and strict terminal passed, including real unbypassed movie decoder and ordered 510 events, title, GameTalk/FLApt owner, actual copied nonnew profile (202 medals, 120 events, A7E60F1A40508000/PUSMC02, rank5/catalog85), world, owned capture/phase-stop joins and `236.8m` measured driving after scoped place-on-track before first respawn. One GAMEWRECKED message was observed later. This is a relocated native baseline, not Replay record/play or general gameplay parity.
+
+Ten 1280x720 frames are in `frames/`, each with exact hash/ACK in `CAPTURES.json`. Personally inspected: `bb_001292.bmp` shows EA logo; `bb_001789.bmp` later EA movie imagery; `bb_003137.bmp` visibly shows Criterion wordmark; `bb_004007.bmp` shows title; `bb_004380.bmp` is black (profile load proved by log, not this image); `bb_005629.bmp` shows car select; `bb_005944.bmp` shows world; `bb_006437.bmp` and `bb_006950.bmp` show road/driving; `bb_008177.bmp` shows WRECKED. No Criterion 5-second capture was taken. Root independently reviews raw frames.
+
+`flow-terminal.json` records phase-stop requested, exact-owned cleanup and input reset; `PRIVATE_PROFILE_BINDING.json` records one-link private profile; `CURRENT_SAVE_LOAD_GATE.json` records raw profile observations; `RUN_EXIT.json` records 5,622 asset handles and unchanged Source41 normal 15 payloads, config and profile. No normal install or canonical counters were changed. The earlier prelaunch FAIL and prior manifest remain recorded.

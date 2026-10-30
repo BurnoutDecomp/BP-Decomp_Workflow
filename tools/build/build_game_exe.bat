@@ -2446,6 +2446,7 @@ echo "%SRC%\GameSource\Physics\VehicleManager\BrnPhysicalTrafficManager_TrafficE
   echo "%SRC%\GameSource\Replays\BrnReplayArray.cpp"
   rem  QuantisedQuatPos Pack/UnPack -- the 12-byte quat+pos record the key-frame paths ride.
   echo "%SRC%\GameSource\Replays\BrnReplayQuantisedQuatPos.cpp"
+  echo "%SRC%\GameSource\Replays\BrnReplayQuantisedVector4.cpp"
   rem  ---- the replay serialiser LoadProp threads through the whole load path ----
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropEntitySerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayPropSerialiserFrame.cpp"
@@ -3776,6 +3777,7 @@ echo "%SRC%\GameShared\GameClasses\Sound\Playback\RWAC\CgsGenericRwacMasterVoice
   rem  NOTE: %SRC%\GameSource\Director\BrnDirectorModule.cpp is the REVERTED raw-offset
   rem  duplicate and must NOT be mounted -- the live TU is the one under DirectorModule\.
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModule.cpp"
+  echo "%SRC%\GameSource\Director\BrnReplayDirector.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOOutputBuffer.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleIOSceneQuery.cpp"
   echo "%SRC%\GameSource\Director\DirectorModule\BrnDirectorModuleDebugCompononent.cpp"
@@ -5465,7 +5467,15 @@ echo "%SRC%\SharedClasses\Traffic\BrnTrafficVehicleTraits.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeGUIToX_wBT_01.cpp"
   echo "%SRC%\GameSource\Game\GameBridgeWorldToX_wBT_01.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayDirectorBridgeSerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayDirectorSerialiser.cpp"
   echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayGameModuleSerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayRaceCarEntitySerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayTrafficEntitySerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplayTrafficSerialiserFrame.cpp"
+  rem Sound replay provider and the real frame/static-layout bodies used by its stream methods.
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplaySoundSerialiser.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplaySoundSerialiserFrame.cpp"
+  echo "%SRC%\GameSource\Replays\Serialisers\BrnReplaySoundSerialiserStaticLayout.cpp"
   echo "%SRC%\GameShared\GameClasses\Graphics\MoviePlayer\CgsMoviePlayerChunkBuffer.cpp"
   echo "%SRC%\GameSource\World\EntityModules\TrafficEntityModule\BrnTrafficEntityModule_wBT_01.cpp"
   echo "%SRC%\GameShared\GameClasses\Gui\CgsGuiModuleIO_OutputBuffer_Getters.cpp"

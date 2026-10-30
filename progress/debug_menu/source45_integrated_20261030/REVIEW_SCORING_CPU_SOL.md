@@ -1,0 +1,23 @@
+# Fresh combined source review: scoring payload and CPU PerfMon graph math
+
+Reviewed both sealed candidates against B5 `abbc9047d850a4665d959993012261c55205e5e5`. The scoring and CPU patches have no overlapping production paths. I did not edit shared source, refs, or ledger state.
+
+## Scoring payload and ordered distance
+
+**VERDICT: pass** — use `scratch/DEBUG_MENU_1011/scoring_resume_20261029_exact_eol/changes_exact_eol.patch` (SHA-256 `366091b144f4b38a86de939d739d03c338f792e3c8e4ce59a1ce66cb0c9d44e4`). It applies cleanly without whitespace relaxation to the exact pinned base; reverse apply-check passes against the exact frozen postimage. Its four normalized postimages equal the separately compiled post sources. The raw `GameStateModule_ProcessGameEvents_wBT_05.cpp` post preserves the frozen mixed EOL bytes and normalizes byte-for-byte to the tested LF post.
+
+ARTIST event 143 loads the full 64-bit value at event `+0` into r6, reads the s32 field at `+8` into r5 and the NetworkPlayerID at `+0xC` into r4. `SetNetworkStuntMultiplier` stores r6 with `std` at CarScoreData `+0xC8`, r5 at `+0xD0`, and active byte `1` at `+0xD8`; on the big-endian X360, the high 32 bits go at `+0xC8` and low 32 at `+0xCC`. The existing gather reads both words. The post preserves the full `s64` through the event handler and setter and writes both named s32 fields. DecFIGS does not expose the added chainable declarations, so the field order/width rests on ARTIST register and memory evidence plus the already recovered host fields.
+
+ARTIST `0x8232A2D0–0x8232A2E8` broadcasts the threshold, computes squared distance with `vmsum3fp128`, then branches away when the ordered `threshold > distance` predicate is false. That rejects unordered NaN and the exact/outside boundary. The post expression `!(lfDistanceSquared < 102400.0f)` reproduces that condition; the unchanged scalar motion-dot unordered path remains unchanged. Canonical MSVC flags contain no `/fp:fast`.
+
+Validation: six actual pre/post owning-TU compile gates pass (DebugComponent, UpdateB, ProcessGameEvents); the extracted-source fixture reproduces the expected **five pre failures** (wrong C8, CC, gather words, and both NaN cases) and passes **13/13 post checks**. The source header snapshot integrity file is bound by SHA-256 `f10dedd6a7443106ebe60e17882c4faeedb24b5cd280142cf361ce088ebfb073` and reports PASS. Primary manifest: 103/103 entries verified; exact-EOL manifest: 8/8 verified. Primary seal SHA-256 `6834e04be6f88dea4ec51ae43c175f912ee9cb969e2d0f19e7dcf91a3b82f7a2`; exact-EOL seal SHA-256 `0e5fbdced35937575bdbe45e2a190c51cb3472d8d26e9b668fdec84818c70224`.
+
+## CPU PerfMon graph math finite witness
+
+**VERDICT: pass** — use `scratch/DEBUG_MENU_1011/cpu_perfmon_graph_math_witness_20261029/changes.patch` (SHA-256 `92fd33a0d2586d0d425d4a61d27a36a19185be6c971fcccef0c351de0196dddb`). It is LF-only, applies cleanly against the pinned B5 source, and reverse apply-check passes against the exact post. The source preimage is B5 blob `db5d96901e409eae9467875bfb057dc79687e31c` / SHA-256 `658e95dd55d7a7eccd323512ababb6da9ba066cb09791f6377f07b30b8286e92`; post SHA-256 is `b88a88b77e7370f01c19a4e2db180b2a82502cb6378f2a8d3b8e157a8bf4da81`.
+
+I independently checked the raw 564-byte ARTIST function at `0x82826820`: the words at `0x828268B4/BCC/269B8/269E4/269EC` are `EC0CF83A/EC00F828/EC1B06B2/EFC0F82A/EC1EF828`, matching `fmadds`, `fsubs`, `fmuls`, `fadds`, and `fsubs`. The post uses `std::fmaf(maxCpu, 2.8799999f, 32.0f) - 32.0f` for the background and separately rounded product, endpoint addition, and width subtraction for each segment, then carries the endpoint forward. DecFIGS `0xB35BAC` supplies `void RenderPerformanceGraph(Debug2DImmediateRender*)`; the ARTIST Hex-Rays prototype is explicitly unreliable.
+
+The compiled finite witness uses `mfMaxCpu=1.0f` and one `Update cost` monitor at `1.0f`. The preimage produces widths `0x403851eb` and `0x403851ec`; the post produces `0x403851f0` for both and the expected endpoint `0x420b851f`. The fixture extracts the actual production function body and records its DrawBox arguments; it is a bounded finite-input witness, not native rendering proof. Both actual pre/post production-TU gates pass. All 54 tracked headers in the private overlays match their Git objects at the pinned B5 commit; external includes are MSVC/Windows SDK headers. CPU seal SHA-256 `cb45bfa951e362243381d5bedc8cd3a26befd1bfcc9de50e0778209159efa67a`; manifest SHA-256 `ef8d25dce8ddb790e872f5fb1a1d5df5c48c043fe04ec89c2ebf924d902f0ada`, all 167 entries verified.
+
+Neither candidate has native/game rendering or site-credit evidence. Original failing preimage controls are retained.

@@ -1,0 +1,125 @@
+diff --git a/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp b/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp
+index db5d96901..226d3088b 100644
+--- a/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp
++++ b/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp
+@@ -4,6 +4,7 @@
+ #include "GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsDebugUI.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                                            // CGS_ASSERT (LogBufferEnable)
+ 
++#include <cmath>
+ #include <cstdio>
+ #include <cstring>
+ 
+@@ -207,7 +208,8 @@ namespace CgsDev
+         lpDebug2DRender->DrawFrame(32.0f, 408.0f, 608.0f, 412.0f,
+                                    0xFF000000u, 2.0f);
+         lpDebug2DRender->DrawBox(Vector2{32.0f, 408.0f, 0, 0},
+-                                Vector2{mfMaxCpu * 2.8799999f, 4.0f, 0, 0}, 0xFF252525u);
++                                Vector2{std::fmaf(mfMaxCpu, 2.8799999f, 32.0f) - 32.0f,
++                                        4.0f, 0, 0}, 0xFF252525u);
+ 
+         f32 lfX = 32.0f;
+         f32 lfTotal = 0.0f;
+@@ -223,10 +225,12 @@ namespace CgsDev
+                 std::strcmp(lData.mpcName, "Render cost") != 0)
+                 continue;
+ 
+-            const f32 lfWidth = lData.mfCurrentValue * 2.8800001f;
++            const f32 lfScaledWidth = lData.mfCurrentValue * 2.8800001f;
++            const f32 lfNextX = lfScaledWidth + lfX;
++            const f32 lfWidth = lfNextX - lfX;
+             lpDebug2DRender->DrawBox(Vector2{lfX, 408.0f, 0, 0},
+                                     Vector2{lfWidth, 4.0f, 0, 0}, 0xFFCC59CCu);
+-            lfX += lfWidth;
++            lfX = lfNextX;
+             lfTotal += lData.mfCurrentValue;
+         }
+ 
+diff --git a/src/GameSource/GameState/GameStateModule_ProcessGameEvents_wBT_05.cpp b/src/GameSource/GameState/GameStateModule_ProcessGameEvents_wBT_05.cpp
+index 15db9a3db..157d09bcb 100644
+--- a/src/GameSource/GameState/GameStateModule_ProcessGameEvents_wBT_05.cpp
++++ b/src/GameSource/GameState/GameStateModule_ProcessGameEvents_wBT_05.cpp
+@@ -566,11 +566,10 @@ void GameStateModule::ProcessGameEvents_Group5(s32
+         const GameStateModuleIO::StuntMultiplierEvent* lpMultiplierEvent =
+             reinterpret_cast<const GameStateModuleIO::StuntMultiplierEvent*>(lpEvent);
+         CGS_ASSERT(lpMultiplierEvent, "lpMultiplierEvent");
+-        // The console hands the whole 64-bit word over; ScoringSystem::SetNetworkStuntMultiplier
+-        // declares that parameter as an s32.
++        // ARTIST loads the full event payload into r6 with ld; preserve all 64 bits.
+         mModeManager.GetScoringSystem()->SetNetworkStuntMultiplier(lpMultiplierEvent->mNetworkPlayerID,
+                                                                    lpMultiplierEvent->miStuntMultiplier,
+-                                                                   static_cast<s32>(lpMultiplierEvent->mi64MultiplierData));
++                                                                   lpMultiplierEvent->mi64MultiplierData);
+         break;
+     }
+ 
+diff --git a/src/GameSource/GameState/ModeManager/Debug/BrnScoringSystemDebugComponent.cpp b/src/GameSource/GameState/ModeManager/Debug/BrnScoringSystemDebugComponent.cpp
+index e58417caf..d0205e2bc 100644
+--- a/src/GameSource/GameState/ModeManager/Debug/BrnScoringSystemDebugComponent.cpp
++++ b/src/GameSource/GameState/ModeManager/Debug/BrnScoringSystemDebugComponent.cpp
+@@ -182,7 +182,8 @@ namespace BrnGameState
+         // Both vectors are normalised before the dot product, exactly as the VMX body does.
+         const Vector3 lToRaceCar =
+             lpRaceCarState->mTransform.Pos() - lpLocalPlayersCarState->mTransform.Pos();
+-        if (rw::math::vpu::MagnitudeSquared(lToRaceCar) >= 102400.0f)
++        const f32 lfDistanceSquared = rw::math::vpu::MagnitudeSquared(lToRaceCar);
++        if (!(lfDistanceSquared < 102400.0f))
+             return;
+ 
+         const f32 lfMotionDot = rw::math::vpu::Dot(
+diff --git a/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h b/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h
+index cdfc6e08b..02a58fca4 100644
+--- a/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h
++++ b/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem.h
+@@ -590,11 +590,9 @@ namespace BrnGameState
+         // slot, SetNetworkStuntScore by network player id; both store via CarData::GetScoreData().
+         void SetPlayerStuntScore(EActiveRaceCarIndex leRaceCarIndex, s32 liScore);                         // 0x8231F0C8
+         void SetNetworkStuntScore(BrnNetwork::NetworkPlayerID lID, s32 liScore);                           // 0x8231FC20
+-        // SetNetworkStuntMultiplier (0x8231FC50) arms the per-car "chainable stunt multiplier" trio
+-        // (CarScoreData +0xC8 miChainableScore / +0xD0 miCurrentChainableMultiplier / +0xD8 mbChainActive)
+-        // on GetCarData(lID); reconciled arg order from the X360 register setup (r5->+0xD0, r6->+0xC8).
+-        // Body in BrnScoringSystem_UpdateB.cpp (writes via the CarScoreData chainable-trio accessors).
+-        void SetNetworkStuntMultiplier(BrnNetwork::NetworkPlayerID lID, s32 liMultiplier, s32 liChainableScore); // 0x8231FC50
++        // ARTIST r6 carries the complete 64-bit payload stored at CarScoreData +0xC8/+0xCC;
++        // r5 supplies the frame value at +0xD0, and the chain-active byte is set at +0xD8.
++        void SetNetworkStuntMultiplier(BrnNetwork::NetworkPlayerID lID, s32 liMultiplier, s64 li64MultiplierData); // 0x8231FC50
+ 
+         // PlayerPerformedBarrelRolls (0x823634D0) adds liCount to the per-car barrel-roll tally at
+         // CarScoreData +0xFC (carved as miBarrelRollCount). Body in BrnScoringSystem_UpdateB.cpp.
+diff --git a/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_UpdateB.cpp b/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_UpdateB.cpp
+index ee2665075..9848e7717 100644
+--- a/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_UpdateB.cpp
++++ b/src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_UpdateB.cpp
+@@ -613,25 +613,18 @@ namespace BrnGameState
+     // ------------------------------------------------------------------------
+     // SetNetworkStuntMultiplier -- X360 0x8231FC50
+     // ------------------------------------------------------------------------
+-    // Arm the per-car "chainable stunt multiplier" trio for the car owned by the given
+-    // network player. The lookup (GetCarData(NetworkPlayerID), X360 sub_8231DD88) returns
+-    // NULL when no such car is registered; only on a hit does the X360 body write:
+-    //   miChainableScore (+0xC8) = liChainableScore   (asm std r30,0xC8 -- r30 == a4)
+-    //   miCurrentChainableMultiplier (+0xD0) = liMultiplier  (asm stw r31,0xD0 -- r31 == a3)
+-    //   mbChainActive (+0xD8) = 1                      (asm stb 1,0xD8)
+-    // Arg order reconciled from the register setup: r5(a3) is the multiplier (->+0xD0),
+-    // r6(a4) is the chainable score (->+0xC8); the declared signature names them
+-    // (lID, liMultiplier, liChainableScore). The +0xC8 store is a 64-bit `std` whose low
+-    // word is the chainable score; the high word (miChainableField, +0xCC) is the
+-    // store's incidental tail and is not a meaningful value -- only the named s32 score is
+-    // reproduced here.
+-    void ScoringSystem::SetNetworkStuntMultiplier(BrnNetwork::NetworkPlayerID lID, s32 liMultiplier, s32 liChainableScore)
++    // ARTIST receives the complete 64-bit event payload in r6 and stores it with std at +0xC8.
++    // Preserve its big-endian word order in the two recovered s32 fields: high word at +0xC8,
++    // low word at +0xCC. The display gather copies both words; +0xD0 is the received frame value.
++    void ScoringSystem::SetNetworkStuntMultiplier(BrnNetwork::NetworkPlayerID lID, s32 liMultiplier, s64 li64MultiplierData)
+     {
+         CarData* lpCar = GetCarData(lID);
+         if (lpCar)
+         {
+             GameStateModuleIO::CarScoreData* lpScore = lpCar->GetScoreData();
+-            lpScore->SetChainableScore(liChainableScore);
++            const u64 luMultiplierData = static_cast<u64>(li64MultiplierData);
++            lpScore->SetChainableScore(static_cast<s32>(luMultiplierData >> 32));
++            lpScore->SetChainableField(static_cast<s32>(luMultiplierData));
+             lpScore->SetCurrentChainableMultiplier(liMultiplier);
+             lpScore->SetChainActive(true);
+         }
