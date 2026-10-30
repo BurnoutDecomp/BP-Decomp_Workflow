@@ -1,0 +1,695 @@
+{
+  "schema": 1,
+  "reviewer": "native_concrete_review",
+  "verdict": "pass",
+  "scope": "Read-only retained P27 phase collection and bounded pixel recommendations; no new execution approval",
+  "packet_manifest_sha256": "c1ee0852fd0af97e366cc6f819a47ec7376f452a0243005572a78c6e7f141b44",
+  "packet_seal_sha256": "cb7ea7562b982e0397c214f6f922e9fe633b160cb86b8e21b995e46d685a7bd0",
+  "independently_rerun": [
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_concrete_review_20261029\\PROPS28_PHYSICAL_INDEPENDENT.json",
+      "sha256": "7a58a524ef9bc47f769aad1cb2fdbed36aec6e349da3edfdaf5d09e0ded3ce39"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_concrete_review_20261029\\PROPS28_PROPS_PARTIAL_INDEPENDENT.json",
+      "sha256": "826452d08d1110fd0d2cabcbfbf87eb8b473214769be58b0a798fae03cce4653"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_concrete_review_20261029\\PROPS28_ROI_PS5\\RESULT.json",
+      "sha256": "aec68e6d688c314d43abf92a639fa90f05d938873a70ed7112454c1e616e42d4"
+    },
+    {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_concrete_review_20261029\\PROPS28_ROI_PS7\\RESULT.json",
+      "sha256": "679bc351e1825e84910cb20f6e6a9296ab0a7b2e0a369065aa14f09d50ab3ffa"
+    }
+  ],
+  "physical": {
+    "phases": 32,
+    "typed_values": 288,
+    "all_final_defaults": true,
+    "original_run": "FAIL_preserved"
+  },
+  "props": {
+    "phases": 50,
+    "expected": 55,
+    "typed_values": 800,
+    "final_nondefaults": [
+      "BrnWorld::PropEntityModule::Construct#0004",
+      "BrnWorld::PropEntityModule::Construct#0006"
+    ],
+    "original_run": "FAIL_preserved"
+  },
+  "profile_check_epoch": "Independent replay verified private live and saved .after against original fixture before owner authorized ordinary-copy current-save transition for next P29. Saved P27 inputs remain unchanged; current private path now belongs to new epoch.",
+  "source_pin": "00830db6c9b5e06e70cf3e5defc552f18abf8781",
+  "negative_cases_per_run": 5,
+  "roi_defect_reproduced_both_PS5_PS7": true,
+  "recommendations": [
+    {
+      "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+      "caption": "Module stats display",
+      "recommendation": "bounded_display_behavior_supported",
+      "scope": "Budget/zone table visible when TRUE, absent when FALSE and restored FALSE; only screen-space display scope.",
+      "evidence": [
+        {
+          "phase": "E05-positive",
+          "frame": {
+            "phase": "E05-positive",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "state": "positive",
+            "sequence": 17,
+            "present": 20041,
+            "file": "bb_020041.bmp",
+            "relative_path": "frames/bb_020041.bmp",
+            "sha256": "ba021f7ef253c74faee81215fb838c58cfed289f8b4d1b8fdeb1ff0e33ec3df5",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=17 present=20041 file=bb_020041.bmp",
+            "ack_line_index": 81303,
+            "request_cursor_line_index": 81126,
+            "captured_at_utc": "2026-10-29T21:15:58.6152025Z",
+            "frames_csv": {
+              "present": 20041,
+              "raw_line": "20041,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3038.654,-2.837,-1943.251,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3038.654",
+                "-2.837",
+                "-1943.251"
+              ]
+            }
+          },
+          "raw_group_start_line": 79633,
+          "raw_group_end_line": 79680,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "alias": "E05",
+            "path": "/Physics/Prop Entity Module/Render PropEntityModule stats",
+            "value": "TRUE",
+            "expected": "TRUE",
+            "path_log_line": 79648,
+            "value_log_line": 79649,
+            "close_log_line": 79650
+          }
+        },
+        {
+          "phase": "E05-negative",
+          "frame": {
+            "phase": "E05-negative",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "state": "negative",
+            "sequence": 18,
+            "present": 21027,
+            "file": "bb_021027.bmp",
+            "relative_path": "frames/bb_021027.bmp",
+            "sha256": "0f6c4bf08c5d559c1bb3fecdbfc0085c77a70b664ba22bfe3df826c7069cb53a",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=18 present=21027 file=bb_021027.bmp",
+            "ack_line_index": 85410,
+            "request_cursor_line_index": 85266,
+            "captured_at_utc": "2026-10-29T21:16:09.8622492Z",
+            "frames_csv": {
+              "present": 21027,
+              "raw_line": "21027,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3038.400,-2.860,-1944.360,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3038.400",
+                "-2.860",
+                "-1944.360"
+              ]
+            }
+          },
+          "raw_group_start_line": 83957,
+          "raw_group_end_line": 84004,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "alias": "E05",
+            "path": "/Physics/Prop Entity Module/Render PropEntityModule stats",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 83972,
+            "value_log_line": 83973,
+            "close_log_line": 83974
+          }
+        },
+        {
+          "phase": "E05-restore",
+          "frame": {
+            "phase": "E05-restore",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "state": "restore",
+            "sequence": 19,
+            "present": 22138,
+            "file": "bb_022138.bmp",
+            "relative_path": "frames/bb_022138.bmp",
+            "sha256": "89075b7c9369428385e835fc216f9f7b04672c5b6c15520f4bd582ad199d53df",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=19 present=22138 file=bb_022138.bmp",
+            "ack_line_index": 90253,
+            "request_cursor_line_index": 90091,
+            "captured_at_utc": "2026-10-29T21:16:21.5563122Z",
+            "frames_csv": {
+              "present": 22138,
+              "raw_line": "22138,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3037.461,-2.875,-1945.062,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3037.461",
+                "-2.875",
+                "-1945.062"
+              ]
+            }
+          },
+          "raw_group_start_line": 88487,
+          "raw_group_end_line": 88534,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0005",
+            "alias": "E05",
+            "path": "/Physics/Prop Entity Module/Render PropEntityModule stats",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 88502,
+            "value_log_line": 88503,
+            "close_log_line": 88504
+          }
+        }
+      ],
+      "limitation": "Same-site defaults restore is observed; overall Props run remains FAIL and final all-fields restoration is not established. No active prop physics or LOD behavior claim."
+    },
+    {
+      "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+      "caption": "Cell grid display",
+      "recommendation": "bounded_display_behavior_supported",
+      "scope": "White cell outlines and green active-cell shading visible when TRUE, absent when FALSE and restored FALSE.",
+      "evidence": [
+        {
+          "phase": "E06-positive",
+          "frame": {
+            "phase": "E06-positive",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "state": "positive",
+            "sequence": 20,
+            "present": 23145,
+            "file": "bb_023145.bmp",
+            "relative_path": "frames/bb_023145.bmp",
+            "sha256": "2c3d3b05bc7460fd535b1e9e446dcea97f8a268db42cb46fdf264aa18c58b6b8",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=20 present=23145 file=bb_023145.bmp",
+            "ack_line_index": 94672,
+            "request_cursor_line_index": 94509,
+            "captured_at_utc": "2026-10-29T21:16:33.0289916Z",
+            "frames_csv": {
+              "present": 23145,
+              "raw_line": "23145,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3037.228,-2.900,-1946.172,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3037.228",
+                "-2.900",
+                "-1946.172"
+              ]
+            }
+          },
+          "raw_group_start_line": 93085,
+          "raw_group_end_line": 93132,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "alias": "E06",
+            "path": "/Physics/Prop Entity Module/Render cell grid",
+            "value": "TRUE",
+            "expected": "TRUE",
+            "path_log_line": 93103,
+            "value_log_line": 93104,
+            "close_log_line": 93105
+          }
+        },
+        {
+          "phase": "E06-negative",
+          "frame": {
+            "phase": "E06-negative",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "state": "negative",
+            "sequence": 21,
+            "present": 24142,
+            "file": "bb_024142.bmp",
+            "relative_path": "frames/bb_024142.bmp",
+            "sha256": "43ff242ed3f78b1f5e476e17fb86f5dab896879549e6516b3c8d41d74d17bdb8",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=21 present=24142 file=bb_024142.bmp",
+            "ack_line_index": 98971,
+            "request_cursor_line_index": 98789,
+            "captured_at_utc": "2026-10-29T21:16:45.1322363Z",
+            "frames_csv": {
+              "present": 24142,
+              "raw_line": "24142,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3037.008,-2.923,-1947.180,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3037.008",
+                "-2.923",
+                "-1947.180"
+              ]
+            }
+          },
+          "raw_group_start_line": 97335,
+          "raw_group_end_line": 97382,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "alias": "E06",
+            "path": "/Physics/Prop Entity Module/Render cell grid",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 97353,
+            "value_log_line": 97354,
+            "close_log_line": 97355
+          }
+        },
+        {
+          "phase": "E06-restore",
+          "frame": {
+            "phase": "E06-restore",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "state": "restore",
+            "sequence": 22,
+            "present": 25116,
+            "file": "bb_025116.bmp",
+            "relative_path": "frames/bb_025116.bmp",
+            "sha256": "38cc66a423425147a61eb14ff0378f7475c3b2770cb78f1ab90e0ad6bcae6616",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=22 present=25116 file=bb_025116.bmp",
+            "ack_line_index": 103209,
+            "request_cursor_line_index": 103015,
+            "captured_at_utc": "2026-10-29T21:16:57.0908167Z",
+            "frames_csv": {
+              "present": 25116,
+              "raw_line": "25116,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 101672,
+          "raw_group_end_line": 101719,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0006",
+            "alias": "E06",
+            "path": "/Physics/Prop Entity Module/Render cell grid",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 101690,
+            "value_log_line": 101691,
+            "close_log_line": 101692
+          }
+        }
+      ],
+      "limitation": "Same-site defaults restore is observed; overall Props run remains FAIL and final all-fields restoration is not established. No active prop physics or LOD behavior claim."
+    },
+    {
+      "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+      "caption": "Cell grid zoom",
+      "recommendation": "bounded_display_behavior_supported",
+      "scope": "With cell-grid gate TRUE, values 2, 0.5 and restored 1 visibly expand, contract and restore grid scale. Context gate subsequently returns FALSE.",
+      "evidence": [
+        {
+          "phase": "E07-positive",
+          "frame": {
+            "phase": "E07-positive",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "state": "positive",
+            "sequence": 24,
+            "present": 27180,
+            "file": "bb_027180.bmp",
+            "relative_path": "frames/bb_027180.bmp",
+            "sha256": "511d4dc419439360072f659f1eea3fe029a493f4917d237b8b9cfaa64869ae1c",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=24 present=27180 file=bb_027180.bmp",
+            "ack_line_index": 112089,
+            "request_cursor_line_index": 111875,
+            "captured_at_utc": "2026-10-29T21:17:21.9474647Z",
+            "frames_csv": {
+              "present": 27180,
+              "raw_line": "27180,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 110357,
+          "raw_group_end_line": 110404,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "alias": "E07",
+            "path": "/Physics/Prop Entity Module/Cell grid zoom",
+            "value": "2.000",
+            "expected": "2",
+            "path_log_line": 110378,
+            "value_log_line": 110379,
+            "close_log_line": 110380
+          }
+        },
+        {
+          "phase": "E07-negative",
+          "frame": {
+            "phase": "E07-negative",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "state": "negative",
+            "sequence": 25,
+            "present": 28163,
+            "file": "bb_028163.bmp",
+            "relative_path": "frames/bb_028163.bmp",
+            "sha256": "c16f4c3b660f413bb536d4b8cd214b714f1fffd9eb8cf4b5bdd8cada4fa77e81",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=25 present=28163 file=bb_028163.bmp",
+            "ack_line_index": 116444,
+            "request_cursor_line_index": 116210,
+            "captured_at_utc": "2026-10-29T21:17:35.6176212Z",
+            "frames_csv": {
+              "present": 28163,
+              "raw_line": "28163,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 114867,
+          "raw_group_end_line": 114914,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "alias": "E07",
+            "path": "/Physics/Prop Entity Module/Cell grid zoom",
+            "value": "0.500",
+            "expected": "0.5",
+            "path_log_line": 114888,
+            "value_log_line": 114889,
+            "close_log_line": 114890
+          }
+        },
+        {
+          "phase": "E07-restore",
+          "frame": {
+            "phase": "E07-restore",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "state": "restore",
+            "sequence": 26,
+            "present": 29114,
+            "file": "bb_029114.bmp",
+            "relative_path": "frames/bb_029114.bmp",
+            "sha256": "a1391a8367a3d6b240a568b0ef8e4aa38e33df996959ba21d69ffc14aee73e17",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=26 present=29114 file=bb_029114.bmp",
+            "ack_line_index": 120602,
+            "request_cursor_line_index": 120348,
+            "captured_at_utc": "2026-10-29T21:17:49.0883258Z",
+            "frames_csv": {
+              "present": 29114,
+              "raw_line": "29114,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 119018,
+          "raw_group_end_line": 119065,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0007",
+            "alias": "E07",
+            "path": "/Physics/Prop Entity Module/Cell grid zoom",
+            "value": "1.000",
+            "expected": "1",
+            "path_log_line": 119039,
+            "value_log_line": 119040,
+            "close_log_line": 119041
+          }
+        }
+      ],
+      "limitation": "Same-site defaults restore is observed; overall Props run remains FAIL and final all-fields restoration is not established. No active prop physics or LOD behavior claim."
+    },
+    {
+      "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+      "caption": "Traffic-light marker display",
+      "recommendation": "bounded_display_behavior_supported",
+      "scope": "Traffic-light ID text at the left signal appears when TRUE, disappears when FALSE and restored FALSE; source RenderTrafficLights filters IsTrafficLight and prints ID. This is not a cell-index label.",
+      "evidence": [
+        {
+          "phase": "E08-positive",
+          "frame": {
+            "phase": "E08-positive",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "state": "positive",
+            "sequence": 28,
+            "present": 31031,
+            "file": "bb_031031.bmp",
+            "relative_path": "frames/bb_031031.bmp",
+            "sha256": "400a9b475fb4ce642d46f5d37bb5df48ca4f20e86cefae6b72b71b7cbf5750f3",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=28 present=31031 file=bb_031031.bmp",
+            "ack_line_index": 129048,
+            "request_cursor_line_index": 128809,
+            "captured_at_utc": "2026-10-29T21:18:18.0476954Z",
+            "frames_csv": {
+              "present": 31031,
+              "raw_line": "31031,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 127403,
+          "raw_group_end_line": 127450,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "alias": "E08",
+            "path": "/Physics/Prop Entity Module/Render props marked as Traffic Lights",
+            "value": "TRUE",
+            "expected": "TRUE",
+            "path_log_line": 127427,
+            "value_log_line": 127428,
+            "close_log_line": 127429
+          }
+        },
+        {
+          "phase": "E08-negative",
+          "frame": {
+            "phase": "E08-negative",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "state": "negative",
+            "sequence": 29,
+            "present": 31982,
+            "file": "bb_031982.bmp",
+            "relative_path": "frames/bb_031982.bmp",
+            "sha256": "8ebe3a13a2141cbc3d12960e1119a79e24f7b5ada7c657a93cdd74eaa3caf3a3",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=29 present=31982 file=bb_031982.bmp",
+            "ack_line_index": 133182,
+            "request_cursor_line_index": 132894,
+            "captured_at_utc": "2026-10-29T21:18:33.7269426Z",
+            "frames_csv": {
+              "present": 31982,
+              "raw_line": "31982,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 131545,
+          "raw_group_end_line": 131592,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "alias": "E08",
+            "path": "/Physics/Prop Entity Module/Render props marked as Traffic Lights",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 131569,
+            "value_log_line": 131570,
+            "close_log_line": 131571
+          }
+        },
+        {
+          "phase": "E08-restore",
+          "frame": {
+            "phase": "E08-restore",
+            "target_site_id": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "state": "restore",
+            "sequence": 30,
+            "present": 32967,
+            "file": "bb_032967.bmp",
+            "relative_path": "frames/bb_032967.bmp",
+            "sha256": "98f3405b59b01ae2d3ec29942570ce39beec38175297a73804c9df2f349f2670",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=35532 slot=62140 seq=30 present=32967 file=bb_032967.bmp",
+            "ack_line_index": 137572,
+            "request_cursor_line_index": 137265,
+            "captured_at_utc": "2026-10-29T21:18:49.4238756Z",
+            "frames_csv": {
+              "present": 32967,
+              "raw_line": "32967,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3036.869,-2.930,-1947.517,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3036.869",
+                "-2.930",
+                "-1947.517"
+              ]
+            }
+          },
+          "raw_group_start_line": 135980,
+          "raw_group_end_line": 136027,
+          "selected_probe": {
+            "site": "BrnWorld::PropEntityDebugComponent::OnActivate#0008",
+            "alias": "E08",
+            "path": "/Physics/Prop Entity Module/Render props marked as Traffic Lights",
+            "value": "FALSE",
+            "expected": "FALSE",
+            "path_log_line": 136004,
+            "value_log_line": 136005,
+            "close_log_line": 136006
+          }
+        }
+      ],
+      "limitation": "Same-site defaults restore is observed; overall Props run remains FAIL and final all-fields restoration is not established. No active prop physics or LOD behavior claim."
+    },
+    {
+      "site": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent::OnActivate#0004",
+      "caption": "Draw physical traffic",
+      "recommendation": "bounded_display_behavior_supported",
+      "scope": "Owned frame E02-positive shows white/blue vehicle wire boxes; E02-negative and restored FALSE remove them. Candidate source DrawPhysicalTraffic exclusively iterates mUsedTrafficVehicles, draws white/blue body boxes, blue wheels and red heading arrows. Later context TRUE frames show close vehicle box and red arrow; final context FALSE removes overlay. Active membership is supported by source-specific drawn geometry rather than ordinary traffic alone.",
+      "evidence": [
+        {
+          "phase": "E02-positive",
+          "frame": {
+            "phase": "E02-positive",
+            "target_site_id": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent::OnActivate#0004",
+            "state": "positive",
+            "sequence": 8,
+            "present": 11447,
+            "file": "bb_011447.bmp",
+            "relative_path": "frames/bb_011447.bmp",
+            "sha256": "939e95279e1c119c10b42c9062c06fcb543d3da0dc65736323a26c7d434c8119",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=44276 slot=62141 seq=8 present=11447 file=bb_011447.bmp",
+            "ack_line_index": 43090,
+            "request_cursor_line_index": 42944,
+            "captured_at_utc": "2026-10-29T21:14:08.2603843Z",
+            "frames_csv": {
+              "present": 11447,
+              "raw_line": "11447,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3040.691,-2.734,-1938.009,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3040.691",
+                "-2.734",
+                "-1938.009"
+              ]
+            }
+          },
+          "raw_group_start_line": 41633,
+          "raw_group_end_line": 41659
+        },
+        {
+          "phase": "E02-negative",
+          "frame": {
+            "phase": "E02-negative",
+            "target_site_id": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent::OnActivate#0004",
+            "state": "negative",
+            "sequence": 9,
+            "present": 12255,
+            "file": "bb_012255.bmp",
+            "relative_path": "frames/bb_012255.bmp",
+            "sha256": "acf12ecf929b1eff26cb69983050acaf330fd34b15a57c99f39da36285830713",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=44276 slot=62141 seq=9 present=12255 file=bb_012255.bmp",
+            "ack_line_index": 46695,
+            "request_cursor_line_index": 46607,
+            "captured_at_utc": "2026-10-29T21:14:20.1581794Z",
+            "frames_csv": {
+              "present": 12255,
+              "raw_line": "12255,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3040.691,-2.734,-1938.009,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3040.691",
+                "-2.734",
+                "-1938.009"
+              ]
+            }
+          },
+          "raw_group_start_line": 45183,
+          "raw_group_end_line": 45209
+        },
+        {
+          "phase": "E02-restore",
+          "frame": {
+            "phase": "E02-restore",
+            "target_site_id": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent::OnActivate#0004",
+            "state": "restore",
+            "sequence": 10,
+            "present": 13160,
+            "file": "bb_013160.bmp",
+            "relative_path": "frames/bb_013160.bmp",
+            "sha256": "b2fa0f47a0d51d26e66bf7d1c75a298edcd2165add42412987a737d2b2a69e2b",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=44276 slot=62141 seq=10 present=13160 file=bb_013160.bmp",
+            "ack_line_index": 50510,
+            "request_cursor_line_index": 50421,
+            "captured_at_utc": "2026-10-29T21:14:31.9267692Z",
+            "frames_csv": {
+              "present": 13160,
+              "raw_line": "13160,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3040.691,-2.734,-1938.009,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3040.691",
+                "-2.734",
+                "-1938.009"
+              ]
+            }
+          },
+          "raw_group_start_line": 48767,
+          "raw_group_end_line": 48793
+        },
+        {
+          "phase": "physical-traffic-context-restore",
+          "frame": {
+            "phase": "physical-traffic-context-restore",
+            "target_site_id": "BrnPhysics::Vehicle::PhysicalTrafficManagerDebugComponent::OnActivate#0004",
+            "state": "context-restore",
+            "sequence": 32,
+            "present": 36457,
+            "file": "bb_036457.bmp",
+            "relative_path": "frames/bb_036457.bmp",
+            "sha256": "99406917c0222bd15d598d10b658ec128fe5cade493c5a3dd4ba4f10c88da569",
+            "bytes": 3686454,
+            "ack_line": "[frame-request] pid=44276 slot=62141 seq=32 present=36457 file=bb_036457.bmp",
+            "ack_line_index": 151199,
+            "request_cursor_line_index": 150805,
+            "captured_at_utc": "2026-10-29T21:20:00.1470781Z",
+            "frames_csv": {
+              "present": 36457,
+              "raw_line": "36457,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,0,0.000,0.000,0.000,0.0000,0.0000,0.0000,0,0,0.0000,3039.147,-2.882,-1945.301,2",
+              "columns": 24,
+              "player_position_xyz": [
+                "3039.147",
+                "-2.882",
+                "-1945.301"
+              ]
+            }
+          },
+          "raw_group_start_line": 149500,
+          "raw_group_end_line": 149526
+        }
+      ],
+      "limitation": "Does not certify joints, air rams, catchup interpolation, driver-control values, or freezing behavior."
+    }
+  ],
+  "ledger_credit_written": 0,
+  "remaining": "All other sites retain pending/inconclusive behavior status. Targeted Props E12/E14/E15 continuation must bind fresh normal-save copy, only selected aliases, complete finalizer metadata, and measured restore evidence. No Physical rerun needed for reporting alone."
+}
