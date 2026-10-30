@@ -1,0 +1,35 @@
+--- a/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp
++++ b/src/GameShared/GameClasses/Development/PerfMon/DebugComponent/CgsDebugComponentPerfMonCpu.cpp
+@@ -4,6 +4,7 @@
+ #include "GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsDebugUI.h"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"                                            // CGS_ASSERT (LogBufferEnable)
+ 
++#include <cmath>
+ #include <cstdio>
+ #include <cstring>
+ 
+@@ -207,7 +208,8 @@
+         lpDebug2DRender->DrawFrame(32.0f, 408.0f, 608.0f, 412.0f,
+                                    0xFF000000u, 2.0f);
+         lpDebug2DRender->DrawBox(Vector2{32.0f, 408.0f, 0, 0},
+-                                Vector2{mfMaxCpu * 2.8799999f, 4.0f, 0, 0}, 0xFF252525u);
++                                Vector2{std::fmaf(mfMaxCpu, 2.8799999f, 32.0f) - 32.0f,
++                                        4.0f, 0, 0}, 0xFF252525u);
+ 
+         f32 lfX = 32.0f;
+         f32 lfTotal = 0.0f;
+@@ -223,10 +225,12 @@
+                 std::strcmp(lData.mpcName, "Render cost") != 0)
+                 continue;
+ 
+-            const f32 lfWidth = lData.mfCurrentValue * 2.8800001f;
++            const f32 lfScaledWidth = lData.mfCurrentValue * 2.8800001f;
++            const f32 lfNextX = lfScaledWidth + lfX;
++            const f32 lfWidth = lfNextX - lfX;
+             lpDebug2DRender->DrawBox(Vector2{lfX, 408.0f, 0, 0},
+                                     Vector2{lfWidth, 4.0f, 0, 0}, 0xFFCC59CCu);
+-            lfX += lfWidth;
++            lfX = lfNextX;
+             lfTotal += lData.mfCurrentValue;
+         }
+ 
