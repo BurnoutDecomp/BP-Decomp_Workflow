@@ -38149,14 +38149,23 @@
       "pseudocode_line": 30,
       "original_call": "sub_8282D720(a1, a1 + 19992, \"Texture Window\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0007",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Texture Window OpenWorldGr presents actual Texture0of661128x64 road/kerb imagery; selecting<none> removes the overlay. Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "variable",
@@ -38175,14 +38184,23 @@
       "pseudocode_line": 32,
       "original_call": "sub_8282D720(a1, a1 + 21084, \"Sort By\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0008",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Sort By Nothing->Area visibly changes first entry from128x64 road/kerb to8x8 gray. Width has exact native readback and retains that same first8x8 entry; no independent distinct Width ordering claim. Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "variable",
@@ -38201,14 +38219,23 @@
       "pseudocode_line": 34,
       "original_call": "sub_8282D720(a1, a1 + 21152, \"Draw\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0009",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Draw Actual Size shows the8x8 texture at tiny native size; Stretched enlarges it; Thumbnails8x8 produces a populated grid. Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "variable",
@@ -38266,14 +38293,23 @@
       "pseudocode_line": 42,
       "original_call": "sub_8282F720(a1, CgsResource::DebugComponent::IncTextureCallback, a1, \"Next Texture\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0011",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Next Texture changes visible caption0->1 and the128x64 road/kerb image to16x16 black. Prev Texture restores0 and road/kerb; final controls also return to their captured baseline. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "function",
@@ -38293,14 +38329,23 @@
       "pseudocode_line": 43,
       "original_call": "sub_8282F720(a1, CgsResource::DebugComponent::DecTextureCallback, a1, \"Prev Texture\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0012",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Prev Texture reverses observed1->0 and restores the original128x64 road/kerb image. Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "function",
@@ -38320,14 +38365,23 @@
       "pseudocode_line": 44,
       "original_call": "sub_8282F720(a1, CgsResource::DebugComponent::IncPageCallback, a1, \"Next Texture Page\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0013",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Next Texture Page changes visible0->64 in661-entry pool and changes the populated8x8 tile page. Prev Texture Page restores visible0 and the original page0 tile arrangement; final Texture window is off. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "function",
@@ -38347,14 +38401,23 @@
       "pseudocode_line": 45,
       "original_call": "sub_8282F720(a1, CgsResource::DebugComponent::DecPageCallback, a1, \"Prev Texture Page\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "CgsResource::DebugComponent::InitWindows#0014",
       "function": "CgsResource::DebugComponent::InitWindows",
       "original_address": "0x828EE200",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828EE200.json",
       "component": "CgsResource::DebugComponent",
       "component_name": null,
-      "component_path": "Core"
+      "component_path": "Core",
+      "notes": "Prev Texture Page reverses64->0 with the original populated page0 tile arrangement restored. Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent. Bounded private source22e/execcdb OpenWorldGr661-entry native evidence; installed source41/exe5d2 is separate. Width retains the same first entry as Area; no distinct full Width-order claim, other pools/domains or Replay credit.",
+      "evidence": [
+        "progress/debug_menu/texture7_native_20261030/ROOT_DECISION.json",
+        "progress/debug_menu/texture7_native_20261030/ROOT_RAW_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+        "progress/debug_menu/texture7_native_20261030/RETAINED_ORIGINALS.json",
+        "progress/debug_menu/texture7_native_20261030/README.md"
+      ]
     },
     {
       "kind": "function",
@@ -38548,8 +38611,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1183,
-      "verified": 144,
+      "pending": 1176,
+      "verified": 151,
       "original-noop": 28
     }
   }
