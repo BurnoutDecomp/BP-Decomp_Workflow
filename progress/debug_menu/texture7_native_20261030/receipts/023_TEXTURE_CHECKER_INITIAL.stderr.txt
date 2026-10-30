@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\rtex11\CheckTextureNative11.py", line 99, in <module>
+    ap=argparse.ArgumentParser();ap.add_argument('--packet',type=Path,default=Path(__file__).resolve().parent);ap.add_argument('--run-dir',type=Path,required=True);ap.add_argument('--pixel-review',type=Path);args=ap.parse_args();out=check(args.packet.resolve(),args.run_dir.resolve(),args.pixel_review);print(json.dumps(out,indent=2));raise SystemExit(0 if out['status']=='PASS' else (2 if out['status']=='PENDING' else 1))
+                                                                                                                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\rtex11\CheckTextureNative11.py", line 35, in check
+    need(terminal['success'] and terminal['helper_cleanup_complete'] and terminal['profile_restoration_complete'] and terminal['flow_status']['owned_cleanup_complete'] and terminal['flow_status']['input_events_reset'],'terminal owned input/process/helper/profile cleanup incomplete')
+                                                                                                                                                                            ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'input_events_reset'

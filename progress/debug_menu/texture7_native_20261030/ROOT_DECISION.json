@@ -1,0 +1,178 @@
+{
+  "status": "APPROVED_SEVEN_BOUNDED_NATIVE_SITE_DISPOSITIONS",
+  "reviewer": "/root",
+  "created_utc": "2026-10-30T18:45:18.502715+00:00",
+  "new_unique_sites": 7,
+  "source_commit": "22e673523a69a7a710d53a2bbba61efa0824700c",
+  "exe_sha256": "ccdbfa54ca4f51a776f525ccd3760ff020307cbb33b509a700237f841bc21b54",
+  "installed_source41_unchanged": true,
+  "normal_install_performed": false,
+  "root_personally_viewed_contact_tiles": 28,
+  "root_personally_viewed_full_size_frames": [
+    "bb_006435.bmp",
+    "bb_010294.bmp",
+    "bb_011852.bmp"
+  ],
+  "peer_personally_viewed_all28_frames": true,
+  "observations": [
+    "Frames1-4 show the console and Texture window absent, and the saved red/black car and world are visible.",
+    "Frames5-6 show OpenWorldGr Texture0of661128x64 road/kerb. Frames7-8 switch to Texture1of66116x16 black;9-10 restore road/kerb0.",
+    "Frames11-12 show Area changing first entry to8x8 gray. Width13-14 keeps the same entry; its distinct full ordering is not proved.",
+    "Frames15-16 show tiny Actual Size8x8 gray. Stretched17-18 fills the window;19-20 show a populated8x8 tile grid.",
+    "Frames21-22 show index64 and a different populated grid;23-24 restore index0 and the original grid.",
+    "Frames25-28 show the complete Texture overlay absent after Off and the exact three captured controls restored."
+  ],
+  "accepted": {
+    "CgsResource::DebugComponent::InitWindows#0007": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Texture Window OpenWorldGr presents actual Texture0of661128x64 road/kerb imagery; selecting<none> removes the overlay.",
+      "restore_observation": "Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent.",
+      "frame_names": [
+        "bb_006251.bmp",
+        "bb_006435.bmp",
+        "bb_006583.bmp",
+        "bb_012658.bmp",
+        "bb_012860.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0008": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Sort By Nothing->Area visibly changes first entry from128x64 road/kerb to8x8 gray. Width has exact native readback and retains that same first8x8 entry; no independent distinct Width ordering claim.",
+      "restore_observation": "Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent.",
+      "frame_names": [
+        "bb_006435.bmp",
+        "bb_006583.bmp",
+        "bb_008977.bmp",
+        "bb_009144.bmp",
+        "bb_009438.bmp",
+        "bb_009741.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0009": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Draw Actual Size shows the8x8 texture at tiny native size; Stretched enlarges it; Thumbnails8x8 produces a populated grid.",
+      "restore_observation": "Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent.",
+      "frame_names": [
+        "bb_009438.bmp",
+        "bb_009741.bmp",
+        "bb_010017.bmp",
+        "bb_010294.bmp",
+        "bb_010556.bmp",
+        "bb_010813.bmp",
+        "bb_011065.bmp",
+        "bb_011335.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0011": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Next Texture changes visible caption0->1 and the128x64 road/kerb image to16x16 black.",
+      "restore_observation": "Prev Texture restores0 and road/kerb; final controls also return to their captured baseline.",
+      "frame_names": [
+        "bb_006435.bmp",
+        "bb_006583.bmp",
+        "bb_007907.bmp",
+        "bb_008090.bmp",
+        "bb_008438.bmp",
+        "bb_008666.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0012": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Prev Texture reverses observed1->0 and restores the original128x64 road/kerb image.",
+      "restore_observation": "Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent.",
+      "frame_names": [
+        "bb_007907.bmp",
+        "bb_008090.bmp",
+        "bb_008438.bmp",
+        "bb_008666.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0013": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Next Texture Page changes visible0->64 in661-entry pool and changes the populated8x8 tile page.",
+      "restore_observation": "Prev Texture Page restores visible0 and the original page0 tile arrangement; final Texture window is off.",
+      "frame_names": [
+        "bb_011065.bmp",
+        "bb_011335.bmp",
+        "bb_011611.bmp",
+        "bb_011852.bmp",
+        "bb_012120.bmp",
+        "bb_012373.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    },
+    "CgsResource::DebugComponent::InitWindows#0014": {
+      "status": "verified",
+      "scope": "This exact native run, selected OpenWorldGr pool and exercised controls only",
+      "observed_effect": "Prev Texture Page reverses64->0 with the original populated page0 tile arrangement restored.",
+      "restore_observation": "Exact same-run indexed raw values restore Texture Window=<none>, Sort By=Nothing, Draw=Stretched; final frames27/28 show the Texture overlay absent.",
+      "frame_names": [
+        "bb_011611.bmp",
+        "bb_011852.bmp",
+        "bb_012120.bmp",
+        "bb_012373.bmp",
+        "bb_013213.bmp",
+        "bb_013409.bmp"
+      ]
+    }
+  },
+  "raw_groups": 13,
+  "raw_typed_triples": 22,
+  "unique_PID_slot_sequence_frame_ACKs": 28,
+  "exact_three_control_same_run_restore": true,
+  "current_user_save_private_copy_actually_loaded": true,
+  "native_profile": {
+    "nonnew": true,
+    "medals": 202,
+    "event_count": 120,
+    "spawn": "A7E60F1A40508000",
+    "car": "PUSMC02",
+    "rank": 5,
+    "max_cars": 85
+  },
+  "prior_failures_preserved": [
+    "Initial checker expected nonexistent input_events_reset field; later read-only validator uses actual input_reset_complete.",
+    "Initial preflight533/536/542 failures remain failures in retained evidence; no receipts are rewritten."
+  ],
+  "excluded_sites": [
+    "CgsResource::DebugComponent::OnActivate#0001",
+    "CgsResource::DebugComponent::OnActivate#0002"
+  ],
+  "limitations": [
+    "Area first-entry change is directly visible. Width retains the same first8x8 gray entry; a distinct Width ordering relative to Area is not established.",
+    "Black16x16 display at Next is reported as seen; this review does not diagnose the content of that asset.",
+    "Only seven selected sites and exercised draw/sort/callback actions in this661-entry pool are verified. No all-pool/all-mode or retail rendering parity claim.",
+    "No Replay recording/playback, queue/MaxPartial, physical controller, audio parity, normal installation or canonical registry edits.",
+    "Credit is for the recorded selected OpenWorldGr pool and exercised transitions, not all banks, sort keys, numeric domains or hardware.",
+    "Replay recording/playback is not exercised. Successful private startup and these Texture controls do not certify the remaining Replay controls.",
+    "Heap/Bundle and other already-final Resource controls are not recounted."
+  ],
+  "normal_source_runtime_config_profile_data_language_edits": false,
+  "counts_before": {
+    "pending": 1183,
+    "verified": 144,
+    "original-noop": 28
+  },
+  "counts_after": {
+    "pending": 1176,
+    "verified": 151,
+    "original-noop": 28
+  }
+}
