@@ -1,0 +1,58 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "resource_windows_native_62144",
+    "case_path":  "D:\\r21v9\\suites\\resource_windows\\Case_ResourceWindows.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-29T20:34:27.2302212+01:00",
+    "flow_exit":  0,
+    "bug":  "Heap, Histogram, Type Stats, and Bundle Window effects must be visible and restore. Texture, queue, and partial-fixup actions are excluded from this old-34dd run.",
+    "asserts":  0,
+    "run_dir":  "D:\\r21v9\\suites\\resource_windows\\runs\\resource_windows_20261029_184609",
+    "label":  "",
+    "area":  "debug-menu",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62144,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no new assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "status=complete; frames=20; selected-pool=OpenWorldGr",
+                       "pass":  true,
+                       "name":  "native resource driver completed with owner-bound frames",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  2,
+                       "exe_size":  11636736,
+                       "exe_mtime_before_lock":  "2026-10-27T21:24:38.2277801+01:00",
+                       "exe_sha":  "34dd9dad3c53",
+                       "b5_head":  "ae20985da",
+                       "exe_b5":  "00830db6",
+                       "parent_head":  "ae20985da",
+                       "exe_mtime":  "2026-10-27T21:24:38.2277801+01:00"
+                   }
+}

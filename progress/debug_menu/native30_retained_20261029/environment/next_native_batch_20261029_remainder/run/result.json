@@ -1,0 +1,58 @@
+{
+  "checks": [
+    {
+      "name": "original strict flow completed and owned game exited",
+      "kind": "TerminalFlow",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "pass": true
+    },
+    {
+      "name": "no new assertions",
+      "kind": "NewAsserts",
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "pass": true
+    },
+    {
+      "name": "no exceptions",
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "pass": true
+    },
+    {
+      "name": "normal title route reached DRIVING",
+      "kind": "Mark",
+      "detail": "final phase DRIVING, want DRIVING",
+      "pass": true
+    },
+    {
+      "name": "exact selected restorable controls native P/N/R and cleanup complete; pixels require independent review",
+      "kind": "Script",
+      "detail": "status=fail frames=34 phases=34 site_credit=0",
+      "pass": false
+    }
+  ],
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\Case.ps1",
+  "area": "debug-menu",
+  "as_expected": false,
+  "bug": "Twenty-four pending original cloud and irradiance controls need separate native consumer positive/negative/restore witnesses.",
+  "when": "2026-10-29T20:42:10.1771772+01:00",
+  "asserts": 0,
+  "provenance": {
+    "exe_mtime_before_lock": "2026-10-29T10:12:42.4038115+01:00",
+    "exe_size": 11701760,
+    "b5_dirty": 4,
+    "b5_head": "d85e2d5e2",
+    "exe_sha": "474ba5bb1a72",
+    "exe_b5": "abbc9047",
+    "parent_head": "a0123c9c5",
+    "exe_mtime": "2026-10-29T10:12:42.4038115+01:00"
+  },
+  "expected": "PASS",
+  "phase": "DRIVING",
+  "verdict": "FAIL",
+  "label": "Environment24 bounded restorable controls; private source32; stationary PNR;76frame cap640x360;64MiB log; RootV8 normal41 guard and V5 concurrency",
+  "case": "environment24_cloud_layers_irradiance_channels_62180",
+  "slot": 62180,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\next_native_batch_20261029_remainder\\run_62180_game01",
+  "flow_exit": 0
+}

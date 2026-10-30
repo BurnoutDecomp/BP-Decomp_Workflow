@@ -1,0 +1,276 @@
+{
+  "schema": 1,
+  "status": "reviewed",
+  "reviewer": "/root/resource_concrete_review",
+  "reviewer_personally_viewed": true,
+  "root_personally_viewed": false,
+  "root_v8_authority_sha256": "092948117cf40424c555943e3760f2e07f3c1bc5f97f0a08a91e0712237ddb38",
+  "suite": "resource_stats_allocator",
+  "slot": 62145,
+  "run_name": "resource_stats_allocator_20261029_184609",
+  "packet_manifest_sha256": "990c9f32deba6431181383a6a4c982db839d66942618fd3d2eb734320558806c",
+  "run_receipt_sha256": "d5bb3712e95d0ac7ab5bfb91447345db96f71814c77a5208a967ca4f7d145939",
+  "restore_sha256": "c8fc0e43a8fa144fb511c495fa908c29d7974a06570ff383a0f3f9fd56d20dea",
+  "postcheck_sha256": "b899d711eeaa8f90cdaa1f56c4e5910a3fd9d28b38db073a82a4aee64a5b9198",
+  "observations": "All18 actual owner-bound frames personally inspected by named peer, not by Root. First frame black; early2 blurred car with allocatorHUD,3 black scene withHUD; all have no console history. Later stationary scene and all action/restore frames are console-absent. Actual self-match totals4358440/44015224/0; both valid Sound counterfactuals0/0/0;24 visible allocator rows; off effect visible and baselineHUDTRUE correctly restoredTRUE. CasePASS/asserts0 and exact process/input/profile/assets cleanup reviewed.",
+  "all_action_and_restore_frames_console_absent": true,
+  "raw_frame_check": "STATS10_INDEPENDENT_RAW_FRAME_CHECK.json",
+  "raw_triples_verified": 33,
+  "frames": [
+    {
+      "phase": "console_closed_after_resourcebaseline",
+      "sequence": 1,
+      "sha256": "5fcf82cecfced48aef7625ed11acd6a37d7ebc35b9c2f050f3caca7b8858e510",
+      "observation": "Black transition plus three green diagnostics; no useful scene witness.",
+      "name": "bb_001690.bmp"
+    },
+    {
+      "phase": "console_closed_after_resourcebindphases",
+      "sequence": 2,
+      "sha256": "350e71b4f15b4870a88b9f9ab8c5f44d1b77207a340962392b2df7d71d438367",
+      "observation": "Blurred car-selection scene with24 allocator rows; no console history.",
+      "name": "bb_002694.bmp"
+    },
+    {
+      "phase": "console_closed_after_resourcedumpstats",
+      "sequence": 3,
+      "sha256": "93b4e29096443f685eb7127b9a1721fc76fcd14c4ac87983e12b977b3870a6b2",
+      "observation": "Black transition with allocator table still visible; no console history.",
+      "name": "bb_003205.bmp"
+    },
+    {
+      "phase": "stationary_natural_scene",
+      "sequence": 4,
+      "sha256": "b536f750308db5a84d5ee1e61e14f72c27f357b527fc692f1917c81edfea5143",
+      "observation": "Native stationary junkyard/car baseline with allocator HUD alreadyTRUE and ShareTest overlay absent; console absent.",
+      "name": "bb_003435.bmp"
+    },
+    {
+      "phase": "share_self_match_on",
+      "sequence": 5,
+      "sha256": "6b3ad308c670a08d8d699dcc30a71359dc206233a6b1873862bea21daf0bfcd6",
+      "observation": "Console absent. Share Test Results explicitly show4358440,44015224,0 over existing allocator table; OpenWorldGr self-match.",
+      "name": "bb_003724.bmp"
+    },
+    {
+      "phase": "share_self_match_on",
+      "sequence": 6,
+      "sha256": "3e06aa86ace8919ac56ef32e9233ab35fc44ddaa73426c13bd38b983408c5207",
+      "observation": "Console absent. Share Test Results explicitly show4358440,44015224,0 over existing allocator table; OpenWorldGr self-match.",
+      "name": "bb_003919.bmp"
+    },
+    {
+      "phase": "share_test0_other_pool_counterfactual",
+      "sequence": 7,
+      "sha256": "8733bb425be14a24ed79500dcfc1d1e762079a26720bd071f90c70dbd6a1bc10",
+      "observation": "Console absent. Independent selector0 Sound vsOpenWorldGr counterfactual shows0,0,0.",
+      "name": "bb_004198.bmp"
+    },
+    {
+      "phase": "share_test0_other_pool_counterfactual",
+      "sequence": 8,
+      "sha256": "215efe38afee198076fc5ecdd7fa40478aa027dd8665854faafc9fbe7b538e5b",
+      "observation": "Console absent. Independent selector0 Sound vsOpenWorldGr counterfactual shows0,0,0.",
+      "name": "bb_004374.bmp"
+    },
+    {
+      "phase": "share_test1_other_pool_counterfactual",
+      "sequence": 9,
+      "sha256": "c19fc48fdb115fe032293bcb77ba98f4f8a071076d0b7e4ea56e934debf4bf0c",
+      "observation": "Console absent. Independent selector1 Sound vsOpenWorldGr counterfactual shows0,0,0.",
+      "name": "bb_004653.bmp"
+    },
+    {
+      "phase": "share_test1_other_pool_counterfactual",
+      "sequence": 10,
+      "sha256": "5612651c2430f2906f5481a2e535a5faa789622184403f45e0d266c89aace60e",
+      "observation": "Console absent. Independent selector1 Sound vsOpenWorldGr counterfactual shows0,0,0.",
+      "name": "bb_004826.bmp"
+    },
+    {
+      "phase": "share_restore_off",
+      "sequence": 11,
+      "sha256": "d673db5da2fa0c25b082f73ff88e567ed0c7af042af5ee66284a862d7a6106ae",
+      "observation": "Console absent. Share Test Results overlay removed after ShowShareFALSE; allocator HUD remains.",
+      "name": "bb_005074.bmp"
+    },
+    {
+      "phase": "share_restore_off",
+      "sequence": 12,
+      "sha256": "a95c3aac4721cc2b7edde4ad6a1ac59fc6f57173265ca2f262c12e2e5486a800",
+      "observation": "Console absent. Share Test Results overlay removed after ShowShareFALSE; allocator HUD remains.",
+      "name": "bb_005274.bmp"
+    },
+    {
+      "phase": "allocator_hud_on",
+      "sequence": 13,
+      "sha256": "2b083617e8b0c780d0403030b03cd7c39476475dd5fed31a75a22fda3470235b",
+      "observation": "Console absent. Allocator HUD shows24 visible rows with Name/Type/MM andVM Size/Current/Max columns and nonzero current use.",
+      "name": "bb_005490.bmp"
+    },
+    {
+      "phase": "allocator_hud_on",
+      "sequence": 14,
+      "sha256": "4517e13242d8d16685c82725bdbae968003802ae457c34c7e302ed006040cde0",
+      "observation": "Console absent. Allocator HUD shows24 visible rows with Name/Type/MM andVM Size/Current/Max columns and nonzero current use.",
+      "name": "bb_005702.bmp"
+    },
+    {
+      "phase": "allocator_hud_off_readonly_attempt",
+      "sequence": 15,
+      "sha256": "723aa245d2c07e5e88498ad9e9291dc448cfe7b1d662f5598aa1374c65c793ac",
+      "observation": "Console absent. Allocator HUD removed; native car/junkyard scene remains. Explicit raw read-only rejections keep Used0/Free96.",
+      "name": "bb_005925.bmp"
+    },
+    {
+      "phase": "allocator_hud_off_readonly_attempt",
+      "sequence": 16,
+      "sha256": "76fdebd9c45f043a78bb08e790da5ee1b75674cdd17cb5d9b9afbd1924eb5cca",
+      "observation": "Console absent. Allocator HUD removed; native car/junkyard scene remains. Explicit raw read-only rejections keep Used0/Free96.",
+      "name": "bb_006121.bmp"
+    },
+    {
+      "phase": "restore_resource_controls",
+      "sequence": 17,
+      "sha256": "0087eee4d9840076a51a738b19c6e1d50b64adcea44a534bda53fab08ee1f163",
+      "observation": "Console absent. Allocator HUD returns because captured baseline wasTRUE; ShareTest overlay absent and both selectors restoredFonts.",
+      "name": "bb_006346.bmp"
+    },
+    {
+      "phase": "restore_resource_controls",
+      "sequence": 18,
+      "sha256": "eb9732d2b144a6900c0d1d55578c24980e6bc2eba5bc6b506e23e00e667714f4",
+      "observation": "Console absent. Allocator HUD returns because captured baseline wasTRUE; ShareTest overlay absent and both selectors restoredFonts.",
+      "name": "bb_006522.bmp"
+    }
+  ],
+  "sites": {
+    "CgsResource::DebugComponent::InitWindows#0015": {
+      "frame_names": [
+        "bb_003205.bmp",
+        "bb_003435.bmp"
+      ],
+      "observed_effect": "Original DumpStats callback produced1315-byte native Pool Stats table containing27 actual live pools, includingFonts/Sound/OpenWorldGr; copied/hash-verified and deleted under exact dump mutex.",
+      "dump_sha256": "f4efadff3aa104b0d41224449e2ea7ac5e5267c9c6b8914687844c02b1f2360f",
+      "dump_pool_count": 27,
+      "status": "verified",
+      "restore_observation": "No control latch retained; original dump output removed only after hash match under mutex; source/normal files unchanged."
+    },
+    "CgsResource::DebugComponent::InitWindows#0018": {
+      "restore_observation": "CapturedFALSE restoredFALSE; results absent in final frame.",
+      "share_totals": [
+        4358440,
+        44015224,
+        0
+      ],
+      "observed_effect": "ShowShareTRUE renders Share Test Results with4358440/44015224/0; FALSE removes the overlay.",
+      "status": "verified",
+      "frame_names": [
+        "bb_003919.bmp",
+        "bb_005274.bmp",
+        "bb_006522.bmp"
+      ]
+    },
+    "BrnResource::DebugComponent::OnActivate#0003": {
+      "frame_names": [
+        "bb_005702.bmp",
+        "bb_006121.bmp",
+        "bb_006522.bmp"
+      ],
+      "status": "verified",
+      "readonly_write_rejected": true,
+      "readonly_rejection_line_index": 18319,
+      "limitation": "Used baseline0 and SET0 equality alone is not rejection proof; explicit native error is the witness. Early preinitialization Free0 is not the fresh capacity context.",
+      "observed_effect": "Slots Free setter rejected by exact native read-only error at zero-based line18319; subsequent typed raw Used0/Free96 unchanged from fresh initialized context.",
+      "restore_observation": "Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+      "slots_used": 0,
+      "slots_free": 96
+    },
+    "CgsResource::DebugComponent::InitWindows#0017": {
+      "share_totals": [
+        4358440,
+        44015224,
+        0
+      ],
+      "status": "verified",
+      "restored_selector_value": "Fonts",
+      "frame_names": [
+        "bb_003919.bmp",
+        "bb_004826.bmp",
+        "bb_006522.bmp"
+      ],
+      "observed_effect": "Selector1 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts.",
+      "initial_selector_value": "Fonts",
+      "counterfactual_share_totals": [
+        0,
+        0,
+        0
+      ],
+      "restore_observation": "Initial capturedFonts restoredFonts with ShowShareFALSE."
+    },
+    "BrnResource::DebugComponent::OnActivate#0001": {
+      "frame_names": [
+        "bb_003435.bmp",
+        "bb_005702.bmp",
+        "bb_006121.bmp",
+        "bb_006522.bmp"
+      ],
+      "initial_hud_value": "TRUE",
+      "status": "verified",
+      "restored_off": false,
+      "restored_to_baseline": true,
+      "observed_effect": "ShowHUDTRUE displays24 visible allocator rows with type/size/current/max columns; separateFALSE phase removesHUD.",
+      "restore_observation": "InitialTRUE restoredTRUE, so allocator table correctly visible again in final frame; no false final-off claim.",
+      "restored_hud_value": "TRUE",
+      "allocator_rows": 24,
+      "off_observed": true
+    },
+    "BrnResource::DebugComponent::OnActivate#0002": {
+      "frame_names": [
+        "bb_005702.bmp",
+        "bb_006121.bmp",
+        "bb_006522.bmp"
+      ],
+      "status": "verified",
+      "readonly_write_rejected": true,
+      "readonly_rejection_line_index": 18318,
+      "limitation": "Used baseline0 and SET0 equality alone is not rejection proof; explicit native error is the witness. Early preinitialization Free0 is not the fresh capacity context.",
+      "observed_effect": "Slots Used setter rejected by exact native read-only error at zero-based line18318; subsequent typed raw Used0/Free96 unchanged from fresh initialized context.",
+      "restore_observation": "Read-only fields never overwritten; writable controls exactly restored to captured baselines.",
+      "slots_used": 0,
+      "slots_free": 96
+    },
+    "CgsResource::DebugComponent::InitWindows#0016": {
+      "share_totals": [
+        4358440,
+        44015224,
+        0
+      ],
+      "status": "verified",
+      "restored_selector_value": "Fonts",
+      "frame_names": [
+        "bb_003919.bmp",
+        "bb_004374.bmp",
+        "bb_006522.bmp"
+      ],
+      "observed_effect": "Selector0 independently changed from OpenWorldGr self-match to actualSound, reducing rendered4358440/44015224/0 to0/0/0 without asserts.",
+      "initial_selector_value": "Fonts",
+      "counterfactual_share_totals": [
+        0,
+        0,
+        0
+      ],
+      "restore_observation": "Initial capturedFonts restoredFonts with ShowShareFALSE."
+    }
+  },
+  "proposed_new_unique_sites": 7,
+  "canonical_sites_changed": 0,
+  "post_validator11": {
+    "manifest_sha256": "826782a2eb8ac9a0c97cc980c507dd6e6335f9a73b0c687121d67e5faad8893b",
+    "verified_payload_count": 3,
+    "checker_sha256": "8615f7c69f47a421d318161ee5d92d4618a92e61f984f78ed99848f64b6c460b",
+    "review": "Exact baseline-aware HUD restore plus separately linked off/restore frames; legacy restored_off accepted onlyFALSEbaseline;7tamper tests pass. Root personal requirement retained, native packets unchanged.",
+    "verdict": "PASS narrow factual HUD-baseline predicate"
+  },
+  "history": "D9 Stats773 Invalid pool id asserts and missing phase event failure remain immutable; no source assertion suppression or native rerun of completed Windows."
+}

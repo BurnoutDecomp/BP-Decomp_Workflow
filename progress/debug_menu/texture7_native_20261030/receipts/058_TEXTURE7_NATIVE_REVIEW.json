@@ -1,0 +1,191 @@
+{
+  "status": "PASS",
+  "verdict": "pass",
+  "reviewer": "/root/replay_integration_review",
+  "created_utc": "2026-10-29T21:56:28.784396+00:00",
+  "review_scope": "Actual native seven-site Texture Window/sort/draw/callback effects, all28 personally viewed frames, raw typed readbacks, exact same-run restoration and strict owned cleanup. No canonical edits.",
+  "packet": "D:\\rtex11",
+  "packet_manifest_sha256": "b0ae87ee0f7d7e5f6568a905dd7cdc4abbbc2937d0d2aca13872f59a25e6c967",
+  "packet_seal_sha256": "1d993766bd820e18e0becd308cb10727dc1f94666e5e4e12b4c78cfe24560a92",
+  "policy_sha256": "df180b5f816925b4a2d575f8d421d1864d1c7877672f49e25fabd011b688768f",
+  "run_dir": "C:\\Users\\adri1\\Documents\\Codex\\resource_texture_source22e_62144_20261029\\resource_windows_20261029_213450",
+  "source_commit": "22e673523a69a7a710d53a2bbba61efa0824700c",
+  "exe_sha256": "ccdbfa54ca4f51a776f525ccd3760ff020307cbb33b509a700237f841bc21b54",
+  "owned_process": {
+    "pid": 7216,
+    "image_path": "D:\\rtex11\\suites\\resource_windows\\stage\\resource_windows_20261029_213450\\slot\\Burnout_PC.exe",
+    "start_time_utc": "2026-10-29T21:50:11.8113341Z",
+    "start_ticks": 639289074118113341,
+    "stage_root": "D:\\rtex11\\suites\\resource_windows\\stage\\resource_windows_20261029_213450",
+    "slot": 62144,
+    "slot_tag": "_62144",
+    "runtime_workflow_commit": "ae20985da4c916431ca91c03ebb3e2a6bd986ff5",
+    "runtime_workflow_tree": "aeb51e4164d6fccc59b1774240d53ea9d6be5a0e",
+    "runtime_root_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_runtime_overlay_20261028_private",
+    "runtime_overlay_manifest_sha256": "348cbcc86c63f566e7dcc3db5f67867192521a2be202b4af1357dceb453071d8",
+    "runtime_overlay_seal_sha256": "99910711b12fae66fc3025942f37447632380c814f19230908ca2ec13f19d922",
+    "phase_done_requester_sha256": "10be4697bc1bff6d024c686a4d2dbbe4a60322dd196f83bec2239bba0bf0e995",
+    "frame_event": "Local\\BurnoutPC_FrameRequest_7216_62144"
+  },
+  "native_case": "PASS",
+  "native_case_asserts": 0,
+  "personally_viewed": true,
+  "frame_count": 28,
+  "all28_frame_hash_and_PID_slot_sequence_ACK_checks": "pass",
+  "typed_readback_groups": 13,
+  "typed_readback_validation_failures": [],
+  "same_run_baseline": {
+    "Core/Resource/Sort By": "Nothing",
+    "Core/Resource/Texture Window": "<none>",
+    "Core/Resource/Draw": "Stretched"
+  },
+  "exact_three_control_restore": "pass",
+  "visible_texture_total": 661,
+  "visible_indices": {
+    "open": 0,
+    "next": 1,
+    "previous": 0,
+    "next_page": 64,
+    "previous_page": 0
+  },
+  "pixel_review": {
+    "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_texture22e_review_20261029\\TEXTURE7_NATIVE_PIXEL_REVIEW.json",
+    "sha256": "8fac6592a0a564163eb3b337478ecb84d4e230228d62a998cf5e21a26e01ea09"
+  },
+  "verified_bounded_sites": [
+    "CgsResource::DebugComponent::InitWindows#0007",
+    "CgsResource::DebugComponent::InitWindows#0008",
+    "CgsResource::DebugComponent::InitWindows#0009",
+    "CgsResource::DebugComponent::InitWindows#0011",
+    "CgsResource::DebugComponent::InitWindows#0012",
+    "CgsResource::DebugComponent::InitWindows#0013",
+    "CgsResource::DebugComponent::InitWindows#0014"
+  ],
+  "selected_site_count": 7,
+  "actual_current_profile_snapshot_sha256": "d7062394d301297191063dbf1c30cddd312ad28dae4e1f0e280bbbf796d09241",
+  "actual_native_profile_witnesses": [
+    {
+      "pattern": "\\[SaveLoadPC\\] bootup read: OK name='Profile'",
+      "matches": [
+        {
+          "line_index_zero_based": 1024,
+          "line_number_one_based": 1025,
+          "line": "[SaveLoadPC] bootup read: OK name='Profile' image=262144 mugshots=960800"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[profile-save\\] ValidateProfiles: progression=1 progressionDLC1=1 options=1 optionsDLC1=1 liveRevenge=1",
+      "matches": [
+        {
+          "line_index_zero_based": 1047,
+          "line_number_one_based": 1048,
+          "line": "[profile-save] ValidateProfiles: progression=1 progressionDLC1=1 options=1 optionsDLC1=1 liveRevenge=1  (the progression term prints its own two counts above)"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[profile-save\\] deserialised: isNewProfile=0 -> playIntroVideo=0",
+      "matches": [
+        {
+          "line_index_zero_based": 1048,
+          "line_number_one_based": 1049,
+          "line": "[profile-save] deserialised: isNewProfile=0 -> playIntroVideo=0"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[one-profile\\].*same=1.*isNewProfile gs=0 pm=0.*medalsFromTheStart gs=[0-9]+ pm=[0-9]+.*eventCount gs=[0-9]+ pm=[0-9]+.*spawnCarId gs=[0-9A-Fa-f]+ pm=[0-9A-Fa-f]+",
+      "matches": [
+        {
+          "line_index_zero_based": 1197,
+          "line_number_one_based": 1198,
+          "line": "[one-profile] gameState.mProgressionManager.mProfile=00007FF705FA3C80 profileManager.mpProgressionProfile=00007FF705FA3C80 same=1 | isNewProfile gs=0 pm=0 | medalsFromTheStart gs=202 pm=202 | eventCount gs=120 pm=120 | spawnCarId gs=A7E60F1A40508000 pm=A7E60F1A40508000 | roadRules gs=0 | maxCars gs=85"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[GameStateModule::OnProfileLoaded\\].*spawnCar=\\S+ profileCar=\\S+ rank=[0-9]+ maxCars=[0-9]+ savedPos=\\(",
+      "matches": [
+        {
+          "line_index_zero_based": 1297,
+          "line_number_one_based": 1298,
+          "line": "[GameStateModule::OnProfileLoaded] junkyard=250700 spawnCar=PUSMC02 profileCar=PUSMC02 rank=5 maxCars=85 savedPos=(2986.933105, -2.733859, -2011.417847)"
+        }
+      ]
+    }
+  ],
+  "observed_runtime_progress": {
+    "medals_game_state": 202,
+    "medals_profile_manager": 202,
+    "event_count_game_state": 120,
+    "event_count_profile_manager": 120,
+    "spawn_car_id": "A7E60F1A40508000",
+    "spawn_car": "PUSMC02",
+    "profile_car": "PUSMC02",
+    "rank": 5,
+    "max_cars": 85,
+    "values_observed_not_prescribed": true
+  },
+  "cleanup": {
+    "owned_game_absent_at_independent_CIM_check": true,
+    "retained_original_creation_handle": true,
+    "owned_cleanup_complete": true,
+    "input_reset_complete": true,
+    "helper_cleanup_complete": true,
+    "profile_restoration_complete": true,
+    "phase_stop_complete": true,
+    "dump_hash_cleanup_complete": true,
+    "protected_normal36_nonlogs_unchanged": true,
+    "asset_rosters_and_payload_and_runtime_unchanged": true
+  },
+  "native_receipt_pins": {
+    "RESOURCE_DRIVER_RECEIPT.json": "37d690b825b3c316c530c09d09023a619a0cfd235e355b86c527207cc6212340",
+    "RESOURCE_RESTORE_RECEIPT.json": "860ba13c39a1f5eb722fab43a628bd8618634234cfa36fa569d404cb6499befb",
+    "flow-terminal.json": "92d8446240535e33ed64a79045318c843b6b57e55cb0ce6854d6d4490f6094eb",
+    "result.json": "39def5ab1bd6c0a10201406e6e963850e538ceec0538c351985334d5712b22eb",
+    "POSTCHECK.json": "49c875b1c026771d2ed25912c8c3400b1c53ad70c69cd459e433a6d5bb352176",
+    "NORMAL_PROTECTION_BEFORE.json": "9fd781ad2e822dc009973c33f5ea410ca070e8cd7ac4d071d23b227e934c6893",
+    "NORMAL_PROTECTION_AFTER.json": "bcf379072cbec331e4b7825da63df7a2bceec180b76ea42146b53dd3a872cf73",
+    "RESOURCE_PHASE_DONE.json": "83af0c876b78917a739b4d8b088d15db7a43901c059cb6b6ed79963e373d2ebb",
+    "RESOURCE_PHASE_DONE_REQUEST.json": "5f0a5ce5e57355064c510da4c0f62eacba423f0af507e0ac513a743889864d35",
+    "RESOURCE_PHASE_REQUEST_MONITOR_RECEIPT.json": "eb94ee3c79309584100347719250098804f5b70417365723bda53be9b217cd78",
+    "TEXTURE_PROVIDER_PROBE.json": "8a299634500d35716f30b9cd192b0df0007ab6400de6652676a0f4f1dff6fb5c",
+    "TEXTURE_PROVIDER_GATE.json": "38efdb777e2baf0db335b3b8552b30a02591effa03458d3cff73f7b6bdc1a24e",
+    "TEXTURE_PROVIDER_GATE_VALIDATED.json": "364cc537e4cc1f6232a2adda34f9a7caf1b52251231d06505c65c32fcd2bb2ce",
+    "DATA_COPY_RECEIPT.json": "92d39ee1df9702d5c8ce4ae0371530cf638239d2694c08499d66b5bebb801f1b"
+  },
+  "owned_game_log": {
+    "path": "D:\\rtex11\\suites\\resource_windows\\stage\\resource_windows_20261029_213450\\slot\\BrnGame.log",
+    "sha256": "44c99d12b679e48d827e0d4de99e8d33223d8bbda1bea55436e814f6c76b134c"
+  },
+  "offline_validator_successor": {
+    "verdict": "pass",
+    "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\resource_texture_validator12_20261029\\CheckTextureNative12.py",
+    "sha256": "e967851908282addbb7d321e783a74dc9317c1271875fc9fa350ccbec230275c",
+    "manifest_sha256": "9ed96a269c34e7cdc89413116fbd1ddff37bf695ddeb29a2b5755596ad70d0f6",
+    "seal_sha256": "cc77bc51a15fa3dd24f540a8f83dee71b1a890a6cc38253f1eae166d0df347ac",
+    "narrow_change": "input_events_reset->input_reset_complete matches the actual original terminal schema",
+    "reviewer_execution_returncode": 0,
+    "reviewer_execution_result": {
+      "status": "PASS",
+      "failures": [],
+      "pending": [],
+      "selected_site_count": 7,
+      "frame_count": 28,
+      "native_case": "PASS"
+    },
+    "false_real_reset_counterfactual_rejects_even_if_wrong_legacy_field_true": true,
+    "original546_packet_and_native_receipts_unchanged": true,
+    "native_rerun": false
+  },
+  "limitations": [
+    "Area first-entry change is directly visible. Width retains the same first8x8 gray entry; a distinct Width ordering relative to Area is not established.",
+    "Black16x16 display at Next is reported as seen; this review does not diagnose the content of that asset.",
+    "Only seven selected sites and exercised draw/sort/callback actions in this661-entry pool are verified. No all-pool/all-mode or retail rendering parity claim.",
+    "No Replay recording/playback, queue/MaxPartial, physical controller, audio parity, normal installation or canonical registry edits."
+  ],
+  "canonical_registry_edits": false,
+  "normal_install_performed": false,
+  "source_or_game_edit_performed_by_reviewer": false
+}
