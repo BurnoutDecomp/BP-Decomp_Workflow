@@ -1,0 +1,88 @@
+﻿{
+    "expected":  "PASS",
+    "case":  "resource_texture7_source22e_62144",
+    "case_path":  "D:\\rtex11\\suites\\resource_windows\\Case_ResourceWindows.ps1",
+    "phase":  "DRIVING",
+    "when":  "2026-10-29T22:53:02.2715893+01:00",
+    "flow_exit":  0,
+    "bug":  "Source22e Texture Window, Sort, Draw and four callbacks require an actual populated native texture caption/image before further actions, independent changed/restored pixels and exact initial restore. Queue, partial-fixup and forced Replay states are excluded.",
+    "asserts":  0,
+    "run_dir":  "C:\\Users\\adri1\\Documents\\Codex\\resource_texture_source22e_62144_20261029\\resource_windows_20261029_213450",
+    "label":  "",
+    "area":  "debug-menu",
+    "as_expected":  true,
+    "verdict":  "PASS",
+    "slot":  62144,
+    "checks":  [
+                   {
+                       "detail":  "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+                       "pass":  true,
+                       "name":  "original strict flow completed and owned game exited",
+                       "kind":  "TerminalFlow"
+                   },
+                   {
+                       "detail":  "0 assert family(ies), all known (0 lines)",
+                       "pass":  true,
+                       "name":  "no new assert families",
+                       "kind":  "NewAsserts"
+                   },
+                   {
+                       "detail":  "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+                       "pass":  true,
+                       "name":  "no exceptions",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "final phase DRIVING, want DRIVING",
+                       "pass":  true,
+                       "name":  "reached DRIVING",
+                       "kind":  "Mark"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[SaveLoadPC\\] bootup read: OK name=\u0027Profile\u0027/, want [1, +inf]",
+                       "pass":  true,
+                       "name":  "current profile native read succeeded",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[profile-save\\] ValidateProfiles: progression=1 progressionDLC1=1 options=1 optionsDLC1=1 liveRevenge=1/, want [1, +inf]",
+                       "pass":  true,
+                       "name":  "current profile progression/options validation succeeded",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[profile-save\\] deserialised: isNewProfile=0 -\u003e playIntroVideo=0/, want [1, +inf]",
+                       "pass":  true,
+                       "name":  "current profile deserialised as returning profile",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[one-profile\\].*same=1.*isNewProfile gs=0 pm=0.*medalsFromTheStart gs=[0-9]+ pm=[0-9]+.*eventCount gs=[0-9]+ pm=[0-9]+.*spawnCarId gs=[0-9A-Fa-f]+ pm=[0-9A-Fa-f]+/, want [1, +inf]",
+                       "pass":  true,
+                       "name":  "current returning-profile progress is active",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "1 line(s) match /\\[GameStateModule::OnProfileLoaded\\].*spawnCar=\\S+ profileCar=\\S+ rank=[0-9]+ maxCars=[0-9]+ savedPos=\\(/, want [1, +inf]",
+                       "pass":  true,
+                       "name":  "current profile native spawn/progression callback",
+                       "kind":  "LogCount"
+                   },
+                   {
+                       "detail":  "status=complete; frames=28; selected-pool=OpenWorldGr",
+                       "pass":  true,
+                       "name":  "native resource driver completed with owner-bound frames",
+                       "kind":  "Script"
+                   }
+               ],
+    "provenance":  {
+                       "b5_dirty":  2,
+                       "exe_size":  11794432,
+                       "exe_mtime_before_lock":  "2026-10-29T21:24:25.8848213+01:00",
+                       "exe_sha":  "ccdbfa54ca4f",
+                       "b5_head":  "ae20985da",
+                       "exe_b5":  "22e67352",
+                       "parent_head":  "ae20985da",
+                       "exe_mtime":  "2026-10-29T21:24:25.8848213+01:00"
+                   }
+}

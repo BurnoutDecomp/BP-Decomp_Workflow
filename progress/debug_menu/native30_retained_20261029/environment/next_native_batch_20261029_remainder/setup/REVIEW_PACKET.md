@@ -1,0 +1,9 @@
+# Bounded24 native remainder
+
+Same source32/exe474, private62180, original skipvideo latch. Selected24 sites are Environment0051-0059 plus0066-0068/0072-0083. Original Restore1.1 failure is preserved; this successor never normalizes captured baselines. It checks all selected values against the original RegisterFloat ranges before any target writes, skips un-restorable values explicitly as pending, and excludes their aliases from cleanup/emergency SET. At least20 restorable actual controls are required before target writes. E53=1.1 was observed and is expected to remain pending, untouched.
+
+Source-backed layer1 visibility prerequisites are explicit: for0052density/0054feather P/N only, E56opacity=.5; for0056opacity P/N only, E52density=.5. Each R returns both target and companion to their natural frozen values. Companions get no extra credit. All28 aliases are read after every target; all unmodified values including skippedE53 must retain captured baseline. New0057-59 darkRGB are layer0 sky shader inputs with original0..1ranges, same source/render chain.
+
+Max76frames640x360,64MiBlog,240s. Expected actual23controls if onlyE53 is skipped:73frames and72phases. Machine completion does not grant site credit. Actualscene review and individual P/N/R pixels remain required. Density51 already has a bounded proposal from retained prior run, so no duplicate new credit.
+
+Normal guard is a fresh36-file snapshot against RootV8 normal41 roster0679dfb7c4dfc121056e8f146b0792fb2c52879ba8f348729923a8c8d540a94b and delegation092948117cf40424c555943e3760f2e07f3c1bc5f97f0a08a91e0712237ddb38; private474 is unchanged. Exact raw reader/ACK/pose/image safeguards and official owned-only phase completion are retained. See current SCOPE/Driver/Case/Analyze and all original failed predecessors; no failure is relabeled.

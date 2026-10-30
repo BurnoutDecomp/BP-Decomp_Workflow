@@ -98,8 +98,16 @@ jobs:
           echo "sha=$SHA" >> "$GITHUB_OUTPUT"
           echo "Target b5-decomp commit: $SHA"
 
-      - name: Refresh ledger membership without replaying stale statuses
+      - name: Check global publication eligibility
         if: steps.freshness.outputs.needed == 'true'
+        id: eligibility
+        run: |
+          python tools/work/publish_snapshot.py check \
+            --source-repo "$B5_REPO" --source-commit "${{ steps.target.outputs.sha }}" \
+            --result reconcile-eligibility.json
+
+      - name: Refresh ledger membership without replaying stale statuses
+        if: steps.freshness.outputs.needed == 'true' && steps.eligibility.outputs.eligible == 'true'
         env:
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
         run: |
@@ -110,7 +118,7 @@ jobs:
             --data '{"branch":"main","reset":false,"metadata_only":true}' \
             "${WORK_SERVER%/}/admin/sync"
 
-      - name: Advance b5-decomp submodule pointer
+      - name: Check out the exact source snapshot for evidence
         if: steps.freshness.outputs.needed == 'true'
         run: |
           set -euo pipefail
@@ -118,14 +126,14 @@ jobs:
           # Materialise the submodule at the triggering commit over HTTPS (its .gitmodules
           # URL is SSH; we don't touch it, so no stray diff). A fresh clone is more robust
           # than `submodule update` when the recorded pointer isn't fetchable at depth 1.
-          # The contents are needed for the cross-check; `git add` records the new gitlink.
+          # The contents are evidence even for private/stale triggers. Only the
+          # guarded publisher below may update the global gitlink.
           rm -rf b5-decomp
           # Keep commit ancestry to reject out-of-order snapshots; fetch source
           # blobs only for the actual checkout, not for the whole history.
           git clone --filter=blob:none --no-checkout --branch "$B5_BRANCH" "$B5_REPO" b5-decomp
           git -C b5-decomp fetch origin "$SHA"
           git -C b5-decomp checkout -q "$SHA"
-          git add b5-decomp
 
       - name: Refresh the class -> home-file map
         if: steps.freshness.outputs.needed == 'true'
@@ -171,14 +179,25 @@ jobs:
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
         run: |
           set -euo pipefail
-          python -m pytest tools/re/test_funcaudit.py tools/work/test_source_status.py tools/work/test_external_status.py tools/work/test_reconcile_from_files.py -q
-          python tools/work/source_status.py --server "$WORK_SERVER" --publish
+          python -m pytest tools/re/test_funcaudit.py tools/work/test_source_status.py tools/work/test_external_status.py tools/work/test_reconcile_from_files.py tools/work/test_publish_snapshot.py -q
+          if python tools/work/publish_snapshot.py check --require-current \
+              --source-repo "$B5_REPO" --source-commit "${{ steps.target.outputs.sha }}" \
+              --result reconcile-before-ledger.json; then
+            python tools/work/source_status.py --server "$WORK_SERVER" --publish \
+              --canonical-source-repo "$B5_REPO"
+          else
+            status=$?
+            if [ "$status" -ne 3 ]; then exit "$status"; fi
+            echo "superseded=true" >> "$GITHUB_OUTPUT"
+            echo "Historical/private source evidence retained; live ledger publication skipped."
+          fi
 
       - name: Export the reconciled durable ledger
         if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
         run: python tools/work/fetch_server_status.py --server "$WORK_SERVER"
 
       - name: Commit + push if anything changed
+        id: publish
         if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
         run: |
           set -euo pipefail
@@ -191,25 +210,16 @@ jobs:
           Automatic committed-source evidence and durable ledger export.
           Recovered functions are recorded without inventing review passes.
           EOF
-          # Overlay only generated inputs onto the newest parent tree. Builds can
-          # publish asm/linked-file results while this job runs; preserve those.
-          for attempt in 1 2 3 4 5; do
-            git fetch origin main
-            python tools/work/fetch_server_status.py --server "$WORK_SERVER"
-            git read-tree origin/main
-            git add progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json b5-decomp
-            if git diff --cached --quiet origin/main; then
-              echo "snapshot already published"; exit 0
-            fi
-            TREE="$(git write-tree)"
-            COMMIT="$(git commit-tree "$TREE" -p origin/main -F "$RUNNER_TEMP/reconcile-message.txt")"
-            if git push origin "$COMMIT:refs/heads/main"; then exit 0; fi
-            sleep 3
-          done
-          echo "could not publish after five attempts"; exit 1
+          # The publisher rechecks live canonical dev before EVERY push retry.
+          # It overlays only this run's named outputs onto the newest main tree.
+          python tools/work/publish_snapshot.py publish \
+            --source-repo "$B5_REPO" --source-commit "$SHA" \
+            --kind reconcile --message-file "$RUNNER_TEMP/reconcile-message.txt" \
+            --status-server "$WORK_SERVER" --result reconcile-publication.json \
+            --files progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json
 
       - name: Refresh public dashboard snapshot
-        if: steps.freshness.outputs.needed == 'true' && steps.source.outputs.superseded != 'true'
+        if: steps.publish.outputs.published == 'true'
         env:
           # The existing CI publisher credential is an admin worker token, so it
           # is also authorised to call the server's durable, non-reset sync.
@@ -226,3 +236,17 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{"branch":"main","reset":false,"metadata_only":true}' \
             "${WORK_SERVER%/}/admin/sync"
+
+      - name: Keep this run's source evidence and publication decision
+        if: always() && steps.target.outputs.sha != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-evidence-${{ steps.target.outputs.sha }}-${{ github.run_id }}
+          path: |
+            progress/funcaudit.json
+            progress/stubs.json
+            progress/class_homes.json
+            progress/source_status.json
+            reconcile-*.json
+          retention-days: 30
+          if-no-files-found: warn

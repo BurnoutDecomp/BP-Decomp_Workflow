@@ -1,0 +1,1555 @@
+{
+  "address": "0x827D0098",
+  "name": "BrnWorld::EnvironmentSettings::EnvironmentManager::GenerateShaderConstants",
+  "prototype": "void BrnWorld::EnvironmentSettings::EnvironmentManager::GenerateShaderConstantsvoid __thiscall(BrnWorld::EnvironmentSettings::EnvironmentManager *this, int lOutputSkyTopColourDrk, int lOutputSkyHorColourPow, int lOutputSkySunColourPow, int lOutputSkyHorBleedSclPow, int R8, int R9, int R10, int a9, int a10, int a11, int a12, int a13, int a14, int a15, int a16, int a17, int a18, int a19, int a20, int a21, int a22, int a23, int a24, int a25, int a26, int a27, int a28, int a29, int a30, int a31, int a32, int a33, int a34, int a35, int a36, int a37, int a38, int a39, int a40, int a41, int a42, int a43, int a44, int a45, int a46, int a47, int a48, int a49, int a50, int a51, int a52, int a53, float *a54, int a55, int a56, int a57, int a58, int a59, int a60, int a61, int a62, int a63)",
+  "variables": [
+    {
+      "name": "this",
+      "type": "BrnWorld::EnvironmentSettings::EnvironmentManager *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "lOutputSkyTopColourDrk",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "lOutputSkyHorColourPow",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "lOutputSkySunColourPow",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "lOutputSkyHorBleedSclPow",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "R8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "R9",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a9",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a10",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a11",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a12",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a13",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a14",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a15",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a16",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a17",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a18",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a19",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a20",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a21",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a22",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a23",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a24",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a25",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a26",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a27",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a28",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a29",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a30",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a31",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a32",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a33",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a34",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a35",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a36",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a37",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a38",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a39",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a40",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a41",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a42",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a43",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a44",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a45",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a46",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a47",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a48",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a49",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a50",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a51",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a52",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a53",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a54",
+      "type": "float *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a55",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a56",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a57",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a58",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a59",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a60",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a61",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a62",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a63",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "_R0",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v64",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v65",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v66",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v67",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v68",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v69",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v70",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v71",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R31",
+      "type": "BrnWorld::EnvironmentSettings::EnvironmentManager *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R28",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R27",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R25",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R30",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R24",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R4",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R5",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R4",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v87",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v88",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v89",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v90",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v91",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R7",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R8",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R9",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v97",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v98",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_FP9",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_FP12",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_FP10",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_FP12",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v107",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v108",
+      "type": "XMMATRIX *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R0",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v111",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v112",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v113",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v114",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v115",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v116",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v117",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R16",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R26",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R15",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R14",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "void *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v139",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R10",
+      "type": "void *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v142",
+      "type": "double",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R28",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R29",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R17",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R25",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R18",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R24",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R0",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R19",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R23",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R28",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R22",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R21",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R20",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R0",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R0",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R5",
+      "type": "void *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R9",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "void *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "_R11",
+      "type": "float *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v190",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v191",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v192",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v193",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v194",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v195",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v196",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v197",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v198",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v199",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v200",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v201",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v202",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v203",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v204",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v205",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v206",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v207",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v208",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v209",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v210",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v211",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v212",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v213",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v214",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v215",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v216",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v217",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v218",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v219",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v220",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v221",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v222",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v223",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v224",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v225",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v226",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v227",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v228",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v229",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v230",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v231",
+      "type": "void *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v232",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v233",
+      "type": "void *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v234",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v235",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v236",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v237",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v238",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v239",
+      "type": "_BYTE[12]",
+      "is_reg": false,
+      "size": 12
+    },
+    {
+      "name": "v240",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v241",
+      "type": "_BYTE[12]",
+      "is_reg": false,
+      "size": 12
+    },
+    {
+      "name": "v242",
+      "type": "float",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v243",
+      "type": "_BYTE[12]",
+      "is_reg": false,
+      "size": 12
+    },
+    {
+      "name": "v244",
+      "type": "char[64]",
+      "is_reg": false,
+      "size": 64
+    },
+    {
+      "name": "v245",
+      "type": "char[64]",
+      "is_reg": false,
+      "size": 64
+    },
+    {
+      "name": "a14a",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a16a",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a18a",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "lOutputScattTopColourDrk",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "lOutputScattHorColourPow",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "a26a",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v252",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    }
+  ],
+  "pseudocode": "void __thiscall BrnWorld::EnvironmentSettings::EnvironmentManager::GenerateShaderConstants(\n        BrnWorld::EnvironmentSettings::EnvironmentManager *this,\n        int lOutputSkyTopColourDrk,\n        int lOutputSkyHorColourPow,\n        int lOutputSkySunColourPow,\n        int lOutputSkyHorBleedSclPow,\n        int R8,\n        int R9,\n        int R10,\n        int a9,\n        int a10,\n        int a11,\n        int a12,\n        int a13,\n        int a14,\n        int a15,\n        int a16,\n        int a17,\n        int a18,\n        int a19,\n        int a20,\n        int a21,\n        int a22,\n        int a23,\n        int a24,\n        int a25,\n        int a26,\n        int a27,\n        int a28,\n        int a29,\n        int a30,\n        int a31,\n        int a32,\n        int a33,\n        int a34,\n        int a35,\n        int a36,\n        int a37,\n        int a38,\n        int a39,\n        int a40,\n        int a41,\n        int a42,\n        int a43,\n        int a44,\n        int a45,\n        int a46,\n        int a47,\n        int a48,\n        int a49,\n        int a50,\n        int a51,\n        int a52,\n        int a53,\n        float *a54,\n        int a55,\n        int a56,\n        int a57,\n        int a58,\n        int a59,\n        int a60,\n        int a61,\n        int a62,\n        int a63)\n{\n  double v64; // fp8\n  double v65; // fp7\n  double v66; // fp6\n  double v67; // fp5\n  double v68; // fp4\n  double v69; // fp3\n  double v70; // fp2\n  double v71; // fp1\n  double v87; // fp13\n  double v88; // fp12\n  double v89; // fp11\n  double v90; // fp10\n  double v91; // fp9\n  double v97; // fp0\n  double v98; // fp13\n  double v107; // fp31\n  XMMATRIX *v108; // r3\n  int v111; // r10\n  int v112; // r9\n  int v113; // r8\n  int v114; // r7\n  int v115; // r6\n  int v116; // r5\n  int v117; // r4\n  double v139; // fp13\n  double v142; // fp0\n  int v190; // [sp+8h] [-218h]\n  int v191; // [sp+8h] [-218h]\n  int v192; // [sp+Ch] [-214h]\n  int v193; // [sp+10h] [-210h]\n  int v194; // [sp+14h] [-20Ch]\n  int v195; // [sp+18h] [-208h]\n  int v196; // [sp+1Ch] [-204h]\n  int v197; // [sp+20h] [-200h]\n  int v198; // [sp+24h] [-1FCh]\n  int v199; // [sp+28h] [-1F8h]\n  int v200; // [sp+2Ch] [-1F4h]\n  int v201; // [sp+30h] [-1F0h]\n  int v202; // [sp+34h] [-1ECh]\n  int v203; // [sp+38h] [-1E8h]\n  int v204; // [sp+3Ch] [-1E4h]\n  int v205; // [sp+40h] [-1E0h]\n  int v206; // [sp+44h] [-1DCh]\n  int v207; // [sp+48h] [-1D8h]\n  int v208; // [sp+4Ch] [-1D4h]\n  int v209; // [sp+50h] [-1D0h]\n  int v210; // [sp+54h] [-1CCh]\n  int v211; // [sp+58h] [-1C8h]\n  int v212; // [sp+5Ch] [-1C4h]\n  int v213; // [sp+60h] [-1C0h]\n  int v214; // [sp+64h] [-1BCh]\n  int v215; // [sp+68h] [-1B8h]\n  int v216; // [sp+6Ch] [-1B4h]\n  int v217; // [sp+70h] [-1B0h]\n  int v218; // [sp+74h] [-1ACh]\n  int v219; // [sp+78h] [-1A8h]\n  int v220; // [sp+7Ch] [-1A4h]\n  int v221; // [sp+80h] [-1A0h]\n  int v222; // [sp+84h] [-19Ch]\n  int v223; // [sp+88h] [-198h]\n  float v224; // [sp+90h] [-190h] BYREF\n  float v225; // [sp+94h] [-18Ch]\n  __int64 v226; // [sp+98h] [-188h] BYREF\n  float v227; // [sp+A0h] [-180h] BYREF\n  float v228; // [sp+A4h] [-17Ch]\n  float v229; // [sp+A8h] [-178h]\n  float v230; // [sp+ACh] [-174h]\n  void *v231; // [sp+B0h] [-170h]\n  float v232; // [sp+B4h] [-16Ch] BYREF\n  void *v233; // [sp+B8h] [-168h]\n  float v234; // [sp+C0h] [-160h] BYREF\n  int v235; // [sp+C4h] [-15Ch] BYREF\n  int v236; // [sp+C8h] [-158h]\n  int v237; // [sp+CCh] [-154h]\n  float v238; // [sp+D0h] [-150h] BYREF\n  _BYTE v239[12]; // [sp+D4h] [-14Ch] BYREF\n  float v240; // [sp+E0h] [-140h] BYREF\n  _BYTE v241[12]; // [sp+E4h] [-13Ch] BYREF\n  float v242; // [sp+F0h] [-130h] BYREF\n  _BYTE v243[12]; // [sp+F4h] [-12Ch] BYREF\n  char v244[64]; // [sp+100h] [-120h] BYREF\n  char v245[64]; // [sp+140h] [-E0h] BYREF\n  int a14a; // [sp+23Ch] [+1Ch]\n  int a16a; // [sp+244h] [+24h]\n  int a18a; // [sp+24Ch] [+2Ch]\n  int lOutputScattTopColourDrk; // [sp+25Ch] [+3Ch]\n  int lOutputScattHorColourPow; // [sp+264h] [+44h]\n  int a26a; // [sp+26Ch] [+4Ch]\n  int v252; // [sp+304h] [+E4h]\n\n  _savegprlr_14();\n  _R31 = this;\n  lOutputScattTopColourDrk = R8;\n  _R28 = lOutputSkyTopColourDrk;\n  lOutputScattHorColourPow = R9;\n  _R27 = lOutputSkyHorColourPow;\n  a26a = R10;\n  _R25 = lOutputSkySunColourPow;\n  LODWORD(_R30) = 0;\n  v227 = this->float540;\n  _R24 = lOutputSkyHorBleedSclPow;\n  v228 = this->float544;\n  a14a = lOutputSkyTopColourDrk;\n  a16a = lOutputSkyHorColourPow;\n  v229 = this->float548;\n  a18a = lOutputSkySunColourPow;\n  _R7 = &this->float540;\n  _R6 = &this->float550;\n  v230 = this->float578;\n  _R4 = &v227;\n  _R5 = &this->float560;\n  __asm\n  {\n    lvx128    v0, r0, r4\n    stvx128   v0, r0, r28\n  }\n  v227 = this->float550;\n  v228 = this->float554;\n  v229 = this->float558;\n  v230 = this->float570;\n  _R4 = &v227;\n  __asm\n  {\n    lvx128    v0, r0, r4\n    stvx128   v0, r0, r27\n  }\n  v227 = this->float560;\n  v228 = this->float564;\n  v229 = this->float568;\n  v230 = this->float574;\n  _R4 = &v227;\n  __asm\n  {\n    lvx128    v0, r0, r4\n    stvx128   v0, r0, r25\n  }\n  v224 = this->float57C;\n  v225 = this->float580;\n  *&v226 = this->float584;\n  LODWORD(v226) = 0;\n  _R11 = &v224;\n  __asm\n  {\n    lvx128    v0, r0, r11\n    stvx128   v0, r0, r24\n  }\n  if ( this->byte6F4 )\n  {\n    __asm { lvx128    v0, r0, r7 }\n    _R11 = 1424;\n    _R4 = 1440;\n    _R7 = 1456;\n    __asm { lvx128    v13, r0, r6 }\n    v87 = this->float570;\n    __asm { lvx128    v12, r0, r5 }\n    v88 = this->float574;\n    v89 = this->float57C;\n    v90 = this->float580;\n    v91 = this->float584;\n    this->float5C8 = this->float578;\n    this->float5C0 = v87;\n    this->float5C4 = v88;\n    this->float5CC = v89;\n    this->float5D0 = v90;\n    this->float5D4 = v91;\n    __asm\n    {\n      stvx128   v0, r31, r11\n      stvx128   v13, r31, r4\n      stvx128   v12, r31, r7\n    }\n  }\n  v224 = this->float590;\n  v225 = this->float594;\n  *&v226 = this->float598;\n  *(&v226 + 1) = this->float5C8;\n  _R7 = &v224;\n  __asm\n  {\n    lvx128    v0, r0, r7\n    stvx128   v0, r0, r8\n  }\n  v224 = this->float5A0;\n  v225 = this->float5A4;\n  *&v226 = this->float5A8;\n  *(&v226 + 1) = this->float5C0;\n  _R8 = &v224;\n  __asm\n  {\n    lvx128    v0, r0, r8\n    stvx128   v0, r0, r9\n  }\n  v224 = this->float5B0;\n  v225 = this->float5B4;\n  *&v226 = this->float5B8;\n  *(&v226 + 1) = this->float5C4;\n  _R9 = &v224;\n  __asm\n  {\n    lvx128    v0, r0, r9\n    stvx128   v0, r0, r10\n  }\n  v227 = this->float5CC;\n  v228 = this->float5D0;\n  v229 = this->float5D4;\n  v230 = 0.0;\n  _R11 = &v227;\n  __asm { lvx128    v0, r0, r11 }\n  _R11 = a28;\n  __asm { stvx128   v0, r0, r11 }\n  *&v226 = this->float5E0;\n  v97 = this->float5D8;\n  v98 = (1.0 / (this->float5DC - this->float5D8));\n  *(&v226 + 1) = this->float5E4;\n  v224 = v98;\n  v225 = v97 * v98;\n  _R11 = &v224;\n  __asm { lvx128    v0, r0, r11 }\n  _R11 = a30;\n  __asm { stvx128   v0, r0, r11 }\n  if ( this->mbOverrideKeyLightDirection )\n  {\n    _R11 = &this->field_1220;\n    HIDWORD(_R30) = a32;\n    __asm\n    {\n      lvx128    v0, r0, r11\n      stvx128   v0, r0, r29\n      lvx128    v0, r0, r11\n    }\n    _R11 = v252;\n    __asm { stvx128   v0, r0, r11 }\n  }\n  else\n  {\n    _FP9 = (this->float1C6C - this->float504);\n    __asm { fsel      f12, f9, f10, f12 }\n    _FP10 = (_FP12 - this->float1C68);\n    __asm { fsel      f12, f10, f12, f11 }\n    v107 = ((_FP12 - 23400.0) * 0.000072722054);\n    v108 = BrnWorld::EnvironmentSettings::ComputeKeyLightDirection(\n             ((this->float504 - 23400.0) * 0.000072722054),\n             this->float510,\n             this->float514,\n             this->float518,\n             this,\n             _R4,\n             _R5,\n             _R6,\n             &v224,\n             &v224,\n             &v224,\n             R10,\n             v190);\n    _R11 = v252;\n    __asm { stvx128   v1, r0, r11 }\n    BrnWorld::EnvironmentSettings::ComputeKeyLightDirection(\n      v107,\n      _R31->float510,\n      _R31->float514,\n      _R31->float518,\n      v108,\n      v117,\n      v116,\n      v115,\n      v114,\n      v113,\n      v112,\n      v111,\n      v191);\n    HIDWORD(_R30) = a32;\n    __asm { stvx128   v1, r0, r29 }\n  }\n  _R11 = 1520;\n  _R16 = a34;\n  _R7 = 1536;\n  _R26 = a36;\n  _R6 = 1664;\n  _R15 = a38;\n  _R5 = 1680;\n  _R14 = a40;\n  _R4 = 1696;\n  __asm { lvx128    v0, r31, r11 }\n  _R3 = 1712;\n  __asm { stvx128   v0, r0, r16 }\n  __asm { lvx128    v0, r31, r7 }\n  __asm { stvx128   v0, r0, r26 }\n  __asm { lvx128    v0, r31, r6 }\n  _R6 = a42;\n  __asm { stvx128   v0, r0, r15 }\n  _R11 = &_R31->field_11B0;\n  __asm { lvx128    v0, r31, r5 }\n  _R7 = &v232;\n  __asm\n  {\n    stvx128   v0, r0, r14\n    lvx128    v0, r31, r4\n    stvx128   v0, r0, r6\n  }\n  _R6 = a44;\n  __asm\n  {\n    lvx128    v0, r31, r3\n    stvx128   v0, r0, r6\n  }\n  v224 = *&_R31->gap5E8[232];\n  v225 = *&_R31->gap5E8[236];\n  v226 = _R30;\n  _R10 = &v224;\n  __asm { lvx128    v0, r0, r10 }\n  _R10 = a48;\n  __asm { stvx128   v0, r0, r10 }\n  v224 = *&_R31->gap5E8[216];\n  v225 = *&_R31->gap5E8[220];\n  v226 = _R30;\n  _R10 = &v224;\n  __asm { lvx128    v0, r0, r10 }\n  _R10 = a50;\n  __asm { stvx128   v0, r0, r10 }\n  v224 = *&_R31->gap5E8[224];\n  v225 = *&_R31->gap5E8[228];\n  v226 = _R30;\n  _R10 = &v224;\n  __asm { lvx128    v0, r0, r10 }\n  _R10 = a52;\n  __asm { stvx128   v0, r0, r10 }\n  __asm { lvx128    v13, r0, r11 }\n  _R10 = &unk_82CDA400;\n  v139 = *&_R31->gap5E8[248];\n  __asm\n  {\n    vmr       v12, v13\n    vspltw    v13, v13, 1\n    lvx128    v7, r0, r10\n  }\n  v233 = &unk_82CDA400;\n  __asm { vspltw    v12, v12, 0 }\n  _R10 = &unk_82CDA3C0;\n  __asm { lvx128    v6, r0, r10 }\n  v231 = &unk_82CDA3C0;\n  __asm { vperm     v13, v12, v13, v6 }\n  v232 = v139 * 0.00012500001;\n  __asm\n  {\n    lvlx      v0, r0, r7\n    vspltw    v0, v0, 0\n    vperm     v0, v0, v0, v7\n    vsldoi    v0, v13, v0, v8\n  }\n  _R11 = a46;\n  __asm { stvx128   v0, r0, r11 }\n  if ( _R31->gap6F5 )\n  {\n    __asm { lvx128    v5, r0, r29 }\n    __asm { lvx128    v4, r0, r24 }\n    __asm { lvx128    v3, r0, r25 }\n    __asm { lvx128    v2, r0, r27 }\n    __asm { lvx128    v1, r0, r28 }\n    BrnWorld::EnvironmentSettings::ComputeIrradianceRigFromSky(\n      &_R31->gap5E8[40],\n      &_R31->gap5E8[56],\n      &_R31->gap5E8[88],\n      &_R31->gap5E8[72],\n      &_R31->gap5E8[104],\n      &_R31->gap5E8[120],\n      &v226,\n      &unk_820D0000,\n      v190,\n      v192,\n      v193,\n      v194,\n      v195,\n      v196,\n      v197,\n      v198,\n      v199,\n      v200,\n      v201,\n      v202,\n      v203,\n      v204,\n      v205,\n      v206,\n      v207,\n      v208,\n      v209,\n      v210,\n      v211,\n      v212,\n      v213,\n      v214,\n      v215,\n      v216,\n      v217,\n      v218,\n      v219,\n      v220,\n      v221,\n      v222,\n      v223);\n  }\n  v142 = *&_R31->gap5E8[136];\n  v227 = *&_R31->gap5E8[136];\n  v224 = v142;\n  v238 = v142;\n  v240 = v142;\n  v225 = 0.0;\n  v242 = v142;\n  v226 = 0;\n  _R11 = &v224;\n  v228 = 0.0;\n  v229 = 0.0;\n  _R5 = 1632;\n  v230 = 0.0;\n  memset(v239, 0, sizeof(v239));\n  v234 = v142;\n  _R4 = 1616;\n  __asm { lvx128    v10, r0, r11 }\n  _R11 = &v227;\n  memset(v241, 0, sizeof(v241));\n  __asm { vspltw    v10, v10, 0 }\n  __asm { lvx128    v0, r31, r5 }\n  __asm { lvx128    v9, r0, r11 }\n  _R11 = &v238;\n  memset(v243, 0, sizeof(v243));\n  __asm { vspltw    v9, v9, 0 }\n  __asm { lvx128    v13, r31, r4 }\n  v235 = 0;\n  _R3 = 1600;\n  __asm { lvx128    v8, r0, r11 }\n  _R11 = &v240;\n  v236 = 0;\n  _R28 = 1584;\n  v237 = 0;\n  __asm\n  {\n    vmulfp128 v6, v13, v9\n    vspltw    v8, v8, 0\n  }\n  _R10 = 1552;\n  __asm\n  {\n    lvx128    v12, r31, r3\n    lvx128    v7, r0, r11\n  }\n  _R11 = &v242;\n  __asm\n  {\n    vspltw    v4, v7, 0\n    vmulfp128 v7, v0, v10\n    lvx128    v11, r31, r28\n  }\n  __asm\n  {\n    vmulfp128 v5, v12, v8\n    lvx128    v1, r0, r29\n  }\n  __asm { lvx128    v0, r0, r11 }\n  _R11 = &v234;\n  __asm\n  {\n    vspltw    v0, v0, 0\n    vmulfp128 v4, v11, v4\n    lvx128    v11, r31, r10\n    lvx128    v13, r0, r11\n  }\n  _R11 = 1568;\n  __asm\n  {\n    vspltw    v13, v13, 0\n    lvx128    v12, r31, r11\n    vmulfp128 v2, v11, v13\n    vmulfp128 v3, v12, v0\n  }\n  BrnWorld::GlobalIrradianceManager::ComputeIrradiance(\n    &_R31->field_700,\n    1616,\n    1632,\n    &v235,\n    v243,\n    v241,\n    v239,\n    1552,\n    v71,\n    v70,\n    v69,\n    v68,\n    v67,\n    v66,\n    v65,\n    v64);\n  _R29 = a56;\n  _R11 = BrnWorld::GlobalIrradianceManager::GetIrradianceMatrix(v244, &_R31->field_700, 0);\n  _R17 = 16;\n  _R25 = a56 + 16;\n  _R18 = 32;\n  _R24 = a56 + 32;\n  __asm { lvx128    v0, r0, r11 }\n  _R19 = 48;\n  __asm { stvx128   v0, r0, r29 }\n  _R23 = a56 + 48;\n  __asm { lvx128    v0, r11, r17 }\n  __asm { stvx128   v0, r0, r25 }\n  __asm { lvx128    v0, r11, r18 }\n  __asm\n  {\n    stvx128   v0, r0, r24\n    lvx128    v0, r11, r19\n    stvx128   v0, r0, r23\n  }\n  _R28 = a58;\n  _R11 = BrnWorld::GlobalIrradianceManager::GetIrradianceMatrix(v245, &_R31->field_700, 1u);\n  _R22 = a58 + 16;\n  _R21 = a58 + 32;\n  _R20 = a58 + 48;\n  __asm { lvx128    v0, r0, r11 }\n  __asm { stvx128   v0, r0, r28 }\n  __asm\n  {\n    lvx128    v0, r11, r17\n    stvx128   v0, r0, r22\n    lvx128    v0, r11, r18\n    stvx128   v0, r0, r21\n    lvx128    v0, r11, r19\n    stvx128   v0, r0, r20\n  }\n  _R3 = BrnWorld::GlobalIrradianceManager::GetIrradianceMatrix(v244, &_R31->field_700, 2u);\n  _R11 = a60;\n  __asm { lvx128    v0, r0, r3 }\n  _R6 = 1984;\n  __asm { vspltisw  v13, 1 }\n  _R10 = a60 + 16;\n  _R5 = v233;\n  _R9 = a60 + 32;\n  _R8 = a60 + 48;\n  __asm { stvx128   v0, r0, r11 }\n  _R7 = &_R31->field_11C0;\n  __asm\n  {\n    lvx128    v0, r3, r17\n    vcfsx     v13, v13, 0\n    stvx128   v0, r0, r10\n    lvx128    v0, r3, r18\n    stvx128   v0, r0, r9\n    lvx128    v0, r3, r19\n    stvx128   v0, r0, r8\n    lvx128    v0, r31, r6\n  }\n  _R6 = a62;\n  __asm\n  {\n    stvx128   v0, r0, r6\n    lvlx      v0, r0, r7\n  }\n  _R7 = v231;\n  __asm\n  {\n    vspltw    v0, v0, 0\n    lvx128    v7, r0, r5\n    lvx128    v6, r0, r7\n    vperm     v13, v0, v13, v7\n    vperm     v11, v0, v0, v6\n  }\n  _R7 = a14a;\n  __asm\n  {\n    vsldoi    v13, v11, v13, v8\n    lvx128    v12, r0, r7\n    vmulfp128 v12, v12, v13\n    stvx128   v12, r0, r7\n  }\n  _R7 = a16a;\n  __asm\n  {\n    lvx128    v12, r0, r7\n    vmulfp128 v12, v12, v13\n    stvx128   v12, r0, r7\n  }\n  _R7 = a18a;\n  __asm\n  {\n    lvx128    v12, r0, r7\n    vmulfp128 v12, v12, v13\n    stvx128   v12, r0, r7\n  }\n  _R7 = lOutputScattTopColourDrk;\n  __asm\n  {\n    lvx128    v12, r0, r7\n    vmulfp128 v12, v12, v13\n    stvx128   v12, r0, r7\n  }\n  _R7 = lOutputScattHorColourPow;\n  __asm\n  {\n    lvx128    v12, r0, r7\n    vmulfp128 v12, v12, v13\n    stvx128   v12, r0, r7\n  }\n  _R7 = a26a;\n  __asm\n  {\n    lvx128    v12, r0, r7\n    vmulfp128 v13, v12, v13\n    stvx128   v13, r0, r7\n  }\n  _R7 = a42;\n  __asm\n  {\n    lvx128    v13, r0, r16\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r16\n    lvx128    v13, r0, r26\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r26\n    lvx128    v13, r0, r15\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r15\n    lvx128    v13, r0, r14\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r14\n    lvx128    v13, r0, r7\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r7\n  }\n  _R7 = a44;\n  __asm\n  {\n    lvx128    v13, r0, r7\n    vmulfp128 v13, v13, v0\n    stvx128   v13, r0, r7\n  }\n  __asm\n  {\n    lvx128    v13, r0, r29\n    lvx128    v12, r0, r25\n    vmulfp128 v13, v0, v13\n    lvx128    v11, r0, r24\n    vmulfp128 v12, v0, v12\n    lvx128    v10, r0, r23\n    vmulfp128 v11, v0, v11\n    vmulfp128 v10, v0, v10\n    stvx128   v13, r0, r29\n    stvx128   v12, r0, r25\n    stvx128   v11, r0, r24\n    stvx128   v10, r0, r23\n    lvx128    v13, r0, r28\n    lvx128    v12, r0, r22\n    vmulfp128 v13, v0, v13\n    lvx128    v11, r0, r21\n    vmulfp128 v12, v0, v12\n    lvx128    v10, r0, r20\n    vmulfp128 v11, v0, v11\n    vmulfp128 v10, v0, v10\n    stvx128   v13, r0, r28\n    stvx128   v12, r0, r22\n    stvx128   v11, r0, r21\n    stvx128   v10, r0, r20\n    lvx128    v13, r0, r11\n    lvx128    v12, r0, r10\n    vmulfp128 v13, v0, v13\n    lvx128    v11, r0, r9\n    vmulfp128 v12, v0, v12\n    lvx128    v10, r0, r8\n    vmulfp128 v11, v0, v11\n    vmulfp128 v10, v0, v10\n    stvx128   v13, r0, r11\n  }\n  __asm\n  {\n    stvx128   v12, r0, r10\n    stvx128   v11, r0, r9\n    stvx128   v10, r0, r8\n    lvx128    v13, r0, r6\n    vmulfp128 v0, v13, v0\n    stvx128   v0, r0, r6\n  }\n  v234 = gfSpecularScale;\n  v235 = 0;\n  v236 = 0;\n  __asm { lvx128    v0, r0, r26 }\n  v237 = 0;\n  _R11 = &v234;\n  __asm\n  {\n    lvx128    v13, r0, r11\n    vspltw    v13, v13, 0\n    vmulfp128 v0, v0, v13\n    stvx128   v0, r0, r26\n  }\n  *a54 = *&_R31->field_11C0;\n  _restgprlr();\n}\n",
+  "assembly": "0x827D0098  mflr      r12\n0x827D009C  bl        __savegprlr_14\n0x827D00A0  stfd      f31, var_A0(r1)\n0x827D00A4  stwu      r1, back_chain(r1)\n0x827D00A8  mr        r31, r3\n0x827D00AC  stw       r8, 0x220+a22(r1)\n0x827D00B0  mr        r28, r4\n0x827D00B4  stw       r9, 0x220+a24(r1)\n0x827D00B8  mr        r27, r5\n0x827D00BC  stw       r10, 0x220+a26(r1)\n0x827D00C0  mr        r25, r6\n0x827D00C4  addi      r11, r1, 0x220+var_184\n0x827D00C8  lfs       f0, 0x540(r31)\n0x827D00CC  li        r30, 0\n0x827D00D0  stfs      f0, 0x220+var_180(r1)\n0x827D00D4  mr        r24, r7\n0x827D00D8  lfs       f0, 0x544(r31)\n0x827D00DC  stw       r28, 0x220+a14(r1)\n0x827D00E0  stfs      f0, 0x220+var_17C(r1)\n0x827D00E4  stw       r27, 0x220+a16(r1)\n0x827D00E8  lfs       f0, 0x548(r31)\n0x827D00EC  stw       r25, 0x220+a18(r1)\n0x827D00F0  stfs      f0, 0x220+var_178(r1)\n0x827D00F4  addi      r7, r31, 0x540\n0x827D00F8  lfs       f0, 0x578(r31)\n0x827D00FC  addi      r6, r31, 0x550\n0x827D0100  stfs      f0, 0x220+var_174(r1)\n0x827D0104  addi      r4, r1, 0x220+var_180\n0x827D0108  addi      r5, r31, 0x560\n0x827D010C  lvx128    v0, r0, r4\n0x827D0110  stvx128   v0, r0, r28\n0x827D0114  lfs       f0, 0x550(r31)\n0x827D0118  stfs      f0, 0x220+var_180(r1)\n0x827D011C  lfs       f0, 0x554(r31)\n0x827D0120  stfs      f0, 0x220+var_17C(r1)\n0x827D0124  lfs       f0, 0x558(r31)\n0x827D0128  stfs      f0, 0x220+var_178(r1)\n0x827D012C  lfs       f0, 0x570(r31)\n0x827D0130  stfs      f0, 0x220+var_174(r1)\n0x827D0134  addi      r4, r1, 0x220+var_180\n0x827D0138  lvx128    v0, r0, r4\n0x827D013C  stvx128   v0, r0, r27\n0x827D0140  lfs       f0, 0x560(r31)\n0x827D0144  stfs      f0, 0x220+var_180(r1)\n0x827D0148  lfs       f0, 0x564(r31)\n0x827D014C  stfs      f0, 0x220+var_17C(r1)\n0x827D0150  lfs       f0, 0x568(r31)\n0x827D0154  stfs      f0, 0x220+var_178(r1)\n0x827D0158  lfs       f0, 0x574(r31)\n0x827D015C  stfs      f0, 0x220+var_174(r1)\n0x827D0160  addi      r4, r1, 0x220+var_180\n0x827D0164  lvx128    v0, r0, r4\n0x827D0168  stvx128   v0, r0, r25\n0x827D016C  lfs       f0, 0x57C(r31)\n0x827D0170  stfs      f0, 0x220+var_190(r1)\n0x827D0174  lfs       f0, 0x580(r31)\n0x827D0178  stfs      f0, 0x220+var_18C(r1)\n0x827D017C  lfs       f0, 0x584(r31)\n0x827D0180  stfs      f0, 0x220+var_188(r1)\n0x827D0184  stw       r30, 0(r11)\n0x827D0188  addi      r11, r1, 0x220+var_190\n0x827D018C  lvx128    v0, r0, r11\n0x827D0190  stvx128   v0, r0, r24\n0x827D0194  lbz       r11, 0x6F4(r31)\n0x827D0198  cmplwi    cr6, r11, 0\n0x827D019C  beq       cr6, loc_827D01F4\n0x827D01A0  lvx128    v0, r0, r7\n0x827D01A4  li        r11, 0x590\n0x827D01A8  li        r4, 0x5A0\n0x827D01AC  lfs       f0, 0x578(r31)\n0x827D01B0  li        r7, 0x5B0\n0x827D01B4  lvx128    v13, r0, r6\n0x827D01B8  lfs       f13, 0x570(r31)\n0x827D01BC  lvx128    v12, r0, r5\n0x827D01C0  lfs       f12, 0x574(r31)\n0x827D01C4  lfs       f11, 0x57C(r31)\n0x827D01C8  lfs       f10, 0x580(r31)\n0x827D01CC  lfs       f9, 0x584(r31)\n0x827D01D0  stfs      f0, 0x5C8(r31)\n0x827D01D4  stfs      f13, 0x5C0(r31)\n0x827D01D8  stfs      f12, 0x5C4(r31)\n0x827D01DC  stfs      f11, 0x5CC(r31)\n0x827D01E0  stfs      f10, 0x5D0(r31)\n0x827D01E4  stfs      f9, 0x5D4(r31)\n0x827D01E8  stvx128   v0, r31, r11\n0x827D01EC  stvx128   v13, r31, r4\n0x827D01F0  stvx128   v12, r31, r7\n0x827D01F4  lfs       f0, 0x590(r31)\n0x827D01F8  addi      r11, r1, 0x220+var_174\n0x827D01FC  stfs      f0, 0x220+var_190(r1)\n0x827D0200  lfs       f0, 0x594(r31)\n0x827D0204  stfs      f0, 0x220+var_18C(r1)\n0x827D0208  lfs       f0, 0x598(r31)\n0x827D020C  stfs      f0, 0x220+var_188(r1)\n0x827D0210  lfs       f0, 0x5C8(r31)\n0x827D0214  stfs      f0, 0x220+var_184(r1)\n0x827D0218  addi      r7, r1, 0x220+var_190\n0x827D021C  lvx128    v0, r0, r7\n0x827D0220  stvx128   v0, r0, r8\n0x827D0224  lfs       f0, 0x5A0(r31)\n0x827D0228  stfs      f0, 0x220+var_190(r1)\n0x827D022C  lfs       f0, 0x5A4(r31)\n0x827D0230  stfs      f0, 0x220+var_18C(r1)\n0x827D0234  lfs       f0, 0x5A8(r31)\n0x827D0238  stfs      f0, 0x220+var_188(r1)\n0x827D023C  lfs       f0, 0x5C0(r31)\n0x827D0240  stfs      f0, 0x220+var_184(r1)\n0x827D0244  addi      r8, r1, 0x220+var_190\n0x827D0248  lvx128    v0, r0, r8\n0x827D024C  stvx128   v0, r0, r9\n0x827D0250  lfs       f0, 0x5B0(r31)\n0x827D0254  stfs      f0, 0x220+var_190(r1)\n0x827D0258  lfs       f0, 0x5B4(r31)\n0x827D025C  stfs      f0, 0x220+var_18C(r1)\n0x827D0260  lfs       f0, 0x5B8(r31)\n0x827D0264  stfs      f0, 0x220+var_188(r1)\n0x827D0268  lfs       f0, 0x5C4(r31)\n0x827D026C  stfs      f0, 0x220+var_184(r1)\n0x827D0270  addi      r9, r1, 0x220+var_190\n0x827D0274  lvx128    v0, r0, r9\n0x827D0278  stvx128   v0, r0, r10\n0x827D027C  lfs       f0, 0x5CC(r31)\n0x827D0280  stfs      f0, 0x220+var_180(r1)\n0x827D0284  lfs       f0, 0x5D0(r31)\n0x827D0288  stfs      f0, 0x220+var_17C(r1)\n0x827D028C  lfs       f0, 0x5D4(r31)\n0x827D0290  stfs      f0, 0x220+var_178(r1)\n0x827D0294  stw       r30, 0(r11)\n0x827D0298  addi      r11, r1, 0x220+var_180\n0x827D029C  lvx128    v0, r0, r11\n0x827D02A0  lwz       r11, 0x220+a28(r1)\n0x827D02A4  stvx128   v0, r0, r11\n0x827D02A8  lis       r11, flt_82001C98@ha\n0x827D02AC  lfs       f12, 0x5E0(r31)\n0x827D02B0  stfs      f12, 0x220+var_188(r1)\n0x827D02B4  lfs       f0, 0x5D8(r31)\n0x827D02B8  lfs       f13, 0x5DC(r31)\n0x827D02BC  lfs       f12, 0x5E4(r31)\n0x827D02C0  stfs      f12, 0x220+var_184(r1)\n0x827D02C4  fsubs     f12, f13, f0\n0x827D02C8  lfs       f13, flt_82001C98@l(r11)\n0x827D02CC  fdivs     f13, f13, f12\n0x827D02D0  stfs      f13, 0x220+var_190(r1)\n0x827D02D4  fmuls     f0, f0, f13\n0x827D02D8  stfs      f0, 0x220+var_18C(r1)\n0x827D02DC  addi      r11, r1, 0x220+var_190\n0x827D02E0  lvx128    v0, r0, r11\n0x827D02E4  lwz       r11, 0x220+a30(r1)\n0x827D02E8  stvx128   v0, r0, r11\n0x827D02EC  lbz       r11, 0x1234(r31)\n0x827D02F0  cmplwi    cr6, r11, 0\n0x827D02F4  beq       cr6, loc_827D0318\n0x827D02F8  addi      r11, r31, 0x1220\n0x827D02FC  lwz       r29, 0x220+a32(r1)\n0x827D0300  lvx128    v0, r0, r11\n0x827D0304  stvx128   v0, r0, r29\n0x827D0308  lvx128    v0, r0, r11\n0x827D030C  lwz       r11, 0x220+arg_E4(r1)\n0x827D0310  stvx128   v0, r0, r11\n0x827D0314  b         loc_827D038C\n0x827D0318  lis       r11, flt_820CAA7C@ha\n0x827D031C  lfs       f13, 0x504(r31)\n0x827D0320  lfs       f10, 0x504(r31)\n0x827D0324  lfs       f11, 0x1C68(r31)\n0x827D0328  lfs       f4, 0x518(r31)\n0x827D032C  lfs       f3, 0x514(r31)\n0x827D0330  lfs       f0, flt_820CAA7C@l(r11)\n0x827D0334  lis       r11, flt_820CAA78@ha\n0x827D0338  fsubs     f12, f13, f0\n0x827D033C  lfs       f2, 0x510(r31)\n0x827D0340  lfs       f13, flt_820CAA78@l(r11)\n0x827D0344  fmuls     f1, f12, f13\n0x827D0348  lfs       f12, 0x1C6C(r31)\n0x827D034C  fsubs     f9, f12, f10\n0x827D0350  fsel      f12, f9, f10, f12\n0x827D0354  fsubs     f10, f12, f11\n0x827D0358  fsel      f12, f10, f12, f11\n0x827D035C  fsubs     f0, f12, f0\n0x827D0360  fmuls     f31, f0, f13\n0x827D0364  bl        BrnWorld__EnvironmentSettings__ComputeKeyLightDirection\n0x827D0368  lwz       r11, 0x220+arg_E4(r1)\n0x827D036C  fmr       f1, f31\n0x827D0370  stvx128   v1, r0, r11\n0x827D0374  lfs       f4, 0x518(r31)\n0x827D0378  lfs       f3, 0x514(r31)\n0x827D037C  lfs       f2, 0x510(r31)\n0x827D0380  bl        BrnWorld__EnvironmentSettings__ComputeKeyLightDirection\n0x827D0384  lwz       r29, 0x220+a32(r1)\n0x827D0388  stvx128   v1, r0, r29\n0x827D038C  li        r11, 0x5F0\n0x827D0390  lwz       r16, 0x220+a34(r1)\n0x827D0394  li        r7, 0x600\n0x827D0398  lwz       r26, 0x220+a36(r1)\n0x827D039C  li        r6, 0x680\n0x827D03A0  lwz       r15, 0x220+a38(r1)\n0x827D03A4  li        r5, 0x690\n0x827D03A8  lwz       r14, 0x220+a40(r1)\n0x827D03AC  li        r4, 0x6A0\n0x827D03B0  lvx128    v0, r31, r11\n0x827D03B4  li        r3, 0x6B0\n0x827D03B8  stvx128   v0, r0, r16\n0x827D03BC  addi      r10, r1, 0x220+var_188\n0x827D03C0  lvx128    v0, r31, r7\n0x827D03C4  addi      r9, r1, 0x220+var_188\n0x827D03C8  stvx128   v0, r0, r26\n0x827D03CC  addi      r8, r1, 0x220+var_188\n0x827D03D0  lvx128    v0, r31, r6\n0x827D03D4  lwz       r6, 0x220+a42(r1)\n0x827D03D8  stvx128   v0, r0, r15\n0x827D03DC  addi      r11, r31, 0x11B0\n0x827D03E0  lvx128    v0, r31, r5\n0x827D03E4  addi      r7, r1, 0x220+var_16C\n0x827D03E8  stvx128   v0, r0, r14\n0x827D03EC  lvx128    v0, r31, r4\n0x827D03F0  stvx128   v0, r0, r6\n0x827D03F4  lwz       r6, 0x220+a44(r1)\n0x827D03F8  lvx128    v0, r31, r3\n0x827D03FC  stvx128   v0, r0, r6\n0x827D0400  lfs       f0, 0x6D0(r31)\n0x827D0404  stfs      f0, 0x220+var_190(r1)\n0x827D0408  lfs       f0, 0x6D4(r31)\n0x827D040C  stfs      f0, 0x220+var_18C(r1)\n0x827D0410  std       r30, 0(r10)\n0x827D0414  addi      r10, r1, 0x220+var_190\n0x827D0418  lvx128    v0, r0, r10\n0x827D041C  lwz       r10, 0x220+a48(r1)\n0x827D0420  stvx128   v0, r0, r10\n0x827D0424  lfs       f0, 0x6C0(r31)\n0x827D0428  stfs      f0, 0x220+var_190(r1)\n0x827D042C  lfs       f0, 0x6C4(r31)\n0x827D0430  stfs      f0, 0x220+var_18C(r1)\n0x827D0434  std       r30, 0(r9)\n0x827D0438  addi      r10, r1, 0x220+var_190\n0x827D043C  lvx128    v0, r0, r10\n0x827D0440  lwz       r10, 0x220+a50(r1)\n0x827D0444  stvx128   v0, r0, r10\n0x827D0448  lfs       f0, 0x6C8(r31)\n0x827D044C  stfs      f0, 0x220+var_190(r1)\n0x827D0450  lfs       f0, 0x6CC(r31)\n0x827D0454  stfs      f0, 0x220+var_18C(r1)\n0x827D0458  std       r30, 0(r8)\n0x827D045C  addi      r10, r1, 0x220+var_190\n0x827D0460  lvx128    v0, r0, r10\n0x827D0464  lwz       r10, 0x220+a52(r1)\n0x827D0468  stvx128   v0, r0, r10\n0x827D046C  lis       r10, unk_82CDA400@ha\n0x827D0470  lvx128    v13, r0, r11\n0x827D0474  addi      r10, r10, unk_82CDA400@l\n0x827D0478  lfs       f13, 0x6E0(r31)\n0x827D047C  vmr       v12, v13\n0x827D0480  vspltw    v13, v13, 1\n0x827D0484  lvx128    v7, r0, r10\n0x827D0488  stw       r10, 0x220+var_168(r1)\n0x827D048C  lis       r10, unk_82CDA3C0@ha\n0x827D0490  vspltw    v12, v12, 0\n0x827D0494  addi      r10, r10, unk_82CDA3C0@l\n0x827D0498  lvx128    v6, r0, r10\n0x827D049C  stw       r10, 0x220+var_170(r1)\n0x827D04A0  lis       r10, flt_820CD130@ha\n0x827D04A4  vperm     v13, v12, v13, v6\n0x827D04A8  lfs       f0, flt_820CD130@l(r10)\n0x827D04AC  fmuls     f0, f13, f0\n0x827D04B0  stfs      f0, 0x220+var_16C(r1)\n0x827D04B4  lvlx      v0, r0, r7\n0x827D04B8  vspltw    v0, v0, 0\n0x827D04BC  vperm     v0, v0, v0, v7\n0x827D04C0  vsldoi    v0, v13, v0, v8\n0x827D04C4  lwz       r11, 0x220+a46(r1)\n0x827D04C8  stvx128   v0, r0, r11\n0x827D04CC  lbz       r11, 0x6F5(r31)\n0x827D04D0  cmplwi    cr6, r11, 0\n0x827D04D4  beq       cr6, loc_827D0508\n0x827D04D8  addi      r8, r31, 0x660\n0x827D04DC  lvx128    v5, r0, r29\n0x827D04E0  addi      r7, r31, 0x650\n0x827D04E4  lvx128    v4, r0, r24\n0x827D04E8  addi      r6, r31, 0x630\n0x827D04EC  lvx128    v3, r0, r25\n0x827D04F0  addi      r5, r31, 0x640\n0x827D04F4  lvx128    v2, r0, r27\n0x827D04F8  addi      r4, r31, 0x620\n0x827D04FC  lvx128    v1, r0, r28\n0x827D0500  addi      r3, r31, 0x610\n0x827D0504  bl        BrnWorld__EnvironmentSettings__ComputeIrradianceRigFromSky\n0x827D0508  addi      r11, r1, 0x220+var_18C\n0x827D050C  lfs       f0, 0x670(r31)\n0x827D0510  stfs      f0, 0x220+var_190(r1)\n0x827D0514  addi      r10, r1, 0x220+var_17C\n0x827D0518  stfs      f0, 0x220+var_180(r1)\n0x827D051C  addi      r9, r1, 0x220+var_14C\n0x827D0520  stfs      f0, 0x220+var_150(r1)\n0x827D0524  addi      r8, r1, 0x220+var_13C\n0x827D0528  stfs      f0, 0x220+var_140(r1)\n0x827D052C  addi      r7, r1, 0x220+var_12C\n0x827D0530  stw       r30, 0(r11)\n0x827D0534  stfs      f0, 0x220+var_130(r1)\n0x827D0538  stw       r30, 4(r11)\n0x827D053C  addi      r6, r1, 0x220+var_15C\n0x827D0540  stw       r30, 8(r11)\n0x827D0544  addi      r11, r1, 0x220+var_190\n0x827D0548  stw       r30, 0(r10)\n0x827D054C  stw       r30, 4(r10)\n0x827D0550  li        r5, 0x660\n0x827D0554  stw       r30, 8(r10)\n0x827D0558  stw       r30, 0(r9)\n0x827D055C  stfs      f0, 0x220+var_160(r1)\n0x827D0560  stw       r30, 4(r9)\n0x827D0564  li        r4, 0x650\n0x827D0568  lvx128    v10, r0, r11\n0x827D056C  addi      r11, r1, 0x220+var_180\n0x827D0570  stw       r30, 8(r9)\n0x827D0574  stw       r30, 0(r8)\n0x827D0578  vspltw    v10, v10, 0\n0x827D057C  stw       r30, 4(r8)\n0x827D0580  lvx128    v0, r31, r5\n0x827D0584  stw       r30, 8(r8)\n0x827D0588  lvx128    v9, r0, r11\n0x827D058C  addi      r11, r1, 0x220+var_150\n0x827D0590  stw       r30, 0(r7)\n0x827D0594  vspltw    v9, v9, 0\n0x827D0598  stw       r30, 4(r7)\n0x827D059C  lvx128    v13, r31, r4\n0x827D05A0  stw       r30, 8(r7)\n0x827D05A4  stw       r30, 0(r6)\n0x827D05A8  li        r3, 0x640\n0x827D05AC  lvx128    v8, r0, r11\n0x827D05B0  addi      r11, r1, 0x220+var_140\n0x827D05B4  stw       r30, 4(r6)\n0x827D05B8  li        r28, 0x630\n0x827D05BC  stw       r30, 8(r6)\n0x827D05C0  vmulfp128 v6, v13, v9\n0x827D05C4  vspltw    v8, v8, 0\n0x827D05C8  li        r10, 0x610\n0x827D05CC  lvx128    v12, r31, r3\n0x827D05D0  lvx128    v7, r0, r11\n0x827D05D4  addi      r11, r1, 0x220+var_130\n0x827D05D8  vspltw    v4, v7, 0\n0x827D05DC  vmulfp128 v7, v0, v10\n0x827D05E0  lvx128    v11, r31, r28\n0x827D05E4  addi      r27, r31, 0x700\n0x827D05E8  vmulfp128 v5, v12, v8\n0x827D05EC  lvx128    v1, r0, r29\n0x827D05F0  mr        r3, r27\n0x827D05F4  lvx128    v0, r0, r11\n0x827D05F8  addi      r11, r1, 0x220+var_160\n0x827D05FC  vspltw    v0, v0, 0\n0x827D0600  vmulfp128 v4, v11, v4\n0x827D0604  lvx128    v11, r31, r10\n0x827D0608  lvx128    v13, r0, r11\n0x827D060C  li        r11, 0x620\n0x827D0610  vspltw    v13, v13, 0\n0x827D0614  lvx128    v12, r31, r11\n0x827D0618  vmulfp128 v2, v11, v13\n0x827D061C  vmulfp128 v3, v12, v0\n0x827D0620  bl        BrnWorld__GlobalIrradianceManager__ComputeIrradiance\n0x827D0624  li        r5, 0\n0x827D0628  mr        r4, r27\n0x827D062C  addi      r3, r1, 0x220+var_120\n0x827D0630  bl        BrnWorld__GlobalIrradianceManager__GetIrradianceMatrix\n0x827D0634  lwz       r29, 0x220+a56(r1)\n0x827D0638  mr        r11, r3\n0x827D063C  li        r17, 0x10\n0x827D0640  addi      r25, r29, 0x10\n0x827D0644  li        r18, 0x20 # ' '\n0x827D0648  addi      r24, r29, 0x20 # ' '\n0x827D064C  lvx128    v0, r0, r11\n0x827D0650  li        r19, 0x30 # '0'\n0x827D0654  stvx128   v0, r0, r29\n0x827D0658  addi      r23, r29, 0x30 # '0'\n0x827D065C  lvx128    v0, r11, r17\n0x827D0660  li        r5, 1\n0x827D0664  stvx128   v0, r0, r25\n0x827D0668  mr        r4, r27\n0x827D066C  lvx128    v0, r11, r18\n0x827D0670  addi      r3, r1, 0x220+var_E0\n0x827D0674  stvx128   v0, r0, r24\n0x827D0678  lvx128    v0, r11, r19\n0x827D067C  stvx128   v0, r0, r23\n0x827D0680  bl        BrnWorld__GlobalIrradianceManager__GetIrradianceMatrix\n0x827D0684  lwz       r28, 0x220+a58(r1)\n0x827D0688  mr        r11, r3\n0x827D068C  li        r5, 2\n0x827D0690  addi      r22, r28, 0x10\n0x827D0694  addi      r21, r28, 0x20 # ' '\n0x827D0698  addi      r20, r28, 0x30 # '0'\n0x827D069C  lvx128    v0, r0, r11\n0x827D06A0  mr        r4, r27\n0x827D06A4  stvx128   v0, r0, r28\n0x827D06A8  addi      r3, r1, 0x220+var_120\n0x827D06AC  lvx128    v0, r11, r17\n0x827D06B0  stvx128   v0, r0, r22\n0x827D06B4  lvx128    v0, r11, r18\n0x827D06B8  stvx128   v0, r0, r21\n0x827D06BC  lvx128    v0, r11, r19\n0x827D06C0  stvx128   v0, r0, r20\n0x827D06C4  bl        BrnWorld__GlobalIrradianceManager__GetIrradianceMatrix\n0x827D06C8  lwz       r11, 0x220+a60(r1)\n0x827D06CC  lvx128    v0, r0, r3\n0x827D06D0  li        r6, 0x7C0\n0x827D06D4  vspltisw  v13, 1\n0x827D06D8  addi      r10, r11, 0x10\n0x827D06DC  lwz       r5, 0x220+var_168(r1)\n0x827D06E0  addi      r9, r11, 0x20 # ' '\n0x827D06E4  addi      r8, r11, 0x30 # '0'\n0x827D06E8  stvx128   v0, r0, r11\n0x827D06EC  addi      r7, r31, 0x11C0\n0x827D06F0  lvx128    v0, r3, r17\n0x827D06F4  vcfsx     v13, v13, 0\n0x827D06F8  stvx128   v0, r0, r10\n0x827D06FC  lvx128    v0, r3, r18\n0x827D0700  stvx128   v0, r0, r9\n0x827D0704  lvx128    v0, r3, r19\n0x827D0708  stvx128   v0, r0, r8\n0x827D070C  lvx128    v0, r31, r6\n0x827D0710  lwz       r6, 0x220+a62(r1)\n0x827D0714  stvx128   v0, r0, r6\n0x827D0718  lvlx      v0, r0, r7\n0x827D071C  lwz       r7, 0x220+var_170(r1)\n0x827D0720  vspltw    v0, v0, 0\n0x827D0724  lvx128    v7, r0, r5\n0x827D0728  lvx128    v6, r0, r7\n0x827D072C  vperm     v13, v0, v13, v7\n0x827D0730  vperm     v11, v0, v0, v6\n0x827D0734  lwz       r7, 0x220+a14(r1)\n0x827D0738  vsldoi    v13, v11, v13, v8\n0x827D073C  lvx128    v12, r0, r7\n0x827D0740  vmulfp128 v12, v12, v13\n0x827D0744  stvx128   v12, r0, r7\n0x827D0748  lwz       r7, 0x220+a16(r1)\n0x827D074C  lvx128    v12, r0, r7\n0x827D0750  vmulfp128 v12, v12, v13\n0x827D0754  stvx128   v12, r0, r7\n0x827D0758  lwz       r7, 0x220+a18(r1)\n0x827D075C  lvx128    v12, r0, r7\n0x827D0760  vmulfp128 v12, v12, v13\n0x827D0764  stvx128   v12, r0, r7\n0x827D0768  lwz       r7, 0x220+a22(r1)\n0x827D076C  lvx128    v12, r0, r7\n0x827D0770  vmulfp128 v12, v12, v13\n0x827D0774  stvx128   v12, r0, r7\n0x827D0778  lwz       r7, 0x220+a24(r1)\n0x827D077C  lvx128    v12, r0, r7\n0x827D0780  vmulfp128 v12, v12, v13\n0x827D0784  stvx128   v12, r0, r7\n0x827D0788  lwz       r7, 0x220+a26(r1)\n0x827D078C  lvx128    v12, r0, r7\n0x827D0790  vmulfp128 v13, v12, v13\n0x827D0794  stvx128   v13, r0, r7\n0x827D0798  lwz       r7, 0x220+a42(r1)\n0x827D079C  lvx128    v13, r0, r16\n0x827D07A0  vmulfp128 v13, v13, v0\n0x827D07A4  stvx128   v13, r0, r16\n0x827D07A8  lvx128    v13, r0, r26\n0x827D07AC  vmulfp128 v13, v13, v0\n0x827D07B0  stvx128   v13, r0, r26\n0x827D07B4  lvx128    v13, r0, r15\n0x827D07B8  vmulfp128 v13, v13, v0\n0x827D07BC  stvx128   v13, r0, r15\n0x827D07C0  lvx128    v13, r0, r14\n0x827D07C4  vmulfp128 v13, v13, v0\n0x827D07C8  stvx128   v13, r0, r14\n0x827D07CC  lvx128    v13, r0, r7\n0x827D07D0  vmulfp128 v13, v13, v0\n0x827D07D4  stvx128   v13, r0, r7\n0x827D07D8  lwz       r7, 0x220+a44(r1)\n0x827D07DC  lvx128    v13, r0, r7\n0x827D07E0  vmulfp128 v13, v13, v0\n0x827D07E4  stvx128   v13, r0, r7\n0x827D07E8  addi      r7, r1, 0x220+var_15C\n0x827D07EC  lvx128    v13, r0, r29\n0x827D07F0  lvx128    v12, r0, r25\n0x827D07F4  vmulfp128 v13, v0, v13\n0x827D07F8  lvx128    v11, r0, r24\n0x827D07FC  vmulfp128 v12, v0, v12\n0x827D0800  lvx128    v10, r0, r23\n0x827D0804  vmulfp128 v11, v0, v11\n0x827D0808  vmulfp128 v10, v0, v10\n0x827D080C  stvx128   v13, r0, r29\n0x827D0810  stvx128   v12, r0, r25\n0x827D0814  stvx128   v11, r0, r24\n0x827D0818  stvx128   v10, r0, r23\n0x827D081C  lvx128    v13, r0, r28\n0x827D0820  lvx128    v12, r0, r22\n0x827D0824  vmulfp128 v13, v0, v13\n0x827D0828  lvx128    v11, r0, r21\n0x827D082C  vmulfp128 v12, v0, v12\n0x827D0830  lvx128    v10, r0, r20\n0x827D0834  vmulfp128 v11, v0, v11\n0x827D0838  vmulfp128 v10, v0, v10\n0x827D083C  stvx128   v13, r0, r28\n0x827D0840  stvx128   v12, r0, r22\n0x827D0844  stvx128   v11, r0, r21\n0x827D0848  stvx128   v10, r0, r20\n0x827D084C  lvx128    v13, r0, r11\n0x827D0850  lvx128    v12, r0, r10\n0x827D0854  vmulfp128 v13, v0, v13\n0x827D0858  lvx128    v11, r0, r9\n0x827D085C  vmulfp128 v12, v0, v12\n0x827D0860  lvx128    v10, r0, r8\n0x827D0864  vmulfp128 v11, v0, v11\n0x827D0868  vmulfp128 v10, v0, v10\n0x827D086C  stvx128   v13, r0, r11\n0x827D0870  lis       r11, gfSpecularScale@ha\n0x827D0874  stvx128   v12, r0, r10\n0x827D0878  stvx128   v11, r0, r9\n0x827D087C  stvx128   v10, r0, r8\n0x827D0880  lvx128    v13, r0, r6\n0x827D0884  vmulfp128 v0, v13, v0\n0x827D0888  stvx128   v0, r0, r6\n0x827D088C  lfs       f0, gfSpecularScale@l(r11)\n0x827D0890  stfs      f0, 0x220+var_160(r1)\n0x827D0894  stw       r30, 0(r7)\n0x827D0898  stw       r30, 4(r7)\n0x827D089C  lvx128    v0, r0, r26\n0x827D08A0  stw       r30, 8(r7)\n0x827D08A4  addi      r11, r1, 0x220+var_160\n0x827D08A8  lvx128    v13, r0, r11\n0x827D08AC  vspltw    v13, v13, 0\n0x827D08B0  vmulfp128 v0, v0, v13\n0x827D08B4  stvx128   v0, r0, r26\n0x827D08B8  lwz       r11, 0x220+a54(r1)\n0x827D08BC  lfs       f0, 0x11C0(r31)\n0x827D08C0  stfs      f0, 0(r11)\n0x827D08C4  addi      r1, r1, 0x220\n0x827D08C8  lfd       f31, var_A0(r1)\n0x827D08CC  b         __restgprlr",
+  "xrefs_to": [
+    {
+      "address": "0x827D1410",
+      "name": "WorldModule::SetupShaderConstantsBeforeRendering"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EB0",
+      "name": "__savegprlr_14"
+    },
+    {
+      "address": "0x82678AB0",
+      "name": "BrnWorld::EnvironmentSettings::ComputeKeyLightDirection"
+    },
+    {
+      "address": "0x8267C948",
+      "name": "BrnWorld::EnvironmentSettings::ComputeIrradianceRigFromSky"
+    },
+    {
+      "address": "0x827CA978",
+      "name": "BrnWorld::GlobalIrradianceManager::ComputeIrradiance"
+    },
+    {
+      "address": "0x827B0500",
+      "name": "BrnWorld::GlobalIrradianceManager::GetIrradianceMatrix"
+    }
+  ]
+}
