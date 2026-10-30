@@ -5,15 +5,15 @@ Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-**Installed: 5d2b9994ba54** (SHA-256 5d2b9994ba54521930d9d526e34e7ea6796c47d0d963ee376d2cb0ecffd7feb6), from B5 source d85e2d5e2526783406d69fedc0ab17b219eb69bc on dev. The build used workflow source baa6622f016d44e5bef7ec803a2e74083be0c1c5. Launch build/game/Burnout_PC.exe. [Build, native and install evidence](playable_refresh_20261029/README.md).
+**Installed: 39b62961b592** (SHA-256 39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da), from B5 dev 3f4f9c06 and clean build workflow 38a0ec83. Launch build/game/Burnout_PC.exe. This includes the native SatNav payload-size repair. [Evidence, reviews and remaining visual check](minimap_native_payload_20261030/README.md).
 
-The canonical 3,010-TU build and link passed with 171 compiled, 2,839 cached, zero warnings and zero errors. Private slot62172 passed 17 checks with zero asserts or exceptions: both EA and Criterion logo videos visibly played without the skip-video latch, completed through their ordinary 510 events, and advanced to the title before the first scoped Start input. The run continued through profile loading and into driving, measuring 306.9 m of path and 212.0 m net. The retained returning-profile fixture and place-on-track relocation limit this to a startup and driving baseline; it does not certify organic route navigation or complete gameplay.
+The clean 3,019-TU build passed. Private slot 62188 passed 12 startup, current-save and driving checks with 234.667 m travel, one gameplay wreck and zero asserts or exceptions. The exact tested payload is installed, with 21 save/config/log hashes preserved. The normal live-user profile was not used for a delivery launch. The earlier Source45 EA/Criterion-video baseline remains [in its historical evidence](source45_playable_20261030/README.md).
 
-The refresh replaced exactly 15 runtime payloads and preserved the hashes of all 21 protected profile/config/log files. It adds zero debug-site dispositions. Playback was muted; audible playback, physical controllers, online/long-session behavior, full menus and full-game certification remain outside this baseline.
-
-Historical delivery and pending/failure receipts remain below and in the [previous October27 receipt](screenshot_gameplay_delivery_20261027.json).
+The paired native event experiment proves the repaired field forwarding. Its screenshot timing check remains FAIL, and complete visual minimap repair remains UNVERIFIED. Audio, physical controllers, online/long-session behavior, full menus and complete gameplay are not certified by this baseline.
 
 ## Campaign counts
+
+**October 31 cleanup:** 7,673 historical scratch frames deleted, about 30 GB recovered. Current minimap originals, recent captures, representative historical frames, logs and contact sheets were retained. [Cleanup ledger](frame_cleanup_20261031/README.md).
 
 **October 30 camera/Props displays:** Root approved seven more sites: two Director displays (the captured camera name and live transform axes), four PropEntity displays (module stats, cell grid, gated zoom and a traffic-light ID), and PhysicalTrafficManager Draw physical traffic. Exact raw joins, P/N/R pixels and per-site restores support these bounded outcomes. The historical P27 aggregates remain FAIL, and Director pivot, behavior text, near clip and far clip remain unproved. The Director run actually loaded a copy of the current save; historical P27 progression loading is not certified. [Evidence and limits](displays7_native_20261030/README.md).
 

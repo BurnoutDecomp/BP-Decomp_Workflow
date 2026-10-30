@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "reviewed_utc": "2026-10-30T22:50:01.446860+00:00",
+  "scope": "Targeted D output and same-volume reserve diff only",
+  "previous_manifest_sha256": "7453b8d84609462269c22d56c8bdc3229b0fb5d6936259862183e71ae6d895b4",
+  "manifest_sha256": "8eea2e64476a49c6d5014fe76a33657d156fa37ede0ca9887fefb271359e94cd",
+  "changed_manifest_file_hashes": [
+    "Run.py",
+    "freeze.py",
+    "OfflineTest.py"
+  ],
+  "all_other_manifest_fields_equal": true,
+  "exact_reverse_diff_matches_original_file_hashes": true,
+  "frozen_collect_matches_manifest": true,
+  "native_runner_design_verdict": "PASS",
+  "runtime_data_preservation_plan_verdict": "PASS",
+  "conditions": [
+    "Free space must pass actual same-D reserve check for each side",
+    "All reviewed frozen inputs must still match"
+  ],
+  "initial_D_requirement_bytes": 2812470828,
+  "fixed_D_requirement_bytes": 2513531670,
+  "floor_bytes": 2147483648,
+  "actual_run_side_boundary_checks": {
+    "old_threshold_minus_one": "REJECT",
+    "old_threshold": "ACCEPT_GATE_THEN_STOP_BEFORE_WRITE",
+    "fixed_threshold_minus_one": "REJECT",
+    "fixed_threshold": "ACCEPT_GATE_THEN_STOP_BEFORE_WRITE"
+  },
+  "offline_test_main": "PASS",
+  "profile_gate_test": "PASS",
+  "production_source_verdict_unchanged": "PASS",
+  "full_visual_verification_plan_verdict_unchanged": "FAIL",
+  "native_runtime_result": "UNVERIFIED_NOT_LAUNCHED",
+  "visual_fix_proven": false,
+  "findings": [],
+  "compression_cleanup_audited": false,
+  "report_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\minimap_sol_review_20261030\\D_OUTPUT_FOLLOWUP.md",
+  "report_sha256": "cb5034b939a69cfa2d681c6f53e6fdf849fc209a74d289bd5eedbfda9877ad48"
+}
