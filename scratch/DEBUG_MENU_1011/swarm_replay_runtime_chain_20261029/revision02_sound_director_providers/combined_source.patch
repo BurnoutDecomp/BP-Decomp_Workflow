@@ -1,0 +1,738 @@
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp
+@@ -108,31 +108,26 @@
+     // @ 0x82682488 -- find the per-entity 12-byte record for the traffic entity whose recorded
+     // id matches luEntityId. Linear scan over the recorded traffic entities (match key @
+     // record+0x40, i.e. base+0xA70+80*i); returns null when the count is <= 0 or no match.
+-    void* SoundSerialiser::GetTrafficEnt(u32 luEntityId)
+-    {
+-        s32 liIndex = 0;
+-        if (GetStaticLayout()->GetNumTrafficEntities() <= 0)
+-        {
+-            return nullptr;
+-        }
+-
+-        s32 liKeyOffset = 0;
+-        while (*reinterpret_cast<u32*>(
+-                   reinterpret_cast<u8*>(GetStaticLayout())
+-                   + SoundSerialiserStaticLayout::KU_TRAFFIC_KEY_BASE + liKeyOffset)
+-               != luEntityId)
+-        {
+-            ++liIndex;
+-            liKeyOffset += SoundSerialiserStaticLayout::KU_TRAFFIC_RECORD_STRIDE;
+-            if (liIndex >= GetStaticLayout()->GetNumTrafficEntities())
+-            {
+-                return nullptr;
+-            }
+-        }
+-
+-        return reinterpret_cast<u8*>(GetStaticLayout())
+-             + SoundSerialiserStaticLayout::KU_TRAFFIC_ENT_BASE
+-             + SoundSerialiserStaticLayout::KU_TRAFFIC_ENT_STRIDE * liIndex;
++    SoundSerialiserTrafficEntityData* SoundSerialiser::GetTrafficEnt(u32 luEntityId)
++    {
++        for (s32 liIndex=0; liIndex<GetStaticLayout()->GetNumTrafficEntities(); ++liIndex)
++        {
++            if (GetStaticLayout()->maTrafficEntities[liIndex].mEntityId.muValue==luEntityId)
++                return &GetStaticLayout()->maTrafficEntityData[liIndex];
++        }
++        return nullptr;
++    }
++
++    // ARTIST826823E0..480: u16 comparison@record+0x48, stride80, first match.
++    const BrnTraffic::BrnTrafficIO::TrafficSoundEntity*
++    SoundSerialiser::GetTrafficEntityByTrafficIndex(u16 lu16TrafficIndex)
++    {
++        for (u16 lu16Index=0; lu16Index<GetStaticLayout()->GetNumTrafficEntities(); ++lu16Index)
++        {
++            if (GetStaticLayout()->maTrafficEntities[lu16Index].mu16EntityIndex==lu16TrafficIndex)
++                return &GetStaticLayout()->maTrafficEntities[lu16Index];
++        }
++        return nullptr;
+     }
+ 
+     // @ 0x826534E0 -- read a 12-byte quantised quat+pos record off the stream, unpack it
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.h
+@@ -72,7 +72,11 @@
+         SoundSerialiserStaticLayout* AddTrafficEntity(const void* lpEntity);
+ 
+         // @0x82682488 -- find the 12-byte per-entity record for a recorded traffic id.
+-        void* GetTrafficEnt(u32 luEntityId);
++        SoundSerialiserTrafficEntityData* GetTrafficEnt(u32 luEntityId);
++
++        // ARTIST826823E0: first recorded entity whose16-bit traffic index matches.
++        const BrnTraffic::BrnTrafficIO::TrafficSoundEntity*
++            GetTrafficEntityByTrafficIndex(u16 lu16TrafficIndex);
+ 
+         // The frame-level Read/Write below overload the base's byte-transfer Read(void*,s32) /
+         // Write(const void*,s32); re-expose those so the frame bodies can call both by name.
+--- a/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiserStaticLayout.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiserStaticLayout.h
+@@ -27,12 +27,25 @@
+ // count/control scalars get named members. GROW into named sub-records if DWARF is recovered.
+ 
+ #include "types.hpp"
++#include "GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficSoundInterfaces.h"
+ #include <cstddef>   // offsetof (the layout pins at the bottom)
+ 
+ #include "GameShared/GameClasses/Module/CgsVariableEventQueue.h"   // CgsModule::VariableEventQueue<512,16>
+ 
+ namespace BrnReplays
+ {
++    // ARTIST82682488 returns this12-byte auxiliary record;826B7340 stores four
++    // wheel contacts and crashing at+0..4;826E32B0 reads/writes drift at+8.
++    struct SoundSerialiserTrafficEntityData
++    {
++        bool mabWheelOnGround[4];
++        bool mbIsCrashing;
++        u8 maReserved[3];
++        f32 mfDriftFactor;
++    };
++    static_assert(sizeof(SoundSerialiserTrafficEntityData)==12,"original traffic auxiliary stride");
++    static_assert(offsetof(SoundSerialiserTrafficEntityData,mfDriftFactor)==8,"original drift field");
++
+     // Reconstructed from BURNOUT_X360_ARTIST.XEX. Sound-module replay static layout block.
+     class SoundSerialiserStaticLayout
+     {
+@@ -76,7 +89,9 @@
+         s32                                    miNumScrapes;                   // +0x810
+         CgsModule::VariableEventQueue<512, 16> mEventQueue;                    // +0x814 (0x210 -> +0xA24)
+         f32                                    mfA24;                          // +0xA24
+-        u8                                     maReserved0xA28[0xC58 - 0xA28]; // +0xA28 (opaque; traffic records live here)
++        u8                                     maReserved0xA28[8];             // +0xA28 -> aligned records
++        BrnTraffic::BrnTrafficIO::TrafficSoundEntity maTrafficEntities[6];      // +0xA30
++        SoundSerialiserTrafficEntityData        maTrafficEntityData[6];       // +0xC10
+         s32                                    miNumTrafficEntities;           // +0xC58
+         f32                                    mfC5C;                          // +0xC5C
+         u8                                     maReserved0xC60[0xE88 - 0xC60]; // +0xC60 (opaque; previous-frame copy)
+@@ -94,6 +109,8 @@
+     static_assert(offsetof(SoundSerialiserStaticLayout, miNumScrapes)         == 0x810, "miNumScrapes @ +0x810");
+     static_assert(offsetof(SoundSerialiserStaticLayout, mEventQueue)          == 0x814, "mEventQueue @ +0x814");
+     static_assert(offsetof(SoundSerialiserStaticLayout, mfA24)                == 0xA24, "mfA24 @ +0xA24");
++    static_assert(offsetof(SoundSerialiserStaticLayout, maTrafficEntities)==0xA30,"original traffic records");
++    static_assert(offsetof(SoundSerialiserStaticLayout, maTrafficEntityData)==0xC10,"original traffic auxiliary records");
+     static_assert(offsetof(SoundSerialiserStaticLayout, miNumTrafficEntities) == 0xC58, "miNumTrafficEntities @ +0xC58");
+     static_assert(offsetof(SoundSerialiserStaticLayout, mfC5C)                == 0xC5C, "mfC5C @ +0xC5C");
+     static_assert(offsetof(SoundSerialiserStaticLayout, muE88)                == 0xE88, "muE88 @ +0xE88");
+--- a/src/GameSource/Sound/Vehicles/Traffic/BrnTrafficSkid.cpp
++++ b/src/GameSource/Sound/Vehicles/Traffic/BrnTrafficSkid.cpp
+@@ -21,10 +21,7 @@
+ // SendIndexes::AEMS_Skids_Traffic (Send01, ReverbSend) -- the same tables AISkidEffect
+ // reads.
+ //
+-// FLAG (replay serialiser not in this tree): while the sound serialiser plays back,
+-// the console's ProcessUpdate takes mfDriftFactor from the recorded traffic entity, and
+-// while it records it writes mfDriftFactor there. This tree's SoundLogicModule holds
+-// no SoundSerialiser, so the live drift factor is always used.
++// ARTIST826E3304..3398: consume/publish drift before the voice update.
+ //
+ // Not carried: the KB_SKID_PRINT_INFO developer TTY lines in CalculateDriftParameter,
+ // gated on a switch that is zero in the image.
+@@ -222,6 +219,23 @@
+     const BrnTraffic::BrnTrafficIO::TrafficSoundEntity* lpTrafficSoundEntity = mpTrafficControl->GetTrafficEntity();
+     CGS_ASSERT( lpTrafficSoundEntity != 0, "lpTrafficSoundEntity" );
+ 
++    BrnReplays::SoundSerialiser& lrSerialiser=
++        static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule())->GetSoundSerialiser();
++    if (lrSerialiser.IsPlaying())
++    {
++        BrnReplays::SoundSerialiserTrafficEntityData* lpData=
++            lrSerialiser.GetTrafficEnt(lpTrafficSoundEntity->mEntityId.muValue);
++        if (lpData)
++            mfDriftFactor=lpData->mfDriftFactor;
++    }
++    else if (lrSerialiser.IsRecording())
++    {
++        BrnReplays::SoundSerialiserTrafficEntityData* lpData=
++            lrSerialiser.GetTrafficEnt(lpTrafficSoundEntity->mEntityId.muValue);
++        if (lpData)
++            lpData->mfDriftFactor=mfDriftFactor;
++    }
++
+     const CgsSound::Logic::VoiceWrapper::E_UPDATE_STAGE leStageBefore = mSkidVoice.GetUpdateStage();
+     mSkidVoice.Update();
+ 
+--- a/src/GameSource/Sound/Vehicles/Traffic/BrnTrafficStateManager.cpp
++++ b/src/GameSource/Sound/Vehicles/Traffic/BrnTrafficStateManager.cpp
+@@ -18,11 +18,7 @@
+ // =============================================================================
+ // BrnSound::Logic::Traffic::TrafficStateManager -- out-of-line bodies.
+ //
+-// FLAG (replay serialiser not in this tree): while the sound serialiser records, the
+-// console's UpdateParams mirrors the six nearest entities into it, and while it plays
+-// back it matches and attaches the recorded entities instead of the live list. This
+-// tree's SoundLogicModule holds no SoundSerialiser and nothing drives its mode, so only
+-// the live traffic interface is read -- the console's own path whenever no replay runs.
++// ARTIST82702ED8: live/recorded traffic selection and nearest-six capture.
+ //
+ // Traffic cull success/failure retains the original Sound debug log.
+ // =============================================================================
+@@ -209,8 +205,23 @@
+     SortResult laSortedEntities[BrnTraffic::BrnTrafficIO::TrafficSoundOutputInterface::KU_MAX_ENTITIES];
+     SortEntitiesDistanceFromPosition( lListenerPosition, lrTraffic, laSortedEntities );
+ 
++    BrnReplays::SoundSerialiser& lrSerialiser=lpModule->GetSoundSerialiser();
++    if (lrSerialiser.IsRecording())
++    {
++        lrSerialiser.GetStaticLayout()->miNumTrafficEntities=0;
++        for (u16 lu16Entry=0; lu16Entry<KU_NUMBER_OF_TRAFFIC_CARS &&
++             lu16Entry<lrTraffic.GetTrafficEntityCount(); ++lu16Entry)
++        {
++            const u16 lu16Index=laSortedEntities[lu16Entry].muIndex;
++            CGS_ASSERT(lu16Index<lrTraffic.mu16EntityCount,"lu16Index < mu16EntityCount");
++            lrSerialiser.AddTrafficEntity(&lrTraffic.maActiveEntityList[lu16Index]);
++        }
++    }
++
+     u16 lau16EntityMatched[KU_NUM_SLOTS] = { 0 };
+-    const u16 lu16EntityCount = lrTraffic.GetTrafficEntityCount();
++    const u16 lu16EntityCount = lrSerialiser.IsPlaying()
++        ? static_cast<u16>(lrSerialiser.GetStaticLayout()->GetNumTrafficEntities())
++        : lrTraffic.GetTrafficEntityCount();
+ 
+     for ( u16 luActiveIndex = 0; luActiveIndex < KU_NUM_SLOTS; ++luActiveIndex )
+     {
+@@ -224,10 +235,16 @@
+         u16 lu16Matches = 0;
+         for ( u16 luEntry = 0; luEntry < lu16EntityCount; ++luEntry )
+         {
+-            // TrafficSoundOutputInterface::GetTrafficEntity, inlined.
+-            const u16 lu16Index = laSortedEntities[luEntry].muIndex;
+-            CGS_ASSERT( lu16Index < lrTraffic.mu16EntityCount, "lu16Index < mu16EntityCount" );
+-            const Slot::TrafficSoundEntity& lrEntity = lrTraffic.maActiveEntityList[lu16Index];
++            const Slot::TrafficSoundEntity* lpEntity;
++            if (lrSerialiser.IsPlaying())
++                lpEntity=&lrSerialiser.GetStaticLayout()->maTrafficEntities[luEntry];
++            else
++            {
++                const u16 lu16Index=laSortedEntities[luEntry].muIndex;
++                CGS_ASSERT(lu16Index<lrTraffic.mu16EntityCount,"lu16Index < mu16EntityCount");
++                lpEntity=&lrTraffic.maActiveEntityList[lu16Index];
++            }
++            const Slot::TrafficSoundEntity& lrEntity=*lpEntity;
+ 
+             if ( lrEntity.mu16EntityIndex == lrActiveSlot.mEntity.mu16EntityIndex )
+             {
+@@ -246,9 +263,16 @@
+ 
+     for ( u16 luEntry = 0; luEntry < lu16EntityCount; ++luEntry )
+     {
+-        const u16 lu16Index = laSortedEntities[luEntry].muIndex;
+-        CGS_ASSERT( lu16Index < lrTraffic.mu16EntityCount, "lu16Index < mu16EntityCount" );
+-        const Slot::TrafficSoundEntity& lrEntity = lrTraffic.maActiveEntityList[lu16Index];
++        const Slot::TrafficSoundEntity* lpEntity;
++        if (lrSerialiser.IsPlaying())
++            lpEntity=&lrSerialiser.GetStaticLayout()->maTrafficEntities[luEntry];
++        else
++        {
++            const u16 lu16Index=laSortedEntities[luEntry].muIndex;
++            CGS_ASSERT(lu16Index<lrTraffic.mu16EntityCount,"lu16Index < mu16EntityCount");
++            lpEntity=&lrTraffic.maActiveEntityList[lu16Index];
++        }
++        const Slot::TrafficSoundEntity& lrEntity=*lpEntity;
+ 
+         if ( lau16EntityMatched[luEntry] != 0 )
+             continue;
+@@ -283,7 +307,7 @@
+         if ( KI_SPEW_TRAFFIC_MANAGEMENT )
+             BrnSound::Debug::DebugComponent::mLogCombined << "[Traffic] Successfully Culled. \n";
+         if ( lbAttached )
+-            break;
++            luEntry=lrTraffic.GetTrafficEntityCount(); // ARTIST8270365C..80, then loop increment
+     }
+ 
+     CgsDev::PerfMonCpu::StopMonitor( miCpuMonitor );
+--- a/src/GameSource/Sound/Vehicles/Wheels/BrnInAirEffect.cpp
++++ b/src/GameSource/Sound/Vehicles/Wheels/BrnInAirEffect.cpp
+@@ -669,10 +669,7 @@
+ // the car's queued PhysicalTrafficState, and it counts as crashing only while both it
+ // and the player car are fatally crashing. No physical state clears the data.
+ //
+-// FLAG (replay serialiser not in this tree): while the sound serialiser plays back,
+-// the console takes the wheel-contact flags and the crash flag from the recorded
+-// traffic entity instead. This tree's SoundLogicModule holds no SoundSerialiser, so
+-// only the live path runs.
++// ARTIST826B7070..7114 selects recorded wheel/crash state during playback.
+ void TrafficInAir::UpdatePhysicsData(f32 afTimeStep)
+ {
+     bool lbFoundState = false;
+@@ -680,6 +677,26 @@
+     {
+         BrnSound::Module::SoundLogicModule* lpModule =
+             static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule());
++        BrnReplays::SoundSerialiser& lrSerialiser=lpModule->GetSoundSerialiser();
++        if (lrSerialiser.IsPlaying())
++        {
++            const BrnReplays::SoundSerialiserTrafficEntityData* lpData=
++                lrSerialiser.GetTrafficEnt(mpTrafficEntity->mEntityId.muValue);
++            if (lpData)
++            {
++                lbFoundState=true;
++                mPhysicsData.mIsOnGround.Update(false);
++                for (u32 luWheel=0; luWheel<4; ++luWheel)
++                {
++                    mPhysicsData.maWheelOnGround[luWheel].Update(lpData->mabWheelOnGround[luWheel]);
++                    if (mPhysicsData.maWheelOnGround[luWheel].GetCurrent())
++                        mPhysicsData.mIsOnGround.Update(true);
++                }
++                mPhysicsData.mbIsCrashing=lpData->mbIsCrashing;
++            }
++        }
++        else
++        {
+         const BrnSound::Module::Io::LogicInputBuffer* lpInputBuffer =
+             lpModule->GetBrnInputStructure();
+         CGS_ASSERT(lpInputBuffer != nullptr, "lpInputBuffer");
+@@ -713,6 +730,7 @@
+                     ->GetVehicleInterface()->IsPlayerCarFatalyCrashing();
+             }
+         }
++        }
+     }
+ 
+     if (!lbFoundState)
+@@ -734,12 +752,25 @@
+     // traffic.
+ }
+ 
+-// FLAG (replay serialiser not in this tree): while the sound serialiser records, the
+-// console writes the four wheel-contact flags and the crash flag of a physical car
+-// into its recorded traffic entity before the base update. This tree's
+-// SoundLogicModule holds no SoundSerialiser, so only the base update runs.
++// ARTIST826B7354..73D4: publish four wheel contacts and crash before base update.
+ void TrafficInAir::ProcessUpdate()
+ {
++    if (mpTrafficEntity->mbIsPhysical)
++    {
++        BrnReplays::SoundSerialiser& lrSerialiser=
++            static_cast<BrnSound::Module::SoundLogicModule*>(GetLogicModule())->GetSoundSerialiser();
++        if (lrSerialiser.IsRecording())
++        {
++            BrnReplays::SoundSerialiserTrafficEntityData* lpData=
++                lrSerialiser.GetTrafficEnt(mpTrafficEntity->mEntityId.muValue);
++            if (lpData)
++            {
++                lpData->mbIsCrashing=mPhysicsData.mbIsCrashing;
++                for (u32 luWheel=0; luWheel<4; ++luWheel)
++                    lpData->mabWheelOnGround[luWheel]=mPhysicsData.maWheelOnGround[luWheel].GetCurrent();
++            }
++        }
++    }
+     InAirEffect::ProcessUpdate();
+ }
+ 
+--- a/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.h
++++ b/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.h
+@@ -229,6 +229,8 @@
+     Attrib::Gen::burnoutglobaldata& GetGlobalData() { return mBurnoutGlobalData; }
+     const Attrib::Gen::burnoutglobaldata& GetGlobalData() const { return mBurnoutGlobalData; }
+     BrnSound::Logic::FrameInformation& GetFrameInformation() { return mFrameInformation; }
++    // Typed access to the X360-only persistent replay channel (inline original member walk).
++    BrnReplays::SoundSerialiser& GetSoundSerialiser() { return mSoundSerialiser; }
+     const BrnSound::Logic::FrameInformation& GetFrameInformation() const { return mFrameInformation; }
+     // Inlined in ReverbEffect::ProcessUpdate (ARTIST module+0x51FC).
+     CgsSound::Logic::Voice& GetGlobalReverbVoice() { return mGlobalReverbVoice; }
+--- a/src/GameSource/Director/BrnDirectorModule.h
++++ b/src/GameSource/Director/BrnDirectorModule.h
+@@ -13,7 +13,7 @@
+ #include "GameSource/Director/Camera/Camera.h"                            // BrnDirector::Camera::Camera (mCamera)
+ #include "GameSource/Director/Utils/BrnDirectorWorldMap.h"                // BrnDirector::WorldMap (mWorldMap)
+ #include "GameSource/Director/Utils/BrnDirectorPostOfficeTypes.h"         // the six scene-query post offices
+-#include "GameSource/Replays/BrnReplayBaseSerialiser.h"                   // BrnReplays::BaseSerialiser (mDirectorSerialiser)
++#include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"                   // BrnReplays::BaseSerialiser (mDirectorSerialiser)
+ 
+ namespace BrnResource { namespace GameDataIO { class AllocatorList; } }   // DirectorModule::Prepare's 2nd arg (boot audit F-P6-16)
+ 
+@@ -350,20 +350,9 @@
+ 
+     u8 mPad_0x38925[0x38930 - 0x38925];                      // +0x38925..+0x3892F (untouched)
+ 
+-    // this+0x38930 (231728). BrnReplays::BaseSerialiser::Construct(this, 4, 0, 1024, 384,
+-    // "DirectorModule", 0) -- the director's own replay serialiser record (DWARF calls
+-    // the derived type BrnReplays::DirectorSerialiser; that derived type is not homed
+-    // yet, so this is declared at its real touched base type). Real committed base type.
+-    // Prepare/Update (declaration-only) reach the same field via
+-    // BrnReplays::DirectorSerialiser::GetStaticLayout(this+231728) -- same offset,
+-    // corroborating this placement.
+-    BrnReplays::BaseSerialiser mDirectorSerialiser;
+-
+-    // this+0x3898C (231820): one zeroed byte immediately after mDirectorSerialiser's
+-    // BaseSerialiser-sized (0x5C CONSOLE bytes) tail -- a DirectorSerialiser-added field;
+-    // that derived type is not homed, so this is named as an explicit scratch byte rather
+-    // than folded into BaseSerialiser itself.
+-    u8 mDirectorSerialiserExtra_0x3898C;                     // +0x3898C
++    // ARTIST DirectorModule::Construct/Update own the persistent derived
++    // serialiser at console +0x38930. Its own +0x5C latch belongs to that type.
++    BrnReplays::DirectorSerialiser mDirectorSerialiser;
+ 
+     u8 mPad_0x3898D[0x38990 - 0x3898D];                      // +0x3898D..+0x3898F (untouched)
+ 
+--- a/src/GameSource/Director/BrnMainDirector.h
++++ b/src/GameSource/Director/BrnMainDirector.h
+@@ -299,6 +299,9 @@
+         const GameState& GetGameState() const { return maGameState; }
+         Camera::BehaviourManager& GetBehaviourManager()       { return mBehaviourManager; }
+         CameraFinaliser&          GetCameraFinaliser()        { return mCameraFinaliser; }
++
++        // ARTIST DirectorModule::Update copies MainDirector+0x32F10.
++        const Camera::Camera& GetLastCamera() const { return mLastCamera; }
+ 
+         // The embedded CgsGraphics::Camera (CONSOLE +0x349D0) -- the camera
+         // MainDirector::Update fills (via Camera::Camera::CopyToCgsCamera) and publishes with
+--- a/src/GameSource/Director/Camera/BrnBehaviourManager.h
++++ b/src/GameSource/Director/Camera/BrnBehaviourManager.h
+@@ -363,6 +363,14 @@
+         // the console reaches the same storage by inlined displacement off the DIRECTOR.
+         BehaviourParameterBank&       GetBehaviourParameterBank()       { return mBehaviourParameterBank; }
+ 
++        // ARTIST DirectorModule::Update 822754B4..82275518 snapshots these
++        // existing members: manager+0x1586C, +0x15874, +0x163C0 respectively.
++        const Utils::TempCameraBoostResponder& GetTempCameraBoostResponder() const
++        { return mTempCameraBoostResponder; }
++        const Utils::SpeedResponder& GetSpeedResponder() const { return mSpeedResponder; }
++        f32 GetLastHandbrakeTime() const { return mfLastHandbrakeTime; }
++
++
+         void LockBehaviourForInterpolation(BehaviourHelperIndex lFrom, BehaviourHelperIndex lTo);
+         void UnlockBehaviourForInterpolation(BehaviourHelperIndex lFrom, BehaviourHelperIndex lTo);
+         void SetBehaviourUpdatesDuringPause(BehaviourHelperIndex lHelper, bool lbUpdatesDuringPause);
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp
+@@ -115,13 +115,10 @@
+ 
+     mMainDirector.Construct(&mDirectorResourceManager, lfTime);
+ 
+-    mDirectorSerialiser.Construct(
+-        /* liId               */ 4,
+-        /* liMode             */ 0,
+-        /* liBufferSize       */ 1024,
+-        /* liStaticBufferSize */ 384,
+-        /* lpcName            */ "DirectorModule",
+-        /* liFlag             */ 0);
++    mDirectorSerialiser.Construct();
++    mbReplayStartedThisFrame = 0;  // ARTIST 8225C664
++    mbIsReplaying = false;
++    mbReplayRestoring = false;
+ 
+     // Budget literals are the X360 rodata floats flt_82004014 (Pre SQ / Post Gui) and
+     // flt_82001C98 (Main) -- both cross-confirmed elsewhere in this codebase as 0.1f and
+@@ -413,33 +410,19 @@
+     }
+     mbIsReplaying = lbIsReplaying;          // this+232192
+ 
+-    // ---- 2. ⚠️ QUIET GATE: the director-serialiser mode bookkeeping ------------------
+-    // The X360 then reads the director serialiser's mode word and stamps two of its flags:
+-    //     if ( mDirectorSerialiser.GetMode() == E_MODE_RESTORING /*7*/ )
+-    //     {
+-    //         mbReplayRestoring                  = true;   // this+232193
+-    //         mDirectorSerialiser.mbDataRestored = true;   // this+231817 == serialiser +0x59
+-    //     }
+-    //     else if ( mode == E_MODE_RECORDING_PREPARING /*1*/ || mode == E_MODE_PLAYING_PREPARING /*4*/ )
+-    //     {
+-    //         mDirectorSerialiser.mbDataReady    = true;   // this+231816 == serialiser +0x58
+-    //     }
+-    // (The two byte offsets land EXACTLY on BrnReplays::BaseSerialiser's committed
+-    //  mbDataReady @+0x58 / mbDataRestored @+0x59 -- that coincidence is the attestation
+-    //  that mDirectorSerialiser is at this+0x38930 and that these are its fields.)
+-    //
+-    // GATED because both fields are `protected` on BrnReplays::BaseSerialiser and there is no
+-    // public setter; adding one means editing GameSource/Replays/BrnReplayBaseSerialiser.h,
+-    // which is outside this wave's ownership. The exact additive change is written into the
+-    // wave log for the conductor. Reaching around the class to poke +0x58/+0x59 by offset is
+-    // precisely the raw-offset-into-another-class's-storage pattern this TU was rewritten to
+-    // remove, so it is not done here.
+-    //
+-    // CONSEQUENCE WHILE GATED: only the replay-record/restore handshake is affected, and the
+-    // whole replay leg is gated anyway (step 4). The live camera path is untouched.
+-    //
+-    // DELETE-WHEN: delete this gate once BrnReplays::BaseSerialiser exposes
+-    // SetDataReady(bool) / SetDataRestored(bool) (or DirectorSerialiser is homed).
++    // ARTIST 8225C7EC..8225C834: restore acknowledgement takes precedence
++    // over the prepare/readiness handshake.
++    const BrnReplays::BaseSerialiser::EMode leMode = mDirectorSerialiser.GetMode();
++    if (leMode == BrnReplays::BaseSerialiser::E_MODE_RESTORING)
++    {
++        mbReplayRestoring = true;
++        mDirectorSerialiser.SetDataRestored(true);
++    }
++    else if (leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++             leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING)
++    {
++        mDirectorSerialiser.SetDataReady(true);
++    }
+ 
+     // ---- 3. the per-frame scene-query post office ----------------------------------
+     // This pass populates ALL SIX post offices: it is the one that may MINT query ids.
+@@ -463,22 +446,14 @@
+ 
+     if (mbIsReplaying)
+     {
+-        // ⚠️ QUIET GATE -- the REPLAY leg. The X360 runs, when the serialiser mode is
+-        // E_MODE_PLAYING_PREPARING (4), E_MODE_PLAYING (5) or E_MODE_PLAYING_STALLED (6):
+-        //     mDirectorSerialiser.mbDataReady = true;
+-        //     BrnReplays::DirectorSerialiser::Read(&mDirectorSerialiser);            // @0x82650340
+-        //     ReplayDirector::PreSceneQueryUpdate(                                   // @0x8225BD28
+-        //         this + 221008 /* +0x35F50 */,
+-        //         BrnReplays::DirectorSerialiser::GetStaticLayout(&mDirectorSerialiser), // @0x821F5C58
+-        //         &lIO );
+-        // GATED because BrnReplays::DirectorSerialiser is un-homed (only the base
+-        // BaseSerialiser is committed -- GetStaticLayout/Read/Write are the derived type's)
+-        // and BrnDirector::ReplayDirector::PreSceneQueryUpdate is itself declaration-only
+-        // (BrnReplayDirector.h documents why: an unmodelled layout plus a VMX pipeline).
+-        // CONSEQUENCE: replay playback drives no camera. Free drive / all live gameplay is
+-        // unaffected -- mbIsReplaying is false for every one of those frames.
+-        // DELETE-WHEN: BrnReplays::DirectorSerialiser gets a home AND
+-        // ReplayDirector::PreSceneQueryUpdate is bodied.
++        if (mDirectorSerialiser.IsPlaying())
++        {
++            mDirectorSerialiser.SetDataReady(true);
++            mDirectorSerialiser.Read();
++            // Original next call: ReplayDirector::PreSceneQueryUpdate
++            // (8225BD28) with GetStaticLayout and lIO. The camera provider is
++            // still declaration-only; see the bounded packet's remaining gaps.
++        }
+     }
+     else
+     {
+@@ -578,36 +553,26 @@
+         // DELETE-WHEN: as the PreSceneQueryUpdate replay gate.
+     }
+ 
+-    // ---- 5. ⚠️ QUIET GATE: the replay RECORD leg + serialiser registration ----------
+-    // For serialiser modes E_MODE_RECORDING_PREPARING (1) / E_MODE_RECORDING (2) /
+-    // E_MODE_RECORDING_STALLED (3) the X360 snapshots the frame into the serialiser's static
+-    // layout and writes the record:
+-    //     Camera::Camera::Construct( DirectorSerialiser::GetStaticLayout(&mDirectorSerialiser) );
+-    //     Camera::Camera::operator=( GetStaticLayout(...), this + 211472 );
+-    //     *(u64*)(GetStaticLayout(...) + 352) = *(u64*)(this + 204736);
+-    //     *(u32*)(GetStaticLayout(...) + 360) = *(u32*)(this + 208508);   // + 364/368 from
+-    //     *(u32*)(GetStaticLayout(...) + 372) = *(f32*)(this + 211408);   //   208512/208516
+-    //     DirectorSerialiser::Write( &mDirectorSerialiser );              // @0x82650438
+-    // and then, UNCONDITIONALLY:
+-    //     ReplayIO::RequestInterface::RegisterSerialiser(                 // @0x821F34A0
+-    //         lpOutputBuffer->GetReplayRequestI(), &mDirectorSerialiser );
+-    // and finally a dev tripwire:
+-    //     CGS_ASSERT( !lpSceneQueryOutputBuffer->GetSceneQueryInterface()->HasData(),
+-    //                 "!lpSceneQueryOutput->GetSceneQueryInterface()->HasData()" );  // :387
+-    //
+-    // GATED for three separate reasons, none of them fixable inside this wave:
+-    //   * DirectorSerialiser::GetStaticLayout / ::Write are the UN-HOMED derived serialiser's;
+-    //   * every source offset above (this+204736 / +208508.. / +211408 / +211472) lands inside
+-    //     the un-modelled +0x36380..+0x38920 tail (CameraDebugInfo / GameState / VehicleTracker),
+-    //     so there is no named member to read them through;
+-    //   * CgsSceneManager::SceneManagerIO::SceneQueryInterface::HasData @0x82204E48 has no
+-    //     declaration on the committed SceneManager header (its own header says the body lives
+-    //     in CgsSceneManagerModuleIO.cpp), and that header is outside this wave's ownership.
+-    // CONSEQUENCE: no replay recording, and the director's serialiser is not registered with
+-    // the replay subsystem. Neither affects the live camera. The dropped assert is a dev
+-    // tripwire only.
+-    // DELETE-WHEN: DirectorSerialiser is homed, the +0x36380 tail members are recovered, and
+-    // SceneQueryInterface::HasData is declared on the SceneManager header.
++    // ARTIST 82275448..8227551C: snapshot in every recording mode,
++    // then let Write select whether the stream can advance this frame.
++    if (mDirectorSerialiser.IsRecording())
++    {
++        BrnReplays::DirectorSerialiserStaticLayout* lpFrame = mDirectorSerialiser.GetStaticLayout();
++        lpFrame->mCamera.Construct();
++        lpFrame->mCamera = mMainDirector.GetLastCamera();
++        const Camera::BehaviourManager& lrManager = mMainDirector.GetBehaviourManager();
++        lpFrame->mCarBaseAssetAttribsKey =
++            lrManager.GetBehaviourParameterBank().GetGameplayCameraCarAttribsKey();
++        lpFrame->mTempCameraBoostResponder = lrManager.GetTempCameraBoostResponder();
++        lpFrame->mSpeedResponder = lrManager.GetSpeedResponder();
++        lpFrame->mfLastHandbrakeTime = lrManager.GetLastHandbrakeTime();
++        mDirectorSerialiser.Write();
++    }
++
++    // ARTIST 82275520..8227552C: every mode, including idle and restoring.
++    lpOutputBuffer->GetReplayRequestI()->RegisterSerialiser(&mDirectorSerialiser);
++    CGS_ASSERT(!lpProducerOf(lpSceneQueryOutputBuffer)->HasData(),
++               "!lpSceneQueryOutput->GetSceneQueryInterface()->HasData()");
+ 
+     lpInputBuffer->UnlockForRead();
+     lpSceneQueryInputBuffer->UnlockForRead();
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.cpp
+@@ -142,10 +142,10 @@
+     }
+ 
+     // X360 0x82206A58: return &mReplayRequestInterface (this+0x724). Tests the WRITE lock (bit 3).
+-    u8* OutputBuffer::GetReplayRequestI()
+-    {
+-        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
+-        return reinterpret_cast<u8*>(&mReplayRequestInterface);
++    BrnReplays::ReplayIO::RequestInterface* OutputBuffer::GetReplayRequestI()
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing");
++        return &mReplayRequestInterface;
+     }
+ 
+     // X360 0x822078F0: return &mTimerRequestInterface (this+0x500). Tests the WRITE lock (bit 3).
+--- a/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp
++++ b/src/GameSource/Director/DirectorModule/BrnDirectorModuleIOOutputBuffer.hpp
+@@ -109,7 +109,7 @@
+         // ARTIST 0x82207848: typed mutable view of the same member under the write lock.
+         BrnDirector::DirectorOutputInterface* GetDirectorOutputInterface();
+         u8*       GetDirectorOutputIn();        // legacy byte view for existing callers
+-        u8*       GetReplayRequestI();          // -> mReplayRequestInterface   @0x0724
++        BrnReplays::ReplayIO::RequestInterface* GetReplayRequestI();          // -> mReplayRequestInterface   @0x0724
+         CgsSystem::TimerRequestInterface* GetTimerRequestInterfac();  // -> mTimerRequestInterface @0x0500
+         // X360 0x822069B0 -> &mVaultRequestInterface (this+0x510), WRITE-lock. Same DWARF name
+         // as the const twin above; the constness is what separates the two lock bits here.
+--- a/src/GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.cpp
+@@ -15,6 +15,12 @@
+ namespace BrnReplays
+ {
+ 
++void DirectorSerialiser::Construct()
++{
++    BaseSerialiser::Construct(4, 0, 1024, KI_STATIC_LAYOUT_SIZE, "DirectorModule", 0);
++    mbStaticCameraConstructed = false;
++}
++
+ // @ 0x82650340 -- cpp:38. Lock, resolve the static camera, then the mode ladder:
+ // the STALLED pair (3/6), the PREPARING pair (1/4) and RESTORING (7) are explicit
+ // no-ops; RECORDING (2) appends the whole camera image to the record stream and
+@@ -23,7 +29,7 @@
+ {
+     BaseSerialiser::Lock();
+ 
+-    BrnDirector::Camera::Camera* lpStatic = GetStaticLayout();
++    DirectorSerialiserStaticLayout* lpStatic = GetStaticLayout();
+     CGS_ASSERT(lpStatic != 0, "lpStatic");   // :38 (non-gating)
+ 
+     const EMode leMode = GetMode();
+@@ -46,18 +52,18 @@
+ // @ 0x82650438 -- cpp:69. Lock, resolve the static camera, construct it in place
+ // exactly once (the +0x5C latch; note the X360 runs the construct block BEFORE
+ // its lpStatic NULL guard -- only the serialise dispatch below is guarded, and
+-// that order is kept), then RECORDING appends / PLAYING restores the camera
+-// image. Always Unlocks.
++// that order is kept), then RECORDING appends / PLAYING restores the director
++// frame. Always Unlocks.
+ void DirectorSerialiser::Write()
+ {
+     BaseSerialiser::Lock();
+ 
+-    BrnDirector::Camera::Camera* lpStatic = GetStaticLayout();
++    DirectorSerialiserStaticLayout* lpStatic = GetStaticLayout();
+     CGS_ASSERT(lpStatic != 0, "lpStatic");   // :69 (non-gating)
+ 
+     if (!mbStaticCameraConstructed)
+     {
+-        lpStatic->Construct();
++        lpStatic->mCamera.Construct();
+         mbStaticCameraConstructed = true;
+     }
+ 
+--- a/src/GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h
+@@ -1,71 +1,54 @@
+ #ifndef GAMESOURCE_REPLAYS_SERIALISERS_BRNREPLAYDIRECTORSERIALISER_H
+ #define GAMESOURCE_REPLAYS_SERIALISERS_BRNREPLAYDIRECTORSERIALISER_H
+ 
+-#include "types.hpp"
+-#include "GameShared/GameClasses/Core/CgsAssert.h"     // CGS_ASSERT (GetStaticLayout's inline tripwires)
+-#include "GameSource/Replays/BrnReplayBaseSerialiser.h" // BrnReplays::BaseSerialiser
+-
+-// ============================================================================
+-// GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h
+-//
+-// BrnReplays::DirectorSerialiser -- the replay serialiser channel for the
+-// director: its 384-byte static buffer IS a BrnDirector::Camera::Camera (the
+-// replay camera image; Write constructs it in place once, then each frame the
+-// whole camera is appended to the record stream while RECORDING and restored
+-// from the playback stream while PLAYING). Reconstructed from
+-// BURNOUT_X360_ARTIST.XEX; the asserts name the original files
+-// (BrnReplayDirectorSerialiser.h:107/:108 -- GetStaticLayout is header-inline
+-// -- and BrnReplayDirectorSerialiser.cpp:38/:69).
+-//
+-// Bodied by this TU (3 ledger functions, class:BrnReplays::DirectorSerialiser):
+-//   GetStaticLayout @0x821F5C58 (inline here; the X360 exports one copy)
+-//   Read            @0x82650340   Write @0x82650438   (BrnReplayDirectorSerialiser.cpp)
+-// The rest of the surface (Construct etc.) is un-attested by this TU's export
+-// set and not declared.
+-// ============================================================================
+-
+-namespace BrnDirector { namespace Camera { class Camera; } }
++#include "GameShared/GameClasses/Core/CgsAssert.h"
++#include "GameSource/Replays/BrnReplayBaseSerialiser.h"
++#include "GameSource/Director/Camera/Camera.h"
++#include "GameSource/Director/Camera/Utils/BrnTempBoostResponder.h"
++#include "GameSource/Director/Camera/Utils/BrnSpeedResponder.h"
+ 
+ namespace BrnReplays
+ {
++    // ARTIST DirectorModule::Update 82275478..82275518 writes the camera,
++    // car key (+0x160), boost responder (+0x168), speed responder (+0x170),
++    // and handbrake timer (+0x174), in this order. ReplayDirector::FillInSharedInfo
++    // reads the same tail at 82250C68..82250C94. Camera pointer members widen on
++    // PC, so allocation and stream sizes follow this native record's sizeof.
++    // Member names other than mCarBaseAssetAttribsKey are inferred from those
++    // already-homed producers; the latter name is in the 8225BD28 assertion.
++    struct DirectorSerialiserStaticLayout
++    {
++        BrnDirector::Camera::Camera mCamera;
++        u64 mCarBaseAssetAttribsKey;
++        BrnDirector::Camera::Utils::TempCameraBoostResponder mTempCameraBoostResponder;
++        BrnDirector::Camera::Utils::SpeedResponder mSpeedResponder;
++        f32 mfLastHandbrakeTime;
++    };
++
+     class DirectorSerialiser : public BaseSerialiser
+     {
+     public:
+-        // The X360 static-layout byte size (0x180 == the X360 sizeof of the
+-        // Camera::Camera image the buffer holds). FLAG: the literal is the
+-        // SERIALISED size (the asm's li r5,0x180 + the :107 bound); the 64-bit
+-        // host sizeof(Camera::Camera) may drift from it -- the replay stream
+-        // format is pinned by this constant, not by the host sizeof.
+-        static const s32 KI_STATIC_LAYOUT_SIZE = 384;
++        static const s32 KI_STATIC_LAYOUT_SIZE = sizeof(DirectorSerialiserStaticLayout);
+ 
+-        // @0x821F5C58 (this TU; header-inline in the original, h:107/:108). The
+-        // serialiser's static buffer viewed as the replay camera, behind the two
+-        // inline tripwires (the :107 text is streamed through a stack StrStream
+-        // into the assert message buffer on the X360; folded static here).
+-        BrnDirector::Camera::Camera* GetStaticLayout()
++        // Inlined in DirectorModule::Construct 8225C698..8225C6C4: the
++        // BaseSerialiser initialiser followed by the derived +0x5C latch reset.
++        void Construct();
++
++        // ARTIST 821F5C58; original header lines 107/108.
++        DirectorSerialiserStaticLayout* GetStaticLayout()
+         {
+             CGS_ASSERT(GetStaticBufferSize() >= KI_STATIC_LAYOUT_SIZE,
+-                       "Static buffer size is too small\n");                 // :107 (non-gating)
+-            CGS_ASSERT(GetStaticBuffer() != 0, "GetStaticBuffer()");         // :108 (non-gating)
+-            return static_cast<BrnDirector::Camera::Camera*>(GetStaticBuffer());
++                       "Static buffer size is too small\n");
++            CGS_ASSERT(GetStaticBuffer() != 0, "GetStaticBuffer()");
++            return static_cast<DirectorSerialiserStaticLayout*>(GetStaticBuffer());
+         }
+ 
+-        // @0x82650340 (this TU, cpp:38) -- the per-frame stream step: while
+-        // RECORDING append the whole camera image to the record buffer; while
+-        // PLAYING restore it from the playback buffer. The PREPARING / STALLED /
+-        // RESTORING modes are explicit no-ops (the asm's guard ladder).
+-        void Read();
+-
+-        // @0x82650438 (this TU, cpp:69) -- as Read, but first construct the
+-        // camera in the static buffer exactly once (the mbStaticCameraConstructed
+-        // latch); the mode dispatch then only acts on RECORDING / PLAYING.
+-        void Write();
++        void Read();   // ARTIST 82650340
++        void Write();  // ARTIST 82650438
+ 
+     private:
+-        // X360 +0x5C (right after the base's mbAllowStreaming @0x5A): raised by
+-        // Write's one-time in-place Camera::Construct on the static buffer.
+-        bool mbStaticCameraConstructed;
++        bool mbStaticCameraConstructed;  // ARTIST +0x5C
+     };
+ }
+ 
+-#endif // GAMESOURCE_REPLAYS_SERIALISERS_BRNREPLAYDIRECTORSERIALISER_H
++#endif

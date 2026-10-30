@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "failures": [],
+  "pending": [],
+  "selected_site_count": 7,
+  "frame_count": 28,
+  "native_case": "PASS",
+  "profile_snapshot_sha256": "d7062394d301297191063dbf1c30cddd312ad28dae4e1f0e280bbbf796d09241",
+  "actual_native_profile_witnesses": [
+    {
+      "pattern": "\\[SaveLoadPC\\] bootup read: OK name='Profile'",
+      "matches": [
+        {
+          "line_index_zero_based": 1024,
+          "line": "[SaveLoadPC] bootup read: OK name='Profile' image=262144 mugshots=960800"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[profile-save\\] ValidateProfiles: progression=1 progressionDLC1=1 options=1 optionsDLC1=1 liveRevenge=1",
+      "matches": [
+        {
+          "line_index_zero_based": 1047,
+          "line": "[profile-save] ValidateProfiles: progression=1 progressionDLC1=1 options=1 optionsDLC1=1 liveRevenge=1  (the progression term prints its own two counts above)"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[profile-save\\] deserialised: isNewProfile=0 -> playIntroVideo=0",
+      "matches": [
+        {
+          "line_index_zero_based": 1048,
+          "line": "[profile-save] deserialised: isNewProfile=0 -> playIntroVideo=0"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[one-profile\\].*same=1.*isNewProfile gs=0 pm=0.*medalsFromTheStart gs=[0-9]+ pm=[0-9]+.*eventCount gs=[0-9]+ pm=[0-9]+.*spawnCarId gs=[0-9A-Fa-f]+ pm=[0-9A-Fa-f]+",
+      "matches": [
+        {
+          "line_index_zero_based": 1197,
+          "line": "[one-profile] gameState.mProgressionManager.mProfile=00007FF705FA3C80 profileManager.mpProgressionProfile=00007FF705FA3C80 same=1 | isNewProfile gs=0 pm=0 | medalsFromTheStart gs=202 pm=202 | eventCount gs=120 pm=120 | spawnCarId gs=A7E60F1A40508000 pm=A7E60F1A40508000 | roadRules gs=0 | maxCars gs=85"
+        }
+      ]
+    },
+    {
+      "pattern": "\\[GameStateModule::OnProfileLoaded\\].*spawnCar=\\S+ profileCar=\\S+ rank=[0-9]+ maxCars=[0-9]+ savedPos=\\(",
+      "matches": [
+        {
+          "line_index_zero_based": 1297,
+          "line": "[GameStateModule::OnProfileLoaded] junkyard=250700 spawnCar=PUSMC02 profileCar=PUSMC02 rank=5 maxCars=85 savedPos=(2986.933105, -2.733859, -2011.417847)"
+        }
+      ]
+    }
+  ],
+  "no_canonical_edits": true
+}

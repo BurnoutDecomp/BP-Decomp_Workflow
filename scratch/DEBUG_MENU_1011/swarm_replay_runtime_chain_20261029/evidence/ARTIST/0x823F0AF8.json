@@ -1,0 +1,2107 @@
+{
+  "address": "0x823F0AF8",
+  "name": "BrnGame::BrnGameModule::DoUpdate",
+  "prototype": "int BrnGame::BrnGameModule::DoUpdateint __fastcall(BrnGame::BrnGameModule *this)",
+  "variables": [
+    {
+      "name": "this",
+      "type": "BrnGame::BrnGameModule *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "AvailableMemory",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "started",
+      "type": "BOOL",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "updated",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v5",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v6",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v9",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v13",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v14",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v15",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v16",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v17",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v18",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v19",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v20",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v21",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v22",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v23",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v24",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v25",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v26",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v27",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v28",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v29",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v30",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v31",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v32",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v33",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v34",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v35",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v36",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v37",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v38",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v39",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v40",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v41",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v42",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v43",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v44",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v45",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v46",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v47",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v48",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v49",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v50",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v51",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v52",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v53",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v54",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v55",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v56",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v57",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v58",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v59",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v60",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v61",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v62",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v63",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v64",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v65",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v66",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v67",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v68",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v69",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v70",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v71",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v72",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v73",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v74",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v75",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v76",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v77",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v78",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v79",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v80",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v81",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v82",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v83",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v84",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v85",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v86",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v87",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v88",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v89",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v90",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v91",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v92",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v93",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v94",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v95",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v96",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v97",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v98",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v99",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v100",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v101",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v102",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v103",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v104",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v105",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v106",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v107",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v108",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v109",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v110",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v111",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v112",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v113",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v114",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v115",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v116",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v117",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v118",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v119",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v120",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v121",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v122",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v123",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v124",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v125",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v126",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v127",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v128",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v129",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v130",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v131",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v132",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v133",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v134",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v135",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v136",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v137",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v138",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v139",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v140",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v141",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v142",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v143",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v144",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v145",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v146",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v147",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v148",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v149",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v150",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v151",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v152",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v153",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v154",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v155",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v156",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v157",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v158",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v159",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v160",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v161",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v162",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v163",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v164",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v165",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v166",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v167",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v168",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v169",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v170",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v171",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v172",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v173",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v174",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v175",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v176",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v177",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v178",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v179",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v180",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v181",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v182",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v183",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v184",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v185",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v186",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v187",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v188",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v189",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v190",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v191",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v192",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v193",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v194",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v195",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v196",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v197",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v198",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v199",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v200",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v201",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v202",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v203",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v204",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v205",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v206",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v207",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v208",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "Resour",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v210",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v211",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v212",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v213",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v214",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v215",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v216",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v217",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v218",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v219",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v220",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v221",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v222",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v223",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v224",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v225",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v226",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v227",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v228",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v229",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v230",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v231",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "SystemTimerBaseTime",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v233",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v234",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v235",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v236",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v237",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v238",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v239",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v240",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v241",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v242",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v244",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v245",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v246",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v247",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v248",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v249",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v250",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v251",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v252",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v253",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v254",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v255",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v256",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v257",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v258",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v259",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v260",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v261",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v262",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v263",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v264",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v265",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v266",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v267",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v268",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v269",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v270",
+      "type": "unsigned __int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v271",
+      "type": "int *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v272",
+      "type": "_DWORD *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v273",
+      "type": "unsigned __int8 *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v274",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v275",
+      "type": "_DWORD *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v276",
+      "type": "int *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v277",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v278",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v279",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v280",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v281",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v282",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v283",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v284",
+      "type": "unsigned __int8 *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v285",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v286",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v287",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v288",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v289",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v290",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v291",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v292",
+      "type": "unsigned __int8 *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v293",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v294",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v295",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v296",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    }
+  ],
+  "pseudocode": "int __fastcall BrnGame::BrnGameModule::DoUpdate(BrnGame::BrnGameModule *this)\n{\n  int AvailableMemory; // r31\n  BOOL started; // r3\n  int updated; // r28\n  int *v5; // r23\n  int *v6; // r14\n  int v7; // r27\n  int v8; // r3\n  int v9; // r30\n  int v10; // r3\n  int v11; // r3\n  int v12; // r3\n  int v13; // r3\n  int v14; // r3\n  int v15; // r3\n  int v16; // r3\n  int v17; // r3\n  int v18; // r30\n  int v19; // r3\n  int v20; // r3\n  int v21; // r3\n  int v22; // r3\n  int v23; // r3\n  int v24; // r3\n  int v25; // r3\n  int v26; // r3\n  int v27; // r3\n  int v28; // r30\n  int v29; // r3\n  int v30; // r3\n  int v31; // r3\n  int v32; // r3\n  int v33; // r3\n  int v34; // r3\n  int v35; // r3\n  int v36; // r3\n  int v37; // r3\n  int v38; // r30\n  int v39; // r3\n  int v40; // r3\n  int v41; // r3\n  int v42; // r3\n  int v43; // r3\n  int v44; // r3\n  int v45; // r3\n  int v46; // r3\n  int v47; // r3\n  int v48; // r30\n  int v49; // r3\n  int v50; // r3\n  int v51; // r3\n  int v52; // r3\n  int v53; // r3\n  int v54; // r3\n  int v55; // r3\n  int v56; // r3\n  int v57; // r3\n  int v58; // r30\n  int v59; // r3\n  int v60; // r3\n  int v61; // r3\n  int v62; // r3\n  int v63; // r3\n  int v64; // r3\n  int v65; // r3\n  int v66; // r3\n  int v67; // r3\n  int v68; // r30\n  int v69; // r3\n  int v70; // r3\n  int v71; // r3\n  int v72; // r3\n  int v73; // r3\n  int v74; // r3\n  int v75; // r3\n  int v76; // r3\n  int v77; // r23\n  int v78; // r3\n  int v79; // r30\n  int v80; // r3\n  int v81; // r3\n  int v82; // r3\n  int v83; // r3\n  int v84; // r3\n  int v85; // r3\n  int v86; // r3\n  int v87; // r3\n  int v88; // r3\n  int v89; // r30\n  int v90; // r3\n  int v91; // r3\n  int v92; // r3\n  int v93; // r3\n  int v94; // r3\n  int v95; // r3\n  int v96; // r3\n  int v97; // r3\n  int v98; // r3\n  int v99; // r30\n  int v100; // r3\n  int v101; // r3\n  int v102; // r3\n  int v103; // r3\n  int v104; // r3\n  int v105; // r3\n  int v106; // r3\n  int v107; // r3\n  _DWORD *v108; // r28\n  int v109; // r3\n  int v110; // r3\n  int v111; // r30\n  int v112; // r3\n  int v113; // r3\n  int v114; // r3\n  int v115; // r3\n  int v116; // r3\n  int v117; // r3\n  int v118; // r3\n  int v119; // r3\n  int v120; // r30\n  int v121; // r3\n  int v122; // r3\n  int v123; // r3\n  int v124; // r3\n  int v125; // r3\n  int v126; // r3\n  int v127; // r3\n  int v128; // r3\n  int v129; // r3\n  int v130; // r30\n  int v131; // r3\n  int v132; // r3\n  int v133; // r3\n  int v134; // r3\n  int v135; // r3\n  int v136; // r3\n  int v137; // r3\n  int v138; // r3\n  int v139; // r3\n  int v140; // r30\n  int v141; // r3\n  int v142; // r3\n  int v143; // r3\n  int v144; // r3\n  int v145; // r3\n  int v146; // r3\n  int v147; // r3\n  int v148; // r3\n  int v149; // r3\n  int v150; // r30\n  int v151; // r3\n  int v152; // r3\n  int v153; // r3\n  int v154; // r3\n  int v155; // r3\n  int v156; // r3\n  int v157; // r3\n  int v158; // r3\n  int v159; // r3\n  int v160; // r30\n  int v161; // r3\n  int v162; // r3\n  int v163; // r3\n  int v164; // r3\n  int v165; // r3\n  int v166; // r3\n  int v167; // r3\n  int v168; // r3\n  int v169; // r3\n  int v170; // r30\n  int v171; // r3\n  int v172; // r3\n  int v173; // r3\n  int v174; // r3\n  int v175; // r3\n  int v176; // r3\n  int v177; // r3\n  int v178; // r3\n  int v179; // r3\n  int v180; // r30\n  int v181; // r3\n  int v182; // r3\n  int v183; // r3\n  int v184; // r3\n  int v185; // r3\n  int v186; // r3\n  int v187; // r3\n  int v188; // r3\n  int v189; // r3\n  int v190; // r30\n  int v191; // r3\n  int v192; // r3\n  int v193; // r3\n  int v194; // r3\n  int v195; // r3\n  int v196; // r3\n  int v197; // r3\n  int v198; // r3\n  int v199; // r3\n  int v200; // r30\n  int v201; // r3\n  int v202; // r3\n  int v203; // r3\n  int v204; // r3\n  int v205; // r3\n  int v206; // r3\n  int v207; // r3\n  int v208; // r3\n  int Resour; // r3\n  int v210; // r30\n  int v211; // r3\n  int v212; // r30\n  int v213; // r29\n  int v214; // r3\n  int v215; // r3\n  int v216; // r3\n  int v217; // r30\n  int v218; // r3\n  int v219; // r3\n  int v220; // r3\n  int v221; // r3\n  int v222; // r30\n  int v223; // r3\n  int v224; // r3\n  int v225; // r3\n  int v226; // r3\n  int v227; // r3\n  int v228; // r3\n  int v229; // r3\n  int v230; // r3\n  int v231; // r3\n  int SystemTimerBaseTime; // r3\n  int v233; // r3\n  int v234; // r30\n  int v235; // r3\n  int v236; // r3\n  int v237; // r3\n  int v238; // r3\n  int v239; // r3\n  int v240; // r3\n  int v241; // r3\n  int v242; // r3\n  int result; // r3\n  int v244; // [sp+8h] [-1B8h]\n  int v245; // [sp+Ch] [-1B4h]\n  int v246; // [sp+10h] [-1B0h]\n  int v247; // [sp+14h] [-1ACh]\n  int v248; // [sp+18h] [-1A8h]\n  int v249; // [sp+1Ch] [-1A4h]\n  int v250; // [sp+20h] [-1A0h]\n  int v251; // [sp+24h] [-19Ch]\n  int v252; // [sp+28h] [-198h]\n  int v253; // [sp+2Ch] [-194h]\n  int v254; // [sp+30h] [-190h]\n  int v255; // [sp+34h] [-18Ch]\n  int v256; // [sp+38h] [-188h]\n  int v257; // [sp+3Ch] [-184h]\n  int v258; // [sp+40h] [-180h]\n  int v259; // [sp+44h] [-17Ch]\n  int v260; // [sp+48h] [-178h]\n  int v261; // [sp+4Ch] [-174h]\n  int v262; // [sp+50h] [-170h]\n  int v263; // [sp+58h] [-168h]\n  int v264; // [sp+5Ch] [-164h]\n  int v265; // [sp+60h] [-160h]\n  int v266; // [sp+64h] [-15Ch]\n  int v267; // [sp+68h] [-158h]\n  int v268; // [sp+6Ch] [-154h]\n  int v269; // [sp+70h] [-150h]\n  unsigned __int16 v270; // [sp+76h] [-14Ah]\n  int *v271; // [sp+A8h] [-118h]\n  _DWORD *v272; // [sp+ACh] [-114h]\n  unsigned __int8 *v273; // [sp+B0h] [-110h]\n  int v274; // [sp+B8h] [-108h]\n  _DWORD *v275; // [sp+BCh] [-104h]\n  int *v276; // [sp+C0h] [-100h]\n  int v277; // [sp+D0h] [-F0h]\n  int v278; // [sp+D4h] [-ECh] BYREF\n  int v279; // [sp+D8h] [-E8h]\n  int v280; // [sp+DCh] [-E4h] BYREF\n  int v281; // [sp+E0h] [-E0h]\n  int v282; // [sp+E4h] [-DCh] BYREF\n  int v283; // [sp+E8h] [-D8h]\n  unsigned __int8 *v284; // [sp+ECh] [-D4h] BYREF\n  int v285; // [sp+F0h] [-D0h]\n  int v286; // [sp+F4h] [-CCh] BYREF\n  int v287; // [sp+F8h] [-C8h]\n  int v288; // [sp+FCh] [-C4h] BYREF\n  int v289; // [sp+100h] [-C0h]\n  int v290; // [sp+104h] [-BCh] BYREF\n  int v291; // [sp+108h] [-B8h]\n  unsigned __int8 *v292; // [sp+10Ch] [-B4h] BYREF\n  int v293; // [sp+110h] [-B0h]\n  int v294; // [sp+114h] [-ACh] BYREF\n  int v295; // [sp+118h] [-A8h]\n  int v296; // [sp+11Ch] [-A4h] BYREF\n\n  _savegprlr_14();\n  AvailableMemory = BrnResource::GetAvailableMemory(this);\n  started = CgsDev::PerfMonCpu::StartMonitor(this->field_996F30);\n  CgsSystem::GetSystemTimerBaseTime(started);\n  updated = BrnGame::BrnGameModule::ConstructUpdateSetFromFsm(this);\n  v5 = &this->gap8C3604[866556];\n  v271 = &this->gap8C3604[866556];\n  v281 = *&this->gap8C3604[866556];\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<CgsInput::InputIO::OutputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v6 = &this->gap8C3604[866560];\n  v295 = *&this->gap8C3604[866560];\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnNetwork::BrnNetworkModuleIO::OutputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v277 = *v6;\n  if ( !(CgsModule::IOBufferStack::CreateIOBuffer<BrnGameState::GameStateModuleIO::OutputBuffer>)() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v293 = *v6;\n  if ( !(CgsModule::IOBufferStack::CreateIOBuffer<BrnWorldIO::UpdateOutputBuffer>)() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v283 = *v5;\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnDirector::DirectorIO::InputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v291 = *v6;\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnSound::Module::Io::RootOutputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v279 = *v6;\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PreSim>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v289 = *v6;\n  if ( !(CgsModule::IOBufferStack::CreateIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PostSim>)() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v287 = *v6;\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnEffects::EffectsIO::OutputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v285 = *v6;\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnSound::Module::Io::RootPreUpdateOutputBuffer>() )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v7 = *&this->gap8C3604[866576];\n  v273 = *&this->gap8C3604[866572];\n  BrnGame::BrnGameModule::BridgeTimers(this, v284, 0, 0, 0);\n  CgsDev::PerfMonCpu::StopMonitor(this->field_996F30);\n  CgsDev::PerfMonCpu::StartMonitor(*&this->gap996F34[44]);\n  CgsModule::IOBuffer::LockForRead(v7);\n  BrnResource::GameDataIO::OutputBuffer::GetLive(v7);\n  CgsModule::IOBuffer::UnlockForRead(v7);\n  CgsDev::PerfMonCpu::StopMonitor(*&this->gap996F34[44]);\n  if ( !*&this->gap9A0622[14] )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpReusableLoadingScreenAllocator\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n      2008);\n    CgsDev::Assert::EndAssert();\n  }\n  v8 = CgsMemory::LinearMalloc::FreeAll(*&this->gap9A0622[14]);\n  v9 = BrnResource::GetAvailableMemory(v8);\n  if ( AvailableMemory != v9 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v10 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v11 = (sub_821F0E50)(v10, 2013);\n      v12 = CgsDev::StrStreamBase::operator__(v11, \":\");\n      v13 = CgsDev::StrStreamBase::operator__(\n              v12,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v14 = CgsDev::StrStreamBase::operator__(v13, \"] Available memory changed from \");\n      v15 = (sub_821F0EC8)(v14, AvailableMemory);\n      v16 = CgsDev::StrStreamBase::operator__(v15, \" to \");\n      v17 = (sub_821F0EC8)(v16, v9);\n      CgsDev::StrStreamBase::operator__(v17, \"\\n\");\n    }\n    AvailableMemory = v9;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2013);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v274 = BrnGame::BrnGameModule::DoUpdate_InputPreWorld(this, *v5, *v6, v282);\n  v18 = BrnResource::GetAvailableMemory(v274);\n  if ( AvailableMemory != v18 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v19 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v20 = (sub_821F0E50)(v19, 2021);\n      v21 = CgsDev::StrStreamBase::operator__(v20, \":\");\n      v22 = CgsDev::StrStreamBase::operator__(\n              v21,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v23 = CgsDev::StrStreamBase::operator__(v22, \"] Available memory changed from \");\n      v24 = (sub_821F0EC8)(v23, AvailableMemory);\n      v25 = CgsDev::StrStreamBase::operator__(v24, \" to \");\n      v26 = (sub_821F0EC8)(v25, v18);\n      CgsDev::StrStreamBase::operator__(v26, \"\\n\");\n    }\n    AvailableMemory = v18;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2021);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v27 = BrnGame::BrnGameModule::DoUpdate_NetworkPreSim(this, *v5, *v6, v282, v296, updated);\n  v28 = BrnResource::GetAvailableMemory(v27);\n  if ( AvailableMemory != v28 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v29 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v30 = (sub_821F0E50)(v29, 2033);\n      v31 = CgsDev::StrStreamBase::operator__(v30, \":\");\n      v32 = CgsDev::StrStreamBase::operator__(\n              v31,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v33 = CgsDev::StrStreamBase::operator__(v32, \"] Available memory changed from \");\n      v34 = (sub_821F0EC8)(v33, AvailableMemory);\n      v35 = CgsDev::StrStreamBase::operator__(v34, \" to \");\n      v36 = (sub_821F0EC8)(v35, v28);\n      CgsDev::StrStreamBase::operator__(v36, \"\\n\");\n    }\n    AvailableMemory = v28;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2033);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v37 = BrnGame::BrnGameModule::DoUpdate_GameStatePreWorld(this, *v271, *v6, v282, v296, v278, updated);\n  v38 = BrnResource::GetAvailableMemory(v37);\n  if ( AvailableMemory != v38 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v39 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v40 = (sub_821F0E50)(v39, 2048);\n      v41 = CgsDev::StrStreamBase::operator__(v40, \":\");\n      v42 = CgsDev::StrStreamBase::operator__(\n              v41,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v43 = CgsDev::StrStreamBase::operator__(v42, \"] Available memory changed from \");\n      v44 = (sub_821F0EC8)(v43, AvailableMemory);\n      v45 = CgsDev::StrStreamBase::operator__(v44, \" to \");\n      v46 = (sub_821F0EC8)(v45, v38);\n      CgsDev::StrStreamBase::operator__(v46, \"\\n\");\n    }\n    AvailableMemory = v38;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2048);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v47 = BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim(this, *v271, *v6, v278, v280, updated);\n  v48 = BrnResource::GetAvailableMemory(v47);\n  if ( AvailableMemory != v48 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v49 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v50 = (sub_821F0E50)(v49, 2059);\n      v51 = CgsDev::StrStreamBase::operator__(v50, \":\");\n      v52 = CgsDev::StrStreamBase::operator__(\n              v51,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v53 = CgsDev::StrStreamBase::operator__(v52, \"] Available memory changed from \");\n      v54 = (sub_821F0EC8)(v53, AvailableMemory);\n      v55 = CgsDev::StrStreamBase::operator__(v54, \" to \");\n      v56 = (sub_821F0EC8)(v55, v48);\n      CgsDev::StrStreamBase::operator__(v56, \"\\n\");\n    }\n    AvailableMemory = v48;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2059);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v275 = &this->gap9A0B3C[152];\n  v272 = &this->gap9A0B3C[156];\n  v57 = BrnGame::BrnGameModule::DoUpdate_GuiPreWorld(\n          this,\n          *v271,\n          *v6,\n          *&this->gap9A0B3C[156],\n          *&this->gap9A0B3C[152],\n          v273);\n  v58 = BrnResource::GetAvailableMemory(v57);\n  if ( AvailableMemory != v58 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v59 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v60 = (sub_821F0E50)(v59, 2070);\n      v61 = CgsDev::StrStreamBase::operator__(v60, \":\");\n      v62 = CgsDev::StrStreamBase::operator__(\n              v61,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v63 = CgsDev::StrStreamBase::operator__(v62, \"] Available memory changed from \");\n      v64 = (sub_821F0EC8)(v63, AvailableMemory);\n      v65 = CgsDev::StrStreamBase::operator__(v64, \" to \");\n      v66 = (sub_821F0EC8)(v65, v58);\n      CgsDev::StrStreamBase::operator__(v66, \"\\n\");\n    }\n    AvailableMemory = v58;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2070);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v67 = BrnGame::BrnGameModule::DoPreUpdate_Sound(this, *v6, v286, *&this->gap9A0B3C[144]);\n  v68 = BrnResource::GetAvailableMemory(v67);\n  if ( AvailableMemory != v68 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v69 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v70 = (sub_821F0E50)(v69, 2079);\n      v71 = CgsDev::StrStreamBase::operator__(v70, \":\");\n      v72 = CgsDev::StrStreamBase::operator__(\n              v71,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v73 = CgsDev::StrStreamBase::operator__(v72, \"] Available memory changed from \");\n      v74 = (sub_821F0EC8)(v73, AvailableMemory);\n      v75 = CgsDev::StrStreamBase::operator__(v74, \" to \");\n      v76 = (sub_821F0EC8)(v75, v68);\n      CgsDev::StrStreamBase::operator__(v76, \"\\n\");\n    }\n    AvailableMemory = v68;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2079);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v276 = &this->gap8C3604[866596];\n  CgsDev::PerfMonCpu::StartMonitor(*&this->gap8C3604[866596]);\n  v77 = BrnGame::BrnGameModule::ConstructUpdateSet(this, v278, v296, v282, *&this->gap9A0B3C[152], v280);\n  v78 = CgsDev::PerfMonCpu::StopMonitor(*&this->gap8C3604[866596]);\n  v79 = BrnResource::GetAvailableMemory(v78);\n  if ( AvailableMemory != v79 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v80 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v81 = (sub_821F0E50)(v80, 2094);\n      v82 = CgsDev::StrStreamBase::operator__(v81, \":\");\n      v83 = CgsDev::StrStreamBase::operator__(\n              v82,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v84 = CgsDev::StrStreamBase::operator__(v83, \"] Available memory changed from \");\n      v85 = (sub_821F0EC8)(v84, AvailableMemory);\n      v86 = CgsDev::StrStreamBase::operator__(v85, \" to \");\n      v87 = (sub_821F0EC8)(v86, v79);\n      CgsDev::StrStreamBase::operator__(v87, \"\\n\");\n    }\n    AvailableMemory = v79;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2094);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  LOWORD(v266) = v77;\n  HIWORD(v264) = HIWORD(v294);\n  v88 = BrnGame::BrnGameModule::DoUpdate_World(this, *v271, *v6, v282, v296, v278, *v272, v280);\n  v89 = BrnResource::GetAvailableMemory(v88);\n  if ( AvailableMemory != v89 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v90 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v91 = (sub_821F0E50)(v90, 2112);\n      v92 = CgsDev::StrStreamBase::operator__(v91, \":\");\n      v93 = CgsDev::StrStreamBase::operator__(\n              v92,\n              \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v94 = CgsDev::StrStreamBase::operator__(v93, \"] Available memory changed from \");\n      v95 = (sub_821F0EC8)(v94, AvailableMemory);\n      v96 = CgsDev::StrStreamBase::operator__(v95, \" to \");\n      v97 = (sub_821F0EC8)(v96, v89);\n      CgsDev::StrStreamBase::operator__(v97, \"\\n\");\n    }\n    AvailableMemory = v89;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2112);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v98 = BrnGame::BrnGameModule::DoUpdate_InputPostWorld(this, *v271, *v6, v278, v294, v274);\n  v99 = BrnResource::GetAvailableMemory(v98);\n  if ( AvailableMemory != v99 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v100 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v101 = (sub_821F0E50)(v100, 2123);\n      v102 = CgsDev::StrStreamBase::operator__(v101, \":\");\n      v103 = CgsDev::StrStreamBase::operator__(\n               v102,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v104 = CgsDev::StrStreamBase::operator__(v103, \"] Available memory changed from \");\n      v105 = (sub_821F0EC8)(v104, AvailableMemory);\n      v106 = CgsDev::StrStreamBase::operator__(v105, \" to \");\n      v107 = (sub_821F0EC8)(v106, v99);\n      CgsDev::StrStreamBase::operator__(v107, \"\\n\");\n    }\n    AvailableMemory = v99;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2123);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v108 = &this->gap9A0B3C[160];\n  LOWORD(v264) = v77;\n  v109 = BrnGame::BrnGameModule::DoUpdate_Director(\n           this,\n           *v271,\n           *v6,\n           v284,\n           v282,\n           v278,\n           v294,\n           v280,\n           v244,\n           v245,\n           v246,\n           v247,\n           v248,\n           v249,\n           v250,\n           v251,\n           v252,\n           v253,\n           v254,\n           v255,\n           v256,\n           v257,\n           v258,\n           v259,\n           v260,\n           v261,\n           v262,\n           *&this->gap9A0B3C[160],\n           v263,\n           v264,\n           v265,\n           v266,\n           v267,\n           v268,\n           v269,\n           v270);\n  v110 = BrnResource::GetAvailableMemory(v109);\n  v111 = v110;\n  if ( AvailableMemory != v110 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v112 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v113 = (sub_821F0E50)(v112, 2138);\n      v114 = CgsDev::StrStreamBase::operator__(v113, \":\");\n      v115 = CgsDev::StrStreamBase::operator__(\n               v114,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v116 = CgsDev::StrStreamBase::operator__(v115, \"] Available memory changed from \");\n      v117 = (sub_821F0EC8)(v116, AvailableMemory);\n      v118 = CgsDev::StrStreamBase::operator__(v117, \" to \");\n      v119 = (sub_821F0EC8)(v118, v111);\n      v110 = CgsDev::StrStreamBase::operator__(v119, \"\\n\");\n    }\n    AvailableMemory = v111;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2138);\n      v110 = CgsDev::Assert::EndAssert();\n    }\n  }\n  if ( !this->gap9A0B3C[92] )\n    v110 = BrnGame::BrnGameModule::DoUpdate_GUI(\n             this,\n             *v271,\n             *v6,\n             *&this->gap9A0B3C[144],\n             *&this->gap9A0B3C[148],\n             v282,\n             v296,\n             v278);\n  v120 = BrnResource::GetAvailableMemory(v110);\n  if ( AvailableMemory != v120 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v121 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v122 = (sub_821F0E50)(v121, 2166);\n      v123 = CgsDev::StrStreamBase::operator__(v122, \":\");\n      v124 = CgsDev::StrStreamBase::operator__(\n               v123,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v125 = CgsDev::StrStreamBase::operator__(v124, \"] Available memory changed from \");\n      v126 = (sub_821F0EC8)(v125, AvailableMemory);\n      v127 = CgsDev::StrStreamBase::operator__(v126, \" to \");\n      v128 = (sub_821F0EC8)(v127, v120);\n      CgsDev::StrStreamBase::operator__(v128, \"\\n\");\n    }\n    AvailableMemory = v120;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2166);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v129 = BrnGame::BrnGameModule::DoUpdate_DirectorPostGUI(this, *v271, *v6, v284, *v272, *v108);\n  v130 = BrnResource::GetAvailableMemory(v129);\n  if ( AvailableMemory != v130 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v131 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v132 = (sub_821F0E50)(v131, 2177);\n      v133 = CgsDev::StrStreamBase::operator__(v132, \":\");\n      v134 = CgsDev::StrStreamBase::operator__(\n               v133,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v135 = CgsDev::StrStreamBase::operator__(v134, \"] Available memory changed from \");\n      v136 = (sub_821F0EC8)(v135, AvailableMemory);\n      v137 = CgsDev::StrStreamBase::operator__(v136, \" to \");\n      v138 = (sub_821F0EC8)(v137, v130);\n      CgsDev::StrStreamBase::operator__(v138, \"\\n\");\n    }\n    AvailableMemory = v130;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2177);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v139 = BrnGame::BrnGameModule::DoUpdate_Effects(this, *v271, *v6, v282, v278, v294, *v108, v280);\n  v140 = BrnResource::GetAvailableMemory(v139);\n  if ( AvailableMemory != v140 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v141 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v142 = (sub_821F0E50)(v141, 2194);\n      v143 = CgsDev::StrStreamBase::operator__(v142, \":\");\n      v144 = CgsDev::StrStreamBase::operator__(\n               v143,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v145 = CgsDev::StrStreamBase::operator__(v144, \"] Available memory changed from \");\n      v146 = (sub_821F0EC8)(v145, AvailableMemory);\n      v147 = CgsDev::StrStreamBase::operator__(v146, \" to \");\n      v148 = (sub_821F0EC8)(v147, v140);\n      CgsDev::StrStreamBase::operator__(v148, \"\\n\");\n    }\n    AvailableMemory = v140;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2194);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v149 = BrnGame::BrnGameModule::DoUpdate_Sound(this, *v271, *v6, v278, v294, *v108, v280, v292);\n  v150 = BrnResource::GetAvailableMemory(v149);\n  if ( AvailableMemory != v150 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v151 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v152 = (sub_821F0E50)(v151, 2210);\n      v153 = CgsDev::StrStreamBase::operator__(v152, \":\");\n      v154 = CgsDev::StrStreamBase::operator__(\n               v153,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v155 = CgsDev::StrStreamBase::operator__(v154, \"] Available memory changed from \");\n      v156 = (sub_821F0EC8)(v155, AvailableMemory);\n      v157 = CgsDev::StrStreamBase::operator__(v156, \" to \");\n      v158 = (sub_821F0EC8)(v157, v150);\n      CgsDev::StrStreamBase::operator__(v158, \"\\n\");\n    }\n    AvailableMemory = v150;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2210);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v159 = BrnGame::BrnGameModule::DoUpdate_ReplaysPostSim(this, *v271, *v6, v294, v288, v292, *v108, *v272);\n  v160 = BrnResource::GetAvailableMemory(v159);\n  if ( AvailableMemory != v160 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v161 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v162 = (sub_821F0E50)(v161, 2225);\n      v163 = CgsDev::StrStreamBase::operator__(v162, \":\");\n      v164 = CgsDev::StrStreamBase::operator__(\n               v163,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v165 = CgsDev::StrStreamBase::operator__(v164, \"] Available memory changed from \");\n      v166 = (sub_821F0EC8)(v165, AvailableMemory);\n      v167 = CgsDev::StrStreamBase::operator__(v166, \" to \");\n      v168 = (sub_821F0EC8)(v167, v160);\n      CgsDev::StrStreamBase::operator__(v168, \"\\n\");\n    }\n    AvailableMemory = v160;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2225);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v169 = BrnGame::BrnGameModule::DoUpdate_GameStatePostWorld(this, *v271, *v6, v282, v294, *v272, v290, *v108);\n  v170 = BrnResource::GetAvailableMemory(v169);\n  if ( AvailableMemory != v170 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v171 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v172 = (sub_821F0E50)(v171, 2239);\n      v173 = CgsDev::StrStreamBase::operator__(v172, \":\");\n      v174 = CgsDev::StrStreamBase::operator__(\n               v173,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v175 = CgsDev::StrStreamBase::operator__(v174, \"] Available memory changed from \");\n      v176 = (sub_821F0EC8)(v175, AvailableMemory);\n      v177 = CgsDev::StrStreamBase::operator__(v176, \" to \");\n      v178 = (sub_821F0EC8)(v177, v170);\n      CgsDev::StrStreamBase::operator__(v178, \"\\n\");\n    }\n    AvailableMemory = v170;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2239);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v179 = BrnGame::BrnGameModule::DoUpdate_NetworkPostSim(this, *v271, *v6, v278, v294, *v272, v77);\n  v180 = BrnResource::GetAvailableMemory(v179);\n  if ( AvailableMemory != v180 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v181 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v182 = (sub_821F0E50)(v181, 2253);\n      v183 = CgsDev::StrStreamBase::operator__(v182, \":\");\n      v184 = CgsDev::StrStreamBase::operator__(\n               v183,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v185 = CgsDev::StrStreamBase::operator__(v184, \"] Available memory changed from \");\n      v186 = (sub_821F0EC8)(v185, AvailableMemory);\n      v187 = CgsDev::StrStreamBase::operator__(v186, \" to \");\n      v188 = (sub_821F0EC8)(v187, v180);\n      CgsDev::StrStreamBase::operator__(v188, \"\\n\");\n    }\n    AvailableMemory = v180;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2253);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  CgsDev::PerfMonCpu::StartMonitor(*v276);\n  v189 = BrnGame::BrnGameModule::UpdateTimers(this, v278, *v108);\n  v190 = BrnResource::GetAvailableMemory(v189);\n  if ( AvailableMemory != v190 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v191 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v192 = (sub_821F0E50)(v191, 2260);\n      v193 = CgsDev::StrStreamBase::operator__(v192, \":\");\n      v194 = CgsDev::StrStreamBase::operator__(\n               v193,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v195 = CgsDev::StrStreamBase::operator__(v194, \"] Available memory changed from \");\n      v196 = (sub_821F0EC8)(v195, AvailableMemory);\n      v197 = CgsDev::StrStreamBase::operator__(v196, \" to \");\n      v198 = (sub_821F0EC8)(v197, v190);\n      CgsDev::StrStreamBase::operator__(v198, \"\\n\");\n    }\n    AvailableMemory = v190;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2260);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  v199 = BrnGame::BrnGameModule::UpdateFrameRateType(this, v278);\n  v200 = BrnResource::GetAvailableMemory(v199);\n  if ( AvailableMemory != v200 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v201 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v202 = (sub_821F0E50)(v201, 2266);\n      v203 = CgsDev::StrStreamBase::operator__(v202, \":\");\n      v204 = CgsDev::StrStreamBase::operator__(\n               v203,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v205 = CgsDev::StrStreamBase::operator__(v204, \"] Available memory changed from \");\n      v206 = (sub_821F0EC8)(v205, AvailableMemory);\n      v207 = CgsDev::StrStreamBase::operator__(v206, \" to \");\n      v208 = (sub_821F0EC8)(v207, v200);\n      CgsDev::StrStreamBase::operator__(v208, \"\\n\");\n    }\n    AvailableMemory = v200;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2266);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  sub_823B7B80(v273, v278, v294, *v108, *v275, v292, *v272, v280);\n  BrnGame::BrnGameModule::BridgeGuiToResource(this, v273, *v275, *v272);\n  Resour = BrnWorldIO::UpdateOutputBuffer::GetResour(v294);\n  BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(v273, Resour);\n  v210 = BrnWorldIO::UpdateOutputBuffer(v294);\n  v211 = BrnResource::GameDataIO::InputBuffe(v273);\n  CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(v211, v210);\n  v212 = *v108;\n  v213 = BrnDirector::DirectorIO::Output(*v108);\n  v214 = BrnResource::GameDataIO::InputBuffe(v273);\n  CgsModule::VariableEventQueue<32768,16>::Append<512,16>(v214, v213);\n  v215 = BrnDirector::DirectorIO::OutputBuffer::Get(v212);\n  BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<512>(v273, v215);\n  v216 = BrnGameState::GameStateModuleIO::OutputBu(v278);\n  BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<3072>(v273, v216);\n  v217 = BrnSound::Module::Io::RootOutp(v292);\n  v218 = BrnResource::GameDataIO::InputBuffe(v273);\n  CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(v218, v217);\n  v219 = BrnSound::Module::Io::RootOutputBuffer::G(v292);\n  BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(v273, v219);\n  v220 = BrnReplays::ReplayIO::OutputBuffer_PreSim(v280);\n  BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<1024>(v273, v220);\n  v221 = sub_823B7D20(v273, v278, v294, *v108, *v275, v292, *v272, v280);\n  v222 = BrnResource::GetAvailableMemory(v221);\n  if ( AvailableMemory != v222 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v223 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v224 = (sub_821F0E50)(v223, 2281);\n      v225 = CgsDev::StrStreamBase::operator__(v224, \":\");\n      v226 = CgsDev::StrStreamBase::operator__(\n               v225,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v227 = CgsDev::StrStreamBase::operator__(v226, \"] Available memory changed from \");\n      v228 = (sub_821F0EC8)(v227, AvailableMemory);\n      v229 = CgsDev::StrStreamBase::operator__(v228, \" to \");\n      v230 = (sub_821F0EC8)(v229, v222);\n      CgsDev::StrStreamBase::operator__(v230, \"\\n\");\n    }\n    AvailableMemory = v222;\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2281);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  CgsModule::IOBuffer::LockForRead(v282);\n  BrnGame::BrnGameModule::BridgeInputToGame(this, v282);\n  v231 = CgsModule::IOBuffer::UnlockForRead(v282);\n  SystemTimerBaseTime = CgsSystem::GetSystemTimerBaseTime(v231);\n  CgsSystem::GetSystemTimerFrequency(SystemTimerBaseTime);\n  v233 = CgsDev::PerfMonCpu::StopMonitor(*v276);\n  v234 = BrnResource::GetAvailableMemory(v233);\n  if ( AvailableMemory != v234 )\n  {\n    if ( (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n    {\n      v235 = CgsDev::StrStreamBase::operator__(CgsDev::Log::gpDebugPrint, \"[\");\n      v236 = (sub_821F0E50)(v235, 2308);\n      v237 = CgsDev::StrStreamBase::operator__(v236, \":\");\n      v238 = CgsDev::StrStreamBase::operator__(\n               v237,\n               \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\");\n      v239 = CgsDev::StrStreamBase::operator__(v238, \"] Available memory changed from \");\n      v240 = (sub_821F0EC8)(v239, AvailableMemory);\n      v241 = CgsDev::StrStreamBase::operator__(v240, \" to \");\n      v242 = (sub_821F0EC8)(v241, v234);\n      CgsDev::StrStreamBase::operator__(v242, \"\\n\");\n    }\n    if ( byte_82FFA89C )\n    {\n      CgsDev::Assert::BeginAssert();\n      CgsDev::Assert::FireAssert(\n        \"Memory check failed\",\n        \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/BrnGameModule.cpp\",\n        2308);\n      CgsDev::Assert::EndAssert();\n    }\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnSound::Module::Io::RootPreUpdateOutputBuffer>(v285, &v286) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnEffects::EffectsIO::OutputBuffer>(v287, &v288) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PostSim>(v289, &v290) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PreSim>(v279, &v280) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnSound::Module::Io::RootOutputBuffer>(v291, &v292) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnDirector::DirectorIO::InputBuffer>(v283, &v284) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnWorldIO::UpdateOutputBuffer>(v293, &v294) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnGameState::GameStateModuleIO::OutputBuffer>(v277, &v278) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !CgsModule::IOBufferStack::DestroyIOBuffer<BrnNetwork::BrnNetworkModuleIO::OutputBuffer>(v295, &v296) )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    CgsDev::Assert::EndAssert();\n  }\n  result = CgsModule::IOBufferStack::DestroyIOBuffer<CgsInput::InputIO::OutputBuffer>(v281, &v282);\n  if ( !result )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    result = CgsDev::Assert::EndAssert();\n  }\n  _restgprlr();\n  return result;\n}\n",
+  "assembly": "0x823F0AF8  mflr      r12\n0x823F0AFC  bl        __savegprlr_14\n0x823F0B00  stwu      r1, back_chain(r1)\n0x823F0B04  mr        r25, r3\n0x823F0B08  bl        BrnResource__GetAvailableMemory\n0x823F0B0C  addis     r29, r25, 0x99\n0x823F0B10  mr        r31, r3\n0x823F0B14  addi      r29, r29, 0x6F30\n0x823F0B18  lwz       r3, 0(r29)\n0x823F0B1C  bl        CgsDev__PerfMonCpu__StartMonitor\n0x823F0B20  bl        CgsSystem__GetSystemTimerBaseTime\n0x823F0B24  mr        r3, r25\n0x823F0B28  bl        BrnGame__BrnGameModule__ConstructUpdateSetFromFsm\n0x823F0B2C  addis     r23, r25, 0x99\n0x823F0B30  mr        r28, r3\n0x823F0B34  addi      r23, r23, 0x6F00\n0x823F0B38  lis       r11, aInput_0@ha\n0x823F0B3C  addi      r4, r1, 0x1C0+var_DC\n0x823F0B40  addi      r5, r11, aInput_0@l# \"Input\"\n0x823F0B44  lwz       r3, 0(r23)\n0x823F0B48  stw       r23, 0x1C0+var_118(r1)\n0x823F0B4C  stw       r3, 0x1C0+var_E0(r1)\n0x823F0B50  bl        ___CreateIOBuffer_VOutputBuffer_InputIO_CgsInput___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_InputIO_CgsInput__PB\n0x823F0B54  clrlwi    r11, r3, 24\n0x823F0B58  cmplwi    cr6, r11, 0\n0x823F0B5C  lis       r11, aMpstackCreatei@ha\n0x823F0B60  addi      r30, r11, aMpstackCreatei@l# \"mpStack->CreateIOBuffer( &mpBuffer, lpc\"...\n0x823F0B64  lis       r11, aGamesharedGame_16@ha\n0x823F0B68  addi      r27, r11, aGamesharedGame_16@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Mo\"...\n0x823F0B6C  stw       r27, 0x1C0+var_FC(r1)\n0x823F0B70  bne       cr6, loc_823F0B8C\n0x823F0B74  bl        CgsDev__Assert__BeginAssert\n0x823F0B78  li        r5, 0x34 # '4'\n0x823F0B7C  mr        r4, r27\n0x823F0B80  mr        r3, r30\n0x823F0B84  bl        CgsDev__Assert__FireAssert\n0x823F0B88  bl        CgsDev__Assert__EndAssert\n0x823F0B8C  addis     r14, r25, 0x99\n0x823F0B90  lis       r11, aNetwork@ha\n0x823F0B94  addi      r14, r14, 0x6F04\n0x823F0B98  addi      r5, r11, aNetwork@l# \"Network\"\n0x823F0B9C  addi      r4, r1, 0x1C0+var_A4\n0x823F0BA0  lwz       r3, 0(r14)\n0x823F0BA4  stw       r3, 0x1C0+var_A8(r1)\n0x823F0BA8  bl        ___CreateIOBuffer_VOutputBuffer_BrnNetworkModuleIO_BrnNetwork___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_BrnNetw\n0x823F0BAC  clrlwi    r11, r3, 24\n0x823F0BB0  cmplwi    cr6, r11, 0\n0x823F0BB4  bne       cr6, loc_823F0BD0\n0x823F0BB8  bl        CgsDev__Assert__BeginAssert\n0x823F0BBC  li        r5, 0x34 # '4'\n0x823F0BC0  mr        r4, r27\n0x823F0BC4  mr        r3, r30\n0x823F0BC8  bl        CgsDev__Assert__FireAssert\n0x823F0BCC  bl        CgsDev__Assert__EndAssert\n0x823F0BD0  lwz       r3, 0(r14)\n0x823F0BD4  lis       r11, aGamestate@ha\n0x823F0BD8  addi      r4, r1, 0x1C0+var_EC\n0x823F0BDC  addi      r5, r11, aGamestate@l# \"GameState\"\n0x823F0BE0  stw       r3, 0x1C0+var_F0(r1)\n0x823F0BE4  bl        ___CreateIOBuffer_VOutputBuffer_GameStateModuleIO_BrnGameState___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_GameSt\n0x823F0BE8  clrlwi    r11, r3, 24\n0x823F0BEC  cmplwi    cr6, r11, 0\n0x823F0BF0  bne       cr6, loc_823F0C0C\n0x823F0BF4  bl        CgsDev__Assert__BeginAssert\n0x823F0BF8  li        r5, 0x34 # '4'\n0x823F0BFC  mr        r4, r27\n0x823F0C00  mr        r3, r30\n0x823F0C04  bl        CgsDev__Assert__FireAssert\n0x823F0C08  bl        CgsDev__Assert__EndAssert\n0x823F0C0C  lwz       r3, 0(r14)\n0x823F0C10  lis       r11, aWorld@ha\n0x823F0C14  addi      r4, r1, 0x1C0+var_AC\n0x823F0C18  addi      r5, r11, aWorld@l# \"World\"\n0x823F0C1C  stw       r3, 0x1C0+var_B0(r1)\n0x823F0C20  bl        ___CreateIOBuffer_VUpdateOutputBuffer_BrnWorldIO___IOBufferStack_CgsModule__QAA_NPAPAVUpdateOutputBuffer_BrnWorldIO__PB\n0x823F0C24  clrlwi    r11, r3, 24\n0x823F0C28  cmplwi    cr6, r11, 0\n0x823F0C2C  bne       cr6, loc_823F0C48\n0x823F0C30  bl        CgsDev__Assert__BeginAssert\n0x823F0C34  li        r5, 0x34 # '4'\n0x823F0C38  mr        r4, r27\n0x823F0C3C  mr        r3, r30\n0x823F0C40  bl        CgsDev__Assert__FireAssert\n0x823F0C44  bl        CgsDev__Assert__EndAssert\n0x823F0C48  lwz       r3, 0(r23)\n0x823F0C4C  lis       r11, aDirector@ha\n0x823F0C50  addi      r4, r1, 0x1C0+var_D4\n0x823F0C54  addi      r5, r11, aDirector@l# \"Director\"\n0x823F0C58  stw       r3, 0x1C0+var_D8(r1)\n0x823F0C5C  bl        ___CreateIOBuffer_VInputBuffer_DirectorIO_BrnDirector___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_DirectorIO_BrnDi\n0x823F0C60  clrlwi    r11, r3, 24\n0x823F0C64  cmplwi    cr6, r11, 0\n0x823F0C68  bne       cr6, loc_823F0C84\n0x823F0C6C  bl        CgsDev__Assert__BeginAssert\n0x823F0C70  li        r5, 0x34 # '4'\n0x823F0C74  mr        r4, r27\n0x823F0C78  mr        r3, r30\n0x823F0C7C  bl        CgsDev__Assert__FireAssert\n0x823F0C80  bl        CgsDev__Assert__EndAssert\n0x823F0C84  lwz       r3, 0(r14)\n0x823F0C88  lis       r11, aSound@ha\n0x823F0C8C  addi      r4, r1, 0x1C0+var_B4\n0x823F0C90  addi      r5, r11, aSound@l# \"Sound\"\n0x823F0C94  stw       r3, 0x1C0+var_B8(r1)\n0x823F0C98  bl        ___CreateIOBuffer_VRootOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootOutputBuffer_Io_Module_\n0x823F0C9C  clrlwi    r11, r3, 24\n0x823F0CA0  cmplwi    cr6, r11, 0\n0x823F0CA4  bne       cr6, loc_823F0CC0\n0x823F0CA8  bl        CgsDev__Assert__BeginAssert\n0x823F0CAC  li        r5, 0x34 # '4'\n0x823F0CB0  mr        r4, r27\n0x823F0CB4  mr        r3, r30\n0x823F0CB8  bl        CgsDev__Assert__FireAssert\n0x823F0CBC  bl        CgsDev__Assert__EndAssert\n0x823F0CC0  lwz       r3, 0(r14)\n0x823F0CC4  lis       r11, aReplayspresim@ha\n0x823F0CC8  addi      r4, r1, 0x1C0+var_E4\n0x823F0CCC  addi      r5, r11, aReplayspresim@l# \"ReplaysPreSim\"\n0x823F0CD0  stw       r3, 0x1C0+var_E8(r1)\n0x823F0CD4  bl        ___CreateIOBuffer_VOutputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PreSim_Rep\n0x823F0CD8  clrlwi    r11, r3, 24\n0x823F0CDC  cmplwi    cr6, r11, 0\n0x823F0CE0  bne       cr6, loc_823F0CFC\n0x823F0CE4  bl        CgsDev__Assert__BeginAssert\n0x823F0CE8  li        r5, 0x34 # '4'\n0x823F0CEC  mr        r4, r27\n0x823F0CF0  mr        r3, r30\n0x823F0CF4  bl        CgsDev__Assert__FireAssert\n0x823F0CF8  bl        CgsDev__Assert__EndAssert\n0x823F0CFC  lwz       r3, 0(r14)\n0x823F0D00  lis       r11, aReplayspostsim@ha\n0x823F0D04  addi      r4, r1, 0x1C0+var_BC\n0x823F0D08  addi      r5, r11, aReplayspostsim@l# \"ReplaysPostSim\"\n0x823F0D0C  stw       r3, 0x1C0+var_C0(r1)\n0x823F0D10  bl        ___CreateIOBuffer_VOutputBuffer_PostSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PostSim_R\n0x823F0D14  clrlwi    r11, r3, 24\n0x823F0D18  cmplwi    cr6, r11, 0\n0x823F0D1C  bne       cr6, loc_823F0D38\n0x823F0D20  bl        CgsDev__Assert__BeginAssert\n0x823F0D24  li        r5, 0x34 # '4'\n0x823F0D28  mr        r4, r27\n0x823F0D2C  mr        r3, r30\n0x823F0D30  bl        CgsDev__Assert__FireAssert\n0x823F0D34  bl        CgsDev__Assert__EndAssert\n0x823F0D38  lwz       r3, 0(r14)\n0x823F0D3C  lis       r11, aEffects_0@ha\n0x823F0D40  addi      r4, r1, 0x1C0+var_C4\n0x823F0D44  addi      r5, r11, aEffects_0@l# \"Effects\"\n0x823F0D48  stw       r3, 0x1C0+var_C8(r1)\n0x823F0D4C  bl        ___CreateIOBuffer_VOutputBuffer_EffectsIO_BrnEffects___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_EffectsIO_BrnEff\n0x823F0D50  clrlwi    r11, r3, 24\n0x823F0D54  cmplwi    cr6, r11, 0\n0x823F0D58  bne       cr6, loc_823F0D74\n0x823F0D5C  bl        CgsDev__Assert__BeginAssert\n0x823F0D60  li        r5, 0x34 # '4'\n0x823F0D64  mr        r4, r27\n0x823F0D68  mr        r3, r30\n0x823F0D6C  bl        CgsDev__Assert__FireAssert\n0x823F0D70  bl        CgsDev__Assert__EndAssert\n0x823F0D74  lwz       r3, 0(r14)\n0x823F0D78  lis       r11, aSoundrootpreup@ha\n0x823F0D7C  addi      r4, r1, 0x1C0+var_CC\n0x823F0D80  addi      r5, r11, aSoundrootpreup@l# \"SoundRootPreUpdateOutput\"\n0x823F0D84  stw       r3, 0x1C0+var_D0(r1)\n0x823F0D88  bl        ___CreateIOBuffer_VRootPreUpdateOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootPreUpdateOutpu\n0x823F0D8C  clrlwi    r11, r3, 24\n0x823F0D90  cmplwi    cr6, r11, 0\n0x823F0D94  bne       cr6, loc_823F0DB0\n0x823F0D98  bl        CgsDev__Assert__BeginAssert\n0x823F0D9C  li        r5, 0x34 # '4'\n0x823F0DA0  mr        r4, r27\n0x823F0DA4  mr        r3, r30\n0x823F0DA8  bl        CgsDev__Assert__FireAssert\n0x823F0DAC  bl        CgsDev__Assert__EndAssert\n0x823F0DB0  lis       r11, 0x99\n0x823F0DB4  lwz       r4, 0x1C0+var_D4(r1)\n0x823F0DB8  lis       r10, 0x99\n0x823F0DBC  ori       r11, r11, 0x6F10 # 0x996F10\n0x823F0DC0  ori       r10, r10, 0x6F14 # 0x996F14\n0x823F0DC4  li        r7, 0\n0x823F0DC8  li        r6, 0\n0x823F0DCC  li        r5, 0\n0x823F0DD0  lwzx      r11, r25, r11\n0x823F0DD4  mr        r3, r25\n0x823F0DD8  lwzx      r27, r25, r10\n0x823F0DDC  stw       r11, 0x1C0+var_110(r1)\n0x823F0DE0  stw       r27, 0x1C0+var_F8(r1)\n0x823F0DE4  bl        BrnGame__BrnGameModule__BridgeTimers\n0x823F0DE8  lwz       r3, 0(r29)\n0x823F0DEC  bl        CgsDev__PerfMonCpu__StopMonitor\n0x823F0DF0  addis     r30, r25, 0x99\n0x823F0DF4  addi      r30, r30, 0x6F60\n0x823F0DF8  lwz       r3, 0(r30)\n0x823F0DFC  bl        CgsDev__PerfMonCpu__StartMonitor\n0x823F0E00  mr        r3, r27\n0x823F0E04  bl        CgsModule__IOBuffer__LockForRead\n0x823F0E08  mr        r3, r27\n0x823F0E0C  bl        BrnResource__GameDataIO__OutputBuffer__GetLive\n0x823F0E10  mr        r11, r3\n0x823F0E14  mr        r3, r27\n0x823F0E18  lbz       r11, 0(r11)\n0x823F0E1C  stb       r11, 0x1C0+var_120(r1)\n0x823F0E20  bl        CgsModule__IOBuffer__UnlockForRead\n0x823F0E24  lwz       r3, 0(r30)\n0x823F0E28  bl        CgsDev__PerfMonCpu__StopMonitor\n0x823F0E2C  addis     r30, r25, 0x9A\n0x823F0E30  addi      r30, r30, 0x630\n0x823F0E34  lwz       r11, 0(r30)\n0x823F0E38  cmplwi    cr6, r11, 0\n0x823F0E3C  lis       r11, aDP4B5MainBurno_131@ha\n0x823F0E40  addi      r24, r11, aDP4B5MainBurno_131@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x823F0E44  bne       cr6, loc_823F0E64\n0x823F0E48  bl        CgsDev__Assert__BeginAssert\n0x823F0E4C  lis       r11, aMpreusableload@ha\n0x823F0E50  li        r5, 0x7D8\n0x823F0E54  addi      r3, r11, aMpreusableload@l# \"mpReusableLoadingScreenAllocator\"\n0x823F0E58  mr        r4, r24\n0x823F0E5C  bl        CgsDev__Assert__FireAssert\n0x823F0E60  bl        CgsDev__Assert__EndAssert\n0x823F0E64  lwz       r3, 0(r30)\n0x823F0E68  bl        CgsMemory__LinearMalloc__FreeAll\n0x823F0E6C  bl        BrnResource__GetAvailableMemory\n0x823F0E70  lis       r11, asc_82001CC4@ha\n0x823F0E74  lis       r15, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F0E78  addi      r22, r11, asc_82001CC4@l# \"\\n\"\n0x823F0E7C  lis       r11, aTo_0@ha\n0x823F0E80  mr        r30, r3\n0x823F0E84  addi      r21, r11, aTo_0@l# \" to \"\n0x823F0E88  lis       r11, aAvailableMemor@ha\n0x823F0E8C  stw       r15, 0x1C0+var_10C(r1)\n0x823F0E90  cmplw     cr6, r31, r30\n0x823F0E94  addi      r20, r11, aAvailableMemor@l# \"] Available memory changed from \"\n0x823F0E98  lis       r11, asc_820084F8@ha\n0x823F0E9C  lis       r27, byte_82FFA89C@ha\n0x823F0EA0  addi      r19, r11, asc_820084F8@l# \":\"\n0x823F0EA4  lis       r11, asc_820187DC@ha\n0x823F0EA8  lis       r17, CgsDev__Log__gpDebugPrint@ha\n0x823F0EAC  addi      r18, r11, asc_820187DC@l# \"[\"\n0x823F0EB0  lis       r11, aMemoryCheckFai@ha\n0x823F0EB4  addi      r29, r11, aMemoryCheckFai@l# \"Memory check failed\"\n0x823F0EB8  stw       r29, 0x1C0+var_11C(r1)\n0x823F0EBC  beq       cr6, loc_823F0F44\n0x823F0EC0  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F0EC4  clrldi    r11, r11, 63\n0x823F0EC8  cmpldi    cr6, r11, 0\n0x823F0ECC  beq       cr6, loc_823F0F1C\n0x823F0ED0  mr        r4, r18\n0x823F0ED4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F0ED8  bl        CgsDev__StrStreamBase__operator__\n0x823F0EDC  li        r4, 0x7DD\n0x823F0EE0  bl        sub_821F0E50\n0x823F0EE4  mr        r4, r19\n0x823F0EE8  bl        CgsDev__StrStreamBase__operator__\n0x823F0EEC  mr        r4, r24\n0x823F0EF0  bl        CgsDev__StrStreamBase__operator__\n0x823F0EF4  mr        r4, r20\n0x823F0EF8  bl        CgsDev__StrStreamBase__operator__\n0x823F0EFC  mr        r4, r31\n0x823F0F00  bl        sub_821F0EC8\n0x823F0F04  mr        r4, r21\n0x823F0F08  bl        CgsDev__StrStreamBase__operator__\n0x823F0F0C  mr        r4, r30\n0x823F0F10  bl        sub_821F0EC8\n0x823F0F14  mr        r4, r22\n0x823F0F18  bl        CgsDev__StrStreamBase__operator__\n0x823F0F1C  lbz       r11, byte_82FFA89C@l(r27)\n0x823F0F20  mr        r31, r30\n0x823F0F24  cmplwi    cr6, r11, 0\n0x823F0F28  beq       cr6, loc_823F0F44\n0x823F0F2C  bl        CgsDev__Assert__BeginAssert\n0x823F0F30  li        r5, 0x7DD\n0x823F0F34  mr        r4, r24\n0x823F0F38  mr        r3, r29\n0x823F0F3C  bl        CgsDev__Assert__FireAssert\n0x823F0F40  bl        CgsDev__Assert__EndAssert\n0x823F0F44  lwz       r26, 0x1C0+var_DC(r1)\n0x823F0F48  mr        r3, r25\n0x823F0F4C  lwz       r5, 0(r14)\n0x823F0F50  mr        r6, r26\n0x823F0F54  lwz       r4, 0(r23)\n0x823F0F58  bl        BrnGame__BrnGameModule__DoUpdate_InputPreWorld\n0x823F0F5C  stw       r3, 0x1C0+var_108(r1)\n0x823F0F60  bl        BrnResource__GetAvailableMemory\n0x823F0F64  mr        r30, r3\n0x823F0F68  cmplw     cr6, r31, r30\n0x823F0F6C  beq       cr6, loc_823F0FF4\n0x823F0F70  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F0F74  clrldi    r11, r11, 63\n0x823F0F78  cmpldi    cr6, r11, 0\n0x823F0F7C  beq       cr6, loc_823F0FCC\n0x823F0F80  mr        r4, r18\n0x823F0F84  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F0F88  bl        CgsDev__StrStreamBase__operator__\n0x823F0F8C  li        r4, 0x7E5\n0x823F0F90  bl        sub_821F0E50\n0x823F0F94  mr        r4, r19\n0x823F0F98  bl        CgsDev__StrStreamBase__operator__\n0x823F0F9C  mr        r4, r24\n0x823F0FA0  bl        CgsDev__StrStreamBase__operator__\n0x823F0FA4  mr        r4, r20\n0x823F0FA8  bl        CgsDev__StrStreamBase__operator__\n0x823F0FAC  mr        r4, r31\n0x823F0FB0  bl        sub_821F0EC8\n0x823F0FB4  mr        r4, r21\n0x823F0FB8  bl        CgsDev__StrStreamBase__operator__\n0x823F0FBC  mr        r4, r30\n0x823F0FC0  bl        sub_821F0EC8\n0x823F0FC4  mr        r4, r22\n0x823F0FC8  bl        CgsDev__StrStreamBase__operator__\n0x823F0FCC  lbz       r11, byte_82FFA89C@l(r27)\n0x823F0FD0  mr        r31, r30\n0x823F0FD4  cmplwi    cr6, r11, 0\n0x823F0FD8  beq       cr6, loc_823F0FF4\n0x823F0FDC  bl        CgsDev__Assert__BeginAssert\n0x823F0FE0  li        r5, 0x7E5\n0x823F0FE4  mr        r4, r24\n0x823F0FE8  mr        r3, r29\n0x823F0FEC  bl        CgsDev__Assert__FireAssert\n0x823F0FF0  bl        CgsDev__Assert__EndAssert\n0x823F0FF4  lwz       r16, 0x1C0+var_A4(r1)\n0x823F0FF8  mr        r8, r28\n0x823F0FFC  mr        r6, r26\n0x823F1000  lwz       r5, 0(r14)\n0x823F1004  mr        r7, r16\n0x823F1008  lwz       r4, 0(r23)\n0x823F100C  mr        r3, r25\n0x823F1010  bl        BrnGame__BrnGameModule__DoUpdate_NetworkPreSim\n0x823F1014  bl        BrnResource__GetAvailableMemory\n0x823F1018  mr        r30, r3\n0x823F101C  cmplw     cr6, r31, r30\n0x823F1020  beq       cr6, loc_823F10A8\n0x823F1024  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F1028  clrldi    r11, r11, 63\n0x823F102C  cmpldi    cr6, r11, 0\n0x823F1030  beq       cr6, loc_823F1080\n0x823F1034  mr        r4, r18\n0x823F1038  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F103C  bl        CgsDev__StrStreamBase__operator__\n0x823F1040  li        r4, 0x7F1\n0x823F1044  bl        sub_821F0E50\n0x823F1048  mr        r4, r19\n0x823F104C  bl        CgsDev__StrStreamBase__operator__\n0x823F1050  mr        r4, r24\n0x823F1054  bl        CgsDev__StrStreamBase__operator__\n0x823F1058  mr        r4, r20\n0x823F105C  bl        CgsDev__StrStreamBase__operator__\n0x823F1060  mr        r4, r31\n0x823F1064  bl        sub_821F0EC8\n0x823F1068  mr        r4, r21\n0x823F106C  bl        CgsDev__StrStreamBase__operator__\n0x823F1070  mr        r4, r30\n0x823F1074  bl        sub_821F0EC8\n0x823F1078  mr        r4, r22\n0x823F107C  bl        CgsDev__StrStreamBase__operator__\n0x823F1080  lbz       r11, byte_82FFA89C@l(r27)\n0x823F1084  mr        r31, r30\n0x823F1088  cmplwi    cr6, r11, 0\n0x823F108C  beq       cr6, loc_823F10A8\n0x823F1090  bl        CgsDev__Assert__BeginAssert\n0x823F1094  li        r5, 0x7F1\n0x823F1098  mr        r4, r24\n0x823F109C  mr        r3, r29\n0x823F10A0  bl        CgsDev__Assert__FireAssert\n0x823F10A4  bl        CgsDev__Assert__EndAssert\n0x823F10A8  lwz       r29, 0x1C0+var_118(r1)\n0x823F10AC  mr        r9, r28\n0x823F10B0  lwz       r23, 0x1C0+var_EC(r1)\n0x823F10B4  mr        r7, r16\n0x823F10B8  mr        r6, r26\n0x823F10BC  lwz       r5, 0(r14)\n0x823F10C0  mr        r8, r23\n0x823F10C4  mr        r3, r25\n0x823F10C8  lwz       r4, 0(r29)\n0x823F10CC  bl        BrnGame__BrnGameModule__DoUpdate_GameStatePreWorld\n0x823F10D0  bl        BrnResource__GetAvailableMemory\n0x823F10D4  mr        r30, r3\n0x823F10D8  cmplw     cr6, r31, r30\n0x823F10DC  beq       cr6, loc_823F1164\n0x823F10E0  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F10E4  clrldi    r11, r11, 63\n0x823F10E8  cmpldi    cr6, r11, 0\n0x823F10EC  beq       cr6, loc_823F113C\n0x823F10F0  mr        r4, r18\n0x823F10F4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F10F8  bl        CgsDev__StrStreamBase__operator__\n0x823F10FC  li        r4, 0x800\n0x823F1100  bl        sub_821F0E50\n0x823F1104  mr        r4, r19\n0x823F1108  bl        CgsDev__StrStreamBase__operator__\n0x823F110C  mr        r4, r24\n0x823F1110  bl        CgsDev__StrStreamBase__operator__\n0x823F1114  mr        r4, r20\n0x823F1118  bl        CgsDev__StrStreamBase__operator__\n0x823F111C  mr        r4, r31\n0x823F1120  bl        sub_821F0EC8\n0x823F1124  mr        r4, r21\n0x823F1128  bl        CgsDev__StrStreamBase__operator__\n0x823F112C  mr        r4, r30\n0x823F1130  bl        sub_821F0EC8\n0x823F1134  mr        r4, r22\n0x823F1138  bl        CgsDev__StrStreamBase__operator__\n0x823F113C  lbz       r11, byte_82FFA89C@l(r27)\n0x823F1140  mr        r31, r30\n0x823F1144  cmplwi    cr6, r11, 0\n0x823F1148  beq       cr6, loc_823F1164\n0x823F114C  bl        CgsDev__Assert__BeginAssert\n0x823F1150  li        r5, 0x800\n0x823F1154  mr        r4, r24\n0x823F1158  lwz       r3, 0x1C0+var_11C(r1)\n0x823F115C  bl        CgsDev__Assert__FireAssert\n0x823F1160  bl        CgsDev__Assert__EndAssert\n0x823F1164  mr        r8, r28\n0x823F1168  lwz       r28, 0x1C0+var_E4(r1)\n0x823F116C  mr        r6, r23\n0x823F1170  lwz       r5, 0(r14)\n0x823F1174  mr        r7, r28\n0x823F1178  lwz       r4, 0(r29)\n0x823F117C  mr        r3, r25\n0x823F1180  bl        BrnGame__BrnGameModule__DoUpdate_ReplaysPreSim\n0x823F1184  bl        BrnResource__GetAvailableMemory\n0x823F1188  mr        r30, r3\n0x823F118C  cmplw     cr6, r31, r30\n0x823F1190  beq       cr6, loc_823F1218\n0x823F1194  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F1198  clrldi    r11, r11, 63\n0x823F119C  cmpldi    cr6, r11, 0\n0x823F11A0  beq       cr6, loc_823F11F0\n0x823F11A4  mr        r4, r18\n0x823F11A8  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F11AC  bl        CgsDev__StrStreamBase__operator__\n0x823F11B0  li        r4, 0x80B\n0x823F11B4  bl        sub_821F0E50\n0x823F11B8  mr        r4, r19\n0x823F11BC  bl        CgsDev__StrStreamBase__operator__\n0x823F11C0  mr        r4, r24\n0x823F11C4  bl        CgsDev__StrStreamBase__operator__\n0x823F11C8  mr        r4, r20\n0x823F11CC  bl        CgsDev__StrStreamBase__operator__\n0x823F11D0  mr        r4, r31\n0x823F11D4  bl        sub_821F0EC8\n0x823F11D8  mr        r4, r21\n0x823F11DC  bl        CgsDev__StrStreamBase__operator__\n0x823F11E0  mr        r4, r30\n0x823F11E4  bl        sub_821F0EC8\n0x823F11E8  mr        r4, r22\n0x823F11EC  bl        CgsDev__StrStreamBase__operator__\n0x823F11F0  lbz       r11, byte_82FFA89C@l(r27)\n0x823F11F4  mr        r31, r30\n0x823F11F8  cmplwi    cr6, r11, 0\n0x823F11FC  beq       cr6, loc_823F1218\n0x823F1200  bl        CgsDev__Assert__BeginAssert\n0x823F1204  li        r5, 0x80B\n0x823F1208  mr        r4, r24\n0x823F120C  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1210  bl        CgsDev__Assert__FireAssert\n0x823F1214  bl        CgsDev__Assert__EndAssert\n0x823F1218  lwz       r11, 0x1C0+var_118(r1)\n0x823F121C  addis     r29, r25, 0x9A\n0x823F1220  mr        r3, r25\n0x823F1224  lwz       r5, 0(r14)\n0x823F1228  addi      r29, r29, 0xBD4\n0x823F122C  lwz       r8, 0x1C0+var_110(r1)\n0x823F1230  lwz       r4, 0(r11)\n0x823F1234  addis     r11, r25, 0x9A\n0x823F1238  addi      r11, r11, 0xBD8\n0x823F123C  lwz       r7, 0(r29)\n0x823F1240  stw       r29, 0x1C0+var_104(r1)\n0x823F1244  lwz       r6, 0(r11)\n0x823F1248  stw       r11, 0x1C0+var_114(r1)\n0x823F124C  bl        BrnGame__BrnGameModule__DoUpdate_GuiPreWorld\n0x823F1250  bl        BrnResource__GetAvailableMemory\n0x823F1254  mr        r30, r3\n0x823F1258  cmplw     cr6, r31, r30\n0x823F125C  beq       cr6, loc_823F12E4\n0x823F1260  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)\n0x823F1264  clrldi    r11, r11, 63\n0x823F1268  cmpldi    cr6, r11, 0\n0x823F126C  beq       cr6, loc_823F12BC\n0x823F1270  mr        r4, r18\n0x823F1274  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1278  bl        CgsDev__StrStreamBase__operator__\n0x823F127C  li        r4, 0x816\n0x823F1280  bl        sub_821F0E50\n0x823F1284  mr        r4, r19\n0x823F1288  bl        CgsDev__StrStreamBase__operator__\n0x823F128C  mr        r4, r24\n0x823F1290  bl        CgsDev__StrStreamBase__operator__\n0x823F1294  mr        r4, r20\n0x823F1298  bl        CgsDev__StrStreamBase__operator__\n0x823F129C  mr        r4, r31\n0x823F12A0  bl        sub_821F0EC8\n0x823F12A4  mr        r4, r21\n0x823F12A8  bl        CgsDev__StrStreamBase__operator__\n0x823F12AC  mr        r4, r30\n0x823F12B0  bl        sub_821F0EC8\n0x823F12B4  mr        r4, r22\n0x823F12B8  bl        CgsDev__StrStreamBase__operator__\n0x823F12BC  lbz       r11, byte_82FFA89C@l(r27)\n0x823F12C0  mr        r31, r30\n0x823F12C4  cmplwi    cr6, r11, 0\n0x823F12C8  beq       cr6, loc_823F12E4\n0x823F12CC  bl        CgsDev__Assert__BeginAssert\n0x823F12D0  li        r5, 0x816\n0x823F12D4  mr        r4, r24\n0x823F12D8  lwz       r3, 0x1C0+var_11C(r1)\n0x823F12DC  bl        CgsDev__Assert__FireAssert\n0x823F12E0  bl        CgsDev__Assert__EndAssert\n0x823F12E4  addis     r27, r25, 0x9A\n0x823F12E8  lwz       r15, 0x1C0+var_CC(r1)\n0x823F12EC  mr        r3, r25\n0x823F12F0  lwz       r4, 0(r14)\n0x823F12F4  addi      r27, r27, 0xBCC\n0x823F12F8  mr        r5, r15\n0x823F12FC  lwz       r6, 0(r27)\n0x823F1300  bl        BrnGame__BrnGameModule__DoPreUpdate_Sound\n0x823F1304  bl        BrnResource__GetAvailableMemory\n0x823F1308  mr        r30, r3\n0x823F130C  cmplw     cr6, r31, r30\n0x823F1310  beq       cr6, loc_823F13A0\n0x823F1314  lwz       r11, 0x1C0+var_10C(r1)\n0x823F1318  ld        r11, 0x1908(r11)\n0x823F131C  clrldi    r11, r11, 63\n0x823F1320  cmpldi    cr6, r11, 0\n0x823F1324  beq       cr6, loc_823F1374\n0x823F1328  mr        r4, r18\n0x823F132C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1330  bl        CgsDev__StrStreamBase__operator__\n0x823F1334  li        r4, 0x81F\n0x823F1338  bl        sub_821F0E50\n0x823F133C  mr        r4, r19\n0x823F1340  bl        CgsDev__StrStreamBase__operator__\n0x823F1344  mr        r4, r24\n0x823F1348  bl        CgsDev__StrStreamBase__operator__\n0x823F134C  mr        r4, r20\n0x823F1350  bl        CgsDev__StrStreamBase__operator__\n0x823F1354  mr        r4, r31\n0x823F1358  bl        sub_821F0EC8\n0x823F135C  mr        r4, r21\n0x823F1360  bl        CgsDev__StrStreamBase__operator__\n0x823F1364  mr        r4, r30\n0x823F1368  bl        sub_821F0EC8\n0x823F136C  mr        r4, r22\n0x823F1370  bl        CgsDev__StrStreamBase__operator__\n0x823F1374  lis       r11, byte_82FFA89C@ha\n0x823F1378  mr        r31, r30\n0x823F137C  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1380  cmplwi    cr6, r11, 0\n0x823F1384  beq       cr6, loc_823F13A0\n0x823F1388  bl        CgsDev__Assert__BeginAssert\n0x823F138C  li        r5, 0x81F\n0x823F1390  mr        r4, r24\n0x823F1394  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1398  bl        CgsDev__Assert__FireAssert\n0x823F139C  bl        CgsDev__Assert__EndAssert\n0x823F13A0  addis     r30, r25, 0x99\n0x823F13A4  addi      r30, r30, 0x6F28\n0x823F13A8  lwz       r3, 0(r30)\n0x823F13AC  stw       r30, 0x1C0+var_100(r1)\n0x823F13B0  bl        CgsDev__PerfMonCpu__StartMonitor\n0x823F13B4  mr        r8, r28\n0x823F13B8  lwz       r7, 0(r29)\n0x823F13BC  mr        r6, r26\n0x823F13C0  mr        r5, r16\n0x823F13C4  mr        r4, r23\n0x823F13C8  mr        r3, r25\n0x823F13CC  bl        BrnGame__BrnGameModule__ConstructUpdateSet\n0x823F13D0  mr        r23, r3\n0x823F13D4  lwz       r3, 0(r30)\n0x823F13D8  bl        CgsDev__PerfMonCpu__StopMonitor\n0x823F13DC  bl        BrnResource__GetAvailableMemory\n0x823F13E0  mr        r30, r3\n0x823F13E4  cmplw     cr6, r31, r30\n0x823F13E8  beq       cr6, loc_823F1478\n0x823F13EC  lwz       r11, 0x1C0+var_10C(r1)\n0x823F13F0  ld        r11, 0x1908(r11)\n0x823F13F4  clrldi    r11, r11, 63\n0x823F13F8  cmpldi    cr6, r11, 0\n0x823F13FC  beq       cr6, loc_823F144C\n0x823F1400  mr        r4, r18\n0x823F1404  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1408  bl        CgsDev__StrStreamBase__operator__\n0x823F140C  li        r4, 0x82E\n0x823F1410  bl        sub_821F0E50\n0x823F1414  mr        r4, r19\n0x823F1418  bl        CgsDev__StrStreamBase__operator__\n0x823F141C  mr        r4, r24\n0x823F1420  bl        CgsDev__StrStreamBase__operator__\n0x823F1424  mr        r4, r20\n0x823F1428  bl        CgsDev__StrStreamBase__operator__\n0x823F142C  mr        r4, r31\n0x823F1430  bl        sub_821F0EC8\n0x823F1434  mr        r4, r21\n0x823F1438  bl        CgsDev__StrStreamBase__operator__\n0x823F143C  mr        r4, r30\n0x823F1440  bl        sub_821F0EC8\n0x823F1444  mr        r4, r22\n0x823F1448  bl        CgsDev__StrStreamBase__operator__\n0x823F144C  lis       r11, byte_82FFA89C@ha\n0x823F1450  mr        r31, r30\n0x823F1454  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1458  cmplwi    cr6, r11, 0\n0x823F145C  beq       cr6, loc_823F1478\n0x823F1460  bl        CgsDev__Assert__BeginAssert\n0x823F1464  li        r5, 0x82E\n0x823F1468  mr        r4, r24\n0x823F146C  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1470  bl        CgsDev__Assert__FireAssert\n0x823F1474  bl        CgsDev__Assert__EndAssert\n0x823F1478  lwz       r11, 0x1C0+var_114(r1)\n0x823F147C  mr        r7, r16\n0x823F1480  lwz       r28, 0x1C0+var_118(r1)\n0x823F1484  mr        r3, r25\n0x823F1488  lwz       r26, 0x1C0+var_AC(r1)\n0x823F148C  lwz       r29, 0x1C0+var_EC(r1)\n0x823F1490  lwz       r10, 0x1C0+var_E4(r1)\n0x823F1494  mr        r8, r29\n0x823F1498  lwz       r9, 0(r11)\n0x823F149C  lwz       r5, 0(r14)\n0x823F14A0  lwz       r4, 0(r28)\n0x823F14A4  lwz       r6, 0x1C0+var_DC(r1)\n0x823F14A8  sth       r23, 0x1C0+var_15A(r1)\n0x823F14AC  stw       r26, 0x1C0+var_164(r1)\n0x823F14B0  stw       r15, 0x1C0+var_16C(r1)\n0x823F14B4  bl        BrnGame__BrnGameModule__DoUpdate_World\n0x823F14B8  bl        BrnResource__GetAvailableMemory\n0x823F14BC  mr        r30, r3\n0x823F14C0  cmplw     cr6, r31, r30\n0x823F14C4  beq       cr6, loc_823F1554\n0x823F14C8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F14CC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F14D0  clrldi    r11, r11, 63\n0x823F14D4  cmpldi    cr6, r11, 0\n0x823F14D8  beq       cr6, loc_823F1528\n0x823F14DC  mr        r4, r18\n0x823F14E0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F14E4  bl        CgsDev__StrStreamBase__operator__\n0x823F14E8  li        r4, 0x840\n0x823F14EC  bl        sub_821F0E50\n0x823F14F0  mr        r4, r19\n0x823F14F4  bl        CgsDev__StrStreamBase__operator__\n0x823F14F8  mr        r4, r24\n0x823F14FC  bl        CgsDev__StrStreamBase__operator__\n0x823F1500  mr        r4, r20\n0x823F1504  bl        CgsDev__StrStreamBase__operator__\n0x823F1508  mr        r4, r31\n0x823F150C  bl        sub_821F0EC8\n0x823F1510  mr        r4, r21\n0x823F1514  bl        CgsDev__StrStreamBase__operator__\n0x823F1518  mr        r4, r30\n0x823F151C  bl        sub_821F0EC8\n0x823F1520  mr        r4, r22\n0x823F1524  bl        CgsDev__StrStreamBase__operator__\n0x823F1528  lis       r11, byte_82FFA89C@ha\n0x823F152C  mr        r31, r30\n0x823F1530  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1534  cmplwi    cr6, r11, 0\n0x823F1538  beq       cr6, loc_823F1554\n0x823F153C  bl        CgsDev__Assert__BeginAssert\n0x823F1540  li        r5, 0x840\n0x823F1544  mr        r4, r24\n0x823F1548  lwz       r3, 0x1C0+var_11C(r1)\n0x823F154C  bl        CgsDev__Assert__FireAssert\n0x823F1550  bl        CgsDev__Assert__EndAssert\n0x823F1554  mr        r7, r26\n0x823F1558  lwz       r8, 0x1C0+var_108(r1)\n0x823F155C  mr        r6, r29\n0x823F1560  lwz       r5, 0(r14)\n0x823F1564  mr        r3, r25\n0x823F1568  lwz       r4, 0(r28)\n0x823F156C  bl        BrnGame__BrnGameModule__DoUpdate_InputPostWorld\n0x823F1570  bl        BrnResource__GetAvailableMemory\n0x823F1574  mr        r30, r3\n0x823F1578  cmplw     cr6, r31, r30\n0x823F157C  beq       cr6, loc_823F160C\n0x823F1580  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1584  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1588  clrldi    r11, r11, 63\n0x823F158C  cmpldi    cr6, r11, 0\n0x823F1590  beq       cr6, loc_823F15E0\n0x823F1594  mr        r4, r18\n0x823F1598  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F159C  bl        CgsDev__StrStreamBase__operator__\n0x823F15A0  li        r4, 0x84B\n0x823F15A4  bl        sub_821F0E50\n0x823F15A8  mr        r4, r19\n0x823F15AC  bl        CgsDev__StrStreamBase__operator__\n0x823F15B0  mr        r4, r24\n0x823F15B4  bl        CgsDev__StrStreamBase__operator__\n0x823F15B8  mr        r4, r20\n0x823F15BC  bl        CgsDev__StrStreamBase__operator__\n0x823F15C0  mr        r4, r31\n0x823F15C4  bl        sub_821F0EC8\n0x823F15C8  mr        r4, r21\n0x823F15CC  bl        CgsDev__StrStreamBase__operator__\n0x823F15D0  mr        r4, r30\n0x823F15D4  bl        sub_821F0EC8\n0x823F15D8  mr        r4, r22\n0x823F15DC  bl        CgsDev__StrStreamBase__operator__\n0x823F15E0  lis       r11, byte_82FFA89C@ha\n0x823F15E4  mr        r31, r30\n0x823F15E8  lbz       r11, byte_82FFA89C@l(r11)\n0x823F15EC  cmplwi    cr6, r11, 0\n0x823F15F0  beq       cr6, loc_823F160C\n0x823F15F4  bl        CgsDev__Assert__BeginAssert\n0x823F15F8  li        r5, 0x84B\n0x823F15FC  mr        r4, r24\n0x823F1600  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1604  bl        CgsDev__Assert__FireAssert\n0x823F1608  bl        CgsDev__Assert__EndAssert\n0x823F160C  lwz       r4, 0(r28)\n0x823F1610  addis     r28, r25, 0x9A\n0x823F1614  mr        r9, r26\n0x823F1618  lwz       r5, 0(r14)\n0x823F161C  addi      r28, r28, 0xBDC\n0x823F1620  lwz       r10, 0x1C0+var_E4(r1)\n0x823F1624  mr        r8, r29\n0x823F1628  lwz       r7, 0x1C0+var_DC(r1)\n0x823F162C  mr        r3, r25\n0x823F1630  lwz       r6, 0x1C0+var_D4(r1)\n0x823F1634  sth       r23, 0x1C0+var_164+2(r1)\n0x823F1638  lwz       r11, 0(r28)\n0x823F163C  stw       r11, 0x1C0+var_16C(r1)\n0x823F1640  bl        BrnGame__BrnGameModule__DoUpdate_Director\n0x823F1644  bl        BrnResource__GetAvailableMemory\n0x823F1648  mr        r30, r3\n0x823F164C  cmplw     cr6, r31, r30\n0x823F1650  beq       cr6, loc_823F16E0\n0x823F1654  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1658  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F165C  clrldi    r11, r11, 63\n0x823F1660  cmpldi    cr6, r11, 0\n0x823F1664  beq       cr6, loc_823F16B4\n0x823F1668  mr        r4, r18\n0x823F166C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1670  bl        CgsDev__StrStreamBase__operator__\n0x823F1674  li        r4, 0x85A\n0x823F1678  bl        sub_821F0E50\n0x823F167C  mr        r4, r19\n0x823F1680  bl        CgsDev__StrStreamBase__operator__\n0x823F1684  mr        r4, r24\n0x823F1688  bl        CgsDev__StrStreamBase__operator__\n0x823F168C  mr        r4, r20\n0x823F1690  bl        CgsDev__StrStreamBase__operator__\n0x823F1694  mr        r4, r31\n0x823F1698  bl        sub_821F0EC8\n0x823F169C  mr        r4, r21\n0x823F16A0  bl        CgsDev__StrStreamBase__operator__\n0x823F16A4  mr        r4, r30\n0x823F16A8  bl        sub_821F0EC8\n0x823F16AC  mr        r4, r22\n0x823F16B0  bl        CgsDev__StrStreamBase__operator__\n0x823F16B4  lis       r11, byte_82FFA89C@ha\n0x823F16B8  mr        r31, r30\n0x823F16BC  lbz       r11, byte_82FFA89C@l(r11)\n0x823F16C0  cmplwi    cr6, r11, 0\n0x823F16C4  beq       cr6, loc_823F16E0\n0x823F16C8  bl        CgsDev__Assert__BeginAssert\n0x823F16CC  li        r5, 0x85A\n0x823F16D0  mr        r4, r24\n0x823F16D4  lwz       r3, 0x1C0+var_11C(r1)\n0x823F16D8  bl        CgsDev__Assert__FireAssert\n0x823F16DC  bl        CgsDev__Assert__EndAssert\n0x823F16E0  lis       r11, 0x9A\n0x823F16E4  lwz       r29, 0x1C0+var_C4(r1)\n0x823F16E8  ori       r11, r11, 0xB98 # 0x9A0B98\n0x823F16EC  lbzx      r11, r25, r11\n0x823F16F0  cmplwi    cr6, r11, 0\n0x823F16F4  bne       cr6, loc_823F1780\n0x823F16F8  lwz       r10, 0x1C0+var_104(r1)\n0x823F16FC  mr        r3, r25\n0x823F1700  lwz       r6, 0(r27)\n0x823F1704  lwz       r11, 0(r28)\n0x823F1708  lwz       r27, 0x1C0+var_108(r1)\n0x823F170C  lwz       r9, 0x1C0+var_EC(r1)\n0x823F1710  lwz       r30, 0(r10)\n0x823F1714  lis       r10, 0x9A\n0x823F1718  lwz       r4, 0x1C0+var_118(r1)\n0x823F171C  ori       r7, r10, 0xBD0 # 0x9A0BD0\n0x823F1720  lwz       r10, 0x1C0+var_114(r1)\n0x823F1724  stw       r27, 0x1C0+var_124(r1)\n0x823F1728  stw       r11, 0x1C0+var_14C(r1)\n0x823F172C  lwz       r27, 0x1C0+var_F8(r1)\n0x823F1730  lwz       r8, 0x1C0+var_DC(r1)\n0x823F1734  lwz       r10, 0(r10)\n0x823F1738  lwz       r5, 0(r14)\n0x823F173C  lwz       r4, 0(r4)\n0x823F1740  stw       r27, 0x1C0+var_134(r1)\n0x823F1744  lwz       r27, 0x1C0+var_110(r1)\n0x823F1748  stw       r10, 0x1C0+var_10C(r1)\n0x823F174C  mr        r10, r9\n0x823F1750  mr        r9, r16\n0x823F1754  lwzx      r7, r25, r7\n0x823F1758  sth       r23, 0x1C0+var_12A(r1)\n0x823F175C  stw       r29, 0x1C0+var_144(r1)\n0x823F1760  stw       r27, 0x1C0+var_13C(r1)\n0x823F1764  stw       r30, 0x1C0+var_154(r1)\n0x823F1768  stw       r26, 0x1C0+var_16C(r1)\n0x823F176C  lwz       r11, 0x1C0+var_10C(r1)\n0x823F1770  stw       r11, 0x64(r1)\n0x823F1774  lwz       r11, 0x1C0+var_E4(r1)\n0x823F1778  stw       r11, 0x1C0+var_164(r1)\n0x823F177C  bl        BrnGame__BrnGameModule__DoUpdate_GUI\n0x823F1780  bl        BrnResource__GetAvailableMemory\n0x823F1784  mr        r30, r3\n0x823F1788  cmplw     cr6, r31, r30\n0x823F178C  beq       cr6, loc_823F181C\n0x823F1790  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1794  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1798  clrldi    r11, r11, 63\n0x823F179C  cmpldi    cr6, r11, 0\n0x823F17A0  beq       cr6, loc_823F17F0\n0x823F17A4  mr        r4, r18\n0x823F17A8  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F17AC  bl        CgsDev__StrStreamBase__operator__\n0x823F17B0  li        r4, 0x876\n0x823F17B4  bl        sub_821F0E50\n0x823F17B8  mr        r4, r19\n0x823F17BC  bl        CgsDev__StrStreamBase__operator__\n0x823F17C0  mr        r4, r24\n0x823F17C4  bl        CgsDev__StrStreamBase__operator__\n0x823F17C8  mr        r4, r20\n0x823F17CC  bl        CgsDev__StrStreamBase__operator__\n0x823F17D0  mr        r4, r31\n0x823F17D4  bl        sub_821F0EC8\n0x823F17D8  mr        r4, r21\n0x823F17DC  bl        CgsDev__StrStreamBase__operator__\n0x823F17E0  mr        r4, r30\n0x823F17E4  bl        sub_821F0EC8\n0x823F17E8  mr        r4, r22\n0x823F17EC  bl        CgsDev__StrStreamBase__operator__\n0x823F17F0  lis       r11, byte_82FFA89C@ha\n0x823F17F4  mr        r31, r30\n0x823F17F8  lbz       r11, byte_82FFA89C@l(r11)\n0x823F17FC  cmplwi    cr6, r11, 0\n0x823F1800  beq       cr6, loc_823F181C\n0x823F1804  bl        CgsDev__Assert__BeginAssert\n0x823F1808  li        r5, 0x876\n0x823F180C  mr        r4, r24\n0x823F1810  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1814  bl        CgsDev__Assert__FireAssert\n0x823F1818  bl        CgsDev__Assert__EndAssert\n0x823F181C  lwz       r11, 0x1C0+var_114(r1)\n0x823F1820  mr        r3, r25\n0x823F1824  lwz       r16, 0x1C0+var_118(r1)\n0x823F1828  lwz       r6, 0x1C0+var_D4(r1)\n0x823F182C  lwz       r8, 0(r28)\n0x823F1830  lwz       r5, 0(r14)\n0x823F1834  lwz       r7, 0(r11)\n0x823F1838  lwz       r4, 0(r16)\n0x823F183C  bl        BrnGame__BrnGameModule__DoUpdate_DirectorPostGUI\n0x823F1840  bl        BrnResource__GetAvailableMemory\n0x823F1844  mr        r30, r3\n0x823F1848  cmplw     cr6, r31, r30\n0x823F184C  beq       cr6, loc_823F18DC\n0x823F1850  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1854  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1858  clrldi    r11, r11, 63\n0x823F185C  cmpldi    cr6, r11, 0\n0x823F1860  beq       cr6, loc_823F18B0\n0x823F1864  mr        r4, r18\n0x823F1868  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F186C  bl        CgsDev__StrStreamBase__operator__\n0x823F1870  li        r4, 0x881\n0x823F1874  bl        sub_821F0E50\n0x823F1878  mr        r4, r19\n0x823F187C  bl        CgsDev__StrStreamBase__operator__\n0x823F1880  mr        r4, r24\n0x823F1884  bl        CgsDev__StrStreamBase__operator__\n0x823F1888  mr        r4, r20\n0x823F188C  bl        CgsDev__StrStreamBase__operator__\n0x823F1890  mr        r4, r31\n0x823F1894  bl        sub_821F0EC8\n0x823F1898  mr        r4, r21\n0x823F189C  bl        CgsDev__StrStreamBase__operator__\n0x823F18A0  mr        r4, r30\n0x823F18A4  bl        sub_821F0EC8\n0x823F18A8  mr        r4, r22\n0x823F18AC  bl        CgsDev__StrStreamBase__operator__\n0x823F18B0  lis       r11, byte_82FFA89C@ha\n0x823F18B4  mr        r31, r30\n0x823F18B8  lbz       r11, byte_82FFA89C@l(r11)\n0x823F18BC  cmplwi    cr6, r11, 0\n0x823F18C0  beq       cr6, loc_823F18DC\n0x823F18C4  bl        CgsDev__Assert__BeginAssert\n0x823F18C8  li        r5, 0x881\n0x823F18CC  mr        r4, r24\n0x823F18D0  lwz       r3, 0x1C0+var_11C(r1)\n0x823F18D4  bl        CgsDev__Assert__FireAssert\n0x823F18D8  bl        CgsDev__Assert__EndAssert\n0x823F18DC  lbz       r11, 0x1C0+var_120(r1)\n0x823F18E0  mr        r8, r26\n0x823F18E4  mr        r3, r25\n0x823F18E8  lwz       r10, 0x1C0+var_E4(r1)\n0x823F18EC  lwz       r9, 0(r28)\n0x823F18F0  lwz       r5, 0(r14)\n0x823F18F4  lwz       r7, 0x1C0+var_EC(r1)\n0x823F18F8  lwz       r4, 0(r16)\n0x823F18FC  lwz       r6, 0x1C0+var_DC(r1)\n0x823F1900  sth       r23, 0x1C0+var_154+2(r1)\n0x823F1904  stb       r11, 0x1C0+var_15A+1(r1)\n0x823F1908  stw       r29, 0x1C0+var_164(r1)\n0x823F190C  stw       r15, 0x1C0+var_16C(r1)\n0x823F1910  bl        BrnGame__BrnGameModule__DoUpdate_Effects\n0x823F1914  bl        BrnResource__GetAvailableMemory\n0x823F1918  mr        r30, r3\n0x823F191C  cmplw     cr6, r31, r30\n0x823F1920  beq       cr6, loc_823F19B0\n0x823F1924  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1928  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F192C  clrldi    r11, r11, 63\n0x823F1930  cmpldi    cr6, r11, 0\n0x823F1934  beq       cr6, loc_823F1984\n0x823F1938  mr        r4, r18\n0x823F193C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1940  bl        CgsDev__StrStreamBase__operator__\n0x823F1944  li        r4, 0x892\n0x823F1948  bl        sub_821F0E50\n0x823F194C  mr        r4, r19\n0x823F1950  bl        CgsDev__StrStreamBase__operator__\n0x823F1954  mr        r4, r24\n0x823F1958  bl        CgsDev__StrStreamBase__operator__\n0x823F195C  mr        r4, r20\n0x823F1960  bl        CgsDev__StrStreamBase__operator__\n0x823F1964  mr        r4, r31\n0x823F1968  bl        sub_821F0EC8\n0x823F196C  mr        r4, r21\n0x823F1970  bl        CgsDev__StrStreamBase__operator__\n0x823F1974  mr        r4, r30\n0x823F1978  bl        sub_821F0EC8\n0x823F197C  mr        r4, r22\n0x823F1980  bl        CgsDev__StrStreamBase__operator__\n0x823F1984  lis       r11, byte_82FFA89C@ha\n0x823F1988  mr        r31, r30\n0x823F198C  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1990  cmplwi    cr6, r11, 0\n0x823F1994  beq       cr6, loc_823F19B0\n0x823F1998  bl        CgsDev__Assert__BeginAssert\n0x823F199C  li        r5, 0x892\n0x823F19A0  mr        r4, r24\n0x823F19A4  lwz       r3, 0x1C0+var_11C(r1)\n0x823F19A8  bl        CgsDev__Assert__FireAssert\n0x823F19AC  bl        CgsDev__Assert__EndAssert\n0x823F19B0  lwz       r15, 0x1C0+var_114(r1)\n0x823F19B4  mr        r7, r26\n0x823F19B8  lwz       r27, 0x1C0+var_B4(r1)\n0x823F19BC  mr        r3, r25\n0x823F19C0  lwz       r9, 0x1C0+var_E4(r1)\n0x823F19C4  mr        r10, r27\n0x823F19C8  lwz       r8, 0(r28)\n0x823F19CC  lwz       r5, 0(r14)\n0x823F19D0  lwz       r11, 0(r15)\n0x823F19D4  lwz       r6, 0x1C0+var_EC(r1)\n0x823F19D8  lwz       r4, 0(r16)\n0x823F19DC  sth       r23, 0x1C0+var_15A(r1)\n0x823F19E0  stw       r29, 0x1C0+var_164(r1)\n0x823F19E4  stw       r11, 0x1C0+var_16C(r1)\n0x823F19E8  bl        BrnGame__BrnGameModule__DoUpdate_Sound\n0x823F19EC  bl        BrnResource__GetAvailableMemory\n0x823F19F0  mr        r30, r3\n0x823F19F4  cmplw     cr6, r31, r30\n0x823F19F8  beq       cr6, loc_823F1A88\n0x823F19FC  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1A00  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1A04  clrldi    r11, r11, 63\n0x823F1A08  cmpldi    cr6, r11, 0\n0x823F1A0C  beq       cr6, loc_823F1A5C\n0x823F1A10  mr        r4, r18\n0x823F1A14  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1A18  bl        CgsDev__StrStreamBase__operator__\n0x823F1A1C  li        r4, 0x8A2\n0x823F1A20  bl        sub_821F0E50\n0x823F1A24  mr        r4, r19\n0x823F1A28  bl        CgsDev__StrStreamBase__operator__\n0x823F1A2C  mr        r4, r24\n0x823F1A30  bl        CgsDev__StrStreamBase__operator__\n0x823F1A34  mr        r4, r20\n0x823F1A38  bl        CgsDev__StrStreamBase__operator__\n0x823F1A3C  mr        r4, r31\n0x823F1A40  bl        sub_821F0EC8\n0x823F1A44  mr        r4, r21\n0x823F1A48  bl        CgsDev__StrStreamBase__operator__\n0x823F1A4C  mr        r4, r30\n0x823F1A50  bl        sub_821F0EC8\n0x823F1A54  mr        r4, r22\n0x823F1A58  bl        CgsDev__StrStreamBase__operator__\n0x823F1A5C  lis       r11, byte_82FFA89C@ha\n0x823F1A60  mr        r31, r30\n0x823F1A64  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1A68  cmplwi    cr6, r11, 0\n0x823F1A6C  beq       cr6, loc_823F1A88\n0x823F1A70  bl        CgsDev__Assert__BeginAssert\n0x823F1A74  li        r5, 0x8A2\n0x823F1A78  mr        r4, r24\n0x823F1A7C  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1A80  bl        CgsDev__Assert__FireAssert\n0x823F1A84  bl        CgsDev__Assert__EndAssert\n0x823F1A88  mr        r7, r29\n0x823F1A8C  lwz       r29, 0x1C0+var_BC(r1)\n0x823F1A90  mr        r8, r27\n0x823F1A94  lwz       r10, 0(r15)\n0x823F1A98  mr        r6, r26\n0x823F1A9C  lwz       r9, 0(r28)\n0x823F1AA0  mr        r3, r25\n0x823F1AA4  lwz       r5, 0(r14)\n0x823F1AA8  lwz       r4, 0(r16)\n0x823F1AAC  sth       r23, 0x1C0+var_164+2(r1)\n0x823F1AB0  stw       r29, 0x1C0+var_16C(r1)\n0x823F1AB4  bl        BrnGame__BrnGameModule__DoUpdate_ReplaysPostSim\n0x823F1AB8  bl        BrnResource__GetAvailableMemory\n0x823F1ABC  mr        r30, r3\n0x823F1AC0  cmplw     cr6, r31, r30\n0x823F1AC4  beq       cr6, loc_823F1B54\n0x823F1AC8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1ACC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1AD0  clrldi    r11, r11, 63\n0x823F1AD4  cmpldi    cr6, r11, 0\n0x823F1AD8  beq       cr6, loc_823F1B28\n0x823F1ADC  mr        r4, r18\n0x823F1AE0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1AE4  bl        CgsDev__StrStreamBase__operator__\n0x823F1AE8  li        r4, 0x8B1\n0x823F1AEC  bl        sub_821F0E50\n0x823F1AF0  mr        r4, r19\n0x823F1AF4  bl        CgsDev__StrStreamBase__operator__\n0x823F1AF8  mr        r4, r24\n0x823F1AFC  bl        CgsDev__StrStreamBase__operator__\n0x823F1B00  mr        r4, r20\n0x823F1B04  bl        CgsDev__StrStreamBase__operator__\n0x823F1B08  mr        r4, r31\n0x823F1B0C  bl        sub_821F0EC8\n0x823F1B10  mr        r4, r21\n0x823F1B14  bl        CgsDev__StrStreamBase__operator__\n0x823F1B18  mr        r4, r30\n0x823F1B1C  bl        sub_821F0EC8\n0x823F1B20  mr        r4, r22\n0x823F1B24  bl        CgsDev__StrStreamBase__operator__\n0x823F1B28  lis       r11, byte_82FFA89C@ha\n0x823F1B2C  mr        r31, r30\n0x823F1B30  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1B34  cmplwi    cr6, r11, 0\n0x823F1B38  beq       cr6, loc_823F1B54\n0x823F1B3C  bl        CgsDev__Assert__BeginAssert\n0x823F1B40  li        r5, 0x8B1\n0x823F1B44  mr        r4, r24\n0x823F1B48  lwz       r3, 0x1C0+var_11C(r1)\n0x823F1B4C  bl        CgsDev__Assert__FireAssert\n0x823F1B50  bl        CgsDev__Assert__EndAssert\n0x823F1B54  mr        r9, r29\n0x823F1B58  lwz       r10, 0(r28)\n0x823F1B5C  mr        r7, r26\n0x823F1B60  lwz       r8, 0(r15)\n0x823F1B64  mr        r3, r25\n0x823F1B68  lwz       r6, 0x1C0+var_DC(r1)\n0x823F1B6C  lwz       r5, 0(r14)\n0x823F1B70  lwz       r4, 0(r16)\n0x823F1B74  sth       r23, 0x1C0+var_16C+2(r1)\n0x823F1B78  bl        BrnGame__BrnGameModule__DoUpdate_GameStatePostWorld\n0x823F1B7C  bl        BrnResource__GetAvailableMemory\n0x823F1B80  mr        r30, r3\n0x823F1B84  cmplw     cr6, r31, r30\n0x823F1B88  beq       cr6, loc_823F1C20\n0x823F1B8C  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1B90  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1B94  clrldi    r11, r11, 63\n0x823F1B98  cmpldi    cr6, r11, 0\n0x823F1B9C  beq       cr6, loc_823F1BEC\n0x823F1BA0  mr        r4, r18\n0x823F1BA4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1BA8  bl        CgsDev__StrStreamBase__operator__\n0x823F1BAC  li        r4, 0x8BF\n0x823F1BB0  bl        sub_821F0E50\n0x823F1BB4  mr        r4, r19\n0x823F1BB8  bl        CgsDev__StrStreamBase__operator__\n0x823F1BBC  mr        r4, r24\n0x823F1BC0  bl        CgsDev__StrStreamBase__operator__\n0x823F1BC4  mr        r4, r20\n0x823F1BC8  bl        CgsDev__StrStreamBase__operator__\n0x823F1BCC  mr        r4, r31\n0x823F1BD0  bl        sub_821F0EC8\n0x823F1BD4  mr        r4, r21\n0x823F1BD8  bl        CgsDev__StrStreamBase__operator__\n0x823F1BDC  mr        r4, r30\n0x823F1BE0  bl        sub_821F0EC8\n0x823F1BE4  mr        r4, r22\n0x823F1BE8  bl        CgsDev__StrStreamBase__operator__\n0x823F1BEC  lis       r11, byte_82FFA89C@ha\n0x823F1BF0  mr        r31, r30\n0x823F1BF4  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1BF8  cmplwi    cr6, r11, 0\n0x823F1BFC  beq       cr6, loc_823F1C20\n0x823F1C00  bl        CgsDev__Assert__BeginAssert\n0x823F1C04  lwz       r29, 0x1C0+var_11C(r1)\n0x823F1C08  li        r5, 0x8BF\n0x823F1C0C  mr        r4, r24\n0x823F1C10  mr        r3, r29\n0x823F1C14  bl        CgsDev__Assert__FireAssert\n0x823F1C18  bl        CgsDev__Assert__EndAssert\n0x823F1C1C  b         loc_823F1C24\n0x823F1C20  lwz       r29, 0x1C0+var_11C(r1)\n0x823F1C24  mr        r9, r23\n0x823F1C28  lwz       r23, 0x1C0+var_EC(r1)\n0x823F1C2C  mr        r7, r26\n0x823F1C30  lwz       r8, 0(r15)\n0x823F1C34  mr        r6, r23\n0x823F1C38  lwz       r5, 0(r14)\n0x823F1C3C  mr        r3, r25\n0x823F1C40  lwz       r4, 0(r16)\n0x823F1C44  bl        BrnGame__BrnGameModule__DoUpdate_NetworkPostSim\n0x823F1C48  bl        BrnResource__GetAvailableMemory\n0x823F1C4C  mr        r30, r3\n0x823F1C50  cmplw     cr6, r31, r30\n0x823F1C54  beq       cr6, loc_823F1CE4\n0x823F1C58  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1C5C  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1C60  clrldi    r11, r11, 63\n0x823F1C64  cmpldi    cr6, r11, 0\n0x823F1C68  beq       cr6, loc_823F1CB8\n0x823F1C6C  mr        r4, r18\n0x823F1C70  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1C74  bl        CgsDev__StrStreamBase__operator__\n0x823F1C78  li        r4, 0x8CD\n0x823F1C7C  bl        sub_821F0E50\n0x823F1C80  mr        r4, r19\n0x823F1C84  bl        CgsDev__StrStreamBase__operator__\n0x823F1C88  mr        r4, r24\n0x823F1C8C  bl        CgsDev__StrStreamBase__operator__\n0x823F1C90  mr        r4, r20\n0x823F1C94  bl        CgsDev__StrStreamBase__operator__\n0x823F1C98  mr        r4, r31\n0x823F1C9C  bl        sub_821F0EC8\n0x823F1CA0  mr        r4, r21\n0x823F1CA4  bl        CgsDev__StrStreamBase__operator__\n0x823F1CA8  mr        r4, r30\n0x823F1CAC  bl        sub_821F0EC8\n0x823F1CB0  mr        r4, r22\n0x823F1CB4  bl        CgsDev__StrStreamBase__operator__\n0x823F1CB8  lis       r11, byte_82FFA89C@ha\n0x823F1CBC  mr        r31, r30\n0x823F1CC0  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1CC4  cmplwi    cr6, r11, 0\n0x823F1CC8  beq       cr6, loc_823F1CE4\n0x823F1CCC  bl        CgsDev__Assert__BeginAssert\n0x823F1CD0  li        r5, 0x8CD\n0x823F1CD4  mr        r4, r24\n0x823F1CD8  mr        r3, r29\n0x823F1CDC  bl        CgsDev__Assert__FireAssert\n0x823F1CE0  bl        CgsDev__Assert__EndAssert\n0x823F1CE4  lwz       r11, 0x1C0+var_100(r1)\n0x823F1CE8  lwz       r3, 0(r11)\n0x823F1CEC  bl        CgsDev__PerfMonCpu__StartMonitor\n0x823F1CF0  mr        r4, r23\n0x823F1CF4  lwz       r5, 0(r28)\n0x823F1CF8  mr        r3, r25\n0x823F1CFC  bl        BrnGame__BrnGameModule__UpdateTimers\n0x823F1D00  bl        BrnResource__GetAvailableMemory\n0x823F1D04  mr        r30, r3\n0x823F1D08  cmplw     cr6, r31, r30\n0x823F1D0C  beq       cr6, loc_823F1D9C\n0x823F1D10  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1D14  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1D18  clrldi    r11, r11, 63\n0x823F1D1C  cmpldi    cr6, r11, 0\n0x823F1D20  beq       cr6, loc_823F1D70\n0x823F1D24  mr        r4, r18\n0x823F1D28  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1D2C  bl        CgsDev__StrStreamBase__operator__\n0x823F1D30  li        r4, 0x8D4\n0x823F1D34  bl        sub_821F0E50\n0x823F1D38  mr        r4, r19\n0x823F1D3C  bl        CgsDev__StrStreamBase__operator__\n0x823F1D40  mr        r4, r24\n0x823F1D44  bl        CgsDev__StrStreamBase__operator__\n0x823F1D48  mr        r4, r20\n0x823F1D4C  bl        CgsDev__StrStreamBase__operator__\n0x823F1D50  mr        r4, r31\n0x823F1D54  bl        sub_821F0EC8\n0x823F1D58  mr        r4, r21\n0x823F1D5C  bl        CgsDev__StrStreamBase__operator__\n0x823F1D60  mr        r4, r30\n0x823F1D64  bl        sub_821F0EC8\n0x823F1D68  mr        r4, r22\n0x823F1D6C  bl        CgsDev__StrStreamBase__operator__\n0x823F1D70  lis       r11, byte_82FFA89C@ha\n0x823F1D74  mr        r31, r30\n0x823F1D78  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1D7C  cmplwi    cr6, r11, 0\n0x823F1D80  beq       cr6, loc_823F1D9C\n0x823F1D84  bl        CgsDev__Assert__BeginAssert\n0x823F1D88  li        r5, 0x8D4\n0x823F1D8C  mr        r4, r24\n0x823F1D90  mr        r3, r29\n0x823F1D94  bl        CgsDev__Assert__FireAssert\n0x823F1D98  bl        CgsDev__Assert__EndAssert\n0x823F1D9C  mr        r4, r23\n0x823F1DA0  mr        r3, r25\n0x823F1DA4  bl        BrnGame__BrnGameModule__UpdateFrameRateType\n0x823F1DA8  bl        BrnResource__GetAvailableMemory\n0x823F1DAC  mr        r30, r3\n0x823F1DB0  cmplw     cr6, r31, r30\n0x823F1DB4  beq       cr6, loc_823F1E44\n0x823F1DB8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1DBC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1DC0  clrldi    r11, r11, 63\n0x823F1DC4  cmpldi    cr6, r11, 0\n0x823F1DC8  beq       cr6, loc_823F1E18\n0x823F1DCC  mr        r4, r18\n0x823F1DD0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1DD4  bl        CgsDev__StrStreamBase__operator__\n0x823F1DD8  li        r4, 0x8DA\n0x823F1DDC  bl        sub_821F0E50\n0x823F1DE0  mr        r4, r19\n0x823F1DE4  bl        CgsDev__StrStreamBase__operator__\n0x823F1DE8  mr        r4, r24\n0x823F1DEC  bl        CgsDev__StrStreamBase__operator__\n0x823F1DF0  mr        r4, r20\n0x823F1DF4  bl        CgsDev__StrStreamBase__operator__\n0x823F1DF8  mr        r4, r31\n0x823F1DFC  bl        sub_821F0EC8\n0x823F1E00  mr        r4, r21\n0x823F1E04  bl        CgsDev__StrStreamBase__operator__\n0x823F1E08  mr        r4, r30\n0x823F1E0C  bl        sub_821F0EC8\n0x823F1E10  mr        r4, r22\n0x823F1E14  bl        CgsDev__StrStreamBase__operator__\n0x823F1E18  lis       r11, byte_82FFA89C@ha\n0x823F1E1C  mr        r31, r30\n0x823F1E20  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1E24  cmplwi    cr6, r11, 0\n0x823F1E28  beq       cr6, loc_823F1E44\n0x823F1E2C  bl        CgsDev__Assert__BeginAssert\n0x823F1E30  li        r5, 0x8DA\n0x823F1E34  mr        r4, r24\n0x823F1E38  mr        r3, r29\n0x823F1E3C  bl        CgsDev__Assert__FireAssert\n0x823F1E40  bl        CgsDev__Assert__EndAssert\n0x823F1E44  lwz       r16, 0x1C0+var_114(r1)\n0x823F1E48  mr        r8, r27\n0x823F1E4C  lwz       r15, 0x1C0+var_104(r1)\n0x823F1E50  mr        r5, r26\n0x823F1E54  lwz       r14, 0x1C0+var_E4(r1)\n0x823F1E58  lwz       r23, 0x1C0+var_110(r1)\n0x823F1E5C  mr        r10, r14\n0x823F1E60  lwz       r6, 0(r28)\n0x823F1E64  mr        r3, r23\n0x823F1E68  lwz       r9, 0(r16)\n0x823F1E6C  lwz       r7, 0(r15)\n0x823F1E70  lwz       r4, 0x1C0+var_EC(r1)\n0x823F1E74  bl        sub_823B7B80\n0x823F1E78  mr        r4, r23\n0x823F1E7C  lwz       r6, 0(r16)\n0x823F1E80  mr        r3, r25\n0x823F1E84  lwz       r5, 0(r15)\n0x823F1E88  bl        BrnGame__BrnGameModule__BridgeGuiToResource\n0x823F1E8C  mr        r3, r26\n0x823F1E90  bl        BrnWorldIO__UpdateOutputBuffer__GetResour\n0x823F1E94  mr        r4, r3\n0x823F1E98  mr        r3, r23\n0x823F1E9C  bl        ___AppendRequestInterface__0BAAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0BAAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(BrnResource::GameDataIO::RequestInterface<4096> const *)\n0x823F1EA0  mr        r3, r26\n0x823F1EA4  bl        BrnWorldIO__UpdateOutputBuffer\n0x823F1EA8  mr        r30, r3\n0x823F1EAC  mr        r3, r23\n0x823F1EB0  bl        BrnResource__GameDataIO__InputBuffe\n0x823F1EB4  mr        r4, r30\n0x823F1EB8  bl        ___Append__0IAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0IAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(CgsModule::VariableEventQueue<2048,16> const &)\n0x823F1EBC  lwz       r30, 0(r28)\n0x823F1EC0  mr        r3, r30\n0x823F1EC4  bl        BrnDirector__DirectorIO__Output\n0x823F1EC8  mr        r29, r3\n0x823F1ECC  mr        r3, r23\n0x823F1ED0  bl        BrnResource__GameDataIO__InputBuffe\n0x823F1ED4  mr        r4, r29\n0x823F1ED8  bl        ___Append__0CAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0CAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<512,16>(CgsModule::VariableEventQueue<512,16> const &)\n0x823F1EDC  mr        r3, r30\n0x823F1EE0  bl        BrnDirector__DirectorIO__OutputBuffer__Get\n0x823F1EE4  mr        r4, r3\n0x823F1EE8  mr        r3, r23\n0x823F1EEC  bl        ___AppendRequestInterface__0CAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0CAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<512>(BrnResource::GameDataIO::RequestInterface<512> const *)\n0x823F1EF0  lwz       r29, 0x1C0+var_EC(r1)\n0x823F1EF4  mr        r3, r29\n0x823F1EF8  bl        BrnGameState__GameStateModuleIO__OutputBu\n0x823F1EFC  mr        r4, r3\n0x823F1F00  mr        r3, r23\n0x823F1F04  bl        ___AppendRequestInterface__0MAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0MAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<3072>(BrnResource::GameDataIO::RequestInterface<3072> const *)\n0x823F1F08  mr        r3, r27\n0x823F1F0C  bl        BrnSound__Module__Io__RootOutp\n0x823F1F10  mr        r30, r3\n0x823F1F14  mr        r3, r23\n0x823F1F18  bl        BrnResource__GameDataIO__InputBuffe\n0x823F1F1C  mr        r4, r30\n0x823F1F20  bl        ___Append__0IAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0IAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(CgsModule::VariableEventQueue<2048,16> const &)\n0x823F1F24  mr        r3, r27\n0x823F1F28  bl        BrnSound__Module__Io__RootOutputBuffer__G\n0x823F1F2C  mr        r4, r3\n0x823F1F30  mr        r3, r23\n0x823F1F34  bl        ___AppendRequestInterface__0BAAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0BAAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(BrnResource::GameDataIO::RequestInterface<4096> const *)\n0x823F1F38  mr        r3, r14\n0x823F1F3C  bl        BrnReplays__ReplayIO__OutputBuffer_PreSim\n0x823F1F40  mr        r4, r3\n0x823F1F44  mr        r3, r23\n0x823F1F48  bl        ___AppendRequestInterface__0EAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0EAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<1024>(BrnResource::GameDataIO::RequestInterface<1024> const *)\n0x823F1F4C  mr        r10, r14\n0x823F1F50  mr        r8, r27\n0x823F1F54  lwz       r9, 0(r16)\n0x823F1F58  mr        r5, r26\n0x823F1F5C  lwz       r7, 0(r15)\n0x823F1F60  mr        r4, r29\n0x823F1F64  lwz       r6, 0(r28)\n0x823F1F68  mr        r3, r23\n0x823F1F6C  bl        sub_823B7D20\n0x823F1F70  bl        BrnResource__GetAvailableMemory\n0x823F1F74  mr        r30, r3\n0x823F1F78  cmplw     cr6, r31, r30\n0x823F1F7C  beq       cr6, loc_823F200C\n0x823F1F80  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F1F84  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F1F88  clrldi    r11, r11, 63\n0x823F1F8C  cmpldi    cr6, r11, 0\n0x823F1F90  beq       cr6, loc_823F1FE0\n0x823F1F94  mr        r4, r18\n0x823F1F98  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F1F9C  bl        CgsDev__StrStreamBase__operator__\n0x823F1FA0  li        r4, 0x8E9\n0x823F1FA4  bl        sub_821F0E50\n0x823F1FA8  mr        r4, r19\n0x823F1FAC  bl        CgsDev__StrStreamBase__operator__\n0x823F1FB0  mr        r4, r24\n0x823F1FB4  bl        CgsDev__StrStreamBase__operator__\n0x823F1FB8  mr        r4, r20\n0x823F1FBC  bl        CgsDev__StrStreamBase__operator__\n0x823F1FC0  mr        r4, r31\n0x823F1FC4  bl        sub_821F0EC8\n0x823F1FC8  mr        r4, r21\n0x823F1FCC  bl        CgsDev__StrStreamBase__operator__\n0x823F1FD0  mr        r4, r30\n0x823F1FD4  bl        sub_821F0EC8\n0x823F1FD8  mr        r4, r22\n0x823F1FDC  bl        CgsDev__StrStreamBase__operator__\n0x823F1FE0  lis       r11, byte_82FFA89C@ha\n0x823F1FE4  mr        r31, r30\n0x823F1FE8  lbz       r11, byte_82FFA89C@l(r11)\n0x823F1FEC  cmplwi    cr6, r11, 0\n0x823F1FF0  beq       cr6, loc_823F200C\n0x823F1FF4  bl        CgsDev__Assert__BeginAssert\n0x823F1FF8  li        r5, 0x8E9\n0x823F1FFC  mr        r4, r24\n0x823F2000  lwz       r3, 0x1C0+var_11C(r1)\n0x823F2004  bl        CgsDev__Assert__FireAssert\n0x823F2008  bl        CgsDev__Assert__EndAssert\n0x823F200C  lwz       r30, 0x1C0+var_DC(r1)\n0x823F2010  mr        r3, r30\n0x823F2014  bl        CgsModule__IOBuffer__LockForRead\n0x823F2018  mr        r4, r30\n0x823F201C  mr        r3, r25\n0x823F2020  bl        BrnGame__BrnGameModule__BridgeInputToGame\n0x823F2024  mr        r3, r30\n0x823F2028  bl        CgsModule__IOBuffer__UnlockForRead\n0x823F202C  bl        CgsSystem__GetSystemTimerBaseTime\n0x823F2030  bl        CgsSystem__GetSystemTimerFrequency\n0x823F2034  lwz       r11, 0x1C0+var_100(r1)\n0x823F2038  lwz       r3, 0(r11)\n0x823F203C  bl        CgsDev__PerfMonCpu__StopMonitor\n0x823F2040  bl        BrnResource__GetAvailableMemory\n0x823F2044  mr        r30, r3\n0x823F2048  cmplw     cr6, r31, r30\n0x823F204C  beq       cr6, loc_823F20D8\n0x823F2050  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x823F2054  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x823F2058  clrldi    r11, r11, 63\n0x823F205C  cmpldi    cr6, r11, 0\n0x823F2060  beq       cr6, loc_823F20B0\n0x823F2064  mr        r4, r18\n0x823F2068  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918\n0x823F206C  bl        CgsDev__StrStreamBase__operator__\n0x823F2070  li        r4, 0x904\n0x823F2074  bl        sub_821F0E50\n0x823F2078  mr        r4, r19\n0x823F207C  bl        CgsDev__StrStreamBase__operator__\n0x823F2080  mr        r4, r24\n0x823F2084  bl        CgsDev__StrStreamBase__operator__\n0x823F2088  mr        r4, r20\n0x823F208C  bl        CgsDev__StrStreamBase__operator__\n0x823F2090  mr        r4, r31\n0x823F2094  bl        sub_821F0EC8\n0x823F2098  mr        r4, r21\n0x823F209C  bl        CgsDev__StrStreamBase__operator__\n0x823F20A0  mr        r4, r30\n0x823F20A4  bl        sub_821F0EC8\n0x823F20A8  mr        r4, r22\n0x823F20AC  bl        CgsDev__StrStreamBase__operator__\n0x823F20B0  lis       r11, byte_82FFA89C@ha\n0x823F20B4  lbz       r11, byte_82FFA89C@l(r11)\n0x823F20B8  cmplwi    cr6, r11, 0\n0x823F20BC  beq       cr6, loc_823F20D8\n0x823F20C0  bl        CgsDev__Assert__BeginAssert\n0x823F20C4  li        r5, 0x904\n0x823F20C8  mr        r4, r24\n0x823F20CC  lwz       r3, 0x1C0+var_11C(r1)\n0x823F20D0  bl        CgsDev__Assert__FireAssert\n0x823F20D4  bl        CgsDev__Assert__EndAssert\n0x823F20D8  addi      r4, r1, 0x1C0+var_CC\n0x823F20DC  lwz       r3, 0x1C0+var_D0(r1)\n0x823F20E0  bl        ___DestroyIOBuffer_VRootPreUpdateOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootPreUpdateOutp\n0x823F20E4  clrlwi    r11, r3, 24\n0x823F20E8  cmplwi    cr6, r11, 0\n0x823F20EC  lis       r11, aMpstackDestroy@ha\n0x823F20F0  addi      r31, r11, aMpstackDestroy@l# \"mpStack->DestroyIOBuffer( &mpBuffer )\"\n0x823F20F4  bne       cr6, loc_823F2118\n0x823F20F8  bl        CgsDev__Assert__BeginAssert\n0x823F20FC  lwz       r30, 0x1C0+var_FC(r1)\n0x823F2100  li        r5, 0x39 # '9'\n0x823F2104  mr        r4, r30\n0x823F2108  mr        r3, r31\n0x823F210C  bl        CgsDev__Assert__FireAssert\n0x823F2110  bl        CgsDev__Assert__EndAssert\n0x823F2114  b         loc_823F211C\n0x823F2118  lwz       r30, 0x1C0+var_FC(r1)\n0x823F211C  addi      r4, r1, 0x1C0+var_C4\n0x823F2120  lwz       r3, 0x1C0+var_C8(r1)\n0x823F2124  bl        ___DestroyIOBuffer_VOutputBuffer_EffectsIO_BrnEffects___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_EffectsIO_BrnEf\n0x823F2128  clrlwi    r11, r3, 24\n0x823F212C  cmplwi    cr6, r11, 0\n0x823F2130  bne       cr6, loc_823F214C\n0x823F2134  bl        CgsDev__Assert__BeginAssert\n0x823F2138  li        r5, 0x39 # '9'\n0x823F213C  mr        r4, r30\n0x823F2140  mr        r3, r31\n0x823F2144  bl        CgsDev__Assert__FireAssert\n0x823F2148  bl        CgsDev__Assert__EndAssert\n0x823F214C  addi      r4, r1, 0x1C0+var_BC\n0x823F2150  lwz       r3, 0x1C0+var_C0(r1)\n0x823F2154  bl        ___DestroyIOBuffer_VOutputBuffer_PostSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PostSim_\n0x823F2158  clrlwi    r11, r3, 24\n0x823F215C  cmplwi    cr6, r11, 0\n0x823F2160  bne       cr6, loc_823F217C\n0x823F2164  bl        CgsDev__Assert__BeginAssert\n0x823F2168  li        r5, 0x39 # '9'\n0x823F216C  mr        r4, r30\n0x823F2170  mr        r3, r31\n0x823F2174  bl        CgsDev__Assert__FireAssert\n0x823F2178  bl        CgsDev__Assert__EndAssert\n0x823F217C  addi      r4, r1, 0x1C0+var_E4\n0x823F2180  lwz       r3, 0x1C0+var_E8(r1)\n0x823F2184  bl        ___DestroyIOBuffer_VOutputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PreSim_Re\n0x823F2188  clrlwi    r11, r3, 24\n0x823F218C  cmplwi    cr6, r11, 0\n0x823F2190  bne       cr6, loc_823F21AC\n0x823F2194  bl        CgsDev__Assert__BeginAssert\n0x823F2198  li        r5, 0x39 # '9'\n0x823F219C  mr        r4, r30\n0x823F21A0  mr        r3, r31\n0x823F21A4  bl        CgsDev__Assert__FireAssert\n0x823F21A8  bl        CgsDev__Assert__EndAssert\n0x823F21AC  addi      r4, r1, 0x1C0+var_B4\n0x823F21B0  lwz       r3, 0x1C0+var_B8(r1)\n0x823F21B4  bl        ___DestroyIOBuffer_VRootOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootOutputBuffer_Io_Module\n0x823F21B8  clrlwi    r11, r3, 24\n0x823F21BC  cmplwi    cr6, r11, 0\n0x823F21C0  bne       cr6, loc_823F21DC\n0x823F21C4  bl        CgsDev__Assert__BeginAssert\n0x823F21C8  li        r5, 0x39 # '9'\n0x823F21CC  mr        r4, r30\n0x823F21D0  mr        r3, r31\n0x823F21D4  bl        CgsDev__Assert__FireAssert\n0x823F21D8  bl        CgsDev__Assert__EndAssert\n0x823F21DC  addi      r4, r1, 0x1C0+var_D4\n0x823F21E0  lwz       r3, 0x1C0+var_D8(r1)\n0x823F21E4  bl        ___DestroyIOBuffer_VInputBuffer_DirectorIO_BrnDirector___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_DirectorIO_BrnD\n0x823F21E8  clrlwi    r11, r3, 24\n0x823F21EC  cmplwi    cr6, r11, 0\n0x823F21F0  bne       cr6, loc_823F220C\n0x823F21F4  bl        CgsDev__Assert__BeginAssert\n0x823F21F8  li        r5, 0x39 # '9'\n0x823F21FC  mr        r4, r30\n0x823F2200  mr        r3, r31\n0x823F2204  bl        CgsDev__Assert__FireAssert\n0x823F2208  bl        CgsDev__Assert__EndAssert\n0x823F220C  addi      r4, r1, 0x1C0+var_AC\n0x823F2210  lwz       r3, 0x1C0+var_B0(r1)\n0x823F2214  bl        ___DestroyIOBuffer_VUpdateOutputBuffer_BrnWorldIO___IOBufferStack_CgsModule__QAA_NPAPAVUpdateOutputBuffer_BrnWorldIO___# CgsModule::IOBufferStack::DestroyIOBuffer<BrnWorldIO::UpdateOutputBuffer>(BrnWorldIO::UpdateOutputBuffer * *)\n0x823F2218  clrlwi    r11, r3, 24\n0x823F221C  cmplwi    cr6, r11, 0\n0x823F2220  bne       cr6, loc_823F223C\n0x823F2224  bl        CgsDev__Assert__BeginAssert\n0x823F2228  li        r5, 0x39 # '9'\n0x823F222C  mr        r4, r30\n0x823F2230  mr        r3, r31\n0x823F2234  bl        CgsDev__Assert__FireAssert\n0x823F2238  bl        CgsDev__Assert__EndAssert\n0x823F223C  addi      r4, r1, 0x1C0+var_EC\n0x823F2240  lwz       r3, 0x1C0+var_F0(r1)\n0x823F2244  bl        ___DestroyIOBuffer_VOutputBuffer_GameStateModuleIO_BrnGameState___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_GameS\n0x823F2248  clrlwi    r11, r3, 24\n0x823F224C  cmplwi    cr6, r11, 0\n0x823F2250  bne       cr6, loc_823F226C\n0x823F2254  bl        CgsDev__Assert__BeginAssert\n0x823F2258  li        r5, 0x39 # '9'\n0x823F225C  mr        r4, r30\n0x823F2260  mr        r3, r31\n0x823F2264  bl        CgsDev__Assert__FireAssert\n0x823F2268  bl        CgsDev__Assert__EndAssert\n0x823F226C  addi      r4, r1, 0x1C0+var_A4\n0x823F2270  lwz       r3, 0x1C0+var_A8(r1)\n0x823F2274  bl        ___DestroyIOBuffer_VOutputBuffer_BrnNetworkModuleIO_BrnNetwork___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_BrnNet\n0x823F2278  clrlwi    r11, r3, 24\n0x823F227C  cmplwi    cr6, r11, 0\n0x823F2280  bne       cr6, loc_823F229C\n0x823F2284  bl        CgsDev__Assert__BeginAssert\n0x823F2288  li        r5, 0x39 # '9'\n0x823F228C  mr        r4, r30\n0x823F2290  mr        r3, r31\n0x823F2294  bl        CgsDev__Assert__FireAssert\n0x823F2298  bl        CgsDev__Assert__EndAssert\n0x823F229C  addi      r4, r1, 0x1C0+var_DC\n0x823F22A0  lwz       r3, 0x1C0+var_E0(r1)\n0x823F22A4  bl        ___DestroyIOBuffer_VOutputBuffer_InputIO_CgsInput___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_InputIO_CgsInput___# CgsModule::IOBufferStack::DestroyIOBuffer<CgsInput::InputIO::OutputBuffer>(CgsInput::InputIO::OutputBuffer * *)\n0x823F22A8  clrlwi    r11, r3, 24\n0x823F22AC  cmplwi    cr6, r11, 0\n0x823F22B0  bne       cr6, loc_823F22CC\n0x823F22B4  bl        CgsDev__Assert__BeginAssert\n0x823F22B8  li        r5, 0x39 # '9'\n0x823F22BC  mr        r4, r30\n0x823F22C0  mr        r3, r31\n0x823F22C4  bl        CgsDev__Assert__FireAssert\n0x823F22C8  bl        CgsDev__Assert__EndAssert\n0x823F22CC  addi      r1, r1, 0x1C0\n0x823F22D0  b         __restgprlr",
+  "xrefs_to": [
+    {
+      "address": "0x823F22D8",
+      "name": "LoadingScriptedState::Update"
+    },
+    {
+      "address": "0x823F3048",
+      "name": "MainGameFlowStateInGame::Update"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EB0",
+      "name": "__savegprlr_14"
+    },
+    {
+      "address": "0x82661A38",
+      "name": "BrnResource::GetAvailableMemory"
+    },
+    {
+      "address": "0x821F1198",
+      "name": "CgsDev::PerfMonCpu::StartMonitor"
+    },
+    {
+      "address": "0x828D75A0",
+      "name": "CgsSystem::GetSystemTimerBaseTime"
+    },
+    {
+      "address": "0x823BD420",
+      "name": "BrnGame::BrnGameModule::ConstructUpdateSetFromFsm"
+    },
+    {
+      "address": "0x823AD2B0",
+      "name": "??$CreateIOBuffer@VOutputBuffer@InputIO@CgsInput@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@InputIO@CgsInput@@PB"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x823AD948",
+      "name": "??$CreateIOBuffer@VOutputBuffer@BrnNetworkModuleIO@BrnNetwork@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@BrnNetw"
+    },
+    {
+      "address": "0x823AC6E8",
+      "name": "??$CreateIOBuffer@VOutputBuffer@GameStateModuleIO@BrnGameState@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@GameSt"
+    },
+    {
+      "address": "0x823AD100",
+      "name": "??$CreateIOBuffer@VUpdateOutputBuffer@BrnWorldIO@@@IOBufferStack@CgsModule@@QAA_NPAPAVUpdateOutputBuffer@BrnWorldIO@@PB"
+    },
+    {
+      "address": "0x823AE280",
+      "name": "??$CreateIOBuffer@VInputBuffer@DirectorIO@BrnDirector@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@DirectorIO@BrnDi"
+    },
+    {
+      "address": "0x823AD458",
+      "name": "??$CreateIOBuffer@VRootOutputBuffer@Io@Module@BrnSound@@@IOBufferStack@CgsModule@@QAA_NPAPAVRootOutputBuffer@Io@Module@"
+    },
+    {
+      "address": "0x823AE428",
+      "name": "??$CreateIOBuffer@VOutputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PreSim@Rep"
+    },
+    {
+      "address": "0x823AE5D0",
+      "name": "??$CreateIOBuffer@VOutputBuffer_PostSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PostSim@R"
+    },
+    {
+      "address": "0x823AE778",
+      "name": "??$CreateIOBuffer@VOutputBuffer@EffectsIO@BrnEffects@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@EffectsIO@BrnEff"
+    },
+    {
+      "address": "0x823AD528",
+      "name": "??$CreateIOBuffer@VRootPreUpdateOutputBuffer@Io@Module@BrnSound@@@IOBufferStack@CgsModule@@QAA_NPAPAVRootPreUpdateOutpu"
+    },
+    {
+      "address": "0x823BD150",
+      "name": "BrnGame::BrnGameModule::BridgeTimers"
+    },
+    {
+      "address": "0x821F1308",
+      "name": "CgsDev::PerfMonCpu::StopMonitor"
+    },
+    {
+      "address": "0x82204C88",
+      "name": "CgsModule::IOBuffer::LockForRead"
+    },
+    {
+      "address": "0x823B1638",
+      "name": "BrnResource::GameDataIO::OutputBuffer::GetLive"
+    },
+    {
+      "address": "0x82204D50",
+      "name": "CgsModule::IOBuffer::UnlockForRead"
+    },
+    {
+      "address": "0x82866E60",
+      "name": "CgsMemory::LinearMalloc::FreeAll"
+    },
+    {
+      "address": "0x821F01A8",
+      "name": "CgsDev::StrStreamBase::operator<<"
+    },
+    {
+      "address": "0x821F0E50",
+      "name": "sub_821F0E50"
+    },
+    {
+      "address": "0x821F0EC8",
+      "name": "sub_821F0EC8"
+    },
+    {
+      "address": "0x823C5650",
+      "name": "BrnGame::BrnGameModule::DoUpdate_InputPreWorld"
+    },
+    {
+      "address": "0x823C5858",
+      "name": "BrnGame::BrnGameModule::DoUpdate_NetworkPreSim"
+    },
+    {
+      "address": "0x823EE0E8",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GameStatePreWorld"
+    },
+    {
+      "address": "0x823DD2A0",
+      "name": "BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim"
+    },
+    {
+      "address": "0x823DCD78",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GuiPreWorld"
+    },
+    {
+      "address": "0x823EE4D8",
+      "name": "BrnGame::BrnGameModule::DoPreUpdate_Sound"
+    },
+    {
+      "address": "0x823DCB40",
+      "name": "BrnGame::BrnGameModule::ConstructUpdateSet"
+    },
+    {
+      "address": "0x823E8BD0",
+      "name": "BrnGame::BrnGameModule::DoUpdate_World"
+    },
+    {
+      "address": "0x823C59E8",
+      "name": "BrnGame::BrnGameModule::DoUpdate_InputPostWorld"
+    },
+    {
+      "address": "0x823E8DE0",
+      "name": "BrnGame::BrnGameModule::DoUpdate_Director"
+    },
+    {
+      "address": "0x823F0758",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GUI"
+    },
+    {
+      "address": "0x823DCE38",
+      "name": "BrnGame::BrnGameModule::DoUpdate_DirectorPostGUI"
+    },
+    {
+      "address": "0x823DD0A8",
+      "name": "BrnGame::BrnGameModule::DoUpdate_Effects"
+    },
+    {
+      "address": "0x823DCEC0",
+      "name": "BrnGame::BrnGameModule::DoUpdate_Sound"
+    },
+    {
+      "address": "0x823DD408",
+      "name": "BrnGame::BrnGameModule::DoUpdate_ReplaysPostSim"
+    },
+    {
+      "address": "0x823E92A8",
+      "name": "BrnGame::BrnGameModule::DoUpdate_GameStatePostWorld"
+    },
+    {
+      "address": "0x823EE580",
+      "name": "BrnGame::BrnGameModule::DoUpdate_NetworkPostSim"
+    },
+    {
+      "address": "0x823BCFD0",
+      "name": "BrnGame::BrnGameModule::UpdateTimers"
+    },
+    {
+      "address": "0x823BD0A8",
+      "name": "BrnGame::BrnGameModule::UpdateFrameRateType"
+    },
+    {
+      "address": "0x823B7B80",
+      "name": "sub_823B7B80"
+    },
+    {
+      "address": "0x823EE710",
+      "name": "BrnGame::BrnGameModule::BridgeGuiToResource"
+    },
+    {
+      "address": "0x823B5780",
+      "name": "BrnWorldIO::UpdateOutputBuffer::GetResour"
+    },
+    {
+      "address": "0x823C76B8",
+      "name": "??$AppendRequestInterface@$0BAAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0BAAA@@12@@Z"
+    },
+    {
+      "address": "0x823B5828",
+      "name": "BrnWorldIO::UpdateOutputBuffer"
+    },
+    {
+      "address": "0x823B1830",
+      "name": "BrnResource::GameDataIO::InputBuffe"
+    },
+    {
+      "address": "0x823CE908",
+      "name": "??$Append@$0IAA@$0BA@@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QAA_NABV?$VariableEventQueue@$0IAA@$0BA@@1@@Z"
+    },
+    {
+      "address": "0x823B24A0",
+      "name": "BrnDirector::DirectorIO::Output"
+    },
+    {
+      "address": "0x823C7F28",
+      "name": "??$Append@$0CAA@$0BA@@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QAA_NABV?$VariableEventQueue@$0CAA@$0BA@@1@@Z"
+    },
+    {
+      "address": "0x823B33B0",
+      "name": "BrnDirector::DirectorIO::OutputBuffer::Get"
+    },
+    {
+      "address": "0x823CEAC0",
+      "name": "??$AppendRequestInterface@$0CAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0CAA@@12@@Z"
+    },
+    {
+      "address": "0x823B9798",
+      "name": "BrnGameState::GameStateModuleIO::OutputBu"
+    },
+    {
+      "address": "0x823EDF88",
+      "name": "??$AppendRequestInterface@$0MAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0MAA@@12@@Z"
+    },
+    {
+      "address": "0x823B8B10",
+      "name": "BrnSound::Module::Io::RootOutp"
+    },
+    {
+      "address": "0x823B8A68",
+      "name": "BrnSound::Module::Io::RootOutputBuffer::G"
+    },
+    {
+      "address": "0x823BB128",
+      "name": "BrnReplays::ReplayIO::OutputBuffer_PreSim"
+    },
+    {
+      "address": "0x823EE038",
+      "name": "??$AppendRequestInterface@$0EAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0EAA@@12@@Z"
+    },
+    {
+      "address": "0x823B7D20",
+      "name": "sub_823B7D20"
+    },
+    {
+      "address": "0x823BD248",
+      "name": "BrnGame::BrnGameModule::BridgeInputToGame"
+    },
+    {
+      "address": "0x828D75C8",
+      "name": "CgsSystem::GetSystemTimerFrequency"
+    },
+    {
+      "address": "0x823C7768",
+      "name": "??$DestroyIOBuffer@VRootPreUpdateOutputBuffer@Io@Module@BrnSound@@@IOBufferStack@CgsModule@@QAA_NPAPAVRootPreUpdateOutp"
+    },
+    {
+      "address": "0x823AE848",
+      "name": "??$DestroyIOBuffer@VOutputBuffer@EffectsIO@BrnEffects@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@EffectsIO@BrnEf"
+    },
+    {
+      "address": "0x823AE6A0",
+      "name": "??$DestroyIOBuffer@VOutputBuffer_PostSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PostSim@"
+    },
+    {
+      "address": "0x823AE4F8",
+      "name": "??$DestroyIOBuffer@VOutputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PreSim@Re"
+    },
+    {
+      "address": "0x823C7840",
+      "name": "??$DestroyIOBuffer@VRootOutputBuffer@Io@Module@BrnSound@@@IOBufferStack@CgsModule@@QAA_NPAPAVRootOutputBuffer@Io@Module"
+    },
+    {
+      "address": "0x823AE350",
+      "name": "??$DestroyIOBuffer@VInputBuffer@DirectorIO@BrnDirector@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@DirectorIO@BrnD"
+    },
+    {
+      "address": "0x823AD1D8",
+      "name": "??$DestroyIOBuffer@VUpdateOutputBuffer@BrnWorldIO@@@IOBufferStack@CgsModule@@QAA_NPAPAVUpdateOutputBuffer@BrnWorldIO@@@"
+    },
+    {
+      "address": "0x823AC7C0",
+      "name": "??$DestroyIOBuffer@VOutputBuffer@GameStateModuleIO@BrnGameState@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@GameS"
+    },
+    {
+      "address": "0x823ADA20",
+      "name": "??$DestroyIOBuffer@VOutputBuffer@BrnNetworkModuleIO@BrnNetwork@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@BrnNet"
+    },
+    {
+      "address": "0x823ADE58",
+      "name": "??$DestroyIOBuffer@VOutputBuffer@InputIO@CgsInput@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@InputIO@CgsInput@@@"
+    }
+  ]
+}

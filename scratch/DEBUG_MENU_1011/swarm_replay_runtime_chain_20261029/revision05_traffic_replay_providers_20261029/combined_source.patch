@@ -1,0 +1,1568 @@
+--- a/src/GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.cpp
+@@ -22,77 +22,24 @@
+ //     to those container methods (reverse-inlining).
+ //
+ // Callee declarations (BaseSerialiser, the frame structs, the Quantised packers, the
+-// Vehicle, ReadPhysicsInfo) live in their own TUs; included / declared here for the
++// Vehicle) live in their own TUs; the physics record codec is recovered below for the
+ // compile-only gate.
+ 
+ #include "types.hpp"
+ #include "GameShared/GameClasses/Core/CgsAssert.h"
+-#include "GameSource/Replays/BrnReplayBaseSerialiser.h"
++#include "GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h"
+ #include "GameSource/Replays/BrnReplayQuantisedQuatPos.h"
+ #include "GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiserFrame.h"
+ #include "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficVehicle.h"
+ 
+ #include <cstring>
++#include <cmath>
++#include "vendor/renderware/physics/JointFrames.hpp"
++#include "GameSource/Replays/BrnReplayQuantisedVector4.h"
++#include "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h"
+ 
+ namespace BrnReplays
+ {
+-    // DWARF home: GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h.
+-    class TrafficEntitySerialiser : public BaseSerialiser
+-    {
+-    public:
+-        // @0x8264C978
+-        s32 Construct();
+-        // @0x8264C710 -- returns the static-layout buffer, asserting it is big enough.
+-        TrafficEntitySerialiserStaticLayout* GetStaticLayout();
+-
+-        // @0x82653418 -- lazily clear the static layout on the first frame, mark it done.
+-        TrafficEntitySerialiserStaticLayout* CheckStaticLayoutCleared();
+-
+-        // @0x8265F2D8 / @0x8265F4E8 -- playback / record one frame (top-level dispatch).
+-        s32 Read();
+-        s32 Write();
+-
+-        // @0x8265DD38 / @0x8265D288 -- playback / record one whole frame buffer.
+-        void ReadFrame(TrafficEntitySerialiserStaticLayout* lpFrame, s32 liArg3);
+-        void WriteFrame(TrafficEntitySerialiserStaticLayout* lpFrame, s32 liArg3);
+-
+-        // @0x82658D98 / @0x82658B50 -- read / write a quat+pos transform record.
+-        void ReadAsQuatPos(void* lpTransform);
+-        void WriteAsQuatPos(const void* lpTransform);
+-
+-        // @ ReadPhysicsInfo (external TU) / @0x8265AE98 WritePhysicsInfo.
+-        void ReadPhysicsInfo(TrafficPhysicsInfoRecord* lpInfo, u32 luIndex, s32 liArg4);
+-        void WritePhysicsInfo(const u8* lpInfo, u8 luIndex);
+-
+-        // --- per-vehicle accessors (return pointers into the chunked static layout) ---
+-        // @0x82714118
+-        TrafficPhysicsInfoRecord* GetPhysicsInfo(u32 luPhysicsInfo);
+-        // @0x82707280
+-        TrafficVehicleDataRecord* GetVehicleData(u32 luVehicle);
+-        // @0x827071E8
+-        TrafficVehicleTransformRecord* GetVehicleTransform(u32 luVehicle);
+-
+-        // --- record-side setters (TrafficEntityModule::UpdateSerialiser drives these) ---
+-        // @0x827073C8
+-        void SetActiveHullsForLocalPlayer(const void* lpActiveHulls);
+-        // @0x82707438
+-        void SetBonusAssets(const u8* lpauBonusAssets, u32 luNumBonusAssets);
+-        // @0x82707320
+-        void SetPhysicsData(const u64* lpBits, const void* lpaPhysicsInfo);
+-        // @0x82714060
+-        void SetVehicleData(u32 luVehicle, BrnTraffic::Vehicle* lpVehicle);
+-        // @0x82707168
+-        void SetVehicleTransforms(const void* lpaTransforms);
+-
+-    private:
+-        // X360: two bytes at this+0x5C / this+0x5D, both cleared by Construct.
+-        // mbStaticLayoutCleared (+0x5C) is set by CheckStaticLayoutCleared once the
+-        // static layout has been zeroed; mbDeltaActive (+0x5D) tracks whether a delta
+-        // chain is in progress across Read frames.
+-        bool mbStaticLayoutCleared; // @0x5C
+-        bool mbDeltaActive;         // @0x5D
+-    };
+-
+     // -------------------------------------------------------------------------
+ 
+     s32 TrafficEntitySerialiser::Construct()
+@@ -119,7 +66,7 @@
+     // On the first frame after (re)start, when the static layout has not yet been
+     // cleared and the static buffer exists, zero the whole layout, reset the frame's
+     // bit arrays / info-valid words and mark it cleared.
+-    TrafficEntitySerialiserStaticLayout* TrafficEntitySerialiser::CheckStaticLayoutCleared()
++    void TrafficEntitySerialiser::CheckStaticLayoutCleared()
+     {
+         if (!mbStaticLayoutCleared && mpStaticBuffer != nullptr)
+         {
+@@ -134,12 +81,10 @@
+             lpLayout->mVehicleUpdateBits.UnSetAll();
+             lpLayout->mPhysicsBits.UnSetAll();
+             std::memset(&lpLayout->mInfoValid, 0, sizeof(lpLayout->mInfoValid));
+-            lpLayout->maTrafficLightState[0] = 0xFF;
+-            lpLayout->maTrafficLightState[1] = 0xFF;
++            lpLayout->muLocalPlayerHull = 0xFFFF;
+ 
+             mbStaticLayoutCleared = true;
+         }
+-        return GetStaticLayout();
+     }
+ 
+     // @0x82714118
+@@ -192,7 +137,7 @@
+ 
+     // @0x827073C8
+     // Copy the 148-byte active-hull header for the local player into the static layout.
+-    void TrafficEntitySerialiser::SetActiveHullsForLocalPlayer(const void* lpActiveHulls)
++    void TrafficEntitySerialiser::SetActiveHullsForLocalPlayer(const ::Set<u16, 72>* lpActiveHulls)
+     {
+         CGS_ASSERT(lpActiveHulls != nullptr, "lpActiveHulls");
+         std::memcpy(GetStaticLayout(), lpActiveHulls, 148);
+@@ -221,14 +166,15 @@
+     // 64-bit *lpBits is copied unchanged. (The Hex-Rays `HIDWORD(v7) = 0x10000` is a
+     // decompiler mis-model of `lis r9,1; ori r31,r9,0x9190` building the 0x19190 == 102800
+     // memcpy size in r31; there is no high-dword rewrite in the raw asm.)
+-    void TrafficEntitySerialiser::SetPhysicsData(const u64* lpBits, const void* lpaPhysicsInfo)
++    void TrafficEntitySerialiser::SetPhysicsData(const CgsContainers::BitArray<25>* lpBits, const BrnTraffic::TrafficPhysicsInfo* lpaPhysicsInfo)
+     {
+         CGS_ASSERT(lpBits != nullptr, "lpBits");
+         CGS_ASSERT(lpaPhysicsInfo != nullptr, "lpaPhysicsInfo");
+ 
+         TrafficEntitySerialiserStaticLayout* lpLayout = GetStaticLayout();
+         // asm: ld r10,0(a2) ; std r10,0xF0(layout) -- copy all 8 bytes of *lpBits as-is.
+-        const u64 lu64Bits = *lpBits;
++        u64 lu64Bits;
++        std::memcpy(&lu64Bits, lpBits, sizeof(lu64Bits));
+         std::memcpy(&lpLayout->mPhysicsBits, &lu64Bits, sizeof(lu64Bits));
+ 
+         std::memcpy(lpLayout->maPhysicsInfo, lpaPhysicsInfo, KU_PHYSICS_INFO_TOTAL);
+@@ -276,17 +222,27 @@
+     // the matrix store the caller performs.
+     void TrafficEntitySerialiser::ReadAsQuatPos(void* lpTransform)
+     {
+-        u8 lauPacked[12];
++        alignas(16) u8 lauPacked[16];
+         BaseSerialiser::Read(lauPacked, 12);
+-
+         float lafUnpacked[8];
+         QuantisedQuatPos::UnPack(lafUnpacked, lauPacked);
+-
+-        // The X360 builds a rotation matrix from the unpacked quaternion in VMX regs and
+-        // stores it (plus the position lane) into lpTransform. The exact matrix math is
+-        // produced by the (not-yet reconstructed) QuantisedQuatPos expansion; copy the
+-        // unpacked working set into the transform record as the grounded surface.
+-        std::memcpy(lpTransform, lafUnpacked, sizeof(lafUnpacked));
++        // ARTIST 82658E34..82658EA8: the rwmath scaled-quaternion builder,
++        // identical to the inline in RigidBody::DynamicUpdate. Keep fused neg_qq
++        // and the three original permutation leftovers in basis W lanes.
++        const float lfSX = 1.4142135381698608f * lafUnpacked[0];
++        const float lfSY = 1.4142135381698608f * lafUnpacked[1];
++        const float lfSZ = 1.4142135381698608f * lafUnpacked[2];
++        const float lfSW = 1.4142135381698608f * lafUnpacked[3];
++        const float lfDX = std::fmaf(-lfSX, lfSX, 0.5f);
++        const float lfDY = std::fmaf(-lfSY, lfSY, 0.5f);
++        const float lfDZ = std::fmaf(-lfSZ, lfSZ, 0.5f);
++        const float lfXY = lfSX * lfSY, lfYZ = lfSY * lfSZ, lfZX = lfSZ * lfSX;
++        const float lfWZ = lfSW * lfSZ, lfWX = lfSW * lfSX, lfWY = lfSW * lfSY;
++        auto& lrTransform = *static_cast<Matrix44Affine*>(lpTransform);
++        lrTransform.xAxis = {lfDY + lfDZ, lfXY + lfWZ, lfZX - lfWY, lfDX + lfDY};
++        lrTransform.yAxis = {lfXY - lfWZ, lfDZ + lfDX, lfYZ + lfWX, lfXY - lfWZ};
++        lrTransform.zAxis = {lfZX + lfWY, lfYZ - lfWX, lfDX + lfDY, lfXY + lfWZ};
++        lrTransform.wAxis = {lafUnpacked[4], lafUnpacked[5], lafUnpacked[6], 0.0f};
+     }
+ 
+     // @0x82658B50
+@@ -294,13 +250,18 @@
+     // quantised record and write it to the stream.
+     void TrafficEntitySerialiser::WriteAsQuatPos(const void* lpTransform)
+     {
+-        // The X360 reads the transform's basis vectors in VMX regs, derives a quaternion
+-        // (with the w-sign-selection `fsel`) plus the position, then Pack()s an 8-float
+-        // scratch. Reconstructed as the scratch-build + Pack + Write surface.
+-        float lafScratch[8];
+-        std::memcpy(lafScratch, lpTransform, sizeof(lafScratch));
+-
+-        u8 lauPacked[12];
++        const auto& lrTransform = *static_cast<const Matrix44Affine*>(lpTransform);
++        rw::math::vpu::Matrix33 lBasis;
++        lBasis.xAxis = lrTransform.xAxis;
++        lBasis.yAxis = lrTransform.yAxis;
++        lBasis.zAxis = lrTransform.zAxis;
++        const rw::math::vpu::Quaternion lQuat = rw::math::vpu::QuaternionFromMatrix33(lBasis, 0.0f);
++        float lafScratch[8] = {lQuat.x, lQuat.y, lQuat.z, lQuat.w,
++                              lrTransform.Pos().x, 0.0f, lrTransform.Pos().z, 0.0f};
++        // ARTIST 82658D58..82658D6C, flt_8206CEB4=-900. Unordered selects the floor.
++        const float lfY = lrTransform.Pos().y;
++        lafScratch[5] = (lfY - -900.0f >= 0.0f) ? lfY : -900.0f;
++        alignas(16) u8 lauPacked[16];
+         QuantisedQuatPos::Pack(lauPacked, lafScratch);
+         BaseSerialiser::Write(lauPacked, 12);
+     }
+@@ -315,17 +276,17 @@
+         CGS_ASSERT(lpFrame != nullptr, "lpFrame");
+         // The X360 fires FOUR alignment asserts under the single (ptr & 0xF) != 0 guard
+         // (0x8265DD9C-0x8265DE18), each citing a distinct member.
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maHeader) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0");
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maHeader) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0");
+         CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maPhysicsInfo) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->maPhysicsInfo) & 0xf) == 0");
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maTrafficLightState) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maTrafficLightManager) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mTrafficLightManager) & 0xf) == 0");
+ 
+-        BaseSerialiser::Read(lpFrame->maHeader, 148);
+-        BaseSerialiser::Read(lpFrame->maTrafficLightState, 2);
++        BaseSerialiser::Read(&lpFrame->mHeader, 148);
++        BaseSerialiser::Read(&lpFrame->muLocalPlayerHull, 2);
+         // The bonus-asset count is read with the 1-byte ReadByte primitive (sub_8264FCF0),
+         // not the general Read(_,1).
+         BaseSerialiser::ReadByte(&lpFrame->muNumBonusAssets);
+@@ -358,7 +319,7 @@
+         // at stride KU_SLOT_STRIDE starting at the slot-table base, read one more byte
+         // into a local, store its inverted-zero test into muReadSlotsValid, then read the
+         // 4-byte muReadSlotsWord.
+-        u8* lpSlot = lpFrame->maSlotTable;
++        u8* lpSlot = (lpFrame->maTrafficLightManager + 5);
+         for (u32 luSlot = 0; luSlot < KU_NUM_SLOTS; ++luSlot)
+         {
+             BaseSerialiser::ReadByte(lpSlot);
+@@ -368,8 +329,8 @@
+         BaseSerialiser::ReadByte(&luByte);
+         // asm 0x8265E7C8-0x8265E7DC: cntlzw(byte); extrwi ,1,26 (== (clz>>5)&1 == (byte==0));
+         // xori ,1  -> stored value is (byte != 0) ? 1 : 0.
+-        lpFrame->muReadSlotsValid = (luByte != 0) ? 1u : 0u; // ((cntlzw(byte)>>5)&1) ^ 1
+-        BaseSerialiser::Read(&lpFrame->muReadSlotsWord, 4);
++        lpFrame->maTrafficLightManager[4800] = (luByte != 0) ? 1u : 0u; // ((cntlzw(byte)>>5)&1) ^ 1
++        BaseSerialiser::Read(&lpFrame->maTrafficLightManager[4804], 4);
+     }
+ 
+     // @0x8265D288
+@@ -379,17 +340,17 @@
+         CGS_ASSERT(lpFrame != nullptr, "lpFrame");
+         // The X360 fires FOUR alignment asserts under the single (ptr & 0xF) != 0 guard
+         // (0x8265D2EC-0x8265D368), each citing a distinct member.
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maHeader) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0");
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maHeader) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mHeader) & 0xf) == 0");
+         CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maPhysicsInfo) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->maPhysicsInfo) & 0xf) == 0");
+-        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maTrafficLightState) & 0xf) == 0,
++        CGS_ASSERT((reinterpret_cast<uintptr_t>(lpFrame->maTrafficLightManager) & 0xf) == 0,
+                    "(reinterpret_cast<uintptr_t>(&lpFrame->mTrafficLightManager) & 0xf) == 0");
+ 
+-        BaseSerialiser::Write(lpFrame->maHeader, 148);
+-        BaseSerialiser::Write(lpFrame->maTrafficLightState, 2);
++        BaseSerialiser::Write(&lpFrame->mHeader, 148);
++        BaseSerialiser::Write(&lpFrame->muLocalPlayerHull, 2);
+         BaseSerialiser::Write(&lpFrame->muNumBonusAssets, 1);
+         BaseSerialiser::Write(lpFrame->maBonusAssets, 2);
+         BaseSerialiser::Write(&lpFrame->mVehicleUpdateBits, 80);
+@@ -418,14 +379,14 @@
+         // Trailing slot table (loc_8265DCD4-0x8265DD28): write KU_NUM_SLOTS one-byte slots at
+         // stride KU_SLOT_STRIDE, then the SAME +148080/+148084 slots-valid scalars the read side
+         // uses (asm r29=a2+143280, Write(+0x12C0,1)/Write(+0x12C4,4) -- no read/write asymmetry).
+-        const u8* lpSlot = lpFrame->maSlotTable;
++        const u8* lpSlot = (lpFrame->maTrafficLightManager + 5);
+         for (u32 luSlot = 0; luSlot < KU_NUM_SLOTS; ++luSlot)
+         {
+             BaseSerialiser::Write(lpSlot, 1);
+             lpSlot += KU_SLOT_STRIDE;
+         }
+-        BaseSerialiser::Write(&lpFrame->muReadSlotsValid, 1);  // +148080
+-        BaseSerialiser::Write(&lpFrame->muReadSlotsWord, 4);   // +148084
++        BaseSerialiser::Write(&lpFrame->maTrafficLightManager[4800], 1);  // +148080
++        BaseSerialiser::Write(&lpFrame->maTrafficLightManager[4804], 4);   // +148084
+     }
+ 
+     // @0x8265F2D8
+@@ -599,3 +560,218 @@
+         }
+     }
+ }
++
++
++namespace BrnReplays
++{
++namespace
++{
++    // FLAG recovered role name. ARTIST static descriptor 82FFA5C0, initializer
++    // 82C5F3F8..82C5F47C: r4/r5/r6/r7=9/9/9/5, v1=(-2,-2,-2,0), v2=(2,2,2,1).
++    const QuantisedVector4Compression sTrafficSkinningCompression(
++        Vector4{-2.0f,-2.0f,-2.0f,0.0f}, Vector4{2.0f,2.0f,2.0f,1.0f}, 9,9,9,5);
++
++    bool SameTrafficTransformXYZ(const Matrix44Affine& a, const Matrix44Affine& b)
++    {
++        const Vector3* ap = &a.xAxis; const Vector3* bp = &b.xAxis;
++        for (u32 row=0;row<4;++row)
++            if (ap[row].x != bp[row].x || ap[row].y != bp[row].y || ap[row].z != bp[row].z)
++                return false;
++        return true;
++    }
++    template<class T> bool TrafficXYZDeltaExceeds(const T& a, const T& b)
++    {
++        // flt_8209D7B0. Strict vcmpgt: NaN is false, unlike an inverted <= test.
++        const float epsilon=0.0000152587890625f;
++        return std::fabs(a.x-b.x)>epsilon || std::fabs(a.y-b.y)>epsilon || std::fabs(a.z-b.z)>epsilon;
++    }
++}
++
++    // ARTIST 8265AE98..8265B70C. A four-bit mask selects detached parts,
++    // skinning, light locators and the wheel/deformation block respectively.
++    void TrafficEntitySerialiser::WritePhysicsInfo(const u8* lpInfo, u8 luIndex)
++    {
++        const auto& info=*reinterpret_cast<const BrnTraffic::TrafficPhysicsInfo*>(lpInfo);
++        CGS_ASSERT(info.mDetachedPartQueue.muNumParts<=20,"lPhysicsInfo.muNumDetachedParts <= 20");
++        auto* layout=GetStaticLayout();
++        const BrnTraffic::TrafficPhysicsInfo* previous=nullptr;
++        if (!IsKeyFrame())
++        {
++            CGS_ASSERT(luIndex<25,"invalid index");
++            if ((layout->mInfoValid & (u64(1)<<luIndex))!=0)
++                previous=reinterpret_cast<const BrnTraffic::TrafficPhysicsInfo*>(layout->maPreviousPhysicsInfo)+luIndex;
++        }
++        u8 flags=15;
++        if (previous)
++        {
++            CGS_ASSERT(!IsKeyFrame(),"!IsKeyFrame()");
++            u32 part=0;
++            if(info.mDetachedPartQueue.muNumParts==previous->mDetachedPartQueue.muNumParts)
++            {
++                for(;part<info.mDetachedPartQueue.muNumParts;++part)
++                    if(info.mDetachedPartQueue.mau8PartIndex[part]!=previous->mDetachedPartQueue.mau8PartIndex[part] ||
++                       !SameTrafficTransformXYZ(info.mDetachedPartQueue.maTransforms[part],previous->mDetachedPartQueue.maTransforms[part])) break;
++                if(part==info.mDetachedPartQueue.muNumParts) flags&=~1u;
++            }
++            if(std::memcmp(info.maSkinningOffsets_Scratch,previous->maSkinningOffsets_Scratch,sizeof(info.maSkinningOffsets_Scratch))==0) flags&=~2u;
++            if(info.miNumLightLocators==previous->miNumLightLocators)
++            {
++                s32 light=0;
++                // These two counterintuitive branches are in the shipped code:
++                // 8265B1EC beq exits on EQUAL tags; 8265B22C bne exits when
++                // every XYZ delta is <= epsilon. Do not replace with equality.
++                for(;light<info.miNumLightLocators;++light)
++                    if(info.maLightTagPointTypes[light]==previous->maLightTagPointTypes[light] ||
++                       !TrafficXYZDeltaExceeds(info.maLightLocatorPositions[light],previous->maLightLocatorPositions[light])) break;
++                if(light==info.miNumLightLocators) flags&=~4u;
++            }
++            bool sameWheels=std::memcmp(info.mabWheelExists,previous->mabWheelExists,sizeof(info.mabWheelExists))==0;
++            bool sameRoad=!TrafficXYZDeltaExceeds(info.mvRoadTestNormal_HeightAboveRoad,previous->mvRoadTestNormal_HeightAboveRoad) &&
++                !(std::fabs(info.mvRoadTestNormal_HeightAboveRoad.w-previous->mvRoadTestNormal_HeightAboveRoad.w)>0.0000152587890625f);
++            if(sameWheels && sameRoad && info.mbIsDeforming==previous->mbIsDeforming &&
++               info.mbIsFatallyCrashing==previous->mbIsFatallyCrashing && info.mu8RenderDamageFlags==previous->mu8RenderDamageFlags)
++            {
++                u32 glass=0;
++                for(;glass<8;++glass)
++                    if(info.mafGlassPaneFractureAmounts[glass]!=previous->mafGlassPaneFractureAmounts[glass]) break;
++                // Original 8265B39C branches away when ALL glass entries match.
++                // The following wheel loop subtracts each loaded row from ITSELF
++                // (8265B3B8/C4/CC/D0), so its strict comparisons never exceed epsilon.
++                if(glass!=8) flags&=~8u;
++            }
++        }
++        BaseSerialiser::WriteByte(&flags);
++        if(flags&1)
++        {
++            BaseSerialiser::Write(&info.mDetachedPartQueue.muNumParts,1);
++            for(u32 part=0;part<info.mDetachedPartQueue.muNumParts;++part)
++            {
++                BaseSerialiser::Write(&info.mDetachedPartQueue.mau8PartIndex[part],1);
++                WriteAsQuatPos(&info.mDetachedPartQueue.maTransforms[part]);
++            }
++        }
++        if(flags&2)
++            for(u32 point=0;point<128;++point)
++            {
++                alignas(16) u8 packed[16]; const auto& v=info.maSkinningOffsets_Scratch[point];
++                QuantisedVector4::Pack(packed,&sTrafficSkinningCompression,Vector4{v.x,v.y,v.z,v.w});
++                BaseSerialiser::Write(packed,4);
++            }
++        if(flags&4)
++        {
++            BaseSerialiser::Write(&info.miNumLightLocators,1);
++            for(s32 light=0;light<info.miNumLightLocators;++light)
++            {
++                BaseSerialiser::WriteFloat(&info.maLightLocatorPositions[light].x);
++                BaseSerialiser::WriteFloat(&info.maLightLocatorPositions[light].y);
++                BaseSerialiser::WriteFloat(&info.maLightLocatorPositions[light].z);
++                BaseSerialiser::Write(&info.maLightTagPointTypes[light],1);
++            }
++        }
++        if(flags&8)
++        {
++            BaseSerialiser::Write(info.mabWheelExists,4);
++            BaseSerialiser::Write(&info.mvRoadTestNormal_HeightAboveRoad,16);
++            for(u32 wheel=0;wheel<4;++wheel)
++            {
++                float packed[12]; const Vector3* rows=&info.maWheelTransforms[wheel].xAxis;
++                for(u32 row=0;row<4;++row) {packed[3*row]=rows[row].x;packed[3*row+1]=rows[row].y;packed[3*row+2]=rows[row].z;}
++                BaseSerialiser::Write(packed,48);
++            }
++            BaseSerialiser::Write(&info.mbIsDeforming,1);
++            BaseSerialiser::Write(&info.mbIsFatallyCrashing,1);
++            BaseSerialiser::Write(&info.mu8RenderDamageFlags,1);
++            BaseSerialiser::Write(info.mafGlassPaneFractureAmounts,32);
++        }
++    }
++
++    // ARTIST 8265B710..8265BDC8; exported callers retained the name but no
++    // function JSON was emitted. Recovered directly from the raw image assembly.
++    void TrafficEntitySerialiser::ReadPhysicsInfo(TrafficPhysicsInfoRecord* lpInfo,u32 luIndex,s32)
++    {
++        auto& info=*reinterpret_cast<BrnTraffic::TrafficPhysicsInfo*>(lpInfo);
++        auto* layout=GetStaticLayout();
++        const BrnTraffic::TrafficPhysicsInfo* previous=nullptr;
++        if(!IsKeyFrame())
++        {
++            CGS_ASSERT(luIndex<25,"invalid index");
++            if(layout->mInfoValid & (u64(1)<<luIndex))
++                previous=reinterpret_cast<const BrnTraffic::TrafficPhysicsInfo*>(layout->maPreviousPhysicsInfo)+luIndex;
++        }
++        u8 flags; BaseSerialiser::ReadByte(&flags);
++        CGS_ASSERT(flags==15 || previous!=nullptr,"previous physics info required for delta");
++        if(flags&1)
++        {
++            BaseSerialiser::ReadByte(&info.mDetachedPartQueue.muNumParts);
++            for(u32 part=0;part<info.mDetachedPartQueue.muNumParts;++part)
++            {
++                BaseSerialiser::ReadByte(&info.mDetachedPartQueue.mau8PartIndex[part]);
++                ReadAsQuatPos(&info.mDetachedPartQueue.maTransforms[part]);
++            }
++        }
++        else
++        {
++            CGS_ASSERT(!IsKeyFrame(),"!IsKeyFrame()");
++            info.mDetachedPartQueue.muNumParts=previous->mDetachedPartQueue.muNumParts;
++            for(u32 part=0;part<info.mDetachedPartQueue.muNumParts;++part)
++            {
++                info.mDetachedPartQueue.mau8PartIndex[part]=previous->mDetachedPartQueue.mau8PartIndex[part];
++                info.mDetachedPartQueue.maTransforms[part]=previous->mDetachedPartQueue.maTransforms[part];
++            }
++        }
++        if(flags&2)
++            for(u32 point=0;point<128;++point)
++            {
++                alignas(16) u8 packed[16];BaseSerialiser::Read(packed,4);
++                QuantisedVector4::UnPack(&info.maSkinningOffsets_Scratch[point],packed,&sTrafficSkinningCompression);
++            }
++        else {CGS_ASSERT(!IsKeyFrame(),"!IsKeyFrame()");std::memcpy(info.maSkinningOffsets_Scratch,previous->maSkinningOffsets_Scratch,sizeof(info.maSkinningOffsets_Scratch));}
++        if(flags&4)
++        {
++            BaseSerialiser::ReadByte(&info.miNumLightLocators);
++            for(s32 light=0;light<info.miNumLightLocators;++light)
++            {
++                BaseSerialiser::ReadFloat(&info.maLightLocatorPositions[light].x);
++                BaseSerialiser::ReadFloat(&info.maLightLocatorPositions[light].y);
++                BaseSerialiser::ReadFloat(&info.maLightLocatorPositions[light].z);
++                info.maLightLocatorPositions[light].w=0.0f;
++                BaseSerialiser::ReadByte(&info.maLightTagPointTypes[light]);
++            }
++        }
++        else
++        {
++            CGS_ASSERT(!IsKeyFrame(),"!IsKeyFrame()");info.miNumLightLocators=previous->miNumLightLocators;
++            for(s32 light=0;light<info.miNumLightLocators;++light)
++            {
++                info.maLightLocatorPositions[light]=previous->maLightLocatorPositions[light];
++                info.maLightTagPointTypes[light]=previous->maLightTagPointTypes[light];
++            }
++        }
++        if(flags&8)
++        {
++            BaseSerialiser::Read(info.mabWheelExists,4);
++            BaseSerialiser::Read(&info.mvRoadTestNormal_HeightAboveRoad,16);
++            for(u32 wheel=0;wheel<4;++wheel)
++            {
++                float packed[12];BaseSerialiser::Read(packed,48);
++                Vector3* rows=&info.maWheelTransforms[wheel].xAxis;
++                for(u32 row=0;row<4;++row) rows[row]={packed[3*row],packed[3*row+1],packed[3*row+2],0.0f};
++            }
++            u8 value;BaseSerialiser::ReadByte(&value);info.mbIsDeforming=value!=0;
++            BaseSerialiser::ReadByte(&value);info.mbIsFatallyCrashing=value!=0;
++            BaseSerialiser::ReadByte(&info.mu8RenderDamageFlags);
++            BaseSerialiser::Read(info.mafGlassPaneFractureAmounts,32);
++        }
++        else
++        {
++            CGS_ASSERT(!IsKeyFrame(),"!IsKeyFrame()");
++            std::memcpy(info.mabWheelExists,previous->mabWheelExists,4);
++            info.mvRoadTestNormal_HeightAboveRoad=previous->mvRoadTestNormal_HeightAboveRoad;
++            std::memcpy(info.maWheelTransforms,previous->maWheelTransforms,sizeof(info.maWheelTransforms));
++            info.mbIsDeforming=previous->mbIsDeforming;info.mbIsFatallyCrashing=previous->mbIsFatallyCrashing;
++            info.mu8RenderDamageFlags=previous->mu8RenderDamageFlags;
++            std::memcpy(info.mafGlassPaneFractureAmounts,previous->mafGlassPaneFractureAmounts,32);
++        }
++        CGS_ASSERT(info.mDetachedPartQueue.muNumParts<=20,"lPhysicsInfo.muNumDetachedParts <= 20");
++    }
++}
+--- /dev/null
++++ b/src/GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h
+@@ -0,0 +1,67 @@
++#pragma once
++
++#include "GameSource/Replays/BrnReplayBaseSerialiser.h"
++#include "GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiserFrame.h"
++#include "GameShared/GameClasses/Containers/CgsBitArray.h"
++namespace BrnTraffic { struct TrafficPhysicsInfo; }
++
++namespace BrnReplays
++{
++    // DWARF home: GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h.
++    class TrafficEntitySerialiser : public BaseSerialiser
++    {
++    public:
++        // @0x8264C978
++        s32 Construct();
++        // @0x8264C710 -- returns the static-layout buffer, asserting it is big enough.
++        TrafficEntitySerialiserStaticLayout* GetStaticLayout();
++
++        // @0x82653418 -- void; no getter/assertion on the unallocated or already-cleared paths.
++        void CheckStaticLayoutCleared();
++
++        // @0x8265F2D8 / @0x8265F4E8 -- playback / record one frame (top-level dispatch).
++        s32 Read();
++        s32 Write();
++
++        // @0x8265DD38 / @0x8265D288 -- playback / record one whole frame buffer.
++        void ReadFrame(TrafficEntitySerialiserStaticLayout* lpFrame, s32 liArg3);
++        void WriteFrame(TrafficEntitySerialiserStaticLayout* lpFrame, s32 liArg3);
++
++        // @0x82658D98 / @0x82658B50 -- read / write a quat+pos transform record.
++        void ReadAsQuatPos(void* lpTransform);
++        void WriteAsQuatPos(const void* lpTransform);
++
++        // @0x8265B710 ReadPhysicsInfo (raw-image export hole) / @0x8265AE98 WritePhysicsInfo.
++        void ReadPhysicsInfo(TrafficPhysicsInfoRecord* lpInfo, u32 luIndex, s32 liArg4);
++        void WritePhysicsInfo(const u8* lpInfo, u8 luIndex);
++
++        // --- per-vehicle accessors (return pointers into the chunked static layout) ---
++        // @0x82714118
++        TrafficPhysicsInfoRecord* GetPhysicsInfo(u32 luPhysicsInfo);
++        // @0x82707280
++        TrafficVehicleDataRecord* GetVehicleData(u32 luVehicle);
++        // @0x827071E8
++        TrafficVehicleTransformRecord* GetVehicleTransform(u32 luVehicle);
++
++        // --- record-side setters (TrafficEntityModule::UpdateSerialiser drives these) ---
++        // @0x827073C8
++        void SetActiveHullsForLocalPlayer(const ::Set<u16, 72>* lpActiveHulls);
++        // @0x82707438
++        void SetBonusAssets(const u8* lpauBonusAssets, u32 luNumBonusAssets);
++        // @0x82707320
++        void SetPhysicsData(const CgsContainers::BitArray<25>* lpBits, const BrnTraffic::TrafficPhysicsInfo* lpaPhysicsInfo);
++        // @0x82714060
++        void SetVehicleData(u32 luVehicle, BrnTraffic::Vehicle* lpVehicle);
++        // @0x82707168
++        void SetVehicleTransforms(const void* lpaTransforms);
++
++    private:
++        // X360: two bytes at this+0x5C / this+0x5D, both cleared by Construct.
++        // mbStaticLayoutCleared (+0x5C) is set by CheckStaticLayoutCleared once the
++        // static layout has been zeroed; mbDeltaActive (+0x5D) tracks whether a delta
++        // chain is in progress across Read frames.
++        bool mbStaticLayoutCleared; // @0x5C
++        bool mbDeltaActive;         // @0x5D
++    };
++
++}
+--- a/src/GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiserFrame.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiserFrame.h
+@@ -17,7 +17,7 @@
+ //
+ // REGION MAP (static-base offsets, all from the accessor ASM):
+ //   +0x00000 (0)       mHeader              148 bytes  (Read/Write a2,148)
+-//   +0x00094 (148)     mTrafficLightState   2 bytes    (Read/Write a2+148,2)
++//   +0x00094 (148)     muLocalPlayerHull    2 bytes    (Read/Write a2+148,2)
+ //   +0x00096 (150)     muNumBonusAssets     1 byte     (SetBonusAssets stores count here)
+ //   +0x00097 (151)     maBonusAssets[ . ]   2 bytes    (SetBonusAssets stores assets +151+i; Read/Write a2+151,2)
+ //   +0x000A0 (160)     mVehicleUpdateBits   FastBitArray<600> (80 bytes / 10 u64; Read/Write a2+160,80)
+@@ -34,6 +34,7 @@
+ //     GetPhysicsInfo: 4112*index + base + 40480.
+ 
+ #include "types.hpp"
++#include "GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.h"
+ #include "GameShared/GameClasses/Containers/CgsFastBitArray.h"
+ 
+ namespace BrnTraffic { class Vehicle; }
+@@ -128,32 +129,13 @@
+ 
+     // The 251008-byte static-layout buffer GetStaticLayout returns. Only the regions the
+     // accessors prove are named; the spans between them are explicit padding.
+-    struct TrafficEntitySerialiserStaticLayout
++    struct TrafficEntitySerialiserStaticLayout : TrafficSerialiserFrame
+     {
+-        u8                       maHeader[148];               // @0x00000  mHeader
+-        u8                       maTrafficLightState[2];      // @0x00094
+-        u8                       muNumBonusAssets;            // @0x00096
+-        u8                       maBonusAssets[2];            // @0x00097  (count at +150, assets +151..)
+-        u8                       maPad0099[160 - 153];        // @0x00099  -> +0xA0
+-        CgsContainers::FastBitArray<600> mVehicleUpdateBits;  // @0x000A0  80 bytes
+-        CgsContainers::FastBitArray<25>  mPhysicsBits;        // @0x000F0  8 bytes
+-        // @0x000F8 .. @0x00100 : 8 undecoded bytes before the vehicle chunks.
+-        u8                       maPad00F8[256 - 248];        // @0x000F8
+         // 3 vehicle chunks, each KU_VEHICLE_CHUNK_STRIDE (13408) bytes.
+         u8                       maVehicleChunks[KU_NUM_VEHICLE_CHUNKS * KU_VEHICLE_CHUNK_STRIDE]; // @0x00100
+         // @0x100 + 3*13408 == 40480 == KU_OFFSET_PHYSICS_INFO (the chunks run right up to it).
+         TrafficPhysicsInfoRecord maPhysicsInfo[KU_NUM_PHYSICS_INFO]; // @0x09E20  25 * 4112 == 102800
+-        // @0x9E20 + 102800 == 143280; the slot table begins +5 bytes later, at +143285.
+-        u8                       maPad22FB0[KU_OFFSET_SLOT_TABLE - (KU_OFFSET_PHYSICS_INFO + KU_PHYSICS_INFO_TOTAL)]; // @0x22FB0  5 bytes
+-        // The slot table: KU_NUM_SLOTS one-byte entries at stride KU_SLOT_STRIDE
+-        // (only byte 0 of each 8-byte slot is used; ReadFrame/WriteFrame walk these).
+-        // Held as a flat byte region so the strided access lands at maSlotTable[i*8];
+-        // the read-side trailing scalars below reuse this region's tail bytes.
+-        u8                       maSlotTable[KU_OFFSET_READ_SLOTS_VALID - KU_OFFSET_SLOT_TABLE]; // @0x22FB5
+-        u8                       muReadSlotsValid;            // @0x242B0  read-side (cntlzw>>5 ^1)
+-        u8                       maPad242B1[KU_OFFSET_READ_SLOTS_WORD - (KU_OFFSET_READ_SLOTS_VALID + 1)]; // 3 bytes
+-        u32                      muReadSlotsWord;             // @0x242B4  read-side BaseSerialiser::Read(_,4)
+-        u8                       maPad242B8[KU_OFFSET_INFO_VALID - (KU_OFFSET_READ_SLOTS_WORD + 4)]; // -> +0x242C0
++        u8                       maTrafficLightManager[4816]; // @143280, original span includes four reserved tail bytes
+         // The info-valid qword (@0x242C0). Read() snapshots the whole 8 bytes from mPhysicsBits;
+         // Block-A and the Write path memset it to 0. It is NOT a write-side trailing-scalar source:
+         // WriteFrame writes the SAME +148080/+148084 slots-valid scalars the read side uses (the
+--- a/src/GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.cpp
++++ b/src/GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.cpp
+@@ -1,27 +1,15 @@
+ #include "GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.h"
+ 
+-// Reconstructed from BURNOUT_X360_ARTIST.XEX (BrnReplays::TrafficSerialiserFrame).
+-//
+-//   Clear @ 0x826533D8
+-//
+-// Store-for-store vs asm @0x826533D8: `li r11,0; li r10,-1; std r11,0xA0..0xF0` writes a
+-// 64-bit ZERO to each of the 11 slots (both handle and value = 0; the Hex-Rays
+-// 0xFFFFFFFF00000000 literal is a misread of the std-of-r11=0). `sth r10,0x94` is a
+-// 16-bit halfword store of -1 to miActiveCount (2 bytes), and `stw r11,0x90` zeroes the
+-// 32-bit frame counter.
+ namespace BrnReplays
+ {
+-    // @ 0x826533D8
++    // ARTIST 0x826533D8: eleven zero qwords at +0xA0..+0xF0, hull -1, count zero.
++    // The asset count/ids and hull element bytes are deliberately retained.
+     TrafficSerialiserFrame* TrafficSerialiserFrame::Clear()
+     {
+-        for (u32 luSlot = 0; luSlot < KU_TRAFFIC_FRAME_SLOTS; ++luSlot)
+-        {
+-            maSlots[luSlot].miHandle = 0;   // std r11(=0): the whole 8-byte slot is zeroed
+-            maSlots[luSlot].miValue  = 0;
+-        }
+-
+-        miActiveCount  = -1;                // sth r10(-1),0x94 -- 16-bit halfword
+-        miFrameCounter = 0;                 // stw r11(0),0x90
++        mVehicleUpdateBits.UnSetAll();
++        mPhysicsBits.UnSetAll();
++        muLocalPlayerHull = 0xFFFF;
++        mHeader.Clear();
+         return this;
+     }
+ }
+--- a/src/GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.h
++++ b/src/GameSource/Replays/Serialisers/BrnReplayTrafficSerialiserFrame.h
+@@ -1,43 +1,24 @@
+ #pragma once
+-
+-// BrnReplays::TrafficSerialiserFrame -- the per-frame snapshot the traffic replay
+-// serialiser records/plays back. No DWARF or prior source recovered for this type,
+-// so only the fields that Clear @0x826533D8 touches are known; everything before
+-// them is held as an opaque leading block. All access is BY NAME.
+-//
+-// X360 reference: Clear @0x826533D8 (called by TrafficEntityModule::UpdateSerialiser).
+-
+ #include "types.hpp"
++#include "GameShared/GameClasses/Containers/CgsSet.h"
++#include "GameShared/GameClasses/Containers/CgsFastBitArray.h"
+ 
+ namespace BrnReplays
+ {
+-    // One slot of the traffic frame's reset table. Clear @0x826533D8 zeroes each slot
+-    // (asm `li r11,0; std r11,0xA0..0xF0` -- a 64-bit ZERO store; both words become 0).
+-    // The Hex-Rays 0xFFFFFFFF00000000 literal is a misread of the std-of-r11=0.
+-    struct TrafficFrameSlot
+-    {
+-        s32 miHandle; // @+0x00 reset to 0 (asm std r11=0 zeroes the whole slot)
+-        s32 miValue;  // @+0x04 reset to 0
+-    };
+-
+-    // Number of reset slots Clear writes: 11 eight-byte stores from +0xA0 to +0xF0.
+-    static const u32 KU_TRAFFIC_FRAME_SLOTS = 11;
+-
+-    // Opaque per-frame traffic state. Only the region Clear touches is named; the
+-    // leading bytes [0x00 .. 0x90) are an undecoded block (no recovered layout). GROW
+-    // this home into named fields if/when a DWARF layout is recovered.
++    // ARTIST Clear 0x826533D8 and producer 0x8272DA80 establish this 256-byte prefix.
++    // Set<u16,72> is the module's active hull set: 144 element bytes then its count.
+     struct TrafficSerialiserFrame
+     {
+-        u8  maHead[0x90];                            // @0x00 undecoded leading state
+-        s32 miFrameCounter;                          // @0x90 reset to 0 by Clear (stw)
+-        s16 miActiveCount;                           // @0x94 reset to -1 by Clear (sth -- 16-bit)
+-        s16 mPad96;                                  // @0x96 untouched by Clear
+-        // @0x98 .. @0x9F : two undecoded words between the counters and the slot table.
+-        u8  maGap[0x08];                             // @0x98 undecoded
+-        TrafficFrameSlot maSlots[KU_TRAFFIC_FRAME_SLOTS]; // @0xA0 reset table (11 slots)
++        ::Set<u16,72> mHeader;                         // +0x00, count at +0x90
++        u16 muLocalPlayerHull;                        // +0x94, invalid = 0xFFFF
++        u8 muNumBonusAssets;                          // +0x96
++        u8 maBonusAssets[2];                          // +0x97
++        u8 maPad0099[7];
++        CgsContainers::FastBitArray<600> mVehicleUpdateBits; // +0xA0
++        CgsContainers::FastBitArray<25> mPhysicsBits;   // +0xF0
++        u8 maPad00F8[8];
+ 
+-        // @0x826533D8 -- reset the frame's slot table and counters to the empty state
+-        // (declared here, defined in BrnReplayTrafficSerialiserFrame.cpp).
+         TrafficSerialiserFrame* Clear();
+     };
++    static_assert(sizeof(TrafficSerialiserFrame) == 256, "Traffic frame prefix");
+ }
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp
+@@ -579,16 +579,11 @@
+     // @ 0x827081D8 -- on entering replay, clear the byte at +0x72521 and, when
+     // CgsDev::Message::gxMessageFilterFlags & 1, print.
+     //
+-    // PARKED: +0x72521 has no name. It is not mbInReplay (:757, pinned at +465714 by Prepare
+-    // @0x8274A578 stage 0), and both replay hooks store ZERO there, which no in/out flag would
+-    // do. It lands in the :776/:777 gap the DecFIGS dwarfdump skips, so naming it would be
+-    // fabrication. Recover those two members from the X360 Construct @0x82740220 field-init
+-    // walk, then restore the store. DELETE THIS WHEN the member is named.
+     void TrafficEntityModule::EnterReplay()
+     {
+         if ((CgsDev::Message::gxMessageFilterFlags & 1) != 0)
+             (*CgsDev::Log::gpDebugPrint) << "TRAF: Enter Replay\n";
+-        // PARKED STORE: `*(this + 0x72521) = 0` -- member unnamed, see the FLAG above.
++        mbReplayAssetsReady = false; // ARTIST 82708224..8270822C: clear +0x72521.
+     }
+ 
+     // @ 0x82708248 -- symmetric to EnterReplay (same parked store).
+@@ -596,7 +591,7 @@
+     {
+         if ((CgsDev::Message::gxMessageFilterFlags & 1) != 0)
+             (*CgsDev::Log::gpDebugPrint) << "TRAF: Leave Replay\n";
+-        // PARKED STORE: `*(this + 0x72521) = 0` -- member unnamed, see EnterReplay's FLAG.
++        mbReplayAssetsReady = false;
+     }
+ 
+     // @ 0x82708F98 --
+@@ -4612,29 +4607,17 @@
+         lpInput->GetVehicleManagerOutputInterface()->GetTrafficTypeRequestQueue(),
+         lpOutput->GetTrafficTypeResponseQueue());
+ 
+-    // The console's remaining tail (re-read by crash parity FX-TRAFFICLIGHTS, 2026-09-25):
+-    //   0x8274EEC8..0x8274EEDC  the output's replay request interface (0x82711D90, the IO header's
+-    //                           GetWriteInterfaceAt834784) ->RegisterSerialiser(&the module's TrafficEntitySerialiser
+-    //                           at +0x724C0) (0x821F34A0), before the two unlocks;
+-    //   0x8274EEF0..0x8274EF3C  after them: serialiser state (lwz 0(+0x724C0)) 1, 2 or 3 and the byte +0x7251B
+-    //                           clear -> TrafficEntitySerialiser::Write(0) (0x8265F4E8) -- the replay recording;
+-    //   0x8274EF40..0x8274EFD8  PerfMonCpu::StopMonitor x2 and GetMonitorData x5 into the miPerfMon_* stats.
+-    // BLOCKED, the replay legs: RegisterSerialiser is bodied (BrnReplayRequestInterface.cpp), but there is no
+-    // serialiser to hand it. BrnReplays::TrafficEntitySerialiser (Construct 0x8264C978, Write 0x8265F4E8) is
+-    // declared only inside the UNMOUNTED BrnReplayTrafficEntitySerialiser.cpp, the module header has no member at
+-    // +0x724C0, and Construct's own serialiser leg is gated (the [T1-traffic-leg] line). That is the traffic
+-    // replay subsystem, not a tail call. Its independent debug-perfmon snapshot tail is restored below.
+-    {
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1(sbLogged,
+-            "PostPhysicsUpdate replay-serialiser registration/write -- RegisterSerialiser "
+-            "0x821F34A0 is bodied, but TrafficEntitySerialiser at +0x724C0 is not declared or mounted");
+-    }
++    // ARTIST 0x8274EEC8..0x8274EEDC, still inside both IO locks.
++    lpOutput->GetReplayRequestInterface()->RegisterSerialiser(&mTrafficEntitySerialiser);
+ 
+     LatchRenderPosesPC(); // FLAG PC-platform leaf: after every traffic pose producer.
+ 
+     lpInput->UnlockForRead();
+     lpOutput->UnlockForWrite();
++
++    // ARTIST 0x8274EEF0..0x8274EF3C: module writes only when replay does not own it.
++    if (mTrafficEntitySerialiser.IsRecording() && !mTrafficEntitySerialiser.SkipModuleSerialise())
++        mTrafficEntitySerialiser.Write();
+ 
+     CgsDev::PerfMonCpu::StopMonitor(miPerfMon_PostPhysicsUpdate_Post1);
+     CgsDev::PerfMonCpu::StopMonitor(miPerfMon_PostPhysicsUpdate);
+@@ -5507,6 +5490,7 @@
+     mReceiverQueue.Construct();
+ 
+     mStreamer.Construct();
++    mTrafficEntitySerialiser.Construct();
+ 
+     // 0x8274087C..0x8274088C -- FuzzyBehaviourLogic::Construct(this+0x71860, this+0x72710),
+     // i.e. mFuzzyBehaviours.Construct(&mTweakValues). Without this call every fuzzy envelope
+@@ -5518,7 +5502,7 @@
+     {
+         static bool sbLogged = false;
+         LogMissingLeg_T1(sbLogged,
+-            "Construct sub-object legs TrafficEntitySerialiser::Construct, "
++            "Construct sub-object legs "
+             "CgsResource::BaseResourcePtr::CreateFromHandle(mpData-adjacent slot), "
+             "the 32-slot showtime list seed and DebugRenderStreamReader::"
+             "Construct -- none of those callees has a body or a usable declaration in this tree");
+@@ -5813,18 +5797,8 @@
+     mbDontCreateStaticVehiclesNearAnyPlayers = false; // 0x725EA
+     mbInPictureParadise                      = false; // 0x725EB
+ 
+-    {
+-        // GATE: two stores inside the un-emitted DWARF :776/:777 window, i.e. the
+-        // BrnReplays::TrafficEntitySerialiser member the console registers at `this + 468160`.
+-        // Construct writes zero to +0x72520 and ONE to +0x72521, while EnterReplay @0x827081D8
+-        // and LeaveReplay @0x82708248 both write zero to +0x72521. A flag that constructs to 1
+-        // and clears on entering AND leaving replay is not mbInReplay, so it stays unnamed.
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1(sbLogged,
+-            "Construct stores +0x72520 = 0 and +0x72521 = 1 -- both inside the replay "
+-            "serialiser's DWARF un-emitted :776/:777 window; no attested member name "
+-            "(the same byte EnterReplay/LeaveReplay clear)");
+-    }
++    mbReplayPlayback = false;      // ARTIST +0x72520
++    mbReplayAssetsReady = true;    // ARTIST +0x72521
+ 
+     // 0x82741450..0x82741460. mLocalPlayerDirection @+0x713E0 is NOT written here; the console
+     // leaves it to PostPhysicsUpdate's tail.
+@@ -5970,26 +5944,17 @@
+             "are gated; same reason the sibling partfile gates PostPhysicsUpdate's bracket");
+     }
+ 
+-    // ⛔ THE OLD NOTE HERE IS RETRACTED (2026-08-27). It said: "BrnUpdateSet is a bare
+-    // `typedef u16` ... with no named bits, and the ARTIST body is an export hole, so THE MASKS
+-    // CANNOT BE READ OFF ANYTHING." **An ARTIST export hole is not an IMAGE hole.** Both masks
+-    // were read straight out of the instruction bytes at 0x8274A9A4..0x8274A9B0 (see the decode
+-    // above); the export set simply carries no per-function JSON for this address. ⭐ "The export
+-    // does not have it" is a fact about the export, never about the binary.
+-    //
+-    // The SIM-PAUSED half is LIVE now (it gates the block below, and it is what makes a paused
+-    // traffic sim actually stop). The REPLAY half stays gated: bit 8 is decoded above in the
+-    // console and drives EnterReplay @0x827081D8 / LeaveReplay @0x82708248, neither of which has
+-    // a body in this tree, and replay is not this wave's surface.
+-    // DELETE WHEN: EnterReplay/LeaveReplay are bodied.
+-    {
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1(sbLogged,
+-            "PreSceneUpdate REPLAY latch -- update-set BIT 8 (E_HLA_UPDATE_PLAYING_REPLAY) is "
+-            "decoded by the console at 0x8274A9A4/0x8274A9AC and drives EnterReplay @0x827081D8 "
+-            "/ LeaveReplay @0x82708248 at 0x8274A9C4..0x8274A9D8; neither callee is bodied in "
+-            "this tree. The SIM-PAUSED half of the decode (bit 0, 0x8274A9B0) is LIVE");
+-    }
++    // ARTIST 0x8274A9A8..0x8274AA4C. This latch is distinct from mbInReplay.
++    const bool lbInReplay = (lUpdateSet & 0x100u) != 0;
++    if (lbInReplay != mbReplayPlayback)
++    {
++        if (lbInReplay) EnterReplay(); else LeaveReplay();
++    }
++    mbReplayPlayback = lbInReplay;
++    mTrafficEntitySerialiser.CheckStaticLayoutCleared();
++    if (mTrafficEntitySerialiser.IsPlaying() && !mTrafficEntitySerialiser.SkipModuleSerialise())
++        mTrafficEntitySerialiser.Read();
++    UpdateSerialiser();
+ 
+     lpOutput->LockForWrite();
+     lpInput->LockForRead();
+@@ -6128,16 +6093,6 @@
+             GenerateCrashedVehicleEvents(lpOutput);
+         }
+ 
+-        {
+-            static bool sbLogged = false;
+-            LogMissingLeg_T1(sbLogged,
+-                "PreSceneUpdate E_STATE_RUNNING remaining leg -- UpdateSerialiser @0x8272DA80, "
+-                "not bodied (replay surface). ManageTriggers @0x82747518 is live before the switch. "
+-                "UpdateCrashSlider @0x82715A18 and GenerateCrashedVehicleEvents @0x82720030 "
+-                "WERE in this list and are now live above. The earlier revision's "
+-                "KillTrafficTooCloseToRaceCars is NOT in the ship's callee list and is "
+-                "therefore not written");
+-        }
+     }
+     break;
+ 
+@@ -6546,38 +6501,18 @@
+     // hull+64, count at hull+6).
+     u16 luHull = KU_INVALID_HULL;
+ 
+-    {
+-        // GATE -- the replay-playback hull source (0x82722588..0x827225A0), i.e.
+-        // `if (*(this + 0x72520)) luHull = *(sub_82707090(this + 0x724C0) + 74);`. Module
+-        // +0x724C0 is the BrnReplays::TrafficEntitySerialiser and +0x72520 the replay-playback
+-        // latch; both sit in the DWARF's un-emitted :776/:777 window with no member in
+-        // BrnTrafficEntityModule.h, and the serialiser class has no owning header in this tree.
+-        // Construct writes the latch zero, so live gameplay takes the arm below; this gate
+-        // changes replay playback only.
+-        // DELETE WHEN: the two members are modelled and the serialiser gets a header.
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1( sbLogged,
+-            "AddVehiclesToTargetList replay-playback hull source -- it reads the hull out of "
+-            "BrnReplays::TrafficEntitySerialiser (module +0x724C0) under the replay latch at "
+-            "module +0x72520, and BOTH sit in the DecFIGS un-emitted :776/:777 window with no "
+-            "member in BrnTrafficEntityModule.h; the serialiser class has no owning header in "
+-            "this tree at all. Construct writes the latch ZERO, so live gameplay takes the "
+-            "per-player hull list below" );
+-    }
+-
+-    // maaRaceCarHulls[meLocalPlayerIndex] -- the per-active-race-car active-hull list, X360
+-    // this + 350220 + 24*index (Reset @0x8272CDA0 Appends into the same array at the same
+-    // base). Entry 0 is the hull the car is in; the rest are neighbours.
+-    const ::Array<u16, KU_MAX_ACTIVE_HULLS_PER_RACECAR>& lrPlayerHulls =
+-        maaRaceCarHulls[meLocalPlayerIndex];
+-
+-    if ( lrPlayerHulls.GetLength() == 0 )
+-    {
+-        // 0x827225A8 `bne` -- before the first RecalculateActiveHulls the list is empty.
+-        return;
+-    }
+-
+-    luHull = lrPlayerHulls.GetItem( 0 );
++    if (mbReplayPlayback)
++    {
++        luHull = mTrafficEntitySerialiser.GetStaticLayout()->muLocalPlayerHull;
++    }
++    else
++    {
++        const ::Array<u16, KU_MAX_ACTIVE_HULLS_PER_RACECAR>& lrPlayerHulls =
++            maaRaceCarHulls[meLocalPlayerIndex];
++        if (lrPlayerHulls.GetLength() == 0)
++            return;
++        luHull = lrPlayerHulls.GetItem(0);
++    }
+ 
+     if ( luHull != KU_INVALID_HULL )
+     {
+@@ -6668,45 +6603,19 @@
+         break;
+     }
+ 
+-    // The pump (0x827489AC..0x827489F0). During replay playback the console replaces Update's
+-    // bonus-asset list with the recorded one:
+-    //     if (*(this + 0x72520)) {
+-    //         luNumBonus = *(sub_82707090(this + 0x724C0) + 150);   // count byte
+-    //         lpauBonus  = sub_82707090(this + 0x724C0) + 151;      // the bytes after it
+-    //     }
+-    //     mStreamer.Update(lpauBonus, luNumBonus);
+-    {
+-        // GATE -- same two un-modelled members as the replay leg above (+0x72520 latch,
+-        // +0x724C0 serialiser); sub_82707090 is an unnamed serialiser accessor.
+-        //
+-        // The (0, 0) below is not a placeholder: it is the console's own value on every
+-        // non-replay frame (both locals start zero, only the latched arm changes them,
+-        // 0x827489B0). Live gameplay is unchanged; replay playback loses the recorded set.
+-        // DELETE WHEN: the two members are modelled and the serialiser gets a header.
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1( sbLogged,
+-            "UpdateStreaming replay-playback bonus-asset override -- reads a count byte + "
+-            "list out of BrnReplays::TrafficEntitySerialiser (module +0x724C0) under the "
+-            "replay latch (module +0x72520); neither member exists in the keystone header "
+-            "(DecFIGS un-emitted :776/:777 window) and the serialiser has no owning header. "
+-            "The (0,0) passed to Update IS the console's own non-replay value, not a stand-in" );
+-    }
+-
+-    mStreamer.Update( 0, 0 );
+-
+-    {
+-        // GATE -- the "all loaded" latch (0x827489F4..0x82748A1C), console
+-        // `if (*(this+0x72520) && !*(this+0x72521)) *(this+0x72521) = AreAllAssetsLoaded();`.
+-        // Both bytes are in the same un-modelled :776/:777 window. The second is set to one by
+-        // Construct and cleared by EnterReplay @0x827081D8 and LeaveReplay @0x82708248, i.e. a
+-        // "replay assets have arrived" latch re-armed at each replay boundary. Dead on every
+-        // live-gameplay frame. DELETE WHEN: the two members are modelled.
+-        static bool sbLogged = false;
+-        LogMissingLeg_T1( sbLogged,
+-            "UpdateStreaming replay assets-arrived latch (module +0x72521, set from "
+-            "AreAllAssetsLoaded under the +0x72520 replay latch) -- same un-modelled "
+-            ":776/:777 window members. Dead on every non-replay frame" );
+-    }
++    // ARTIST 0x827489AC..0x82748A1C: replay supplies the captured streamed assets,
++    // then the common streaming pump advances the boundary readiness latch.
++    const u8* lpauBonusAssets = nullptr;
++    u32 luNumBonusAssets = 0;
++    if (mbReplayPlayback)
++    {
++        BrnReplays::TrafficEntitySerialiserStaticLayout* lpFrame = mTrafficEntitySerialiser.GetStaticLayout();
++        luNumBonusAssets = lpFrame->muNumBonusAssets;
++        lpauBonusAssets = lpFrame->maBonusAssets;
++    }
++    mStreamer.Update(lpauBonusAssets, luNumBonusAssets);
++    if (mbReplayPlayback && !mbReplayAssetsReady)
++        mbReplayAssetsReady = mStreamer.AreAllAssetsLoaded();
+ 
+     // 0x82748A20..0x82748A30: carry the streamer's requests into this frame's output buffer.
+     // This is the only statement that uses lpOutput, which is why the parameter stays.
+@@ -22466,3 +22375,67 @@
+ }
+ 
+ }   // namespace BrnTraffic
++
++
++namespace BrnTraffic
++{
++    // ARTIST 0x8272DA80..0x8272E368. All offsets are resolved to owning members.
++    void TrafficEntityModule::UpdateSerialiser()
++    {
++        mTrafficEntitySerialiser.Lock();
++        const BrnReplays::BaseSerialiser::EMode leMode = mTrafficEntitySerialiser.GetMode();
++        if (mTrafficEntitySerialiser.IsRecording())
++        {
++            BrnReplays::TrafficEntitySerialiserStaticLayout* lpFrame =
++                mTrafficEntitySerialiser.GetStaticLayout();
++            lpFrame->Clear();
++            if (meLocalPlayerIndex != E_ACTIVE_RACE_CAR_INDEX_INVALID &&
++                maaRaceCarHulls[meLocalPlayerIndex].GetLength() != 0)
++            {
++                lpFrame->muLocalPlayerHull = maaRaceCarHulls[meLocalPlayerIndex].GetItem(0);
++                mTrafficEntitySerialiser.SetActiveHullsForLocalPlayer(&mActiveHullsForLocalPlayer);
++            }
++
++            CgsContainers::FastBitArray<KU_MAX_TOTAL_TRAFFIC> lVehicles;
++            lVehicles.SetAnd(mVehicleSoaData.mVehiclesWithEntities, mVehicleSoaData.mAliveVehicles);
++            lpFrame->mVehicleUpdateBits = lVehicles;
++            mTrafficEntitySerialiser.SetVehicleTransforms(maVehicleTransforms);
++            for (s32 liVehicle = lVehicles.GetFirstBitSet(); liVehicle >= 0;
++                 liVehicle = lVehicles.GetNextBitSet(liVehicle))
++            {
++                const u32 luVehicle = static_cast<u32>(liVehicle);
++                Vehicle* lpVehicle = GetVehicle(luVehicle);
++                if (lpVehicle->IsPhysical())
++                    GetTrafficPhysicsInfoForVehicl(luVehicle); // retains physical-slot validity assertions
++                mTrafficEntitySerialiser.SetVehicleData(luVehicle, lpVehicle);
++            }
++            mTrafficEntitySerialiser.SetPhysicsData(&maTrafficPhysicsInfoListBits,
++                                                    maTrafficPhysicsInfoList);
++            u8 lauBonusAssets[BrnReplays::KU_MAX_BONUS_STREAMED_ASSETS];
++            u32 luNumBonusAssets = 0;
++            mStreamer.GetBonusAssets(lauBonusAssets, &luNumBonusAssets);
++            mTrafficEntitySerialiser.SetBonusAssets(lauBonusAssets, luNumBonusAssets);
++            static_assert(sizeof(TrafficLightManager) == 4812, "traffic-light state excluding console tail padding");
++            // The frame owns the byte-exact serialized manager span, not a second runtime type.
++            std::memcpy(lpFrame->maTrafficLightManager, &mTrafficLightManager,
++                        sizeof(mTrafficLightManager));
++        }
++        else if (leMode == BrnReplays::BaseSerialiser::E_MODE_RECORDING_PREPARING ||
++                 leMode == BrnReplays::BaseSerialiser::E_MODE_PLAYING_PREPARING)
++        {
++            mTrafficEntitySerialiser.SetDataReady(mbReplayAssetsReady);
++        }
++        else if (leMode == BrnReplays::BaseSerialiser::E_MODE_RESTORING)
++        {
++            if ((CgsDev::Message::gxMessageFilterFlags & 1) != 0)
++                (*CgsDev::Log::gpDebugPrint) << "TRAF: Restoring replay; dataready="
++                                            << static_cast<u32>(mbReplayAssetsReady) << "\n";
++            mTrafficEntitySerialiser.SetDataRestored(mbReplayAssetsReady);
++        }
++        else if (mTrafficEntitySerialiser.IsPlaying())
++        {
++            mTrafficEntitySerialiser.SetDataReady(true);
++        }
++        mTrafficEntitySerialiser.Unlock();
++    }
++}
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.h
+@@ -18,6 +18,7 @@
+ // their parameter snapshots and physical-request lists at the DWARF position.
+ // =============================================================================
+ 
++#include "GameSource/Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h"
+ #include "types.hpp"        // u8/u16/u32/s8/s32/u64/f32
+ #include "GameShared/GameClasses/Core/CgsAssert.h"  // CGS_ASSERT (UpdateVehicleStuckSideTime inline)
+ #include "BrnCommonTypes.h" // EntityId, Vector2/3/4, Vector3Plus, VecFloat, Matrix44Affine
+@@ -632,6 +633,11 @@
+         // function consumes, not a corona-only side channel.
+         // lpiUpdatedNumDamagedVehiclesRendered is the shared per-frame budget
+         // GenerateDispatchLists seeds to 0 once for the whole loop (`*a52 < 5`, pseudocode :1254).
++        // ARTIST 82727BB0; DWARF owning header :14366. GPR r6/r7 are writable out vectors.
++        void SubmitCoronasForVehicle(BrnCoronaManager::BrnSubmissionInterface* lpCoronaSubmissionInterface,
++                                     u32 luVehicle, Vector3 lCameraPosition, Vector3 lCameraDirection,
++                                     Vector4& lFrontLights, Vector4& lRearLights);
++
+         void RenderTrafficCar( CgsGraphics::DispatchFrame* lpDispatchFrame,
+                                u32 luEntityIdx,
+                                Vector3 lCameraPosition,
+@@ -852,7 +858,7 @@
+                   BrnTrafficIO::OutputBuffer_PreScene* lpOutput);
+         void  PutParamInPurgatory(u32 luParam);                      // @ 0x82716510 (FLAG: Array interior)
+         void  RebuildGeneratorList();                                // @ 0x82742DD0 (FLAG)
+-        void  UpdateSerialiser();                                    // @ 0x8272DA80 (FLAG)
++        void  UpdateSerialiser();                                    // @ 0x8272DA80
+         // @ 0x82707F00. Console defines it here (its assert names BrnTrafficEntityModule.h:2637).
+         // The fsel else-value flt_82001CC0 is 0.0f: Param::Construct @0x82751B60 loads it as the
+         // SetParamAlong argument `0.0`, ParamListNode::Construct @0x82751C38 as `mfParamAlong = 0.0`.
+@@ -1841,6 +1847,11 @@
+         f32                   mfShowtimeTimeLastCrashSpike;         // :774
+         f32                   mfShowtimeMisBounceTimer;             // :775
+ 
++        // X360-only replay state omitted from the DecFIGS member listing (:776/777).
++        BrnReplays::TrafficEntitySerialiser mTrafficEntitySerialiser; // ARTIST +0x724C0
++        bool mbReplayPlayback; // FLAG inferred name: +0x72520 selects recorded hull/assets.
++        bool mbReplayAssetsReady; // FLAG inferred name: +0x72521 streaming readiness latch.
++
+         f32                   mfPlayerIdleTime;                     // :778
+ 
+         CgsContainers::FastBitArray<KU_MAX_TOTAL_TRAFFIC> mVehiclesToUpdateCollidables;  // :780
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.cpp
+@@ -38,8 +38,8 @@
+         static_assert(sizeof(OutputBuffer_PostPhysics::SceneInputInterface) > 800000,
+                       "mSceneInputInterface is the real InSceneUpdateInterface (console 818768 B "
+                       "at +11376), not the 44-byte span the +834784 accessor returns");
+-        static_assert(sizeof(OutputBuffer_PostPhysics::InterfaceAt834784) == 44,
+-                      "the X360-only member at console +834784 is 44 bytes (Construct zeroes 11 words)");
++        static_assert(sizeof(OutputBuffer_PostPhysics::ReplayRequestInterface) == 11 * sizeof(BrnReplays::BaseSerialiser*),
++                      "replay requests retain all eleven host-native pointer slots");
+     }
+ 
+     // X360 0x82761908, store for store -- run by CreateIOBuffer<OutputBuffer_PostPhysics>
+@@ -82,7 +82,7 @@
+         //                                       unrolled-to-a-loop store run. The console runs
+         //                                       it HERE, between the mResourceRequestInterface
+         //                                       leg and the mTrafficTypeResponseQueue leg.
+-        mInterfaceAt834784 = InterfaceAt834784();
++        mReplayRequestInterface = ReplayRequestInterface{};
+ 
+         mTrafficTypeResponseQueue.Construct();          // +0xCAAC0 (830144)
+         mGuiEventQueue.Construct();                     // +0xCFD0C (834828)
+@@ -186,17 +186,29 @@
+     const OutputBuffer_PostPhysics::InterfaceAt834784* OutputBuffer_PostPhysics::GetReadInterfaceAt834784() const
+     {
+         CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
+-        return &mInterfaceAt834784;
++        return &mReplayRequestInterface;
+     }
+ 
+     // X360 0x82711D90 (baked 407): write-lock; same member (this + 834784).
+     OutputBuffer_PostPhysics::InterfaceAt834784* OutputBuffer_PostPhysics::GetWriteInterfaceAt834784()
+     {
+         CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
+-        return &mInterfaceAt834784;
++        return &mReplayRequestInterface;
+     }
+ 
+     // X360 0x827A0C20 (baked 409): read-lock; return &mSceneInputInterface (this + 11376).
++    const OutputBuffer_PostPhysics::ReplayRequestInterface* OutputBuffer_PostPhysics::GetReplayRequestInterface() const
++    {
++        CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
++        return &mReplayRequestInterface;
++    }
++
++    OutputBuffer_PostPhysics::ReplayRequestInterface* OutputBuffer_PostPhysics::GetReplayRequestInterface()
++    {
++        CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
++        return &mReplayRequestInterface;
++    }
++
+     // The leg WorldModule::BridgeEntityModulesToScene_PostPhysics @0x827AB608 calls first
+     // (0x827AB6C0). Two witnesses put the aggregate here rather than at the 44-byte +834784 seat:
+     // Construct @0x82761908 builds it with InSceneUpdateInterface::Construct(this+0x2C70), and
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.h
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.h
+@@ -1,3 +1,4 @@
++#include "GameSource/Replays/BrnReplayRequestInterface.h"
+ #pragma once
+ 
+ // BrnTraffic::BrnTrafficIO IO buffers (TrafficEntityModule shared IO), from the DecFIGS DWARF
+@@ -512,9 +513,9 @@
+         // DWARF :424 -- Construct proves the shape (VariableEventQueue<32768,16> @ +834828),
+         // the same instantiation every other GuiEventInputQueue in the tree is.
+         typedef CgsModule::VariableEventQueue<32768, 16> GuiEventInputQueue;
+-        // X360-only member at +834828-44: 44 bytes, zeroed by Construct as 11 words, no DecFIGS
+-        // counterpart and no recovered type. PARKED: named by offset role rather than invented.
+-        struct InterfaceAt834784 { unsigned char maReserved[44]; };
++        // ARTIST +834784: replay request table. Eleven native BaseSerialiser* slots.
++        typedef BrnReplays::ReplayIO::RequestInterface ReplayRequestInterface;
++        typedef ReplayRequestInterface InterfaceAt834784; // compatibility for original offset-named consumers
+ 
+         // @0x82761908 -- run by CreateIOBuffer<OutputBuffer_PostPhysics> @0x827B79D0.
+         void Construct();
+@@ -574,6 +575,9 @@
+         const GuiEventInputQueue* GetGuiEventQueue() const;                       // 0x827A0E18 (baked 418)
+         GuiEventInputQueue*       GetGuiEventQueue();                             // 0x82712030 (baked 419)
+ 
++        const ReplayRequestInterface* GetReplayRequestInterface() const;
++        ReplayRequestInterface* GetReplayRequestInterface();
++
+         static void _AssertLayout();
+ 
+     private:
+@@ -588,7 +592,7 @@
+         SceneInputInterface            mSceneInputInterface;               // console +11376  :421
+         TrafficTypeResponseQueue       mTrafficTypeResponseQueue;          // console +830144 :422
+         ResourceRequestInterface       mResourceRequestInterface;          // console +830672 :423
+-        InterfaceAt834784              mInterfaceAt834784;                 // console +834784 (X360-only)
++        ReplayRequestInterface        mReplayRequestInterface;                 // console +834784 (X360-only)
+         GuiEventInputQueue             mGuiEventQueue;                     // console +834828 :424
+     };
+ 
+--- a/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
++++ b/src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp
+@@ -22,20 +22,19 @@
+ // 19 opaque mesh / 20 transparent mesh). So this file mirrors BrnRaceCarEntityModule_Render.cpp:
+ // same packet shape, technique-bit scheme, instanced wheel draw and shadow-pass split.
+ //
+-// NAMED GATES, each with its blocker:
+-//   G1 the replay-serialiser pose source (module +468256 selects it);
++// Recovered render paths (the historical G labels below identify their assembly spans):
++//   G1 the replay-serialiser pose source (module +468256 selects it), including physics;
+ //   G2 a physical traffic car RENDERS: its wheels come from
+ //      TrafficPhysicsInfo::maWheelTransforms; its main-view blobby-shadow producer uses the
+ //      road-test normal/height and VehicleTypeRuntime bounds when PhysicsInfo is present;
+ //   G3 the glass-fracture reset + the damaged-vehicle budget leg;
+ //   G4 the detached-body-part override table;
+-//   G5 SubmitCoronasForVehicle @0x82727BB0 (its sibling RenderTrafficLightCoronas @0x8271EC80 landed:
+-//      L3 RACEINTRO 2026-09-27);
++//   G5 SubmitCoronasForVehicle @0x82727BB0 and its GenerateDispatchLists caller loop;
+ //   G6 BrnBlobbyShadowBuffer::AddShadow -- main-view producer recovered from the ARTIST
+ //      VehicleTypeRuntime bounds, vehicle transform and optional physics road-test normal;
+ //   G7 RenderTrafficLightCoronas' replay-playback source (the serialiser at module +0x724C0).
+ // PreDispatchUpdate is otherwise real, including the FastBitArray duplicate suppression and the
+-// species-dispatched liveness predicate; GenerateDispatchLists is complete apart from G5;
++// species-dispatched liveness predicate; GenerateDispatchLists includes G5;
+ // RenderTrafficCar's entry gates, asset/spec resolution, paint colour, body transform, shader
+ // constants 20/21/22/23/24/26, body-part loop and wheel loop are real.
+ //
+@@ -72,6 +71,7 @@
+ #include "pc/gcm/renderengine/reflections/GlassCapture.h"
+ #include "SharedClasses/Traffic/BrnTrafficPvs.h"                           // Pvs::GetHullIndexForPoint / ForIndices (the same)
+ 
++#include <cstring>  // canonical recorded TrafficLightManager read view
+ #include <cmath>    // powf / sqrtf
+ #include <cstdlib>  // getenv / atoi ([tdef-upload] witness, opt-in)
+ #include <cstdio>
+@@ -289,6 +289,38 @@
+     // array -- TryClearupOffscreenTraffic (which then treats every car as never-rendered),
+     // ClearupCrashedTraffic and NukeTrafficJams' kill selection (_wT5_01.cpp / _wT6_01.cpp),
+     // and PostPhysicsUpdate's 80-byte copy into the crash-traffic input interface (+0xCA8).
++    // ARTIST 8274DDE0..8274E428: recorded update bits replace the live visible-ID walk.
++    // Replay does not touch the live rendered-last-frame mask or any live param pool.
++    if (mbReplayPlayback)
++    {
++        const auto* lpFrame=mTrafficEntitySerialiser.GetStaticLayout();
++        for(s32 index=lpFrame->mVehicleUpdateBits.GetFirstBitSet();index>=0;
++            index=lpFrame->mVehicleUpdateBits.GetNextBitSet(index))
++        {
++            const u32 vehicle=static_cast<u32>(index);
++            const auto& transform=*reinterpret_cast<const Matrix44Affine*>(mTrafficEntitySerialiser.GetVehicleTransform(vehicle));
++            const Vector3& position=transform.Pos();
++            const float dx=position.x-lCameraPosition.x,dy=position.y-lCameraPosition.y,dz=position.z-lCameraPosition.z;
++            const float distanceSq=dx*dx+dy*dy+dz*dz;
++            if(!(mfRenderCullDistanceSq>distanceSq)) continue;
++            VehicleRenderInfo info={vehicle,distanceSq,CgsGraphics::Model::E_STATE_LOD_0};
++            u32 insert=lrRenderInfos.GetLength();
++            while(insert>0 && lrRenderInfos[insert-1].mfDistanceSq>distanceSq) --insert;
++            if(lrRenderInfos.GetLength()<lrRenderInfos.GetCapacity()) lrRenderInfos.Append(info);
++            else if(insert>=lrRenderInfos.GetLength()) continue;
++            for(u32 shift=lrRenderInfos.GetLength()-1;shift>insert;--shift) lrRenderInfos[shift]=lrRenderInfos[shift-1];
++            lrRenderInfos[insert]=info;
++        }
++        if(lrRenderInfos.GetLength()>muMaxVehiclesToRender)
++        {
++            VehicleRenderInfo kept[64];
++            for(u32 index=0;index<muMaxVehiclesToRender;++index) kept[index]=lrRenderInfos[index];
++            lrRenderInfos.Clear();
++            for(u32 index=0;index<muMaxVehiclesToRender;++index) lrRenderInfos.Append(kept[index]);
++        }
++        return;
++    }
++
+     mVehicleSoaData.mVehiclesRenderedLastFrame.UnSetAll();
+ 
+     // The producer (WorldModule::FilterFrustumTestResults) has already kept only the
+@@ -527,12 +559,10 @@
+     //       RenderTrafficLightCoronas( lpInput->GetCoronaSubmissionInterface(),
+     //                                  lCameraPosition, lCameraDirection );  // bl 0x8271EC80 at 0x8273B4C4
+     //   }
+-    // NAMED GATE G5, what is left of it: SubmitCoronasForVehicle @0x82727BB0 (DWARF :22445) has no
+-    // declaration in this tree, so the traffic cars' own light coronas stay unsubmitted and the two light
+-    // vectors stay zero; the monitor id at +0x72A38 is a ship-only member with no DWARF name (debug-only).
++    // SubmitCoronasForVehicle @0x82727BB0 (DWARF :22445) fills each car's two light vectors.
++    // The monitor id at +0x72A38 is a ship-only member with no DWARF name (debug-only).
+     // The order is load-bearing: the corona pass runs before the draw pass and only off the shadow pass,
+     // matching the race-car leg's own mbRenderingShadowMap `continue`.
+-    // DELETE-WHEN SubmitCoronasForVehicle lands.
+     if ( !lpShadowMap->IsRenderingShadowMap() )
+     {
+         // [FLAG PC bring-up gate] NOT in the console, which asserts the interface non-null on entry (:14060)
+@@ -546,6 +576,10 @@
+             lpInput->GetCoronaSubmissionInterface();
+         if ( lpCoronaSubmissionInterface != 0 && lpCoronaSubmissionInterface->IsReady() )
+         {
++            // ARTIST 8273B438..8273B4C4: per-car corona out vectors precede traffic lights.
++            for(u32 index=0;index<luLength;++index)
++                SubmitCoronasForVehicle(lpCoronaSubmissionInterface,laTrafficRenderInfos[index].muEntityIndex,
++                                        lCameraPosition,lCameraDirection,laFrontLights[index],laRearLights[index]);
+             RenderTrafficLightCoronas( lpCoronaSubmissionInterface, lCameraPosition, lCameraDirection );
+         }
+     }
+@@ -669,14 +703,21 @@
+                                                 Vector3 lCameraPosition,
+                                                 Vector3 lCameraDirection )
+ {
+-    // ---- step 1, NAMED GATE G7: the replay-playback source ------------------
+-    // Under the replay latch at module +0x72520 the console takes both inputs from
+-    // BrnReplays::TrafficEntitySerialiser (module +0x724C0; sub_82707090 twice: the manager at its +0x22FB0, the
+-    // active-hull set at its +0). The latch and the serialiser are not modelled on this build (the un-emitted DWARF
+-    // :776/:777 window; AddVehiclesToTargetList's replay hull source is the same gate), and Construct writes the
+-    // latch ZERO, so live play takes this arm. DELETE-WHEN the replay wave lands.
+-    const TrafficLightManager* lpTrafficLightManager = &mTrafficLightManager;
+-    const ::Set<u16, KU_MAX_ACTIVE_HULLS>& lrActiveHulls = mActiveHullsForLocalPlayer;
++    // ARTIST 8271ECD8..8271EDB4: select both replay inputs from the recorded frame.
++    // Decode its byte-backed manager span into the canonical native type. Only the
++    // 4812 meaningful bytes are read; the original 4816 span has four unused tail bytes.
++    TrafficLightManager lRecordedTrafficLights;
++    const TrafficLightManager* lpTrafficLightManager=&mTrafficLightManager;
++    const ::Set<u16,KU_MAX_ACTIVE_HULLS>* lpActiveHulls=&mActiveHullsForLocalPlayer;
++    if(mbReplayPlayback)
++    {
++        const auto* frame=mTrafficEntitySerialiser.GetStaticLayout();
++        static_assert(sizeof(TrafficLightManager)==4812,"canonical traffic-light state extent");
++        std::memcpy(&lRecordedTrafficLights,frame->maTrafficLightManager,sizeof(lRecordedTrafficLights));
++        lpTrafficLightManager=&lRecordedTrafficLights;
++        lpActiveHulls=&frame->mHeader;
++    }
++    const ::Set<u16,KU_MAX_ACTIVE_HULLS>& lrActiveHulls=*lpActiveHulls;
+     CGS_ASSERT( lpTrafficLightManager != 0, "lpTrafficLightManager" );              // .cpp:3359
+ 
+     const VecFloat lfCullDistSq = { KF_RENDER_CULL_CORONA_DISTANCE_SQ, KF_RENDER_CULL_CORONA_DISTANCE_SQ,
+@@ -805,58 +846,41 @@
+         return;
+     }
+ 
+-    // ---- entry gate 2 (G1): the replay-serialiser pose source -------------
+-    // NAMED GATE. When module +468256 is set the console takes the vehicle's type, damage record
+-    // and transform from BrnReplays::TrafficEntitySerialiser (module +468160) instead of from the
+-    // live pools, and derives the "not physical" latch from the serialised flag bit 5 rather than
+-    // from Vehicle::mxFlags. BLOCKER: the serialiser is not reconstructed
+-    // (TrafficEntitySerialiser::GetVehicleData / GetPhysicsInfo / GetVehicleTransform are
+-    // undeclared here) and the member at +468256 is unnamed. The live arm below runs outside
+-    // replay playback. DELETE-WHEN the replay wave lands.
+-
+-    const Vehicle* lpVehicle = GetVehicle( luEntityIdx );
+-    if ( lpVehicle == 0 )
+-    {
+-        return;
+-    }
+-
+-    // `lbz r11, 5(r29)` then two independent bit tests, BOTH of which must pass
+-    // (@0x82728C00..0x82728C18). Bit 0 is E_FLAG_ALIVE; the second bit is the same one
+-    // Vehicle::IsAlive()'s sibling predicates read, and it gates rendering specifically.
+-    if ( !lpVehicle->IsAlive() )
+-    {
+-        return;
+-    }
+-    // FLAG (partial gate read): the console requires flags bit 1 as well as bit 0
+-    // (`rlwinm r10, r11, 0,30,30` @0x82728C10, beq -> bail). Vehicle's PC flag enum does not name
+-    // bit 1 yet, and GetFlags() is the only raw accessor, so the test goes through it rather than
+-    // inventing a predicate. Naming stays with whoever owns BrnTrafficVehicle.h.
+-    if ( ( lpVehicle->GetFlags() & 0x02u ) == 0u )
+-    {
+-        return;
+-    }
+-
+-    // ---- G2: the physical (promoted) arm -----------------------------------
+-    // `rlwinm r11, r11, 0,28,28` @0x82728C1C -> Vehicle::IsPhysical(); the console then fetches
+-    // GetTrafficPhysicsInfoForVehicl(idx), asserts it non-null (pseudocode :3188-:3197, baked
+-    // .cpp line 15106) and clears the "not physical" latch (`LOBYTE(v68) = 0` @0x82733200's
+-    // twin at :3200). That latch does three things downstream, and all three are now honoured:
+-    //   * the wheel block takes maWheelTransforms instead of composing the locator (see below);
+-    //   * the main-view blobby producer uses mvRoadTestNormal_HeightAboveRoad when PhysicsInfo
+-    //     is present; the shadow-map pass is excluded by its separate rendering-byte gate;
+-    //   * the damaged verlet-offset upload is enabled -- still G3, see that gate.
+-    // The accessor landed with the keystone (_wT3_00.cpp) and returns the real
+-    // TrafficPhysicsInfo*; the record itself has always been modelled and Constructed
+-    // (_wT1_03.cpp). Nothing here is gated any more.
+-    const bool lbIsPhysical = lpVehicle->IsPhysical();
+-    const TrafficPhysicsInfo* lpPhysicsInfo = 0;
+-    if ( lbIsPhysical )
+-    {
+-        lpPhysicsInfo = GetTrafficPhysicsInfoForVehicl( luEntityIdx );
+-        CGS_ASSERT( lpPhysicsInfo != 0, "lpPhysicsInfo" );                       // baked .cpp 15106
+-    }
+-
+-    const u32 luVehicleType = static_cast< u32 >( lpVehicle->GetVehicleType() );
++    // ARTIST 82728BEC..82728D3C and replay arm 82728CFC: recorded state is
++    // selected without querying the live Vehicle or its render interpolation history.
++    const Vehicle* lpVehicle=nullptr;
++    const TrafficPhysicsInfo* lpPhysicsInfo=nullptr;
++    const Matrix44Affine* lpRecordedTransform=nullptr;
++    bool lbIsPhysical;
++    u32 luVehicleType;
++    f32 lfVehicleSpeed;
++    if(mbReplayPlayback)
++    {
++        const auto* data=mTrafficEntitySerialiser.GetVehicleData(luEntityIdx);
++        const s8 physicsIndex=static_cast<s8>(data->maData[2]);
++        if(physicsIndex>=0)
++        {
++            lpPhysicsInfo=reinterpret_cast<const TrafficPhysicsInfo*>(mTrafficEntitySerialiser.GetPhysicsInfo(physicsIndex));
++            CGS_ASSERT(lpPhysicsInfo!=nullptr,"lpPhysicsInfo");
++        }
++        luVehicleType=data->maData[0];
++        lbIsPhysical=(data->maData[1]&0x20u)==0;
++        lpRecordedTransform=reinterpret_cast<const Matrix44Affine*>(mTrafficEntitySerialiser.GetVehicleTransform(luEntityIdx));
++        lfVehicleSpeed=30.0f; // ARTIST replay arm loads flt_820BA5E8 = 30.0f.
++    }
++    else
++    {
++        lpVehicle=GetVehicle(luEntityIdx);
++        if(lpVehicle==nullptr || !lpVehicle->IsAlive() || (lpVehicle->GetFlags()&0x02u)==0) return;
++        lbIsPhysical=lpVehicle->IsPhysical();
++        if(lbIsPhysical)
++        {
++            lpPhysicsInfo=GetTrafficPhysicsInfoForVehicl(luEntityIdx);
++            CGS_ASSERT(lpPhysicsInfo!=nullptr,"lpPhysicsInfo");
++        }
++        luVehicleType=lpVehicle->GetVehicleType();
++        lfVehicleSpeed=lpVehicle->GetSpeed().x;
++    }
+ 
+     // ---- the asset id, the streamer gates, the two specs -------------------
+     // Leak :8524-8543 maps one-for-one onto ship pseudocode :633-656.
+@@ -918,10 +942,10 @@
+         ? CgsSystem::FrameInterpolation::GetAlpha() : 1.0f;
+     const RenderPosePC& lrRenderPose = maRenderPosesPC[luEntityIdx];
+     const Matrix44Affine lBodyTransform =
+-        lrRenderPose.SampleBody(maVehicleTransforms[luEntityIdx], lfRenderAlpha);
++        mbReplayPlayback ? *lpRecordedTransform : lrRenderPose.SampleBody(maVehicleTransforms[luEntityIdx], lfRenderAlpha);
+ 
+     const Vector4 lPitchRollSteerWheel =
+-        lrRenderPose.SampleAngles(lpVehicle->GetPitch_Roll_Steering_WheelRot(), lfRenderAlpha);
++        mbReplayPlayback ? Vector4{} : lrRenderPose.SampleAngles(lpVehicle->GetPitch_Roll_Steering_WheelRot(), lfRenderAlpha);
+     const f32 lfPitch    = lPitchRollSteerWheel.x;
+     const f32 lfRoll     = lPitchRollSteerWheel.y;
+     const f32 lfSteering = lPitchRollSteerWheel.z;
+@@ -1344,7 +1368,7 @@
+             // Both scales and the threshold are now RECOVERED (see their definitions at the
+             // head of this file); the console arithmetic below is unchanged, only the numbers
+             // it operates on stopped being placeholder zeros.
+-            const f32 lfSpeed = lpVehicle->GetSpeed().x;
++            const f32 lfSpeed = lfVehicleSpeed;
+ 
+             // lfScaledSpeed IS an angular velocity in rad/s (m/s divided by the 0.3 m wheel
+             // radius), which is why it can be compared against the same 30 rad/s threshold
+@@ -1450,8 +1474,8 @@
+                     lPhysicalScale.zAxis.z = lpPhysicalWheelSpec->mScale.z;
+ 
+                     laWheelMatrices[ liInstanceCount ] = rw::math::vpu::Mult(
+-                        lPhysicalScale, lrRenderPose.SampleWheel(liWheel,
+-                            lpPhysicsInfo->maWheelTransforms[liWheel], lfRenderAlpha));
++                        lPhysicalScale, (mbReplayPlayback ? lpPhysicsInfo->maWheelTransforms[liWheel] :
++                         lrRenderPose.SampleWheel(liWheel, lpPhysicsInfo->maWheelTransforms[liWheel], lfRenderAlpha)));
+                     laWheelConstants[ liInstanceCount ] = lv4WheelConstants;
+                     lapWheelMatrices[ liInstanceCount ] = &laWheelMatrices[ liInstanceCount ];
+                     ++liInstanceCount;
+@@ -1597,7 +1621,7 @@
+     // branch is `if (v68) AddShadow; else if (PhysicsInfo) AddShadow`: v68 is initialized true
+     // for a nonphysical traffic car and cleared for the live physical arm at 0x82728C68. A
+     // physical car therefore contributes its road-normal shadow whenever PhysicsInfo exists.
+-    // The replay arm's serialized latch remains behind G1 and is not reconstructed here.
++    // The replay arm selects the same latch and optional physics through the recorded vehicle data.
+     // FLAG PC-platform leaf: TrafficCapture::Submit reuses this geometry leg inside
+     // VehicleScope and supplies no blobby buffer. Reflection faces submit vehicle
+     // geometry only; the main-view dispatch owns ground-shadow publication.
+@@ -1668,3 +1692,109 @@
+ }
+ 
+ }  // namespace BrnTraffic
++
++
++namespace BrnTraffic
++{
++    // ARTIST 82727BB0..827283FC. Declaration shape is DecFIGS; all flags and tag cases are ARTIST.
++    void TrafficEntityModule::SubmitCoronasForVehicle(BrnCoronaManager::BrnSubmissionInterface* lpCoronaSubmissionInterface,
++                                                     u32 luVehicle,Vector3 lCameraPosition,Vector3 lCameraDirection,
++                                                     Vector4& lFrontLights,Vector4& lRearLights)
++    {
++        (void)lCameraDirection;
++        if(mbTrafficIsHidden) return;
++        CGS_ASSERT(lpCoronaSubmissionInterface!=nullptr,"lpCoronaSubmissionInterface != NULL");
++        const TrafficPhysicsInfo* physics=nullptr;
++        Matrix44Affine transform;
++        u32 type;f32 warmth,indicatorWarmth;bool brake,left,right,alarm;
++        if(mbReplayPlayback)
++        {
++            const auto* data=mTrafficEntitySerialiser.GetVehicleData(luVehicle);
++            const s8 physicsIndex=static_cast<s8>(data->maData[2]);
++            if(physicsIndex>=0) physics=reinterpret_cast<const TrafficPhysicsInfo*>(mTrafficEntitySerialiser.GetPhysicsInfo(physicsIndex));
++            transform=*reinterpret_cast<const Matrix44Affine*>(mTrafficEntitySerialiser.GetVehicleTransform(luVehicle));
++            type=data->maData[0];warmth=(data->maData[1]&1u)?1.0f:0.0f;indicatorWarmth=1.0f;
++            brake=(data->maData[1]&2u)!=0;left=(data->maData[1]&4u)!=0;
++            right=(data->maData[1]&8u)!=0;alarm=(data->maData[1]&16u)!=0;
++        }
++        else
++        {
++            const Vehicle* vehicle=GetVehicle(luVehicle);
++            if((vehicle->GetFlags()&Vehicle::E_FLAG_HASENTITY)==0) return;
++            if(vehicle->IsPhysical())
++            {
++                physics=GetTrafficPhysicsInfoForVehicl(luVehicle);
++                if(physics->mbIsFatallyCrashing) return;
++            }
++            transform=maVehicleTransforms[luVehicle];type=vehicle->GetVehicleType();
++            warmth=vehicle->GetHeadlightWarmth();indicatorWarmth=vehicle->GetIndicatorBulbWarmth();
++            brake=vehicle->AreBrakelightsOn();left=vehicle->IsLeftIndicatorOn();
++            right=vehicle->IsRightIndicatorOn();alarm=vehicle->IsAlarmOn();
++        }
++        const f32 tailOpacity=1.0f-warmth;
++        const f32 gap=0.800000011920929f-warmth;
++        const f32 lower=(-gap>=0.0f)?0.0f:gap;
++        const f32 spotOpacity=(0.800000011920929f-lower>=0.0f)?lower:0.800000011920929f;
++        const Vector3 delta=transform.Pos()-lCameraPosition;
++        const f32 distance=std::sqrt(delta.x*delta.x+delta.y*delta.y+delta.z*delta.z);
++        const f32 sizeScale=1.0f+((distance-8.0f>0.0f)?distance-8.0f:0.0f)*0.00704225338995456696f;
++        bool running=true,rear=true;
++        if(GetVehicleSpecies(luVehicle)==Vehicle::E_SPECIES_STATIC)
++        {
++            if(alarm) {running=rear=brake=left=right=false;}
++            else {running=left && (luVehicle&4u)==4u;rear=left;brake=left;right=left;}
++        }
++        if(running) lRearLights.y=1.0f;
++        if(brake) lRearLights.x=1.0f;
++        const auto* spec=maTrafficVehiclePhysicsSpecs[type].operator->();
++        const auto& locators=spec->mLightTags;
++        const Matrix44Affine tagToWorld=rw::math::vpu::Mult(
++            rw::math::vpu::InverseOfMatrixWithOrthonormal3x3(spec->mCarModelSpaceToHandlingBodySpaceTransform),transform);
++        const Vector3 forward=transform.zAxis;
++        const Vector3 reverse={-forward.x,-forward.y,-forward.z,0.0f};
++        const u32 count=physics?static_cast<u32>(physics->miNumLightLocators):locators.GetNumLocatorPoints();
++        for(u32 tag=0;tag<count;++tag)
++        {
++            u32 locatorType;Vector3 local;
++            if(physics)
++            {
++                CGS_ASSERT(physics->maLightTagPointTypes[tag]<=57,"lpPhysicsInfo->maLightTagPointTypes[luTagPoint] <= BrnPhysics::Deformation::E_TAGPOINT_COUNT");
++                locatorType=physics->maLightTagPointTypes[tag];local=physics->maLightLocatorPositions[tag];
++            }
++            else {locatorType=static_cast<u32>(locators.GetLocatorTy(tag));local=locators.GetLocatorXf(tag)->Pos();}
++            const Vector3 position=rw::math::vpu::TransformPoint(tagToWorld,local);
++            switch(locatorType)
++            {
++            case 1:case 2:
++                if(running)
++                {
++                    lpCoronaSubmissionInterface->AddCorona(position,forward,sizeScale,1.0f,eCoronaTypeTrafficHeadLight);
++                    lpCoronaSubmissionInterface->AddCorona(position,forward,sizeScale,tailOpacity,eCoronaTypeTrafficHeadLight);
++                    lFrontLights.y=1.0f;
++                }
++                break;
++            case 3:case 4:
++                if(rear) lpCoronaSubmissionInterface->AddCorona(position,reverse,sizeScale,1.0f,eCoronaTypeTrafficRearLight);
++                break;
++            case 5:case 6:
++                if(running)
++                {
++                    // ARTIST deliberately re-reads the baked locator even for physical traffic.
++                    const Vector3 spot=rw::math::vpu::TransformPoint(tagToWorld,locators.GetLocatorXf(tag)->Pos());
++                    lpCoronaSubmissionInterface->AddCorona(spot,forward,sizeScale,spotOpacity,eCoronaTypeTrafficSpotlights);
++                }
++                break;
++            case 7:case 9:
++                if(left) lpCoronaSubmissionInterface->AddCorona(position,locatorType==7?forward:reverse,sizeScale,indicatorWarmth,eCoronaTypeTrafficIndicator);
++                break;
++            case 8:case 10:
++                if(right) lpCoronaSubmissionInterface->AddCorona(position,locatorType==8?forward:reverse,sizeScale,indicatorWarmth,eCoronaTypeTrafficIndicator);
++                break;
++            case 11:case 12:case 13:
++                if(brake) lpCoronaSubmissionInterface->AddCorona(position,reverse,sizeScale,1.0f,eCoronaTypeTrafficBrakeLight);
++                break;
++            default:break;
++            }
++        }
++    }
++}

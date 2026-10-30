@@ -1,0 +1,2272 @@
+{
+  "entry": "0x827aeeb0",
+  "name": "WorldModule::BridgeEntityModulesToOutput_PostPhysics",
+  "end": "0x827af1cc",
+  "assembly": [
+    {
+      "address": "0x827aeeb0",
+      "assembly": "mflr      r12"
+    },
+    {
+      "address": "0x827aeeb4",
+      "assembly": "bl        __savegprlr_24"
+    },
+    {
+      "address": "0x827aeeb8",
+      "assembly": "stwu      r1, back_chain(r1)"
+    },
+    {
+      "address": "0x827aeebc",
+      "assembly": "mr        r31, r4"
+    },
+    {
+      "address": "0x827aeec0",
+      "assembly": "lis       r11, aDP4B5MainBurno_652@ha"
+    },
+    {
+      "address": "0x827aeec4",
+      "assembly": "mr        r27, r3"
+    },
+    {
+      "address": "0x827aeec8",
+      "assembly": "mr        r29, r5"
+    },
+    {
+      "address": "0x827aeecc",
+      "assembly": "mr        r26, r6"
+    },
+    {
+      "address": "0x827aeed0",
+      "assembly": "mr        r28, r7"
+    },
+    {
+      "address": "0x827aeed4",
+      "assembly": "mr        r24, r8"
+    },
+    {
+      "address": "0x827aeed8",
+      "assembly": "cmplwi    cr6, r31, 0"
+    },
+    {
+      "address": "0x827aeedc",
+      "assembly": "addi      r30, r11, aDP4B5MainBurno_652@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"..."
+    },
+    {
+      "address": "0x827aeee0",
+      "assembly": "bne       cr6, loc_827AEF00"
+    },
+    {
+      "address": "0x827aeee4",
+      "assembly": "bl        CgsDev__Assert__BeginAssert"
+    },
+    {
+      "address": "0x827aeee8",
+      "assembly": "lis       r11, aLpworldoutputN@ha"
+    },
+    {
+      "address": "0x827aeeec",
+      "assembly": "li        r5, 0x4A # 'J'"
+    },
+    {
+      "address": "0x827aeef0",
+      "assembly": "addi      r3, r11, aLpworldoutputN@l# \"lpWorldOutput != NULL\""
+    },
+    {
+      "address": "0x827aeef4",
+      "assembly": "mr        r4, r30"
+    },
+    {
+      "address": "0x827aeef8",
+      "assembly": "bl        CgsDev__Assert__FireAssert"
+    },
+    {
+      "address": "0x827aeefc",
+      "assembly": "bl        CgsDev__Assert__EndAssert"
+    },
+    {
+      "address": "0x827aef00",
+      "assembly": "cmplwi    cr6, r29, 0"
+    },
+    {
+      "address": "0x827aef04",
+      "assembly": "bne       cr6, loc_827AEF24"
+    },
+    {
+      "address": "0x827aef08",
+      "assembly": "bl        CgsDev__Assert__BeginAssert"
+    },
+    {
+      "address": "0x827aef0c",
+      "assembly": "lis       r11, aLptrafficoutpu_3@ha"
+    },
+    {
+      "address": "0x827aef10",
+      "assembly": "li        r5, 0x4B # 'K'"
+    },
+    {
+      "address": "0x827aef14",
+      "assembly": "addi      r3, r11, aLptrafficoutpu_3@l# \"lpTrafficOutputBuffer_PostPhysics != NU\"..."
+    },
+    {
+      "address": "0x827aef18",
+      "assembly": "mr        r4, r30"
+    },
+    {
+      "address": "0x827aef1c",
+      "assembly": "bl        CgsDev__Assert__FireAssert"
+    },
+    {
+      "address": "0x827aef20",
+      "assembly": "bl        CgsDev__Assert__EndAssert"
+    },
+    {
+      "address": "0x827aef24",
+      "assembly": "cmplwi    cr6, r26, 0"
+    },
+    {
+      "address": "0x827aef28",
+      "assembly": "bne       cr6, loc_827AEF48"
+    },
+    {
+      "address": "0x827aef2c",
+      "assembly": "bl        CgsDev__Assert__BeginAssert"
+    },
+    {
+      "address": "0x827aef30",
+      "assembly": "lis       r11, aLpracecaroutpu_2@ha"
+    },
+    {
+      "address": "0x827aef34",
+      "assembly": "li        r5, 0x4C # 'L'"
+    },
+    {
+      "address": "0x827aef38",
+      "assembly": "addi      r3, r11, aLpracecaroutpu_2@l# \"lpRaceCarOutputBuffer_PostPhysics != NU\"..."
+    },
+    {
+      "address": "0x827aef3c",
+      "assembly": "mr        r4, r30"
+    },
+    {
+      "address": "0x827aef40",
+      "assembly": "bl        CgsDev__Assert__FireAssert"
+    },
+    {
+      "address": "0x827aef44",
+      "assembly": "bl        CgsDev__Assert__EndAssert"
+    },
+    {
+      "address": "0x827aef48",
+      "assembly": "cmplwi    cr6, r28, 0"
+    },
+    {
+      "address": "0x827aef4c",
+      "assembly": "bne       cr6, loc_827AEF6C"
+    },
+    {
+      "address": "0x827aef50",
+      "assembly": "bl        CgsDev__Assert__BeginAssert"
+    },
+    {
+      "address": "0x827aef54",
+      "assembly": "lis       r11, aLppropoutputbu_3@ha"
+    },
+    {
+      "address": "0x827aef58",
+      "assembly": "li        r5, 0x4D # 'M'"
+    },
+    {
+      "address": "0x827aef5c",
+      "assembly": "addi      r3, r11, aLppropoutputbu_3@l# \"lpPropOutputBuffer_PostPhysics != NULL\""
+    },
+    {
+      "address": "0x827aef60",
+      "assembly": "mr        r4, r30"
+    },
+    {
+      "address": "0x827aef64",
+      "assembly": "bl        CgsDev__Assert__FireAssert"
+    },
+    {
+      "address": "0x827aef68",
+      "assembly": "bl        CgsDev__Assert__EndAssert"
+    },
+    {
+      "address": "0x827aef6c",
+      "assembly": "mr        r5, r26"
+    },
+    {
+      "address": "0x827aef70",
+      "assembly": "mr        r4, r31"
+    },
+    {
+      "address": "0x827aef74",
+      "assembly": "mr        r3, r27"
+    },
+    {
+      "address": "0x827aef78",
+      "assembly": "bl        WorldModule__BridgeRaceCarResourceRequestsToOutput"
+    },
+    {
+      "address": "0x827aef7c",
+      "assembly": "mr        r3, r24"
+    },
+    {
+      "address": "0x827aef80",
+      "assembly": "bl        BrnWorld__WorldEntityIO__OutputBuffer_Pos"
+    },
+    {
+      "address": "0x827aef84",
+      "assembly": "mr        r30, r3"
+    },
+    {
+      "address": "0x827aef88",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827aef8c",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetResourceRequestResourceInterface"
+    },
+    {
+      "address": "0x827aef90",
+      "assembly": "mr        r4, r30"
+    },
+    {
+      "address": "0x827aef94",
+      "assembly": "bl        ___Append__0BAAA__0BA____VariableEventQueue__0BAAA__0BA__CgsModule__QAA_NABV01__Z# CgsModule::VariableEventQueue<4096,16>::Append<4096,16>(CgsModule::VariableEventQueue<4096,16> const &)"
+    },
+    {
+      "address": "0x827aef98",
+      "assembly": "addis     r30, r27, 0x5E # '^'"
+    },
+    {
+      "address": "0x827aef9c",
+      "assembly": "addi      r30, r30, 0x1CAC"
+    },
+    {
+      "address": "0x827aefa0",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827aefa4",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827aefa8",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827aefac",
+      "assembly": "bl        sub_827A0D70"
+    },
+    {
+      "address": "0x827aefb0",
+      "assembly": "mr        r25, r3"
+    },
+    {
+      "address": "0x827aefb4",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827aefb8",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetResourceRequestResourceInterface"
+    },
+    {
+      "address": "0x827aefbc",
+      "assembly": "mr        r4, r25"
+    },
+    {
+      "address": "0x827aefc0",
+      "assembly": "bl        ___Append__0BAAA__0BA____VariableEventQueue__0BAAA__0BA__CgsModule__QAA_NABV01__Z# CgsModule::VariableEventQueue<4096,16>::Append<4096,16>(CgsModule::VariableEventQueue<4096,16> const &)"
+    },
+    {
+      "address": "0x827aefc4",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827aefc8",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827aefcc",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827aefd0",
+      "assembly": "bl        BrnTraffic__BrnTrafficIO__OutputBuffer_PostPhysics__G"
+    },
+    {
+      "address": "0x827aefd4",
+      "assembly": "mr        r25, r3"
+    },
+    {
+      "address": "0x827aefd8",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827aefdc",
+      "assembly": "bl        sub_827A4E08"
+    },
+    {
+      "address": "0x827aefe0",
+      "assembly": "mr        r4, r25"
+    },
+    {
+      "address": "0x827aefe4",
+      "assembly": "bl        ___Append__0IAAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV01__Z# CgsModule::VariableEventQueue<32768,16>::Append<32768,16>(CgsModule::VariableEventQueue<32768,16> const &)"
+    },
+    {
+      "address": "0x827aefe8",
+      "assembly": "mr        r5, r26"
+    },
+    {
+      "address": "0x827aefec",
+      "assembly": "mr        r4, r31"
+    },
+    {
+      "address": "0x827aeff0",
+      "assembly": "mr        r3, r27"
+    },
+    {
+      "address": "0x827aeff4",
+      "assembly": "bl        WorldModule__BridgeRaceCarEntityInfoToOutput_PostPhysics"
+    },
+    {
+      "address": "0x827aeff8",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827aeffc",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af000",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af004",
+      "assembly": "bl        sub_827A0AD0"
+    },
+    {
+      "address": "0x827af008",
+      "assembly": "mr        r25, r3"
+    },
+    {
+      "address": "0x827af00c",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af010",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetGameEventQue"
+    },
+    {
+      "address": "0x827af014",
+      "assembly": "mr        r4, r25"
+    },
+    {
+      "address": "0x827af018",
+      "assembly": "bl        ___Append__0GAA__0BA____VariableEventQueue__0GAA__0BA__CgsModule__QAA_NABV01__Z# CgsModule::VariableEventQueue<1536,16>::Append<1536,16>(CgsModule::VariableEventQueue<1536,16> const &)"
+    },
+    {
+      "address": "0x827af01c",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af020",
+      "assembly": "bl        sub_827A0CC8"
+    },
+    {
+      "address": "0x827af024",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af028",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af02c",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__AppendTrafficTypeResponseQueue"
+    },
+    {
+      "address": "0x827af030",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af034",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af038",
+      "assembly": "mr        r3, r28"
+    },
+    {
+      "address": "0x827af03c",
+      "assembly": "bl        sub_827A1F58"
+    },
+    {
+      "address": "0x827af040",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af044",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af048",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__AppendPropBecamePhysicalEventQueue"
+    },
+    {
+      "address": "0x827af04c",
+      "assembly": "mr        r3, r28"
+    },
+    {
+      "address": "0x827af050",
+      "assembly": "bl        sub_827A1E08"
+    },
+    {
+      "address": "0x827af054",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af058",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af05c",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetPropVFXLocatorQueue"
+    },
+    {
+      "address": "0x827af060",
+      "assembly": "mr        r3, r28"
+    },
+    {
+      "address": "0x827af064",
+      "assembly": "bl        sub_827A1EB0"
+    },
+    {
+      "address": "0x827af068",
+      "assembly": "mr        r25, r3"
+    },
+    {
+      "address": "0x827af06c",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af070",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetGameEventQue"
+    },
+    {
+      "address": "0x827af074",
+      "assembly": "mr        r4, r25"
+    },
+    {
+      "address": "0x827af078",
+      "assembly": "li        r5, 0x6F # 'o'"
+    },
+    {
+      "address": "0x827af07c",
+      "assembly": "bl        ___Append_VRecordPropHitEvent_GameStateModuleIO_BrnGameState___0DC____VariableEventQueue__0GAA__0BA__CgsModule__QAA_NAB"
+    },
+    {
+      "address": "0x827af080",
+      "assembly": "mr        r3, r28"
+    },
+    {
+      "address": "0x827af084",
+      "assembly": "bl        sub_827A1D60"
+    },
+    {
+      "address": "0x827af088",
+      "assembly": "mr        r25, r3"
+    },
+    {
+      "address": "0x827af08c",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af090",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetGameEventQue"
+    },
+    {
+      "address": "0x827af094",
+      "assembly": "mr        r4, r25"
+    },
+    {
+      "address": "0x827af098",
+      "assembly": "li        r5, 0x76 # 'v'"
+    },
+    {
+      "address": "0x827af09c",
+      "assembly": "bl        ___Append_VHitOverheadSignEvent_GameStateModuleIO_BrnGameState___0GE____VariableEventQueue__0GAA__0BA__CgsModule__QAA_N"
+    },
+    {
+      "address": "0x827af0a0",
+      "assembly": "lis       r11, 0xC"
+    },
+    {
+      "address": "0x827af0a4",
+      "assembly": "ori       r11, r11, 0xB61C # 0xCB61C"
+    },
+    {
+      "address": "0x827af0a8",
+      "assembly": "lbzx      r11, r28, r11"
+    },
+    {
+      "address": "0x827af0ac",
+      "assembly": "cmplwi    cr6, r11, 0"
+    },
+    {
+      "address": "0x827af0b0",
+      "assembly": "beq       cr6, loc_827AF0CC"
+    },
+    {
+      "address": "0x827af0b4",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af0b8",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__GetGameEventQue"
+    },
+    {
+      "address": "0x827af0bc",
+      "assembly": "li        r6, 1"
+    },
+    {
+      "address": "0x827af0c0",
+      "assembly": "li        r5, 0x70 # 'p'"
+    },
+    {
+      "address": "0x827af0c4",
+      "assembly": "addi      r4, r1, 0xA0+var_50"
+    },
+    {
+      "address": "0x827af0c8",
+      "assembly": "bl        CgsModule__VariableEventQueue_1536_16___AddEvent"
+    },
+    {
+      "address": "0x827af0cc",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af0d0",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af0d4",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af0d8",
+      "assembly": "bl        sub_827A08D8"
+    },
+    {
+      "address": "0x827af0dc",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af0e0",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af0e4",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetTrafficNetworkOutputInterface"
+    },
+    {
+      "address": "0x827af0e8",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af0ec",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af0f0",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af0f4",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af0f8",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af0fc",
+      "assembly": "bl        BrnTraffic__BrnTrafficIO__OutputBuf"
+    },
+    {
+      "address": "0x827af100",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af104",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af108",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetTrafficSoundOutputInterface"
+    },
+    {
+      "address": "0x827af10c",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af110",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af114",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af118",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af11c",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af120",
+      "assembly": "bl        BrnTraffic__BrnTrafficIO__Output"
+    },
+    {
+      "address": "0x827af124",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af128",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af12c",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetTrafficDirectorOutputInterface"
+    },
+    {
+      "address": "0x827af130",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af134",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af138",
+      "assembly": "addis     r30, r27, 0x5E # '^'"
+    },
+    {
+      "address": "0x827af13c",
+      "assembly": "addi      r30, r30, 0x1CA8"
+    },
+    {
+      "address": "0x827af140",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af144",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af148",
+      "assembly": "mr        r3, r26"
+    },
+    {
+      "address": "0x827af14c",
+      "assembly": "bl        BrnWorld__RaceCarEntityModuleIO__OutputBuff"
+    },
+    {
+      "address": "0x827af150",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af154",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af158",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetDirectorVehicleInputInterface"
+    },
+    {
+      "address": "0x827af15c",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af160",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af164",
+      "assembly": "mr        r3, r24"
+    },
+    {
+      "address": "0x827af168",
+      "assembly": "bl        BrnWorld__WorldEntityIO__OutputBuffer_PostPhysic"
+    },
+    {
+      "address": "0x827af16c",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af170",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af174",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__SetWorldEntityStatusInterface"
+    },
+    {
+      "address": "0x827af178",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af17c",
+      "assembly": "bl        CgsDev__PerfMonCpu__StartMonitor"
+    },
+    {
+      "address": "0x827af180",
+      "assembly": "mr        r3, r26"
+    },
+    {
+      "address": "0x827af184",
+      "assembly": "bl        BrnWorld__RaceCarEntityModuleIO__OutputBuffer_Post"
+    },
+    {
+      "address": "0x827af188",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af18c",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af190",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__AppendReplayRequestInterface"
+    },
+    {
+      "address": "0x827af194",
+      "assembly": "mr        r3, r28"
+    },
+    {
+      "address": "0x827af198",
+      "assembly": "bl        BrnWorld__PropEntityIO__OutputBuffer_PostPhysics__"
+    },
+    {
+      "address": "0x827af19c",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af1a0",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af1a4",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__AppendReplayRequestInterface"
+    },
+    {
+      "address": "0x827af1a8",
+      "assembly": "mr        r3, r29"
+    },
+    {
+      "address": "0x827af1ac",
+      "assembly": "bl        BrnTraffic__BrnTrafficIO__OutputBuffer_PostPhysics"
+    },
+    {
+      "address": "0x827af1b0",
+      "assembly": "mr        r4, r3"
+    },
+    {
+      "address": "0x827af1b4",
+      "assembly": "mr        r3, r31"
+    },
+    {
+      "address": "0x827af1b8",
+      "assembly": "bl        BrnWorldIO__UpdateOutputBuffer__AppendReplayRequestInterface"
+    },
+    {
+      "address": "0x827af1bc",
+      "assembly": "lwz       r3, 0(r30)"
+    },
+    {
+      "address": "0x827af1c0",
+      "assembly": "bl        CgsDev__PerfMonCpu__StopMonitor"
+    },
+    {
+      "address": "0x827af1c4",
+      "assembly": "addi      r1, r1, 0xA0"
+    },
+    {
+      "address": "0x827af1c8",
+      "assembly": "b         __restgprlr_24"
+    }
+  ],
+  "request_transfer_callees": {
+    "0x827a4bd8": {
+      "callsite": "0x827af174",
+      "name": "BrnWorldIO::UpdateOutputBuffer::SetWorldEntityStatusInterface",
+      "assembly": [
+        {
+          "address": "0x827a4bd8",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x827a4bdc",
+          "assembly": "bl        __savegprlr_27"
+        },
+        {
+          "address": "0x827a4be0",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x827a4be4",
+          "assembly": "mr        r28, r3"
+        },
+        {
+          "address": "0x827a4be8",
+          "assembly": "mr        r27, r4"
+        },
+        {
+          "address": "0x827a4bec",
+          "assembly": "lbz       r11, 0(r28)"
+        },
+        {
+          "address": "0x827a4bf0",
+          "assembly": "extrwi    r11, r11, 1,28"
+        },
+        {
+          "address": "0x827a4bf4",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x827a4bf8",
+          "assembly": "bne       cr6, loc_827A4C74"
+        },
+        {
+          "address": "0x827a4bfc",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x827a4c00",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x827a4c04",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x827a4c08",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x827a4c0c",
+          "assembly": "lis       r30, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x827a4c10",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a4c14",
+          "assembly": "lwz       r29, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x827a4c18",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4c1c",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a4c20",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x827a4c24",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x827a4c28",
+          "assembly": "stw       r31, 0x90+var_38(r1)"
+        },
+        {
+          "address": "0x827a4c2c",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x827a4c30",
+          "assembly": "stw       r29, 0x90+var_34(r1)"
+        },
+        {
+          "address": "0x827a4c34",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x827a4c38",
+          "assembly": "lis       r10, aNotLockedForWr@ha"
+        },
+        {
+          "address": "0x827a4c3c",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a4c40",
+          "assembly": "addi      r4, r10, aNotLockedForWr@l# \"Not locked for writing\\n\""
+        },
+        {
+          "address": "0x827a4c44",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4c48",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x827a4c4c",
+          "assembly": "lwz       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4c50",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x827a4c54",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x827a4c58",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x827a4c5c",
+          "assembly": "lis       r11, aGamesourceWorl_4@ha"
+        },
+        {
+          "address": "0x827a4c60",
+          "assembly": "li        r5, 0x250"
+        },
+        {
+          "address": "0x827a4c64",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a4c68",
+          "assembly": "addi      r4, r11, aGamesourceWorl_4@l# \"..\\\\..\\\\..\\\\GameSource\\\\World/BrnWorldM\"..."
+        },
+        {
+          "address": "0x827a4c6c",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x827a4c70",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x827a4c74",
+          "assembly": "addis     r10, r28, 3"
+        },
+        {
+          "address": "0x827a4c78",
+          "assembly": "mr        r11, r27"
+        },
+        {
+          "address": "0x827a4c7c",
+          "assembly": "addi      r10, r10, -0x6B80"
+        },
+        {
+          "address": "0x827a4c80",
+          "assembly": "li        r9, 5"
+        },
+        {
+          "address": "0x827a4c84",
+          "assembly": "mtctr     r9"
+        },
+        {
+          "address": "0x827a4c88",
+          "assembly": "lbz       r9, 0(r11)"
+        },
+        {
+          "address": "0x827a4c8c",
+          "assembly": "addi      r11, r11, 1"
+        },
+        {
+          "address": "0x827a4c90",
+          "assembly": "stb       r9, 0(r10)"
+        },
+        {
+          "address": "0x827a4c94",
+          "assembly": "addi      r10, r10, 1"
+        },
+        {
+          "address": "0x827a4c98",
+          "assembly": "bdnz      loc_827A4C88"
+        },
+        {
+          "address": "0x827a4c9c",
+          "assembly": "addi      r1, r1, 0x90"
+        },
+        {
+          "address": "0x827a4ca0",
+          "assembly": "b         __restgprlr_27"
+        }
+      ]
+    },
+    "0x821f1198": {
+      "callsite": "0x827af17c",
+      "name": "CgsDev::PerfMonCpu::StartMonitor",
+      "assembly": [
+        {
+          "address": "0x821f1198",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x821f119c",
+          "assembly": "bl        __savegprlr_26"
+        },
+        {
+          "address": "0x821f11a0",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x821f11a4",
+          "assembly": "mr        r31, r3"
+        },
+        {
+          "address": "0x821f11a8",
+          "assembly": "lis       r11, aGamesharedGame_243@ha"
+        },
+        {
+          "address": "0x821f11ac",
+          "assembly": "cmpwi     cr6, r31, 0"
+        },
+        {
+          "address": "0x821f11b0",
+          "assembly": "addi      r26, r11, aGamesharedGame_243@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\De\"..."
+        },
+        {
+          "address": "0x821f11b4",
+          "assembly": "blt       cr6, loc_821F11C8"
+        },
+        {
+          "address": "0x821f11b8",
+          "assembly": "lis       r11, dword_83018264@ha"
+        },
+        {
+          "address": "0x821f11bc",
+          "assembly": "lwz       r11, dword_83018264@l(r11)"
+        },
+        {
+          "address": "0x821f11c0",
+          "assembly": "cmpw      cr6, r31, r11"
+        },
+        {
+          "address": "0x821f11c4",
+          "assembly": "blt       cr6, loc_821F11E4"
+        },
+        {
+          "address": "0x821f11c8",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x821f11cc",
+          "assembly": "lis       r11, aLimonitorid0Li_0@ha"
+        },
+        {
+          "address": "0x821f11d0",
+          "assembly": "li        r5, 0x3D # '='"
+        },
+        {
+          "address": "0x821f11d4",
+          "assembly": "addi      r3, r11, aLimonitorid0Li_0@l# \"liMonitorID >= 0 && liMonitorID < miMax\"..."
+        },
+        {
+          "address": "0x821f11d8",
+          "assembly": "mr        r4, r26"
+        },
+        {
+          "address": "0x821f11dc",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x821f11e0",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x821f11e4",
+          "assembly": "slwi      r11, r31, 1"
+        },
+        {
+          "address": "0x821f11e8",
+          "assembly": "lis       r29, CgsDev__PerfMonCpu__mpMonitorsArray@ha"
+        },
+        {
+          "address": "0x821f11ec",
+          "assembly": "add       r11, r31, r11"
+        },
+        {
+          "address": "0x821f11f0",
+          "assembly": "slwi      r30, r11, 5"
+        },
+        {
+          "address": "0x821f11f4",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r29)"
+        },
+        {
+          "address": "0x821f11f8",
+          "assembly": "add       r11, r30, r11"
+        },
+        {
+          "address": "0x821f11fc",
+          "assembly": "lbz       r11, 0x3C(r11)"
+        },
+        {
+          "address": "0x821f1200",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x821f1204",
+          "assembly": "beq       cr6, loc_821F12C8"
+        },
+        {
+          "address": "0x821f1208",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x821f120c",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x821f1210",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x821f1214",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x821f1218",
+          "assembly": "lis       r28, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x821f121c",
+          "assembly": "addi      r3, r1, 0xB0+var_50"
+        },
+        {
+          "address": "0x821f1220",
+          "assembly": "lwz       r27, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x821f1224",
+          "assembly": "stw       r11, 0xB0+var_50(r1)"
+        },
+        {
+          "address": "0x821f1228",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r28)# byte_83018150"
+        },
+        {
+          "address": "0x821f122c",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x821f1230",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x821f1234",
+          "assembly": "stw       r31, 0xB0+var_48(r1)"
+        },
+        {
+          "address": "0x821f1238",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x821f123c",
+          "assembly": "stw       r27, 0xB0+var_44(r1)"
+        },
+        {
+          "address": "0x821f1240",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x821f1244",
+          "assembly": "lis       r10, aMonitorAlready@ha"
+        },
+        {
+          "address": "0x821f1248",
+          "assembly": "addi      r3, r1, 0xB0+var_50"
+        },
+        {
+          "address": "0x821f124c",
+          "assembly": "addi      r4, r10, aMonitorAlready@l# \"Monitor already started: \""
+        },
+        {
+          "address": "0x821f1250",
+          "assembly": "stw       r11, 0xB0+var_50(r1)"
+        },
+        {
+          "address": "0x821f1254",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x821f1258",
+          "assembly": "lwz       r11, 0xB0+var_50(r1)"
+        },
+        {
+          "address": "0x821f125c",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x821f1260",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x821f1264",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x821f1268",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r29)"
+        },
+        {
+          "address": "0x821f126c",
+          "assembly": "addi      r3, r1, 0xB0+var_50"
+        },
+        {
+          "address": "0x821f1270",
+          "assembly": "add       r11, r30, r11"
+        },
+        {
+          "address": "0x821f1274",
+          "assembly": "addi      r4, r11, 0x1C"
+        },
+        {
+          "address": "0x821f1278",
+          "assembly": "cmplwi    cr6, r4, 0"
+        },
+        {
+          "address": "0x821f127c",
+          "assembly": "bne       cr6, loc_821F1288"
+        },
+        {
+          "address": "0x821f1280",
+          "assembly": "lis       r11, aNullstring@ha"
+        },
+        {
+          "address": "0x821f1284",
+          "assembly": "addi      r4, r11, aNullstring@l# \"<NULLSTRING>\""
+        },
+        {
+          "address": "0x821f1288",
+          "assembly": "lwz       r11, 0xB0+var_50(r1)"
+        },
+        {
+          "address": "0x821f128c",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x821f1290",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x821f1294",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x821f1298",
+          "assembly": "lis       r11, asc_82001CC4@ha"
+        },
+        {
+          "address": "0x821f129c",
+          "assembly": "addi      r3, r1, 0xB0+var_50"
+        },
+        {
+          "address": "0x821f12a0",
+          "assembly": "addi      r4, r11, asc_82001CC4@l# \"\\n\""
+        },
+        {
+          "address": "0x821f12a4",
+          "assembly": "lwz       r11, 0xB0+var_50(r1)"
+        },
+        {
+          "address": "0x821f12a8",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x821f12ac",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x821f12b0",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x821f12b4",
+          "assembly": "li        r5, 0x40 # '@'"
+        },
+        {
+          "address": "0x821f12b8",
+          "assembly": "mr        r4, r26"
+        },
+        {
+          "address": "0x821f12bc",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r28)# byte_83018150"
+        },
+        {
+          "address": "0x821f12c0",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x821f12c4",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x821f12c8",
+          "assembly": "addi      r3, r1, 0xB0+var_60# lpPerformanceCount"
+        },
+        {
+          "address": "0x821f12cc",
+          "assembly": "bl        QueryPerformanceCounter"
+        },
+        {
+          "address": "0x821f12d0",
+          "assembly": "lwz       r10, CgsDev__PerfMonCpu__mpMonitorsArray@l(r29)"
+        },
+        {
+          "address": "0x821f12d4",
+          "assembly": "li        r9, 1"
+        },
+        {
+          "address": "0x821f12d8",
+          "assembly": "ld        r11, 0xB0+var_60(r1)"
+        },
+        {
+          "address": "0x821f12dc",
+          "assembly": "add       r10, r30, r10"
+        },
+        {
+          "address": "0x821f12e0",
+          "assembly": "stb       r9, 0x3C(r10)"
+        },
+        {
+          "address": "0x821f12e4",
+          "assembly": "lwz       r10, CgsDev__PerfMonCpu__mpMonitorsArray@l(r29)"
+        },
+        {
+          "address": "0x821f12e8",
+          "assembly": "stdx      r11, r30, r10"
+        },
+        {
+          "address": "0x821f12ec",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r29)"
+        },
+        {
+          "address": "0x821f12f0",
+          "assembly": "add       r11, r30, r11"
+        },
+        {
+          "address": "0x821f12f4",
+          "assembly": "lwz       r10, 0x14(r11)"
+        },
+        {
+          "address": "0x821f12f8",
+          "assembly": "addi      r10, r10, 1"
+        },
+        {
+          "address": "0x821f12fc",
+          "assembly": "stw       r10, 0x14(r11)"
+        },
+        {
+          "address": "0x821f1300",
+          "assembly": "addi      r1, r1, 0xB0"
+        },
+        {
+          "address": "0x821f1304",
+          "assembly": "b         __restgprlr_26"
+        }
+      ]
+    },
+    "0x8279e9c0": {
+      "callsite": "0x827af184",
+      "name": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_Post",
+      "assembly": [
+        {
+          "address": "0x8279e9c0",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x8279e9c4",
+          "assembly": "bl        __savegprlr_28"
+        },
+        {
+          "address": "0x8279e9c8",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x8279e9cc",
+          "assembly": "mr        r28, r3"
+        },
+        {
+          "address": "0x8279e9d0",
+          "assembly": "lbz       r11, 0(r28)"
+        },
+        {
+          "address": "0x8279e9d4",
+          "assembly": "extrwi    r11, r11, 1,27"
+        },
+        {
+          "address": "0x8279e9d8",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x8279e9dc",
+          "assembly": "bne       cr6, loc_8279EA58"
+        },
+        {
+          "address": "0x8279e9e0",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x8279e9e4",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x8279e9e8",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x8279e9ec",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x8279e9f0",
+          "assembly": "lis       r30, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x8279e9f4",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x8279e9f8",
+          "assembly": "lwz       r29, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x8279e9fc",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x8279ea00",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x8279ea04",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x8279ea08",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x8279ea0c",
+          "assembly": "stw       r31, 0x90+var_38(r1)"
+        },
+        {
+          "address": "0x8279ea10",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x8279ea14",
+          "assembly": "stw       r29, 0x90+var_34(r1)"
+        },
+        {
+          "address": "0x8279ea18",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x8279ea1c",
+          "assembly": "lis       r10, aNotLockedForRe@ha"
+        },
+        {
+          "address": "0x8279ea20",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x8279ea24",
+          "assembly": "addi      r4, r10, aNotLockedForRe@l# \"Not locked for reading\\n\""
+        },
+        {
+          "address": "0x8279ea28",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x8279ea2c",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x8279ea30",
+          "assembly": "lwz       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x8279ea34",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x8279ea38",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x8279ea3c",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x8279ea40",
+          "assembly": "lis       r11, aDP4B5MainBurno_41@ha"
+        },
+        {
+          "address": "0x8279ea44",
+          "assembly": "li        r5, 0x254"
+        },
+        {
+          "address": "0x8279ea48",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x8279ea4c",
+          "assembly": "addi      r4, r11, aDP4B5MainBurno_41@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"..."
+        },
+        {
+          "address": "0x8279ea50",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x8279ea54",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x8279ea58",
+          "assembly": "addis     r3, r28, 0xD"
+        },
+        {
+          "address": "0x8279ea5c",
+          "assembly": "addi      r3, r3, 0xC70"
+        },
+        {
+          "address": "0x8279ea60",
+          "assembly": "addi      r1, r1, 0x90"
+        },
+        {
+          "address": "0x8279ea64",
+          "assembly": "b         __restgprlr_28"
+        }
+      ]
+    },
+    "0x827a4ca8": {
+      "callsite": "0x827af1b8",
+      "name": "BrnWorldIO::UpdateOutputBuffer::AppendReplayRequestInterface",
+      "assembly": [
+        {
+          "address": "0x827a4ca8",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x827a4cac",
+          "assembly": "bl        __savegprlr_27"
+        },
+        {
+          "address": "0x827a4cb0",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x827a4cb4",
+          "assembly": "mr        r28, r3"
+        },
+        {
+          "address": "0x827a4cb8",
+          "assembly": "mr        r27, r4"
+        },
+        {
+          "address": "0x827a4cbc",
+          "assembly": "lbz       r11, 0(r28)"
+        },
+        {
+          "address": "0x827a4cc0",
+          "assembly": "extrwi    r11, r11, 1,28"
+        },
+        {
+          "address": "0x827a4cc4",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x827a4cc8",
+          "assembly": "bne       cr6, loc_827A4D44"
+        },
+        {
+          "address": "0x827a4ccc",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x827a4cd0",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x827a4cd4",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x827a4cd8",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x827a4cdc",
+          "assembly": "lis       r30, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x827a4ce0",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a4ce4",
+          "assembly": "lwz       r29, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x827a4ce8",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4cec",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a4cf0",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x827a4cf4",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x827a4cf8",
+          "assembly": "stw       r31, 0x90+var_38(r1)"
+        },
+        {
+          "address": "0x827a4cfc",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x827a4d00",
+          "assembly": "stw       r29, 0x90+var_34(r1)"
+        },
+        {
+          "address": "0x827a4d04",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x827a4d08",
+          "assembly": "lis       r10, aNotLockedForWr@ha"
+        },
+        {
+          "address": "0x827a4d0c",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a4d10",
+          "assembly": "addi      r4, r10, aNotLockedForWr@l# \"Not locked for writing\\n\""
+        },
+        {
+          "address": "0x827a4d14",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4d18",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x827a4d1c",
+          "assembly": "lwz       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a4d20",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x827a4d24",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x827a4d28",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x827a4d2c",
+          "assembly": "lis       r11, aGamesourceWorl_4@ha"
+        },
+        {
+          "address": "0x827a4d30",
+          "assembly": "li        r5, 0x256"
+        },
+        {
+          "address": "0x827a4d34",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a4d38",
+          "assembly": "addi      r4, r11, aGamesourceWorl_4@l# \"..\\\\..\\\\..\\\\GameSource\\\\World/BrnWorldM\"..."
+        },
+        {
+          "address": "0x827a4d3c",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x827a4d40",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x827a4d44",
+          "assembly": "addis     r3, r28, 3"
+        },
+        {
+          "address": "0x827a4d48",
+          "assembly": "mr        r4, r27"
+        },
+        {
+          "address": "0x827a4d4c",
+          "assembly": "addi      r3, r3, -0x6AA4"
+        },
+        {
+          "address": "0x827a4d50",
+          "assembly": "bl        BrnReplays__ReplayIO__RequestInterface__Append"
+        },
+        {
+          "address": "0x827a4d54",
+          "assembly": "addi      r1, r1, 0x90"
+        },
+        {
+          "address": "0x827a4d58",
+          "assembly": "b         __restgprlr_27"
+        }
+      ]
+    },
+    "0x827a2000": {
+      "callsite": "0x827af198",
+      "name": "BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::",
+      "assembly": [
+        {
+          "address": "0x827a2000",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x827a2004",
+          "assembly": "bl        __savegprlr_28"
+        },
+        {
+          "address": "0x827a2008",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x827a200c",
+          "assembly": "mr        r28, r3"
+        },
+        {
+          "address": "0x827a2010",
+          "assembly": "lbz       r11, 0(r28)"
+        },
+        {
+          "address": "0x827a2014",
+          "assembly": "extrwi    r11, r11, 1,27"
+        },
+        {
+          "address": "0x827a2018",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x827a201c",
+          "assembly": "bne       cr6, loc_827A2098"
+        },
+        {
+          "address": "0x827a2020",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x827a2024",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x827a2028",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x827a202c",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x827a2030",
+          "assembly": "lis       r30, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x827a2034",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a2038",
+          "assembly": "lwz       r29, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x827a203c",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a2040",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a2044",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x827a2048",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x827a204c",
+          "assembly": "stw       r31, 0x90+var_38(r1)"
+        },
+        {
+          "address": "0x827a2050",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x827a2054",
+          "assembly": "stw       r29, 0x90+var_34(r1)"
+        },
+        {
+          "address": "0x827a2058",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x827a205c",
+          "assembly": "lis       r10, aNotLockedForRe@ha"
+        },
+        {
+          "address": "0x827a2060",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a2064",
+          "assembly": "addi      r4, r10, aNotLockedForRe@l# \"Not locked for reading\\n\""
+        },
+        {
+          "address": "0x827a2068",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a206c",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x827a2070",
+          "assembly": "lwz       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a2074",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x827a2078",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x827a207c",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x827a2080",
+          "assembly": "lis       r11, aGamesourceWorl_12@ha"
+        },
+        {
+          "address": "0x827a2084",
+          "assembly": "li        r5, 0x2E3"
+        },
+        {
+          "address": "0x827a2088",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a208c",
+          "assembly": "addi      r4, r11, aGamesourceWorl_12@l# \"..\\\\..\\\\..\\\\GameSource\\\\World/EntityMod\"..."
+        },
+        {
+          "address": "0x827a2090",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x827a2094",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x827a2098",
+          "assembly": "addis     r3, r28, 0xD"
+        },
+        {
+          "address": "0x827a209c",
+          "assembly": "addi      r3, r3, -0x4A10"
+        },
+        {
+          "address": "0x827a20a0",
+          "assembly": "addi      r1, r1, 0x90"
+        },
+        {
+          "address": "0x827a20a4",
+          "assembly": "b         __restgprlr_28"
+        }
+      ]
+    },
+    "0x827a0b78": {
+      "callsite": "0x827af1ac",
+      "name": "BrnTraffic::BrnTrafficIO::OutputBuffer_PostPhysics",
+      "assembly": [
+        {
+          "address": "0x827a0b78",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x827a0b7c",
+          "assembly": "bl        __savegprlr_28"
+        },
+        {
+          "address": "0x827a0b80",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x827a0b84",
+          "assembly": "mr        r28, r3"
+        },
+        {
+          "address": "0x827a0b88",
+          "assembly": "lbz       r11, 0(r28)"
+        },
+        {
+          "address": "0x827a0b8c",
+          "assembly": "extrwi    r11, r11, 1,27"
+        },
+        {
+          "address": "0x827a0b90",
+          "assembly": "cmplwi    cr6, r11, 0"
+        },
+        {
+          "address": "0x827a0b94",
+          "assembly": "bne       cr6, loc_827A0C10"
+        },
+        {
+          "address": "0x827a0b98",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x827a0b9c",
+          "assembly": "lis       r11, off_82000D00@ha"
+        },
+        {
+          "address": "0x827a0ba0",
+          "assembly": "lis       r10, dword_82F32264@ha"
+        },
+        {
+          "address": "0x827a0ba4",
+          "assembly": "addi      r11, r11, off_82000D00@l"
+        },
+        {
+          "address": "0x827a0ba8",
+          "assembly": "lis       r30, CgsDev__Assert__gpcMessageBuffer@ha"
+        },
+        {
+          "address": "0x827a0bac",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a0bb0",
+          "assembly": "lwz       r29, dword_82F32264@l(r10)"
+        },
+        {
+          "address": "0x827a0bb4",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a0bb8",
+          "assembly": "lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a0bbc",
+          "assembly": "bl        CgsContainers__BasePriorityQueue__Clear"
+        },
+        {
+          "address": "0x827a0bc0",
+          "assembly": "lis       r11, off_82000D08@ha"
+        },
+        {
+          "address": "0x827a0bc4",
+          "assembly": "stw       r31, 0x90+var_38(r1)"
+        },
+        {
+          "address": "0x827a0bc8",
+          "assembly": "li        r9, 0"
+        },
+        {
+          "address": "0x827a0bcc",
+          "assembly": "stw       r29, 0x90+var_34(r1)"
+        },
+        {
+          "address": "0x827a0bd0",
+          "assembly": "addi      r11, r11, off_82000D08@l"
+        },
+        {
+          "address": "0x827a0bd4",
+          "assembly": "lis       r10, aNotLockedForRe@ha"
+        },
+        {
+          "address": "0x827a0bd8",
+          "assembly": "addi      r3, r1, 0x90+var_40"
+        },
+        {
+          "address": "0x827a0bdc",
+          "assembly": "addi      r4, r10, aNotLockedForRe@l# \"Not locked for reading\\n\""
+        },
+        {
+          "address": "0x827a0be0",
+          "assembly": "stw       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a0be4",
+          "assembly": "stb       r9, (byte_83018150 - 0x83018150)(r31)"
+        },
+        {
+          "address": "0x827a0be8",
+          "assembly": "lwz       r11, 0x90+var_40(r1)"
+        },
+        {
+          "address": "0x827a0bec",
+          "assembly": "lwz       r11, 4(r11)"
+        },
+        {
+          "address": "0x827a0bf0",
+          "assembly": "mtctr     r11"
+        },
+        {
+          "address": "0x827a0bf4",
+          "assembly": "bctrl"
+        },
+        {
+          "address": "0x827a0bf8",
+          "assembly": "lis       r11, aGamesourceWorl_25@ha"
+        },
+        {
+          "address": "0x827a0bfc",
+          "assembly": "li        r5, 0x196"
+        },
+        {
+          "address": "0x827a0c00",
+          "assembly": "lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150"
+        },
+        {
+          "address": "0x827a0c04",
+          "assembly": "addi      r4, r11, aGamesourceWorl_25@l# \"..\\\\..\\\\..\\\\GameSource\\\\World/EntityMod\"..."
+        },
+        {
+          "address": "0x827a0c08",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x827a0c0c",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x827a0c10",
+          "assembly": "addis     r3, r28, 0xD"
+        },
+        {
+          "address": "0x827a0c14",
+          "assembly": "addi      r3, r3, -0x4320"
+        },
+        {
+          "address": "0x827a0c18",
+          "assembly": "addi      r1, r1, 0x90"
+        },
+        {
+          "address": "0x827a0c1c",
+          "assembly": "b         __restgprlr_28"
+        }
+      ]
+    },
+    "0x821f1308": {
+      "callsite": "0x827af1c0",
+      "name": "CgsDev::PerfMonCpu::StopMonitor",
+      "assembly": [
+        {
+          "address": "0x821f1308",
+          "assembly": "mflr      r12"
+        },
+        {
+          "address": "0x821f130c",
+          "assembly": "stw       r12, var_8(r1)"
+        },
+        {
+          "address": "0x821f1310",
+          "assembly": "std       r30, var_18(r1)"
+        },
+        {
+          "address": "0x821f1314",
+          "assembly": "std       r31, var_10(r1)"
+        },
+        {
+          "address": "0x821f1318",
+          "assembly": "stwu      r1, back_chain(r1)"
+        },
+        {
+          "address": "0x821f131c",
+          "assembly": "slwi      r11, r3, 1"
+        },
+        {
+          "address": "0x821f1320",
+          "assembly": "lis       r30, CgsDev__PerfMonCpu__mpMonitorsArray@ha"
+        },
+        {
+          "address": "0x821f1324",
+          "assembly": "add       r11, r3, r11"
+        },
+        {
+          "address": "0x821f1328",
+          "assembly": "slwi      r31, r11, 5"
+        },
+        {
+          "address": "0x821f132c",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r30)"
+        },
+        {
+          "address": "0x821f1330",
+          "assembly": "add       r11, r31, r11"
+        },
+        {
+          "address": "0x821f1334",
+          "assembly": "lbz       r11, 0x3C(r11)"
+        },
+        {
+          "address": "0x821f1338",
+          "assembly": "cmplwi    cr6, r11, 1"
+        },
+        {
+          "address": "0x821f133c",
+          "assembly": "beq       cr6, loc_821F1360"
+        },
+        {
+          "address": "0x821f1340",
+          "assembly": "bl        CgsDev__Assert__BeginAssert"
+        },
+        {
+          "address": "0x821f1344",
+          "assembly": "lis       r11, aGamesharedGame_243@ha"
+        },
+        {
+          "address": "0x821f1348",
+          "assembly": "li        r5, 0x61 # 'a'"
+        },
+        {
+          "address": "0x821f134c",
+          "assembly": "addi      r4, r11, aGamesharedGame_243@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\De\"..."
+        },
+        {
+          "address": "0x821f1350",
+          "assembly": "lis       r11, aMpmonitorsarra_0@ha"
+        },
+        {
+          "address": "0x821f1354",
+          "assembly": "addi      r3, r11, aMpmonitorsarra_0@l# \"mpMonitorsArray[liMonitorID].mbActive =\"..."
+        },
+        {
+          "address": "0x821f1358",
+          "assembly": "bl        CgsDev__Assert__FireAssert"
+        },
+        {
+          "address": "0x821f135c",
+          "assembly": "bl        CgsDev__Assert__EndAssert"
+        },
+        {
+          "address": "0x821f1360",
+          "assembly": "addi      r3, r1, 0x70+var_20# lpPerformanceCount"
+        },
+        {
+          "address": "0x821f1364",
+          "assembly": "bl        QueryPerformanceCounter"
+        },
+        {
+          "address": "0x821f1368",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r30)"
+        },
+        {
+          "address": "0x821f136c",
+          "assembly": "li        r8, 0"
+        },
+        {
+          "address": "0x821f1370",
+          "assembly": "ld        r9, 0x70+var_20(r1)"
+        },
+        {
+          "address": "0x821f1374",
+          "assembly": "add       r10, r31, r11"
+        },
+        {
+          "address": "0x821f1378",
+          "assembly": "ldx       r11, r31, r11"
+        },
+        {
+          "address": "0x821f137c",
+          "assembly": "stb       r8, 0x3C(r10)"
+        },
+        {
+          "address": "0x821f1380",
+          "assembly": "subf      r9, r11, r9"
+        },
+        {
+          "address": "0x821f1384",
+          "assembly": "lwz       r11, CgsDev__PerfMonCpu__mpMonitorsArray@l(r30)"
+        },
+        {
+          "address": "0x821f1388",
+          "assembly": "add       r11, r31, r11"
+        },
+        {
+          "address": "0x821f138c",
+          "assembly": "ld        r10, 8(r11)"
+        },
+        {
+          "address": "0x821f1390",
+          "assembly": "add       r10, r10, r9"
+        },
+        {
+          "address": "0x821f1394",
+          "assembly": "std       r10, 8(r11)"
+        },
+        {
+          "address": "0x821f1398",
+          "assembly": "addi      r1, r1, 0x70"
+        },
+        {
+          "address": "0x821f139c",
+          "assembly": "lwz       r12, var_8(r1)"
+        },
+        {
+          "address": "0x821f13a0",
+          "assembly": "mtlr      r12"
+        },
+        {
+          "address": "0x821f13a4",
+          "assembly": "ld        r30, var_18(r1)"
+        },
+        {
+          "address": "0x821f13a8",
+          "assembly": "ld        r31, var_10(r1)"
+        },
+        {
+          "address": "0x821f13ac",
+          "assembly": "blr"
+        }
+      ]
+    }
+  },
+  "source": "read-only extraction from a private copy of canonical ARTIST IDB"
+}

@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "errors": [],
+  "source_sha256": "c7117354ddbd85e8abd66d1363c10b865cb74c18bc7662f62b03bd7f3ec297fa",
+  "assembly_sha256": "e3cf8f61799b533b50d030cf94f8bfaeebbe84db2a87be918d1ecf0339d854a7",
+  "positive_contract": {
+    "call_order": [
+      "DoUpdate_InputPreWorld",
+      "DoUpdate_NetworkPreSim",
+      "DoUpdate_GameStatePreWorld",
+      "DoUpdate_ReplaysPreSim",
+      "DoUpdate_GuiPreWorld",
+      "DoPreUpdate_Sound",
+      "ConstructUpdateSet",
+      "lpState->Update",
+      "DoUpdate_InputPostWorld",
+      "DoUpdate_Effects",
+      "FinishInGameSoundFramePC",
+      "DoUpdate_ReplaysPostSim",
+      "DoUpdate_GameStatePostWorld",
+      "DoUpdate_NetworkPostSim",
+      "UpdateTimers"
+    ],
+    "lifetime": {
+      "mpUpdateInputBufferStack": {
+        "create": [
+          "&mpGuiInputBuffer",
+          "&mpGuiViewInputBuffer"
+        ],
+        "destroy": [
+          "&mpGuiViewInputBuffer",
+          "&mpGuiInputBuffer"
+        ]
+      },
+      "mpUpdateOutputBufferStack": {
+        "create": [
+          "&mpGuiOutputBuffer",
+          "&mpGuiModelOutputBuffer",
+          "&mpDirectorOutputBuffer",
+          "&mpWorldUpdateOutputBuffer",
+          "&mpNetworkOutputBuffer",
+          "&mpInGameSoundRootOutputPC",
+          "&mpReplayPreSimOutputBuffer",
+          "&mpReplayPostSimOutputBuffer",
+          "&mpEffectsOutputBuffer",
+          "&mpInGameSoundPreUpdateOutputPC"
+        ],
+        "destroy": [
+          "&mpInGameSoundPreUpdateOutputPC",
+          "&mpEffectsOutputBuffer",
+          "&mpReplayPostSimOutputBuffer",
+          "&mpReplayPreSimOutputBuffer",
+          "&mpInGameSoundRootOutputPC",
+          "&mpNetworkOutputBuffer",
+          "&mpWorldUpdateOutputBuffer",
+          "&mpDirectorOutputBuffer",
+          "&mpGuiModelOutputBuffer",
+          "&mpGuiOutputBuffer"
+        ]
+      }
+    }
+  },
+  "negative_controls": {
+    "source24_before": [
+      "DoUpdate_ReplaysPreSim: expected one selected call, found 0",
+      "DoUpdate_GuiPreWorld: expected one selected call, found 0",
+      "DoPreUpdate_Sound: expected one selected call, found 0",
+      "ConstructUpdateSet: expected one selected call, found 0",
+      "DoUpdate_ReplaysPostSim: expected one selected call, found 0",
+      "native producer/consumer call order",
+      "DoUpdate_ReplaysPreSim: expected one selected call, found 0",
+      "DoUpdate_ReplaysPostSim: expected one selected call, found 0",
+      "PreSim must receive initial FSM set",
+      "PostSim must receive late output-derived set",
+      "BridgeReplayToGui: expected one selected call, found 0",
+      "Effects typed participant dataflow",
+      "PostSim typed participant dataflow",
+      "manual Effects-only registration bypass remains",
+      "Replay resource request forwarding absent",
+      "Sound output destroyed before PostSim",
+      "Replay phase outputs missing from frame lifetime"
+    ],
+    "drop_pre_sim": [
+      "DoUpdate_ReplaysPreSim: expected one selected call, found 0",
+      "native producer/consumer call order",
+      "DoUpdate_ReplaysPreSim: expected one selected call, found 0",
+      "PreSim must receive initial FSM set"
+    ],
+    "wrong_post_set": [
+      "PostSim must receive late output-derived set"
+    ],
+    "null_effects_replay": [
+      "Effects typed participant dataflow"
+    ],
+    "wrong_lifo": [
+      "mpUpdateOutputBufferStack teardown is not reverse allocation order"
+    ],
+    "early_sound_teardown": [
+      "Sound output destroyed before PostSim"
+    ],
+    "drop_replay_gui": [
+      "BridgeReplayToGui: expected one selected call, found 0"
+    ]
+  },
+  "native_behavior_proof": false
+}

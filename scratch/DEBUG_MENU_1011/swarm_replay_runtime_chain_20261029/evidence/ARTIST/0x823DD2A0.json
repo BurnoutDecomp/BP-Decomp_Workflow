@@ -1,0 +1,189 @@
+{
+  "address": "0x823DD2A0",
+  "name": "BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim",
+  "prototype": "_DWORD * BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim_DWORD *__fastcall(int a1, int a2, int a3, int a4, int a5, int a6)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v9",
+      "type": "int *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v13",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v14",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v17",
+      "type": "_DWORD[19]",
+      "is_reg": false,
+      "size": 76
+    }
+  ],
+  "pseudocode": "_DWORD *__fastcall BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim(int a1, int a2, int a3, int a4, int a5, int a6)\n{\n  int *v9; // r28\n  int v12; // r30\n  int v13; // r3\n  int v14; // r3\n  _DWORD *result; // r3\n  _DWORD v17[19]; // [sp+54h] [-4Ch] BYREF\n\n  _savegprlr_25();\n  v9 = (a1 + 10055512);\n  CgsDev::PerfMonCpu::StartMonitor(*(a1 + 10055512));\n  if ( !CgsModule::IOBufferStack::CreateIOBuffer<BrnReplays::ReplayIO::InputBuffer_PreSim>(a2, v17, \"ReplaysPreSim\") )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->CreateIOBuffer( &mpBuffer, lpcName )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      52);\n    CgsDev::Assert::EndAssert();\n  }\n  v12 = v17[0];\n  sub_823B6FE0(v17[0], a4);\n  v13 = sub_823B96F0(a4);\n  BrnReplays::ReplayIO::InputBuffer_PreSim::AppendGameActionQueue(v12, v13);\n  BrnReplays::ReplayIO::InputBuffer_PreSim::SetTimerStatusInterface(v12, a1 + 10095372);\n  sub_823B7060(v12, a4);\n  (*(*(a1 + 9163520) + 68))(a1 + 9163520, v12, a5, a6);\n  BrnReplays::BaseSerialiser::Lock(a1 + 10096844);\n  BrnReplays::BaseSerialiser::Serialise(a1 + 10096844, a1 + 10095396, 24);\n  BrnReplays::BaseSerialiser::Unlock(a1 + 10096844);\n  v14 = *v9;\n  *(a1 + 10096932) = 1;\n  *(a1 + 10096933) = 1;\n  CgsDev::PerfMonCpu::StopMonitor(v14);\n  result = CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::InputBuffer_PreSim>(a2, v17);\n  if ( !result )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"mpStack->DestroyIOBuffer( &mpBuffer )\",\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsModuleIOHelper.h\",\n      57);\n    result = CgsDev::Assert::EndAssert();\n  }\n  _restgprlr_25();\n  return result;\n}\n",
+  "assembly": "0x823DD2A0  mflr      r12\n0x823DD2A4  bl        __savegprlr_25\n0x823DD2A8  stwu      r1, back_chain(r1)\n0x823DD2AC  mr        r31, r3\n0x823DD2B0  mr        r30, r4\n0x823DD2B4  addis     r28, r31, 0x99\n0x823DD2B8  mr        r29, r6\n0x823DD2BC  addi      r28, r28, 0x6F58\n0x823DD2C0  mr        r27, r7\n0x823DD2C4  mr        r26, r8\n0x823DD2C8  lwz       r3, 0(r28)\n0x823DD2CC  bl        CgsDev__PerfMonCpu__StartMonitor\n0x823DD2D0  lis       r11, aReplayspresim@ha\n0x823DD2D4  stw       r30, 0xA0+var_50(r1)\n0x823DD2D8  addi      r4, r1, 0xA0+var_4C\n0x823DD2DC  addi      r5, r11, aReplayspresim@l# \"ReplaysPreSim\"\n0x823DD2E0  mr        r3, r30\n0x823DD2E4  bl        ___CreateIOBuffer_VInputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_PreSim_Repla\n0x823DD2E8  clrlwi    r11, r3, 24\n0x823DD2EC  cmplwi    cr6, r11, 0\n0x823DD2F0  lis       r11, aGamesharedGame_16@ha\n0x823DD2F4  addi      r25, r11, aGamesharedGame_16@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Mo\"...\n0x823DD2F8  bne       cr6, loc_823DD318\n0x823DD2FC  bl        CgsDev__Assert__BeginAssert\n0x823DD300  lis       r11, aMpstackCreatei@ha\n0x823DD304  li        r5, 0x34 # '4'\n0x823DD308  addi      r3, r11, aMpstackCreatei@l# \"mpStack->CreateIOBuffer( &mpBuffer, lpc\"...\n0x823DD30C  mr        r4, r25\n0x823DD310  bl        CgsDev__Assert__FireAssert\n0x823DD314  bl        CgsDev__Assert__EndAssert\n0x823DD318  lwz       r30, 0xA0+var_4C(r1)\n0x823DD31C  mr        r4, r29\n0x823DD320  mr        r3, r30\n0x823DD324  bl        sub_823B6FE0\n0x823DD328  mr        r3, r29\n0x823DD32C  bl        sub_823B96F0\n0x823DD330  mr        r4, r3\n0x823DD334  mr        r3, r30\n0x823DD338  bl        BrnReplays__ReplayIO__InputBuffer_PreSim__AppendGameActionQueue\n0x823DD33C  addis     r4, r31, 0x9A\n0x823DD340  mr        r3, r30\n0x823DD344  addi      r4, r4, 0xB0C\n0x823DD348  bl        BrnReplays__ReplayIO__InputBuffer_PreSim__SetTimerStatusInterface\n0x823DD34C  mr        r4, r29\n0x823DD350  mr        r3, r30\n0x823DD354  bl        sub_823B7060\n0x823DD358  addis     r3, r31, 0x8C\n0x823DD35C  mr        r6, r26\n0x823DD360  addi      r3, r3, -0x2D00\n0x823DD364  mr        r5, r27\n0x823DD368  mr        r4, r30\n0x823DD36C  lwz       r11, 0(r3)\n0x823DD370  lwz       r11, 0x44(r11)\n0x823DD374  mtctr     r11\n0x823DD378  bctrl\n0x823DD37C  addis     r30, r31, 0x9A\n0x823DD380  addi      r30, r30, 0x10CC\n0x823DD384  mr        r3, r30\n0x823DD388  bl        BrnReplays__BaseSerialiser__Lock\n0x823DD38C  addis     r4, r31, 0x9A\n0x823DD390  li        r5, 0x18\n0x823DD394  addi      r4, r4, 0xB24\n0x823DD398  mr        r3, r30\n0x823DD39C  bl        BrnReplays__BaseSerialiser__Serialise\n0x823DD3A0  mr        r3, r30\n0x823DD3A4  bl        BrnReplays__BaseSerialiser__Unlock\n0x823DD3A8  lis       r11, 0x9A\n0x823DD3AC  lis       r9, 0x9A\n0x823DD3B0  lwz       r3, 0(r28)\n0x823DD3B4  ori       r10, r11, 0x1124 # 0x9A1124\n0x823DD3B8  li        r11, 1\n0x823DD3BC  ori       r9, r9, 0x1125 # 0x9A1125\n0x823DD3C0  stbx      r11, r31, r10\n0x823DD3C4  stbx      r11, r31, r9\n0x823DD3C8  bl        CgsDev__PerfMonCpu__StopMonitor\n0x823DD3CC  addi      r4, r1, 0xA0+var_4C\n0x823DD3D0  lwz       r3, 0xA0+var_50(r1)\n0x823DD3D4  bl        ___DestroyIOBuffer_VInputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_PreSim_Repl\n0x823DD3D8  clrlwi    r11, r3, 24\n0x823DD3DC  cmplwi    cr6, r11, 0\n0x823DD3E0  bne       cr6, loc_823DD400\n0x823DD3E4  bl        CgsDev__Assert__BeginAssert\n0x823DD3E8  lis       r11, aMpstackDestroy@ha\n0x823DD3EC  li        r5, 0x39 # '9'\n0x823DD3F0  addi      r3, r11, aMpstackDestroy@l# \"mpStack->DestroyIOBuffer( &mpBuffer )\"\n0x823DD3F4  mr        r4, r25\n0x823DD3F8  bl        CgsDev__Assert__FireAssert\n0x823DD3FC  bl        CgsDev__Assert__EndAssert\n0x823DD400  addi      r1, r1, 0xA0\n0x823DD404  b         __restgprlr_25",
+  "xrefs_to": [
+    {
+      "address": "0x823F0AF8",
+      "name": "BrnGame::BrnGameModule::DoUpdate"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EDC",
+      "name": "__savegprlr_25"
+    },
+    {
+      "address": "0x821F1198",
+      "name": "CgsDev::PerfMonCpu::StartMonitor"
+    },
+    {
+      "address": "0x823AFB78",
+      "name": "??$CreateIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repla"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x823B6FE0",
+      "name": "sub_823B6FE0"
+    },
+    {
+      "address": "0x823B96F0",
+      "name": "sub_823B96F0"
+    },
+    {
+      "address": "0x823C9A38",
+      "name": "BrnReplays::ReplayIO::InputBuffer_PreSim::AppendGameActionQueue"
+    },
+    {
+      "address": "0x823BAF70",
+      "name": "BrnReplays::ReplayIO::InputBuffer_PreSim::SetTimerStatusInterface"
+    },
+    {
+      "address": "0x823B7060",
+      "name": "sub_823B7060"
+    },
+    {
+      "address": "0x823A6718",
+      "name": "BrnReplays::BaseSerialiser::Lock"
+    },
+    {
+      "address": "0x8264C470",
+      "name": "BrnReplays::BaseSerialiser::Serialise"
+    },
+    {
+      "address": "0x823A67C0",
+      "name": "BrnReplays::BaseSerialiser::Unlock"
+    },
+    {
+      "address": "0x821F1308",
+      "name": "CgsDev::PerfMonCpu::StopMonitor"
+    },
+    {
+      "address": "0x823AFC48",
+      "name": "??$DestroyIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repl"
+    }
+  ]
+}

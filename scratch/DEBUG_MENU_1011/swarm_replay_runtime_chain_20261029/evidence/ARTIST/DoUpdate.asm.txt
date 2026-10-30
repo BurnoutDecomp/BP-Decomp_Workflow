@@ -1,0 +1,1527 @@
+0x823F0AF8  mflr      r12
+0x823F0AFC  bl        __savegprlr_14
+0x823F0B00  stwu      r1, back_chain(r1)
+0x823F0B04  mr        r25, r3
+0x823F0B08  bl        BrnResource__GetAvailableMemory
+0x823F0B0C  addis     r29, r25, 0x99
+0x823F0B10  mr        r31, r3
+0x823F0B14  addi      r29, r29, 0x6F30
+0x823F0B18  lwz       r3, 0(r29)
+0x823F0B1C  bl        CgsDev__PerfMonCpu__StartMonitor
+0x823F0B20  bl        CgsSystem__GetSystemTimerBaseTime
+0x823F0B24  mr        r3, r25
+0x823F0B28  bl        BrnGame__BrnGameModule__ConstructUpdateSetFromFsm
+0x823F0B2C  addis     r23, r25, 0x99
+0x823F0B30  mr        r28, r3
+0x823F0B34  addi      r23, r23, 0x6F00
+0x823F0B38  lis       r11, aInput_0@ha
+0x823F0B3C  addi      r4, r1, 0x1C0+var_DC
+0x823F0B40  addi      r5, r11, aInput_0@l# "Input"
+0x823F0B44  lwz       r3, 0(r23)
+0x823F0B48  stw       r23, 0x1C0+var_118(r1)
+0x823F0B4C  stw       r3, 0x1C0+var_E0(r1)
+0x823F0B50  bl        ___CreateIOBuffer_VOutputBuffer_InputIO_CgsInput___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_InputIO_CgsInput__PB
+0x823F0B54  clrlwi    r11, r3, 24
+0x823F0B58  cmplwi    cr6, r11, 0
+0x823F0B5C  lis       r11, aMpstackCreatei@ha
+0x823F0B60  addi      r30, r11, aMpstackCreatei@l# "mpStack->CreateIOBuffer( &mpBuffer, lpc"...
+0x823F0B64  lis       r11, aGamesharedGame_16@ha
+0x823F0B68  addi      r27, r11, aGamesharedGame_16@l# "..\\..\\..\\GameShared\\GameClasses\\Mo"...
+0x823F0B6C  stw       r27, 0x1C0+var_FC(r1)
+0x823F0B70  bne       cr6, loc_823F0B8C
+0x823F0B74  bl        CgsDev__Assert__BeginAssert
+0x823F0B78  li        r5, 0x34 # '4'
+0x823F0B7C  mr        r4, r27
+0x823F0B80  mr        r3, r30
+0x823F0B84  bl        CgsDev__Assert__FireAssert
+0x823F0B88  bl        CgsDev__Assert__EndAssert
+0x823F0B8C  addis     r14, r25, 0x99
+0x823F0B90  lis       r11, aNetwork@ha
+0x823F0B94  addi      r14, r14, 0x6F04
+0x823F0B98  addi      r5, r11, aNetwork@l# "Network"
+0x823F0B9C  addi      r4, r1, 0x1C0+var_A4
+0x823F0BA0  lwz       r3, 0(r14)
+0x823F0BA4  stw       r3, 0x1C0+var_A8(r1)
+0x823F0BA8  bl        ___CreateIOBuffer_VOutputBuffer_BrnNetworkModuleIO_BrnNetwork___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_BrnNetw
+0x823F0BAC  clrlwi    r11, r3, 24
+0x823F0BB0  cmplwi    cr6, r11, 0
+0x823F0BB4  bne       cr6, loc_823F0BD0
+0x823F0BB8  bl        CgsDev__Assert__BeginAssert
+0x823F0BBC  li        r5, 0x34 # '4'
+0x823F0BC0  mr        r4, r27
+0x823F0BC4  mr        r3, r30
+0x823F0BC8  bl        CgsDev__Assert__FireAssert
+0x823F0BCC  bl        CgsDev__Assert__EndAssert
+0x823F0BD0  lwz       r3, 0(r14)
+0x823F0BD4  lis       r11, aGamestate@ha
+0x823F0BD8  addi      r4, r1, 0x1C0+var_EC
+0x823F0BDC  addi      r5, r11, aGamestate@l# "GameState"
+0x823F0BE0  stw       r3, 0x1C0+var_F0(r1)
+0x823F0BE4  bl        ___CreateIOBuffer_VOutputBuffer_GameStateModuleIO_BrnGameState___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_GameSt
+0x823F0BE8  clrlwi    r11, r3, 24
+0x823F0BEC  cmplwi    cr6, r11, 0
+0x823F0BF0  bne       cr6, loc_823F0C0C
+0x823F0BF4  bl        CgsDev__Assert__BeginAssert
+0x823F0BF8  li        r5, 0x34 # '4'
+0x823F0BFC  mr        r4, r27
+0x823F0C00  mr        r3, r30
+0x823F0C04  bl        CgsDev__Assert__FireAssert
+0x823F0C08  bl        CgsDev__Assert__EndAssert
+0x823F0C0C  lwz       r3, 0(r14)
+0x823F0C10  lis       r11, aWorld@ha
+0x823F0C14  addi      r4, r1, 0x1C0+var_AC
+0x823F0C18  addi      r5, r11, aWorld@l# "World"
+0x823F0C1C  stw       r3, 0x1C0+var_B0(r1)
+0x823F0C20  bl        ___CreateIOBuffer_VUpdateOutputBuffer_BrnWorldIO___IOBufferStack_CgsModule__QAA_NPAPAVUpdateOutputBuffer_BrnWorldIO__PB
+0x823F0C24  clrlwi    r11, r3, 24
+0x823F0C28  cmplwi    cr6, r11, 0
+0x823F0C2C  bne       cr6, loc_823F0C48
+0x823F0C30  bl        CgsDev__Assert__BeginAssert
+0x823F0C34  li        r5, 0x34 # '4'
+0x823F0C38  mr        r4, r27
+0x823F0C3C  mr        r3, r30
+0x823F0C40  bl        CgsDev__Assert__FireAssert
+0x823F0C44  bl        CgsDev__Assert__EndAssert
+0x823F0C48  lwz       r3, 0(r23)
+0x823F0C4C  lis       r11, aDirector@ha
+0x823F0C50  addi      r4, r1, 0x1C0+var_D4
+0x823F0C54  addi      r5, r11, aDirector@l# "Director"
+0x823F0C58  stw       r3, 0x1C0+var_D8(r1)
+0x823F0C5C  bl        ___CreateIOBuffer_VInputBuffer_DirectorIO_BrnDirector___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_DirectorIO_BrnDi
+0x823F0C60  clrlwi    r11, r3, 24
+0x823F0C64  cmplwi    cr6, r11, 0
+0x823F0C68  bne       cr6, loc_823F0C84
+0x823F0C6C  bl        CgsDev__Assert__BeginAssert
+0x823F0C70  li        r5, 0x34 # '4'
+0x823F0C74  mr        r4, r27
+0x823F0C78  mr        r3, r30
+0x823F0C7C  bl        CgsDev__Assert__FireAssert
+0x823F0C80  bl        CgsDev__Assert__EndAssert
+0x823F0C84  lwz       r3, 0(r14)
+0x823F0C88  lis       r11, aSound@ha
+0x823F0C8C  addi      r4, r1, 0x1C0+var_B4
+0x823F0C90  addi      r5, r11, aSound@l# "Sound"
+0x823F0C94  stw       r3, 0x1C0+var_B8(r1)
+0x823F0C98  bl        ___CreateIOBuffer_VRootOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootOutputBuffer_Io_Module_
+0x823F0C9C  clrlwi    r11, r3, 24
+0x823F0CA0  cmplwi    cr6, r11, 0
+0x823F0CA4  bne       cr6, loc_823F0CC0
+0x823F0CA8  bl        CgsDev__Assert__BeginAssert
+0x823F0CAC  li        r5, 0x34 # '4'
+0x823F0CB0  mr        r4, r27
+0x823F0CB4  mr        r3, r30
+0x823F0CB8  bl        CgsDev__Assert__FireAssert
+0x823F0CBC  bl        CgsDev__Assert__EndAssert
+0x823F0CC0  lwz       r3, 0(r14)
+0x823F0CC4  lis       r11, aReplayspresim@ha
+0x823F0CC8  addi      r4, r1, 0x1C0+var_E4
+0x823F0CCC  addi      r5, r11, aReplayspresim@l# "ReplaysPreSim"
+0x823F0CD0  stw       r3, 0x1C0+var_E8(r1)
+0x823F0CD4  bl        ___CreateIOBuffer_VOutputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PreSim_Rep
+0x823F0CD8  clrlwi    r11, r3, 24
+0x823F0CDC  cmplwi    cr6, r11, 0
+0x823F0CE0  bne       cr6, loc_823F0CFC
+0x823F0CE4  bl        CgsDev__Assert__BeginAssert
+0x823F0CE8  li        r5, 0x34 # '4'
+0x823F0CEC  mr        r4, r27
+0x823F0CF0  mr        r3, r30
+0x823F0CF4  bl        CgsDev__Assert__FireAssert
+0x823F0CF8  bl        CgsDev__Assert__EndAssert
+0x823F0CFC  lwz       r3, 0(r14)
+0x823F0D00  lis       r11, aReplayspostsim@ha
+0x823F0D04  addi      r4, r1, 0x1C0+var_BC
+0x823F0D08  addi      r5, r11, aReplayspostsim@l# "ReplaysPostSim"
+0x823F0D0C  stw       r3, 0x1C0+var_C0(r1)
+0x823F0D10  bl        ___CreateIOBuffer_VOutputBuffer_PostSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PostSim_R
+0x823F0D14  clrlwi    r11, r3, 24
+0x823F0D18  cmplwi    cr6, r11, 0
+0x823F0D1C  bne       cr6, loc_823F0D38
+0x823F0D20  bl        CgsDev__Assert__BeginAssert
+0x823F0D24  li        r5, 0x34 # '4'
+0x823F0D28  mr        r4, r27
+0x823F0D2C  mr        r3, r30
+0x823F0D30  bl        CgsDev__Assert__FireAssert
+0x823F0D34  bl        CgsDev__Assert__EndAssert
+0x823F0D38  lwz       r3, 0(r14)
+0x823F0D3C  lis       r11, aEffects_0@ha
+0x823F0D40  addi      r4, r1, 0x1C0+var_C4
+0x823F0D44  addi      r5, r11, aEffects_0@l# "Effects"
+0x823F0D48  stw       r3, 0x1C0+var_C8(r1)
+0x823F0D4C  bl        ___CreateIOBuffer_VOutputBuffer_EffectsIO_BrnEffects___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_EffectsIO_BrnEff
+0x823F0D50  clrlwi    r11, r3, 24
+0x823F0D54  cmplwi    cr6, r11, 0
+0x823F0D58  bne       cr6, loc_823F0D74
+0x823F0D5C  bl        CgsDev__Assert__BeginAssert
+0x823F0D60  li        r5, 0x34 # '4'
+0x823F0D64  mr        r4, r27
+0x823F0D68  mr        r3, r30
+0x823F0D6C  bl        CgsDev__Assert__FireAssert
+0x823F0D70  bl        CgsDev__Assert__EndAssert
+0x823F0D74  lwz       r3, 0(r14)
+0x823F0D78  lis       r11, aSoundrootpreup@ha
+0x823F0D7C  addi      r4, r1, 0x1C0+var_CC
+0x823F0D80  addi      r5, r11, aSoundrootpreup@l# "SoundRootPreUpdateOutput"
+0x823F0D84  stw       r3, 0x1C0+var_D0(r1)
+0x823F0D88  bl        ___CreateIOBuffer_VRootPreUpdateOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootPreUpdateOutpu
+0x823F0D8C  clrlwi    r11, r3, 24
+0x823F0D90  cmplwi    cr6, r11, 0
+0x823F0D94  bne       cr6, loc_823F0DB0
+0x823F0D98  bl        CgsDev__Assert__BeginAssert
+0x823F0D9C  li        r5, 0x34 # '4'
+0x823F0DA0  mr        r4, r27
+0x823F0DA4  mr        r3, r30
+0x823F0DA8  bl        CgsDev__Assert__FireAssert
+0x823F0DAC  bl        CgsDev__Assert__EndAssert
+0x823F0DB0  lis       r11, 0x99
+0x823F0DB4  lwz       r4, 0x1C0+var_D4(r1)
+0x823F0DB8  lis       r10, 0x99
+0x823F0DBC  ori       r11, r11, 0x6F10 # 0x996F10
+0x823F0DC0  ori       r10, r10, 0x6F14 # 0x996F14
+0x823F0DC4  li        r7, 0
+0x823F0DC8  li        r6, 0
+0x823F0DCC  li        r5, 0
+0x823F0DD0  lwzx      r11, r25, r11
+0x823F0DD4  mr        r3, r25
+0x823F0DD8  lwzx      r27, r25, r10
+0x823F0DDC  stw       r11, 0x1C0+var_110(r1)
+0x823F0DE0  stw       r27, 0x1C0+var_F8(r1)
+0x823F0DE4  bl        BrnGame__BrnGameModule__BridgeTimers
+0x823F0DE8  lwz       r3, 0(r29)
+0x823F0DEC  bl        CgsDev__PerfMonCpu__StopMonitor
+0x823F0DF0  addis     r30, r25, 0x99
+0x823F0DF4  addi      r30, r30, 0x6F60
+0x823F0DF8  lwz       r3, 0(r30)
+0x823F0DFC  bl        CgsDev__PerfMonCpu__StartMonitor
+0x823F0E00  mr        r3, r27
+0x823F0E04  bl        CgsModule__IOBuffer__LockForRead
+0x823F0E08  mr        r3, r27
+0x823F0E0C  bl        BrnResource__GameDataIO__OutputBuffer__GetLive
+0x823F0E10  mr        r11, r3
+0x823F0E14  mr        r3, r27
+0x823F0E18  lbz       r11, 0(r11)
+0x823F0E1C  stb       r11, 0x1C0+var_120(r1)
+0x823F0E20  bl        CgsModule__IOBuffer__UnlockForRead
+0x823F0E24  lwz       r3, 0(r30)
+0x823F0E28  bl        CgsDev__PerfMonCpu__StopMonitor
+0x823F0E2C  addis     r30, r25, 0x9A
+0x823F0E30  addi      r30, r30, 0x630
+0x823F0E34  lwz       r11, 0(r30)
+0x823F0E38  cmplwi    cr6, r11, 0
+0x823F0E3C  lis       r11, aDP4B5MainBurno_131@ha
+0x823F0E40  addi      r24, r11, aDP4B5MainBurno_131@l# "d:\\p4\\b5_main\\burnout\\main\\code\\g"...
+0x823F0E44  bne       cr6, loc_823F0E64
+0x823F0E48  bl        CgsDev__Assert__BeginAssert
+0x823F0E4C  lis       r11, aMpreusableload@ha
+0x823F0E50  li        r5, 0x7D8
+0x823F0E54  addi      r3, r11, aMpreusableload@l# "mpReusableLoadingScreenAllocator"
+0x823F0E58  mr        r4, r24
+0x823F0E5C  bl        CgsDev__Assert__FireAssert
+0x823F0E60  bl        CgsDev__Assert__EndAssert
+0x823F0E64  lwz       r3, 0(r30)
+0x823F0E68  bl        CgsMemory__LinearMalloc__FreeAll
+0x823F0E6C  bl        BrnResource__GetAvailableMemory
+0x823F0E70  lis       r11, asc_82001CC4@ha
+0x823F0E74  lis       r15, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F0E78  addi      r22, r11, asc_82001CC4@l# "\n"
+0x823F0E7C  lis       r11, aTo_0@ha
+0x823F0E80  mr        r30, r3
+0x823F0E84  addi      r21, r11, aTo_0@l# " to "
+0x823F0E88  lis       r11, aAvailableMemor@ha
+0x823F0E8C  stw       r15, 0x1C0+var_10C(r1)
+0x823F0E90  cmplw     cr6, r31, r30
+0x823F0E94  addi      r20, r11, aAvailableMemor@l# "] Available memory changed from "
+0x823F0E98  lis       r11, asc_820084F8@ha
+0x823F0E9C  lis       r27, byte_82FFA89C@ha
+0x823F0EA0  addi      r19, r11, asc_820084F8@l# ":"
+0x823F0EA4  lis       r11, asc_820187DC@ha
+0x823F0EA8  lis       r17, CgsDev__Log__gpDebugPrint@ha
+0x823F0EAC  addi      r18, r11, asc_820187DC@l# "["
+0x823F0EB0  lis       r11, aMemoryCheckFai@ha
+0x823F0EB4  addi      r29, r11, aMemoryCheckFai@l# "Memory check failed"
+0x823F0EB8  stw       r29, 0x1C0+var_11C(r1)
+0x823F0EBC  beq       cr6, loc_823F0F44
+0x823F0EC0  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F0EC4  clrldi    r11, r11, 63
+0x823F0EC8  cmpldi    cr6, r11, 0
+0x823F0ECC  beq       cr6, loc_823F0F1C
+0x823F0ED0  mr        r4, r18
+0x823F0ED4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F0ED8  bl        CgsDev__StrStreamBase__operator__
+0x823F0EDC  li        r4, 0x7DD
+0x823F0EE0  bl        sub_821F0E50
+0x823F0EE4  mr        r4, r19
+0x823F0EE8  bl        CgsDev__StrStreamBase__operator__
+0x823F0EEC  mr        r4, r24
+0x823F0EF0  bl        CgsDev__StrStreamBase__operator__
+0x823F0EF4  mr        r4, r20
+0x823F0EF8  bl        CgsDev__StrStreamBase__operator__
+0x823F0EFC  mr        r4, r31
+0x823F0F00  bl        sub_821F0EC8
+0x823F0F04  mr        r4, r21
+0x823F0F08  bl        CgsDev__StrStreamBase__operator__
+0x823F0F0C  mr        r4, r30
+0x823F0F10  bl        sub_821F0EC8
+0x823F0F14  mr        r4, r22
+0x823F0F18  bl        CgsDev__StrStreamBase__operator__
+0x823F0F1C  lbz       r11, byte_82FFA89C@l(r27)
+0x823F0F20  mr        r31, r30
+0x823F0F24  cmplwi    cr6, r11, 0
+0x823F0F28  beq       cr6, loc_823F0F44
+0x823F0F2C  bl        CgsDev__Assert__BeginAssert
+0x823F0F30  li        r5, 0x7DD
+0x823F0F34  mr        r4, r24
+0x823F0F38  mr        r3, r29
+0x823F0F3C  bl        CgsDev__Assert__FireAssert
+0x823F0F40  bl        CgsDev__Assert__EndAssert
+0x823F0F44  lwz       r26, 0x1C0+var_DC(r1)
+0x823F0F48  mr        r3, r25
+0x823F0F4C  lwz       r5, 0(r14)
+0x823F0F50  mr        r6, r26
+0x823F0F54  lwz       r4, 0(r23)
+0x823F0F58  bl        BrnGame__BrnGameModule__DoUpdate_InputPreWorld
+0x823F0F5C  stw       r3, 0x1C0+var_108(r1)
+0x823F0F60  bl        BrnResource__GetAvailableMemory
+0x823F0F64  mr        r30, r3
+0x823F0F68  cmplw     cr6, r31, r30
+0x823F0F6C  beq       cr6, loc_823F0FF4
+0x823F0F70  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F0F74  clrldi    r11, r11, 63
+0x823F0F78  cmpldi    cr6, r11, 0
+0x823F0F7C  beq       cr6, loc_823F0FCC
+0x823F0F80  mr        r4, r18
+0x823F0F84  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F0F88  bl        CgsDev__StrStreamBase__operator__
+0x823F0F8C  li        r4, 0x7E5
+0x823F0F90  bl        sub_821F0E50
+0x823F0F94  mr        r4, r19
+0x823F0F98  bl        CgsDev__StrStreamBase__operator__
+0x823F0F9C  mr        r4, r24
+0x823F0FA0  bl        CgsDev__StrStreamBase__operator__
+0x823F0FA4  mr        r4, r20
+0x823F0FA8  bl        CgsDev__StrStreamBase__operator__
+0x823F0FAC  mr        r4, r31
+0x823F0FB0  bl        sub_821F0EC8
+0x823F0FB4  mr        r4, r21
+0x823F0FB8  bl        CgsDev__StrStreamBase__operator__
+0x823F0FBC  mr        r4, r30
+0x823F0FC0  bl        sub_821F0EC8
+0x823F0FC4  mr        r4, r22
+0x823F0FC8  bl        CgsDev__StrStreamBase__operator__
+0x823F0FCC  lbz       r11, byte_82FFA89C@l(r27)
+0x823F0FD0  mr        r31, r30
+0x823F0FD4  cmplwi    cr6, r11, 0
+0x823F0FD8  beq       cr6, loc_823F0FF4
+0x823F0FDC  bl        CgsDev__Assert__BeginAssert
+0x823F0FE0  li        r5, 0x7E5
+0x823F0FE4  mr        r4, r24
+0x823F0FE8  mr        r3, r29
+0x823F0FEC  bl        CgsDev__Assert__FireAssert
+0x823F0FF0  bl        CgsDev__Assert__EndAssert
+0x823F0FF4  lwz       r16, 0x1C0+var_A4(r1)
+0x823F0FF8  mr        r8, r28
+0x823F0FFC  mr        r6, r26
+0x823F1000  lwz       r5, 0(r14)
+0x823F1004  mr        r7, r16
+0x823F1008  lwz       r4, 0(r23)
+0x823F100C  mr        r3, r25
+0x823F1010  bl        BrnGame__BrnGameModule__DoUpdate_NetworkPreSim
+0x823F1014  bl        BrnResource__GetAvailableMemory
+0x823F1018  mr        r30, r3
+0x823F101C  cmplw     cr6, r31, r30
+0x823F1020  beq       cr6, loc_823F10A8
+0x823F1024  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F1028  clrldi    r11, r11, 63
+0x823F102C  cmpldi    cr6, r11, 0
+0x823F1030  beq       cr6, loc_823F1080
+0x823F1034  mr        r4, r18
+0x823F1038  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F103C  bl        CgsDev__StrStreamBase__operator__
+0x823F1040  li        r4, 0x7F1
+0x823F1044  bl        sub_821F0E50
+0x823F1048  mr        r4, r19
+0x823F104C  bl        CgsDev__StrStreamBase__operator__
+0x823F1050  mr        r4, r24
+0x823F1054  bl        CgsDev__StrStreamBase__operator__
+0x823F1058  mr        r4, r20
+0x823F105C  bl        CgsDev__StrStreamBase__operator__
+0x823F1060  mr        r4, r31
+0x823F1064  bl        sub_821F0EC8
+0x823F1068  mr        r4, r21
+0x823F106C  bl        CgsDev__StrStreamBase__operator__
+0x823F1070  mr        r4, r30
+0x823F1074  bl        sub_821F0EC8
+0x823F1078  mr        r4, r22
+0x823F107C  bl        CgsDev__StrStreamBase__operator__
+0x823F1080  lbz       r11, byte_82FFA89C@l(r27)
+0x823F1084  mr        r31, r30
+0x823F1088  cmplwi    cr6, r11, 0
+0x823F108C  beq       cr6, loc_823F10A8
+0x823F1090  bl        CgsDev__Assert__BeginAssert
+0x823F1094  li        r5, 0x7F1
+0x823F1098  mr        r4, r24
+0x823F109C  mr        r3, r29
+0x823F10A0  bl        CgsDev__Assert__FireAssert
+0x823F10A4  bl        CgsDev__Assert__EndAssert
+0x823F10A8  lwz       r29, 0x1C0+var_118(r1)
+0x823F10AC  mr        r9, r28
+0x823F10B0  lwz       r23, 0x1C0+var_EC(r1)
+0x823F10B4  mr        r7, r16
+0x823F10B8  mr        r6, r26
+0x823F10BC  lwz       r5, 0(r14)
+0x823F10C0  mr        r8, r23
+0x823F10C4  mr        r3, r25
+0x823F10C8  lwz       r4, 0(r29)
+0x823F10CC  bl        BrnGame__BrnGameModule__DoUpdate_GameStatePreWorld
+0x823F10D0  bl        BrnResource__GetAvailableMemory
+0x823F10D4  mr        r30, r3
+0x823F10D8  cmplw     cr6, r31, r30
+0x823F10DC  beq       cr6, loc_823F1164
+0x823F10E0  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F10E4  clrldi    r11, r11, 63
+0x823F10E8  cmpldi    cr6, r11, 0
+0x823F10EC  beq       cr6, loc_823F113C
+0x823F10F0  mr        r4, r18
+0x823F10F4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F10F8  bl        CgsDev__StrStreamBase__operator__
+0x823F10FC  li        r4, 0x800
+0x823F1100  bl        sub_821F0E50
+0x823F1104  mr        r4, r19
+0x823F1108  bl        CgsDev__StrStreamBase__operator__
+0x823F110C  mr        r4, r24
+0x823F1110  bl        CgsDev__StrStreamBase__operator__
+0x823F1114  mr        r4, r20
+0x823F1118  bl        CgsDev__StrStreamBase__operator__
+0x823F111C  mr        r4, r31
+0x823F1120  bl        sub_821F0EC8
+0x823F1124  mr        r4, r21
+0x823F1128  bl        CgsDev__StrStreamBase__operator__
+0x823F112C  mr        r4, r30
+0x823F1130  bl        sub_821F0EC8
+0x823F1134  mr        r4, r22
+0x823F1138  bl        CgsDev__StrStreamBase__operator__
+0x823F113C  lbz       r11, byte_82FFA89C@l(r27)
+0x823F1140  mr        r31, r30
+0x823F1144  cmplwi    cr6, r11, 0
+0x823F1148  beq       cr6, loc_823F1164
+0x823F114C  bl        CgsDev__Assert__BeginAssert
+0x823F1150  li        r5, 0x800
+0x823F1154  mr        r4, r24
+0x823F1158  lwz       r3, 0x1C0+var_11C(r1)
+0x823F115C  bl        CgsDev__Assert__FireAssert
+0x823F1160  bl        CgsDev__Assert__EndAssert
+0x823F1164  mr        r8, r28
+0x823F1168  lwz       r28, 0x1C0+var_E4(r1)
+0x823F116C  mr        r6, r23
+0x823F1170  lwz       r5, 0(r14)
+0x823F1174  mr        r7, r28
+0x823F1178  lwz       r4, 0(r29)
+0x823F117C  mr        r3, r25
+0x823F1180  bl        BrnGame__BrnGameModule__DoUpdate_ReplaysPreSim
+0x823F1184  bl        BrnResource__GetAvailableMemory
+0x823F1188  mr        r30, r3
+0x823F118C  cmplw     cr6, r31, r30
+0x823F1190  beq       cr6, loc_823F1218
+0x823F1194  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F1198  clrldi    r11, r11, 63
+0x823F119C  cmpldi    cr6, r11, 0
+0x823F11A0  beq       cr6, loc_823F11F0
+0x823F11A4  mr        r4, r18
+0x823F11A8  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F11AC  bl        CgsDev__StrStreamBase__operator__
+0x823F11B0  li        r4, 0x80B
+0x823F11B4  bl        sub_821F0E50
+0x823F11B8  mr        r4, r19
+0x823F11BC  bl        CgsDev__StrStreamBase__operator__
+0x823F11C0  mr        r4, r24
+0x823F11C4  bl        CgsDev__StrStreamBase__operator__
+0x823F11C8  mr        r4, r20
+0x823F11CC  bl        CgsDev__StrStreamBase__operator__
+0x823F11D0  mr        r4, r31
+0x823F11D4  bl        sub_821F0EC8
+0x823F11D8  mr        r4, r21
+0x823F11DC  bl        CgsDev__StrStreamBase__operator__
+0x823F11E0  mr        r4, r30
+0x823F11E4  bl        sub_821F0EC8
+0x823F11E8  mr        r4, r22
+0x823F11EC  bl        CgsDev__StrStreamBase__operator__
+0x823F11F0  lbz       r11, byte_82FFA89C@l(r27)
+0x823F11F4  mr        r31, r30
+0x823F11F8  cmplwi    cr6, r11, 0
+0x823F11FC  beq       cr6, loc_823F1218
+0x823F1200  bl        CgsDev__Assert__BeginAssert
+0x823F1204  li        r5, 0x80B
+0x823F1208  mr        r4, r24
+0x823F120C  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1210  bl        CgsDev__Assert__FireAssert
+0x823F1214  bl        CgsDev__Assert__EndAssert
+0x823F1218  lwz       r11, 0x1C0+var_118(r1)
+0x823F121C  addis     r29, r25, 0x9A
+0x823F1220  mr        r3, r25
+0x823F1224  lwz       r5, 0(r14)
+0x823F1228  addi      r29, r29, 0xBD4
+0x823F122C  lwz       r8, 0x1C0+var_110(r1)
+0x823F1230  lwz       r4, 0(r11)
+0x823F1234  addis     r11, r25, 0x9A
+0x823F1238  addi      r11, r11, 0xBD8
+0x823F123C  lwz       r7, 0(r29)
+0x823F1240  stw       r29, 0x1C0+var_104(r1)
+0x823F1244  lwz       r6, 0(r11)
+0x823F1248  stw       r11, 0x1C0+var_114(r1)
+0x823F124C  bl        BrnGame__BrnGameModule__DoUpdate_GuiPreWorld
+0x823F1250  bl        BrnResource__GetAvailableMemory
+0x823F1254  mr        r30, r3
+0x823F1258  cmplw     cr6, r31, r30
+0x823F125C  beq       cr6, loc_823F12E4
+0x823F1260  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r15)
+0x823F1264  clrldi    r11, r11, 63
+0x823F1268  cmpldi    cr6, r11, 0
+0x823F126C  beq       cr6, loc_823F12BC
+0x823F1270  mr        r4, r18
+0x823F1274  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1278  bl        CgsDev__StrStreamBase__operator__
+0x823F127C  li        r4, 0x816
+0x823F1280  bl        sub_821F0E50
+0x823F1284  mr        r4, r19
+0x823F1288  bl        CgsDev__StrStreamBase__operator__
+0x823F128C  mr        r4, r24
+0x823F1290  bl        CgsDev__StrStreamBase__operator__
+0x823F1294  mr        r4, r20
+0x823F1298  bl        CgsDev__StrStreamBase__operator__
+0x823F129C  mr        r4, r31
+0x823F12A0  bl        sub_821F0EC8
+0x823F12A4  mr        r4, r21
+0x823F12A8  bl        CgsDev__StrStreamBase__operator__
+0x823F12AC  mr        r4, r30
+0x823F12B0  bl        sub_821F0EC8
+0x823F12B4  mr        r4, r22
+0x823F12B8  bl        CgsDev__StrStreamBase__operator__
+0x823F12BC  lbz       r11, byte_82FFA89C@l(r27)
+0x823F12C0  mr        r31, r30
+0x823F12C4  cmplwi    cr6, r11, 0
+0x823F12C8  beq       cr6, loc_823F12E4
+0x823F12CC  bl        CgsDev__Assert__BeginAssert
+0x823F12D0  li        r5, 0x816
+0x823F12D4  mr        r4, r24
+0x823F12D8  lwz       r3, 0x1C0+var_11C(r1)
+0x823F12DC  bl        CgsDev__Assert__FireAssert
+0x823F12E0  bl        CgsDev__Assert__EndAssert
+0x823F12E4  addis     r27, r25, 0x9A
+0x823F12E8  lwz       r15, 0x1C0+var_CC(r1)
+0x823F12EC  mr        r3, r25
+0x823F12F0  lwz       r4, 0(r14)
+0x823F12F4  addi      r27, r27, 0xBCC
+0x823F12F8  mr        r5, r15
+0x823F12FC  lwz       r6, 0(r27)
+0x823F1300  bl        BrnGame__BrnGameModule__DoPreUpdate_Sound
+0x823F1304  bl        BrnResource__GetAvailableMemory
+0x823F1308  mr        r30, r3
+0x823F130C  cmplw     cr6, r31, r30
+0x823F1310  beq       cr6, loc_823F13A0
+0x823F1314  lwz       r11, 0x1C0+var_10C(r1)
+0x823F1318  ld        r11, 0x1908(r11)
+0x823F131C  clrldi    r11, r11, 63
+0x823F1320  cmpldi    cr6, r11, 0
+0x823F1324  beq       cr6, loc_823F1374
+0x823F1328  mr        r4, r18
+0x823F132C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1330  bl        CgsDev__StrStreamBase__operator__
+0x823F1334  li        r4, 0x81F
+0x823F1338  bl        sub_821F0E50
+0x823F133C  mr        r4, r19
+0x823F1340  bl        CgsDev__StrStreamBase__operator__
+0x823F1344  mr        r4, r24
+0x823F1348  bl        CgsDev__StrStreamBase__operator__
+0x823F134C  mr        r4, r20
+0x823F1350  bl        CgsDev__StrStreamBase__operator__
+0x823F1354  mr        r4, r31
+0x823F1358  bl        sub_821F0EC8
+0x823F135C  mr        r4, r21
+0x823F1360  bl        CgsDev__StrStreamBase__operator__
+0x823F1364  mr        r4, r30
+0x823F1368  bl        sub_821F0EC8
+0x823F136C  mr        r4, r22
+0x823F1370  bl        CgsDev__StrStreamBase__operator__
+0x823F1374  lis       r11, byte_82FFA89C@ha
+0x823F1378  mr        r31, r30
+0x823F137C  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1380  cmplwi    cr6, r11, 0
+0x823F1384  beq       cr6, loc_823F13A0
+0x823F1388  bl        CgsDev__Assert__BeginAssert
+0x823F138C  li        r5, 0x81F
+0x823F1390  mr        r4, r24
+0x823F1394  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1398  bl        CgsDev__Assert__FireAssert
+0x823F139C  bl        CgsDev__Assert__EndAssert
+0x823F13A0  addis     r30, r25, 0x99
+0x823F13A4  addi      r30, r30, 0x6F28
+0x823F13A8  lwz       r3, 0(r30)
+0x823F13AC  stw       r30, 0x1C0+var_100(r1)
+0x823F13B0  bl        CgsDev__PerfMonCpu__StartMonitor
+0x823F13B4  mr        r8, r28
+0x823F13B8  lwz       r7, 0(r29)
+0x823F13BC  mr        r6, r26
+0x823F13C0  mr        r5, r16
+0x823F13C4  mr        r4, r23
+0x823F13C8  mr        r3, r25
+0x823F13CC  bl        BrnGame__BrnGameModule__ConstructUpdateSet
+0x823F13D0  mr        r23, r3
+0x823F13D4  lwz       r3, 0(r30)
+0x823F13D8  bl        CgsDev__PerfMonCpu__StopMonitor
+0x823F13DC  bl        BrnResource__GetAvailableMemory
+0x823F13E0  mr        r30, r3
+0x823F13E4  cmplw     cr6, r31, r30
+0x823F13E8  beq       cr6, loc_823F1478
+0x823F13EC  lwz       r11, 0x1C0+var_10C(r1)
+0x823F13F0  ld        r11, 0x1908(r11)
+0x823F13F4  clrldi    r11, r11, 63
+0x823F13F8  cmpldi    cr6, r11, 0
+0x823F13FC  beq       cr6, loc_823F144C
+0x823F1400  mr        r4, r18
+0x823F1404  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1408  bl        CgsDev__StrStreamBase__operator__
+0x823F140C  li        r4, 0x82E
+0x823F1410  bl        sub_821F0E50
+0x823F1414  mr        r4, r19
+0x823F1418  bl        CgsDev__StrStreamBase__operator__
+0x823F141C  mr        r4, r24
+0x823F1420  bl        CgsDev__StrStreamBase__operator__
+0x823F1424  mr        r4, r20
+0x823F1428  bl        CgsDev__StrStreamBase__operator__
+0x823F142C  mr        r4, r31
+0x823F1430  bl        sub_821F0EC8
+0x823F1434  mr        r4, r21
+0x823F1438  bl        CgsDev__StrStreamBase__operator__
+0x823F143C  mr        r4, r30
+0x823F1440  bl        sub_821F0EC8
+0x823F1444  mr        r4, r22
+0x823F1448  bl        CgsDev__StrStreamBase__operator__
+0x823F144C  lis       r11, byte_82FFA89C@ha
+0x823F1450  mr        r31, r30
+0x823F1454  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1458  cmplwi    cr6, r11, 0
+0x823F145C  beq       cr6, loc_823F1478
+0x823F1460  bl        CgsDev__Assert__BeginAssert
+0x823F1464  li        r5, 0x82E
+0x823F1468  mr        r4, r24
+0x823F146C  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1470  bl        CgsDev__Assert__FireAssert
+0x823F1474  bl        CgsDev__Assert__EndAssert
+0x823F1478  lwz       r11, 0x1C0+var_114(r1)
+0x823F147C  mr        r7, r16
+0x823F1480  lwz       r28, 0x1C0+var_118(r1)
+0x823F1484  mr        r3, r25
+0x823F1488  lwz       r26, 0x1C0+var_AC(r1)
+0x823F148C  lwz       r29, 0x1C0+var_EC(r1)
+0x823F1490  lwz       r10, 0x1C0+var_E4(r1)
+0x823F1494  mr        r8, r29
+0x823F1498  lwz       r9, 0(r11)
+0x823F149C  lwz       r5, 0(r14)
+0x823F14A0  lwz       r4, 0(r28)
+0x823F14A4  lwz       r6, 0x1C0+var_DC(r1)
+0x823F14A8  sth       r23, 0x1C0+var_15A(r1)
+0x823F14AC  stw       r26, 0x1C0+var_164(r1)
+0x823F14B0  stw       r15, 0x1C0+var_16C(r1)
+0x823F14B4  bl        BrnGame__BrnGameModule__DoUpdate_World
+0x823F14B8  bl        BrnResource__GetAvailableMemory
+0x823F14BC  mr        r30, r3
+0x823F14C0  cmplw     cr6, r31, r30
+0x823F14C4  beq       cr6, loc_823F1554
+0x823F14C8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F14CC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F14D0  clrldi    r11, r11, 63
+0x823F14D4  cmpldi    cr6, r11, 0
+0x823F14D8  beq       cr6, loc_823F1528
+0x823F14DC  mr        r4, r18
+0x823F14E0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F14E4  bl        CgsDev__StrStreamBase__operator__
+0x823F14E8  li        r4, 0x840
+0x823F14EC  bl        sub_821F0E50
+0x823F14F0  mr        r4, r19
+0x823F14F4  bl        CgsDev__StrStreamBase__operator__
+0x823F14F8  mr        r4, r24
+0x823F14FC  bl        CgsDev__StrStreamBase__operator__
+0x823F1500  mr        r4, r20
+0x823F1504  bl        CgsDev__StrStreamBase__operator__
+0x823F1508  mr        r4, r31
+0x823F150C  bl        sub_821F0EC8
+0x823F1510  mr        r4, r21
+0x823F1514  bl        CgsDev__StrStreamBase__operator__
+0x823F1518  mr        r4, r30
+0x823F151C  bl        sub_821F0EC8
+0x823F1520  mr        r4, r22
+0x823F1524  bl        CgsDev__StrStreamBase__operator__
+0x823F1528  lis       r11, byte_82FFA89C@ha
+0x823F152C  mr        r31, r30
+0x823F1530  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1534  cmplwi    cr6, r11, 0
+0x823F1538  beq       cr6, loc_823F1554
+0x823F153C  bl        CgsDev__Assert__BeginAssert
+0x823F1540  li        r5, 0x840
+0x823F1544  mr        r4, r24
+0x823F1548  lwz       r3, 0x1C0+var_11C(r1)
+0x823F154C  bl        CgsDev__Assert__FireAssert
+0x823F1550  bl        CgsDev__Assert__EndAssert
+0x823F1554  mr        r7, r26
+0x823F1558  lwz       r8, 0x1C0+var_108(r1)
+0x823F155C  mr        r6, r29
+0x823F1560  lwz       r5, 0(r14)
+0x823F1564  mr        r3, r25
+0x823F1568  lwz       r4, 0(r28)
+0x823F156C  bl        BrnGame__BrnGameModule__DoUpdate_InputPostWorld
+0x823F1570  bl        BrnResource__GetAvailableMemory
+0x823F1574  mr        r30, r3
+0x823F1578  cmplw     cr6, r31, r30
+0x823F157C  beq       cr6, loc_823F160C
+0x823F1580  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1584  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1588  clrldi    r11, r11, 63
+0x823F158C  cmpldi    cr6, r11, 0
+0x823F1590  beq       cr6, loc_823F15E0
+0x823F1594  mr        r4, r18
+0x823F1598  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F159C  bl        CgsDev__StrStreamBase__operator__
+0x823F15A0  li        r4, 0x84B
+0x823F15A4  bl        sub_821F0E50
+0x823F15A8  mr        r4, r19
+0x823F15AC  bl        CgsDev__StrStreamBase__operator__
+0x823F15B0  mr        r4, r24
+0x823F15B4  bl        CgsDev__StrStreamBase__operator__
+0x823F15B8  mr        r4, r20
+0x823F15BC  bl        CgsDev__StrStreamBase__operator__
+0x823F15C0  mr        r4, r31
+0x823F15C4  bl        sub_821F0EC8
+0x823F15C8  mr        r4, r21
+0x823F15CC  bl        CgsDev__StrStreamBase__operator__
+0x823F15D0  mr        r4, r30
+0x823F15D4  bl        sub_821F0EC8
+0x823F15D8  mr        r4, r22
+0x823F15DC  bl        CgsDev__StrStreamBase__operator__
+0x823F15E0  lis       r11, byte_82FFA89C@ha
+0x823F15E4  mr        r31, r30
+0x823F15E8  lbz       r11, byte_82FFA89C@l(r11)
+0x823F15EC  cmplwi    cr6, r11, 0
+0x823F15F0  beq       cr6, loc_823F160C
+0x823F15F4  bl        CgsDev__Assert__BeginAssert
+0x823F15F8  li        r5, 0x84B
+0x823F15FC  mr        r4, r24
+0x823F1600  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1604  bl        CgsDev__Assert__FireAssert
+0x823F1608  bl        CgsDev__Assert__EndAssert
+0x823F160C  lwz       r4, 0(r28)
+0x823F1610  addis     r28, r25, 0x9A
+0x823F1614  mr        r9, r26
+0x823F1618  lwz       r5, 0(r14)
+0x823F161C  addi      r28, r28, 0xBDC
+0x823F1620  lwz       r10, 0x1C0+var_E4(r1)
+0x823F1624  mr        r8, r29
+0x823F1628  lwz       r7, 0x1C0+var_DC(r1)
+0x823F162C  mr        r3, r25
+0x823F1630  lwz       r6, 0x1C0+var_D4(r1)
+0x823F1634  sth       r23, 0x1C0+var_164+2(r1)
+0x823F1638  lwz       r11, 0(r28)
+0x823F163C  stw       r11, 0x1C0+var_16C(r1)
+0x823F1640  bl        BrnGame__BrnGameModule__DoUpdate_Director
+0x823F1644  bl        BrnResource__GetAvailableMemory
+0x823F1648  mr        r30, r3
+0x823F164C  cmplw     cr6, r31, r30
+0x823F1650  beq       cr6, loc_823F16E0
+0x823F1654  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1658  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F165C  clrldi    r11, r11, 63
+0x823F1660  cmpldi    cr6, r11, 0
+0x823F1664  beq       cr6, loc_823F16B4
+0x823F1668  mr        r4, r18
+0x823F166C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1670  bl        CgsDev__StrStreamBase__operator__
+0x823F1674  li        r4, 0x85A
+0x823F1678  bl        sub_821F0E50
+0x823F167C  mr        r4, r19
+0x823F1680  bl        CgsDev__StrStreamBase__operator__
+0x823F1684  mr        r4, r24
+0x823F1688  bl        CgsDev__StrStreamBase__operator__
+0x823F168C  mr        r4, r20
+0x823F1690  bl        CgsDev__StrStreamBase__operator__
+0x823F1694  mr        r4, r31
+0x823F1698  bl        sub_821F0EC8
+0x823F169C  mr        r4, r21
+0x823F16A0  bl        CgsDev__StrStreamBase__operator__
+0x823F16A4  mr        r4, r30
+0x823F16A8  bl        sub_821F0EC8
+0x823F16AC  mr        r4, r22
+0x823F16B0  bl        CgsDev__StrStreamBase__operator__
+0x823F16B4  lis       r11, byte_82FFA89C@ha
+0x823F16B8  mr        r31, r30
+0x823F16BC  lbz       r11, byte_82FFA89C@l(r11)
+0x823F16C0  cmplwi    cr6, r11, 0
+0x823F16C4  beq       cr6, loc_823F16E0
+0x823F16C8  bl        CgsDev__Assert__BeginAssert
+0x823F16CC  li        r5, 0x85A
+0x823F16D0  mr        r4, r24
+0x823F16D4  lwz       r3, 0x1C0+var_11C(r1)
+0x823F16D8  bl        CgsDev__Assert__FireAssert
+0x823F16DC  bl        CgsDev__Assert__EndAssert
+0x823F16E0  lis       r11, 0x9A
+0x823F16E4  lwz       r29, 0x1C0+var_C4(r1)
+0x823F16E8  ori       r11, r11, 0xB98 # 0x9A0B98
+0x823F16EC  lbzx      r11, r25, r11
+0x823F16F0  cmplwi    cr6, r11, 0
+0x823F16F4  bne       cr6, loc_823F1780
+0x823F16F8  lwz       r10, 0x1C0+var_104(r1)
+0x823F16FC  mr        r3, r25
+0x823F1700  lwz       r6, 0(r27)
+0x823F1704  lwz       r11, 0(r28)
+0x823F1708  lwz       r27, 0x1C0+var_108(r1)
+0x823F170C  lwz       r9, 0x1C0+var_EC(r1)
+0x823F1710  lwz       r30, 0(r10)
+0x823F1714  lis       r10, 0x9A
+0x823F1718  lwz       r4, 0x1C0+var_118(r1)
+0x823F171C  ori       r7, r10, 0xBD0 # 0x9A0BD0
+0x823F1720  lwz       r10, 0x1C0+var_114(r1)
+0x823F1724  stw       r27, 0x1C0+var_124(r1)
+0x823F1728  stw       r11, 0x1C0+var_14C(r1)
+0x823F172C  lwz       r27, 0x1C0+var_F8(r1)
+0x823F1730  lwz       r8, 0x1C0+var_DC(r1)
+0x823F1734  lwz       r10, 0(r10)
+0x823F1738  lwz       r5, 0(r14)
+0x823F173C  lwz       r4, 0(r4)
+0x823F1740  stw       r27, 0x1C0+var_134(r1)
+0x823F1744  lwz       r27, 0x1C0+var_110(r1)
+0x823F1748  stw       r10, 0x1C0+var_10C(r1)
+0x823F174C  mr        r10, r9
+0x823F1750  mr        r9, r16
+0x823F1754  lwzx      r7, r25, r7
+0x823F1758  sth       r23, 0x1C0+var_12A(r1)
+0x823F175C  stw       r29, 0x1C0+var_144(r1)
+0x823F1760  stw       r27, 0x1C0+var_13C(r1)
+0x823F1764  stw       r30, 0x1C0+var_154(r1)
+0x823F1768  stw       r26, 0x1C0+var_16C(r1)
+0x823F176C  lwz       r11, 0x1C0+var_10C(r1)
+0x823F1770  stw       r11, 0x64(r1)
+0x823F1774  lwz       r11, 0x1C0+var_E4(r1)
+0x823F1778  stw       r11, 0x1C0+var_164(r1)
+0x823F177C  bl        BrnGame__BrnGameModule__DoUpdate_GUI
+0x823F1780  bl        BrnResource__GetAvailableMemory
+0x823F1784  mr        r30, r3
+0x823F1788  cmplw     cr6, r31, r30
+0x823F178C  beq       cr6, loc_823F181C
+0x823F1790  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1794  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1798  clrldi    r11, r11, 63
+0x823F179C  cmpldi    cr6, r11, 0
+0x823F17A0  beq       cr6, loc_823F17F0
+0x823F17A4  mr        r4, r18
+0x823F17A8  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F17AC  bl        CgsDev__StrStreamBase__operator__
+0x823F17B0  li        r4, 0x876
+0x823F17B4  bl        sub_821F0E50
+0x823F17B8  mr        r4, r19
+0x823F17BC  bl        CgsDev__StrStreamBase__operator__
+0x823F17C0  mr        r4, r24
+0x823F17C4  bl        CgsDev__StrStreamBase__operator__
+0x823F17C8  mr        r4, r20
+0x823F17CC  bl        CgsDev__StrStreamBase__operator__
+0x823F17D0  mr        r4, r31
+0x823F17D4  bl        sub_821F0EC8
+0x823F17D8  mr        r4, r21
+0x823F17DC  bl        CgsDev__StrStreamBase__operator__
+0x823F17E0  mr        r4, r30
+0x823F17E4  bl        sub_821F0EC8
+0x823F17E8  mr        r4, r22
+0x823F17EC  bl        CgsDev__StrStreamBase__operator__
+0x823F17F0  lis       r11, byte_82FFA89C@ha
+0x823F17F4  mr        r31, r30
+0x823F17F8  lbz       r11, byte_82FFA89C@l(r11)
+0x823F17FC  cmplwi    cr6, r11, 0
+0x823F1800  beq       cr6, loc_823F181C
+0x823F1804  bl        CgsDev__Assert__BeginAssert
+0x823F1808  li        r5, 0x876
+0x823F180C  mr        r4, r24
+0x823F1810  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1814  bl        CgsDev__Assert__FireAssert
+0x823F1818  bl        CgsDev__Assert__EndAssert
+0x823F181C  lwz       r11, 0x1C0+var_114(r1)
+0x823F1820  mr        r3, r25
+0x823F1824  lwz       r16, 0x1C0+var_118(r1)
+0x823F1828  lwz       r6, 0x1C0+var_D4(r1)
+0x823F182C  lwz       r8, 0(r28)
+0x823F1830  lwz       r5, 0(r14)
+0x823F1834  lwz       r7, 0(r11)
+0x823F1838  lwz       r4, 0(r16)
+0x823F183C  bl        BrnGame__BrnGameModule__DoUpdate_DirectorPostGUI
+0x823F1840  bl        BrnResource__GetAvailableMemory
+0x823F1844  mr        r30, r3
+0x823F1848  cmplw     cr6, r31, r30
+0x823F184C  beq       cr6, loc_823F18DC
+0x823F1850  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1854  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1858  clrldi    r11, r11, 63
+0x823F185C  cmpldi    cr6, r11, 0
+0x823F1860  beq       cr6, loc_823F18B0
+0x823F1864  mr        r4, r18
+0x823F1868  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F186C  bl        CgsDev__StrStreamBase__operator__
+0x823F1870  li        r4, 0x881
+0x823F1874  bl        sub_821F0E50
+0x823F1878  mr        r4, r19
+0x823F187C  bl        CgsDev__StrStreamBase__operator__
+0x823F1880  mr        r4, r24
+0x823F1884  bl        CgsDev__StrStreamBase__operator__
+0x823F1888  mr        r4, r20
+0x823F188C  bl        CgsDev__StrStreamBase__operator__
+0x823F1890  mr        r4, r31
+0x823F1894  bl        sub_821F0EC8
+0x823F1898  mr        r4, r21
+0x823F189C  bl        CgsDev__StrStreamBase__operator__
+0x823F18A0  mr        r4, r30
+0x823F18A4  bl        sub_821F0EC8
+0x823F18A8  mr        r4, r22
+0x823F18AC  bl        CgsDev__StrStreamBase__operator__
+0x823F18B0  lis       r11, byte_82FFA89C@ha
+0x823F18B4  mr        r31, r30
+0x823F18B8  lbz       r11, byte_82FFA89C@l(r11)
+0x823F18BC  cmplwi    cr6, r11, 0
+0x823F18C0  beq       cr6, loc_823F18DC
+0x823F18C4  bl        CgsDev__Assert__BeginAssert
+0x823F18C8  li        r5, 0x881
+0x823F18CC  mr        r4, r24
+0x823F18D0  lwz       r3, 0x1C0+var_11C(r1)
+0x823F18D4  bl        CgsDev__Assert__FireAssert
+0x823F18D8  bl        CgsDev__Assert__EndAssert
+0x823F18DC  lbz       r11, 0x1C0+var_120(r1)
+0x823F18E0  mr        r8, r26
+0x823F18E4  mr        r3, r25
+0x823F18E8  lwz       r10, 0x1C0+var_E4(r1)
+0x823F18EC  lwz       r9, 0(r28)
+0x823F18F0  lwz       r5, 0(r14)
+0x823F18F4  lwz       r7, 0x1C0+var_EC(r1)
+0x823F18F8  lwz       r4, 0(r16)
+0x823F18FC  lwz       r6, 0x1C0+var_DC(r1)
+0x823F1900  sth       r23, 0x1C0+var_154+2(r1)
+0x823F1904  stb       r11, 0x1C0+var_15A+1(r1)
+0x823F1908  stw       r29, 0x1C0+var_164(r1)
+0x823F190C  stw       r15, 0x1C0+var_16C(r1)
+0x823F1910  bl        BrnGame__BrnGameModule__DoUpdate_Effects
+0x823F1914  bl        BrnResource__GetAvailableMemory
+0x823F1918  mr        r30, r3
+0x823F191C  cmplw     cr6, r31, r30
+0x823F1920  beq       cr6, loc_823F19B0
+0x823F1924  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1928  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F192C  clrldi    r11, r11, 63
+0x823F1930  cmpldi    cr6, r11, 0
+0x823F1934  beq       cr6, loc_823F1984
+0x823F1938  mr        r4, r18
+0x823F193C  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1940  bl        CgsDev__StrStreamBase__operator__
+0x823F1944  li        r4, 0x892
+0x823F1948  bl        sub_821F0E50
+0x823F194C  mr        r4, r19
+0x823F1950  bl        CgsDev__StrStreamBase__operator__
+0x823F1954  mr        r4, r24
+0x823F1958  bl        CgsDev__StrStreamBase__operator__
+0x823F195C  mr        r4, r20
+0x823F1960  bl        CgsDev__StrStreamBase__operator__
+0x823F1964  mr        r4, r31
+0x823F1968  bl        sub_821F0EC8
+0x823F196C  mr        r4, r21
+0x823F1970  bl        CgsDev__StrStreamBase__operator__
+0x823F1974  mr        r4, r30
+0x823F1978  bl        sub_821F0EC8
+0x823F197C  mr        r4, r22
+0x823F1980  bl        CgsDev__StrStreamBase__operator__
+0x823F1984  lis       r11, byte_82FFA89C@ha
+0x823F1988  mr        r31, r30
+0x823F198C  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1990  cmplwi    cr6, r11, 0
+0x823F1994  beq       cr6, loc_823F19B0
+0x823F1998  bl        CgsDev__Assert__BeginAssert
+0x823F199C  li        r5, 0x892
+0x823F19A0  mr        r4, r24
+0x823F19A4  lwz       r3, 0x1C0+var_11C(r1)
+0x823F19A8  bl        CgsDev__Assert__FireAssert
+0x823F19AC  bl        CgsDev__Assert__EndAssert
+0x823F19B0  lwz       r15, 0x1C0+var_114(r1)
+0x823F19B4  mr        r7, r26
+0x823F19B8  lwz       r27, 0x1C0+var_B4(r1)
+0x823F19BC  mr        r3, r25
+0x823F19C0  lwz       r9, 0x1C0+var_E4(r1)
+0x823F19C4  mr        r10, r27
+0x823F19C8  lwz       r8, 0(r28)
+0x823F19CC  lwz       r5, 0(r14)
+0x823F19D0  lwz       r11, 0(r15)
+0x823F19D4  lwz       r6, 0x1C0+var_EC(r1)
+0x823F19D8  lwz       r4, 0(r16)
+0x823F19DC  sth       r23, 0x1C0+var_15A(r1)
+0x823F19E0  stw       r29, 0x1C0+var_164(r1)
+0x823F19E4  stw       r11, 0x1C0+var_16C(r1)
+0x823F19E8  bl        BrnGame__BrnGameModule__DoUpdate_Sound
+0x823F19EC  bl        BrnResource__GetAvailableMemory
+0x823F19F0  mr        r30, r3
+0x823F19F4  cmplw     cr6, r31, r30
+0x823F19F8  beq       cr6, loc_823F1A88
+0x823F19FC  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1A00  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1A04  clrldi    r11, r11, 63
+0x823F1A08  cmpldi    cr6, r11, 0
+0x823F1A0C  beq       cr6, loc_823F1A5C
+0x823F1A10  mr        r4, r18
+0x823F1A14  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1A18  bl        CgsDev__StrStreamBase__operator__
+0x823F1A1C  li        r4, 0x8A2
+0x823F1A20  bl        sub_821F0E50
+0x823F1A24  mr        r4, r19
+0x823F1A28  bl        CgsDev__StrStreamBase__operator__
+0x823F1A2C  mr        r4, r24
+0x823F1A30  bl        CgsDev__StrStreamBase__operator__
+0x823F1A34  mr        r4, r20
+0x823F1A38  bl        CgsDev__StrStreamBase__operator__
+0x823F1A3C  mr        r4, r31
+0x823F1A40  bl        sub_821F0EC8
+0x823F1A44  mr        r4, r21
+0x823F1A48  bl        CgsDev__StrStreamBase__operator__
+0x823F1A4C  mr        r4, r30
+0x823F1A50  bl        sub_821F0EC8
+0x823F1A54  mr        r4, r22
+0x823F1A58  bl        CgsDev__StrStreamBase__operator__
+0x823F1A5C  lis       r11, byte_82FFA89C@ha
+0x823F1A60  mr        r31, r30
+0x823F1A64  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1A68  cmplwi    cr6, r11, 0
+0x823F1A6C  beq       cr6, loc_823F1A88
+0x823F1A70  bl        CgsDev__Assert__BeginAssert
+0x823F1A74  li        r5, 0x8A2
+0x823F1A78  mr        r4, r24
+0x823F1A7C  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1A80  bl        CgsDev__Assert__FireAssert
+0x823F1A84  bl        CgsDev__Assert__EndAssert
+0x823F1A88  mr        r7, r29
+0x823F1A8C  lwz       r29, 0x1C0+var_BC(r1)
+0x823F1A90  mr        r8, r27
+0x823F1A94  lwz       r10, 0(r15)
+0x823F1A98  mr        r6, r26
+0x823F1A9C  lwz       r9, 0(r28)
+0x823F1AA0  mr        r3, r25
+0x823F1AA4  lwz       r5, 0(r14)
+0x823F1AA8  lwz       r4, 0(r16)
+0x823F1AAC  sth       r23, 0x1C0+var_164+2(r1)
+0x823F1AB0  stw       r29, 0x1C0+var_16C(r1)
+0x823F1AB4  bl        BrnGame__BrnGameModule__DoUpdate_ReplaysPostSim
+0x823F1AB8  bl        BrnResource__GetAvailableMemory
+0x823F1ABC  mr        r30, r3
+0x823F1AC0  cmplw     cr6, r31, r30
+0x823F1AC4  beq       cr6, loc_823F1B54
+0x823F1AC8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1ACC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1AD0  clrldi    r11, r11, 63
+0x823F1AD4  cmpldi    cr6, r11, 0
+0x823F1AD8  beq       cr6, loc_823F1B28
+0x823F1ADC  mr        r4, r18
+0x823F1AE0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1AE4  bl        CgsDev__StrStreamBase__operator__
+0x823F1AE8  li        r4, 0x8B1
+0x823F1AEC  bl        sub_821F0E50
+0x823F1AF0  mr        r4, r19
+0x823F1AF4  bl        CgsDev__StrStreamBase__operator__
+0x823F1AF8  mr        r4, r24
+0x823F1AFC  bl        CgsDev__StrStreamBase__operator__
+0x823F1B00  mr        r4, r20
+0x823F1B04  bl        CgsDev__StrStreamBase__operator__
+0x823F1B08  mr        r4, r31
+0x823F1B0C  bl        sub_821F0EC8
+0x823F1B10  mr        r4, r21
+0x823F1B14  bl        CgsDev__StrStreamBase__operator__
+0x823F1B18  mr        r4, r30
+0x823F1B1C  bl        sub_821F0EC8
+0x823F1B20  mr        r4, r22
+0x823F1B24  bl        CgsDev__StrStreamBase__operator__
+0x823F1B28  lis       r11, byte_82FFA89C@ha
+0x823F1B2C  mr        r31, r30
+0x823F1B30  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1B34  cmplwi    cr6, r11, 0
+0x823F1B38  beq       cr6, loc_823F1B54
+0x823F1B3C  bl        CgsDev__Assert__BeginAssert
+0x823F1B40  li        r5, 0x8B1
+0x823F1B44  mr        r4, r24
+0x823F1B48  lwz       r3, 0x1C0+var_11C(r1)
+0x823F1B4C  bl        CgsDev__Assert__FireAssert
+0x823F1B50  bl        CgsDev__Assert__EndAssert
+0x823F1B54  mr        r9, r29
+0x823F1B58  lwz       r10, 0(r28)
+0x823F1B5C  mr        r7, r26
+0x823F1B60  lwz       r8, 0(r15)
+0x823F1B64  mr        r3, r25
+0x823F1B68  lwz       r6, 0x1C0+var_DC(r1)
+0x823F1B6C  lwz       r5, 0(r14)
+0x823F1B70  lwz       r4, 0(r16)
+0x823F1B74  sth       r23, 0x1C0+var_16C+2(r1)
+0x823F1B78  bl        BrnGame__BrnGameModule__DoUpdate_GameStatePostWorld
+0x823F1B7C  bl        BrnResource__GetAvailableMemory
+0x823F1B80  mr        r30, r3
+0x823F1B84  cmplw     cr6, r31, r30
+0x823F1B88  beq       cr6, loc_823F1C20
+0x823F1B8C  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1B90  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1B94  clrldi    r11, r11, 63
+0x823F1B98  cmpldi    cr6, r11, 0
+0x823F1B9C  beq       cr6, loc_823F1BEC
+0x823F1BA0  mr        r4, r18
+0x823F1BA4  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1BA8  bl        CgsDev__StrStreamBase__operator__
+0x823F1BAC  li        r4, 0x8BF
+0x823F1BB0  bl        sub_821F0E50
+0x823F1BB4  mr        r4, r19
+0x823F1BB8  bl        CgsDev__StrStreamBase__operator__
+0x823F1BBC  mr        r4, r24
+0x823F1BC0  bl        CgsDev__StrStreamBase__operator__
+0x823F1BC4  mr        r4, r20
+0x823F1BC8  bl        CgsDev__StrStreamBase__operator__
+0x823F1BCC  mr        r4, r31
+0x823F1BD0  bl        sub_821F0EC8
+0x823F1BD4  mr        r4, r21
+0x823F1BD8  bl        CgsDev__StrStreamBase__operator__
+0x823F1BDC  mr        r4, r30
+0x823F1BE0  bl        sub_821F0EC8
+0x823F1BE4  mr        r4, r22
+0x823F1BE8  bl        CgsDev__StrStreamBase__operator__
+0x823F1BEC  lis       r11, byte_82FFA89C@ha
+0x823F1BF0  mr        r31, r30
+0x823F1BF4  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1BF8  cmplwi    cr6, r11, 0
+0x823F1BFC  beq       cr6, loc_823F1C20
+0x823F1C00  bl        CgsDev__Assert__BeginAssert
+0x823F1C04  lwz       r29, 0x1C0+var_11C(r1)
+0x823F1C08  li        r5, 0x8BF
+0x823F1C0C  mr        r4, r24
+0x823F1C10  mr        r3, r29
+0x823F1C14  bl        CgsDev__Assert__FireAssert
+0x823F1C18  bl        CgsDev__Assert__EndAssert
+0x823F1C1C  b         loc_823F1C24
+0x823F1C20  lwz       r29, 0x1C0+var_11C(r1)
+0x823F1C24  mr        r9, r23
+0x823F1C28  lwz       r23, 0x1C0+var_EC(r1)
+0x823F1C2C  mr        r7, r26
+0x823F1C30  lwz       r8, 0(r15)
+0x823F1C34  mr        r6, r23
+0x823F1C38  lwz       r5, 0(r14)
+0x823F1C3C  mr        r3, r25
+0x823F1C40  lwz       r4, 0(r16)
+0x823F1C44  bl        BrnGame__BrnGameModule__DoUpdate_NetworkPostSim
+0x823F1C48  bl        BrnResource__GetAvailableMemory
+0x823F1C4C  mr        r30, r3
+0x823F1C50  cmplw     cr6, r31, r30
+0x823F1C54  beq       cr6, loc_823F1CE4
+0x823F1C58  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1C5C  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1C60  clrldi    r11, r11, 63
+0x823F1C64  cmpldi    cr6, r11, 0
+0x823F1C68  beq       cr6, loc_823F1CB8
+0x823F1C6C  mr        r4, r18
+0x823F1C70  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1C74  bl        CgsDev__StrStreamBase__operator__
+0x823F1C78  li        r4, 0x8CD
+0x823F1C7C  bl        sub_821F0E50
+0x823F1C80  mr        r4, r19
+0x823F1C84  bl        CgsDev__StrStreamBase__operator__
+0x823F1C88  mr        r4, r24
+0x823F1C8C  bl        CgsDev__StrStreamBase__operator__
+0x823F1C90  mr        r4, r20
+0x823F1C94  bl        CgsDev__StrStreamBase__operator__
+0x823F1C98  mr        r4, r31
+0x823F1C9C  bl        sub_821F0EC8
+0x823F1CA0  mr        r4, r21
+0x823F1CA4  bl        CgsDev__StrStreamBase__operator__
+0x823F1CA8  mr        r4, r30
+0x823F1CAC  bl        sub_821F0EC8
+0x823F1CB0  mr        r4, r22
+0x823F1CB4  bl        CgsDev__StrStreamBase__operator__
+0x823F1CB8  lis       r11, byte_82FFA89C@ha
+0x823F1CBC  mr        r31, r30
+0x823F1CC0  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1CC4  cmplwi    cr6, r11, 0
+0x823F1CC8  beq       cr6, loc_823F1CE4
+0x823F1CCC  bl        CgsDev__Assert__BeginAssert
+0x823F1CD0  li        r5, 0x8CD
+0x823F1CD4  mr        r4, r24
+0x823F1CD8  mr        r3, r29
+0x823F1CDC  bl        CgsDev__Assert__FireAssert
+0x823F1CE0  bl        CgsDev__Assert__EndAssert
+0x823F1CE4  lwz       r11, 0x1C0+var_100(r1)
+0x823F1CE8  lwz       r3, 0(r11)
+0x823F1CEC  bl        CgsDev__PerfMonCpu__StartMonitor
+0x823F1CF0  mr        r4, r23
+0x823F1CF4  lwz       r5, 0(r28)
+0x823F1CF8  mr        r3, r25
+0x823F1CFC  bl        BrnGame__BrnGameModule__UpdateTimers
+0x823F1D00  bl        BrnResource__GetAvailableMemory
+0x823F1D04  mr        r30, r3
+0x823F1D08  cmplw     cr6, r31, r30
+0x823F1D0C  beq       cr6, loc_823F1D9C
+0x823F1D10  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1D14  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1D18  clrldi    r11, r11, 63
+0x823F1D1C  cmpldi    cr6, r11, 0
+0x823F1D20  beq       cr6, loc_823F1D70
+0x823F1D24  mr        r4, r18
+0x823F1D28  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1D2C  bl        CgsDev__StrStreamBase__operator__
+0x823F1D30  li        r4, 0x8D4
+0x823F1D34  bl        sub_821F0E50
+0x823F1D38  mr        r4, r19
+0x823F1D3C  bl        CgsDev__StrStreamBase__operator__
+0x823F1D40  mr        r4, r24
+0x823F1D44  bl        CgsDev__StrStreamBase__operator__
+0x823F1D48  mr        r4, r20
+0x823F1D4C  bl        CgsDev__StrStreamBase__operator__
+0x823F1D50  mr        r4, r31
+0x823F1D54  bl        sub_821F0EC8
+0x823F1D58  mr        r4, r21
+0x823F1D5C  bl        CgsDev__StrStreamBase__operator__
+0x823F1D60  mr        r4, r30
+0x823F1D64  bl        sub_821F0EC8
+0x823F1D68  mr        r4, r22
+0x823F1D6C  bl        CgsDev__StrStreamBase__operator__
+0x823F1D70  lis       r11, byte_82FFA89C@ha
+0x823F1D74  mr        r31, r30
+0x823F1D78  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1D7C  cmplwi    cr6, r11, 0
+0x823F1D80  beq       cr6, loc_823F1D9C
+0x823F1D84  bl        CgsDev__Assert__BeginAssert
+0x823F1D88  li        r5, 0x8D4
+0x823F1D8C  mr        r4, r24
+0x823F1D90  mr        r3, r29
+0x823F1D94  bl        CgsDev__Assert__FireAssert
+0x823F1D98  bl        CgsDev__Assert__EndAssert
+0x823F1D9C  mr        r4, r23
+0x823F1DA0  mr        r3, r25
+0x823F1DA4  bl        BrnGame__BrnGameModule__UpdateFrameRateType
+0x823F1DA8  bl        BrnResource__GetAvailableMemory
+0x823F1DAC  mr        r30, r3
+0x823F1DB0  cmplw     cr6, r31, r30
+0x823F1DB4  beq       cr6, loc_823F1E44
+0x823F1DB8  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1DBC  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1DC0  clrldi    r11, r11, 63
+0x823F1DC4  cmpldi    cr6, r11, 0
+0x823F1DC8  beq       cr6, loc_823F1E18
+0x823F1DCC  mr        r4, r18
+0x823F1DD0  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1DD4  bl        CgsDev__StrStreamBase__operator__
+0x823F1DD8  li        r4, 0x8DA
+0x823F1DDC  bl        sub_821F0E50
+0x823F1DE0  mr        r4, r19
+0x823F1DE4  bl        CgsDev__StrStreamBase__operator__
+0x823F1DE8  mr        r4, r24
+0x823F1DEC  bl        CgsDev__StrStreamBase__operator__
+0x823F1DF0  mr        r4, r20
+0x823F1DF4  bl        CgsDev__StrStreamBase__operator__
+0x823F1DF8  mr        r4, r31
+0x823F1DFC  bl        sub_821F0EC8
+0x823F1E00  mr        r4, r21
+0x823F1E04  bl        CgsDev__StrStreamBase__operator__
+0x823F1E08  mr        r4, r30
+0x823F1E0C  bl        sub_821F0EC8
+0x823F1E10  mr        r4, r22
+0x823F1E14  bl        CgsDev__StrStreamBase__operator__
+0x823F1E18  lis       r11, byte_82FFA89C@ha
+0x823F1E1C  mr        r31, r30
+0x823F1E20  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1E24  cmplwi    cr6, r11, 0
+0x823F1E28  beq       cr6, loc_823F1E44
+0x823F1E2C  bl        CgsDev__Assert__BeginAssert
+0x823F1E30  li        r5, 0x8DA
+0x823F1E34  mr        r4, r24
+0x823F1E38  mr        r3, r29
+0x823F1E3C  bl        CgsDev__Assert__FireAssert
+0x823F1E40  bl        CgsDev__Assert__EndAssert
+0x823F1E44  lwz       r16, 0x1C0+var_114(r1)
+0x823F1E48  mr        r8, r27
+0x823F1E4C  lwz       r15, 0x1C0+var_104(r1)
+0x823F1E50  mr        r5, r26
+0x823F1E54  lwz       r14, 0x1C0+var_E4(r1)
+0x823F1E58  lwz       r23, 0x1C0+var_110(r1)
+0x823F1E5C  mr        r10, r14
+0x823F1E60  lwz       r6, 0(r28)
+0x823F1E64  mr        r3, r23
+0x823F1E68  lwz       r9, 0(r16)
+0x823F1E6C  lwz       r7, 0(r15)
+0x823F1E70  lwz       r4, 0x1C0+var_EC(r1)
+0x823F1E74  bl        sub_823B7B80
+0x823F1E78  mr        r4, r23
+0x823F1E7C  lwz       r6, 0(r16)
+0x823F1E80  mr        r3, r25
+0x823F1E84  lwz       r5, 0(r15)
+0x823F1E88  bl        BrnGame__BrnGameModule__BridgeGuiToResource
+0x823F1E8C  mr        r3, r26
+0x823F1E90  bl        BrnWorldIO__UpdateOutputBuffer__GetResour
+0x823F1E94  mr        r4, r3
+0x823F1E98  mr        r3, r23
+0x823F1E9C  bl        ___AppendRequestInterface__0BAAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0BAAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(BrnResource::GameDataIO::RequestInterface<4096> const *)
+0x823F1EA0  mr        r3, r26
+0x823F1EA4  bl        BrnWorldIO__UpdateOutputBuffer
+0x823F1EA8  mr        r30, r3
+0x823F1EAC  mr        r3, r23
+0x823F1EB0  bl        BrnResource__GameDataIO__InputBuffe
+0x823F1EB4  mr        r4, r30
+0x823F1EB8  bl        ___Append__0IAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0IAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(CgsModule::VariableEventQueue<2048,16> const &)
+0x823F1EBC  lwz       r30, 0(r28)
+0x823F1EC0  mr        r3, r30
+0x823F1EC4  bl        BrnDirector__DirectorIO__Output
+0x823F1EC8  mr        r29, r3
+0x823F1ECC  mr        r3, r23
+0x823F1ED0  bl        BrnResource__GameDataIO__InputBuffe
+0x823F1ED4  mr        r4, r29
+0x823F1ED8  bl        ___Append__0CAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0CAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<512,16>(CgsModule::VariableEventQueue<512,16> const &)
+0x823F1EDC  mr        r3, r30
+0x823F1EE0  bl        BrnDirector__DirectorIO__OutputBuffer__Get
+0x823F1EE4  mr        r4, r3
+0x823F1EE8  mr        r3, r23
+0x823F1EEC  bl        ___AppendRequestInterface__0CAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0CAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<512>(BrnResource::GameDataIO::RequestInterface<512> const *)
+0x823F1EF0  lwz       r29, 0x1C0+var_EC(r1)
+0x823F1EF4  mr        r3, r29
+0x823F1EF8  bl        BrnGameState__GameStateModuleIO__OutputBu
+0x823F1EFC  mr        r4, r3
+0x823F1F00  mr        r3, r23
+0x823F1F04  bl        ___AppendRequestInterface__0MAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0MAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<3072>(BrnResource::GameDataIO::RequestInterface<3072> const *)
+0x823F1F08  mr        r3, r27
+0x823F1F0C  bl        BrnSound__Module__Io__RootOutp
+0x823F1F10  mr        r30, r3
+0x823F1F14  mr        r3, r23
+0x823F1F18  bl        BrnResource__GameDataIO__InputBuffe
+0x823F1F1C  mr        r4, r30
+0x823F1F20  bl        ___Append__0IAA__0BA____VariableEventQueue__0IAAA__0BA__CgsModule__QAA_NABV__VariableEventQueue__0IAA__0BA__1__Z# CgsModule::VariableEventQueue<32768,16>::Append<2048,16>(CgsModule::VariableEventQueue<2048,16> const &)
+0x823F1F24  mr        r3, r27
+0x823F1F28  bl        BrnSound__Module__Io__RootOutputBuffer__G
+0x823F1F2C  mr        r4, r3
+0x823F1F30  mr        r3, r23
+0x823F1F34  bl        ___AppendRequestInterface__0BAAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0BAAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>(BrnResource::GameDataIO::RequestInterface<4096> const *)
+0x823F1F38  mr        r3, r14
+0x823F1F3C  bl        BrnReplays__ReplayIO__OutputBuffer_PreSim
+0x823F1F40  mr        r4, r3
+0x823F1F44  mr        r3, r23
+0x823F1F48  bl        ___AppendRequestInterface__0EAA__InputBuffer_GameDataIO_BrnResource__QAAXPBV__RequestInterface__0EAA__12__Z# BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<1024>(BrnResource::GameDataIO::RequestInterface<1024> const *)
+0x823F1F4C  mr        r10, r14
+0x823F1F50  mr        r8, r27
+0x823F1F54  lwz       r9, 0(r16)
+0x823F1F58  mr        r5, r26
+0x823F1F5C  lwz       r7, 0(r15)
+0x823F1F60  mr        r4, r29
+0x823F1F64  lwz       r6, 0(r28)
+0x823F1F68  mr        r3, r23
+0x823F1F6C  bl        sub_823B7D20
+0x823F1F70  bl        BrnResource__GetAvailableMemory
+0x823F1F74  mr        r30, r3
+0x823F1F78  cmplw     cr6, r31, r30
+0x823F1F7C  beq       cr6, loc_823F200C
+0x823F1F80  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F1F84  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F1F88  clrldi    r11, r11, 63
+0x823F1F8C  cmpldi    cr6, r11, 0
+0x823F1F90  beq       cr6, loc_823F1FE0
+0x823F1F94  mr        r4, r18
+0x823F1F98  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F1F9C  bl        CgsDev__StrStreamBase__operator__
+0x823F1FA0  li        r4, 0x8E9
+0x823F1FA4  bl        sub_821F0E50
+0x823F1FA8  mr        r4, r19
+0x823F1FAC  bl        CgsDev__StrStreamBase__operator__
+0x823F1FB0  mr        r4, r24
+0x823F1FB4  bl        CgsDev__StrStreamBase__operator__
+0x823F1FB8  mr        r4, r20
+0x823F1FBC  bl        CgsDev__StrStreamBase__operator__
+0x823F1FC0  mr        r4, r31
+0x823F1FC4  bl        sub_821F0EC8
+0x823F1FC8  mr        r4, r21
+0x823F1FCC  bl        CgsDev__StrStreamBase__operator__
+0x823F1FD0  mr        r4, r30
+0x823F1FD4  bl        sub_821F0EC8
+0x823F1FD8  mr        r4, r22
+0x823F1FDC  bl        CgsDev__StrStreamBase__operator__
+0x823F1FE0  lis       r11, byte_82FFA89C@ha
+0x823F1FE4  mr        r31, r30
+0x823F1FE8  lbz       r11, byte_82FFA89C@l(r11)
+0x823F1FEC  cmplwi    cr6, r11, 0
+0x823F1FF0  beq       cr6, loc_823F200C
+0x823F1FF4  bl        CgsDev__Assert__BeginAssert
+0x823F1FF8  li        r5, 0x8E9
+0x823F1FFC  mr        r4, r24
+0x823F2000  lwz       r3, 0x1C0+var_11C(r1)
+0x823F2004  bl        CgsDev__Assert__FireAssert
+0x823F2008  bl        CgsDev__Assert__EndAssert
+0x823F200C  lwz       r30, 0x1C0+var_DC(r1)
+0x823F2010  mr        r3, r30
+0x823F2014  bl        CgsModule__IOBuffer__LockForRead
+0x823F2018  mr        r4, r30
+0x823F201C  mr        r3, r25
+0x823F2020  bl        BrnGame__BrnGameModule__BridgeInputToGame
+0x823F2024  mr        r3, r30
+0x823F2028  bl        CgsModule__IOBuffer__UnlockForRead
+0x823F202C  bl        CgsSystem__GetSystemTimerBaseTime
+0x823F2030  bl        CgsSystem__GetSystemTimerFrequency
+0x823F2034  lwz       r11, 0x1C0+var_100(r1)
+0x823F2038  lwz       r3, 0(r11)
+0x823F203C  bl        CgsDev__PerfMonCpu__StopMonitor
+0x823F2040  bl        BrnResource__GetAvailableMemory
+0x823F2044  mr        r30, r3
+0x823F2048  cmplw     cr6, r31, r30
+0x823F204C  beq       cr6, loc_823F20D8
+0x823F2050  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha
+0x823F2054  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)
+0x823F2058  clrldi    r11, r11, 63
+0x823F205C  cmpldi    cr6, r11, 0
+0x823F2060  beq       cr6, loc_823F20B0
+0x823F2064  mr        r4, r18
+0x823F2068  lwz       r3, CgsDev__Log__gpDebugPrint@l(r17)# off_82F31918
+0x823F206C  bl        CgsDev__StrStreamBase__operator__
+0x823F2070  li        r4, 0x904
+0x823F2074  bl        sub_821F0E50
+0x823F2078  mr        r4, r19
+0x823F207C  bl        CgsDev__StrStreamBase__operator__
+0x823F2080  mr        r4, r24
+0x823F2084  bl        CgsDev__StrStreamBase__operator__
+0x823F2088  mr        r4, r20
+0x823F208C  bl        CgsDev__StrStreamBase__operator__
+0x823F2090  mr        r4, r31
+0x823F2094  bl        sub_821F0EC8
+0x823F2098  mr        r4, r21
+0x823F209C  bl        CgsDev__StrStreamBase__operator__
+0x823F20A0  mr        r4, r30
+0x823F20A4  bl        sub_821F0EC8
+0x823F20A8  mr        r4, r22
+0x823F20AC  bl        CgsDev__StrStreamBase__operator__
+0x823F20B0  lis       r11, byte_82FFA89C@ha
+0x823F20B4  lbz       r11, byte_82FFA89C@l(r11)
+0x823F20B8  cmplwi    cr6, r11, 0
+0x823F20BC  beq       cr6, loc_823F20D8
+0x823F20C0  bl        CgsDev__Assert__BeginAssert
+0x823F20C4  li        r5, 0x904
+0x823F20C8  mr        r4, r24
+0x823F20CC  lwz       r3, 0x1C0+var_11C(r1)
+0x823F20D0  bl        CgsDev__Assert__FireAssert
+0x823F20D4  bl        CgsDev__Assert__EndAssert
+0x823F20D8  addi      r4, r1, 0x1C0+var_CC
+0x823F20DC  lwz       r3, 0x1C0+var_D0(r1)
+0x823F20E0  bl        ___DestroyIOBuffer_VRootPreUpdateOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootPreUpdateOutp
+0x823F20E4  clrlwi    r11, r3, 24
+0x823F20E8  cmplwi    cr6, r11, 0
+0x823F20EC  lis       r11, aMpstackDestroy@ha
+0x823F20F0  addi      r31, r11, aMpstackDestroy@l# "mpStack->DestroyIOBuffer( &mpBuffer )"
+0x823F20F4  bne       cr6, loc_823F2118
+0x823F20F8  bl        CgsDev__Assert__BeginAssert
+0x823F20FC  lwz       r30, 0x1C0+var_FC(r1)
+0x823F2100  li        r5, 0x39 # '9'
+0x823F2104  mr        r4, r30
+0x823F2108  mr        r3, r31
+0x823F210C  bl        CgsDev__Assert__FireAssert
+0x823F2110  bl        CgsDev__Assert__EndAssert
+0x823F2114  b         loc_823F211C
+0x823F2118  lwz       r30, 0x1C0+var_FC(r1)
+0x823F211C  addi      r4, r1, 0x1C0+var_C4
+0x823F2120  lwz       r3, 0x1C0+var_C8(r1)
+0x823F2124  bl        ___DestroyIOBuffer_VOutputBuffer_EffectsIO_BrnEffects___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_EffectsIO_BrnEf
+0x823F2128  clrlwi    r11, r3, 24
+0x823F212C  cmplwi    cr6, r11, 0
+0x823F2130  bne       cr6, loc_823F214C
+0x823F2134  bl        CgsDev__Assert__BeginAssert
+0x823F2138  li        r5, 0x39 # '9'
+0x823F213C  mr        r4, r30
+0x823F2140  mr        r3, r31
+0x823F2144  bl        CgsDev__Assert__FireAssert
+0x823F2148  bl        CgsDev__Assert__EndAssert
+0x823F214C  addi      r4, r1, 0x1C0+var_BC
+0x823F2150  lwz       r3, 0x1C0+var_C0(r1)
+0x823F2154  bl        ___DestroyIOBuffer_VOutputBuffer_PostSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PostSim_
+0x823F2158  clrlwi    r11, r3, 24
+0x823F215C  cmplwi    cr6, r11, 0
+0x823F2160  bne       cr6, loc_823F217C
+0x823F2164  bl        CgsDev__Assert__BeginAssert
+0x823F2168  li        r5, 0x39 # '9'
+0x823F216C  mr        r4, r30
+0x823F2170  mr        r3, r31
+0x823F2174  bl        CgsDev__Assert__FireAssert
+0x823F2178  bl        CgsDev__Assert__EndAssert
+0x823F217C  addi      r4, r1, 0x1C0+var_E4
+0x823F2180  lwz       r3, 0x1C0+var_E8(r1)
+0x823F2184  bl        ___DestroyIOBuffer_VOutputBuffer_PreSim_ReplayIO_BrnReplays___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_PreSim_Re
+0x823F2188  clrlwi    r11, r3, 24
+0x823F218C  cmplwi    cr6, r11, 0
+0x823F2190  bne       cr6, loc_823F21AC
+0x823F2194  bl        CgsDev__Assert__BeginAssert
+0x823F2198  li        r5, 0x39 # '9'
+0x823F219C  mr        r4, r30
+0x823F21A0  mr        r3, r31
+0x823F21A4  bl        CgsDev__Assert__FireAssert
+0x823F21A8  bl        CgsDev__Assert__EndAssert
+0x823F21AC  addi      r4, r1, 0x1C0+var_B4
+0x823F21B0  lwz       r3, 0x1C0+var_B8(r1)
+0x823F21B4  bl        ___DestroyIOBuffer_VRootOutputBuffer_Io_Module_BrnSound___IOBufferStack_CgsModule__QAA_NPAPAVRootOutputBuffer_Io_Module
+0x823F21B8  clrlwi    r11, r3, 24
+0x823F21BC  cmplwi    cr6, r11, 0
+0x823F21C0  bne       cr6, loc_823F21DC
+0x823F21C4  bl        CgsDev__Assert__BeginAssert
+0x823F21C8  li        r5, 0x39 # '9'
+0x823F21CC  mr        r4, r30
+0x823F21D0  mr        r3, r31
+0x823F21D4  bl        CgsDev__Assert__FireAssert
+0x823F21D8  bl        CgsDev__Assert__EndAssert
+0x823F21DC  addi      r4, r1, 0x1C0+var_D4
+0x823F21E0  lwz       r3, 0x1C0+var_D8(r1)
+0x823F21E4  bl        ___DestroyIOBuffer_VInputBuffer_DirectorIO_BrnDirector___IOBufferStack_CgsModule__QAA_NPAPAVInputBuffer_DirectorIO_BrnD
+0x823F21E8  clrlwi    r11, r3, 24
+0x823F21EC  cmplwi    cr6, r11, 0
+0x823F21F0  bne       cr6, loc_823F220C
+0x823F21F4  bl        CgsDev__Assert__BeginAssert
+0x823F21F8  li        r5, 0x39 # '9'
+0x823F21FC  mr        r4, r30
+0x823F2200  mr        r3, r31
+0x823F2204  bl        CgsDev__Assert__FireAssert
+0x823F2208  bl        CgsDev__Assert__EndAssert
+0x823F220C  addi      r4, r1, 0x1C0+var_AC
+0x823F2210  lwz       r3, 0x1C0+var_B0(r1)
+0x823F2214  bl        ___DestroyIOBuffer_VUpdateOutputBuffer_BrnWorldIO___IOBufferStack_CgsModule__QAA_NPAPAVUpdateOutputBuffer_BrnWorldIO___# CgsModule::IOBufferStack::DestroyIOBuffer<BrnWorldIO::UpdateOutputBuffer>(BrnWorldIO::UpdateOutputBuffer * *)
+0x823F2218  clrlwi    r11, r3, 24
+0x823F221C  cmplwi    cr6, r11, 0
+0x823F2220  bne       cr6, loc_823F223C
+0x823F2224  bl        CgsDev__Assert__BeginAssert
+0x823F2228  li        r5, 0x39 # '9'
+0x823F222C  mr        r4, r30
+0x823F2230  mr        r3, r31
+0x823F2234  bl        CgsDev__Assert__FireAssert
+0x823F2238  bl        CgsDev__Assert__EndAssert
+0x823F223C  addi      r4, r1, 0x1C0+var_EC
+0x823F2240  lwz       r3, 0x1C0+var_F0(r1)
+0x823F2244  bl        ___DestroyIOBuffer_VOutputBuffer_GameStateModuleIO_BrnGameState___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_GameS
+0x823F2248  clrlwi    r11, r3, 24
+0x823F224C  cmplwi    cr6, r11, 0
+0x823F2250  bne       cr6, loc_823F226C
+0x823F2254  bl        CgsDev__Assert__BeginAssert
+0x823F2258  li        r5, 0x39 # '9'
+0x823F225C  mr        r4, r30
+0x823F2260  mr        r3, r31
+0x823F2264  bl        CgsDev__Assert__FireAssert
+0x823F2268  bl        CgsDev__Assert__EndAssert
+0x823F226C  addi      r4, r1, 0x1C0+var_A4
+0x823F2270  lwz       r3, 0x1C0+var_A8(r1)
+0x823F2274  bl        ___DestroyIOBuffer_VOutputBuffer_BrnNetworkModuleIO_BrnNetwork___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_BrnNet
+0x823F2278  clrlwi    r11, r3, 24
+0x823F227C  cmplwi    cr6, r11, 0
+0x823F2280  bne       cr6, loc_823F229C
+0x823F2284  bl        CgsDev__Assert__BeginAssert
+0x823F2288  li        r5, 0x39 # '9'
+0x823F228C  mr        r4, r30
+0x823F2290  mr        r3, r31
+0x823F2294  bl        CgsDev__Assert__FireAssert
+0x823F2298  bl        CgsDev__Assert__EndAssert
+0x823F229C  addi      r4, r1, 0x1C0+var_DC
+0x823F22A0  lwz       r3, 0x1C0+var_E0(r1)
+0x823F22A4  bl        ___DestroyIOBuffer_VOutputBuffer_InputIO_CgsInput___IOBufferStack_CgsModule__QAA_NPAPAVOutputBuffer_InputIO_CgsInput___# CgsModule::IOBufferStack::DestroyIOBuffer<CgsInput::InputIO::OutputBuffer>(CgsInput::InputIO::OutputBuffer * *)
+0x823F22A8  clrlwi    r11, r3, 24
+0x823F22AC  cmplwi    cr6, r11, 0
+0x823F22B0  bne       cr6, loc_823F22CC
+0x823F22B4  bl        CgsDev__Assert__BeginAssert
+0x823F22B8  li        r5, 0x39 # '9'
+0x823F22BC  mr        r4, r30
+0x823F22C0  mr        r3, r31
+0x823F22C4  bl        CgsDev__Assert__FireAssert
+0x823F22C8  bl        CgsDev__Assert__EndAssert
+0x823F22CC  addi      r1, r1, 0x1C0
+0x823F22D0  b         __restgprlr

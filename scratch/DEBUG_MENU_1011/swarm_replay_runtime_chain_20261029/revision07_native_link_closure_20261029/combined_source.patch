@@ -1,0 +1,30 @@
+--- a/src/GameSource/Director/BrnDirectorModule.h
++++ b/src/GameSource/Director/BrnDirectorModule.h
+@@ -16,7 +16,7 @@
+ #include "GameSource/Director/Utils/BrnDirectorPostOfficeTypes.h"         // the six scene-query post offices
+ #include "GameSource/Replays/Serialisers/BrnReplayDirectorSerialiser.h"                   // BrnReplays::DirectorSerialiser (mDirectorSerialiser)
+ 
+-namespace CgsModule { class IOBufferStack; }
++namespace CgsModule { struct IOBufferStack; }
+ 
+ namespace BrnResource { namespace GameDataIO { class AllocatorList; } }   // DirectorModule::Prepare's 2nd arg (boot audit F-P6-16)
+ 
+--- a/src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp
++++ b/src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp
+@@ -944,5 +944,14 @@
+                "lePlayerScoringIndex < E_PLAYER_SCORING_INDEX_COUNT");
+     return maeActiveRaceCarIndex[lePlayerScoringIndex];
+ }
+-}
+-}
++// ARTIST UpdateOutputInterfaces @0x822F5D30..0x822F5D88 inlines two
++// WorldMap2D assignments, one into each live/replay active-car output at +0x28B0.
++// Keep the native pointer member and the map geometry together; the console copies
++// the complete 48-byte record. The existing declaration previously had no provider.
++void RCEntityActiveRaceCarOutputInterface::SetWorldMap2D(
++        const CgsWorld::WorldMap2D* lpWorldMap2D)
++{
++    mWorldMap2D = *lpWorldMap2D;
++}
++}
++}
