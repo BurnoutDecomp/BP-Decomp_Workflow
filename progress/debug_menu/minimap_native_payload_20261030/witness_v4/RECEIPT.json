@@ -1,0 +1,38 @@
+{
+  "cap_per_side": 20000,
+  "max_log_mib": 48,
+  "production_b5": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+  "workflow_base": "e71e9ebfcbce7c5f25a3ce1566dd0031ceb3511c",
+  "tests": [
+    {
+      "case": "unit",
+      "exit": 0,
+      "expected": 0,
+      "stdout": "PASS: interleaved_sender_fixture.txt rejected: line 1: malformed witness\nPASS: malformed_suffix_fixture.txt rejected: line 1: malformed witness\nPASS: unexpected_prefix_fixture.txt rejected: line 1: malformed witness\nPASS: FIFO, mismatch, ambiguity, missing, sequence, suffix, interleave, CRLF and cap checks\n",
+      "stderr": ""
+    },
+    {
+      "case": "explicit_cap_required",
+      "exit": 2,
+      "expected": 2,
+      "stdout": "",
+      "stderr": "usage: pair_witness.py [-h] --cap {20000} log\npair_witness.py: error: the following arguments are required: --cap\n"
+    },
+    {
+      "case": "malformed_with_cap",
+      "exit": 1,
+      "expected": 1,
+      "stdout": "{\n  \"counts\": {\n    \"sender\": 0,\n    \"receiver\": 1\n  },\n  \"pairs\": [],\n  \"tail_mismatches\": 0,\n  \"errors\": [\n    \"line 1: malformed witness\",\n    \"line 2: receiver 1 has no available sender with this prefix\",\n    \"no paired records\"\n  ],\n  \"cap\": 20000\n}\n",
+      "stderr": ""
+    }
+  ],
+  "sha256": {
+    "interleaved_sender_fixture.txt": "4c1f912a0bb619aa684764fd0eb0df25b70c2f3953afc39c9a66a7fd7cac83be",
+    "malformed_suffix_fixture.txt": "71e8dc41bba1b2953d9671efd0166795bf5e756efab0705b97d2b0255dcc9312",
+    "pair_test.py": "0e6c3b1dc3523a77ab1130fd5adbc08b3928c118be8ec534ca162e11c1484bf2",
+    "pair_witness.py": "e924d8af124c1645d09963f76ef34de2d4283e64f89687932faeef31d4169c2f",
+    "TEMP_FIXED_WITNESS_V4.patch": "bae0f1d149a293fb858c4fd52ed959dab5249b6fd68d49cf0ac7b0a4da094f57",
+    "TEMP_OLD_WITNESS_V4.patch": "c030a456fedb5f0dd3cc7171880ef15bfd2fb52a569073ae459db5bd2bf70ccd",
+    "unexpected_prefix_fixture.txt": "3abe8f8609fa1b2e62590a18b36e51727e58e81d108120457ab18033d14c46b8"
+  }
+}
