@@ -1,0 +1,55 @@
+{
+  "workflow": "262ab4b0601e4a33e7e02c651ecc87321e840f34",
+  "b5": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+  "diagnostic_verdict": "fail",
+  "inputs": {
+    "README.md": {
+      "canonical_blob_sha256": "53f5a2f2199e93723bbe8b9a94d330cd841d8c14d6b124efd7af419aba8e50c3",
+      "checkout_sha256": "2de81e65728a8e96edade47224f72b48bb00798090f1f009b184af4049b60ed0"
+    },
+    "SatNavWitnessFormat.h": {
+      "canonical_blob_sha256": "f4bb86bec138bb235a40c17b35b3201593b1300d0235316999a89b2776497dff",
+      "checkout_sha256": "1914ec98a7abf7d588b6a014423342d8ba7e5ed166020c7450363abc2867b4fd"
+    },
+    "TEMP_FIXED_WITNESS_V2.patch": {
+      "canonical_blob_sha256": "34c5c60e401662557e62971db29f7da665ebaf89037dbec5e7554c13a0db6757",
+      "checkout_sha256": "4feea506573a58c2715a90fce5de32a160b3a63d4bc391a44271ee3d9eba74b8"
+    },
+    "TEMP_OLD_WITNESS_V2.patch": {
+      "canonical_blob_sha256": "c2eb23fe365ffe09a2ee93ac8c719440e7bb85c489535593a48d02260ce787df",
+      "checkout_sha256": "d4ccd943b5952bbd46fb60a5c932f6968cdaf6d970afee28bf78d339aa510c5a"
+    },
+    "compiler_test_receipt.txt": {
+      "canonical_blob_sha256": "1106e7136bd9643438f2367f711a56c2cec1a45240586e582f6fa025d0b2c89f",
+      "checkout_sha256": "f2cefb243fc138a8dcdfd2fb55f1dd9016d789a5e302141f9c0180820340d3ef"
+    },
+    "format_test.cpp": {
+      "canonical_blob_sha256": "b370009bbf5864eac900cd3d4d920cf1de128ed22b99d479535fc31794fba522",
+      "checkout_sha256": "7af4e45021df8dedf6d2c977dcdc69f9675d9ea4f6349e4b9efa8b3114109400"
+    },
+    "pair_witness.py": {
+      "canonical_blob_sha256": "7228013cc28afcb1d899fdf30d76f44ee20aba23f715074bc7992612c4f8882c",
+      "checkout_sha256": "3cb7a06e9f10fa2df65f3931ed1ea7436a515dea7701a6a1617e3b36bdf8b09e"
+    },
+    "pair_test.py": {
+      "canonical_blob_sha256": "1238882c31d166e2b1c7503df2e45bb789cc7139b31f5ff21a447e668648d4f9",
+      "checkout_sha256": "2b3d321821d46a6ab1fa018836367acced03af45adf13015b7a29d1673821d01"
+    },
+    "receipt.json": {
+      "canonical_blob_sha256": "87ec7541bb46364040c69adee31064ecfe2382c66bea929e9fe3ad95c3c025f8",
+      "checkout_sha256": "c03b62604274f5225c52f58a01cdda2716e47e347d0699ddcd47ab3d16ebee67"
+    },
+    "format_test.exe": {
+      "sha256": "24f046aeb7deb12b7bcd8cd30772e70bb3381de87dbe62826e5a2a0bfed14601"
+    }
+  },
+  "checks": {
+    "old_fixed_patches_apply_check": true,
+    "retained_format_exe_pass": true,
+    "pair_test_pass": true,
+    "explicit_3000_cap_rejected": true,
+    "two_valid_sender_records_same_line_dropped_second_without_error": true,
+    "valid_record_with_trailing_junk_accepted": true
+  },
+  "defect": "PATTERN.search processes first matching witness per line without rejecting trailing content or additional markers, allowing interleaved final event to be silently lost."
+}

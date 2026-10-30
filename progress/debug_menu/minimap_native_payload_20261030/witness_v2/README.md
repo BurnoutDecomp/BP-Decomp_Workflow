@@ -1,0 +1,13 @@
+# Temporary SatNav witness v2 — not shipping
+
+The preceding source review passed B5 3f4f9c06 but rejected the v1 diagnostics: StrStream's void* formatter truncates x64 pointers, and float strings round. The preserved PRIOR_REVIEW files record that finding; the original v1 evidence remains in the parent directory. No production source changed.
+
+TEMP_OLD_WITNESS_V2.patch applies to e3d773c6; TEMP_FIXED_WITNESS_V2.patch applies to 3f4f9c06. Each adds the same temporary SatNavWitnessFormat.h and opt-in logging. Both passed `git apply --check --ignore-space-change` against their respective bases; the flag accounts for Windows line endings. Remove the diagnostics from source before building any shipping executable.
+
+BRN_SATNAV_EVENT_WITNESS logs up to 3000 sender and receiver records. The receiver reads the queue record before the existing typed assignment. Prefix records exact f32 bits of all position lanes, orientation and speed; raw zoom bits; and all bits of map and mask pointers. Tail records all route-pointer bits and both raw flag bytes without interpreting potentially invalid boolean representations. `std::snprintf` prints fixed-width hex into a buffer sent through the string overload. Counts are per-side and are not cross-thread IDs.
+
+Use `python pair_witness.py ONE_RUN_LOG` separately per run. It pairs only available same-prefix records in FIFO order. Multiple candidate senders are accepted only when their expected tails agree; ambiguity, missing or malformed records, sequence gaps, FIFO gaps, unmatched sends and cap exhaustion are errors. Mismatched received tails are counted separately rather than hidden. Record timing, frame correlation and target-scene coverage independently; identical strings across different runs do not establish pointer equality. Logger interleaving or a cap reached before target coverage must invalidate the witness, not be silently accepted.
+
+`format_test.cpp` links the real CgsStrStream implementation and demonstrates its high-pointer/adjacent-float collision; the new helper distinguishes each separately and preserves an FE flag byte. `pair_test.py` exercises equal-tail duplicate pairing, mismatches, ambiguity, gaps and missing records. `compiler_test_receipt.txt` is the actual canonical MSVC compile/link and execution output; receipt.json gives SHA-256 hashes. For reproduction, compile against `tools/build/msvc_flags.txt` and the include list in `tools/build/msvc_includes.txt`, with the temporary header path first; link format_test.cpp with CgsStrStream.cpp under /OPT:REF and run it, then run `python pair_test.py`.
+
+No paired native run has been performed; causality for the video remains unproven.
