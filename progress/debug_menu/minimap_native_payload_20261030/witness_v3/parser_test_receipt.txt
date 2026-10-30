@@ -1,0 +1,38 @@
+[
+  {
+    "case": "v2_interleaved",
+    "exit": 0,
+    "pairs": 1,
+    "errors": []
+  },
+  {
+    "case": "v3_interleaved",
+    "exit": 1,
+    "pairs": 0,
+    "errors": [
+      "line 1: malformed witness",
+      "line 2: receiver 1 has no available sender with this prefix",
+      "no paired records"
+    ]
+  },
+  {
+    "case": "v2_suffix",
+    "exit": 0,
+    "pairs": 1,
+    "errors": []
+  },
+  {
+    "case": "v3_suffix",
+    "exit": 1,
+    "pairs": 0,
+    "errors": [
+      "line 1: malformed witness",
+      "line 2: receiver 1 has no available sender with this prefix",
+      "no paired records"
+    ]
+  }
+]
+PASS: interleaved_sender_fixture.txt rejected: line 1: malformed witness
+PASS: malformed_suffix_fixture.txt rejected: line 1: malformed witness
+PASS: unexpected_prefix_fixture.txt rejected: line 1: malformed witness
+PASS: FIFO, mismatch, ambiguity, missing, sequence, suffix, interleave, CRLF and cap checks
