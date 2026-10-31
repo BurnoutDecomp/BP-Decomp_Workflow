@@ -1,0 +1,1652 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-31T15:51:19.097925+00:00",
+  "reviewer": "Codex combined fresh reviewer",
+  "verdict": "fail",
+  "verdict_line": "VERDICT: fail",
+  "native_run_performed": false,
+  "builds_performed": false,
+  "source_mutations": false,
+  "profile_mutations": false,
+  "git_mutations": false,
+  "canonical_verdicts_changed": false,
+  "review_scope": "All 28 pending controls plus the actual v2 scripts, original v1 failed review, pinned published source/assembly and private helper dependency contracts.",
+  "readiness": "not_ready_for_native_run",
+  "candidate": {
+    "b5_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "workflow_main": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+    "build_receipt_sha256": "bfa1c512b4b9585a7eb8564017e2739f11cb55fbcaac129a007d03eda3b606c1",
+    "map_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f"
+  },
+  "slot": 62190,
+  "controls_reviewed": 28,
+  "frames_reviewed": 0,
+  "site_credit": 0,
+  "behavior_credit": 0,
+  "input_sha256": {
+    "ALL_FILE_HASHES.sha256": "627a8a84febbb8aa9a73869081a24652bf4916e2f7749954330e78a771c544c7",
+    "Capture.ps1": "01c869f6c7aeac06a6dd2c1ba0c9821df64df25084ec9fc86b390c85d2b3eb98",
+    "Case.ps1": "08f70a297672eac222a21992f11f9ddba9d351a099ab21b96e1651103f175620",
+    "CONTROL_MATRIX.md": "84b5a327f8ac465f0d3ed37344916b5085a2c91d152961d789bd7dfdf26c82b1",
+    "CurrentSaveProgress.ps1": "8036f6505722c8c80333737cf762e90d8c3af109c29ce9a6226d0e0c7078c875",
+    "CURRENT_SAVE_EXPECTED_PROGRESS.json": "916711851c4980a47e51a1b50ce799cf0a0eb6d3751b7826dfc1fbc8cf1a9b64",
+    "Driver.Helpers.ps1": "a9592227db67aa57342ab293825543cb6bd0e695a19a7233585c5e6539c18e65",
+    "Driver.ps1": "d14e520e0a4153abf2af3cf5541e264d1d7b9cf0e69c25367a63fd8d408d0dca",
+    "HELPER_EXTRACTION.json": "09a07fd150541d1e7734f27634eda4acab038cbc985545604df44fec4a416bce",
+    "Invoke-PrivateCase.ps1": "5418f741fa4fa1238975e91243f9b40077c72600cc43233885007d1e1f271b32",
+    "ORIGINAL_REVIEW_INPUT_HASHES.json": "dbfd1f3ca9c0756477a7fa627ab8582033c3ee4f5b00ac270ef4b4f2be593129",
+    "PathGuards.ps1": "c2cd836976d14b1ebf46b24da79e1f0a713590f17e1ef56a1e14e2d95f6190ad",
+    "PATH_ATTESTATION.md": "07b18c55b66e0f874e77de59d7fa48b89e4c6c46155e47aae16ac220cb2536aa",
+    "Preflight.ps1": "684d6df03eb2c1b85cdd6fb865eb120313e10ab74c20cf8ff71d9d21c79e1c48",
+    "README.md": "4810245d19e8e7da058e3d309e141a3a2e9598c09c60f69e721a6d1426c58db8",
+    "RECONCILIATION.json": "4289d67762d8e9dbdc76ecc89209940687ef0ed2c939218d00d5fdb8c4359abf",
+    "Request-HarnessPhaseDone.ps1": "8889e750914804defcce316410ae6cbb2e19d571a864437d3c4f03dfa9f52c39",
+    "REVIEW_PACKET.md": "4a9e75e18ee7defc5a7529eb032d55bcd254ede21b80507dbe11bdf81d414589",
+    "RUNTIME_GATES.md": "314e4fc81d72a1af944735083149f2bc188f4679896231098ea61b60c1cf90c0",
+    "SCOPE.json": "4abaae5de5be3456dce523758828930d3be03ba216a64f17d81062bc6ab98010",
+    "SOURCE_PINS.json": "573c6672873db9d85c820a61671a2c3e7a5044cd02451ded3283d25240759bb5",
+    "STAGING.TEMPLATE.json": "c3f28c923b644880db0b3a8f6c39a83dd10aeebb4ebfbaec67d185db98e17303"
+  },
+  "previous_findings": [
+    {
+      "id": "R1",
+      "disposition": "resolved_static",
+      "evidence": "Case.ps1:30-32 disables concurrency and removes the invalid zero limit; the pinned private helper takes the existing-game refusal path."
+    },
+    {
+      "id": "R2",
+      "disposition": "resolved_static",
+      "evidence": "Plain declared aliases plus Boolean context values are checked in Preflight and Driver; Commands-For validates restore keys."
+    },
+    {
+      "id": "R3",
+      "disposition": "resolved_static",
+      "evidence": "Family/alias/state phase names are distinct. The static namespace has 89 phase names and 190 paths."
+    },
+    {
+      "id": "R4",
+      "disposition": "resolved_static",
+      "evidence": "Actual retry03 helper pair and _checks/_box_lock hashes match. flow_run creates the PID/slot/start-ticks event, checks retained ownership before accepting it and cleans only its creation-handle process. Case requires the matching witness-hash request and terminal receipt."
+    },
+    {
+      "id": "R5",
+      "disposition": "resolved_for_preparation_bytes",
+      "evidence": "All submitted v2 file hashes matched before review output was written. New R9 covers the incompatible launch/output manifest namespace."
+    },
+    {
+      "id": "R6",
+      "disposition": "resolved_static_subject_to_live_proof",
+      "evidence": "Scene defaults are exact constructor f32 values. The driver requires the matching natural F3 display and no matching applied/rejected Debug.ini row in the complete prefix-validated private log, otherwise skips before any setter. Restore strings use round-trip source-default text. Clipping values use exact same-run four-byte reads and bitwise restore checks."
+    },
+    {
+      "id": "R7",
+      "disposition": "resolved_static",
+      "evidence": "Every metadata/request/readback f32 is invariant-parsed and explicitly rejects NaN/infinity before comparison. Scene defaults and all eight f32 probes have matching finite bit pins."
+    },
+    {
+      "id": "R8",
+      "disposition": "documented_behavior_blocker_retained",
+      "evidence": "E14 explicitly names the published 3f PC trap in BehaviourCollection::Prepare and caller assert. It remains pending with no jump-moment behavior credit."
+    }
+  ],
+  "findings": [
+    {
+      "id": "R9",
+      "priority": 1,
+      "title": "The exact package manifest rejects the mandatory runtime stage and requested review artifacts",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "Preflight.ps1",
+          "line_start": 54,
+          "line_end": 57
+        },
+        {
+          "file": "Preflight.ps1",
+          "line_start": 182,
+          "line_end": 186
+        },
+        {
+          "file": "Invoke-PrivateCase.ps1",
+          "line_start": 15,
+          "line_end": 26
+        }
+      ],
+      "evidence": "Preflight enumerates every local package file except SOURCE_PINS.json/ALL_FILE_HASHES.sha256 for source pins, and every file except the manifest for the all-file set. STAGING.json is required in the same directory for Execute but is absent from both submitted name sets. REVIEW.md/REVIEW.json are also required alongside this packet and are absent from those sets. An in-memory set comparison confirms exactly these three additions are rejected. No runtime stage was created during review.",
+      "impact": "The preparation-only preflight passes, but every documented staged execution fails its prelaunch preflight before game launch. These requested review files also make preparation preflight fail after review.",
+      "action": "Define the immutable authored-file set separately from STAGING.json, REVIEW outputs and run evidence. Validate the stage with an explicit runtime contract and preserve hashes of all immutable authored files. Do not solve this by blind manifest regeneration that absorbs arbitrary runtime files."
+    },
+    {
+      "id": "R10",
+      "priority": 2,
+      "title": "The optional true-baseline SC02 anchor seed breaks the first SC01 phase",
+      "affected_aliases": [
+        "SC01",
+        "SC02"
+      ],
+      "locations": [
+        {
+          "file": "Driver.ps1",
+          "line_start": 240,
+          "line_end": 255
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 119,
+          "line_end": 123
+        },
+        {
+          "file": "Driver.Helpers.ps1",
+          "line_start": 177,
+          "line_end": 185
+        }
+      ],
+      "evidence": "When captured SC02=TRUE, scene_triangle_anchor_seed sets SC02=FALSE and leaves it there. Controls are ordered SC01 then SC02. SC01 builds Expected from captured baselines, so it expects SC02=TRUE but sets only SC01. An isolated in-memory execution of the actual Apply-Target/Get-PhaseCommands functions reports: scene_SC01_positive expects SC02=TRUE but anchor seed left FALSE. No native calls or file writes were used in this simulation.",
+      "impact": "The advertised optional branch aborts at the first target and enters emergency restore. The false-baseline/default branch is unaffected by this specific mismatch.",
+      "action": "Place the false seed immediately before SC02 positive, or restore SC02 to its captured baseline before unrelated phases while preserving evidence of the seeded anchor. Validate both natural TRUE and FALSE branches in memory."
+    },
+    {
+      "id": "R11",
+      "priority": 2,
+      "title": "Private-profile physical path validation occurs after the fixture move/copy",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "Preflight.ps1",
+          "line_start": 199,
+          "line_end": 218
+        },
+        {
+          "file": "Case.ps1",
+          "line_start": 52,
+          "line_end": 64
+        },
+        {
+          "file": "D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_gui_batch_20261031_retry03/fixed/runtime/tools/tests/run_case.ps1",
+          "line_start": 263,
+          "line_end": 297
+        },
+        {
+          "file": "PathGuards.ps1",
+          "line_start": 57,
+          "line_end": 96
+        }
+      ],
+      "evidence": "The wrapper preflight checks lexical sibling names/profile equality and hashes only. It never calls the supplied no-reparse/private-profile guards. The bound run_case moves an existing Profile.sav and copies the fixture at lines 263-273, then invokes Setup at line 297. Only Setup subsequently calls Assert-BrnPrivateProfile. A Memcard_62190/data ancestor junction can therefore pass the first lexical checks and redirect that first move/copy before the guard rejects it. The later check sees the newly copied fixture rather than establishing the original target was private.",
+      "impact": "The submitted runner cannot enforce its no-live-user-profile boundary before its first profile mutation. No actual redirected stage or profile mutation occurred in this review.",
+      "action": "Run the physical no-reparse/approved-private-root and existing-profile identity checks in the pre-invocation stage gate before run_case can move/copy any profile. Keep the under-lock Setup recheck, and preserve the private restore-on-owned-exit contract."
+    }
+  ],
+  "controls": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+      "alias": "SC01",
+      "caption": "Draw Collision Volumes",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D800(a1, a1 + 16, \"Draw Collision Volumes\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 394,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC01",
+        "SC01",
+        "alias SC01"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "RenderWorld +0x10 calls DrawPrimitives; live volume instances emit collision-volume geometry.",
+      "required_live_gate": "Require visible live collision volumes; no pixels without data is not a no-op.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R10",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "alias": "SC02",
+      "caption": "Draw Triangle Test",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D800(a1, a1 + 17, \"Draw Triangle Test\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 395,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC02",
+        "SC02",
+        "alias SC02"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "RenderWorld +0x11 calls DrawTriangleTest; fixed swept sphere, triangle and contacts are drawn.",
+      "required_live_gate": "Use the natural frame if baseline is false; otherwise capture an explicit false anchor-seed phase before the first positive. Keep the camera pose stable and require visible swept-sphere/triangle/contact geometry.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R10",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "alias": "SC03",
+      "caption": "Draw Padding",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D800(a1, a1 + 18, \"Draw Padding\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 396,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC03",
+        "SC03",
+        "alias SC03"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest tests byte +0x12 and draws the enlarged padding sphere using mfPadding +0x3c.",
+      "required_live_gate": "Force SC02=true for P/N and restore SC02 baseline.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+      "alias": "SC04",
+      "caption": "TriX",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D6B0(a1, a1 + 48, \"TriX\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 398,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC04",
+        "SC04",
+        "alias SC04"
+      ],
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest consumes float +0x30 (TriX) in triangle vertex construction.",
+      "required_live_gate": "Force SC02=true; compare opposite x offsets.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+      "alias": "SC05",
+      "caption": "TriY",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D6B0(a1, a1 + 52, \"TriY\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 399,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC05",
+        "SC05",
+        "alias SC05"
+      ],
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest consumes float +0x34 (TriY) in triangle vertex construction.",
+      "required_live_gate": "Force SC02=true; compare opposite y offsets.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "alias": "SC06",
+      "caption": "TriZ",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D6B0(a1, a1 + 56, \"TriZ\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 400,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC06",
+        "SC06",
+        "alias SC06"
+      ],
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest consumes float +0x38 (TriZ) in triangle vertex construction.",
+      "required_live_gate": "Force SC02=true; compare opposite z offsets.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+      "alias": "SC07",
+      "caption": "TriScale",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D6B0(a1, a1 + 64, \"TriScale\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 401,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC07",
+        "SC07",
+        "alias SC07"
+      ],
+      "source_default": 1.0,
+      "positive": 1.5,
+      "negative": 0.5,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest consumes float +0x40 (TriScale) in triangle vertex construction.",
+      "required_live_gate": "Force SC02=true; compare 0.5 and 1.5 scales.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "alias": "SC08",
+      "caption": "Padding",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D6B0(a1, a1 + 60, \"Padding\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 402,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC08",
+        "SC08",
+        "alias SC08"
+      ],
+      "source_default": 0.3,
+      "positive": 0.8,
+      "negative": 0.05,
+      "context_overrides": [
+        {
+          "alias": "SC02",
+          "value": true
+        },
+        {
+          "alias": "SC03",
+          "value": true
+        }
+      ],
+      "consumer_observation": "DrawTriangleTest consumes mfPadding +0x3c only while Draw Padding +0x12 is true.",
+      "required_live_gate": "Force SC02 and SC03 true for P/N; restore both baselines.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "alias": "SC09",
+      "caption": "Draw cached triangles",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D800(a1, a1 + 84, \"Draw cached triangles\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 409,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawCachedObjectTriangles",
+          "address": "0x828C2560",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2560.json",
+          "sha256": "dbce72ae298b1422d359b54de0b3f6292a1b670caa182755bf09183e26496f51"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC09",
+        "SC09",
+        "alias SC09"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "RenderWorld +0x54 calls DrawCachedObjectTriangles; reader walks used slots and valid Triangle4 batches.",
+      "required_live_gate": "Require a used cache slot with a valid visible triangle batch; otherwise change scene, do not claim no-op.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "alias": "SC10",
+      "caption": "Draw cache spheres",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D800(a1, a1 + 85, \"Draw cache spheres\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x828AB568.json",
+        "address": "0x828AB568",
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "line": 410,
+        "blob_at_3f": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "artist_export_sha256": "838db6b0297d33fa32ae5681c9c8eef064ca755e21b600c519dd0ea06c46a5a7"
+      },
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawCachedObjectSpheres",
+          "address": "0x828C2B80",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2B80.json",
+          "sha256": "ed610010023e6cd635838257c869377b0045f28425527bd90de433ab4ae9df20"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SC10",
+        "SC10",
+        "alias SC10"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "RenderWorld +0x55 calls DrawCachedObjectSpheres; reader emits populated per-slot sphere records.",
+      "required_live_gate": "Require a used slot with a visible populated sphere record; otherwise change scene, do not claim no-op.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "caption": "Render Shadow map",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v10, \"World\\\\ShadowMap\", \"Render Shadow map\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 270,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateFrustumQueries",
+          "address": "0x827DADF8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827DADF8.json",
+          "sha256": "3e96b89b693a47012eebe5270b7f3b3cd26044ba288767b690fa4ee1d6f85b04"
+        },
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH02",
+        "SH02",
+        "alias SH02"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "mbRenderShadowMapView gates shadow frustum queries and shadow dispatch.",
+      "required_live_gate": "Require upstream shadow-map and world rendering gates plus a visible shadow receiver.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "caption": "Cast shadows from world",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v11, \"World\\\\ShadowMap\", \"Cast shadows from world\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 271,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH03",
+        "SH03",
+        "alias SH03"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "World shadow flag is combined with Render world before world caster dispatch.",
+      "required_live_gate": "Force SH02=true; require upstream Render world and visible world caster/receiver.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "caption": "Cast shadows from cars",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v12, \"World\\\\ShadowMap\", \"Cast shadows from cars\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 272,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH04",
+        "SH04",
+        "alias SH04"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "Car shadow flag is combined with Render race cars and near-only policy before car dispatch.",
+      "required_live_gate": "Force SH02=true; require upstream Render race cars and a visible car caster/receiver.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "caption": "Cast shadows from props",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v68, \"World\\\\ShadowMap\", \"Cast shadows from props\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 274,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH06",
+        "SH06",
+        "alias SH06"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "Prop shadow flag is combined with Render props and near-only policy before prop dispatch.",
+      "required_live_gate": "Force SH02=true; require upstream Render props and visible prop caster/receiver.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "caption": "Render multiple shadow maps (CSM)",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v53, \"World\\\\ShadowMap\", \"Render multiple shadow maps (CSM)\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 276,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH08",
+        "SH08",
+        "alias SH08"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "consumer_observation": "CSM flag selects 3 versus 1 cascade dispatches; ARTIST branches at 0x827C9708..0x827C9738.",
+      "required_live_gate": "Force SH02=true; require visible near and distant caster/receiver witnesses.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0008",
+      "alias": "E08",
+      "caption": "Draw follow-cam pivot",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *v3 + 2910, &unk_820046A7, \"Draw follow-cam pivot\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 72,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82240828",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82240828.json",
+          "sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E08",
+        "E08",
+        "alias E08"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The original follow-camera pivot box/line overlay is gated by the behavior byte at +0xB5E.",
+      "required_live_gate": "GameplayExternal camera behaviour must be allocated and active; capture the camera-world ROI while following the player.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0014",
+      "alias": "E14",
+      "caption": "Allow Jump Moment",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_known_pc_trap_field_only",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 220972, \"Moment Options\", \"Allow Jump Moment\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 83,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E14",
+        "E14",
+        "alias E14"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The allow-jump byte is copied into the moment shared-info gate consumed by the X360 moment update.",
+      "required_live_gate": "Require a named player-jump moment attempt under the same driving setup; raw writes alone prove only registration/readback.",
+      "known_source_blocker": {
+        "kind": "known_pc_trap_source_defect",
+        "source_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+        "source_path": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+        "source_blob": "d45b01607594efa4dc67959f6ccf250e8f5fb674",
+        "condition": "Update sees jump action, can-use-slomo and mbAllowJumpMoment; PrepareCameras reaches BehaviourCollection::Prepare PC trap, returns false and caller asserts.",
+        "disposition": "keep target for field-only evidence; behavior remains pending until filming closure is implemented and witnessed",
+        "behavior_credit": 0
+      },
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0015",
+      "alias": "E15",
+      "caption": "Allow Stunt Moment",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 220973, \"Moment Options\", \"Allow Stunt Moment\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 84,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E15",
+        "E15",
+        "alias E15"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The allow-stunt byte is copied into the moment shared-info gate consumed by the X360 moment update.",
+      "required_live_gate": "Require a named stunt moment attempt under the same driving setup; raw writes alone prove only registration/readback.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0016",
+      "alias": "E16",
+      "caption": "Allow Hard Stop Moment",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 220974, \"Moment Options\", \"Allow Hard Stop Moment\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 85,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E16",
+        "E16",
+        "alias E16"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The allow-hard-stop byte is copied into the moment shared-info gate consumed by the X360 moment update.",
+      "required_live_gate": "Require a named hard-stop moment attempt under the same driving setup; raw writes alone prove only registration/readback.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0018",
+      "alias": "E18",
+      "caption": "Enable Behaviour Debug Output",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 213640, \"Debug Ouput\", \"Enable Behaviour Debug Output\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 91,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E18",
+        "E18",
+        "alias E18"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The behavior DebugPrinter emits queued text only while its enabled byte is true.",
+      "required_live_gate": "Require at least one behavior-printer message in the phase; the V6 screenshots did not isolate this writer effect.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "alias": "E19",
+      "caption": "Enable Moment Debug Output",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 213676, \"Debug Ouput\", \"Enable Moment Debug Output\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 93,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        },
+        {
+          "address": "0x8226BFB0",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8226BFB0.json",
+          "sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E19",
+        "E19",
+        "alias E19"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The moment DebugPrinter B gates the text lines sent through the generic DebugPrinter enabled check.",
+      "required_live_gate": "Require an active moment/crash debug message; pair this site with the moment trigger context, then restore TRUE.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0022",
+      "alias": "E22",
+      "caption": "Show debug camera names",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 211972, \"Debug Ouput\", \"Show debug camera names\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 97,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x821F6740",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F6740.json",
+          "sha256": "c9e97e55dec5014596e6b975974fa6d12e2e07ba2b9d321cb73feee324adfce6"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E22",
+        "E22",
+        "alias E22"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "E21",
+          "value": false
+        }
+      ],
+      "consumer_observation": "When the normal camera selector is cycling, this byte enables the current debug camera name text.",
+      "required_live_gate": "The consumer is conditional on mbCycleNormalCamSelector; do not claim a visible effect unless the cycle state is witnessed.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0023",
+      "alias": "E23",
+      "caption": "Show World Map debug",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 220980, \"Debug Ouput\", \"Show World Map debug\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 98,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82274070",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82274070.json",
+          "sha256": "fb1371819dd55a0426a5fb23cef6d8db2b37179bd688f22b612408f4d5ea98b9"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E23",
+        "E23",
+        "alias E23"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The original world-map debug overlay runs only with this flag and more than one vehicle-position journal record.",
+      "required_live_gate": "Use a moving DRIVING scene with at least two position-journal entries and an available world map.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0026",
+      "alias": "E26",
+      "caption": "Show Crash Info",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *(a1 + 12) + 88480, \"Debug Ouput\", \"Show Crash Info\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 103,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x8226BFB0",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8226BFB0.json",
+          "sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf"
+        },
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        },
+        {
+          "address": "0x8221C6D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8221C6D8.json",
+          "sha256": "9c06c4735ca8fa2fddcce1ed24bc2d0444378bb7359f64fa88343d06fd889d40"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E26",
+        "E26",
+        "alias E26"
+      ],
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [
+        {
+          "alias": "E17",
+          "value": true
+        }
+      ],
+      "consumer_observation": "The crash debug byte gates the original debug-print and selected-moment-render branch while the crash state is updating.",
+      "required_live_gate": "Require the crash state update window; if no crash state is active, raw value passes only and no visual-effect claim.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0043",
+      "alias": "E43",
+      "caption": "Small Near Clip",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "CgsDev::DebugComponent::RegisterVariable(a1, &flt_82CDA55C, \"Clipping\", \"Small Near Clip\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 136,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82205B68",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82205B68.json",
+          "sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801"
+        },
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E43",
+        "E43",
+        "alias E43"
+      ],
+      "source_default": 0.1,
+      "positive": 0.5,
+      "negative": 0.05,
+      "context_overrides": [],
+      "consumer_observation": "When the camera has no custom near distance and state flag 0x10000 is set, the original returns the small-near global and projection copy consumes it.",
+      "required_live_gate": "Require a camera with state bit 0x10000 set and no custom near distance; otherwise this value is not the active near reader.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0044",
+      "alias": "E44",
+      "caption": "Default Near Clip",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "CgsDev::DebugComponent::RegisterVariable(a1, &flt_82CDA560, \"Clipping\", \"Default Near Clip\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 137,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82205B68",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82205B68.json",
+          "sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801"
+        },
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E44",
+        "E44",
+        "alias E44"
+      ],
+      "source_default": 0.15,
+      "positive": 2.0,
+      "negative": 0.15,
+      "context_overrides": [],
+      "consumer_observation": "When no custom near distance or small-near flag applies, the original selects this global and stores the resulting near plane into the CGS camera before projection update.",
+      "required_live_gate": "Use the standard external camera with no custom near value and small-near state bit clear; include a stable close object for the clipping ROI.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0045",
+      "alias": "E45",
+      "caption": "Default Far Clip",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "CgsDev::DebugComponent::RegisterVariable(a1, &flt_82CDA564, \"Clipping\", \"Default Far Clip\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 138,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E45",
+        "E45",
+        "alias E45"
+      ],
+      "source_default": 10000.0,
+      "positive": 500.0,
+      "negative": 10000.0,
+      "context_overrides": [],
+      "consumer_observation": "The original projection-copy path loads the default far plane, stores it into the CGS camera, and rebuilds the perspective matrix.",
+      "required_live_gate": "Use the same stable distant world landmark and camera pose; V6 moving-road frames did not isolate this far-clip consumer.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "alias": "E54",
+      "caption": "Enable Boost Effects",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending_no_native_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "native_evidence_present": false,
+      "registration": {
+        "call": "sub_8282D640(a1, *v5 + 2911, &unk_820046A7, \"Enable Boost Effects\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82275F68.json",
+        "address": "0x82275F68",
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "line": 156,
+        "blob_at_3f": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "artist_export_sha256": "5cbeb5a886dabea8c3eb54292759201c38eb7938659ca0d168dbdffd210decc6"
+      },
+      "artist_witnesses": [
+        {
+          "address": "0x82240828",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82240828.json",
+          "sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias E54",
+        "E54",
+        "alias E54"
+      ],
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "context_overrides": [],
+      "consumer_observation": "The original boost camera FOV/shake paths read the +0xB5F enable byte before applying effects.",
+      "required_live_gate": "Require non-zero speed and ordinary Boost input for a consumer witness; compare the same road/pose with the byte enabled and disabled.",
+      "known_source_blocker": null,
+      "runner_findings": [
+        "R9",
+        "R11"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "powershell_ast",
+      "result": "pass",
+      "detail": "All 9 scripts parsed with zero errors. No runner script was executed."
+    },
+    {
+      "name": "preparation_preflight_before_review_outputs",
+      "result": "pass",
+      "detail": "The actual read-only Preflight.ps1 passed all 18 checks before REVIEW.md/REVIEW.json were created. It validates preparation only, and does not test the AtRun manifest contradiction."
+    },
+    {
+      "name": "source_original_and_helper_pins",
+      "result": "pass",
+      "detail": "Both source/path blob maps match published 3f identities; all 17 artist_evidence file hashes match, all private helper/dependency hashes match. The original v1 complete file set remains byte-identical to ORIGINAL_REVIEW_INPUT_HASHES.json."
+    },
+    {
+      "name": "frame_budget",
+      "result": "pass_static_only",
+      "detail": "88 maximum planned captures including optional seed and both terminal captures; hard cap 90, fixed 1280x720 and maximum 3686454 BMP bytes. No native captures exist for this packet."
+    },
+    {
+      "name": "stage_manifest_namespace_simulation",
+      "result": "fail",
+      "detail": "The mandatory STAGING.json and requested REVIEW.md/REVIEW.json are unexpected members of the exact manifest sets (R9). No stage was created."
+    },
+    {
+      "name": "true_baseline_seed_simulation",
+      "result": "fail",
+      "detail": "The actual functions were extracted as definitions into an isolated in-memory simulation; Execute was replaced with a hashtable-only checker. SC01 expects SC02 TRUE after the seed left it FALSE (R10)."
+    },
+    {
+      "name": "private_profile_pre_mutation_boundary",
+      "result": "fail_static",
+      "detail": "The first no-reparse/private-profile check is in Setup, after the bound helper has already moved/copied the profile (R11)."
+    },
+    {
+      "name": "native_consumer_evidence",
+      "result": "deferred",
+      "detail": "All 28 remain pending with zero site/behavior credit. No syntax/preflight/field-only result proves a rendering or moment consumer."
+    }
+  ],
+  "limits": [
+    "The reviewed executable/source remain pinned to 3f, regardless of subsequent shared-checkout updates.",
+    "Empty triangle caches, absent live volumes or shadow receivers, missing camera-cycle/world-map/crash/moment windows and E43's unresolved 0x10000 producer stay pending.",
+    "E14 has a known source PC trap and receives field-only scope; the separate later jump checkpoint was not reviewed.",
+    "The case injects no phase-local jump/stunt/hard-stop/crash/boost scenarios; no behavior credit is possible without the corresponding native producer and consumer witness.",
+    "No normal live profile/log was locked, moved, restored, written or used as a live hash invariant."
+  ]
+}
