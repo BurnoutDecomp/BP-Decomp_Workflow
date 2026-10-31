@@ -21,6 +21,8 @@ The paired native event experiment proves the repaired field forwarding. Its scr
 
 ## Campaign counts
 
+**November1 cleanup:**153 more reviewed raw frames removed after exact verification against their existing lossless archives, freeing another564 MB. The fresh scratch image scan now finds5.255 GB left, including current evidence and analysis images. Recent cleanup has recovered about39 GB in total. [Removal receipt](reviewed_frame_cleanup_20261101.json), [remaining-image scan](frame_scan_20261101.json).
+
 **October 31 additional cleanup:** 4,932 more old capture files were removed; 1,655 evidence frames were first losslessly archived and verified. Net free-space gain was 8.617 GB. [Receipt](scratch_frame_cleanup_20261031.json).
 
 **October 31 cleanup:** 7,673 historical scratch frames deleted, about 30 GB recovered. Current minimap originals, recent captures, representative historical frames, logs and contact sheets were retained. [Cleanup ledger](frame_cleanup_20261031/README.md).
