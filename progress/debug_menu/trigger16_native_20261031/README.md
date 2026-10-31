@@ -26,3 +26,5 @@ checks used against the original workspace layout.
 
 Totals: **175 verified / 28 original no-ops / 1,152 pending** out of1,355 sites.
 These are site dispositions, not a percentage of code recovered.
+
+After review, the55 V2/V3 scratch BMPs (202,754,970bytes) were removed only after rechecking each against the retained lossless archives. Contact sheets, logs and receipts remain. [Cleanup receipt](FRAME_CLEANUP.json).
