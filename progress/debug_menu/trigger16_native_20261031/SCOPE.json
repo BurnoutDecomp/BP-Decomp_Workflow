@@ -1,0 +1,1182 @@
+{
+  "schema_version": 1,
+  "status": "authored_pending_native_scene_evidence_no_behavior_credit",
+  "cohort": "trigger16_debug_controls_62206_20261031",
+  "slot": 62206,
+  "candidate": {
+    "b5_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+    "workflow_commit": "71be01e0cf78a3b4e7afe009a24f8ffa9faaad6a",
+    "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+    "build_receipt_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_build_20261031\\clean\\BUILD_RECEIPT.json",
+    "build_receipt_sha256": "70bf9d59be6cdf87fccc4fd4e944f5bdbd1a3f3455f36140ba570124503df95c",
+    "map_sha256": "f4fca8c8ac6f0c34ae93f16ab00a487ccc80e0fee55ef2e4cc2a2e47e5a36bd6",
+    "cgsmap_sha256": "d5608810469e4dc35981a651ef666fcddf87349129cb6f96901bedb6374ae2b3",
+    "phase": "clean",
+    "status": "BUILD_PASS"
+  },
+  "control_count": 16,
+  "controls": [
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0001",
+      "alias": "TQ01",
+      "caption": "Render Trigger Regions",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Trigger Regions",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Trigger Regions",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 88,
+        "address": "0x82358798",
+        "callsite": "0x823587BC",
+        "field_offset": "0x154",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld branch at 0x82364E48 gates the static TriggerData region loop.",
+      "scene_gate": "RenderWorld branch at 0x82364E48 gates the static TriggerData region loop.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x154 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ01 TQ01 alias TQ01"
+      ],
+      "positive_command": "set TQ01 TRUE",
+      "negative_command": "set TQ01 FALSE",
+      "restore_command": "set TQ01 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": true,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0002",
+      "alias": "TQ02",
+      "caption": "Render trigger types",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render trigger types",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render trigger types",
+      "type": "i32",
+      "source_default": 4,
+      "positive": 2,
+      "negative": 0,
+      "restore_policy": "Restore the same-run captured typed index using its pinned original option label; never send a numeric enum command.",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 90,
+        "address": "0x82358798",
+        "callsite": "0x823587D4",
+        "field_offset": "0x14C",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "s32*"
+      },
+      "ui": {
+        "step": null,
+        "min": 0,
+        "max": 4,
+        "range_note": "SetRange 0..4; SetOptions table"
+      },
+      "effect_witness": "RenderWorld at 0x8236503C compares this s32 selector to TriggerRegion::GetType; index 4 is All.",
+      "scene_gate": "RenderWorld at 0x8236503C compares this s32 selector to TriggerRegion::GetType; index 4 is All.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x14C is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ02 TQ02 alias TQ02"
+      ],
+      "positive_command": "set TQ02 \"GenericRegion\"",
+      "negative_command": "set TQ02 \"Landmark\"",
+      "restore_command": "set TQ02 \"{same-run captured option label}\"",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "enum_options": [
+        "Landmark",
+        "Blackspot",
+        "GenericRegion",
+        "VFXBoxRegion",
+        "All"
+      ],
+      "min_value": 0,
+      "max_value": 4,
+      "positive_label": "GenericRegion",
+      "negative_label": "Landmark",
+      "source_default_label": "All",
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": 4,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0003",
+      "alias": "TQ03",
+      "caption": "Render generic region types",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render generic region types",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render generic region types",
+      "type": "i32",
+      "source_default": 32,
+      "positive": 7,
+      "negative": 6,
+      "restore_policy": "Restore the same-run captured typed index using its pinned original option label; never send a numeric enum command.",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 94,
+        "address": "0x82358798",
+        "callsite": "0x82358810",
+        "field_offset": "0x150",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "s32*"
+      },
+      "ui": {
+        "step": null,
+        "min": 0,
+        "max": 32,
+        "range_note": "SetRange 0..32; SetOptions table"
+      },
+      "effect_witness": "RenderWorld at 0x82365058 gates generic-region subtypes; index 7 is E_TYPE_JUMP with UI label Stunt; index 32 is All.",
+      "scene_gate": "RenderWorld at 0x82365058 gates generic-region subtypes; index 7 is E_TYPE_JUMP with UI label Stunt; index 32 is All.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x150 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ03 TQ03 alias TQ03"
+      ],
+      "positive_command": "set TQ03 \"Stunt\"",
+      "negative_command": "set TQ03 \"KillzoneTrigger\"",
+      "restore_command": "set TQ03 \"{same-run captured option label}\"",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "enum_options": [
+        "Junkyard",
+        "GasStation",
+        "BodyShop",
+        "PaintShop",
+        "CarPark",
+        "SignatureTakedown",
+        "KillzoneTrigger",
+        "Stunt",
+        "StuntProp",
+        "SignatureCrash",
+        "SignatureCrashCamera",
+        "RoadLimit",
+        "OverDriveBoost",
+        "OverDriveStrength",
+        "OverDriveSpeed",
+        "OverDriveControl",
+        "TireShop",
+        "TuningShop",
+        "PictureParadise",
+        "Tunnel",
+        "Overpass",
+        "Bridge",
+        "Warehouse",
+        "LargeOverheadobject",
+        "NarrowAlley",
+        "Pass Tunnel",
+        "Pass Overpass",
+        "Pass Bridge",
+        "Pass Warehouse",
+        "Pass LargeOverheadobject",
+        "Pass NarrowAlley",
+        "Ramp",
+        "All"
+      ],
+      "min_value": 0,
+      "max_value": 32,
+      "positive_label": "Stunt (E_TYPE_JUMP)",
+      "negative_label": "KillzoneTrigger",
+      "source_default_label": "All",
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": 32,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0004",
+      "alias": "TQ04",
+      "caption": "Render Roaming Locations",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Roaming Locations",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Roaming Locations",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 98,
+        "address": "0x82358798",
+        "callsite": "0x82358848",
+        "field_offset": "0x155",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld branch at 0x823653BC iterates TriggerData roaming locations and DrawSphere after clip-distance test.",
+      "scene_gate": "RenderWorld branch at 0x823653BC iterates TriggerData roaming locations and DrawSphere after clip-distance test.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x155 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ04 TQ04 alias TQ04"
+      ],
+      "positive_command": "set TQ04 TRUE",
+      "negative_command": "set TQ04 FALSE",
+      "restore_command": "set TQ04 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": false,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0005",
+      "alias": "TQ05",
+      "caption": "Render Spawn Locations",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Spawn Locations",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Spawn Locations",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 99,
+        "address": "0x82358798",
+        "callsite": "0x8235885C",
+        "field_offset": "0x156",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld branch at 0x823654A0 iterates TriggerData spawn locations and draws sphere plus direction arrow after clip-distance test.",
+      "scene_gate": "RenderWorld branch at 0x823654A0 iterates TriggerData spawn locations and draws sphere plus direction arrow after clip-distance test.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x156 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ05 TQ05 alias TQ05"
+      ],
+      "positive_command": "set TQ05 TRUE",
+      "negative_command": "set TQ05 FALSE",
+      "restore_command": "set TQ05 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": false,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0006",
+      "alias": "TQ06",
+      "caption": "Render Start Positions",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Start Positions",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Start Positions",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 100,
+        "address": "0x82358798",
+        "callsite": "0x82358870",
+        "field_offset": "0x157",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld branch at 0x823655BC walks Landmark starting grids and draws arrows after clip-distance test.",
+      "scene_gate": "RenderWorld branch at 0x823655BC walks Landmark starting grids and draws arrows after clip-distance test.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x157 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ06 TQ06 alias TQ06"
+      ],
+      "positive_command": "set TQ06 TRUE",
+      "negative_command": "set TQ06 FALSE",
+      "restore_command": "set TQ06 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": false,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0007",
+      "alias": "TQ07",
+      "caption": "Render Info Text",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Info Text",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Info Text",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        },
+        {
+          "alias": "TQ03",
+          "value": 7
+        },
+        {
+          "alias": "TQ10",
+          "value": 10000.0
+        },
+        {
+          "alias": "TQ11",
+          "value": 10000.0
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 101,
+        "address": "0x82358798",
+        "callsite": "0x82358884",
+        "field_offset": "0x158",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld at 0x823652F0 gates per-region DrawText and applies Text clip distance.",
+      "scene_gate": "RenderWorld at 0x823652F0 gates per-region DrawText and applies Text clip distance.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x158 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ07 TQ07 alias TQ07"
+      ],
+      "positive_command": "set TQ07 TRUE",
+      "negative_command": "set TQ07 FALSE",
+      "restore_command": "set TQ07 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": true,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0008",
+      "alias": "TQ08",
+      "caption": "Render Trigger Ids",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Trigger Ids",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Trigger Ids",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        },
+        {
+          "alias": "TQ03",
+          "value": 7
+        },
+        {
+          "alias": "TQ07",
+          "value": true
+        },
+        {
+          "alias": "TQ10",
+          "value": 10000.0
+        },
+        {
+          "alias": "TQ11",
+          "value": 10000.0
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 102,
+        "address": "0x82358798",
+        "callsite": "0x82358898",
+        "field_offset": "0x159",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld at 0x8236534C appends region index and CgsID only inside enabled info text and text clip gate.",
+      "scene_gate": "RenderWorld at 0x8236534C appends region index and CgsID only inside enabled info text and text clip gate.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x159 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ08 TQ08 alias TQ08"
+      ],
+      "positive_command": "set TQ08 TRUE",
+      "negative_command": "set TQ08 FALSE",
+      "restore_command": "set TQ08 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": false,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0009",
+      "alias": "TQ09",
+      "caption": "Render Axis",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Render Axis",
+      "raw_readback_path": "/Triggers/Trigger Regions/Render Axis",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        },
+        {
+          "alias": "TQ03",
+          "value": 7
+        },
+        {
+          "alias": "TQ10",
+          "value": 10000.0
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 103,
+        "address": "0x82358798",
+        "callsite": "0x823588AC",
+        "field_offset": "0x15A",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld at 0x823652CC draws the selected region axis after the static geometry/type/clip filters.",
+      "scene_gate": "RenderWorld at 0x823652CC draws the selected region axis after the static geometry/type/clip filters.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x15A is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ09 TQ09 alias TQ09"
+      ],
+      "positive_command": "set TQ09 TRUE",
+      "negative_command": "set TQ09 FALSE",
+      "restore_command": "set TQ09 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": "35-61",
+        "value": false,
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0010",
+      "alias": "TQ10",
+      "caption": "Clip distance",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Clip distance",
+      "raw_readback_path": "/Triggers/Trigger Regions/Clip distance",
+      "type": "f32",
+      "source_default": 500.0,
+      "positive": 10000.0,
+      "negative": 10.0,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        },
+        {
+          "alias": "TQ03",
+          "value": 7
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 105,
+        "address": "0x82358798",
+        "callsite": "0x823588C4",
+        "field_offset": "0x144",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "f32*"
+      },
+      "ui": {
+        "step": 10.0,
+        "min": 10.0,
+        "max": 10000.0,
+        "range_note": "SetRange 10..10000"
+      },
+      "effect_witness": "RenderWorld squares this distance for region geometry, roaming locations, spawn locations and landmark start-position markers.",
+      "scene_gate": "RenderWorld squares this distance for region geometry, roaming locations, spawn locations and landmark start-position markers.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x144 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ10 TQ10 alias TQ10"
+      ],
+      "positive_command": "set TQ10 10000",
+      "negative_command": "set TQ10 10",
+      "restore_command": "set TQ10 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": 36,
+        "value": 500.0,
+        "bits": "43FA0000",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      },
+      "f32_baseline": {
+        "kind": "published_constructor_source_default_after_full_log_Debug.ini_absence_proof",
+        "source_default_text": "500",
+        "source_default_bits": "43FA0000",
+        "positive_bits": "461C4000",
+        "negative_bits": "41200000",
+        "native_readback_digits": 3,
+        "skip_if_proof_missing": true
+      }
+    },
+    {
+      "id": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate#0011",
+      "alias": "TQ11",
+      "caption": "Text clip distance",
+      "component": "Triggers/Trigger Regions",
+      "lookup_path": "Triggers/Trigger Regions/Text clip distance",
+      "raw_readback_path": "/Triggers/Trigger Regions/Text clip distance",
+      "type": "f32",
+      "source_default": 100.0,
+      "positive": 10000.0,
+      "negative": 10.0,
+      "restore_policy": "same-run captured typed baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TQ01",
+          "value": true
+        },
+        {
+          "alias": "TQ02",
+          "value": 2
+        },
+        {
+          "alias": "TQ03",
+          "value": 7
+        },
+        {
+          "alias": "TQ07",
+          "value": true
+        },
+        {
+          "alias": "TQ10",
+          "value": 10000.0
+        }
+      ],
+      "registration": {
+        "function": "BrnGameState::TriggerQueryManagerDebugComponent::OnActivate",
+        "source_path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "source_line": 106,
+        "address": "0x82358798",
+        "callsite": "0x823588DC",
+        "field_offset": "0x148",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82358798.json",
+        "artist_export_sha256": "9a921997355211a50640519a5729a845a4bfc33c3ee5a6c4dda78608ea1af89f",
+        "variant_type": "f32*"
+      },
+      "ui": {
+        "step": 10.0,
+        "min": 10.0,
+        "max": 10000.0,
+        "range_note": "SetRange 10..10000"
+      },
+      "effect_witness": "RenderWorld tests this squared distance only on the info-text branch; IDs are nested beneath it.",
+      "scene_gate": "RenderWorld tests this squared distance only on the info-text branch; IDs are nested beneath it.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld 0x82364E10; registered field offset 0x148 is loaded at its corresponding consumer branch.",
+      "raw_alias_triplet": [
+        "alias TQ11 TQ11 alias TQ11"
+      ],
+      "positive_command": "set TQ11 10000",
+      "negative_command": "set TQ11 10",
+      "restore_command": "set TQ11 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp",
+        "line": 38,
+        "value": 100.0,
+        "bits": "42C80000",
+        "source_git_blob": "5c5fbaab21f6c423a05d4613e96768c13e0036ff"
+      },
+      "f32_baseline": {
+        "kind": "published_constructor_source_default_after_full_log_Debug.ini_absence_proof",
+        "source_default_text": "100",
+        "source_default_bits": "42C80000",
+        "positive_bits": "461C4000",
+        "negative_bits": "41200000",
+        "native_readback_digits": 3,
+        "skip_if_proof_missing": true
+      }
+    },
+    {
+      "id": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate#0001",
+      "alias": "TE01",
+      "caption": "Render Triggers",
+      "component": "Triggers/Trigger Entities",
+      "lookup_path": "Triggers/Trigger Entities/Render Triggers",
+      "raw_readback_path": "/Triggers/Trigger Entities/Render Triggers",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after P/N and terminally; no assumed default",
+      "context_overrides": [],
+      "registration": {
+        "function": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate",
+        "source_path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "source_line": 63,
+        "address": "0x822A9018",
+        "callsite": "0x822A9038",
+        "field_offset": "0x1D",
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A9018.json",
+        "artist_export_sha256": "32cbfebe05288040e6fa9ab498fd152926c018d9f58e5881ee6dc22e7c7688fc",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld @0x822DA20C master gate exits before reading the used-trigger bitset.",
+      "scene_gate": "RenderWorld @0x822DA20C master gate exits before reading the used-trigger bitset.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld/RenderHUD reads field 0x1D in RenderWorld @0x822DA20C master gate exits before reading the used-trigger bitset.",
+      "raw_alias_triplet": [
+        "alias TE01 TE01 alias TE01"
+      ],
+      "positive_command": "set TE01 TRUE",
+      "negative_command": "set TE01 FALSE",
+      "restore_command": "set TE01 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "line": "42-47",
+        "value": true,
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2"
+      }
+    },
+    {
+      "id": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate#0002",
+      "alias": "TE02",
+      "caption": "Render Trigger Counts",
+      "component": "Triggers/Trigger Entities",
+      "lookup_path": "Triggers/Trigger Entities/Render Trigger Counts",
+      "raw_readback_path": "/Triggers/Trigger Entities/Render Trigger Counts",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TE01",
+          "value": true
+        }
+      ],
+      "registration": {
+        "function": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate",
+        "source_path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "source_line": 64,
+        "address": "0x822A9018",
+        "callsite": "0x822A904C",
+        "field_offset": "0x1C",
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A9018.json",
+        "artist_export_sha256": "32cbfebe05288040e6fa9ab498fd152926c018d9f58e5881ee6dc22e7c7688fc",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderHUD @0x822C4368 gates total/per-type HUD rows; requires active used-trigger data and RenderWorld counters for the total line.",
+      "scene_gate": "RenderHUD @0x822C4368 gates total/per-type HUD rows; requires active used-trigger data and RenderWorld counters for the total line.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld/RenderHUD reads field 0x1C in RenderHUD @0x822C4368 gates total/per-type HUD rows; requires active used-trigger data and RenderWorld counters for the total line.",
+      "raw_alias_triplet": [
+        "alias TE02 TE02 alias TE02"
+      ],
+      "positive_command": "set TE02 TRUE",
+      "negative_command": "set TE02 FALSE",
+      "restore_command": "set TE02 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "line": "42-47",
+        "value": true,
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2"
+      }
+    },
+    {
+      "id": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate#0003",
+      "alias": "TE03",
+      "caption": "Draw Plane Segment Triggers",
+      "component": "Triggers/Trigger Entities",
+      "lookup_path": "Triggers/Trigger Entities/Draw Plane Segment Triggers",
+      "raw_readback_path": "/Triggers/Trigger Entities/Draw Plane Segment Triggers",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TE01",
+          "value": true
+        }
+      ],
+      "registration": {
+        "function": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate",
+        "source_path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "source_line": 65,
+        "address": "0x822A9018",
+        "callsite": "0x822A9060",
+        "field_offset": "0x1E",
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A9018.json",
+        "artist_export_sha256": "32cbfebe05288040e6fa9ab498fd152926c018d9f58e5881ee6dc22e7c7688fc",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld @0x822DA21C type flag gates used-trigger entries whose meType is PLANE_SEGMENT.",
+      "scene_gate": "RenderWorld @0x822DA21C type flag gates used-trigger entries whose meType is PLANE_SEGMENT.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld/RenderHUD reads field 0x1E in RenderWorld @0x822DA21C type flag gates used-trigger entries whose meType is PLANE_SEGMENT.",
+      "raw_alias_triplet": [
+        "alias TE03 TE03 alias TE03"
+      ],
+      "positive_command": "set TE03 TRUE",
+      "negative_command": "set TE03 FALSE",
+      "restore_command": "set TE03 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "line": "42-47",
+        "value": true,
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2"
+      }
+    },
+    {
+      "id": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate#0004",
+      "alias": "TE04",
+      "caption": "Draw Sphere Triggers",
+      "component": "Triggers/Trigger Entities",
+      "lookup_path": "Triggers/Trigger Entities/Draw Sphere Triggers",
+      "raw_readback_path": "/Triggers/Trigger Entities/Draw Sphere Triggers",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TE01",
+          "value": true
+        }
+      ],
+      "registration": {
+        "function": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate",
+        "source_path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "source_line": 66,
+        "address": "0x822A9018",
+        "callsite": "0x822A9074",
+        "field_offset": "0x1F",
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A9018.json",
+        "artist_export_sha256": "32cbfebe05288040e6fa9ab498fd152926c018d9f58e5881ee6dc22e7c7688fc",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld type dispatch @0x822DA42C/0x822DA4D0 draws active sphere triggers when this flag is set.",
+      "scene_gate": "RenderWorld type dispatch @0x822DA42C/0x822DA4D0 draws active sphere triggers when this flag is set.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld/RenderHUD reads field 0x1F in RenderWorld type dispatch @0x822DA42C/0x822DA4D0 draws active sphere triggers when this flag is set.",
+      "raw_alias_triplet": [
+        "alias TE04 TE04 alias TE04"
+      ],
+      "positive_command": "set TE04 TRUE",
+      "negative_command": "set TE04 FALSE",
+      "restore_command": "set TE04 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "line": "42-47",
+        "value": true,
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2"
+      }
+    },
+    {
+      "id": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate#0005",
+      "alias": "TE05",
+      "caption": "Draw Box Triggers",
+      "component": "Triggers/Trigger Entities",
+      "lookup_path": "Triggers/Trigger Entities/Draw Box Triggers",
+      "raw_readback_path": "/Triggers/Trigger Entities/Draw Box Triggers",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after P/N and terminally; no assumed default",
+      "context_overrides": [
+        {
+          "alias": "TE01",
+          "value": true
+        }
+      ],
+      "registration": {
+        "function": "BrnWorld::TriggerEntityModuleDebugComponent::OnActivate",
+        "source_path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "source_line": 67,
+        "address": "0x822A9018",
+        "callsite": "0x822A9088",
+        "field_offset": "0x20",
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x822A9018.json",
+        "artist_export_sha256": "32cbfebe05288040e6fa9ab498fd152926c018d9f58e5881ee6dc22e7c7688fc",
+        "variant_type": "bool*"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "Boolean"
+      },
+      "effect_witness": "RenderWorld box branch @0x822DA4A8/0x822DA544 draws active E_TRIGGERTYPE_BOX entries; plane-segment geometry is gated by TE03.",
+      "scene_gate": "RenderWorld box branch @0x822DA4A8/0x822DA544 draws active E_TRIGGERTYPE_BOX entries; plane-segment geometry is gated by TE03.",
+      "artist_consumer_direct_witness": "ARTIST RenderWorld/RenderHUD reads field 0x20 in RenderWorld type dispatch @0x822DA42C/0x822DA4A8/0x822DA544 draws active box/plane triggers when this flag is set.",
+      "raw_alias_triplet": [
+        "alias TE05 TE05 alias TE05"
+      ],
+      "positive_command": "set TE05 TRUE",
+      "negative_command": "set TE05 FALSE",
+      "restore_command": "set TE05 {captured natural baseline",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "path_attestation": "trigger_component",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp",
+        "line": "42-47",
+        "value": true,
+        "source_git_blob": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2"
+      }
+    }
+  ],
+  "context_aliases": [],
+  "enum_tables": {
+    "TQ02": {
+      "type": "s32",
+      "range": [
+        0,
+        4
+      ],
+      "options": [
+        "Landmark",
+        "Blackspot",
+        "GenericRegion",
+        "VFXBoxRegion",
+        "All"
+      ],
+      "source_values": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "positive": "2 GenericRegion",
+      "negative": "0 Landmark",
+      "restore": "4 All"
+    },
+    "TQ03": {
+      "type": "s32",
+      "range": [
+        0,
+        32
+      ],
+      "options": [
+        "Junkyard",
+        "GasStation",
+        "BodyShop",
+        "PaintShop",
+        "CarPark",
+        "SignatureTakedown",
+        "KillzoneTrigger",
+        "Stunt",
+        "StuntProp",
+        "SignatureCrash",
+        "SignatureCrashCamera",
+        "RoadLimit",
+        "OverDriveBoost",
+        "OverDriveStrength",
+        "OverDriveSpeed",
+        "OverDriveControl",
+        "TireShop",
+        "TuningShop",
+        "PictureParadise",
+        "Tunnel",
+        "Overpass",
+        "Bridge",
+        "Warehouse",
+        "LargeOverheadobject",
+        "NarrowAlley",
+        "Pass Tunnel",
+        "Pass Overpass",
+        "Pass Bridge",
+        "Pass Warehouse",
+        "Pass LargeOverheadobject",
+        "Pass NarrowAlley",
+        "Ramp",
+        "All"
+      ],
+      "positive": "7 Stunt = E_TYPE_JUMP",
+      "negative": "6 KillzoneTrigger",
+      "restore": "32 All"
+    }
+  },
+  "raw_frame_budget": {
+    "natural_baseline": 1,
+    "target_p_n_restore": 48,
+    "terminal_restore": 1,
+    "post_restore_verification": 1,
+    "maximum_planned": 51,
+    "headroom": 1,
+    "width": 1280,
+    "height": 720,
+    "max_bytes_each": 3686454,
+    "max_frames": 52,
+    "includes_terminal": true,
+    "includes_optional_anchor_seed": false
+  },
+  "capture_contract": {
+    "sequence": "DRIVING/current-save proof; one natural baseline; 16 isolated P/N/captured-restore triplets; terminal restore; post-restore readback",
+    "readback": "full-path alias/value/path triplets for all16 declared fields and contexts at every phase; enum raw labels are separately retained",
+    "restore": "same-run captured typed baseline; source-default f32 baseline only after full-log Debug.ini absence and display proof",
+    "effect_credit": "zero until independent review accepts attributed scene pixels/logs and original consumer witness",
+    "absent_scene": "record missing scene/producer condition; never infer original no-op",
+    "dimensions": "1280x720",
+    "max_bmp_bytes": 3686454,
+    "no_field_flip_as_effect": true,
+    "includes_terminal_in_budget": true,
+    "includes_optional_anchor_seed": false
+  },
+  "probe_contract": {
+    "jump_dump": "BRN_JUMP_DUMP=1 logs first24 E_TYPE_JUMP generic-region indices/positions/dimensions plus total; no ID and no guaranteed target row",
+    "target_id": "TriggerData index4413 / CgsID 355882 from pinned prior SCENE.json; debug Render Trigger Ids is a separate live pixel witness",
+    "survey": "48-seat reverse-grid run covered lower surfaces only and earned zero camera credit",
+    "review_rule": "Static asset/field changes, jump-dump rows, absent pixels, no camera hit, unchanged view or missing context are insufficient; never infer original no-op.",
+    "candidate_test_seat": "Optional attempt at -301.309601,20.007740,1156.719654,247.004511 from prior pinned jump scenario; not validated camera coverage or current scene consumer",
+    "phase_producer": "BRN_JUMP_DUMP is emitted once when TriggerData loads, lists only first24 E_TYPE_JUMP indices/positions/dimensions with no CgsID. No existing per-phase trigger draw/receiver producer is assumed."
+  },
+  "path_attestation": {
+    "source_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+    "source_blob_ids": {
+      "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.cpp": "5c5fbaab21f6c423a05d4613e96768c13e0036ff",
+      "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent_RenderWorld.cpp": "6593c38c29b738f028115fc52b33da5d334ab952",
+      "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManagerDebugComponent.h": "5a49403fd1200fb9228b1c382f96b7f42dacb75b",
+      "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManager_Prepare.cpp": "73848ada456df981a22ff30b39281c0da124d497",
+      "src/GameSource/GameState/TriggerQueryManager/BrnTriggerQueryManager.h": "ab035c07721553c1be89f47f18f4278c86cac5f0",
+      "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.cpp": "d1c4e24b9ab0e7762b0e22ba911d08ed8624fac2",
+      "src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleDebugComponent.h": "12938ad045f7a83f2d8cc2ec273743bcdbe28b02",
+      "src/GameSource/World/Trigger/BrnTriggerEntityModule.cpp": "f463f95708041e6b7a9fdb32b50a760e16e3b512",
+      "src/GameSource/World/Trigger/BrnTriggerEntityModule.h": "4baaba4e845bfb1f32cae281f3f7aae12c6398cb",
+      "src/GameSource/Game/BrnGameModule.cpp": "46e250532b8afdeae36c1242efc2482bf833652e",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp": "4ee38f2d55214932e8dc227eaaab3951494d1b00",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp": "e42e9c080a70bca0d00166997c2704df2208dfbd",
+      "src/SharedClasses/Trigger/BrnGenericRegion.h": "d4da59bfbb89cd5915a2844636629cf370008f75",
+      "src/SharedClasses/Trigger/BrnGenericRegion.cpp": "179b827f89ff99b2133173c78be3ba91c2d6ff87",
+      "src/SharedClasses/Trigger/BrnTriggerData.h": "eeff7520ab54ad4815348c65942da01a1c93b5ff",
+      "src/SharedClasses/Trigger/BrnTriggerData.cpp": "cf8f4fa667ded753c4620d68d8395ff25909f832",
+      "src/GameSource/GameState/TriggerQueryManager/CMakeLists.txt": "55290df2e89e92070f60716216e0d562704fb100"
+    },
+    "component_path_rule": "DebugComponent GetComponentPath = GetPath + \"/\" + GetName; both use GetPath Triggers and names Trigger Regions / Trigger Entities",
+    "source_authority": "only git blobs at pinned ca802; never shared dirty RendererModule/WorldModule posts"
+  },
+  "runner_policy": {
+    "concurrency": "AllowConcurrentGames=true; maximum one exact Root-private sibling game under scratch/DEBUG_MENU_1011, separately verified by per-sample PID/path/start-time ledger",
+    "fixture": "Latest copied v4 profile snapshot. Root launcher reads normal Profile.sav once, read-only, requires exact pinned fixture SHA and copies matching bytes into private slot 62206; retry03 runner/driver use only the private profile.",
+    "stop": "no End or global stop; exact PID/slot/start-time PhaseDone and actual flow_status.phase_collection_stop_requested",
+    "limits": "51 planned, 52 hard max raw frames; 1280x720; 3,686,454 BMP cap; MaxSeconds=420; MaxLogMB=48",
+    "credit": "site/behavior credit remains zero for all16"
+  },
+  "enum_readback": {
+    "source": "X360 ARTIST 0x82822FC0 plus original Variable::GetValueAsString and Construct option tables",
+    "rule": "enum GetValueAsString displays the StringList label; checker maps exact option label to miValue/index and stores both display label and canonical s32; numeric or unknown enum display is rejected"
+  }
+}
