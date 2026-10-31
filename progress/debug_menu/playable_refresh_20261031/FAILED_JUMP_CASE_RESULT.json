@@ -1,0 +1,58 @@
+{
+  "bug": "Observe genuine backward jump355882 through the native enabled producer and camera chain",
+  "checks": [
+    {
+      "kind": "TerminalFlow",
+      "name": "original strict flow completed and owned game exited",
+      "pass": true,
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True"
+    },
+    {
+      "kind": "Mark",
+      "name": "DRIVING",
+      "pass": true,
+      "detail": "final phase DRIVING, want DRIVING"
+    },
+    {
+      "kind": "NewAsserts",
+      "name": "no new assertions",
+      "pass": true,
+      "detail": "0 assert family(ies), all known (0 lines)"
+    },
+    {
+      "kind": "LogCount",
+      "name": "no exceptions",
+      "pass": true,
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]"
+    },
+    {
+      "kind": "Script",
+      "name": "actual physical producer and attributed camera chain",
+      "pass": false,
+      "detail": "missing raw chain/capture receipt; pending native evidence"
+    }
+  ],
+  "area": "director",
+  "as_expected": false,
+  "asserts": 0,
+  "case": "player_jump_disabled_62195",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_native_scenario_20261031\\adapter_v2\\runs\\disabled",
+  "slot": 62195,
+  "phase": "DRIVING",
+  "flow_exit": 0,
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_native_scenario_20261031\\adapter_v2\\Case.ps1",
+  "label": "player-jump disabled; no automatic site credit",
+  "when": "2026-10-31T19:29:42.7817899+01:00",
+  "expected": "PASS",
+  "verdict": "FAIL",
+  "provenance": {
+    "exe_b5": "ca802777+dirty",
+    "exe_sha": "f2d88446c626",
+    "b5_head": "ca8027774",
+    "parent_head": "71be01e0c",
+    "exe_size": 11778048,
+    "exe_mtime_before_lock": "2026-10-31T19:26:00.9239478+01:00",
+    "b5_dirty": 4,
+    "exe_mtime": "2026-10-31T19:26:00.9239478+01:00"
+  }
+}
