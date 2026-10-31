@@ -1,21 +1,23 @@
 # Debug-menu behavior campaign
 
-**October31 Scene/Director:** seven additional bounded native outcomes are accepted: the triangle-test gate, padding draw/radius, TriZ response, cached triangles/spheres and moment diagnostic-output gate. The28-control aggregate remains FAIL;21 controls need their actual producer/scene or visible consumer. Captured P/N/restore, original source and the87-frame archive are reviewed. [Decision and limits](scene28_native_20261031/ROOT_DECISION.json), [combined review](scene28_native_20261031/REVIEW.md).
+**October 31 Scene/Director:** seven additional bounded native outcomes are accepted: the triangle-test gate, padding draw/radius, TriZ response, cached triangles/spheres and moment diagnostic-output gate. The 28-control aggregate remains FAIL; 21 controls need their actual producer/scene or visible consumer. Captured P/N/restore, original source and the 87-frame archive are reviewed. [Decision and limits](scene28_native_20261031/ROOT_DECISION.json), [combined review](scene28_native_20261031/REVIEW.md).
 
-**October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof and the playable-build refresh remain pending. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
+**October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof remains pending; the clean playable build is refreshed below. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
 
 Match every entry to ARTIST, including authentic no-ops and broken leftovers.
 Recovery, integration, review and behavior checks remain active.
 
 ## Playable build
 
-**Installed: 39b62961b592** (SHA-256 39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da), from B5 dev 3f4f9c06 and clean build workflow 38a0ec83. Launch build/game/Burnout_PC.exe. This includes the native SatNav payload-size repair. [Evidence, reviews and remaining visual check](minimap_native_payload_20261030/README.md).
+**Installed: 052112a5aa52** (SHA-256 052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52), from B5 dev ca8027774 and clean workflow 71be01e0c. Launch build/game/Burnout_PC.exe. This includes the reviewed jump-filming recovery, the SatNav payload repair and current upstream fixes. Enabled-jump native proof remains pending. [Build, native and install evidence](playable_refresh_20261031/README.md).
 
-The clean 3,019-TU build passed. Private slot 62188 passed 12 startup, current-save and driving checks with 234.667 m travel, one gameplay wreck and zero asserts or exceptions. The exact tested payload is installed, with 21 save/config/log hashes preserved. The normal live-user profile was not used for a delivery launch. The earlier Source45 EA/Criterion-video baseline remains [in its historical evidence](source45_playable_20261030/README.md).
+The full 3,019-TU build passed with zero errors and 86 warnings outside the recovered jump code. Private slot 62199 passed 12 startup/current-save/driving checks with 235.1 m travel, one gameplay wreck and zero assertions/exceptions. EA/Criterion completed without SkipIntro; five attributed gameplay captures and exact owned cleanup pass. All 15 installed payload hashes, 21 save/config/log files and shared WIP are verified. The normal live-user profile was not used for a delivery launch.
 
 The paired native event experiment proves the repaired field forwarding. Its screenshot timing check remains FAIL, and complete visual minimap repair remains UNVERIFIED. Audio, physical controllers, online/long-session behavior, full menus and complete gameplay are not certified by this baseline.
 
 ## Campaign counts
+
+**October 31 additional cleanup:** 4,932 more old capture files were removed; 1,655 evidence frames were first losslessly archived and verified. Net free-space gain was 8.617 GB. [Receipt](scratch_frame_cleanup_20261031.json).
 
 **October 31 cleanup:** 7,673 historical scratch frames deleted, about 30 GB recovered. Current minimap originals, recent captures, representative historical frames, logs and contact sheets were retained. [Cleanup ledger](frame_cleanup_20261031/README.md).
 
