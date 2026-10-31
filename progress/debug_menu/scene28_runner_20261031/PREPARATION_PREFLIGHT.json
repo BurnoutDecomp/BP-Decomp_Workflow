@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "pass": true,
+  "mode": "preparation_read_only",
+  "checks": [
+    {
+      "name": "v2_artifact_hash_pins",
+      "pass": true,
+      "detail": "All v2 source and metadata files match their SHA-256 pins, and the pin list covers the complete package except the pin file and recursive hash manifest."
+    },
+    {
+      "name": "batch_size",
+      "pass": true,
+      "detail": "28 pending targets are retained."
+    },
+    {
+      "name": "declared_aliases",
+      "pass": true,
+      "detail": "30 unique target/context aliases."
+    },
+    {
+      "name": "context_alias_contract",
+      "pass": true,
+      "detail": "Every temporary context uses a plain declared alias and Boolean value, including the restore-map inputs."
+    },
+    {
+      "name": "typed_f32_values",
+      "pass": true,
+      "detail": "Every f32 source default and probe is finite and has a matching exact IEEE-754 single bit pin."
+    },
+    {
+      "name": "scene_padding_step",
+      "pass": true,
+      "detail": "SC08 negative delta is -1 registered 0.25 steps."
+    },
+    {
+      "name": "unique_phase_namespace",
+      "pass": true,
+      "detail": "Family/alias/state receipt names are unique; count=89"
+    },
+    {
+      "name": "complete_command_frame_receipt_namespace",
+      "pass": true,
+      "detail": "All planned phase command files, numbered frame files and fixed run receipts are path-unique; count=190"
+    },
+    {
+      "name": "bounded_frame_plan",
+      "pass": true,
+      "detail": "1 natural + 1 optional SC02 seed + 28*3 target phases + terminal + post-restore = 88 maximum; cap 90; 1280x720; 3686454 bytes each."
+    },
+    {
+      "name": "concurrency_policy",
+      "pass": true,
+      "detail": "The private strict run disables the unsupported concurrency opt-in, supplies no invalid zero limit, and injects no jump action."
+    },
+    {
+      "name": "zero_site_credit",
+      "pass": true,
+      "detail": "All 28 targets remain pending with zero site and behavior credit."
+    },
+    {
+      "name": "e14_known_source_blocker",
+      "pass": true,
+      "detail": "E14 remains a pending field target with an explicit published-source PC trap/assert blocker, not a no-op disposition."
+    },
+    {
+      "name": "private_fixture_pin",
+      "pass": true,
+      "detail": "External read-only profile snapshot SHA-256=4e4526ed40c8fa57f1100503351c68285f9eba69421e4bdab1bb8ce63ec3a23c"
+    },
+    {
+      "name": "no_live_log_binding",
+      "pass": true,
+      "detail": "The expected progress gate compares the private fixture run only; the archived normal log hash is not a live-run invariant."
+    },
+    {
+      "name": "pinned_event_capable_runner",
+      "pass": true,
+      "detail": "Exact private run_case/flow_run hashes and supporting dot-sourced helpers match; flow_run creates, polls and validates the PID/slot/start-time event."
+    },
+    {
+      "name": "text_only_package",
+      "pass": true,
+      "detail": "No binaries, profile files, or asset files were copied into the v2 package."
+    },
+    {
+      "name": "all_file_hash_manifest",
+      "pass": true,
+      "detail": "The SHA-256 manifest covers every v2 package file except itself and every listed hash matches."
+    },
+    {
+      "name": "no_actual_staging",
+      "pass": true,
+      "detail": "Only STAGING.TEMPLATE.json exists; this prep created no actual stage manifest."
+    }
+  ],
+  "problems": [],
+  "site_credit": 0,
+  "native_run_performed": false,
+  "files_inspected": 23
+}

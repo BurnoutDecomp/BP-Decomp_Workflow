@@ -1,0 +1,1836 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-31T14:13:27.203668+00:00",
+  "verdict": "fail",
+  "verdict_line": "VERDICT: fail",
+  "readiness": "not_ready_for_native_run",
+  "review_scope": "One combined read-only review of all 28 controls and the actual draft scripts; no native behavior verdicts.",
+  "candidate": {
+    "b5_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "workflow_main": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+    "build_receipt_sha256": "bfa1c512b4b9585a7eb8564017e2739f11cb55fbcaac129a007d03eda3b606c1",
+    "map_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f"
+  },
+  "slot": 62190,
+  "controls_reviewed": 28,
+  "native_run_performed": false,
+  "frames_reviewed": 0,
+  "site_credit": 0,
+  "canonical_verdicts_changed": false,
+  "builds_performed": false,
+  "source_mutations": false,
+  "profile_mutations": false,
+  "git_mutations": false,
+  "input_sha256": {
+    "Capture.ps1": "4d5eb1bb7481a099f9ab0c83b7b93775d98ae7601bf1daabd9871157cd5d3901",
+    "Case.ps1": "ec696287037e99d2dd3f80a129895c98e630bad5add3553d523651fdb7557021",
+    "CONTROL_MATRIX.md": "6d900315dc248b615e37f0adf502b2f215ca223b87214c93867e5c2a3dd9fa9e",
+    "CURRENT_SAVE_EXPECTED_PROGRESS.json": "770b44ec0f141e1d5a8d787aa98cda8b05ba96e84b15c6eb1019ab2bda916be7",
+    "CurrentSaveProgress.ps1": "c51a125e2dab504ecd5656e01eab1108393c8bdb0e4fb6cbc12cd1efcc45ff8f",
+    "Driver.Helpers.ps1": "4148286eb92ceb6cf29f22a6b30e9f88b6b60093f95fd7ae67db8606e70377ad",
+    "Driver.ps1": "aaf3c386bea2e5d3438cc8278a428e1e1ba9ee00260e6e134590b0c77cf5c8f9",
+    "HELPER_EXTRACTION.json": "56a62c00b71f2e1b2c2297f5f596508ed50b6ec15fc794600ded6c81dea00d94",
+    "PATH_ATTESTATION.md": "07b18c55b66e0f874e77de59d7fa48b89e4c6c46155e47aae16ac220cb2536aa",
+    "PathGuards.ps1": "c2cd836976d14b1ebf46b24da79e1f0a713590f17e1ef56a1e14e2d95f6190ad",
+    "README.md": "07f22f85afdcd0b5ec4dd8503cad832dec82cef92ce5154afe51f6ca53045063",
+    "RECONCILIATION.json": "ffed139c6d7b66af0367e18aa1fed38a5f3f14d824097daff471f4602a3b8994",
+    "Request-HarnessPhaseDone.ps1": "8889e750914804defcce316410ae6cbb2e19d571a864437d3c4f03dfa9f52c39",
+    "REVIEW_PACKET.md": "67c1f5e32e2401d03c2dfbf04b016ac1c07c5990ab2b4523c4df08088648c2b0",
+    "RUNTIME_GATES.md": "49cdb4c9c2b72014d80e9b5d4a638dfe20de06a4ef881df1ad97a3f928eced95",
+    "SCOPE.json": "ba13c29f56f003a95a001fcaf7ae94b670e2f3ccc37f0d8dcfe516963144aae5",
+    "SOURCE_PINS.json": "8647b9560da5010e911ffbb9793bff4bf8661edbeb7955c82f92d4ecfbc80941",
+    "STAGING.TEMPLATE.json": "f46916fff38751aecd23580aedbde2414ebfe672cad54a3d3d106ea64f1407a9"
+  },
+  "additional_published_source_blobs": {
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp": "f99467327f036dcdf1b117ab7a7c6af41c7b33e6",
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/ScriptInterface/CgsScriptInterface.cpp": "d891abb03ae349161bbdb486037c08eb37161347",
+    "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp": "d45b01607594efa4dc67959f6ccf250e8f5fb674",
+    "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerStunt.cpp": "ad009035a503a6622ad53bf16b2fd0b059ae39c9",
+    "src/GameSource/Director/MomentController/Moments/BrnMomentHardStop.cpp": "38966c74fb9722c45910b14c0a3d8084e09f296c",
+    "src/GameSource/Director/MomentController/BrnMomentSharedInfo.cpp": "59e795997d1a03f3957924bcaca55decabd72585"
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "priority": 1,
+      "title": "The case sets an invalid concurrency limit and is rejected before launch",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "Case.ps1",
+          "line_start": 30,
+          "line_end": 32
+        },
+        {
+          "file": "tools/tests/run_case.ps1",
+          "line_start": 80,
+          "line_end": 84,
+          "repository": "workflow",
+          "commit": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b"
+        },
+        {
+          "file": "tools/diagnostics/flow_run.ps1",
+          "line_start": 380,
+          "line_end": 380,
+          "repository": "workflow",
+          "commit": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b"
+        }
+      ],
+      "evidence": "Run.MaxConcurrentOtherGames is 0. The pinned run_case rejects limits outside 1..100, and flow_run has ValidateRange(1,100). No reviewed command-line override is supplied.",
+      "impact": "The stated runner exits with code 2 before Setup or native evidence capture.",
+      "action": "For the intended zero-other-game policy, disable AllowConcurrentGames and remove the invalid 0 override while retaining strict ownership. If a different concurrency policy is intended, supply a valid reviewed limit and state that policy explicitly."
+    },
+    {
+      "id": "R2",
+      "priority": 1,
+      "title": "Ten controls have context aliases that cannot resolve",
+      "affected_aliases": [
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08"
+      ],
+      "locations": [
+        {
+          "file": "SCOPE.json",
+          "line_start": 131,
+          "line_end": 135
+        },
+        {
+          "file": "SCOPE.json",
+          "line_start": 401,
+          "line_end": 409
+        },
+        {
+          "file": "SCOPE.json",
+          "line_start": 624,
+          "line_end": 628
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 52,
+          "line_end": 60
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 101,
+          "line_end": 104
+        }
+      ],
+      "evidence": "Eleven context records use SC02=true, SC03=true or SH02=true as override.alias. Captured baseline keys and native aliases are SC02, SC03 and SH02. Get-PhaseCommands requires override.alias in baseline.Keys and constructs set commands from it literally.",
+      "impact": "The first SC03 positive phase throws missing captured context baseline SC02=true. Fixing only the membership check would emit an invalid alias and still break captured-value restoration.",
+      "action": "Store plain alias names in context_overrides and retain the Boolean in value. Validate every context alias against the 30 declared aliases before any native setter, including the emergency restore map."
+    },
+    {
+      "id": "R3",
+      "priority": 1,
+      "title": "Numeric-only phase names collide across the three families",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "Driver.ps1",
+          "line_start": 87,
+          "line_end": 89
+        },
+        {
+          "file": "Driver.Helpers.ps1",
+          "line_start": 142,
+          "line_end": 144
+        }
+      ],
+      "evidence": "Get-PhaseName discards the qualified ID prefix. Duplicate suffix groups are 0002 SC02/SH02, 0003 SC03/SH03, 0004 SC04/SH04, 0006 SC06/SH06, and 0008 SC08/SH08/E08. The 84 target phases produce only 66 unique receipt names.",
+      "impact": "After the context records are corrected, SH02 attempts phase_0002_positive.cfg, which already belongs to SC02, and Execute refuses the overwrite before its setter. The complete batch cannot finish.",
+      "action": "Use the unique alias or a filesystem-safe full ID in phase names, and check uniqueness of the complete planned command/frame receipt namespace before launch."
+    },
+    {
+      "id": "R4",
+      "priority": 1,
+      "title": "The completion-event requester has no producer in the pinned harness",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "Request-HarnessPhaseDone.ps1",
+          "line_start": 59,
+          "line_end": 61
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 238,
+          "line_end": 240
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 242,
+          "line_end": 269
+        },
+        {
+          "file": "SOURCE_PINS.json",
+          "line_start": 113,
+          "line_end": 134
+        }
+      ],
+      "evidence": "The requester opens Local\\BurnoutPC_HarnessPhaseDone_<pid>_<slot>_<startTicks>. No supplied draft creates this event. The exact pinned a6e4457 flow_run/run_case helpers and tools tree contain no PhaseDone or BurnoutPC_HarnessPhaseDone producer; the pinned B5 source has none either.",
+      "impact": "With the declared helper binding, OpenExisting fails even after successful capture. Driver catch then saves status=fail over the success result, and the harness lacks the claimed early completion request.",
+      "action": "Bind the actual compatible harness or wrapper that creates and polls this PID/slot/start-time event, include it in the review and hash pins, and use its exact stop contract. Preserve ownership checks and avoid a global input or process-stop substitute."
+    },
+    {
+      "id": "R5",
+      "priority": 2,
+      "title": "The reviewed Case.ps1 is not the Case.ps1 recorded in SOURCE_PINS",
+      "affected_aliases": [
+        "SC01",
+        "SC02",
+        "SC03",
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "SC09",
+        "SC10",
+        "SH02",
+        "SH03",
+        "SH04",
+        "SH06",
+        "SH08",
+        "E08",
+        "E14",
+        "E15",
+        "E16",
+        "E18",
+        "E19",
+        "E22",
+        "E23",
+        "E26",
+        "E43",
+        "E44",
+        "E45",
+        "E54"
+      ],
+      "locations": [
+        {
+          "file": "SOURCE_PINS.json",
+          "line_start": 148,
+          "line_end": 148
+        },
+        {
+          "file": "Case.ps1",
+          "line_start": 1,
+          "line_end": 125
+        }
+      ],
+      "evidence": "SOURCE_PINS records 174361320e6e2e25cf6c881b16bde846c88789612b07009823f5fac8398353cc for Case.ps1. The actual reviewed bytes hash to ec696287037e99d2dd3f80a129895c98e630bad5add3553d523651fdb7557021. The other seven copied helper hashes match.",
+      "impact": "The package cannot identify its actual reviewed runner through its own manifest.",
+      "action": "After deliberate fixes, refresh the hash of the actual final Case.ps1 and any other changed packet files; preserve a review manifest for the final bytes and reject mismatches before launch."
+    },
+    {
+      "id": "R6",
+      "priority": 2,
+      "title": "Rounded Scene readbacks do not prove an exact same-run float baseline",
+      "affected_aliases": [
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08"
+      ],
+      "locations": [
+        {
+          "file": "Driver.ps1",
+          "line_start": 41,
+          "line_end": 50
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 185,
+          "line_end": 208
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 107,
+          "line_end": 108
+        },
+        {
+          "file": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp",
+          "line_start": 132,
+          "line_end": 147,
+          "repository": "b5-decomp",
+          "commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b"
+        },
+        {
+          "file": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp",
+          "line_start": 52,
+          "line_end": 78,
+          "repository": "b5-decomp",
+          "commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b"
+        }
+      ],
+      "evidence": "Variant::ConvertToString renders floats with %.3f. Test-RestorableBaseline compares that rounded display to the source default, then restores the same display string. For example TriX=0.0004 displays 0.000, passes the default-0 check, and is restored to 0.0; scale 1.0004 and padding 0.3004 have the same defect. Published source also supports typed INI overrides, so fresh process construction alone does not establish the assumed exact value.",
+      "impact": "The driver can report terminal_restore_verified while changing the natural f32 bits. Unlike the clipping controls, the Scene floats have no exact baseline read.",
+      "action": "Capture and verify actual f32 bits for these five fields, or establish an independently checked exact fresh-default provenance before mutation. Otherwise skip those fields without writing. A rounded default comparison alone must not authorize a write."
+    },
+    {
+      "id": "R7",
+      "priority": 2,
+      "title": "A NaN float readback bypasses the mutation and restore comparison",
+      "affected_aliases": [
+        "SC04",
+        "SC05",
+        "SC06",
+        "SC07",
+        "SC08",
+        "E43",
+        "E44",
+        "E45"
+      ],
+      "locations": [
+        {
+          "file": "Driver.Helpers.ps1",
+          "line_start": 122,
+          "line_end": 125
+        },
+        {
+          "file": "Driver.Helpers.ps1",
+          "line_start": 148,
+          "line_end": 152
+        },
+        {
+          "file": "Driver.ps1",
+          "line_start": 193,
+          "line_end": 198
+        }
+      ],
+      "evidence": "Read-Values does not parse or validate f32 values; it assigns an unused NaN variable. Execute accepts a parsed actual NaN because Abs(want-NaN) > tolerance is false, so its compound mismatch condition is false. The clip baseline display comparison has the same NaN comparison shape.",
+      "impact": "A finite requested value can receive a successful phase/restore receipt despite a non-finite native value string.",
+      "action": "Require invariant-culture numeric parsing and IsFinite-equivalent checks on every f32 raw readback before comparison or baseline acceptance. Reject NaN and infinities explicitly; retain the independent exact-bit restore checks."
+    },
+    {
+      "id": "R8",
+      "priority": 2,
+      "title": "E14 has a known downstream implementation gap, beyond an unobserved jump scene",
+      "affected_aliases": [
+        "E14"
+      ],
+      "locations": [
+        {
+          "file": "RUNTIME_GATES.md",
+          "line_start": 37,
+          "line_end": 45
+        },
+        {
+          "file": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+          "line_start": 178,
+          "line_end": 190,
+          "repository": "b5-decomp",
+          "commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+          "blob": "d45b01607594efa4dc67959f6ccf250e8f5fb674"
+        },
+        {
+          "file": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+          "line_start": 480,
+          "line_end": 494,
+          "repository": "b5-decomp",
+          "commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b"
+        }
+      ],
+      "evidence": "Published 3f MomentPlayerJumping checks jump-action, can-use-slomo and mbAllowJumpMoment, then calls PrepareCameras and asserts success. BehaviourCollection::Prepare calls PlayerJumpingTrap and returns false. The packet pins the common UpdateMoments/UpdateAllMoments handoff, but omits this known terminal consumer gap.",
+      "impact": "A genuine eligible E14 jump attempt can reach an existing PC trap/assert. A field P/N run cannot establish working jump-moment behavior on this source.",
+      "action": "Pin the terminal jump consumer and record E14 as pending with a known implementation blocker. Keep its mutation-only evidence separate; do not attempt to award behavior credit until the filming closure is implemented and the relevant native scenario is witnessed."
+    }
+  ],
+  "notes": [
+    {
+      "id": "N1",
+      "kind": "control_values",
+      "text": "All eight f32 probes are finite, and the selected Source41/ARTIST registrations have the listed steps with no explicit SetRange. SC08 negative=0.0 is -1.2 increments from its source default 0.3 at step 0.25, so the blanket claim that every probe follows default-relative increments is false. An explicit typed SET can still accept 0.0; either document that route or choose a default-relative step value such as 0.05."
+    },
+    {
+      "id": "N2",
+      "kind": "live_gates",
+      "text": "RUNTIME_GATES lists source conditions but Driver eligibility checks only baseline restorability. Case throttle input ends at 10 seconds, while Driver waits 12 seconds after its speed witness before setup. There are no phase-local jump/stunt/hard-stop/crash/boost attempts or camera-cycle/close-object/landmark gates. E43 explicitly has no pinned producer for bit 0x10000. Treat every missing producer, empty cache, absent shadow receiver or unobserved consumer as pending; no no-op or behavior credit follows from this run plan."
+    },
+    {
+      "id": "N3",
+      "kind": "triangle_anchor",
+      "text": "SC02 requires a false interval to seed the camera anchor. The draft captures an arbitrary natural Boolean baseline and does not require SC02=false before its first positive capture. Require that baseline or account for an explicit seed/restore phase before interpreting the first SC02 positive image."
+    },
+    {
+      "id": "N4",
+      "kind": "capture_budget",
+      "text": "The nominal budget is valid: 1 natural + 28*3 target + 1 terminal + 1 post-restore = 87, below 90. Capture-PhaseRaw rejects a 91st requested frame; Assert-NativeBatchFrame and Complete-NativeBatchCaptureAudit reject recorded overrun and enforce BMP size/hash checks. These are static checks, not evidence of any produced frame."
+    }
+  ],
+  "controls": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+      "alias": "SC01",
+      "caption": "Draw Collision Volumes",
+      "lookup_path": "Scene manager/Draw Collision Volumes",
+      "raw_readback_path": "/Scene manager/Draw Collision Volumes",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        }
+      ],
+      "static_consumer_observation": "RenderWorld 0x828D04E8 -> DrawPrimitives; published source walks live volume instances.",
+      "required_live_gate": "Visible live collision volumes and emitted wire geometry.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "alias": "SC02",
+      "caption": "Draw Triangle Test",
+      "lookup_path": "Scene manager/Draw Triangle Test",
+      "raw_readback_path": "/Scene manager/Draw Triangle Test",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "RenderWorld byte +0x11 -> DrawTriangleTest 0x828C2E70; false branch stores the camera anchor.",
+      "required_live_gate": "A false seed interval, then visible swept sphere/triangle/contact geometry with stable pose.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "alias": "SC03",
+      "caption": "Draw Padding",
+      "lookup_path": "Scene manager/Draw Padding",
+      "raw_readback_path": "/Scene manager/Draw Padding",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest byte +0x12 selects the cyan padding sphere.",
+      "required_live_gate": "SC02=true and visible additional padding sphere; repair context alias.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+      "alias": "SC04",
+      "caption": "TriX",
+      "lookup_path": "Scene manager/TriX",
+      "raw_readback_path": "/Scene manager/TriX",
+      "type": "f32",
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "ui": {
+        "step": 0.025,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest reads TriX +0x30.",
+      "required_live_gate": "SC02=true, stable camera anchor and visible opposite x offsets; exact baseline required.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+      "alias": "SC05",
+      "caption": "TriY",
+      "lookup_path": "Scene manager/TriY",
+      "raw_readback_path": "/Scene manager/TriY",
+      "type": "f32",
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "ui": {
+        "step": 0.025,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest reads TriY +0x34.",
+      "required_live_gate": "SC02=true, stable camera anchor and visible opposite y offsets; exact baseline required.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "alias": "SC06",
+      "caption": "TriZ",
+      "lookup_path": "Scene manager/TriZ",
+      "raw_readback_path": "/Scene manager/TriZ",
+      "type": "f32",
+      "source_default": 0.0,
+      "positive": 0.5,
+      "negative": -0.5,
+      "ui": {
+        "step": 0.025,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest reads TriZ +0x38.",
+      "required_live_gate": "SC02=true, stable camera anchor and visible opposite z offsets; exact baseline required.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+      "alias": "SC07",
+      "caption": "TriScale",
+      "lookup_path": "Scene manager/TriScale",
+      "raw_readback_path": "/Scene manager/TriScale",
+      "type": "f32",
+      "source_default": 1.0,
+      "positive": 1.5,
+      "negative": 0.5,
+      "ui": {
+        "step": 0.25,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest reads TriScale +0x40.",
+      "required_live_gate": "SC02=true, stable camera anchor and visible scale difference; exact baseline required.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "alias": "SC08",
+      "caption": "Padding",
+      "lookup_path": "Scene manager/Padding",
+      "raw_readback_path": "/Scene manager/Padding",
+      "type": "f32",
+      "source_default": 0.3,
+      "positive": 0.8,
+      "negative": 0.0,
+      "ui": {
+        "step": 0.25,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawTriangleTest",
+          "address": "0x828C2E70",
+          "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+          "sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7"
+        }
+      ],
+      "static_consumer_observation": "DrawTriangleTest reads Padding +0x3c under Draw Padding.",
+      "required_live_gate": "SC02=true and SC03=true; visible sphere radius difference; exact baseline required.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SC02=true",
+          "value": true
+        },
+        {
+          "alias": "SC03=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "alias": "SC09",
+      "caption": "Draw cached triangles",
+      "lookup_path": "Scene manager/Draw cached triangles",
+      "raw_readback_path": "/Scene manager/Draw cached triangles",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawCachedObjectTriangles",
+          "address": "0x828C2560",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2560.json",
+          "sha256": "dbce72ae298b1422d359b54de0b3f6292a1b670caa182755bf09183e26496f51"
+        }
+      ],
+      "static_consumer_observation": "RenderWorld byte +0x54 -> DrawCachedObjectTriangles 0x828C2560.",
+      "required_live_gate": "Used TriangleCacheManager slot with valid visible Triangle4 lanes.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "alias": "SC10",
+      "caption": "Draw cache spheres",
+      "lookup_path": "Scene manager/Draw cache spheres",
+      "raw_readback_path": "/Scene manager/Draw cache spheres",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "artist_witnesses": [
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::RenderWorld",
+          "address": "0x828D04E8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+          "sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a"
+        },
+        {
+          "function": "CgsSceneManager::SceneManagerDebugComponent::DrawCachedObjectSpheres",
+          "address": "0x828C2B80",
+          "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2B80.json",
+          "sha256": "ed610010023e6cd635838257c869377b0045f28425527bd90de433ab4ae9df20"
+        }
+      ],
+      "static_consumer_observation": "RenderWorld byte +0x55 -> DrawCachedObjectSpheres 0x828C2B80.",
+      "required_live_gate": "Used cache slot with visible cached and inner sphere records.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "caption": "Render Shadow map",
+      "lookup_path": "World/ShadowMap/Render Shadow map",
+      "raw_readback_path": "/World/ShadowMap/Render Shadow map",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateFrustumQueries",
+          "address": "0x827DADF8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827DADF8.json",
+          "sha256": "3e96b89b693a47012eebe5270b7f3b3cd26044ba288767b690fa4ee1d6f85b04"
+        },
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "static_consumer_observation": "GenerateFrustumQueries 0x827DADF8 and dispatch gate read shadow enable.",
+      "required_live_gate": "Update bit 0x80, live light/camera/shadow pass, and visible receiver.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "caption": "Cast shadows from world",
+      "lookup_path": "World/ShadowMap/Cast shadows from world",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from world",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "static_consumer_observation": "GenerateShadowMapDispatchLists 0x827C96D8 ANDs world shadow flag and world render switch.",
+      "required_live_gate": "SH02=true plus visible world caster/receiver in the cascade frustum.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SH02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "caption": "Cast shadows from cars",
+      "lookup_path": "World/ShadowMap/Cast shadows from cars",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from cars",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "static_consumer_observation": "GenerateShadowMapDispatchLists ANDs car shadow/render flags and near-only policy.",
+      "required_live_gate": "SH02=true plus active car caster and receiver in view.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SH02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "caption": "Cast shadows from props",
+      "lookup_path": "World/ShadowMap/Cast shadows from props",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from props",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "static_consumer_observation": "GenerateShadowMapDispatchLists ANDs prop shadow/render flags and near-only policy.",
+      "required_live_gate": "SH02=true plus live prop caster and receiver in view.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SH02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "caption": "Render multiple shadow maps (CSM)",
+      "lookup_path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+      "raw_readback_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "static_consumer_observation": "GenerateShadowMapDispatchLists chooses three cascades versus one.",
+      "required_live_gate": "SH02=true, same pose/light, visible near and distant caster/receiver witnesses.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "SH02=true",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0008",
+      "alias": "E08",
+      "caption": "Draw follow-cam pivot",
+      "lookup_path": "Camera/Draw follow-cam pivot",
+      "raw_readback_path": "/Camera/Draw follow-cam pivot",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82240828",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82240828.json",
+          "sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4"
+        }
+      ],
+      "static_consumer_observation": "GameplayExternal::Update 0x82240828 reads +0xB5E before DrawBox/DrawLine.",
+      "required_live_gate": "Allocated active GameplayExternal behavior and visible pivot geometry.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0014",
+      "alias": "E14",
+      "caption": "Allow Jump Moment",
+      "lookup_path": "Camera/Moment Options/Allow Jump Moment",
+      "raw_readback_path": "/Camera/Moment Options/Allow Jump Moment",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "static_consumer_observation": "UpdateMoments 0x82250268 publishes allow flag; common controller updates moments. Terminal 3f jump path has a known PC filming trap.",
+      "required_live_gate": "Named eligible jump attempt, slomo eligibility, uninhibited moment and implemented filming closure.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5",
+        "R8"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0015",
+      "alias": "E15",
+      "caption": "Allow Stunt Moment",
+      "lookup_path": "Camera/Moment Options/Allow Stunt Moment",
+      "raw_readback_path": "/Camera/Moment Options/Allow Stunt Moment",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "static_consumer_observation": "UpdateMoments publishes allow-stunt; terminal published Stunt path reads MomentSharedInfo_GetStuntEnableFlag1317.",
+      "required_live_gate": "Named live stunt attempt during its selection window; common controller handoff alone is insufficient.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0016",
+      "alias": "E16",
+      "caption": "Allow Hard Stop Moment",
+      "lookup_path": "Camera/Moment Options/Allow Hard Stop Moment",
+      "raw_readback_path": "/Camera/Moment Options/Allow Hard Stop Moment",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82250268",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+          "sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        }
+      ],
+      "static_consumer_observation": "UpdateMoments publishes allow-hard-stop; terminal published HardStop path reads MomentSharedInfo_GetFlag1318.",
+      "required_live_gate": "Named live hard-stop attempt during its selection window; common controller handoff alone is insufficient.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0018",
+      "alias": "E18",
+      "caption": "Enable Behaviour Debug Output",
+      "lookup_path": "Camera/Debug Ouput/Enable Behaviour Debug Output",
+      "raw_readback_path": "/Camera/Debug Ouput/Enable Behaviour Debug Output",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        }
+      ],
+      "static_consumer_observation": "DebugPrinter::ActualPrint 0x821F71D8 tests mbEnabled before Draw2DTextJustified.",
+      "required_live_gate": "Actual behavior-printer text submission while enabled, and corresponding negative interval.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "alias": "E19",
+      "caption": "Enable Moment Debug Output",
+      "lookup_path": "Camera/Debug Ouput/Enable Moment Debug Output",
+      "raw_readback_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        },
+        {
+          "address": "0x82239DE8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+          "sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2"
+        },
+        {
+          "address": "0x8226BFB0",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8226BFB0.json",
+          "sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf"
+        }
+      ],
+      "static_consumer_observation": "ActualPrint plus UpdateAllMoments/ArbStateCrashing readers select moment text.",
+      "required_live_gate": "Actual active moment/crash printer output in the paired phase.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0022",
+      "alias": "E22",
+      "caption": "Show debug camera names",
+      "lookup_path": "Camera/Debug Ouput/Show debug camera names",
+      "raw_readback_path": "/Camera/Debug Ouput/Show debug camera names",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x821F6740",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F6740.json",
+          "sha256": "c9e97e55dec5014596e6b975974fa6d12e2e07ba2b9d321cb73feee324adfce6"
+        }
+      ],
+      "static_consumer_observation": "DebugDisplayCurrentCamera 0x821F6740 uses (cycleNormal && showDebug) || showAll.",
+      "required_live_gate": "E21=false and witnessed normal camera selector cycling; restore E21 baseline.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "E21",
+          "value": false
+        }
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0023",
+      "alias": "E23",
+      "caption": "Show World Map debug",
+      "lookup_path": "Camera/Debug Ouput/Show World Map debug",
+      "raw_readback_path": "/Camera/Debug Ouput/Show World Map debug",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82274070",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82274070.json",
+          "sha256": "fb1371819dd55a0426a5fb23cef6d8db2b37179bd688f22b612408f4d5ea98b9"
+        }
+      ],
+      "static_consumer_observation": "MainDirector::Update 0x82274070 reads world-map byte and position journal size >1.",
+      "required_live_gate": "Available world map, at least two journal entries and visible map geometry.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0026",
+      "alias": "E26",
+      "caption": "Show Crash Info",
+      "lookup_path": "Camera/Debug Ouput/Show Crash Info",
+      "raw_readback_path": "/Camera/Debug Ouput/Show Crash Info",
+      "type": "bool",
+      "source_default": false,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x8226BFB0",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8226BFB0.json",
+          "sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf"
+        },
+        {
+          "address": "0x821F71D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+          "sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922"
+        },
+        {
+          "address": "0x8221C6D8",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8221C6D8.json",
+          "sha256": "9c06c4735ca8fa2fddcce1ed24bc2d0444378bb7359f64fa88343d06fd889d40"
+        }
+      ],
+      "static_consumer_observation": "ArbStateCrashing::Update 0x8226BFB0 reads debug-active byte and invokes MomentSelector text rendering.",
+      "required_live_gate": "Crashing state window, E17=true and visible selector/crash text; restore E17 baseline.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": [
+        {
+          "alias": "E17",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0043",
+      "alias": "E43",
+      "caption": "Small Near Clip",
+      "lookup_path": "Camera/Clipping/Small Near Clip",
+      "raw_readback_path": "/Camera/Clipping/Small Near Clip",
+      "type": "f32",
+      "source_default": 0.1,
+      "positive": 0.5,
+      "negative": 0.05,
+      "ui": {
+        "step": 0.01,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82205B68",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82205B68.json",
+          "sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801"
+        },
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "static_consumer_observation": "GetNearClipDistance/CopyToCgsCamera select small near only without custom near and with bit 0x10000.",
+      "required_live_gate": "Unresolved producer for bit 0x10000; no scene or behavior credit currently.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0044",
+      "alias": "E44",
+      "caption": "Default Near Clip",
+      "lookup_path": "Camera/Clipping/Default Near Clip",
+      "raw_readback_path": "/Camera/Clipping/Default Near Clip",
+      "type": "f32",
+      "source_default": 0.15,
+      "positive": 2.0,
+      "negative": 0.15,
+      "ui": {
+        "step": 0.01,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82205B68",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82205B68.json",
+          "sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801"
+        },
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "static_consumer_observation": "GetNearClipDistance/CopyToCgsCamera select default near when custom/small alternatives are absent.",
+      "required_live_gate": "Stable close object, standard active camera, custom near absent and small-near bit clear.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0045",
+      "alias": "E45",
+      "caption": "Default Far Clip",
+      "lookup_path": "Camera/Clipping/Default Far Clip",
+      "raw_readback_path": "/Camera/Clipping/Default Far Clip",
+      "type": "f32",
+      "source_default": 10000.0,
+      "positive": 500.0,
+      "negative": 10000.0,
+      "ui": {
+        "step": 100.0,
+        "min": null,
+        "max": null,
+        "range_note": "no SetRange on the selected exact 3f registration"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x8220AC48",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+          "sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd"
+        }
+      ],
+      "static_consumer_observation": "CopyToCgsCamera 0x8220AC48 loads default far before projection update.",
+      "required_live_gate": "Same stable camera pose and suitable distant landmark; moving road is insufficient.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5",
+        "R7"
+      ],
+      "context_overrides_as_reviewed": []
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "alias": "E54",
+      "caption": "Enable Boost Effects",
+      "lookup_path": "Camera/Enable Boost Effects",
+      "raw_readback_path": "/Camera/Enable Boost Effects",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "inventory_match": true,
+      "published_verdict_present": false,
+      "raw_alias_triplet_verified": true,
+      "registration_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "artist_witnesses": [
+        {
+          "address": "0x82240828",
+          "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82240828.json",
+          "sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4"
+        }
+      ],
+      "static_consumer_observation": "GameplayExternal::Update reads +0xB5F for FOV offset and boost shake.",
+      "required_live_gate": "Active GameplayExternal behavior, nonzero speed and ordinary Boost input in paired comparable phases.",
+      "live_gate_observed": false,
+      "native_evidence_present": false,
+      "status": "pending",
+      "behavior_credit": 0,
+      "runner_specific_findings": [
+        "R1",
+        "R3",
+        "R4",
+        "R5"
+      ],
+      "context_overrides_as_reviewed": []
+    }
+  ],
+  "checks": [
+    {
+      "name": "published_inventory",
+      "result": "pass",
+      "detail": "1355 inventory entries; all 28 targets exist with matching captions/derived paths and no verdict. Verified Director 0021/0027 and original-noop Scene 0011/0012 are excluded."
+    },
+    {
+      "name": "unique_alias_path_triplet",
+      "result": "pass",
+      "detail": "28 unique target aliases and paths, 30 including context aliases; raw triplets match exact bound alias/path semantics."
+    },
+    {
+      "name": "source_and_original_pins",
+      "result": "pass",
+      "detail": "15 source blob pins + 10 path blob pins match 3f (overlapping maps); all 17 ARTIST witness hashes and all 3 original registration hashes match."
+    },
+    {
+      "name": "immutable_artifact_pins",
+      "result": "pass",
+      "detail": "Executable, map and BUILD_RECEIPT hashes match; receipt correctly records workflow 38a0ec8384e9fb96a2b6df2497fc0a2f3f5eb00f, not a6."
+    },
+    {
+      "name": "private_fixture_and_roster",
+      "result": "pass",
+      "detail": "Referenced profile SHA matches; roster SHA and 5622 records match. No STAGING.json is present and no assets/profiles were staged by this review."
+    },
+    {
+      "name": "powershell_syntax",
+      "result": "pass",
+      "detail": "All seven draft ps1 files parsed with zero PowerShell AST parse errors; no scripts were run."
+    },
+    {
+      "name": "finite_probe_values_and_steps",
+      "result": "partial",
+      "detail": "All eight f32 probes are finite, and the selected Source41/ARTIST registrations have the listed steps with no explicit SetRange. SC08 negative=0.0 is -1.2 increments from its source default 0.3 at step 0.25, so the blanket claim that every probe follows default-relative increments is false. An explicit typed SET can still accept 0.0; either document that route or choose a default-relative step value such as 0.05."
+    },
+    {
+      "name": "same_run_restore",
+      "result": "fail",
+      "detail": "Malformed context alias records and rounded Scene f32 baselines violate the restore contract; valid E17/E21 contexts use captured Boolean baselines and clipping constants have exact-bit checks."
+    },
+    {
+      "name": "raw_frame_budget",
+      "result": "pass_static_only",
+      "detail": "The nominal budget is valid: 1 natural + 28*3 target + 1 terminal + 1 post-restore = 87, below 90. Capture-PhaseRaw rejects a 91st requested frame; Assert-NativeBatchFrame and Complete-NativeBatchCaptureAudit reject recorded overrun and enforce BMP size/hash checks. These are static checks, not evidence of any produced frame."
+    },
+    {
+      "name": "prior_history",
+      "result": "pass",
+      "detail": "Historical corrected Director result hash matches; eligible_control_count=0 and site_credit=0. It is not evidence for this new executable/slot."
+    },
+    {
+      "name": "native_consumer_evidence",
+      "result": "deferred",
+      "detail": "No native run or pixels are in this preparation packet. All 28 remain pending with zero behavior credit; E43 has an explicit unpinned producer and E14 a known published-source consumer gap."
+    }
+  ]
+}
