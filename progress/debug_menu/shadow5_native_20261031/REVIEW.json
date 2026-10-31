@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "verdict": "pass",
+  "scope": "bounded partial native consumer acceptance proposal; not a five-control behavior pass",
+  "proposed_accepted_ids": [
+    "BrnWorld::ShadowMap::Construct#0002",
+    "BrnWorld::ShadowMap::Construct#0004"
+  ],
+  "proposed_accepted_aliases": [
+    "SH02",
+    "SH04"
+  ],
+  "insufficient_aliases": [
+    "SH03",
+    "SH06",
+    "SH08"
+  ],
+  "canonical_updates_performed": false,
+  "site_credit": 0,
+  "behavior_credit": 0,
+  "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+  "candidate_exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+  "owner": {
+    "pid": 58672,
+    "image": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\stage\\slot\\Burnout_PC.exe",
+    "start_ticks": "639290738461318903",
+    "start_utc": "2026-10-31T20:04:06.1318903Z",
+    "slot": 62190
+  },
+  "per_id": [
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "disposition": "proposed_accepted_bounded",
+      "reason": "Stationary player-car shadow on the roadway is present, absent, and restored. Acceptance covers this master-enable visible consumer only; no independent per-phase query/depth-stage certification.",
+      "frames": [
+        {
+          "state": "positive",
+          "archive_member": "run/frames/bb_009222.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009222.bmp",
+          "sha256": "ff716f93081ce7cadc2905966cd519380182193aa66cab9ee4e1563bb27ff3d6",
+          "present": 9222,
+          "sequence": 2,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 21791,
+            "complete_readback_end": 21809,
+            "frame_ack": 22387
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "negative",
+          "archive_member": "run/frames/bb_009514.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009514.bmp",
+          "sha256": "d3f9edfb5c8e108ca6d91eeb862396aedc24b4508ded5e82dfbc02bca43042aa",
+          "present": 9514,
+          "sequence": 3,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 22806,
+            "complete_readback_end": 22823,
+            "frame_ack": 22884
+          },
+          "readback_values": {
+            "SH02": "FALSE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "restore",
+          "archive_member": "run/frames/bb_009843.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009843.bmp",
+          "sha256": "3d6d2a91f4d77663b64f0890c05191d86058cd67dcbec538a224e2fb32e81ec8",
+          "present": 9843,
+          "sequence": 4,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 22930,
+            "complete_readback_end": 22944,
+            "frame_ack": 23507
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        }
+      ],
+      "canonical_site_credit": 0,
+      "canonical_behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "disposition": "insufficient_context_only",
+      "reason": "No isolated world-caster/receiver reversal. Passing bus and HUD confound the positive/negative triplet; reduced dispatch totals are context only.",
+      "frames": [
+        {
+          "state": "positive",
+          "archive_member": "run/frames/bb_010092.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010092.bmp",
+          "sha256": "4220db2225cc9937246e16b5006700c0913e4ce81ca38baf5d582fed79ba946e",
+          "present": 10092,
+          "sequence": 5,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 24002,
+            "complete_readback_end": 24021,
+            "frame_ack": 24610
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "negative",
+          "archive_member": "run/frames/bb_010431.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010431.bmp",
+          "sha256": "273500c280a4323395c98a00cd640050d208e98751848a788cb18135fb137cff",
+          "present": 10431,
+          "sequence": 6,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 25211,
+            "complete_readback_end": 25231,
+            "frame_ack": 25953
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "FALSE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "restore",
+          "archive_member": "run/frames/bb_010709.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010709.bmp",
+          "sha256": "6bc657ac623f11cbf9300e769cc95829b5d939c531fb92c06d69ebe6f79f9d08",
+          "present": 10709,
+          "sequence": 7,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 26502,
+            "complete_readback_end": 26526,
+            "frame_ack": 27108
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        }
+      ],
+      "canonical_site_credit": 0,
+      "canonical_behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "disposition": "proposed_accepted_bounded",
+      "reason": "Stationary player-car roadway shadow is present, absent, and restored while the car remains rendered and SH02 remains TRUE. Acceptance covers this car-caster consumer only.",
+      "frames": [
+        {
+          "state": "positive",
+          "archive_member": "run/frames/bb_010941.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010941.bmp",
+          "sha256": "f8c6add8bc78135aa35780a411169d56bc56a42fa6407c974f10a9d9ece8f3a5",
+          "present": 10941,
+          "sequence": 8,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 27541,
+            "complete_readback_end": 27558,
+            "frame_ack": 28049
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "negative",
+          "archive_member": "run/frames/bb_011220.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011220.bmp",
+          "sha256": "463cbe35eac2bb080a6b54cd71fe361e5c4989d71f05b619b6778e9f93cd16fd",
+          "present": 11220,
+          "sequence": 9,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 28653,
+            "complete_readback_end": 28673,
+            "frame_ack": 29376
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "FALSE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "restore",
+          "archive_member": "run/frames/bb_011477.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011477.bmp",
+          "sha256": "a1f45cda8b97ac47c0d9a6529bea9183f4491264ca73e4a01347f71c9e34b271",
+          "present": 11477,
+          "sequence": 10,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 29787,
+            "complete_readback_end": 29808,
+            "frame_ack": 30349
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        }
+      ],
+      "canonical_site_credit": 0,
+      "canonical_behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "disposition": "insufficient_context_only",
+      "reason": "No identified eligible prop and visible receiver yield a repeatable shadow reversal; independent prop-render eligibility is not established by the scene.",
+      "frames": [
+        {
+          "state": "positive",
+          "archive_member": "run/frames/bb_011737.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011737.bmp",
+          "sha256": "c943804b8fb1e81bc81d5894259cb5424555a40e4ad6bcf8b18abc937bea744c",
+          "present": 11737,
+          "sequence": 11,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 30968,
+            "complete_readback_end": 30987,
+            "frame_ack": 31380
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "negative",
+          "archive_member": "run/frames/bb_012022.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012022.bmp",
+          "sha256": "a2416f95512a588b49fd7e4a00614c8502a1e0b5d33ae9f7b57284e91476ee5e",
+          "present": 12022,
+          "sequence": 12,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 31984,
+            "complete_readback_end": 32001,
+            "frame_ack": 32199
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "FALSE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "restore",
+          "archive_member": "run/frames/bb_012270.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012270.bmp",
+          "sha256": "00204ab3e0293afd4e780495c59bf6c1b3daf81398d843d4c83fbdfdf1bb0e56",
+          "present": 12270,
+          "sequence": 13,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 32354,
+            "complete_readback_end": 32370,
+            "frame_ack": 32925
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        }
+      ],
+      "canonical_site_credit": 0,
+      "canonical_behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "disposition": "insufficient_context_only",
+      "reason": "Three-list-set to near-only to three-list-set dispatcher context is present, but no isolated near/distant receiver output reversal is visible.",
+      "frames": [
+        {
+          "state": "positive",
+          "archive_member": "run/frames/bb_012551.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012551.bmp",
+          "sha256": "6ae5787ec73a5039db308fa6a5ab97f22b564d79bb48e7740fb18b39be763aa9",
+          "present": 12551,
+          "sequence": 14,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 33481,
+            "complete_readback_end": 33500,
+            "frame_ack": 34091
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        },
+        {
+          "state": "negative",
+          "archive_member": "run/frames/bb_012827.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012827.bmp",
+          "sha256": "5fdc052c35a0bb87e165d50680d0b07a7f10a8bf840fa944b2ea060d25edda1a",
+          "present": 12827,
+          "sequence": 15,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 34492,
+            "complete_readback_end": 34513,
+            "frame_ack": 34895
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "FALSE"
+          }
+        },
+        {
+          "state": "restore",
+          "archive_member": "run/frames/bb_013138.bmp",
+          "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013138.bmp",
+          "sha256": "79e21914774d993b6a995fe78e7e2a2f19548391f74399f4b8534c8d3ba0dc14",
+          "present": 13138,
+          "sequence": 16,
+          "owner_pid": 58672,
+          "slot": 62190,
+          "log_indices_zero_based": {
+            "command_cursor": 35352,
+            "complete_readback_end": 35370,
+            "frame_ack": 35948
+          },
+          "readback_values": {
+            "SH02": "TRUE",
+            "SH03": "TRUE",
+            "SH04": "TRUE",
+            "SH06": "TRUE",
+            "SH08": "TRUE"
+          }
+        }
+      ],
+      "canonical_site_credit": 0,
+      "canonical_behavior_credit": 0
+    }
+  ],
+  "supporting_pixel_measurement": {
+    "roi_inclusive": {
+      "x": [
+        805,
+        849
+      ],
+      "y": [
+        590,
+        614
+      ]
+    },
+    "method": "mean of RGB channel bytes in original BMP road patch; supporting visually inspected shadow output, not standalone acceptance",
+    "SH02_p_n_restore": [
+      34.075,
+      104.747,
+      34.071
+    ],
+    "SH04_p_n_restore": [
+      34.532,
+      104.57,
+      34.738
+    ]
+  },
+  "scene": {
+    "observed_car_position": [
+      3040.048828,
+      -4.454158,
+      -2046.797974
+    ],
+    "observed_heading_vector": [
+      -0.012064,
+      -0.004324,
+      -0.999918
+    ],
+    "observed_linear_velocity": [
+      0,
+      0,
+      0
+    ],
+    "view_stable": true,
+    "animated_scene_parts": [
+      "traffic",
+      "sky",
+      "billboards",
+      "HUD"
+    ],
+    "initial_requested_teleport_is_not_claimed_as_settled_pose": true
+  },
+  "fixed_frames": [
+    {
+      "phase": "natural_baseline",
+      "archive_member": "run/frames/bb_008924.bmp",
+      "sha256": "e0844c129cf33e502e7678c9150127af5ea4ce0724cfb37db20c25adfca3f3a4",
+      "present": 8924,
+      "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_008924.bmp"
+    },
+    {
+      "phase": "terminal_restore",
+      "archive_member": "run/frames/bb_013381.bmp",
+      "sha256": "adad13551bbe3c00569fe609f74f30cc636153af8ff7a3328ba17e1029a21e71",
+      "present": 13381,
+      "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013381.bmp"
+    },
+    {
+      "phase": "post_restore_readback",
+      "archive_member": "run/frames/bb_013668.bmp",
+      "sha256": "cc198f2187eb4a0fee2e476bfc9c59b8a8461615eb82543d85274f3127be77e0",
+      "present": 13668,
+      "original_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013668.bmp"
+    }
+  ],
+  "probe_context": {
+    "no_phase_present_or_query_completion_identifier": true,
+    "shadow_pass": "count-tuple latched",
+    "shadow_fetch": "signature and bucket latched; current draw counts adjacent to cached last-completed query pixels of unknown age",
+    "per_phase_pixel_counts_assigned": false,
+    "same_frame_draw_pixel_pairs_inferred": false,
+    "original_noop_inferred": false,
+    "camera_rows_total": 40,
+    "shadow_pass_rows_total": 3031,
+    "shadow_fetch_rows_including_initialization": 263,
+    "unknown_age_examples_zero_based": [
+      {
+        "log_index": 34518,
+        "context": "SH08 negative window",
+        "current_draws_c1_c2": [
+          0,
+          0
+        ],
+        "cached_pixels_c1_c2": [
+          941381,
+          1214616
+        ]
+      },
+      {
+        "log_index": 35378,
+        "context": "SH08 restore window",
+        "current_draws_c1_c2": [
+          905,
+          1867
+        ],
+        "cached_pixels_c1_c2": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "integrity": {
+    "archive_path": "D:\\Reverse\\BP-Decomp_Evidence\\debug_menu\\shadow5_native_20261031\\originals.zip",
+    "archive_sha256": "5743b0ccb8a3b65c775bc65343575f01cb7065c6fd174fefe20c0c5781fcca03",
+    "archive_sha_verified": true,
+    "archive_members_verified": 92,
+    "archive_member_mismatches": 0,
+    "original_frames_visually_inspected": 18,
+    "original_frames_match_archive_and_receipts": true,
+    "all_raw_phase_triplets_match_log": true,
+    "all_frame_acks_match_log": true,
+    "raw_game_log_sha256": "f8f57545001519fa008514a9f6b41052f0dbc655ede4a69ca6abf5270a567260",
+    "all_declared_committed_source_blobs_match": true,
+    "three_original_artist_hashes_match": true
+  },
+  "closure": {
+    "actual_record_checker_pass": true,
+    "target_windows": 15,
+    "frame_count": 18,
+    "terminal_restore_verified": true,
+    "phase_collection_stop_requested": true,
+    "owned_cleanup_complete": true,
+    "input_reset_complete": true,
+    "helper_cleanup_complete": true,
+    "private_profile_restoration_complete": true,
+    "normal_files_unchanged_reported_by_root_exit": true,
+    "live_profile_reread_for_review": false
+  },
+  "next_witnesses": {
+    "SH03": "Unobscured identified static-world caster and receiver with repeatable P/N/restore output.",
+    "SH06": "Identified eligible prop, established independent render gate, and visible receiving surface with repeatable output.",
+    "SH08": "Near and distant caster/receiver views that distinguish three cascades from one."
+  },
+  "source_repair_proposed": false,
+  "review_actions": {
+    "builds": 0,
+    "games": 0,
+    "source_mutations": 0,
+    "git_mutations": 0,
+    "profile_actions": 0,
+    "canonical_credit_updates": 0
+  },
+  "limitations": [
+    "SH02 and SH04 acceptance is bounded to the stationary-car visible roadway-shadow consumer in this scene.",
+    "No exact-present producer/query/depth counts are assigned to any phase.",
+    "SH03, SH06 and SH08 remain pending and are not classified as original no-ops.",
+    "No broad rendering or console parity claim is made."
+  ]
+}

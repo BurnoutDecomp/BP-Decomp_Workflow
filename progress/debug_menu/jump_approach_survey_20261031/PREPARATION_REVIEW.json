@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "verdict": "pass",
+  "shadow_verdict": "pass",
+  "survey_verdict": "pass",
+  "scope": "SH-D1 focused repair verification; earlier resolved findings and survey preparation pass carried forward",
+  "findings": [],
+  "resolved_findings": {
+    "SH-R1": "fixed; carried forward",
+    "SH-R2": "fixed; carried forward",
+    "SV-R1": "fixed; carried forward",
+    "SH-D1": "fixed; verified against actual Case/checker AST expressions and shared PhaseTime helper"
+  },
+  "validation": {
+    "actual_case_and_checker_clock_scenarios": {
+      "correct_clock_accepted": true,
+      "stale_terminal_rejected": true,
+      "stale_driver_rejected": true,
+      "wrong_phase_start_rejected": true,
+      "passed": 4,
+      "failed": 0
+    },
+    "typed_phase_time_modes_passed": 6,
+    "focused_powershell_files_parsed": 5,
+    "powershell_parse_errors": 0,
+    "shadow_manifest_entries": 26,
+    "shadow_manifest_mismatches": 0,
+    "shadow_unstaged_unlaunched": true,
+    "original_and_delta_reviews_preserved": true,
+    "survey_runtime_reviewed_in_this_pass": false,
+    "games_builds_production_git_profile_actions": 0
+  },
+  "reviewed_hashes": {
+    "Case.ps1": "1f5a1c451e3e13f64e79ef4f825fe0a466fd5d538f82e53d5583c9faa6b37b6e",
+    "Check-Shadow5Records.ps1": "6ddfed4dc1b074dc7ef3ba3d7134661bca61ec26f054a9a9f76953eca2819648",
+    "PhaseTime.ps1": "1b7c822fb1ebe97d19acef82418682651a8ed92100c655d278b20d54ee3a3e35",
+    "Test-PhaseDoneOwnerBindingMocks.ps1": "a1ce54225f3b299843a2359d8d474243540a179e38d0188f8541131d1ab68f61"
+  },
+  "preserved_review_hashes": {
+    "REVIEW.md": "b6fe8f1eb372e8805805265069069797d8844825be0fad1ebdbaf2b4ac4872ad",
+    "REVIEW.json": "0db1cdca9168d1110d4d7cee93b0a0d587fbfe69dd03100eaac251220e682056",
+    "DELTA_REVIEW.md": "b7b26117c1fc84d6cb65e4e57a3ed1ae3cbdd721f072877f262b9d2096ea8dc6",
+    "DELTA_REVIEW.json": "414c54a52a575affa48a0bdbb0285f515ccc5f605263afc9fb418014747a25f1"
+  },
+  "site_credit": 0,
+  "behavior_credit": 0,
+  "limitations": "Preparation acceptance only. All five shadow controls remain pending native review. No shadow, jump-camera or physics behavior verdict is granted."
+}
