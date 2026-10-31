@@ -1957,5 +1957,75 @@
       "progress/debug_menu/gui17_native_20261031/REVIEW.json",
       "progress/debug_menu/gui17_native_20261031/ARCHIVE.json"
     ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. A horizontal test edge is visible only in the positive BMP and is absent in the negative and captured-baseline restore BMPs. ARTIST RenderWorld calls DrawTriangleTest under this flag. Acceptance is limited to this visible edge; the full swept-sphere/contact set is not claimed. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. With SC02 held true, the positive BMP adds cyan padding geometry; the negative BMP removes it and restore returns SC02 to its captured baseline. Acceptance is limited to the visible padding draw. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. With SC02 true in P/N, the visible test edge changes span between +0.5 and -0.5; restore removes the test draw by restoring SC02 to baseline. Acceptance is limited to this TriZ-dependent edge response. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. With SC02 and SC03 held true, the positive 0.8 value produces a visible cyan padding wire-sphere; the 0.05 negative and captured-baseline restore show no comparable large sphere. This accepts the visible radius effect only; the small-value view does not establish a no-op. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. The positive BMP contains a large translucent blue cached-triangle overlay; negative and restore do not. The pinned ARTIST reader walks used cache slots and draws valid triangle batches, so this run supplies a visible cache producer/consumer witness. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. The positive BMP shows cache wireframe geometry; negative and restore remove it. The pinned ARTIST reader walks populated sphere records and calls DrawHollowSphere, supplying a visible cache-sphere witness. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
+  },
+  "BrnDirector::DebugComponent::OnActivate#0019": {
+    "state": "verified",
+    "notes": "Bounded native source3f/exe39b62961, private slot62190, completed positive/negative/same-run restore. With E19 TRUE the positive BMP shows the moment-selector candidate/status diagnostic list; the FALSE negative and same-run FALSE restore show no such output. X360 ActualDebugRender calls DebugPrinter output. Acceptance is for the output gate only; the messages say conditions are not met and prove no successful moment. Original aggregate case FAIL remains unchanged; no current-dev rebuild or full-domain claim.",
+    "evidence": [
+      "progress/debug_menu/scene28_native_20261031/ROOT_DECISION.json",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.md",
+      "progress/debug_menu/scene28_native_20261031/REVIEW.json",
+      "progress/debug_menu/scene28_native_20261031/ARCHIVE.json"
+    ]
   }
 }
