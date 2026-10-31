@@ -1,0 +1,1271 @@
+{
+  "candidate": {
+    "b5_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da"
+  },
+  "controls": [
+    {
+      "id": "context",
+      "alias": "G01",
+      "lookup_path": "Gui/Gui Module/Render GUI Objects",
+      "type": "bool",
+      "prepared_short_path": "Gui Module/Render GUI Objects"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0021",
+      "alias": "G21",
+      "lookup_path": "Gui/Gui Module/   Spacing percentage:",
+      "type": "f32",
+      "prepared_short_path": "Gui Module/   Spacing percentage:"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0022",
+      "alias": "G22",
+      "lookup_path": "Gui/Gui Module/Update Flash",
+      "type": "bool",
+      "prepared_short_path": "Gui Module/Update Flash"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0033",
+      "alias": "G33",
+      "lookup_path": "Gui/Gui Module/  Current Hook",
+      "type": "s32",
+      "prepared_short_path": "Gui Module/  Current Hook"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0042",
+      "alias": "G42",
+      "lookup_path": "Gui/Gui Module/Race HUD Toggling/Enable Toggling Race HUD",
+      "type": "bool",
+      "prepared_short_path": "Gui Module/Race HUD Toggling/Enable Toggling Race HUD"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0043",
+      "alias": "G43",
+      "lookup_path": "Gui/Gui Module/Race HUD Toggling/BOOST_BAR",
+      "type": "bool",
+      "prepared_short_path": "Gui Module/Race HUD Toggling/BOOST_BAR"
+    }
+  ],
+  "context_aliases": [],
+  "function_aliases": [
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0004",
+      "alias": "G04",
+      "lookup_path": "Gui/Gui Module/Trigger Car Select",
+      "prepared_short_path": "Gui Module/Trigger Car Select"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0005",
+      "alias": "G05",
+      "lookup_path": "Gui/Gui Module/Trigger Intro",
+      "prepared_short_path": "Gui Module/Trigger Intro"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0013",
+      "alias": "G13",
+      "lookup_path": "Gui/Gui Module/Trigger crash nav",
+      "prepared_short_path": "Gui Module/Trigger crash nav"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0020",
+      "alias": "G20",
+      "lookup_path": "Gui/Gui Module/Change Font Spacing",
+      "prepared_short_path": "Gui Module/Change Font Spacing"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0027",
+      "alias": "G27",
+      "lookup_path": "Gui/Gui Module/Show Keyboard",
+      "prepared_short_path": "Gui Module/Show Keyboard"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0029",
+      "alias": "G29",
+      "lookup_path": "Gui/Gui Module/Play/stop test movie",
+      "prepared_short_path": "Gui Module/Play/stop test movie"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0031",
+      "alias": "G31",
+      "lookup_path": "Gui/Gui Module/Select next font effect",
+      "prepared_short_path": "Gui Module/Select next font effect"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0034",
+      "alias": "G34",
+      "lookup_path": "Gui/Gui Module/Trigger PFX CloseMenu",
+      "prepared_short_path": "Gui Module/Trigger PFX CloseMenu"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0038",
+      "alias": "G38",
+      "lookup_path": "Gui/Gui Module/Components/Trigger EA Trax Component",
+      "prepared_short_path": "Gui Module/Components/Trigger EA Trax Component"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0039",
+      "alias": "G39",
+      "lookup_path": "Gui/Gui Module/Components/Trigger Receive Online Invite",
+      "prepared_short_path": "Gui Module/Components/Trigger Receive Online Invite"
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0040",
+      "alias": "G40",
+      "lookup_path": "Gui/Gui Module/Components/Trigger Payback Component",
+      "prepared_short_path": "Gui Module/Components/Trigger Payback Component"
+    }
+  ],
+  "sites": [
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0004",
+      "caption": "Trigger Car Select",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "source_member": "EnterCarSelectCallback -> OpenCarSelect -> event 229",
+      "source_alias_path": "Gui Module/Trigger Car Select",
+      "artist_consumer": "BrnGui::InGame::Update @0x824E0ED0, case 229: SendStateEvent to TO_CSELECT.",
+      "raw_read_path": "driver-result.json phase command receipt; frames/frames.csv row and raw BMP for Car Select entry and return. Function has no scalar alias result.",
+      "pnr": {
+        "positive": "From the active InGame state invoke the exact alias once; observe the Car Select state and its rendered screen.",
+        "negative": "On a matched InGame baseline phase, do not invoke the callback; confirm the InGame frame/state remains.",
+        "restore": "Back/cancel from Car Select to the same InGame route; compare the restored HUD frame to baseline."
+      },
+      "witness": "The original event-229 route enters TO_CSELECT; the native witness is the actual Car Select screen followed by a return to the original InGame screen.",
+      "runtime_gate": "The Source41 normal route must reach InGame; if the Car Select state or return is unavailable, abort this row with zero credit.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 13,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::EnterCarSelectCallback, a1, \"Trigger Car Select\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger Car Select",
+        "entry_caption_expression": "\"Trigger Car Select\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D648",
+        "0x824E0ED0"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D648",
+          "name": "BrnGui::GuiDebugComponent::EnterCarSelectCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D648.json",
+          "sha256": "89c4f6f2825ab7648f5ec8b437427e2950086def23ba3fbdbd45c8d642fc5865"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0005",
+      "caption": "Trigger Intro",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "source_member": "TriggerIntroCallback -> TriggerIntro -> event 288",
+      "source_alias_path": "Gui Module/Trigger Intro",
+      "artist_consumer": "BrnGui::InGame::Update @0x824E0ED0, case 288: ShutDownHudComponents then SendStateEvent to TO_INTRO.",
+      "raw_read_path": "driver-result.json phase command receipt; raw BMPs and frame-present rows for the Intro/title transition and the restored InGame route.",
+      "pnr": {
+        "positive": "Invoke the callback from InGame; capture the actual TO_INTRO route.",
+        "negative": "Do not invoke on the paired InGame control phase; verify the route stays in InGame.",
+        "restore": "Use the ordinary title/start/drive route to return to InGame and verify the baseline HUD; issue no profile operation."
+      },
+      "witness": "A visible intro/title-flow transition after event 288, then a normal return to the same InGame route.",
+      "runtime_gate": "The intro route must return without a profile or save action; if not, stop the remaining transition cases.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 14,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerIntroCallback, a1, \"Trigger Intro\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger Intro",
+        "entry_caption_expression": "\"Trigger Intro\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250CF50",
+        "0x824E0ED0"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250CF50",
+          "name": "BrnGui::GuiDebugComponent::TriggerIntroCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250CF50.json",
+          "sha256": "7a9f546fc7f00f30bd732635a6a877a153bd967b68adc6c0d38bb5f3a0a83289"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0013",
+      "caption": "Trigger crash nav",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "source_member": "OpenCrashNavCallback -> OpenCrashNav -> event 228",
+      "source_alias_path": "Gui Module/Trigger crash nav",
+      "artist_consumer": "BrnGui::InGame::Update @0x824E0ED0, case 228: SendStateEvent to MAP_MAIN and post GUI-internal command 148.",
+      "raw_read_path": "driver-result.json phase command receipt; raw BMP/state marker for MAP_MAIN and the restored InGame screen.",
+      "pnr": {
+        "positive": "Invoke once in InGame; verify the main-map/CrashNav screen rendered by the MAP_MAIN route.",
+        "negative": "On the paired baseline phase, do not invoke; retain the InGame screen.",
+        "restore": "Back from MAP_MAIN to InGame; verify the prior HUD baseline."
+      },
+      "witness": "The main-map/CrashNav view appears and the HUD shutdown is visible; Back restores the InGame frame.",
+      "runtime_gate": "Map and CrashNav resources must load from the referenced pool; otherwise record a gated skip, not a pass.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 24,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::OpenCrashNavCallback, a1, \"Trigger crash nav\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger crash nav",
+        "entry_caption_expression": "\"Trigger crash nav\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D598",
+        "0x824E0ED0"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D598",
+          "name": "BrnGui::GuiDebugComponent::OpenCrashNavCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D598.json",
+          "sha256": "24b4880d2d6b8ec29fbce8de1b644783603d08d5d2d33bd5787466c8ae766e87"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0020",
+      "caption": "Change Font Spacing",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "source_member": "ChangeFontSpacingCallback -> event 62 carrying mfFontSpacing * 0.01f",
+      "source_alias_path": "Gui Module/Change Font Spacing",
+      "artist_consumer": "CgsGui::ViewModule::ProcessIncomingViewEvents @0x8285FCE8 case 62 -> inlined AptAux::DebugChangeFontSpacing @0x8285FF38/3C stores RenderHandler.mfFontSizeScale; the Apt render callback reads that scale for text layout.",
+      "raw_read_path": "Alias triplet for Gui Module/   Spacing percentage: plus driver-result.json phase commands; compare the same EATrax text ROI in the raw BMP/frames.csv.",
+      "pnr": {
+        "positive": "Set the paired #0021 spacing value to 150, invoke this action, emit one new EATrax track chyron, and capture its text bounds.",
+        "negative": "Set the same value to 50, invoke this action, emit the same song/artist/album chyron, and capture its smaller text bounds.",
+        "restore": "Set the value to 100, invoke this action, emit the same chyron and verify the original text bounds."
+      },
+      "witness": "The EATrax APT string is laid out at 1.5x, 0.5x, then 1.0x scale from the registered 150/50/100 percent values; compare the same string and ROI.",
+      "runtime_gate": "Requires the current in-game EATrax clip and text to be active; no font-spacing conclusion if the clip/resource is absent.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 33,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ChangeFontSpacingCallback, a1, \"Change Font Spacing\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Change Font Spacing",
+        "entry_caption_expression": "\"Change Font Spacing\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D160",
+        "0x8285FCE8"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8250D160",
+          "name": "BrnGui::GuiDebugComponent::ChangeFontSpacingCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D160.json",
+          "sha256": "1ca040374bc24a68ef3d66015637dfbb08a1d0834ee312fdc3e5977bb3348675"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0021",
+      "caption": "Spacing percentage:",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.h",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "source_member": "mfFontSpacing at this+0x2C; default 100.0f; range 30.0f..250.0f; #0020 publishes it to event 62.",
+      "source_alias_path": "Gui Module/   Spacing percentage:",
+      "artist_consumer": "OnActivate @0x8252A3B8 registers this member; event 62 is consumed at ViewModule::ProcessIncomingViewEvents @0x8285FCE8 and stored into the font-scale path read by APT string layout.",
+      "raw_read_path": "Exact native alias definition/value triplet for Gui Module/   Spacing percentage:; expected readbacks 150, 50, 100. Raw output frames are the EATrax text-bounds witness.",
+      "pnr": {
+        "positive": "Set 150.0 and confirm the fresh alias readback before applying #0020.",
+        "negative": "Set 50.0 and confirm the fresh alias readback before applying #0020.",
+        "restore": "Set 100.0 and confirm the fresh alias readback before applying #0020."
+      },
+      "witness": "The value itself is read back from the exact variable; its functional effect is checked through #0020 and the same APT text ROI.",
+      "runtime_gate": "Only credit the value row when every alias readback is fresh and the #0020 text-layout consumer is visible.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 34,
+        "original_call": "sub_8282D6B0(a1, a1 + 44, \" Spacing percentage:\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "   Spacing percentage:",
+        "entry_caption_expression": "\"   Spacing percentage:\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8285FCE8"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.h",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0022",
+      "caption": "Update Flash",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp"
+      ],
+      "source_member": "RegisterVariable mpGuiModule.mpGuiView.mbUpdateFlash",
+      "source_alias_path": "Gui Module/Update Flash",
+      "artist_consumer": "CgsGui::ViewModule::Update @0x82860708 gates AptAux::Update on mbUpdateFlash.",
+      "raw_read_path": "Exact alias definition/value triplet for Gui Module/Update Flash; raw time-separated BMPs/frames.csv for the same active APT EATrax chyron.",
+      "pnr": {
+        "positive": "Set FALSE with the EATrax chyron active; take two time-separated frames and verify the APT frame/animation is frozen.",
+        "negative": "Set TRUE; emit the same chyron and verify the APT content advances or completes normally.",
+        "restore": "Restore TRUE and verify the view resumes and the transient chyron reaches its normal end state."
+      },
+      "witness": "AptAux does not advance while the registered bit is FALSE and resumes on TRUE; the exact alias readback and time-separated view pixels must agree.",
+      "runtime_gate": "Use only an active APT view with a known changing component; if the view is static, the freeze witness is infeasible and this row gets zero credit.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 36,
+        "original_call": "sub_8282D800(a1, *(*(a1 + 12) + 111616) + 552, \"Update Flash\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Update Flash",
+        "entry_caption_expression": "\"Update Flash\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x82860708"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x82860708",
+          "name": "CgsGui::ViewModule::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82860708.json",
+          "sha256": "7f2eacac3387e85824665b4d398078b31be5b11ad4c179d0df12f11ebe13b8e7"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0027",
+      "caption": "Show Keyboard",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiKeyboard.cpp",
+        "src/GameShared/GameClasses/Gui/CgsGuiKeyboard.cpp",
+        "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+        "src/GameSource/Gui/BrnGuiKeyboardHost.cpp"
+      ],
+      "source_member": "ShowKeyboardCallback -> BrnGuiKeyboard::Show -> GuiKeyboard::Show -> XShowKeyboardUI -> PC KeyboardPC::Begin Win32 modal window.",
+      "source_alias_path": "Gui Module/Show Keyboard",
+      "artist_consumer": "BrnGui::GuiDebugComponent::ShowKeyboardCallback @0x824FD478 calls BrnGui::BrnGuiKeyboard::Show @0x824F5B00; CgsGui::GuiKeyboard::Show @0x8284CFD8 calls the platform provider.",
+      "raw_read_path": "Action receipt in driver-result.json plus a read-only EnumWindows receipt for HWND class BurnoutPCKeyboard, title Title Text, prompt Description Text and edit default Default Text; record Cancel completion.",
+      "pnr": {
+        "positive": "Invoke once; observe the owned BurnoutPCKeyboard modal and its source-pinned title/prompt/default text.",
+        "negative": "Do not invoke; confirm no BurnoutPCKeyboard window is owned by Burnout_PC.exe.",
+        "restore": "Choose Cancel, confirm the window is gone and KeyboardHost receives cancellation; do not save entered text."
+      },
+      "witness": "The actual Win32 modal exists with the source UTF-16 labels and closes through Cancel; a success return alone is insufficient.",
+      "runtime_gate": "Requires the Source41 PC KeyboardPC provider and its existing Win32 message pump. Do not type or accept text.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 41,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::ShowKeyboardCallback, a1, \"Show Keyboard\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Show Keyboard",
+        "entry_caption_expression": "\"Show Keyboard\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824FD478",
+        "0x824F5B00",
+        "0x8284CFD8"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiKeyboard.cpp",
+        "src/GameShared/GameClasses/Gui/CgsGuiKeyboard.cpp",
+        "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp",
+        "src/GameSource/Gui/BrnGuiKeyboardHost.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824F5B00",
+          "name": "BrnGui::BrnGuiKeyboard::Show",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824F5B00.json",
+          "sha256": "6b9768c53166370fe9f83cba422cf29a395038600fdeccfe317a2d5b0aa9cbda"
+        },
+        {
+          "address": "0x824FD478",
+          "name": "BrnGui::GuiDebugComponent::ShowKeyboardCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824FD478.json",
+          "sha256": "3d30a52bfa36763be025597b44851fb2f7999f842366c7534a8911db3ed158da"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8284CFD8",
+          "name": "CgsGui::GuiKeyboard::Show",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8284CFD8.json",
+          "sha256": "b217ddb5ec06a192ac6b544b6512022f53c776d93ff4b65a318137fa66a294e9"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0029",
+      "caption": "Play/stop test movie",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "source_member": "PlayMovieCallback -> PlayMovie -> event 511",
+      "source_alias_path": "Gui Module/Play/stop test movie",
+      "artist_consumer": "BrnGui::InGame::Update @0x824E0ED0 case 511 sends the TO_VIDEO state event.",
+      "raw_read_path": "Action command receipt and raw BMP/frames.csv for InGame -> Video transition, first video frame, and return to InGame.",
+      "pnr": {
+        "positive": "Invoke once in InGame and capture the TO_VIDEO state/video content.",
+        "negative": "On the paired InGame phase, do not invoke and verify no video transition.",
+        "restore": "Use the video state's normal Back/skip/finish route and verify the same InGame route; no profile action."
+      },
+      "witness": "A visible Video state and changing video frame are required; black/static output is not a pass.",
+      "runtime_gate": "The video resource must be present in the referenced game-data pool; abort this row if the target route is unavailable.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 43,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::PlayMovieCallback, a1, \"Play/stop test movie\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Play/stop test movie",
+        "entry_caption_expression": "\"Play/stop test movie\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D4E8",
+        "0x824E0ED0"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D4E8",
+          "name": "BrnGui::GuiDebugComponent::PlayMovieCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D4E8.json",
+          "sha256": "dc0e37d25afaacd7de665225026c1e87cc75908bf1d1b268ce27361a16dad2c4"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0031",
+      "caption": "Select next font effect",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "source_member": "RotateThroughFontEffectsCallback -> event 227 -> HUD PostCommand16<61> -> view event 61.",
+      "source_alias_path": "Gui Module/Select next font effect",
+      "artist_consumer": "Race/Freeburn HUD UpdateRunning consumes event 227 and posts command 61; ViewModule::ProcessIncomingViewEvents @0x8285FCE8 case 61 calls AptAux::DebugRotateToNextFontEffect @0x8285FEF0..FF10; miTextEffect cycles 0..4 and is read for APT text layout.",
+      "raw_read_path": "Action receipt plus the same EATrax APT text ROI in each raw BMP/frames.csv row; no scalar alias is registered for miTextEffect.",
+      "pnr": {
+        "positive": "From the clean default effect 0, invoke once and capture effect 1.",
+        "negative": "Invoke once more and capture effect 2 as the second distinct style.",
+        "restore": "Invoke exactly three additional times (states 3, 4, 0) and verify the original effect-0 text rendering."
+      },
+      "witness": "The same visible APT text changes style across the 0..4 cycle and returns exactly to effect 0.",
+      "runtime_gate": "Requires active Race/Freeburn HUD view text and a clean new-process text-effect baseline.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 45,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::RotateThroughFontEffectsCallback, a1, \"Select next font effect\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Select next font effect",
+        "entry_caption_expression": "\"Select next font effect\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D000",
+        "0x8247E898",
+        "0x8285FCE8"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8247E898",
+          "name": "BrnGui::RaceMainHudState::UpdateRunning",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8247E898.json",
+          "sha256": "09033106a38f19bdc73eb6fa0039aa1e815e144b422c7e942dd88598de2359a7"
+        },
+        {
+          "address": "0x8250D000",
+          "name": "BrnGui::GuiDebugComponent::RotateThroughFontEffectsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D000.json",
+          "sha256": "e343c0ea406c536ac93aab9d93e8517d3d148984682282872be226885693df78"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0032",
+      "caption": "Trigger PFX Hook <dynamic>",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h",
+        "src/GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp"
+      ],
+      "source_member": "TriggerPFXCallback -> event 495; caption is macCurrentPFXHookName selected by #0033.",
+      "source_alias_path": "Gui Module/Trigger PFX Hook FadeIn_BW_Menu (index 66); alternate Gui Module/Trigger PFX Hook FadeOut_BW_Menu (index 67).",
+      "artist_consumer": "GuiDebugComponent::Update @0x8250C998 consumes the event-501 hook enumeration and resolves the selected name; EffectsArbitrator::EventUpdate @0x825125C0 case 495 calls StartHook @0x8250B618.",
+      "raw_read_path": "Current Hook alias readback plus the exact function alias command receipt and raw PFX-effect BMP/frames.csv rows.",
+      "pnr": {
+        "positive": "Set #0033 to index 66, verify its dynamic alias is Trigger PFX Hook FadeIn_BW_Menu, invoke it, and capture the menu-hook effect.",
+        "negative": "Close the first menu hook, set #0033 to index 67, verify Trigger PFX Hook FadeOut_BW_Menu, invoke it, and capture the alternate menu-hook effect.",
+        "restore": "Send #0034 event 497, restore #0033 to the original index 0, and verify the pre-effect frame/color."
+      },
+      "witness": "The selected menu hook changes the captured post-FX output; only effect visibly active then removed by event 497 qualifies.",
+      "runtime_gate": "Require event-501 enumeration count 68 and both pinned is_menu hook rows. If the bundle is absent or the resolved alias differs, skip all PFX rows without credit.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 46,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerPFXCallback, a1, a1 + 484)",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": null,
+        "entry_caption_expression": "a1 + 484",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D6F8",
+        "0x8250D2E0",
+        "0x825125C0",
+        "0x8250B618"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h",
+        "src/GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8250B618",
+          "name": "BrnGui::EffectsArbitrator::StartHook",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250B618.json",
+          "sha256": "5fbf32248ddd7eda730400da93ffc8fe5eed2f6b8e44347b82027acee4deb617"
+        },
+        {
+          "address": "0x8250D2E0",
+          "name": "BrnGui::GuiDebugComponent::TriggerPFX",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D2E0.json",
+          "sha256": "b237e930b7314d139a6ca365f9d54c1d9a9427a2198c2327653ff495528a7873"
+        },
+        {
+          "address": "0x8250D6F8",
+          "name": "BrnGui::GuiDebugComponent::TriggerPFXCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D6F8.json",
+          "sha256": "1b907d1157f3889c0ae1084944088b8ea71bf26c956ca9d6aedd8696c1e72ce2"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0033",
+      "caption": "Current Hook",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp"
+      ],
+      "source_member": "miCurrentPFXHookIndex at this+0x1E0; Update copies GuiCache hook enumeration, sets range 0..67 and index 0, then formats macCurrentPFXHookName.",
+      "source_alias_path": "Gui Module/  Current Hook",
+      "artist_consumer": "GuiDebugComponent::Update @0x8250C998 resolves event-501 names; TriggerPFX reads mapHookNames[miCurrentPFXHookIndex] into event 495.",
+      "raw_read_path": "Exact alias triplet for Gui Module/  Current Hook; expected values 66, 67, 0 and corresponding dynamic function labels in raw frames.",
+      "pnr": {
+        "positive": "After event 64 and the 68-name enumeration, set index 66 and verify raw readback 66 plus the FadeIn_BW_Menu function alias.",
+        "negative": "Set index 67 and verify raw readback 67 plus the FadeOut_BW_Menu alias.",
+        "restore": "Restore the clean post-enumeration baseline index 0 and verify its alias label."
+      },
+      "witness": "The menu selection index, visible dynamic callback caption and the hook name used by event495 agree.",
+      "runtime_gate": "No writes before enumeration; skip if Current Hook remains at -1 or the runtime names differ from the pinned asset list.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 47,
+        "original_call": "sub_8282D720(a1, a1 + 480, \" Current Hook\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "  Current Hook",
+        "entry_caption_expression": "\"  Current Hook\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250C998",
+        "0x825125C0"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8250C998",
+          "name": "BrnGui::GuiDebugComponent::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250C998.json",
+          "sha256": "d0d151139b4efcd81a8b66a7cd0029c4ea778d97701485c4400101d696946138"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0034",
+      "caption": "Trigger PFX CloseMenu",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp"
+      ],
+      "source_member": "TriggerClosePFXCallback -> event 497",
+      "source_alias_path": "Gui Module/Trigger PFX CloseMenu",
+      "artist_consumer": "EffectsArbitrator::EventUpdate @0x825125C0 case 497 calls StopMenuHook @0x824FB478.",
+      "raw_read_path": "Action command receipt plus raw frame color/effect ROI before active hook, after close, and after terminal restore.",
+      "pnr": {
+        "positive": "With FadeIn_BW_Menu active from #0032, invoke CloseMenu once and verify the menu effect stops.",
+        "negative": "Reactivate FadeIn_BW_Menu and do not close; verify the effect remains visible for the bounded phase.",
+        "restore": "Invoke CloseMenu after the negative phase and restore Current Hook index 0; verify the original frame/color."
+      },
+      "witness": "A currently active menu hook stops only after event 497 and the full-color baseline returns.",
+      "runtime_gate": "Requires an active is_menu hook; event497 is not treated as proof when no hook is active.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 49,
+        "original_call": "sub_8282F720(a1, BrnGui::GuiDebugComponent::TriggerClosePFXCallback, a1, \"Trigger PFX CloseMenu\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger PFX CloseMenu",
+        "entry_caption_expression": "\"Trigger PFX CloseMenu\"",
+        "entry_path": null,
+        "entry_path_expression": null
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D798",
+        "0x825125C0",
+        "0x824FB478"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x824FB478",
+          "name": "BrnGui::EffectsArbitrator::StopMenuHook",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824FB478.json",
+          "sha256": "bee71982756e5dc56368e403a88650f06c130d7e118c06dea83122a27d338e1e"
+        },
+        {
+          "address": "0x8250D798",
+          "name": "BrnGui::GuiDebugComponent::TriggerClosePFXCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D798.json",
+          "sha256": "1a9fba04b860d981ac29d8f33aab69b06d7329d1fd6a6c5f06f0671cd7ef6f9d"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0038",
+      "caption": "Trigger EA Trax Component",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnEATraxInGameComponent.cpp"
+      ],
+      "source_member": "TriggerEATraxComponentCallback posts GuiEATraxNewTrackEvent id 502, song index 0, preview=true.",
+      "source_alias_path": "Gui Module/Components/Trigger EA Trax Component",
+      "artist_consumer": "AlwaysAvailableComponentsManager::Update @0x82509338 case 502 resolves track metadata and calls EATraxInGameComponent::DisplayNewTrackNotification @0x82439F08.",
+      "raw_read_path": "Action command receipt and raw BMP/frames.csv for the track chyron; no BRN_MUSIC_DIAG logging enabled.",
+      "pnr": {
+        "positive": "With the in-game movie clip active, invoke once and capture the song-0 artist/title/album chyron.",
+        "negative": "Matched phase without event502; confirm the same chyron does not appear.",
+        "restore": "Wait for the normal notification timeout and verify the overlay has returned to baseline; preview=true and no profile controls are called."
+      },
+      "witness": "The actual track notification appears with metadata and expires normally; event posting alone is not sufficient.",
+      "runtime_gate": "Require mbContainerMovieClipPlaying and the song metadata to resolve. If the in-game clip is not active, skip with zero credit.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 59,
+        "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerEATraxComponentCallback, a1, \"Components\", \"Trigger EA Trax Component\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger EA Trax Component",
+        "entry_caption_expression": "\"Trigger EA Trax Component\"",
+        "entry_path": "Components",
+        "entry_path_expression": "\"Components\""
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x825131E0",
+        "0x82509338",
+        "0x82439F08"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnEATraxInGameComponent.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x82439F08",
+          "name": "BrnGui::EATraxInGameComponent::DisplayNewTrackNotification",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82439F08.json",
+          "sha256": "f0a4a92534dee2a9d71a252e65c2d642eef873b26a80378ca8999675f2d5d1d5"
+        },
+        {
+          "address": "0x82509338",
+          "name": "BrnGui::AlwaysAvailableComponentsManager::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82509338.json",
+          "sha256": "7cb1ae983c01f49a5d0ca7cd92b321dab80a6f4ea4c2dfced358ebe8f7502db1"
+        },
+        {
+          "address": "0x825131E0",
+          "name": "BrnGui::GuiDebugComponent::TriggerEATraxComponentCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825131E0.json",
+          "sha256": "28f650d055329fddc140cc96ebc1dae35be5d10ee6bc9c14f2464ec5b4d08cc7"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0039",
+      "caption": "Trigger Receive Online Invite",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp"
+      ],
+      "source_member": "TriggerOnlineInviteCallback posts a local GuiEventBuddyNotification id 105 with name Linus T and notification type 0.",
+      "source_alias_path": "Gui Module/Components/Trigger Receive Online Invite",
+      "artist_consumer": "Source41 d85 AlwaysAvailableComponentsManager::Update @0x82509338 case 105 calls OnlineNotificationMessageComponent::ShowMessage for the invite chyron; this is a local event, not a network request.",
+      "raw_read_path": "Action command receipt and raw BMP/frames.csv for the Linus T invite chyron and its normal disappearance.",
+      "pnr": {
+        "positive": "With the in-game overlay clip active, invoke once; capture the visible Linus T invite notification.",
+        "negative": "Matched phase without event105; verify no invite notification.",
+        "restore": "Wait for the component's normal timeout and verify baseline; do not invoke an online/network action."
+      },
+      "witness": "The Source41 case105 consumer displays the local synthetic invite and the transient notification clears.",
+      "runtime_gate": "Requires the current Source41 case105 sink and mbContainerMovieClipPlaying; no external network or profile write.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 65,
+        "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerOnlineInviteCallback, a1, \"Components\", \"Trigger Receive Online Invite\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger Receive Online Invite",
+        "entry_caption_expression": "\"Trigger Receive Online Invite\"",
+        "entry_path": "Components",
+        "entry_path_expression": "\"Components\""
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x82513228",
+        "0x82509338"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x82509338",
+          "name": "BrnGui::AlwaysAvailableComponentsManager::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82509338.json",
+          "sha256": "7cb1ae983c01f49a5d0ca7cd92b321dab80a6f4ea4c2dfced358ebe8f7502db1"
+        },
+        {
+          "address": "0x82513228",
+          "name": "BrnGui::GuiDebugComponent::TriggerOnlineInviteCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82513228.json",
+          "sha256": "44a9013b04b578f7522f9dd3eb15eeb5731008d387545b23550b9c6c4b0f1d95"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0040",
+      "caption": "Trigger Payback Component",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+        "src/GameSource/Gui/Flow/HUD/Components/BrnPaybackComponent.cpp"
+      ],
+      "source_member": "TriggerPaybackComponent constructs a local GuiDirtyTrickNewEvent id 177 using the active race-car index as both aggressor and victim.",
+      "source_alias_path": "Gui Module/Components/Trigger Payback Component",
+      "artist_consumer": "RaceMainHudState::UpdateRunning @0x8247E898 case177 calls PaybackComponent::BeginAwardAnimation @0x8243E148.",
+      "raw_read_path": "Action command receipt and raw BMP/frames.csv for the local payback-award animation; BRN payback diagnostics remain unset.",
+      "pnr": {
+        "positive": "In active local RaceMainHud, invoke once and observe the award animation for the current race-car index.",
+        "negative": "Matched phase without event177; confirm the animation does not start.",
+        "restore": "Let the finite animation complete and verify the normal RaceMainHud baseline; no game-score/profile event is sent."
+      },
+      "witness": "A visible PaybackComponent award animation begins only on event177 and returns to the baseline HUD.",
+      "runtime_gate": "Require active RaceMainHud and mbPaybackComponent. If either is absent, skip without credit.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 71,
+        "original_call": "CgsDev::DebugComponent::RegisterFunction( a1, BrnGui::GuiDebugComponent::TriggerPaybackComponent, a1, \"Components\", \"Trigger Payback Component\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Trigger Payback Component",
+        "entry_caption_expression": "\"Trigger Payback Component\"",
+        "entry_path": "Components",
+        "entry_path_expression": "\"Components\""
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D848",
+        "0x8247E898",
+        "0x8243E148"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp",
+        "src/GameSource/Gui/Flow/HUD/Components/BrnPaybackComponent.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x8243E148",
+          "name": "BrnGui::PaybackComponent::BeginAwardAnimation",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8243E148.json",
+          "sha256": "37dfffd26ef676825613a8d7c846b1b0a40777f54b1a974559b008b49f1ad01f"
+        },
+        {
+          "address": "0x8247E898",
+          "name": "BrnGui::RaceMainHudState::UpdateRunning",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8247E898.json",
+          "sha256": "09033106a38f19bdc73eb6fa0039aa1e815e144b422c7e942dd88598de2359a7"
+        },
+        {
+          "address": "0x8250D848",
+          "name": "BrnGui::GuiDebugComponent::TriggerPaybackComponent",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D848.json",
+          "sha256": "0d24111a4ee76b138a071e2cc276889bd56fe23e0d5fe2099910cbda3d0c622b"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0042",
+      "caption": "Enable Toggling Race HUD",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+      ],
+      "source_member": "mbToggleableRaceHUDEnabled at this+0x278; change callback user-data 21 gates RaceMainHudState::ForceReenter.",
+      "source_alias_path": "Gui Module/Race HUD Toggling/Enable Toggling Race HUD",
+      "artist_consumer": "ToggleRaceHudComponentsCallback @0x824ED288 -> RaceMainHudState::ForceReenter @0x82474F00 with the original state vector.",
+      "raw_read_path": "Exact alias triplet for the master bool; paired alias Gui Module/Race HUD Toggling/BOOST_BAR and raw frames show the gate effect.",
+      "pnr": {
+        "positive": "Set BOOST_BAR=false while master=false, then set master=true; verify Boost Bar hides under the enabled override.",
+        "negative": "Set master=false with BOOST_BAR still false; verify Boost Bar returns because the override gate is off.",
+        "restore": "Set BOOST_BAR=true and master=false; verify the original complete HUD."
+      },
+      "witness": "The same BOOST_BAR array value is ignored when master is false and applied when master is true; both alias readbacks and pixels must agree.",
+      "runtime_gate": "Requires the InGame RaceMainHud and loaded BOOST_BAR component.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 78,
+        "original_call": "sub_8282D640(a1, a1 + 632, \"Race HUD Toggling\", \"Enable Toggling Race HUD\")",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": "Enable Toggling Race HUD",
+        "entry_caption_expression": "\"Enable Toggling Race HUD\"",
+        "entry_path": "Race HUD Toggling",
+        "entry_path_expression": "\"Race HUD Toggling\""
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824ED288",
+        "0x82474F00"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x82474F00",
+          "name": "BrnGui::RaceMainHudState::ForceReenter",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82474F00.json",
+          "sha256": "342cf21b03e9570a95aad1776a92c8a24c83b4ecb1255672191f0355f157bf06"
+        },
+        {
+          "address": "0x824ED288",
+          "name": "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824ED288.json",
+          "sha256": "56974e360d8b315fbc9ab0aab67202191acc69a9ff4f6226686a7ca59c07c320"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0043",
+      "caption": "Race HUD element toggle registration loop",
+      "source_paths": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+      ],
+      "source_member": "One OnActivate loop registration site expands to 21 labeled bool variables; selected item index 2 is mabTogglableRaceHUDElementsState[2] / BOOST_BAR.",
+      "source_alias_path": "Gui Module/Race HUD Toggling/BOOST_BAR",
+      "artist_consumer": "OnActivate @0x8252A3B8 passes the label array at 0x82F27548; ToggleRaceHudComponentsCallback @0x824ED288 forwards the state vector to RaceMainHudState::ForceReenter @0x82474F00.",
+      "raw_read_path": "Exact alias triplet for Gui Module/Race HUD Toggling/BOOST_BAR; record value false/true/true and the raw BoostBar pixels.",
+      "pnr": {
+        "positive": "With master=true, set BOOST_BAR=false; verify the same bar disappears.",
+        "negative": "With master still true, set BOOST_BAR=true; verify the bar returns.",
+        "restore": "Leave BOOST_BAR=true, set master=false, and compare the full HUD with the original baseline."
+      },
+      "witness": "The selected original loop item is the visible BoostBarRenderer; no credit for the other 20 loop entries is claimed.",
+      "runtime_gate": "Requires the Source41 RaceMainHud, dynamic label BOOST_BAR at index 2, and the master override enabled for P/N.",
+      "entry_state": "pending",
+      "registration": {
+        "address": "0x8252A3B8",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8252A3B8.json",
+        "pseudocode_line": 89,
+        "original_call": "sub_8282D640(a1, v3, \"Race HUD Toggling\", *v4)",
+        "registration_function": "BrnGui::GuiDebugComponent::OnActivate",
+        "entry_caption": null,
+        "entry_caption_expression": "*v4",
+        "entry_path": "Race HUD Toggling",
+        "entry_path_expression": "\"Race HUD Toggling\""
+      },
+      "verdict_key_present": false,
+      "site_credit": 0,
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824ED288",
+        "0x82474F00"
+      ],
+      "source_blob_refs": [
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp"
+      ],
+      "original_export_pins": [
+        {
+          "address": "0x82474F00",
+          "name": "BrnGui::RaceMainHudState::ForceReenter",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82474F00.json",
+          "sha256": "342cf21b03e9570a95aad1776a92c8a24c83b4ecb1255672191f0355f157bf06"
+        },
+        {
+          "address": "0x824ED288",
+          "name": "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824ED288.json",
+          "sha256": "56974e360d8b315fbc9ab0aab67202191acc69a9ff4f6226686a7ca59c07c320"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ]
+    }
+  ],
+  "source_blobs": {
+    "src/GameShared/GameClasses/Gui/CgsGuiKeyboard.cpp": "88e984c85adb3ea38f67f651ab7c74946b285254",
+    "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp": "ad2cf6be79d9b6ec9c9ee857ffac373514a2d657",
+    "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp": "a8753f47ed3e5a2275e0b796249afe3156fdb6c3",
+    "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.h": "c83dad209765abb83d0291dfc97e7673f82610e6",
+    "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": "1e2b18a8e09be4c4064f6f7d1b5971045314e8c0",
+    "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp": "bc3a38c1feb5599e364ecddb8ceef75998cb7706",
+    "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp": "e5f4fdb4ea23e579df63dcb4a76f6d8e5c206805",
+    "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+    "src/GameSource/Gui/BrnGuiKeyboard.cpp": "7801642be1a87ce5a11f57dcf2418e8b27ccff03",
+    "src/GameSource/Gui/BrnGuiKeyboardHost.cpp": "83200f4cd0a7299a111a538c52c3b76a85c6b3d9",
+    "src/GameSource/Gui/Flow/HUD/Components/BrnPaybackComponent.cpp": "be0f50f9732521c50a6ef232372a4e22860b44df",
+    "src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp": "b5500b2473729e0fb18b3260163c15c316a15d60",
+    "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "4f03d81c7306eb8166725d6a2cf550430872d4ce",
+    "src/GameSource/Gui/Flow/Permanent/Components/BrnEATraxInGameComponent.cpp": "412f3b8f0de9d22cf8d7bdbd1deafab6d1690ff1",
+    "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp": "ed8d9d1757613114142c82168c1e0ece0c090ea5",
+    "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp": "35d06576745362fa6ad150f6c5e5b179ac993640",
+    "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2",
+    "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h": "c9ac5c699c936a7129a1af3de3a1a97cdc344cff",
+    "src/GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp": "42133f520917bd033171c104a6646a81e6cb1a51"
+  },
+  "entries_sha256": "f2ff2e044b82af2b96dc32e965b8f02936345f46f9a65fbabed7e5c37ed5c5c4",
+  "verdicts_sha256": "e104fd23eeac7406d4a8a55ae7ee8397020a7f8e60174524e8300417d72b0f6f",
+  "site_credit": 0,
+  "raw_frame_cap": 80
+}

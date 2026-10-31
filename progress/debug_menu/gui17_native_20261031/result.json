@@ -1,0 +1,58 @@
+{
+  "flow_exit": 1,
+  "slot": 62194,
+  "label": "GUI17 native control probe",
+  "provenance": {
+    "exe_size": 11794944,
+    "parent_head": "a6e4457a6",
+    "b5_dirty": 4,
+    "exe_sha": "39b62961b592",
+    "exe_b5": "3f4f9c06",
+    "exe_mtime": "2026-10-31T15:15:56.9644550+01:00",
+    "b5_head": "3f4f9c06e",
+    "exe_mtime_before_lock": "2026-10-31T15:15:56.9644550+01:00"
+  },
+  "expected": "PASS",
+  "asserts": 1,
+  "case": "gui17_source3f_62194",
+  "bug": "GUI17 native controls and concrete consumer discovery",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\fixed\\Case.ps1",
+  "when": "2026-10-31T15:28:58.9124880+01:00",
+  "area": "debug-menu",
+  "phase": "DRIVING",
+  "as_expected": false,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e",
+  "verdict": "FAIL",
+  "checks": [
+    {
+      "kind": "TerminalFlow",
+      "pass": false,
+      "name": "original strict flow completed and owned game exited",
+      "detail": "original flow_exit=1 success=False assert_stop=True foreign_game=False cleanup=True"
+    },
+    {
+      "kind": "NewAsserts",
+      "pass": false,
+      "name": "no new assertions",
+      "detail": "1 NEW assert family(ies): 1x 'mCarSelectManager.IsInJunkyard()' @ src\\GameSource\\GameState\\GameStateModule_ProcessGameEvents_wBT_01.cpp:390"
+    },
+    {
+      "kind": "LogCount",
+      "pass": true,
+      "name": "no exceptions",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]"
+    },
+    {
+      "kind": "Mark",
+      "pass": true,
+      "name": "DRIVING",
+      "detail": "final phase DRIVING, want DRIVING"
+    },
+    {
+      "kind": "Script",
+      "pass": false,
+      "name": "actual profile and recorded probe completion",
+      "detail": "status=fail; per-site effects require review; credit=0"
+    }
+  ]
+}
