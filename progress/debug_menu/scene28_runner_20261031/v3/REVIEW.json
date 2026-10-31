@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-31T16:43:56.291676+00:00",
+  "reviewer": "Codex sole combined fresh reviewer",
+  "verdict": "pass",
+  "verdict_line": "VERDICT: pass",
+  "scope": "Scene28 v3 static runner delta and complete launch/restoration contract; no per-site behavioral verdict.",
+  "readiness": "static_delta_accepted_actual_stage_gate_and_native_evidence_still_required",
+  "candidate": {
+    "b5_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "workflow_main": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+    "build_receipt_sha256": "bfa1c512b4b9585a7eb8564017e2739f11cb55fbcaac129a007d03eda3b606c1",
+    "map_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f"
+  },
+  "slot": 62190,
+  "site_credit": 0,
+  "behavior_credit": 0,
+  "controls_pending": 28,
+  "native_run_performed": false,
+  "builds_performed_by_reviewer": false,
+  "production_source_mutations": false,
+  "git_mutations": false,
+  "profile_mutations": false,
+  "canonical_site_verdicts_changed": false,
+  "input_sha256": {
+    "ALL_FILE_HASHES.sha256": "129ed48f22975b3e8bf715b623a9082e6933c95ec5206b3069905070dbf3d20e",
+    "Capture.ps1": "ee13cf79f4e6ecb2fe40113e70e90341a86d7023f1765cbab8d85d7b75315a6c",
+    "Case.ps1": "ad3be60865f4a3c1679bc2774811b32cd3e58c2b448962325b285bb4e6f1d38b",
+    "CONTROL_MATRIX.md": "2ad1dd66a6cdbcd704738df5974daf86b21d313e25491c1db2a183aab2037c3b",
+    "CURRENT_SAVE_EXPECTED_PROGRESS.json": "bee2e1a988acb86bee2859e7127f1e54452ceca312d4c7d25602a1ee358bb2a4",
+    "CurrentSaveProgress.ps1": "8036f6505722c8c80333737cf762e90d8c3af109c29ce9a6226d0e0c7078c875",
+    "Driver.Helpers.ps1": "d823bf9dc9d87166562fb1a71d2deabd5ddcadf96e25f25be617f3dc4c4033d1",
+    "Driver.ps1": "0a8b80e1e9b63e35457c38ad7cfedb94fd845b230d3348142963c7f727b02c7e",
+    "HELPER_EXTRACTION.json": "5fda8450976ae304a2bcf5b6a162a1eaaaa938b443bcd758ef8929071694ce77",
+    "Invoke-PrivateCase.ps1": "5418f741fa4fa1238975e91243f9b40077c72600cc43233885007d1e1f271b32",
+    "ORIGINAL_REVIEW_INPUT_HASHES.json": "5f5c2e1ff09269456b444659e34e4009c31b85c65dd10594e3df34f373d39a36",
+    "PATH_ATTESTATION.md": "289d7c086115337227fea05b23a8f206c6d63ad0b0559cceb1fdba3f3bc3da85",
+    "PathGuards.ps1": "c2cd836976d14b1ebf46b24da79e1f0a713590f17e1ef56a1e14e2d95f6190ad",
+    "Preflight.ps1": "f355af5aaae651dc48d6705f11331247803992b8a4eb00dcba0b8a7e7c9c023f",
+    "README.md": "9c3fcfd46fa969fbc06d267d665570d29c49b4aa987a2c55845a41a8939ea927",
+    "RECONCILIATION.json": "59e4b44d30600b760e907a60eab017ada8f8f044004e764cbf917b4de31b5e67",
+    "Request-HarnessPhaseDone.ps1": "10be4697bc1bff6d024c686a4d2dbbe4a60322dd196f83bec2239bba0bf0e995",
+    "REVIEW_PACKET.md": "50f2fdbd9797d215233015b738944c64f41fdc088de6a7b299ec37a1b04fb6d2",
+    "RUNTIME_GATES.md": "20d32c6dcf2234b7367b0aea2c7c7f62d04d3356be9a6511ffe456b26a751b68",
+    "SCOPE.json": "cd50dac8bbfb1a3877b00257ad82fada9e44d79f6ae88bb6236acee6d012aa79",
+    "SOURCE_PINS.json": "c8cfef271dd47b5f471d61640f8e5d24261d56dc97a01a8b283b2a5f69b86ce9",
+    "StageBoundary.ps1": "0ed989ecb073c22477fa01b05cfc4281cc3cb8cc9509aec9c961539a81f00dfe",
+    "STAGING.TEMPLATE.json": "8a2b7c6d0b6b7b2029bf6c9c8bca79db091063a09f19c5ef131558912a78fef1"
+  },
+  "checks": {
+    "powershell_ast": {
+      "scripts": 10,
+      "errors": 0,
+      "script_execution": false
+    },
+    "authored_hashes": "all match",
+    "all_file_manifest": "complete set and all hashes match",
+    "canonical_v3_packet": "all pre-review bytes identical",
+    "source_blob_pins": {
+      "b5_at_3f": 20,
+      "path_attestation_at_3f": 11,
+      "all_match": true
+    },
+    "original_evidence_pins": {
+      "count": 17,
+      "all_match": true
+    },
+    "runner_dependency_pins": {
+      "count": 4,
+      "all_match": true
+    },
+    "fixture_snapshot_hash": "matches",
+    "targeted_regressions": {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\scene_v3_validation_20261031_161011\\RESULT.json",
+      "sha256": "7c3d493c03998e899c0707f42c3d5a064e3920a47332d30f76bdda1b0f5d049e",
+      "checks": 8,
+      "all_pass": true,
+      "validation_script_hash_matches": true,
+      "rerun_by_reviewer": false
+    },
+    "actual_stage_exists": false,
+    "actual_run_exists": false
+  },
+  "repaired_findings": [
+    {
+      "id": "R9",
+      "priority": 1,
+      "disposition": "resolved_static",
+      "evidence": "Preflight.ps1:10-13,51-62,171-190: the immutable authored set and all-file manifest exclude exactly STAGING.json, REVIEW.md, REVIEW.json. Every authored member and hash still matches; unknown files fail. Stage metadata is checked separately at lines 192-244. Retained metadata-clone regression checks pass."
+    },
+    {
+      "id": "R10",
+      "priority": 2,
+      "disposition": "resolved_static",
+      "evidence": "Driver.ps1:243-255: SC01 P/N/restore completes before the optional FALSE seed immediately preceding SC02. Both actual-function/actual-loop synthetic branches restore SC01 and the captured SC02 baseline; retained SC02_FALSE.json and SC02_TRUE.json show the exact phase order."
+    },
+    {
+      "id": "R11",
+      "priority": 2,
+      "disposition": "resolved_static",
+      "evidence": "Invoke-PrivateCase.ps1:29 invokes AtRun preflight before run_case; Preflight.ps1:203 invokes StageBoundary.ps1. The boundary fixes stage/slot and stage/data to the approved private root, walks all existing ancestors for reparse points, checks existing profile and independent fixture single-link identity/hash, and accepts an absent private target. Case.ps1:55-73 keeps the under-lock Setup recheck. Retained junction/hard-link tests rejected both before any synthetic protected file changed."
+    }
+  ],
+  "previous_findings": [
+    {
+      "id": "R1",
+      "disposition": "resolved_static",
+      "detail": "Case disables concurrent games; no zero MaxConcurrentOtherGames setting. The exact pinned helper refuses an existing game before its first profile move."
+    },
+    {
+      "id": "R2",
+      "disposition": "resolved_static",
+      "detail": "Thirty declared aliases, Boolean context overrides, and validated restore-map keys are retained."
+    },
+    {
+      "id": "R3",
+      "disposition": "resolved_static",
+      "detail": "Family/alias/state phase names remain unique; 89 planned phase names and 190 receipt paths."
+    },
+    {
+      "id": "R4",
+      "disposition": "resolved_static_requires_native_receipt",
+      "detail": "Exact retry03 helper/dependency hashes match. Actual flow_run creates/polls the PID/slot/start-time event and cleans its retained launch handle. Case requires event witness hash plus original successful terminal/cleanup/profile-restoration receipts."
+    },
+    {
+      "id": "R5",
+      "disposition": "resolved_static",
+      "detail": "All 23 pre-review package files match their submitted manifests; the complete canonical v3 packet is byte-identical. Preserve these bytes and line endings."
+    },
+    {
+      "id": "R6",
+      "disposition": "resolved_static_requires_native_evidence",
+      "detail": "Scene f32 default pins, matching F3 natural readback, and absence of matching applied/rejected typed Debug.ini rows gate every setter; otherwise skip. E43/E44/E45 require same-run exact four-byte reads and bitwise restore checks."
+    },
+    {
+      "id": "R7",
+      "disposition": "resolved_static",
+      "detail": "Invariant f32 parsers reject NaN/infinity before comparisons; exact bit pins are retained."
+    },
+    {
+      "id": "R8",
+      "disposition": "retained_behavior_blocker",
+      "detail": "E14 remains pinned to published 3f and its known Prepare trap/assert. The separate jump source checkpoint does not change this runner executable or earn native credit."
+    }
+  ],
+  "new_actionable_findings": [],
+  "frame_budget": {
+    "maximum_planned": 88,
+    "hard_cap": 90,
+    "width": 1280,
+    "height": 720,
+    "max_bytes_each": 3686454,
+    "frames_reviewed": 0
+  },
+  "pending_controls": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+      "alias": "SC01",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "alias": "SC02",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "alias": "SC03",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+      "alias": "SC04",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+      "alias": "SC05",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "alias": "SC06",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+      "alias": "SC07",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "alias": "SC08",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "alias": "SC09",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "alias": "SC10",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0008",
+      "alias": "E08",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0014",
+      "alias": "E14",
+      "disposition": "pending_known_pc_trap_field_only",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0015",
+      "alias": "E15",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0016",
+      "alias": "E16",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0018",
+      "alias": "E18",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "alias": "E19",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0022",
+      "alias": "E22",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0023",
+      "alias": "E23",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0026",
+      "alias": "E26",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0043",
+      "alias": "E43",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0044",
+      "alias": "E44",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0045",
+      "alias": "E45",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "alias": "E54",
+      "disposition": "pending_no_native_consumer_evidence",
+      "site_credit": 0,
+      "behavior_credit": 0
+    }
+  ],
+  "limitations": [
+    "The retained 18-check preparation preflight and eight synthetic regressions establish static preparation only. No actual STAGING.json, stage, game launch, native setter/readback, frame or camera/shadow/scene behavior was exercised.",
+    "The real Root-created stage must pass the actual AtRun gate immediately before wrapper invocation; this review does not certify an uncreated stage or its runnable assets.",
+    "All 28 native producer/consumer requirements remain in SCOPE.json, CONTROL_MATRIX.md and RUNTIME_GATES.md. Field writes, empty caches and absent effects earn no site credit.",
+    "The runner injects no phase-local jump/stunt/hard-stop/crash/boost scenarios. A matching producer plus consumer/pixel/log witness is required separately.",
+    "Retained validation-initialization failures and v1/v2 failed reviews remain unmodified. No GUI17 aggregate or separately adjudicated GUI outcome was reopened."
+  ]
+}

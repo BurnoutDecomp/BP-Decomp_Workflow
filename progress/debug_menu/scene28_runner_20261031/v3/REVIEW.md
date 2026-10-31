@@ -1,0 +1,21 @@
+# Scene28 v3 combined fresh review
+
+VERDICT: pass
+
+The v3 runner delta passes static review. The actual private stage has not been created or validated, and no native behavior is certified. All **28 controls remain pending**, with **zero site and behavior credit**.
+
+| Finding | Disposition | Evidence |
+| --- | --- | --- |
+| R9 | resolved_static | [Preflight.ps1](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_scene_batch_20261031_v3/Preflight.ps1:10) separates the immutable authored-file set from exactly STAGING.json, REVIEW.md and REVIEW.json. All authored names/hashes remain mandatory, unknown files fail, and the stage is checked separately. The retained metadata-clone regressions cover review outputs, invalid stage metadata and an unknown script. |
+| R10 | resolved_static | [Driver.ps1](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_scene_batch_20261031_v3/Driver.ps1:243) places the optional SC02 false anchor seed immediately before SC02, after SC01 has restored its captured baseline. Retained execution of the actual loop/builders passes for natural TRUE and FALSE and restores both values. |
+| R11 | resolved_static | [Invoke-PrivateCase.ps1](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_scene_batch_20261031_v3/Invoke-PrivateCase.ps1:29) calls preflight before run_case can move/copy a profile. [StageBoundary.ps1](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_scene_batch_20261031_v3/StageBoundary.ps1:2) fixes the approved stage root, rejects existing ancestor reparse points and shared/hard-linked profiles/fixtures, and validates hashes. The later under-lock Setup recheck remains. Retained synthetic junction and hard-link cases reject without changing the protected target. |
+
+The complete retained contract was inspected: unique phase/receipt names; private slot 62190; exact retry03 run_case/flow_run plus supporting dependency pins; fresh logs with immutable accepted-prefix hashes; retained process PID/image/start-time identity; finite f32 probes; safe exact-baseline/skip rules; per-target, terminal and emergency restoration; bounded request-driven captures; and original event/terminal/cleanup/profile-restoration receipts. The helper restores the private fixture only after owned-game exit is confirmed. It preserves the fixture and parked original when cleanup is unconfirmed.
+
+Earlier R1-R7 repairs remain accepted at static scope. R8 remains an explicit behavior blocker: this runner still targets published **3f / executable 39b62961**, where E14 reaches the known player-jump Prepare trap/assert. The separately reviewed source checkpoint does not update that executable. Neither the normal live profile nor a live normal log is used as a mutable target or hash invariant.
+
+All **10 scripts parse with zero errors**. The 23 pre-review package files match both complete manifests and the canonical committed v3 bytes, including line endings. The 20 source pins, 11 path-attribution pins, 17 original-evidence hashes, four runner/dependency hashes and external snapshot hash match. The retained preparation preflight passes 18 checks. The retained validation driver and result hashes match and its **eight synthetic checks pass**. Those checks used recording I/O and synthetic profile files; the reviewer did not rerun them or execute any runner script. Earlier initialization failures and v1/v2 failed reviews remain retained.
+
+The frame plan remains **88 maximum / 90 hard cap**, including the optional seed and terminal captures, at 1280x720 and at most 3,686,454 bytes per frame. **Zero frames were reviewed.** No actual STAGING.json, stage or run exists. Actual-stage AtRun validation and attributable native producer/consumer evidence are still required. The runner supplies no phase-local jump/stunt/hard-stop/crash/boost stimulus; field mutation alone cannot establish those effects. Empty scene/cache data, absent shadow receivers and unresolved camera gates remain pending.
+
+No new blocking or actionable runner defect was found in the submitted delta. Per-finding dispositions, exact input hashes and all 28 pending controls are recorded in [REVIEW.json](D:/Reverse/BP-Decomp_Workflow/scratch/DEBUG_MENU_1011/native_scene_batch_20261031_v3/REVIEW.json).

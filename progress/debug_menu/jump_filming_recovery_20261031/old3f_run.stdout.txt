@@ -1,0 +1,135 @@
+FxDirector2PlayerJumping.cpp
+BrnVehicleEvents.cpp
+Generating Code...
+FAIL  K17 the enabled path selects rig shot 1 and records the exact handle, both owners, ref limit 1, no trap
+FAIL  K18 FOUND_PREPARING sees the original ready result, enters VALID, and keeps the allocated rig behavior
+FAIL  K19 VALID update publishes the jump camera tail: border post-FX 0.15, camera bits 7/1, and Jump_Effect
+FAIL  K20 a subsequent VALID tick reuses the same behavior and camera without assertions or logging
+FAIL  rig-6: Prepare preincrements to shot 1, allocates once, and raises both latches
+FAIL  rig-6: NewBehaviour receives the selected handle, null state owner, this moment, and ref limit 1
+FAIL  rig-6: Prepare while allocated reuses the selected behavior without reallocation
+FAIL  rig-6: Release drops both latches, releases the selected handle, and preserves its index
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-6: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-6: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-6: the stored word wraps before unsigned remainder, so -1 selects shot zero
+FAIL  rig-6: HasFailed asserts both original latches in order, then returns constant false
+FAIL  rig-6: CanSwitchToMeNow asserts both original latches in order, then returns constant true
+FAIL  rig-6: with both latches up, HasFailed still returns false without asserting
+FAIL  rig-6: with both latches up, CanSwitchToMeNow still returns true without asserting
+FAIL  bystander: Prepare preincrements to shot 1, allocates once, and raises both latches
+FAIL  bystander: NewBehaviour receives the selected handle, null state owner, this moment, and ref limit 1
+FAIL  bystander: Prepare while allocated reuses the selected behavior without reallocation
+FAIL  bystander: Release drops both latches, releases the selected handle, and preserves its index
+FAIL  bystander: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  bystander: each prepare records the exact selected handle and both owner arguments
+FAIL  bystander: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  bystander: each prepare records the exact selected handle and both owner arguments
+FAIL  bystander: a non-null selected parameter reaches SetParameters unchanged
+FAIL  bystander: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  bystander: each prepare records the exact selected handle and both owner arguments
+FAIL  bystander: the stored word wraps before unsigned remainder, so -1 selects shot zero
+FAIL  bystander: HasFailed asserts both original latches in order, then returns constant false
+FAIL  bystander: CanSwitchToMeNow asserts both original latches in order, then returns constant true
+FAIL  bystander: with both latches up, HasFailed still returns false without asserting
+FAIL  bystander: with both latches up, CanSwitchToMeNow still returns true without asserting
+FAIL  rig-4: Prepare preincrements to shot 1, allocates once, and raises both latches
+FAIL  rig-4: NewBehaviour receives the selected handle, null state owner, this moment, and ref limit 1
+FAIL  rig-4: Prepare while allocated reuses the selected behavior without reallocation
+FAIL  rig-4: Release drops both latches, releases the selected handle, and preserves its index
+FAIL  rig-4: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-4: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-4: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-4: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-4: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-4: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-4: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  rig-4: each prepare records the exact selected handle and both owner arguments
+FAIL  rig-4: a non-null selected parameter reaches SetParameters unchanged
+FAIL  rig-4: the stored word wraps before unsigned remainder, so -1 selects shot zero
+FAIL  rig-4: HasFailed asserts both original latches in order, then returns constant false
+FAIL  rig-4: CanSwitchToMeNow asserts both original latches in order, then returns constant true
+FAIL  rig-4: with both latches up, HasFailed still returns false without asserting
+FAIL  rig-4: with both latches up, CanSwitchToMeNow still returns true without asserting
+FAIL  ice: Prepare preincrements to shot 1, allocates once, and raises both latches
+FAIL  ice: NewBehaviour receives the selected handle, null state owner, this moment, and ref limit 1
+FAIL  ice: Prepare while allocated reuses the selected behavior without reallocation
+FAIL  ice: Release drops both latches, releases the selected handle, and preserves its index
+FAIL  ice: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  ice: each prepare records the exact selected handle and both owner arguments
+FAIL  ice: a non-null selected parameter reaches SetParameters unchanged
+FAIL  ice: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  ice: each prepare records the exact selected handle and both owner arguments
+FAIL  ice: a non-null selected parameter reaches SetParameters unchanged
+FAIL  ice: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  ice: each prepare records the exact selected handle and both owner arguments
+FAIL  ice: a non-null selected parameter reaches SetParameters unchanged
+FAIL  ice: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  ice: each prepare records the exact selected handle and both owner arguments
+FAIL  ice: a non-null selected parameter reaches SetParameters unchanged
+FAIL  ice: release/reprepare follows the pinned preincrement/remainder index sequence
+FAIL  ice: each prepare records the exact selected handle and both owner arguments
+FAIL  ice: a non-null selected parameter reaches SetParameters unchanged
+FAIL  ice: the stored word wraps before unsigned remainder, so -1 selects shot zero
+FAIL  ice: HasFailed asserts both original latches in order, then returns constant false
+FAIL  ice: CanSwitchToMeNow asserts both original latches in order, then returns constant true
+FAIL  ice: with both latches up, HasFailed still returns false without asserting
+FAIL  ice: with both latches up, CanSwitchToMeNow still returns true without asserting
+FAIL  rig-4 collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.0: original sequence branch publishes the selected camera and time scale
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.0: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.0: prepared sequence collections satisfy both original latch assertions
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.0: only the dropped-rig leading arm detaches into world-no-slo-mo
+FAIL  rig-4 collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.05: original sequence branch publishes the selected camera and time scale
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.05: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.05: prepared sequence collections satisfy both original latch assertions
+FAIL  rig-4 collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.1: original sequence branch publishes the selected camera and time scale
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.1: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  DROPPED_RIG_THEN_ATTACHED_RIG at 1.1: prepared sequence collections satisfy both original latch assertions
+FAIL  bystander collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.0: original sequence branch publishes the selected camera and time scale
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.0: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.0: prepared sequence collections satisfy both original latch assertions
+FAIL  bystander collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.05: original sequence branch publishes the selected camera and time scale
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.05: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.05: prepared sequence collections satisfy both original latch assertions
+FAIL  bystander collection prepares through the extracted production body
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.1: original sequence branch publishes the selected camera and time scale
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.1: flash stores occur only inside the strict 1.0-to-1.1 window
+FAIL  BYSTANDER_THEN_ATTACHED_RIG at 1.1: prepared sequence collections satisfy both original latch assertions
+FAIL  ICE collection prepares through the extracted production body
+FAIL  UpdateCamera ICE_RIG @0x8223AB78: exact 0.5 remaining is ready (less-than comparison is false)
+FAIL  UpdateCamera ICE_RIG: strictly below the 0.5 cooldown fails after selecting its camera
+FAIL  bystander collection prepares through the extracted production body
+FAIL  UpdateCamera BYSTANDER_SHOT @0x8223AB78: exactly 1.0 remains valid (greater-than comparison is false)
+FAIL  UpdateCamera BYSTANDER_SHOT: the first float above 1.0 fails after camera selection
+FAIL  rig-4 collection prepares through the extracted production body
+FAIL  UpdateCamera DROPPED_RIG_SHOT: exact 1.0 remains ready and writes detached/world-no-slo-mo
+FAIL  UpdateCamera DROPPED_RIG_SHOT: strict expiration still publishes its selected camera
+FAIL  rig-6 collection prepares through the extracted production body
+FAIL  UpdateCamera ATTACHED_RIG_SHOT: selects the rig camera with the jump time scale
+FAIL  UpdateCamera default asserts and continues, returning true without replacing the supplied camera
+FxDirector2PlayerJumping: 174 checks, 131 failures
