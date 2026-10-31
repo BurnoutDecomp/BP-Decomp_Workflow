@@ -1,0 +1,89 @@
+identity: 27554 names
+indexing PC tree ... 6619 files, 37155 qualified defs, 12691 enum/const names (23s)
+selected: 8 functions
+paired 8 (clean 3), with findings 5, no_body 0, unpaired 0, no_export 0 (24s)
+  MISSING_CALLEE                6 items in     2 functions
+  UNCITED_DATA                  2 items in     1 functions
+  INFO_TRUNCATED_CALLEES        3 items in     3 functions
+  INFO_UNNAMED_CALLEES          4 items in     4 functions
+report: D:\Reverse\BP-Decomp_Workflow\scratch\funcaudit\work_audit.md
+TU      : GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp    status: compiled    dest: b5-decomp/src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp
+console audit @ b5 31092e95119c: 7600/17709 paired bodies clean (42.9% verified), 301 named with no body, 6960 not audited; stubs 2056 (669 on live paths)
+instruction shape of the built exe (b5 31092e95119c): 3890/14284 same shape (27.2%), 4895 diverge, 11773 named but not in the exe
+
+console audit (b5 31092e95119c, 2026-10-31T01:11:28Z; file GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp):
+  6 function(s) with findings, 9 high-signal item(s), 0 named with no body, 4 stub bod(ies) in the file (0 on live paths)
+  [  5 hs] BrnDirector::MomentPlayerJumping::Prepare @0x82251048 line 261
+      MISSING_CALLEE  Attrib::Instance::Get; Attrib::Attribute::GetLength; Attrib::Instance::GetAttributePointer; Attrib::DefaultDataArea; BrnDirector::Camera::BehaviourI
+  [  3 hs] BrnDirector::MomentPlayerJumping::UpdateCamera @0x8223AB78 line 574
+      MISSING_CASE    0, 1, 2, 3, 4, 5
+      MISSING_CALLEE  BrnDirector::Camer; BrnDirector::Camera::BehaviourIceAnim::GetTimeRemaining
+      MISSING_STRING  "2dFlash"; "invalid type"
+  [  1 hs] BrnDirector::MomentPlayerJumping::GetCameraStatus @0x8220A358 line 396
+      MISSING_CALLEE  BrnDirecto
+  [  0 hs] BrnDirector::MomentPlayerJumping::PrepareCameras @0x822755A0 line 339
+  [  0 hs] BrnDirector::MomentPlayerJumping::Release @0x8223AED0 line 306
+  [  0 hs] BrnDirector::MomentPlayerJumping::Update @0x82275988 line 464
+      UNCITED_DATA    0x82001770; 0x82CDA5E0
+  stub bodies in this file:
+    [HIGH  ] BrnDirector::PlayerJumpingTrap (line 81, trap body)
+    [HIGH  ] BrnDirector::MomentPlayerJumping::PrepareCameras (line 339, trap body, console 105 lines)
+    [HIGH  ] BrnDirector::MomentPlayerJumping::GetCameraStatus (line 396, trap body, console 50 lines)
+    [HIGH  ] BrnDirector::MomentPlayerJumping::Update (line 464, trap body, console 165 lines)
+  instruction shape (built exe of b5 31092e95119c): 7 in the exe -- 1 A same shape, 2 B close, 2 C diverges, 2 T trivial
+    [C  41.6] BrnDirector::MomentPlayerJumping::Update @0x82275988  console 226 / pc 317 insns, branches 20/27
+        callees only on the console: BrnDirector::HookNameStringWrapper::Set, BrnDirector::MomentPlayerJumping::GetCameraStatus, BrnDirector::MomentPlayerJumping::UpdateCamera
+        callees only in our exe    : BrnDirector::Camera::Camera::SetRequestedBorderPostFX, BrnDirector::Camera::CameraState::SetFlag, BrnDirector::Camera::CameraState::SetFlag, strcpy
+        constants only on the console: [3, 263, 285, 332, 400, 1028]
+        constants only in our exe    : [-1, 7, 8, 88, 128, 300]
+    [C  52.4] BrnDirector::MomentPlayerJumping::Prepare @0x82251048  console 115 / pc 125 insns, branches 6/8
+        callees only on the console: Attrib::Attribute::GetLength, Attrib::Instance::Get, BrnDirector::Camera::BehaviourI, CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct
+        callees only in our exe    : Attrib::Gen::shotgroup::Num_ShotList, BrnDirector::BehaviourCollection::AddShot, BrnDirector::BehaviourCollection::AddShot, BrnDirector::BehaviourCollection::AddShot, BrnDirector::BehaviourCollection::AddShot, BrnDirector::BehaviourCollection::AddShot
+        constants only on the console: [159]
+        constants only in our exe    : [-1, 146, 186, 187]
+    [B  57.4] BrnDirector::MomentPlayerJumping::Release @0x8223AED0  console 42 / pc 208 insns, branches 1/25
+        callees only in our exe    : BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle, BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle, BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle, BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle
+        constants only in our exe    : [-1, 50, 51, 108]
+    [B  64.9] BrnDirector::MomentPlayerJumping::PrepareCameras @0x822755A0  console 156 / pc 108 insns, branches 10/12
+        callees only in our exe    : BrnDirector::BehaviourCollection::Prepare, BrnDirector::BehaviourCollection::Prepare, BrnDirector::BehaviourCollection::Prepare, BrnDirector::BehaviourCollection::Prepare, BrnDirector::BehaviourCollection::Prepare, BrnDirector::BehaviourCollection::Prepare
+        constants only on the console: [416, 422, 423, 429, 430, 436]
+        constants only in our exe    : [88, 346, 352, 354, 360, 362]
+    [T 100.0] BrnDirector::MomentPlayerJumping::GetInstanceType @0x821F7628  console 2 / pc 2 insns, branches 0/0
+    [T    --] BrnDirector::MomentPlayerJumping::GetName @0x821F7630  console 4 / pc 2 insns, branches 0/0
+  re-run live for this file: python tools/re/funcaudit.py --tu <file> --cache progress/funcaudit_features.json.gz  (and stubaudit.py --file <file>; asmaudit.py --tu <file> needs a built exe)
+
+== live re-run of funcaudit for GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp ==
+# funcaudit -- 2026-10-31 17:43
+
+Scope: GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp. Paired 8 functions (3 clean, 5 with findings); 0 identity rows name a PC file but have no body anywhere; 0 unpaired (no PC file known); 0 without an export.
+
+A clean function means: nothing this tool can name differs. It cannot see inlined callees, virtual dispatch, argument ORDER or the VALUE of a cited constant (see the docstring).
+
+## Findings by category
+
+| category | items | functions |
+|---|---:|---:|
+| MISSING_CALLEE | 6 | 2 |
+| UNCITED_DATA | 2 | 1 |
+| INFO_TRUNCATED_CALLEES | 3 | 3 |
+| INFO_UNNAMED_CALLEES | 4 | 4 |
+
+## By translation unit (most findings first)
+
+### GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp  (8 findings in 5 functions)
+- **BrnDirector::MomentPlayerJumping::Prepare** @0x82251048 (+1 PC helpers) -- GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp:261
+    - MISSING_CALLEE: Attrib::Instance::Get; Attrib::Attribute::GetLength; Attrib::Instance::GetAttributePointer; Attrib::DefaultDataArea; BrnDirector::Camera::BehaviourI
+    - INFO_TRUNCATED_CALLEES: CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct
+    - INFO_UNNAMED_CALLEES: sub_8224B1B8, sub_8224B0A8, sub_8224B130
+- **BrnDirector::MomentPlayerJumping::Update** @0x82275988 (+2 PC helpers) -- GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp:464
+    - UNCITED_DATA: 0x82001770; 0x82CDA5E0
+    - INFO_TRUNCATED_CALLEES: BrnDirector::Camera::Camera::operator=
+- **BrnDirector::MomentPlayerJumping::GetCameraStatus** @0x8220A358 (+2 PC helpers) -- GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp:396
+    - MISSING_CALLEE: BrnDirecto
+    - INFO_UNNAMED_CALLEES: sub_821FD5B8, sub_821FD118, sub_821FD238, sub_821FD358, sub_821FD2C8
+- **BrnDirector::MomentPlayerJumping::Release** @0x8223AED0 -- GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp:306
+    - INFO_TRUNCATED_CALLEES: BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle
+    - INFO_UNNAMED_CALLEES: sub_8222DF20, sub_8222DDB0, sub_8222DE68, sub_8222E030
+- **BrnDirector::MomentPlayerJumping::PrepareCameras** @0x822755A0 (+2 PC helpers) -- GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp:339
+    - INFO_UNNAMED_CALLEES: sub_82273360, sub_82267D88, sub_82267ED0, sub_82267C40
+

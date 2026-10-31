@@ -1,6 +1,6 @@
 # Debug-menu behavior campaign
 
-**October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separate thirteen-body jump-filming source checkpoint is not merged or installed. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
+**October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof and the playable-build refresh remain pending. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
 
 Match every entry to ARTIST, including authentic no-ops and broken leftovers.
 Recovery, integration, review and behavior checks remain active.

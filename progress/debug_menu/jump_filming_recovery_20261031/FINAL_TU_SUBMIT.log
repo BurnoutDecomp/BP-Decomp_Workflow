@@ -1,0 +1,37 @@
+[work] sync conflict on claim GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp: HTTP 409: {"claimed":false,"tu":"GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp","status":"done","owner":null,"lease_expires_at":null,"message":"not claimable"}
+[work] sync conflict on compiled GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp: HTTP 409: {"detail":"TU is done, not in progress"}
+[work] server rejected compiled GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp: HTTP 409: {"detail":"TU is done, not in progress"} � kept locally
+compile gate: PASS  (files: b5-decomp/src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp)
+faithfulness gate: PASS
+synced 0 queued op(s) to the server, 2 conflict(s) � see warnings above
+
+automated parity: RED
+
+  signal          pseudo     cpp   delta   tol  note
+  call_count         108     207      99     3  <-- gross (>3)
+  branch_count        42      55      13     2  <-- gross (>2)
+  loop_count           1       2       1     1  
+  return_count         8      21      13     2  <-- gross (>2)
+
+  named callees in pseudocode but absent from C++ (check: inlined? stubbed? or genuinely dropped?):
+    - Attrib::Attribute::GetLength
+    - Attrib::DefaultDataArea
+    - Attrib::Instance::Get
+    - Attrib::Instance::GetAttributePointer
+    - Attrib::RefSpec
+    - BrnDirector::Camera
+    - BrnDirector::Camera::BehaviourI
+    - BrnDirector::Camera::BehaviourManager::UnSetBehaviourUsedByHandle
+    - BrnDirector::Camera::Camera::Construct
+    - BrnDirector::Camera::Camera::operator_
+    - BrnDirector::HookNameStringWrapper::Set
+    - BrnDirector::MomentPlayerJumping::UpdateCamera
+    - CgsDev::Assert::BeginAssert
+    - CgsDev::Assert::EndAssert
+    - CgsDev::Assert::FireAssert
+    - CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct
+  -> gross divergence; review and look hard at the flagged signal(s).
+
+reviewer packet -> progress\reviews\GameSource__Director__MomentController__Moments__BrnMomentPlayerJumping.cpp.md
+Next: choose a reviewer per progress/review.config.json policy, run the review, then record the verdict:
+  work review "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp" --verdict pass   # or: --verdict fail --notes "..."
