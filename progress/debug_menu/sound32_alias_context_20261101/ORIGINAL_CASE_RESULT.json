@@ -1,0 +1,58 @@
+{
+  "slot": 62207,
+  "when": "2026-11-01T00:25:12.9629795+01:00",
+  "flow_exit": 0,
+  "case": "native_sound32_log_display_62207",
+  "expected": "PASS",
+  "as_expected": false,
+  "checks": [
+    {
+      "pass": true,
+      "name": "original strict flow completed and owned game exited",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "kind": "TerminalFlow"
+    },
+    {
+      "pass": true,
+      "name": "no new assertions",
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "kind": "NewAsserts"
+    },
+    {
+      "pass": true,
+      "name": "no exceptions",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "kind": "LogCount"
+    },
+    {
+      "pass": true,
+      "name": "reached DRIVING",
+      "detail": "final phase DRIVING, want DRIVING",
+      "kind": "Mark"
+    },
+    {
+      "pass": false,
+      "name": "current save, Sound Console context, 32 typed targets, restore, frames and PhaseDone",
+      "detail": "missing receipt D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v3\\runs\\sound32_62207_20261031_232252_72a3321ecce94494bb24fd04f7a90d3a\\NATURAL_BASELINE.json",
+      "kind": "Script"
+    }
+  ],
+  "area": "debug-menu-native-sound32",
+  "label": "",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v3\\Case.ps1",
+  "asserts": 0,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v3\\runs\\sound32_62207_20261031_232252_72a3321ecce94494bb24fd04f7a90d3a",
+  "verdict": "FAIL",
+  "bug": "Thirty-two original Sound log/display gates; typed P/N/captured restore; event and rendered-consumer evidence pending.",
+  "phase": "DRIVING",
+  "provenance": {
+    "b5_dirty": 4,
+    "parent_head": "58a2b6a5e",
+    "exe_mtime": "2026-11-01T00:22:49.3227034+01:00",
+    "exe_b5": "ca802777",
+    "exe_mtime_before_lock": "2026-11-01T00:22:49.3227034+01:00",
+    "exe_size": 11777024,
+    "exe_sha": "052112a5aa52",
+    "b5_head": "ca8027774"
+  }
+}
