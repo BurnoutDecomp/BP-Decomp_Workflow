@@ -1,0 +1,9 @@
+# One combined source/native review of Scene28
+
+Review all28 controls in SCOPE.json and their exact P/N/restore native phases. Use SOURCE_PINS.json and original assembly; published code is3f and clean EXE39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da. Current dev includes a separate jump-filming fix, but this collection used the older clean executable and earns no inferred E14 implementation credit. Shared renderer/world files contain unrelated WIP; read pinned Git blobs.
+
+Original raw87 BMPs, full log, exact commands/readbacks, profile witnesses and scripts are in `D:\Reverse\BP-Decomp_Evidence\debug_menu\scene28_native_20261031\originals.zip`, SHA `c241c6e15355b0691c525bd1c08a707f2b598b7c305c3a057f708560cf708a8f`; verify against ARCHIVE.json. Their existing raw paths are also in driver-result.json under `D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\native_scene_batch_20261031_v4\runs\native_scene_batch_62190_20261031_172701_97c62abc4b074a36b5b8b1d54eddb907`. Inspect all actual original captures/ACK/CSV attribution, not only WebP contacts. Review Root's collection/normal-file protection reconciliation independently. The original case FAIL and stop-event schema mismatch must stay explicit.
+
+Require each control's real scene/producer and visible consumer effect through negative/restore. Triangle cache/volume/shadow scene absence, missing camera/moment/world-map/boost contexts and E43's unknown producer must stay pending. Pure readout/field receipts are insufficient. Do not invent original no-ops from missing pixels. E14's old native trap path was not activated by a real jump here. Produce per-ID accepted/insufficient results; ROOT has granted0 credit so far.
+
+Read-only review: no games/builds, source/Git/profile changes or publication. Write explicit VERDICT: pass/fail, REVIEW.md and REVIEW.json here, with bounded proposed accepted IDs and actual evidence limitations. This is the sole combined review for all28.
