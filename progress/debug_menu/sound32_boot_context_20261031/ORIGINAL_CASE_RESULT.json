@@ -1,0 +1,58 @@
+{
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v2\\runs\\sound32_62207_20261031_221932_5181994319e246e9968bbcc1d0c9953e",
+  "label": "",
+  "phase": "BOOT",
+  "area": "debug-menu-native-sound32",
+  "case": "native_sound32_log_display_62207",
+  "flow_exit": 1,
+  "asserts": 1,
+  "expected": "PASS",
+  "as_expected": false,
+  "provenance": {
+    "exe_b5": "ca802777",
+    "b5_head": "ca8027774",
+    "exe_mtime_before_lock": "2026-10-31T23:19:27.0777445+01:00",
+    "exe_mtime": "2026-10-31T23:19:27.0777445+01:00",
+    "exe_size": 11777024,
+    "exe_sha": "052112a5aa52",
+    "parent_head": "b8397273f",
+    "b5_dirty": 4
+  },
+  "verdict": "FAIL",
+  "checks": [
+    {
+      "name": "original strict flow completed and owned game exited",
+      "pass": false,
+      "kind": "TerminalFlow",
+      "detail": "original flow_exit=1 success=False assert_stop=True foreign_game=False cleanup=True"
+    },
+    {
+      "name": "no new assertions",
+      "pass": false,
+      "kind": "NewAsserts",
+      "detail": "1 NEW assert family(ies): 1x 'mpSystem' @ src\\GameShared\\GameClasses\\Sound\\Playback\\RWAC\\CgsGenericRwacFactory.cpp:144"
+    },
+    {
+      "name": "no exceptions",
+      "pass": false,
+      "kind": "LogCount",
+      "detail": "1 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]"
+    },
+    {
+      "name": "reached DRIVING",
+      "pass": false,
+      "kind": "Mark",
+      "detail": "final phase BOOT, want DRIVING"
+    },
+    {
+      "name": "current save, private Debug.ini Console sink, read-only context2, 32 typed targets, restore, frames and PhaseDone",
+      "pass": false,
+      "kind": "Script",
+      "detail": "missing receipt D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v2\\runs\\sound32_62207_20261031_221932_5181994319e246e9968bbcc1d0c9953e\\CAPTURE_AUDIT.json"
+    }
+  ],
+  "when": "2026-10-31T23:20:08.0667885+01:00",
+  "bug": "Thirty-two original Sound log/display gates; private Debug.ini seeds Console2 via its registered OnChange; typed P/N/captured target restore; event and rendered-consumer evidence pending.",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261031_v2\\Case.ps1",
+  "slot": 62207
+}

@@ -1,0 +1,30 @@
+{
+  "status": "confirmed_PC_INI_early_autoactivation_dependency_pending_repair",
+  "date_utc": "2026-10-31T22:44:18.449415+00:00",
+  "candidate_b5": "ca80277748eb098822a035093cff9d306d079e2a",
+  "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+  "slot": 62207,
+  "pid": 70284,
+  "target_phases": 0,
+  "frames": 0,
+  "site_credit": 0,
+  "assertion": "mpSystem at CgsGenericRwacFactory.cpp:144",
+  "exception": "System::Lock read0x70 after null GetDefaultRwacSystem",
+  "source_sha256": {
+    "src/GameSource/Sound/BrnDebugComponent.cpp": "a8ba6b4840d6e7dfb17089c311cbc5115ad5ac5d0d47919a46c68849e2312657",
+    "src/GameSource/Sound/Module/BrnRootSoundModule.cpp": "55daf2e155a5a9b1e22317d10d93526ba1fc81327aa0c77ac555a36f1d09435b",
+    "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp": "2b29cc5c1a12c8de44545d7f69cdfa2cfc2ec847a1b13787ec62dbe7bf750a61",
+    "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacFactory.cpp": "8bf6d2cc07cd048846dbb1371a5a6307c779379bb032c11604e818022cade34c"
+  },
+  "native_game_log_sha256": "db139835ae233691989525e02d248ed2c663c0f3cb2fd09e89fd1a139a17ba45",
+  "normal_unchanged": true,
+  "private_profile_restored": true,
+  "profile_load_proved": false,
+  "next_test": "original late Sound activation after RWAC LIVE/current-save DRIVING; one numeric Console2 bootstrap using real null sentinel and callback; preserve2 as explicit read-only context",
+  "original_engine_change": false,
+  "limits": [
+    "Do not add a speculative null guard to the original audition update.",
+    "Late-activation test does not repair or certify PC INI early activation.",
+    "No32-control behavior disposition follows from this invalid BOOT run."
+  ]
+}
