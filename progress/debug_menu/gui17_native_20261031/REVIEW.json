@@ -1,0 +1,1394 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-10-31T15:51:19.097925+00:00",
+  "reviewer": "Codex combined fresh reviewer",
+  "verdict": "fail",
+  "verdict_line": "VERDICT: fail",
+  "native_run_performed": false,
+  "builds_performed": false,
+  "source_mutations": false,
+  "profile_mutations": false,
+  "git_mutations": false,
+  "canonical_verdicts_changed": false,
+  "review_scope": "One combined fresh review; all 17 GUI IDs assessed against pinned 3f source, original assembly and the original raw native evidence.",
+  "aggregate_status": "FAIL",
+  "site_credit": 0,
+  "accepted_subset_count": 2,
+  "recommended_subset_ids": [
+    "BrnGui::GuiDebugComponent::OnActivate#0027",
+    "BrnGui::GuiDebugComponent::OnActivate#0038"
+  ],
+  "controls_reviewed": 17,
+  "frames_reviewed": 48,
+  "input_sha256": {
+    "ARCHIVE.json": "bcbee49701cad5e0a06a4dd6338a82492876231b53452f72e7978a14d85a010a",
+    "BASELINE_READY.json": "43e68ba52c18eff8725cae2a21eb2d913065a24a753ab97f104d13630c3d675c",
+    "CLEAN_MANIFEST.json": "5b8901bd6adc3e393a7856707ef42e32fd98a6c53b505c66fff3f872d1790d7e",
+    "CRASHNAV_STOP_TAP.json": "c14955251d40c02c24f41038d59839c790d46958dbc1a62637b93e6e400643c4",
+    "CURRENT_SAVE_LOAD_GATE.json": "502fd8784f62c1aec6e625b087ce2f63e4f7f55c757f60c9ad2f279e13096fe2",
+    "driver-result.json": "ccc436af591ba4f8666e85c085c32a38958b256b34d70a146775e7484dd89ad5",
+    "flow-terminal.json": "8bd88f2e7d7e90b992b0088479652f5c387e3fe48b40a115445de9b378c83abe",
+    "GUI_CONTACT_01.png": "b2360908d67d2e12cc6eaf3f9aa736c3fdcaa43d755546af0b2a4e67773eeba6",
+    "GUI_CONTACT_02.png": "9298801d5712e34fdc444f1a8decf87e0475c0714daeef6cfeee0f0eabda6b06",
+    "GUI_CONTACT_03.png": "8ce93aca0bebc0bc588619399c8f21b44a3d7805ba34ee5c1708185b31ff87a6",
+    "GUI_CONTACT_04.png": "2c2c41aae600191cc8f3dc996a765ab46fee2a613c543e9d16bf358de5b666d7",
+    "KEYBOARD_CANCELLED.json": "3bdbe9a9acf0c2a05678377f8db8fb86b78cb8532676d284b58849d5a7907727",
+    "KEYBOARD_VISIBLE.json": "1226416362d32010edc19960f8a5d3e59d9b69642cc5c6e4c338bbf7ea455226",
+    "KEYBOARD_WINDOW_CENSUS.json": "a27d6cfd8e335fb1ca59470c96c0a86ab6f14cf2945294ceb474071b76513001",
+    "LATEST_SAVE_EPOCH.json": "3272a84ca89a014a43c27eee597ce973a76078f29813619c81b6defe681a2c32",
+    "ORIGINAL_PINS.json": "5a8cad87efdb99a11d42e8fcdfaa0fdc3877d87552d052881e67f0bd420f2886",
+    "PRIVATE_PROFILE_BINDING.json": "55a96da8894b31cc6cb06b6861c94b4ddac88630a14c6611d0aa169754952520",
+    "README.md": "926f0496e992b743e579ec18f0a9b6920afc1647b704d746e64829eb5d0b7961",
+    "result.json": "40ec48435e4683a320d2ae6575f63d776c1411aaf05fbe0641170ce4deacf413",
+    "REVIEW_PACKET.md": "5fe307651c9c5c67cb6ff6143acdaa93a7d3a8e3e891cb4e357e650b211b4235",
+    "ROOT_PROPOSAL.json": "c127ad9f69d35c607294b733e9559d148a8866c7faf14d8e25bafb536b932516",
+    "RUN_EXIT.json": "35d32694c03874b5b00d2e25eef4caeb70c41593a7da6672bd1f45190cce1e9e",
+    "SCOPE.json": "9822a0c10f41a97e86b830c7983d259e87e573f06e183a7ddbaa5e8383445aad"
+  },
+  "candidate": {
+    "b5_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da"
+  },
+  "checks": [
+    {
+      "name": "archive_identity",
+      "result": "pass",
+      "detail": "originals.zip SHA f0e755289891f9e4914a97b368688e16cf434ca935d692ad3a7a50cca751c1d8; exact set of all 228 members, member lengths and member SHA-256 values match ARCHIVE.json."
+    },
+    {
+      "name": "original_raw_inspection",
+      "result": "pass",
+      "detail": "All 48 original 1280x720 top-down BMPs were viewed individually, not only contact sheets. Mutable raw frame hashes also match the preserved archive. Raw game log has 219523 logical lines; every phase snapshot hash, alias triplet and frame ACK index was verified against original bytes."
+    },
+    {
+      "name": "pinned_source_original_executable",
+      "result": "pass",
+      "detail": "All 19 source blob identities match published B5 3f4f9c06; all 29 per-site original export hashes and all ORIGINAL_PINS entries match. Source review used Git blobs, preserving unrelated WIP. The clean artifact executable currently hashes to 39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da."
+    },
+    {
+      "name": "fixture_and_normal_protection",
+      "result": "pass_archived_receipts_only",
+      "detail": "The retained private gate has 5 Road Rules, rank 5, 202 medals, 120 events, 85 max cars and the pinned returning-save identity. The retained before/after normal profile/config hashes and all 15 payload hashes agree; this review did not lock or re-read live normal user data."
+    },
+    {
+      "name": "aggregate_terminal_outcome",
+      "result": "fail",
+      "detail": "The aggregate remains FAIL, including the failed original strict terminal outcome, one assertion and missing terminal variable restore. Existing adapter/path/capture retry failures are not promoted to behavior evidence."
+    }
+  ],
+  "findings": [
+    {
+      "id": "GUI-F1",
+      "priority": 1,
+      "title": "The aggregate failed at Car Select and has no terminal variable-restore pass",
+      "evidence": [
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\result.json",
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\flow-terminal.json",
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\driver-result.json",
+        "originals.zip::run/RAW_GAME.log:219483-219523",
+        "originals.zip::run/phase_carselect_trigger.cfg"
+      ],
+      "detail": "One retained assertion is mCarSelectManager.IsInJunkyard(); first_assert_stop=true, owned cleanup completed, driver status=fail and terminal_restore_verified=false. The complete original runtime chain for that assertion has not been adjudicated. G04 remains pending, not original no-op/crash-equivalent."
+    },
+    {
+      "id": "GUI-F2",
+      "priority": 2,
+      "title": "CrashNav has a positive transition but an incomplete HUD restore witness",
+      "evidence": [
+        {
+          "phase": "natural_baseline",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_003863.bmp",
+          "sha256": "eecd513eefa715f75dc63e0df330a5ba82887f14eac5df6b1f10120c0aa12047",
+          "sequence": 1,
+          "raw_log_ack_line_1based": 8618
+        },
+        {
+          "phase": "racehud_override_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044516.bmp",
+          "sha256": "ec26cdb05f9857a47041c261b1e3e84a58f1ce218c73af7da942cb5d4bf1c1bc",
+          "sequence": 45,
+          "raw_log_ack_line_1based": 200179
+        },
+        {
+          "phase": "crashnav_trigger",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_045586.bmp",
+          "sha256": "779090d08ab57bcbd377143c6d6ee9a13b31f8bd00781de300207739215ab310",
+          "sequence": 46,
+          "raw_log_ack_line_1based": 204766
+        },
+        {
+          "phase": "crashnav_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_045653.bmp",
+          "sha256": "e27357931f096a906fd2ff77b28150dc59461a8f94760cdbb927d6077208ac15",
+          "sequence": 47,
+          "raw_log_ack_line_1based": 205064
+        },
+        {
+          "phase": "crashnav_return",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_049013.bmp",
+          "sha256": "b13fd84cb35d032d59ee30de5d8ad251d2699c9639b78a48f38a4eba77cd0390",
+          "sequence": 48,
+          "raw_log_ack_line_1based": 219336
+        },
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\CRASHNAV_STOP_TAP.json"
+      ],
+      "detail": "Both map frames show the original MAP_MAIN-style map; the exact slot Stop input returns the same world/camera/car. The pre-G13 frame already lacks the HUD. The return therefore cannot certify restoration of the natural HUD or the shutdown/restore portion of this site."
+    },
+    {
+      "id": "GUI-F3",
+      "priority": 2,
+      "title": "Invite timeout does not restore the visible baseline",
+      "evidence": [
+        {
+          "phase": "natural_baseline",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_003863.bmp",
+          "sha256": "eecd513eefa715f75dc63e0df330a5ba82887f14eac5df6b1f10120c0aa12047",
+          "sequence": 1,
+          "raw_log_ack_line_1based": 8618
+        },
+        {
+          "phase": "invite_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008291.bmp",
+          "sha256": "0610cdc395b23c22d1e77e06d08d9d67e658ae1505be77d65ab3def069b67047",
+          "sequence": 6,
+          "raw_log_ack_line_1based": 29966
+        },
+        {
+          "phase": "invite_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008850.bmp",
+          "sha256": "effaaa2cf6282780d516287118e345ab6cae123a1262aece18d34893c34dd2fe",
+          "sequence": 7,
+          "raw_log_ack_line_1based": 32626
+        }
+      ],
+      "detail": "Linus T invite text is directly visible, but the envelope/D-pad icon persists after text timeout and in later frames. Original timeline evidence is needed to determine its intended lifetime and to complete the restoration verdict."
+    },
+    {
+      "id": "GUI-N1",
+      "priority": 3,
+      "title": "Queued video requests must not be described as executed Intro/video evidence",
+      "evidence": [
+        "originals.zip::run/requests/049.json",
+        "originals.zip::run/requests/050.json",
+        "originals.zip::run/requests/051.json",
+        "originals.zip::run/requests/052.json",
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\ROOT_PROPOSAL.json"
+      ],
+      "detail": "Requests 049/050 are Car Select; 051/052 are video_trigger/video_visible. There is no Intro request. There are no 049-052 done receipts or frames. Keep both Intro and movie controls pending."
+    }
+  ],
+  "controls": [
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0004",
+      "caption": "Trigger Car Select",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Car Select emitted its request and reached the retained host assertion, without a captured target screen or return. The original-named assertion alone does not prove original crashing behavior.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D648",
+        "0x824E0ED0"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D648",
+          "name": "BrnGui::GuiDebugComponent::EnterCarSelectCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D648.json",
+          "sha256": "89c4f6f2825ab7648f5ec8b437427e2950086def23ba3fbdbd45c8d642fc5865"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp": "35d06576745362fa6ad150f6c5e5b179ac993640"
+      },
+      "native_frames": [],
+      "findings": [
+        "GUI-F1"
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0005",
+      "caption": "Trigger Intro",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "No Intro phase or native Intro destination/return exists. The retained queued requests 051/052 are video_trigger/video_visible, not Intro.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250CF50",
+        "0x824E0ED0"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250CF50",
+          "name": "BrnGui::GuiDebugComponent::TriggerIntroCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250CF50.json",
+          "sha256": "7a9f546fc7f00f30bd732635a6a877a153bd967b68adc6c0d38bb5f3a0a83289"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp": "35d06576745362fa6ad150f6c5e5b179ac993640"
+      },
+      "native_frames": [],
+      "findings": [
+        "GUI-N1"
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0013",
+      "caption": "Trigger crash nav",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The map opens and the owned Stop channel returns to the world scene, but the required HUD-baseline restoration is not proved. The natural baseline has the minimap/boost HUD; the return does not. HUD was already absent before G13, so attribution of that loss is unresolved. Accept the positive map/return observation only, without full site credit.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D598",
+        "0x824E0ED0"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D598",
+          "name": "BrnGui::GuiDebugComponent::OpenCrashNavCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D598.json",
+          "sha256": "24b4880d2d6b8ec29fbce8de1b644783603d08d5d2d33bd5787466c8ae766e87"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp": "35d06576745362fa6ad150f6c5e5b179ac993640"
+      },
+      "native_frames": [
+        {
+          "phase": "racehud_override_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044516.bmp",
+          "sha256": "ec26cdb05f9857a47041c261b1e3e84a58f1ce218c73af7da942cb5d4bf1c1bc",
+          "sequence": 45,
+          "raw_log_ack_line_1based": 200179
+        },
+        {
+          "phase": "crashnav_trigger",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_045586.bmp",
+          "sha256": "779090d08ab57bcbd377143c6d6ee9a13b31f8bd00781de300207739215ab310",
+          "sequence": 46,
+          "raw_log_ack_line_1based": 204766
+        },
+        {
+          "phase": "crashnav_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_045653.bmp",
+          "sha256": "e27357931f096a906fd2ff77b28150dc59461a8f94760cdbb927d6077208ac15",
+          "sequence": 47,
+          "raw_log_ack_line_1based": 205064
+        },
+        {
+          "phase": "crashnav_return",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_049013.bmp",
+          "sha256": "b13fd84cb35d032d59ee30de5d8ad251d2699c9639b78a48f38a4eba77cd0390",
+          "sequence": 48,
+          "raw_log_ack_line_1based": 219336
+        }
+      ],
+      "findings": [
+        "GUI-F2"
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0020",
+      "caption": "Change Font Spacing",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Font-spacing commands and new text triggers ran, but the 80/100/160 captures do not isolate the required changing text bounds or a verified rendering consumer.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D160",
+        "0x8285FCE8"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8250D160",
+          "name": "BrnGui::GuiDebugComponent::ChangeFontSpacingCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D160.json",
+          "sha256": "1ca040374bc24a68ef3d66015637dfbb08a1d0834ee312fdc3e5977bb3348675"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": "1e2b18a8e09be4c4064f6f7d1b5971045314e8c0",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp": "ad2cf6be79d9b6ec9c9ee857ffac373514a2d657",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp": "a8753f47ed3e5a2275e0b796249afe3156fdb6c3"
+      },
+      "native_frames": [
+        {
+          "phase": "spacing80_apply",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008949.bmp",
+          "sha256": "85dd3b75beab8928875a3f439518572439caa7620bb8db1936993a18a5b6e2f7",
+          "sequence": 9,
+          "raw_log_ack_line_1based": 33136
+        },
+        {
+          "phase": "spacing80_fresh_text",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009065.bmp",
+          "sha256": "0113ad81858e25078e93eb46574f754014fc915d554e9499271e3136830680fe",
+          "sequence": 10,
+          "raw_log_ack_line_1based": 33691
+        },
+        {
+          "phase": "spacing100_fresh_text",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009210.bmp",
+          "sha256": "eb4f77ddb79fa2cc2ea843624214220d85b340325f1aff0ff808d4177dc1aa6e",
+          "sequence": 12,
+          "raw_log_ack_line_1based": 34417
+        },
+        {
+          "phase": "spacing160_fresh_text",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009391.bmp",
+          "sha256": "c39be47de07fc4619a0ec3d2a8cd80402b72dd93893f7f0b3fcc1cf08c8d43a2",
+          "sequence": 14,
+          "raw_log_ack_line_1based": 35285
+        },
+        {
+          "phase": "spacing100_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009448.bmp",
+          "sha256": "35f299a1bf92dbae6fa2dd530ee38ed1eea1c3c4b24734c16423a2930d3ee4c7",
+          "sequence": 15,
+          "raw_log_ack_line_1based": 35586
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0021",
+      "caption": "Spacing percentage:",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Fresh 80.000/100.000/160.000/100.000 field triplets exist; the coupled font-layout effect remains unproved.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8285FCE8"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": "1e2b18a8e09be4c4064f6f7d1b5971045314e8c0",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp": "ad2cf6be79d9b6ec9c9ee857ffac373514a2d657",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.h": "c83dad209765abb83d0291dfc97e7673f82610e6",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp": "a8753f47ed3e5a2275e0b796249afe3156fdb6c3"
+      },
+      "native_frames": [
+        {
+          "phase": "spacing80_set_only",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008896.bmp",
+          "sha256": "79422b26d024863d201d3083c436cc17bb9d39054722c2cf0bb02b2764b972b8",
+          "sequence": 8,
+          "raw_log_ack_line_1based": 32864
+        },
+        {
+          "phase": "spacing100_fresh_text",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009210.bmp",
+          "sha256": "eb4f77ddb79fa2cc2ea843624214220d85b340325f1aff0ff808d4177dc1aa6e",
+          "sequence": 12,
+          "raw_log_ack_line_1based": 34417
+        },
+        {
+          "phase": "spacing160_fresh_text",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009391.bmp",
+          "sha256": "c39be47de07fc4619a0ec3d2a8cd80402b72dd93893f7f0b3fcc1cf08c8d43a2",
+          "sequence": 14,
+          "raw_log_ack_line_1based": 35285
+        },
+        {
+          "phase": "spacing100_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_009448.bmp",
+          "sha256": "35f299a1bf92dbae6fa2dd530ee38ed1eea1c3c4b24734c16423a2930d3ee4c7",
+          "sequence": 15,
+          "raw_log_ack_line_1based": 35586
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0022",
+      "caption": "Update Flash",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "TRUE/FALSE/TRUE field receipts exist. The selected notification is already disappearing/absent around the freeze captures; these stills do not prove a live APT animation stopped and resumed.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x82860708"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x82860708",
+          "name": "CgsGui::ViewModule::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82860708.json",
+          "sha256": "7f2eacac3387e85824665b4d398078b31be5b11ad4c179d0df12f11ebe13b8e7"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": "1e2b18a8e09be4c4064f6f7d1b5971045314e8c0"
+      },
+      "native_frames": [
+        {
+          "phase": "flash_before_freeze",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014794.bmp",
+          "sha256": "e675060a92b59abf06bafaa3b50eabc198ee9386537b436fcc025205c1924454",
+          "sequence": 21,
+          "raw_log_ack_line_1based": 61985
+        },
+        {
+          "phase": "flash_frozen",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014868.bmp",
+          "sha256": "7883d695e963bd1d85f71e208138a14726fef29d514da42da14fb63699de77de",
+          "sequence": 22,
+          "raw_log_ack_line_1based": 62357
+        },
+        {
+          "phase": "flash_still_frozen",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_015032.bmp",
+          "sha256": "8a3a94fab4a814b0f5c04459c29159a5cb1773a12e0915bfe7a2270ea8a5aa89",
+          "sequence": 23,
+          "raw_log_ack_line_1based": 63188
+        },
+        {
+          "phase": "flash_resume",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_015077.bmp",
+          "sha256": "633dfda907d8f750fd6459c9408a8c56b27bdff5e3717f08587113262fcd79ad",
+          "sequence": 24,
+          "raw_log_ack_line_1based": 63432
+        },
+        {
+          "phase": "flash_resumed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_015210.bmp",
+          "sha256": "0bea514915ad375bafbf3616a6c937a1f1fb112b257df0cf0fbe50a194c11308",
+          "sequence": 25,
+          "raw_log_ack_line_1based": 64111
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0027",
+      "caption": "Show Keyboard",
+      "verdict": "pass",
+      "verdict_line": "VERDICT: pass",
+      "disposition": "accepted_bounded_platform_path",
+      "canonical_state_recommendation": "verified",
+      "recommended_site_credit": 1,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Accept the original callback argument route and the PC keyboard open/cancel path: owned HWND/PID/start/image, exact Title Text / Description Text / Default Text, owned WM_CLOSE using the provider Cancel branch, and native KeyboardHost cancellation. The fixture released only its own Brake/HandBrake holds.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824FD478",
+        "0x824F5B00",
+        "0x8284CFD8"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824F5B00",
+          "name": "BrnGui::BrnGuiKeyboard::Show",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824F5B00.json",
+          "sha256": "6b9768c53166370fe9f83cba422cf29a395038600fdeccfe317a2d5b0aa9cbda"
+        },
+        {
+          "address": "0x824FD478",
+          "name": "BrnGui::GuiDebugComponent::ShowKeyboardCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824FD478.json",
+          "sha256": "3d30a52bfa36763be025597b44851fb2f7999f842366c7534a8911db3ed158da"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8284CFD8",
+          "name": "CgsGui::GuiKeyboard::Show",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8284CFD8.json",
+          "sha256": "b217ddb5ec06a192ac6b544b6512022f53c776d93ff4b65a318137fa66a294e9"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/BrnGuiKeyboard.cpp": "7801642be1a87ce5a11f57dcf2418e8b27ccff03",
+        "src/GameShared/GameClasses/Gui/CgsGuiKeyboard.cpp": "88e984c85adb3ea38f67f651ab7c74946b285254",
+        "src/GameShared/GameClasses/System/PC/CgsXboxLivePC.cpp": "bc3a38c1feb5599e364ecddb8ceef75998cb7706",
+        "src/GameSource/Gui/BrnGuiKeyboardHost.cpp": "83200f4cd0a7299a111a538c52c3b76a85c6b3d9"
+      },
+      "native_frames": [
+        {
+          "phase": "keyboard_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_043643.bmp",
+          "sha256": "5df684fb34c8d8735e0d0acea64692f07e0c55c42446d5c169ea63ec673dbff7",
+          "sequence": 35,
+          "raw_log_ack_line_1based": 196245
+        }
+      ],
+      "findings": [],
+      "native_receipts": [
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\KEYBOARD_VISIBLE.json",
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\KEYBOARD_CANCELLED.json",
+        "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui17_native_20261031\\KEYBOARD_WINDOW_CENSUS.json"
+      ],
+      "native_cancel_log_line_1based": 187968,
+      "limitations": [
+        "PC platform UI/status path only; no XAM layout/status equivalence or hardware-controller claim.",
+        "WM_CLOSE exercised the existing Cancel/X branch; no entered text or OK acceptance was tested.",
+        "No game-backbuffer BMP can show the separate Win32 keyboard dialog; its direct native witness is the owned HWND/control census.",
+        "Full HUD/gameplay recovery after keyboard cancellation was not proved; HUD is absent in keyboard_closed."
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0029",
+      "caption": "Play/stop test movie",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Video requests 051/052 are retained without done receipts, a video frame, or a return; they were queued after the failure.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D4E8",
+        "0x824E0ED0"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824E0ED0",
+          "name": "BrnGui::InGame::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824E0ED0.json",
+          "sha256": "d00a19b076d84525a7f86420ced056923ef45eb9aaf71de214cda1f19f6de11e"
+        },
+        {
+          "address": "0x8250D4E8",
+          "name": "BrnGui::GuiDebugComponent::PlayMovieCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D4E8.json",
+          "sha256": "dc0e37d25afaacd7de665225026c1e87cc75908bf1d1b268ce27361a16dad2c4"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/Screen/States/BrnInGame.cpp": "35d06576745362fa6ad150f6c5e5b179ac993640"
+      },
+      "native_frames": [],
+      "findings": [
+        "GUI-N1"
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0031",
+      "caption": "Select next font effect",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Five requests ran, but the invite text frames do not demonstrate distinct font effects or the effect-0 rendering restoration.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D000",
+        "0x8247E898",
+        "0x8285FCE8"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8247E898",
+          "name": "BrnGui::RaceMainHudState::UpdateRunning",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8247E898.json",
+          "sha256": "09033106a38f19bdc73eb6fa0039aa1e815e144b422c7e942dd88598de2359a7"
+        },
+        {
+          "address": "0x8250D000",
+          "name": "BrnGui::GuiDebugComponent::RotateThroughFontEffectsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D000.json",
+          "sha256": "e343c0ea406c536ac93aab9d93e8517d3d148984682282872be226885693df78"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        },
+        {
+          "address": "0x8285FCE8",
+          "name": "CgsGui::ViewModule::ProcessIncomingViewEvents",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8285FCE8.json",
+          "sha256": "b79b43c0d79c7e2e7f0c9d614c172e3d7996900c3bb54000ab4afda29766fb05"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "4f03d81c7306eb8166725d6a2cf550430872d4ce",
+        "src/GameSource/Gui/Flow/HUD/States/BrnFBurnMainHudState.cpp": "b5500b2473729e0fb18b3260163c15c316a15d60",
+        "src/GameShared/GameClasses/Gui/View/CgsGuiViewModule.cpp": "1e2b18a8e09be4c4064f6f7d1b5971045314e8c0",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAux.cpp": "ad2cf6be79d9b6ec9c9ee857ffac373514a2d657",
+        "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptCallbackRenderAllocateString.cpp": "a8753f47ed3e5a2275e0b796249afe3156fdb6c3"
+      },
+      "native_frames": [
+        {
+          "phase": "font_effect1",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014458.bmp",
+          "sha256": "f4d90fd7b5e6e32e23349028a0a4b989d558d0037344ebe3c92e7e4d4a78935f",
+          "sequence": 16,
+          "raw_log_ack_line_1based": 60295
+        },
+        {
+          "phase": "font_effect2",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014505.bmp",
+          "sha256": "c0410f1929e9726050342e9d257eb33eff6f4a2db8f1a13639c42d4a4a39f37b",
+          "sequence": 17,
+          "raw_log_ack_line_1based": 60546
+        },
+        {
+          "phase": "font_effect3",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014566.bmp",
+          "sha256": "3900b078e7baaed8e75708f5e95e1ad666e1b1f9a2a33ce2d926ceac347ec376",
+          "sequence": 18,
+          "raw_log_ack_line_1based": 60857
+        },
+        {
+          "phase": "font_effect4",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014649.bmp",
+          "sha256": "b0cb37053f120c75549a15dcb3718e7832ee007cc1656593edb4c0369ade156e",
+          "sequence": 19,
+          "raw_log_ack_line_1based": 61278
+        },
+        {
+          "phase": "font_effect5_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_014703.bmp",
+          "sha256": "63131ad98c873e3669d2609e45eac0657cab464cc3d905a2591afa7e664a7716",
+          "sequence": 20,
+          "raw_log_ack_line_1based": 61551
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0032",
+      "caption": "Trigger PFX Hook <dynamic>",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The selected named menu-hook requests ran. The inspected raw frames do not isolate the required menu-hook effect, alternate effect and restored visual baseline.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D6F8",
+        "0x8250D2E0",
+        "0x825125C0",
+        "0x8250B618"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8250B618",
+          "name": "BrnGui::EffectsArbitrator::StartHook",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250B618.json",
+          "sha256": "5fbf32248ddd7eda730400da93ffc8fe5eed2f6b8e44347b82027acee4deb617"
+        },
+        {
+          "address": "0x8250D2E0",
+          "name": "BrnGui::GuiDebugComponent::TriggerPFX",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D2E0.json",
+          "sha256": "b237e930b7314d139a6ca365f9d54c1d9a9427a2198c2327653ff495528a7873"
+        },
+        {
+          "address": "0x8250D6F8",
+          "name": "BrnGui::GuiDebugComponent::TriggerPFXCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D6F8.json",
+          "sha256": "1b907d1157f3889c0ae1084944088b8ea71bf26c956ca9d6aedd8696c1e72ce2"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h": "c9ac5c699c936a7129a1af3de3a1a97cdc344cff",
+        "src/GameSource/Gui/PFX/Resource/BrnGuiPFXHooksResource.cpp": "42133f520917bd033171c104a6646a81e6cb1a51"
+      },
+      "native_frames": [
+        {
+          "phase": "pfx_fadeout",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_024733.bmp",
+          "sha256": "6a2484038c02d91340e61c0f953744d67b09ae5fea7e9f1701e8234f25ab72b5",
+          "sequence": 30,
+          "raw_log_ack_line_1based": 111805
+        },
+        {
+          "phase": "pfx_fadeout_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_024822.bmp",
+          "sha256": "c2c031eb5388e163f6dbef30d17433d1b65043160c33ee5ef067d2b9d2197f78",
+          "sequence": 31,
+          "raw_log_ack_line_1based": 112248
+        },
+        {
+          "phase": "pfx_fadein",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_043839.bmp",
+          "sha256": "ed37cd207413e054dea59d78eee0278373fc236e6936bedc3743660ff9380d28",
+          "sequence": 37,
+          "raw_log_ack_line_1based": 197127
+        },
+        {
+          "phase": "pfx_fadein_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_043950.bmp",
+          "sha256": "810aa7f9e3c33676c6080b5df41edac0705ac8cecaeeee43da854ff52c9f5055",
+          "sequence": 38,
+          "raw_log_ack_line_1based": 197603
+        },
+        {
+          "phase": "pfx_restore_final",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044177.bmp",
+          "sha256": "65f90f8ca09051d878a18f338cb44b1b1500c31b25631b73ff3887ab43343c30",
+          "sequence": 41,
+          "raw_log_ack_line_1based": 198613
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0033",
+      "caption": "Current Hook",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Fresh hook-index changes and named aliases are field/selection evidence; the coupled original menu-hook rendering effect remains unproved.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250C998",
+        "0x825125C0"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8250C998",
+          "name": "BrnGui::GuiDebugComponent::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250C998.json",
+          "sha256": "d0d151139b4efcd81a8b66a7cd0029c4ea778d97701485c4400101d696946138"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/PFX/BrnGuiPFXHooks.h": "c9ac5c699c936a7129a1af3de3a1a97cdc344cff",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2"
+      },
+      "native_frames": [
+        {
+          "phase": "pfx_reset_enumeration",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_024456.bmp",
+          "sha256": "749949452990fd55c7d8da14c7323fa9c392fae0045e0ad9947b38108a6cc1e0",
+          "sequence": 28,
+          "raw_log_ack_line_1based": 110364
+        },
+        {
+          "phase": "pfx_hook67_select",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_024592.bmp",
+          "sha256": "d07fd5e2cbba82359d53bd23f2c2c68f773a571e40cec6e40c0bb8bea1364481",
+          "sequence": 29,
+          "raw_log_ack_line_1based": 111074
+        },
+        {
+          "phase": "pfx_hook66_select",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_043714.bmp",
+          "sha256": "7e569b7bd053c0275bec2778b464abac2512c613901eef4820508dcb72b881c5",
+          "sequence": 36,
+          "raw_log_ack_line_1based": 196568
+        },
+        {
+          "phase": "pfx_restore_final",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044177.bmp",
+          "sha256": "65f90f8ca09051d878a18f338cb44b1b1500c31b25631b73ff3887ab43343c30",
+          "sequence": 41,
+          "raw_log_ack_line_1based": 198613
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0034",
+      "caption": "Trigger PFX CloseMenu",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "CloseMenu requests exist, but there is no demonstrated active menu-hook effect that these frames prove was stopped.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D798",
+        "0x825125C0",
+        "0x824FB478"
+      ],
+      "original_exports": [
+        {
+          "address": "0x824FB478",
+          "name": "BrnGui::EffectsArbitrator::StopMenuHook",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824FB478.json",
+          "sha256": "bee71982756e5dc56368e403a88650f06c130d7e118c06dea83122a27d338e1e"
+        },
+        {
+          "address": "0x8250D798",
+          "name": "BrnGui::GuiDebugComponent::TriggerClosePFXCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D798.json",
+          "sha256": "1a9fba04b860d981ac29d8f33aab69b06d7329d1fd6a6c5f06f0671cd7ef6f9d"
+        },
+        {
+          "address": "0x825125C0",
+          "name": "BrnGui::EffectsArbitrator::EventUpdate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825125C0.json",
+          "sha256": "b93fc899d8a2799d355262a5867d07e6b7421d2d9dc4cd3f5853957d7a7f150f"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/PFX/BrnGuiEffectsArbitrator.cpp": "c0da8d6cb7315af702cc2105b1997beaf70fc8b2"
+      },
+      "native_frames": [
+        {
+          "phase": "pfx_close",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_024904.bmp",
+          "sha256": "75bcfd29cc41a526a2c3ad72f75bb9faade6761b7ee0182b30afaa40654716c0",
+          "sequence": 32,
+          "raw_log_ack_line_1based": 112662
+        },
+        {
+          "phase": "pfx_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_025009.bmp",
+          "sha256": "a6ba02c07e3b3c9c038315c52028175ec74cf74e5709f8a66a4ca9eae99b33a8",
+          "sequence": 33,
+          "raw_log_ack_line_1based": 113174
+        },
+        {
+          "phase": "pfx_close_after_fadein",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044015.bmp",
+          "sha256": "3a08400b812944bb60d86b9a81b8a8abf3d5b6413906961dd2e77c0398d65745",
+          "sequence": 39,
+          "raw_log_ack_line_1based": 197911
+        },
+        {
+          "phase": "pfx_close_after_fadein_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044118.bmp",
+          "sha256": "dcf3520bfdf195ab69ed24ef90cb48f48f63f59ef6d73c53fd142e9d22720b43",
+          "sequence": 40,
+          "raw_log_ack_line_1based": 198347
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0038",
+      "caption": "Trigger EA Trax Component",
+      "verdict": "pass",
+      "verdict_line": "VERDICT: pass",
+      "disposition": "accepted_bounded_notification",
+      "canonical_state_recommendation": "verified",
+      "recommended_site_credit": 1,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "Accept the event-502 song-0 preview notification: no chyron at the natural baseline, LCD Soundsystem / Us V. Them / Sound Of Silver after the exact callback, and no chyron after the normal timeout. This covers the test notification, with no audio or profile-selection claim.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x825131E0",
+        "0x82509338",
+        "0x82439F08"
+      ],
+      "original_exports": [
+        {
+          "address": "0x82439F08",
+          "name": "BrnGui::EATraxInGameComponent::DisplayNewTrackNotification",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82439F08.json",
+          "sha256": "f0a4a92534dee2a9d71a252e65c2d642eef873b26a80378ca8999675f2d5d1d5"
+        },
+        {
+          "address": "0x82509338",
+          "name": "BrnGui::AlwaysAvailableComponentsManager::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82509338.json",
+          "sha256": "7cb1ae983c01f49a5d0ca7cd92b321dab80a6f4ea4c2dfced358ebe8f7502db1"
+        },
+        {
+          "address": "0x825131E0",
+          "name": "BrnGui::GuiDebugComponent::TriggerEATraxComponentCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x825131E0.json",
+          "sha256": "28f650d055329fddc140cc96ebc1dae35be5d10ee6bc9c14f2464ec5b4d08cc7"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp": "e5f4fdb4ea23e579df63dcb4a76f6d8e5c206805",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnEATraxInGameComponent.cpp": "412f3b8f0de9d22cf8d7bdbd1deafab6d1690ff1"
+      },
+      "native_frames": [
+        {
+          "phase": "natural_baseline",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_003863.bmp",
+          "sha256": "eecd513eefa715f75dc63e0df330a5ba82887f14eac5df6b1f10120c0aa12047",
+          "sequence": 1,
+          "raw_log_ack_line_1based": 8618
+        },
+        {
+          "phase": "ea_trigger",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_007555.bmp",
+          "sha256": "903e579274f0f52bfa7ea5a463bebfd2b3e160f54cb93582ae8068b2418dcc1b",
+          "sequence": 2,
+          "raw_log_ack_line_1based": 26384
+        },
+        {
+          "phase": "ea_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_007680.bmp",
+          "sha256": "f90234666b7f7b307f4e0689eaf8c37ed576c9264466b8b7e78273a0f22a7acb",
+          "sequence": 3,
+          "raw_log_ack_line_1based": 26973
+        },
+        {
+          "phase": "ea_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008167.bmp",
+          "sha256": "31f768e277a629952279b479ec80d6a5d92eec79f914dc3719d3e3f4066353ee",
+          "sequence": 4,
+          "raw_log_ack_line_1based": 29310
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0039",
+      "caption": "Trigger Receive Online Invite",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The local Linus T invite text appears and times out, but invite_closed retains the envelope/D-pad icon absent from the natural baseline. Its intended original lifetime and complete restoration need original timeline/consumer evidence.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x82513228",
+        "0x82509338"
+      ],
+      "original_exports": [
+        {
+          "address": "0x82509338",
+          "name": "BrnGui::AlwaysAvailableComponentsManager::Update",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82509338.json",
+          "sha256": "7cb1ae983c01f49a5d0ca7cd92b321dab80a6f4ea4c2dfced358ebe8f7502db1"
+        },
+        {
+          "address": "0x82513228",
+          "name": "BrnGui::GuiDebugComponent::TriggerOnlineInviteCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82513228.json",
+          "sha256": "44a9013b04b578f7522f9dd3eb15eeb5731008d387545b23550b9c6c4b0f1d95"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/BrnGuiAlwaysAvailableComponentsManager.cpp": "e5f4fdb4ea23e579df63dcb4a76f6d8e5c206805",
+        "src/GameSource/Gui/Flow/Permanent/Components/BrnOnlineInviteMessageComponent.cpp": "ed8d9d1757613114142c82168c1e0ece0c090ea5"
+      },
+      "native_frames": [
+        {
+          "phase": "natural_baseline",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_003863.bmp",
+          "sha256": "eecd513eefa715f75dc63e0df330a5ba82887f14eac5df6b1f10120c0aa12047",
+          "sequence": 1,
+          "raw_log_ack_line_1based": 8618
+        },
+        {
+          "phase": "invite_trigger",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008223.bmp",
+          "sha256": "bfb7c06daa14a656430144a4dd7aa6dc4ce14e6494418fdd44c816d9d7452a20",
+          "sequence": 5,
+          "raw_log_ack_line_1based": 29592
+        },
+        {
+          "phase": "invite_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008291.bmp",
+          "sha256": "0610cdc395b23c22d1e77e06d08d9d67e658ae1505be77d65ab3def069b67047",
+          "sequence": 6,
+          "raw_log_ack_line_1based": 29966
+        },
+        {
+          "phase": "invite_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_008850.bmp",
+          "sha256": "effaaa2cf6282780d516287118e345ab6cae123a1262aece18d34893c34dd2fe",
+          "sequence": 7,
+          "raw_log_ack_line_1based": 32626
+        }
+      ],
+      "findings": [
+        "GUI-F3"
+      ]
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0040",
+      "caption": "Trigger Payback Component",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The callback request ran without a visible award animation. An active RaceMainHud/Payback consumer is not established by this Freeburn scene.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x8250D848",
+        "0x8247E898",
+        "0x8243E148"
+      ],
+      "original_exports": [
+        {
+          "address": "0x8243E148",
+          "name": "BrnGui::PaybackComponent::BeginAwardAnimation",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8243E148.json",
+          "sha256": "37dfffd26ef676825613a8d7c846b1b0a40777f54b1a974559b008b49f1ad01f"
+        },
+        {
+          "address": "0x8247E898",
+          "name": "BrnGui::RaceMainHudState::UpdateRunning",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8247E898.json",
+          "sha256": "09033106a38f19bdc73eb6fa0039aa1e815e144b422c7e942dd88598de2359a7"
+        },
+        {
+          "address": "0x8250D848",
+          "name": "BrnGui::GuiDebugComponent::TriggerPaybackComponent",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8250D848.json",
+          "sha256": "0d24111a4ee76b138a071e2cc276889bd56fe23e0d5fe2099910cbda3d0c622b"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "4f03d81c7306eb8166725d6a2cf550430872d4ce",
+        "src/GameSource/Gui/Flow/HUD/Components/BrnPaybackComponent.cpp": "be0f50f9732521c50a6ef232372a4e22860b44df"
+      },
+      "native_frames": [
+        {
+          "phase": "payback_trigger",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_015256.bmp",
+          "sha256": "bef446c2dc8a3d44f9a12d4b87fe712a2ca46b0c22ba01149d9bee7197486a8d",
+          "sequence": 26,
+          "raw_log_ack_line_1based": 64358
+        },
+        {
+          "phase": "payback_visible",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_015339.bmp",
+          "sha256": "008f3f749fb7f09f85ee2da86ddc412fae510e3518aac85a0f0211433c79054e",
+          "sequence": 27,
+          "raw_log_ack_line_1based": 64763
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0042",
+      "caption": "Enable Toggling Race HUD",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The master field TRUE/FALSE receipts exist; the boost HUD was already absent before these phases, so the required master-gate pixel effect is unproved.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824ED288",
+        "0x82474F00"
+      ],
+      "original_exports": [
+        {
+          "address": "0x82474F00",
+          "name": "BrnGui::RaceMainHudState::ForceReenter",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82474F00.json",
+          "sha256": "342cf21b03e9570a95aad1776a92c8a24c83b4ecb1255672191f0355f157bf06"
+        },
+        {
+          "address": "0x824ED288",
+          "name": "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824ED288.json",
+          "sha256": "56974e360d8b315fbc9ab0aab67202191acc69a9ff4f6226686a7ca59c07c320"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "4f03d81c7306eb8166725d6a2cf550430872d4ce"
+      },
+      "native_frames": [
+        {
+          "phase": "keyboard_closed",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_043643.bmp",
+          "sha256": "5df684fb34c8d8735e0d0acea64692f07e0c55c42446d5c169ea63ec673dbff7",
+          "sequence": 35,
+          "raw_log_ack_line_1based": 196245
+        },
+        {
+          "phase": "racehud_override_enable",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044261.bmp",
+          "sha256": "7d495145b4324ad4c3456f4e927202d157f5c7f007bd8b5ac304bdd3d856cceb",
+          "sequence": 42,
+          "raw_log_ack_line_1based": 199005
+        },
+        {
+          "phase": "racehud_boost_hide",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044323.bmp",
+          "sha256": "c214e58212d472456743855d635cb52d4ac2afced137cd9c18349f2345ec1604",
+          "sequence": 43,
+          "raw_log_ack_line_1based": 199286
+        },
+        {
+          "phase": "racehud_boost_show",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044415.bmp",
+          "sha256": "448d010b6a25d1d02c68a4088c6ce569d5289a3349430e9f46cae4e80160e483",
+          "sequence": 44,
+          "raw_log_ack_line_1based": 199715
+        },
+        {
+          "phase": "racehud_override_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044516.bmp",
+          "sha256": "ec26cdb05f9857a47041c261b1e3e84a58f1ce218c73af7da942cb5d4bf1c1bc",
+          "sequence": 45,
+          "raw_log_ack_line_1based": 200179
+        }
+      ],
+      "findings": []
+    },
+    {
+      "id": "BrnGui::GuiDebugComponent::OnActivate#0043",
+      "caption": "Race HUD element toggle registration loop",
+      "verdict": "fail",
+      "verdict_line": "VERDICT: fail",
+      "disposition": "pending",
+      "canonical_state_recommendation": "pending",
+      "recommended_site_credit": 0,
+      "recorded_site_credit": 0,
+      "original_noop_credit": 0,
+      "reason": "The selected BOOST_BAR loop item has fresh FALSE/TRUE receipts. Its required visible hide/show/restore effect is not present; the other 20 loop labels receive no inferred credit.",
+      "artist_addresses": [
+        "0x8252A3B8",
+        "0x824ED288",
+        "0x82474F00"
+      ],
+      "original_exports": [
+        {
+          "address": "0x82474F00",
+          "name": "BrnGui::RaceMainHudState::ForceReenter",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x82474F00.json",
+          "sha256": "342cf21b03e9570a95aad1776a92c8a24c83b4ecb1255672191f0355f157bf06"
+        },
+        {
+          "address": "0x824ED288",
+          "name": "BrnGui::GuiDebugComponent::ToggleRaceHudComponentsCallback",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x824ED288.json",
+          "sha256": "56974e360d8b315fbc9ab0aab67202191acc69a9ff4f6226686a7ca59c07c320"
+        },
+        {
+          "address": "0x8252A3B8",
+          "name": "BrnGui::GuiDebugComponent::OnActivate",
+          "relative_path": ".ida-exports\\BURNOUT_X360_ARTIST.XEX\\0x8252A3B8.json",
+          "sha256": "8aea206ee0b384a8fa19a22281bf3c27b47ed292f8a70a023c9a94ef41a44740"
+        }
+      ],
+      "source_blob_refs": {
+        "src/GameSource/Gui/BrnGuiDebugComponent.cpp": "bfde3c328032a8bc30bfcc593986861c62166695",
+        "src/GameSource/Gui/Flow/HUD/States/BrnRaceMainHudState.cpp": "4f03d81c7306eb8166725d6a2cf550430872d4ce"
+      },
+      "native_frames": [
+        {
+          "phase": "racehud_boost_hide",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044323.bmp",
+          "sha256": "c214e58212d472456743855d635cb52d4ac2afced137cd9c18349f2345ec1604",
+          "sequence": 43,
+          "raw_log_ack_line_1based": 199286
+        },
+        {
+          "phase": "racehud_boost_show",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044415.bmp",
+          "sha256": "448d010b6a25d1d02c68a4088c6ce569d5289a3349430e9f46cae4e80160e483",
+          "sequence": 44,
+          "raw_log_ack_line_1based": 199715
+        },
+        {
+          "phase": "racehud_override_restore",
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_gui_batch_20261031_retry04\\runs\\fixed_62194_e639fcfad6a44c2192e5286c8bad578e\\frames\\bb_044516.bmp",
+          "sha256": "ec26cdb05f9857a47041c261b1e3e84a58f1ce218c73af7da942cb5d4bf1c1bc",
+          "sequence": 45,
+          "raw_log_ack_line_1based": 200179
+        }
+      ],
+      "findings": []
+    }
+  ],
+  "limits": [
+    "No full GUI17 completion is certified.",
+    "Keyboard acceptance is bounded to original arguments and the native PC open/cancel path; no physical controller, XAM parity, text acceptance or full HUD recovery claim.",
+    "EA Trax acceptance is bounded to the local preview notification and timeout; no audio or profile-write claim.",
+    "CrashNav and invite have positive observations but incomplete restoration outcomes.",
+    "All other controls remain pending; lack of pixels or a missing consumer does not prove an original no-op."
+  ]
+}
