@@ -1,0 +1,58 @@
+{
+  "as_expected": false,
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_native_scenario_20261031\\adapter_v3\\Case.ps1",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_native_scenario_20261031\\adapter_v3\\runs\\disabled",
+  "when": "2026-10-31T20:16:04.2603570+01:00",
+  "label": "player-jump disabled; no automatic site credit",
+  "provenance": {
+    "exe_mtime": "2026-10-31T20:11:21.4145807+01:00",
+    "exe_size": 11778048,
+    "b5_head": "ca8027774",
+    "exe_sha": "f2d88446c626",
+    "b5_dirty": 4,
+    "parent_head": "cd2febc38",
+    "exe_mtime_before_lock": "2026-10-31T20:11:21.4145807+01:00",
+    "exe_b5": "ca802777+dirty"
+  },
+  "bug": "Observe genuine backward jump355882 through the native enabled producer and camera chain",
+  "expected": "PASS",
+  "checks": [
+    {
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "kind": "TerminalFlow",
+      "pass": true,
+      "name": "original strict flow completed and owned game exited"
+    },
+    {
+      "detail": "final phase DRIVING, want DRIVING",
+      "kind": "Mark",
+      "pass": true,
+      "name": "DRIVING"
+    },
+    {
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "kind": "NewAsserts",
+      "pass": true,
+      "name": "no new assertions"
+    },
+    {
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "kind": "LogCount",
+      "pass": true,
+      "name": "no exceptions"
+    },
+    {
+      "detail": "missing raw chain/capture receipt; pending native evidence",
+      "kind": "Script",
+      "pass": false,
+      "name": "actual physical producer and attributed camera chain"
+    }
+  ],
+  "asserts": 0,
+  "verdict": "FAIL",
+  "case": "player_jump_disabled_62195",
+  "phase": "DRIVING",
+  "slot": 62195,
+  "flow_exit": 0,
+  "area": "director"
+}

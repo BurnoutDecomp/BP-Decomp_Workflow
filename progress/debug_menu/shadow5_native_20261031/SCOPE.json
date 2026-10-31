@@ -1,0 +1,551 @@
+{
+  "schema_version": 1,
+  "status": "authored_pending_native_run_no_behavior_credit",
+  "cohort": "shadow5_native_62190_20261031",
+  "slot": 62190,
+  "candidate": {
+    "b5_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+    "workflow_commit": "71be01e0cf78a3b4e7afe009a24f8ffa9faaad6a",
+    "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+    "build_receipt_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_build_20261031\\clean\\BUILD_RECEIPT.json",
+    "build_receipt_sha256": "70bf9d59be6cdf87fccc4fd4e944f5bdbd1a3f3455f36140ba570124503df95c",
+    "map_sha256": "f4fca8c8ac6f0c34ae93f16ab00a487ccc80e0fee55ef2e4cc2a2e47e5a36bd6",
+    "cgsmap_sha256": "d5608810469e4dc35981a651ef666fcddf87349129cb6f96901bedb6374ae2b3",
+    "phase": "clean",
+    "status": "BUILD_PASS"
+  },
+  "control_count": 5,
+  "controls": [
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "caption": "Render Shadow map",
+      "component": "World/ShadowMap",
+      "lookup_path": "World/ShadowMap/Render Shadow map",
+      "raw_readback_path": "/World/ShadowMap/Render Shadow map",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "restore the same-run captured baseline after each P/N pair and terminally",
+      "context_overrides": [],
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v10, \"World\\\\ShadowMap\", \"Render Shadow map\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 270,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "effect_witness": "Master shadow enable: the original WorldModule frustum producer tests this byte before building shadow cameras/queries; the renderer also has a separate global shadow render switch.",
+      "scene_gate": "Master shadow enable: the original WorldModule frustum producer tests this byte before building shadow cameras/queries; the renderer also has a separate global shadow render switch.",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateFrustumQueries",
+          "address": "0x827DADF8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827DADF8.json",
+          "sha256": "3e96b89b693a47012eebe5270b7f3b3cd26044ba288767b690fa4ee1d6f85b04"
+        },
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH02",
+        "SH02",
+        "alias SH02"
+      ],
+      "positive_command": "set SH02 true",
+      "negative_command": "set SH02 false",
+      "restore_command": "set SH02 <captured baseline>",
+      "credit": "zero until fresh native review accepts the live consumer witness",
+      "path_attestation": "shadow_literal_group",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "artist_consumer_direct_witness": "ARTIST WorldModule::GenerateFrustumQueries @0x827DADF8: bit-7 update gate, map-enabled branch, key-light camera construction, and shadow frustum emission.",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "lines": "181-210",
+        "value": true,
+        "constructor_blob_at_candidate": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a"
+      }
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "caption": "Cast shadows from world",
+      "component": "World/ShadowMap",
+      "lookup_path": "World/ShadowMap/Cast shadows from world",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from world",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "restore the same-run captured baseline after each P/N pair and terminally",
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v11, \"World\\\\ShadowMap\", \"Cast shadows from world\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 271,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "effect_witness": "World caster selection: world shadow dispatch is gated by this debug byte and the independent render-world switch; compare a visible world caster and receiver.",
+      "scene_gate": "World caster selection: world shadow dispatch is gated by this debug byte and the independent render-world switch; compare a visible world caster and receiver.",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH03",
+        "SH03",
+        "alias SH03"
+      ],
+      "positive_command": "set SH03 true",
+      "negative_command": "set SH03 false",
+      "restore_command": "set SH03 <captured baseline>",
+      "credit": "zero until fresh native review accepts the live consumer witness",
+      "path_attestation": "shadow_literal_group",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "artist_consumer_direct_witness": "ARTIST WorldModule::GenerateShadowMapDispatchLists @0x827C96D8: world debug byte is combined with the main render-world switch before entity caster dispatch.",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "lines": "181-210",
+        "value": true,
+        "constructor_blob_at_candidate": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a"
+      }
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "caption": "Cast shadows from cars",
+      "component": "World/ShadowMap",
+      "lookup_path": "World/ShadowMap/Cast shadows from cars",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from cars",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "restore the same-run captured baseline after each P/N pair and terminally",
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v12, \"World\\\\ShadowMap\", \"Cast shadows from cars\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 272,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "effect_witness": "Car caster selection: car shadow dispatch is gated by this debug byte and the independent render-cars switch; require a renderable car caster and receiver in the same lit area.",
+      "scene_gate": "Car caster selection: car shadow dispatch is gated by this debug byte and the independent render-cars switch; require a renderable car caster and receiver in the same lit area.",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH04",
+        "SH04",
+        "alias SH04"
+      ],
+      "positive_command": "set SH04 true",
+      "negative_command": "set SH04 false",
+      "restore_command": "set SH04 <captured baseline>",
+      "credit": "zero until fresh native review accepts the live consumer witness",
+      "path_attestation": "shadow_literal_group",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "artist_consumer_direct_witness": "ARTIST WorldModule::GenerateShadowMapDispatchLists @0x827C96D8: race-car debug byte is combined with the main render-cars switch before entity caster dispatch.",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "lines": "181-210",
+        "value": true,
+        "constructor_blob_at_candidate": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a"
+      }
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "caption": "Cast shadows from props",
+      "component": "World/ShadowMap",
+      "lookup_path": "World/ShadowMap/Cast shadows from props",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from props",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "restore the same-run captured baseline after each P/N pair and terminally",
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v68, \"World\\\\ShadowMap\", \"Cast shadows from props\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 274,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "effect_witness": "Prop caster selection: prop shadow dispatch is gated by this debug byte and the independent render-props switch; require a renderable prop caster and receiver in the same lit area.",
+      "scene_gate": "Prop caster selection: prop shadow dispatch is gated by this debug byte and the independent render-props switch; require a renderable prop caster and receiver in the same lit area.",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH06",
+        "SH06",
+        "alias SH06"
+      ],
+      "positive_command": "set SH06 true",
+      "negative_command": "set SH06 false",
+      "restore_command": "set SH06 <captured baseline>",
+      "credit": "zero until fresh native review accepts the live consumer witness",
+      "path_attestation": "shadow_literal_group",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "artist_consumer_direct_witness": "ARTIST WorldModule::GenerateShadowMapDispatchLists @0x827C96D8: prop debug byte is combined with the main render-props switch before entity caster dispatch.",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "lines": "181-210",
+        "value": true,
+        "constructor_blob_at_candidate": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a"
+      }
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "caption": "Render multiple shadow maps (CSM)",
+      "component": "World/ShadowMap",
+      "lookup_path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+      "raw_readback_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+      "type": "bool",
+      "source_default": true,
+      "positive": true,
+      "negative": false,
+      "restore_policy": "restore the same-run captured baseline after each P/N pair and terminally",
+      "context_overrides": [
+        {
+          "alias": "SH02",
+          "value": true
+        }
+      ],
+      "registration": {
+        "call": "sub_8282E400(&pInstance, v53, \"World\\\\ShadowMap\", \"Render multiple shadow maps (CSM)\")",
+        "export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x827B43E8.json",
+        "address": "0x827B43E8",
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "line": 276,
+        "blob_at_3f": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "artist_export_sha256": "61975dc942afe0a5f1a099beee08036c3ceb2ad7a87a091a36be7a46b74eb67f"
+      },
+      "ui": {
+        "step": null,
+        "min": null,
+        "max": null,
+        "range_note": "boolean"
+      },
+      "effect_witness": "Cascade selection: the original dispatcher chooses three cascades when enabled and one when disabled; require a stable near-and-distant caster/receiver witness.",
+      "scene_gate": "Cascade selection: the original dispatcher chooses three cascades when enabled and one when disabled; require a stable near-and-distant caster/receiver witness.",
+      "artist_witnesses": [
+        {
+          "function": "WorldModule::GenerateShadowMapDispatchLists",
+          "address": "0x827C96D8",
+          "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+          "sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2"
+        }
+      ],
+      "raw_alias_triplet": [
+        "alias SH08",
+        "SH08",
+        "alias SH08"
+      ],
+      "positive_command": "set SH08 true",
+      "negative_command": "set SH08 false",
+      "restore_command": "set SH08 <captured baseline>",
+      "credit": "zero until fresh native review accepts the live consumer witness",
+      "path_attestation": "shadow_literal_group",
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0,
+      "artist_consumer_direct_witness": "ARTIST WorldModule::GenerateShadowMapDispatchLists @0x827C96D8: assembly seeds three cascades, loads the CSM byte, then selects one when false.",
+      "source_default_evidence": {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "lines": "181-210",
+        "value": true,
+        "constructor_blob_at_candidate": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "candidate_commit": "ca80277748eb098822a035093cff9d306d079e2a"
+      }
+    }
+  ],
+  "context_aliases": [],
+  "excluded": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0008",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0014",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0015",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0016",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0018",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0022",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0023",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0026",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0043",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0044",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0045",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "status": "outside_scope_unmodified",
+      "reason": "not part of the SH02/SH03/SH04/SH06/SH08 native batch"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0021",
+      "status": "verified",
+      "reason": "preserve current published verdict"
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0027",
+      "status": "verified",
+      "reason": "preserve current published verdict"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0011",
+      "status": "original-noop",
+      "reason": "not a candidate"
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0012",
+      "status": "original-noop",
+      "reason": "not a candidate"
+    }
+  ],
+  "raw_frame_budget": {
+    "natural_baseline": 1,
+    "target_p_n_restore": 15,
+    "terminal_restore": 1,
+    "post_restore_verification": 1,
+    "maximum_planned": 18,
+    "headroom": 0,
+    "width": 1280,
+    "height": 720,
+    "max_bytes_each": 3686454,
+    "max_frames": 18,
+    "includes_terminal": true,
+    "includes_optional_anchor_seed": false
+  },
+  "capture_contract": {
+    "sequence": "DRIVING/current-save proof; one natural baseline; full-path typed P/N/captured-restore per target; terminal restore; post-restore proof",
+    "readback": "exact full-path alias/value/path triplets for five declared aliases at every phase",
+    "effect_credit": "zero until independent review accepts attributed native log and scene pixels",
+    "absent_scene": "record missing producer/scene context; never infer original no-op",
+    "restore": "same-run captured Boolean baseline only; pre-setter and terminal checks are mandatory",
+    "includes_terminal_in_budget": true,
+    "includes_optional_anchor_seed": false,
+    "dimensions": "1280x720",
+    "max_bmp_bytes": 3686454,
+    "no_field_flip_as_effect": true
+  },
+  "probe_contract": {
+    "enabled": "BRN_SHADOW_PROBE=1",
+    "shadow_pass": "record counts are latched until the cascade-count triple changes; not one row per phase",
+    "shadow_fetch": "signature/bucket latched; px is the last completed nonblocking pixel query with unknown age; row draws are current-pass counts, so never infer a same-frame draw/pixel pair or current-phase producer from the shared row",
+    "shadow_cam": "camera/frustum reports can witness camera construction only; they do not prove casters or depth writes",
+    "review_rule": "absence of a per-phase probe row is missing evidence, not inactive/no-op; shared shadow-fetch row cannot establish same-frame draw/pixel pairing or current-phase producer"
+  },
+  "path_attestation": {
+    "source_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+    "source_blob_ids": {
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp": "e42e9c080a70bca0d00166997c2704df2208dfbd",
+      "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp": "4ee38f2d55214932e8dc227eaaab3951494d1b00",
+      "src/GameShared/GameClasses/Development/DebugSystem/Interface/CgsDebugInterface.cpp": "1aeddd58550cfe8784769ab8b90d2e77c1326730",
+      "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+      "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+      "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.cpp": "685a423bb65b67ab883e9b39ffe5213f74c89101",
+      "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.h": "d6fce31f1dbeaa63d5640a4572a931878d9b7abe",
+      "src/GameSource/Game/BrnGameModule.cpp": "46e250532b8afdeae36c1242efc2482bf833652e",
+      "src/GameSource/Graphics/BrnRendererModule.cpp": "10fae0043a47c3a86b20f960969b7ada72622972",
+      "src/GameSource/Graphics/BrnRendererModule.h": "16c90c328f4d99caa5482d5e66ac6cb4f2c3351c",
+      "src/GameSource/World/BrnWorldModule.cpp": "73c1040b0bee6a39336a64e1e0d841c6c5787099",
+      "src/GameSource/World/BrnWorldModuleIO_DispatchInputBuffer.cpp": "ceb2052bf72d0d86195ba1f76b76ee2d265e8aa4",
+      "src/GameSource/World/ShadowMap/BrnShadowMap.cpp": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+      "src/pc/gcm/renderengine/ShadowPass.h": "4972897ca0da4bc1a02cc36f2ec9b584dbce2849"
+    },
+    "shadow_prefix": "World\\ShadowMap registrations are root paths; no component selector is used",
+    "source_authority": "Git blobs from the pinned ca802 commit only; never a shared dirty source postimage"
+  },
+  "runner_repair_status": "derived from reviewed Scene28 v4; authored for five pending shadow controls; no run or credit",
+  "runner_policy": {
+    "concurrency": "AllowConcurrentGames=true; maximum one separately identified Root-private sibling game under scratch/DEBUG_MENU_1011; package-local PID/path/start-time guard writes a per-sample ledger because retry03 concurrent enumeration returns an empty array",
+    "fixture": "Root stages only the pinned profile snapshot in private slot 62190; no live user profile access or writes",
+    "live_log": "Only the exact private slot BrnGame.log and owner PID/path/start-time are used for evidence",
+    "input": "Local named DebugKey events include the private slot; frame request includes owned PID and slot; PhaseDone includes PID, slot and process start ticks",
+    "context": "SH02=true is forced as declared context for SH03/SH04/SH06/SH08; all other selected fields remain at captured baselines",
+    "stop": "No End key or global stop event; use exact PID/slot/start-time PhaseDone event",
+    "limits": "18 frames maximum, 1280x720, 3,686,454-byte BMP cap, MaxSeconds=420, MaxLogMB=48",
+    "site_credit": 0
+  }
+}

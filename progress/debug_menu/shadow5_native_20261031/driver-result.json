@@ -1,0 +1,2173 @@
+{
+  "status": "machine_complete_awaiting_independent_pixels",
+  "error": "",
+  "slot": 62190,
+  "process_id": 58672,
+  "process_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\stage\\slot\\Burnout_PC.exe",
+  "process_start_ticks": "639290738461318903",
+  "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+  "selected_controls": 5,
+  "completed_target_count": 5,
+  "skipped_controls": [],
+  "target_results": [
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "scene_gate": "Master shadow enable: the original WorldModule frustum producer tests this byte before building shadow cameras/queries; the renderer also has a separate global shadow render switch.",
+      "effect_witness": "Master shadow enable: the original WorldModule frustum producer tests this byte before building shadow cameras/queries; the renderer also has a separate global shadow render switch.",
+      "phases": [
+        {
+          "frame_sha256": "ff716f93081ce7cadc2905966cd519380182193aa66cab9ee4e1563bb27ff3d6",
+          "state": "positive",
+          "value": "TRUE",
+          "frame_sequence": 2,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 21796,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 21797,
+              "ack_before": 21795
+            },
+            {
+              "alias": "SH03",
+              "value_line": 21799,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 21800,
+              "ack_before": 21798
+            },
+            {
+              "alias": "SH04",
+              "value_line": 21802,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 21803,
+              "ack_before": 21801
+            },
+            {
+              "alias": "SH06",
+              "value_line": 21805,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 21806,
+              "ack_before": 21804
+            },
+            {
+              "alias": "SH08",
+              "value_line": 21808,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 21809,
+              "ack_before": 21807
+            }
+          ]
+        },
+        {
+          "frame_sha256": "d3f9edfb5c8e108ca6d91eeb862396aedc24b4508ded5e82dfbc02bca43042aa",
+          "state": "negative",
+          "value": "FALSE",
+          "frame_sequence": 3,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 22810,
+              "value": "FALSE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 22811,
+              "ack_before": 22809
+            },
+            {
+              "alias": "SH03",
+              "value_line": 22813,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 22814,
+              "ack_before": 22812
+            },
+            {
+              "alias": "SH04",
+              "value_line": 22816,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 22817,
+              "ack_before": 22815
+            },
+            {
+              "alias": "SH06",
+              "value_line": 22819,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 22820,
+              "ack_before": 22818
+            },
+            {
+              "alias": "SH08",
+              "value_line": 22822,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 22823,
+              "ack_before": 22821
+            }
+          ]
+        },
+        {
+          "frame_sha256": "3d6d2a91f4d77663b64f0890c05191d86058cd67dcbec538a224e2fb32e81ec8",
+          "state": "restore",
+          "value": "TRUE",
+          "frame_sequence": 4,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 22931,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 22932,
+              "ack_before": 22930
+            },
+            {
+              "alias": "SH03",
+              "value_line": 22934,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 22935,
+              "ack_before": 22933
+            },
+            {
+              "alias": "SH04",
+              "value_line": 22937,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 22938,
+              "ack_before": 22936
+            },
+            {
+              "alias": "SH06",
+              "value_line": 22940,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 22941,
+              "ack_before": 22939
+            },
+            {
+              "alias": "SH08",
+              "value_line": 22943,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 22944,
+              "ack_before": 22942
+            }
+          ]
+        }
+      ],
+      "restore_verified": true,
+      "effect_status": "pending_independent_native_scene_review"
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "scene_gate": "World caster selection: world shadow dispatch is gated by this debug byte and the independent render-world switch; compare a visible world caster and receiver.",
+      "effect_witness": "World caster selection: world shadow dispatch is gated by this debug byte and the independent render-world switch; compare a visible world caster and receiver.",
+      "phases": [
+        {
+          "frame_sha256": "4220db2225cc9937246e16b5006700c0913e4ce81ca38baf5d582fed79ba946e",
+          "state": "positive",
+          "value": "TRUE",
+          "frame_sequence": 5,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 24008,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 24009,
+              "ack_before": 24007
+            },
+            {
+              "alias": "SH03",
+              "value_line": 24011,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 24012,
+              "ack_before": 24010
+            },
+            {
+              "alias": "SH04",
+              "value_line": 24014,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 24015,
+              "ack_before": 24013
+            },
+            {
+              "alias": "SH06",
+              "value_line": 24017,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 24018,
+              "ack_before": 24016
+            },
+            {
+              "alias": "SH08",
+              "value_line": 24020,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 24021,
+              "ack_before": 24019
+            }
+          ]
+        },
+        {
+          "frame_sha256": "273500c280a4323395c98a00cd640050d208e98751848a788cb18135fb137cff",
+          "state": "negative",
+          "value": "FALSE",
+          "frame_sequence": 6,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 25218,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 25219,
+              "ack_before": 25217
+            },
+            {
+              "alias": "SH03",
+              "value_line": 25221,
+              "value": "FALSE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 25222,
+              "ack_before": 25220
+            },
+            {
+              "alias": "SH04",
+              "value_line": 25224,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 25225,
+              "ack_before": 25223
+            },
+            {
+              "alias": "SH06",
+              "value_line": 25227,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 25228,
+              "ack_before": 25226
+            },
+            {
+              "alias": "SH08",
+              "value_line": 25230,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 25231,
+              "ack_before": 25229
+            }
+          ]
+        },
+        {
+          "frame_sha256": "6bc657ac623f11cbf9300e769cc95829b5d939c531fb92c06d69ebe6f79f9d08",
+          "state": "restore",
+          "value": "TRUE",
+          "frame_sequence": 7,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 26513,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 26514,
+              "ack_before": 26512
+            },
+            {
+              "alias": "SH03",
+              "value_line": 26516,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 26517,
+              "ack_before": 26515
+            },
+            {
+              "alias": "SH04",
+              "value_line": 26519,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 26520,
+              "ack_before": 26518
+            },
+            {
+              "alias": "SH06",
+              "value_line": 26522,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 26523,
+              "ack_before": 26521
+            },
+            {
+              "alias": "SH08",
+              "value_line": 26525,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 26526,
+              "ack_before": 26524
+            }
+          ]
+        }
+      ],
+      "restore_verified": true,
+      "effect_status": "pending_independent_native_scene_review"
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "scene_gate": "Car caster selection: car shadow dispatch is gated by this debug byte and the independent render-cars switch; require a renderable car caster and receiver in the same lit area.",
+      "effect_witness": "Car caster selection: car shadow dispatch is gated by this debug byte and the independent render-cars switch; require a renderable car caster and receiver in the same lit area.",
+      "phases": [
+        {
+          "frame_sha256": "f8c6add8bc78135aa35780a411169d56bc56a42fa6407c974f10a9d9ece8f3a5",
+          "state": "positive",
+          "value": "TRUE",
+          "frame_sequence": 8,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 27545,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 27546,
+              "ack_before": 27544
+            },
+            {
+              "alias": "SH03",
+              "value_line": 27548,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 27549,
+              "ack_before": 27547
+            },
+            {
+              "alias": "SH04",
+              "value_line": 27551,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 27552,
+              "ack_before": 27550
+            },
+            {
+              "alias": "SH06",
+              "value_line": 27554,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 27555,
+              "ack_before": 27553
+            },
+            {
+              "alias": "SH08",
+              "value_line": 27557,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 27558,
+              "ack_before": 27556
+            }
+          ]
+        },
+        {
+          "frame_sha256": "463cbe35eac2bb080a6b54cd71fe361e5c4989d71f05b619b6778e9f93cd16fd",
+          "state": "negative",
+          "value": "FALSE",
+          "frame_sequence": 9,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 28660,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 28661,
+              "ack_before": 28659
+            },
+            {
+              "alias": "SH03",
+              "value_line": 28663,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 28664,
+              "ack_before": 28662
+            },
+            {
+              "alias": "SH04",
+              "value_line": 28666,
+              "value": "FALSE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 28667,
+              "ack_before": 28665
+            },
+            {
+              "alias": "SH06",
+              "value_line": 28669,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 28670,
+              "ack_before": 28668
+            },
+            {
+              "alias": "SH08",
+              "value_line": 28672,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 28673,
+              "ack_before": 28671
+            }
+          ]
+        },
+        {
+          "frame_sha256": "a1f45cda8b97ac47c0d9a6529bea9183f4491264ca73e4a01347f71c9e34b271",
+          "state": "restore",
+          "value": "TRUE",
+          "frame_sequence": 10,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 29795,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 29796,
+              "ack_before": 29794
+            },
+            {
+              "alias": "SH03",
+              "value_line": 29798,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 29799,
+              "ack_before": 29797
+            },
+            {
+              "alias": "SH04",
+              "value_line": 29801,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 29802,
+              "ack_before": 29800
+            },
+            {
+              "alias": "SH06",
+              "value_line": 29804,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 29805,
+              "ack_before": 29803
+            },
+            {
+              "alias": "SH08",
+              "value_line": 29807,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 29808,
+              "ack_before": 29806
+            }
+          ]
+        }
+      ],
+      "restore_verified": true,
+      "effect_status": "pending_independent_native_scene_review"
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "scene_gate": "Prop caster selection: prop shadow dispatch is gated by this debug byte and the independent render-props switch; require a renderable prop caster and receiver in the same lit area.",
+      "effect_witness": "Prop caster selection: prop shadow dispatch is gated by this debug byte and the independent render-props switch; require a renderable prop caster and receiver in the same lit area.",
+      "phases": [
+        {
+          "frame_sha256": "c943804b8fb1e81bc81d5894259cb5424555a40e4ad6bcf8b18abc937bea744c",
+          "state": "positive",
+          "value": "TRUE",
+          "frame_sequence": 11,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 30974,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 30975,
+              "ack_before": 30973
+            },
+            {
+              "alias": "SH03",
+              "value_line": 30977,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 30978,
+              "ack_before": 30976
+            },
+            {
+              "alias": "SH04",
+              "value_line": 30980,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 30981,
+              "ack_before": 30979
+            },
+            {
+              "alias": "SH06",
+              "value_line": 30983,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 30984,
+              "ack_before": 30982
+            },
+            {
+              "alias": "SH08",
+              "value_line": 30986,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 30987,
+              "ack_before": 30985
+            }
+          ]
+        },
+        {
+          "frame_sha256": "a2416f95512a588b49fd7e4a00614c8502a1e0b5d33ae9f7b57284e91476ee5e",
+          "state": "negative",
+          "value": "FALSE",
+          "frame_sequence": 12,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 31988,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 31989,
+              "ack_before": 31987
+            },
+            {
+              "alias": "SH03",
+              "value_line": 31991,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 31992,
+              "ack_before": 31990
+            },
+            {
+              "alias": "SH04",
+              "value_line": 31994,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 31995,
+              "ack_before": 31993
+            },
+            {
+              "alias": "SH06",
+              "value_line": 31997,
+              "value": "FALSE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 31998,
+              "ack_before": 31996
+            },
+            {
+              "alias": "SH08",
+              "value_line": 32000,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 32001,
+              "ack_before": 31999
+            }
+          ]
+        },
+        {
+          "frame_sha256": "00204ab3e0293afd4e780495c59bf6c1b3daf81398d843d4c83fbdfdf1bb0e56",
+          "state": "restore",
+          "value": "TRUE",
+          "frame_sequence": 13,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 32357,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 32358,
+              "ack_before": 32356
+            },
+            {
+              "alias": "SH03",
+              "value_line": 32360,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 32361,
+              "ack_before": 32359
+            },
+            {
+              "alias": "SH04",
+              "value_line": 32363,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 32364,
+              "ack_before": 32362
+            },
+            {
+              "alias": "SH06",
+              "value_line": 32366,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 32367,
+              "ack_before": 32365
+            },
+            {
+              "alias": "SH08",
+              "value_line": 32369,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 32370,
+              "ack_before": 32368
+            }
+          ]
+        }
+      ],
+      "restore_verified": true,
+      "effect_status": "pending_independent_native_scene_review"
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "scene_gate": "Cascade selection: the original dispatcher chooses three cascades when enabled and one when disabled; require a stable near-and-distant caster/receiver witness.",
+      "effect_witness": "Cascade selection: the original dispatcher chooses three cascades when enabled and one when disabled; require a stable near-and-distant caster/receiver witness.",
+      "phases": [
+        {
+          "frame_sha256": "6ae5787ec73a5039db308fa6a5ab97f22b564d79bb48e7740fb18b39be763aa9",
+          "state": "positive",
+          "value": "TRUE",
+          "frame_sequence": 14,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 33487,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 33488,
+              "ack_before": 33486
+            },
+            {
+              "alias": "SH03",
+              "value_line": 33490,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 33491,
+              "ack_before": 33489
+            },
+            {
+              "alias": "SH04",
+              "value_line": 33493,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 33494,
+              "ack_before": 33492
+            },
+            {
+              "alias": "SH06",
+              "value_line": 33496,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 33497,
+              "ack_before": 33495
+            },
+            {
+              "alias": "SH08",
+              "value_line": 33499,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 33500,
+              "ack_before": 33498
+            }
+          ]
+        },
+        {
+          "frame_sha256": "5fdc052c35a0bb87e165d50680d0b07a7f10a8bf840fa944b2ea060d25edda1a",
+          "state": "negative",
+          "value": "FALSE",
+          "frame_sequence": 15,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 34500,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 34501,
+              "ack_before": 34499
+            },
+            {
+              "alias": "SH03",
+              "value_line": 34503,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 34504,
+              "ack_before": 34502
+            },
+            {
+              "alias": "SH04",
+              "value_line": 34506,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 34507,
+              "ack_before": 34505
+            },
+            {
+              "alias": "SH06",
+              "value_line": 34509,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 34510,
+              "ack_before": 34508
+            },
+            {
+              "alias": "SH08",
+              "value_line": 34512,
+              "value": "FALSE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 34513,
+              "ack_before": 34511
+            }
+          ]
+        },
+        {
+          "frame_sha256": "79e21914774d993b6a995fe78e7e2a2f19548391f74399f4b8534c8d3ba0dc14",
+          "state": "restore",
+          "value": "TRUE",
+          "frame_sequence": 16,
+          "raw_alias_readbacks": [
+            {
+              "alias": "SH02",
+              "value_line": 35357,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render Shadow map",
+              "ack_after": 35358,
+              "ack_before": 35356
+            },
+            {
+              "alias": "SH03",
+              "value_line": 35360,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from world",
+              "ack_after": 35361,
+              "ack_before": 35359
+            },
+            {
+              "alias": "SH04",
+              "value_line": 35363,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from cars",
+              "ack_after": 35364,
+              "ack_before": 35362
+            },
+            {
+              "alias": "SH06",
+              "value_line": 35366,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Cast shadows from props",
+              "ack_after": 35367,
+              "ack_before": 35365
+            },
+            {
+              "alias": "SH08",
+              "value_line": 35369,
+              "value": "TRUE",
+              "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+              "ack_after": 35370,
+              "ack_before": 35368
+            }
+          ]
+        }
+      ],
+      "restore_verified": true,
+      "effect_status": "pending_independent_native_scene_review"
+    }
+  ],
+  "frames": [
+    {
+      "phase": "natural_baseline",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_008924.bmp",
+      "name": "bb_008924.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "e0844c129cf33e502e7678c9150127af5ea4ce0724cfb37db20c25adfca3f3a4",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 1,
+      "present": 8924,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=1 present=8924 file=bb_008924.bmp",
+      "ack_index": 21265,
+      "request_cursor": 21259,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "8924,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH02_positive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009222.bmp",
+      "name": "bb_009222.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "ff716f93081ce7cadc2905966cd519380182193aa66cab9ee4e1563bb27ff3d6",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 2,
+      "present": 9222,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=2 present=9222 file=bb_009222.bmp",
+      "ack_index": 22387,
+      "request_cursor": 22376,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "9222,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH02_negative",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009514.bmp",
+      "name": "bb_009514.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "d3f9edfb5c8e108ca6d91eeb862396aedc24b4508ded5e82dfbc02bca43042aa",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 3,
+      "present": 9514,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=3 present=9514 file=bb_009514.bmp",
+      "ack_index": 22884,
+      "request_cursor": 22882,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "9514,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH02_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_009843.bmp",
+      "name": "bb_009843.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "3d6d2a91f4d77663b64f0890c05191d86058cd67dcbec538a224e2fb32e81ec8",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 4,
+      "present": 9843,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=4 present=9843 file=bb_009843.bmp",
+      "ack_index": 23507,
+      "request_cursor": 23504,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "9843,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH03_positive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010092.bmp",
+      "name": "bb_010092.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "4220db2225cc9937246e16b5006700c0913e4ce81ca38baf5d582fed79ba946e",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 5,
+      "present": 10092,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=5 present=10092 file=bb_010092.bmp",
+      "ack_index": 24610,
+      "request_cursor": 24607,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "10092,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH03_negative",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010431.bmp",
+      "name": "bb_010431.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "273500c280a4323395c98a00cd640050d208e98751848a788cb18135fb137cff",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 6,
+      "present": 10431,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=6 present=10431 file=bb_010431.bmp",
+      "ack_index": 25953,
+      "request_cursor": 25950,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "10431,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH03_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010709.bmp",
+      "name": "bb_010709.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "6bc657ac623f11cbf9300e769cc95829b5d939c531fb92c06d69ebe6f79f9d08",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 7,
+      "present": 10709,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=7 present=10709 file=bb_010709.bmp",
+      "ack_index": 27108,
+      "request_cursor": 27103,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "10709,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH04_positive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_010941.bmp",
+      "name": "bb_010941.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "f8c6add8bc78135aa35780a411169d56bc56a42fa6407c974f10a9d9ece8f3a5",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 8,
+      "present": 10941,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=8 present=10941 file=bb_010941.bmp",
+      "ack_index": 28049,
+      "request_cursor": 28045,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "10941,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH04_negative",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011220.bmp",
+      "name": "bb_011220.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "463cbe35eac2bb080a6b54cd71fe361e5c4989d71f05b619b6778e9f93cd16fd",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 9,
+      "present": 11220,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=9 present=11220 file=bb_011220.bmp",
+      "ack_index": 29376,
+      "request_cursor": 29373,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "11220,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH04_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011477.bmp",
+      "name": "bb_011477.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "a1f45cda8b97ac47c0d9a6529bea9183f4491264ca73e4a01347f71c9e34b271",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 10,
+      "present": 11477,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=10 present=11477 file=bb_011477.bmp",
+      "ack_index": 30349,
+      "request_cursor": 30346,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "11477,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH06_positive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_011737.bmp",
+      "name": "bb_011737.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "c943804b8fb1e81bc81d5894259cb5424555a40e4ad6bcf8b18abc937bea744c",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 11,
+      "present": 11737,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=11 present=11737 file=bb_011737.bmp",
+      "ack_index": 31380,
+      "request_cursor": 31376,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "11737,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH06_negative",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012022.bmp",
+      "name": "bb_012022.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "a2416f95512a588b49fd7e4a00614c8502a1e0b5d33ae9f7b57284e91476ee5e",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 12,
+      "present": 12022,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=12 present=12022 file=bb_012022.bmp",
+      "ack_index": 32199,
+      "request_cursor": 32196,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "12022,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH06_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012270.bmp",
+      "name": "bb_012270.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "00204ab3e0293afd4e780495c59bf6c1b3daf81398d843d4c83fbdfdf1bb0e56",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 13,
+      "present": 12270,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=13 present=12270 file=bb_012270.bmp",
+      "ack_index": 32925,
+      "request_cursor": 32922,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "12270,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH08_positive",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012551.bmp",
+      "name": "bb_012551.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "6ae5787ec73a5039db308fa6a5ab97f22b564d79bb48e7740fb18b39be763aa9",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 14,
+      "present": 12551,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=14 present=12551 file=bb_012551.bmp",
+      "ack_index": 34091,
+      "request_cursor": 34087,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "12551,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH08_negative",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_012827.bmp",
+      "name": "bb_012827.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "5fdc052c35a0bb87e165d50680d0b07a7f10a8bf840fa944b2ea060d25edda1a",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 15,
+      "present": 12827,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=15 present=12827 file=bb_012827.bmp",
+      "ack_index": 34895,
+      "request_cursor": 34892,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "12827,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "shadow_SH08_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013138.bmp",
+      "name": "bb_013138.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "79e21914774d993b6a995fe78e7e2a2f19548391f74399f4b8534c8d3ba0dc14",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 16,
+      "present": 13138,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=16 present=13138 file=bb_013138.bmp",
+      "ack_index": 35948,
+      "request_cursor": 35940,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "13138,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "terminal_restore",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013381.bmp",
+      "name": "bb_013381.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "adad13551bbe3c00569fe609f74f30cc636153af8ff7a3328ba17e1029a21e71",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 17,
+      "present": 13381,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=17 present=13381 file=bb_013381.bmp",
+      "ack_index": 36896,
+      "request_cursor": 36892,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "13381,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    },
+    {
+      "phase": "post_restore_readback",
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\bb_013668.bmp",
+      "name": "bb_013668.bmp",
+      "bytes": 3686454,
+      "max_bytes": 3686454,
+      "width": 1280,
+      "height": 720,
+      "sha256": "cc198f2187eb4a0fee2e476bfc9c59b8a8461615eb82543d85274f3127be77e0",
+      "pid": 58672,
+      "slot": 62190,
+      "sequence": 18,
+      "present": 13668,
+      "ack": "[frame-request] pid=58672 slot=62190 seq=18 present=13668 file=bb_013668.bmp",
+      "ack_index": 38089,
+      "request_cursor": 38082,
+      "csv_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\frames\\frames.csv",
+      "csv_row": "13668,1.000000,0.016667,0.500000,-1,0,0.000,0.000,0.000,0,320,3039.165,-5.070,-2045.236,0.1195,-0.3588,7.4899,0,0,0.0000,3040.049,-4.454,-2046.798,4"
+    }
+  ],
+  "phases": [
+    {
+      "snapshot_hash": "5C-13-A2-2C-1B-A0-98-8A-4A-0B-E4-13-3B-A4-CA-93-AE-D9-AB-08-64-CF-16-86-F3-E1-38-F3-9F-91-D7-AD",
+      "command_sha256": "eace954b26a59dc1d228f914e09e241313731ec4aa4f1ab76e18f32a6f671ce2",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE"
+      ],
+      "snapshot_bytes": 3842342,
+      "cursor": 21791,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH02_positive.cfg",
+      "phase": "shadow_SH02_positive",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 21796,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 21797,
+          "ack_before": 21795
+        },
+        {
+          "alias": "SH03",
+          "value_line": 21799,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 21800,
+          "ack_before": 21798
+        },
+        {
+          "alias": "SH04",
+          "value_line": 21802,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 21803,
+          "ack_before": 21801
+        },
+        {
+          "alias": "SH06",
+          "value_line": 21805,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 21806,
+          "ack_before": 21804
+        },
+        {
+          "alias": "SH08",
+          "value_line": 21808,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 21809,
+          "ack_before": 21807
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "3B-2E-55-23-59-73-76-94-11-22-AA-7D-67-4A-3C-7F-00-97-D1-69-B8-F8-AE-65-90-41-D6-14-C8-52-0D-D4",
+      "command_sha256": "26fb2947911790e585402d8728626b010143c2760c8b70924f4d14441707ed62",
+      "expected": {
+        "SH02": "FALSE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 FALSE"
+      ],
+      "snapshot_bytes": 4004518,
+      "cursor": 22806,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH02_negative.cfg",
+      "phase": "shadow_SH02_negative",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 22810,
+          "value": "FALSE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 22811,
+          "ack_before": 22809
+        },
+        {
+          "alias": "SH03",
+          "value_line": 22813,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 22814,
+          "ack_before": 22812
+        },
+        {
+          "alias": "SH04",
+          "value_line": 22816,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 22817,
+          "ack_before": 22815
+        },
+        {
+          "alias": "SH06",
+          "value_line": 22819,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 22820,
+          "ack_before": 22818
+        },
+        {
+          "alias": "SH08",
+          "value_line": 22822,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 22823,
+          "ack_before": 22821
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "66-D1-FB-2F-FE-65-6F-30-C0-33-B0-8D-8B-9D-1F-A5-B9-DD-96-7D-13-10-27-03-A9-3C-A5-9C-E5-93-CB-14",
+      "command_sha256": "eace954b26a59dc1d228f914e09e241313731ec4aa4f1ab76e18f32a6f671ce2",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE"
+      ],
+      "snapshot_bytes": 4041949,
+      "cursor": 22930,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH02_restore.cfg",
+      "phase": "shadow_SH02_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 22931,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 22932,
+          "ack_before": 22930
+        },
+        {
+          "alias": "SH03",
+          "value_line": 22934,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 22935,
+          "ack_before": 22933
+        },
+        {
+          "alias": "SH04",
+          "value_line": 22937,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 22938,
+          "ack_before": 22936
+        },
+        {
+          "alias": "SH06",
+          "value_line": 22940,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 22941,
+          "ack_before": 22939
+        },
+        {
+          "alias": "SH08",
+          "value_line": 22943,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 22944,
+          "ack_before": 22942
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "8E-BA-13-F0-26-1F-1E-63-82-66-40-68-54-66-D2-F4-C5-4B-6F-DF-1F-DE-CF-6F-5B-9B-87-E5-CB-8A-B5-73",
+      "command_sha256": "227e340050e63ff66abe3cce2192c5f85a8a5f1734bbb1700c9a17d860b88217",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH03 TRUE"
+      ],
+      "snapshot_bytes": 4268172,
+      "cursor": 24002,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH03_positive.cfg",
+      "phase": "shadow_SH03_positive",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 24008,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 24009,
+          "ack_before": 24007
+        },
+        {
+          "alias": "SH03",
+          "value_line": 24011,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 24012,
+          "ack_before": 24010
+        },
+        {
+          "alias": "SH04",
+          "value_line": 24014,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 24015,
+          "ack_before": 24013
+        },
+        {
+          "alias": "SH06",
+          "value_line": 24017,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 24018,
+          "ack_before": 24016
+        },
+        {
+          "alias": "SH08",
+          "value_line": 24020,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 24021,
+          "ack_before": 24019
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "4A-B8-C1-13-4B-9B-5A-4D-31-86-4F-24-73-7C-0B-0D-A6-A8-6D-6B-C0-CC-78-15-05-7F-FC-33-CC-20-E3-12",
+      "command_sha256": "a56c377420ba1080565313127529a36bd7b6c7915e95c720bcf550bedf2cc2f8",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "FALSE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH03 FALSE"
+      ],
+      "snapshot_bytes": 4477040,
+      "cursor": 25211,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH03_negative.cfg",
+      "phase": "shadow_SH03_negative",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 25218,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 25219,
+          "ack_before": 25217
+        },
+        {
+          "alias": "SH03",
+          "value_line": 25221,
+          "value": "FALSE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 25222,
+          "ack_before": 25220
+        },
+        {
+          "alias": "SH04",
+          "value_line": 25224,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 25225,
+          "ack_before": 25223
+        },
+        {
+          "alias": "SH06",
+          "value_line": 25227,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 25228,
+          "ack_before": 25226
+        },
+        {
+          "alias": "SH08",
+          "value_line": 25230,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 25231,
+          "ack_before": 25229
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "F9-52-7B-58-00-CC-60-5F-00-EF-25-38-99-4E-28-28-8E-0C-F8-F7-A0-79-DD-7B-99-40-C7-E8-56-3B-A6-A0",
+      "command_sha256": "227e340050e63ff66abe3cce2192c5f85a8a5f1734bbb1700c9a17d860b88217",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH03 TRUE"
+      ],
+      "snapshot_bytes": 4726594,
+      "cursor": 26502,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH03_restore.cfg",
+      "phase": "shadow_SH03_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 26513,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 26514,
+          "ack_before": 26512
+        },
+        {
+          "alias": "SH03",
+          "value_line": 26516,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 26517,
+          "ack_before": 26515
+        },
+        {
+          "alias": "SH04",
+          "value_line": 26519,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 26520,
+          "ack_before": 26518
+        },
+        {
+          "alias": "SH06",
+          "value_line": 26522,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 26523,
+          "ack_before": 26521
+        },
+        {
+          "alias": "SH08",
+          "value_line": 26525,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 26526,
+          "ack_before": 26524
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "C1-6F-0D-CF-D4-57-C0-8F-6F-22-79-E2-36-C3-35-C5-BE-37-6C-99-CD-51-E9-83-D7-50-55-E4-CB-F2-C6-01",
+      "command_sha256": "fa9115e27f49d61fc3f8a5b23d8580e355a4745d367e002ca06ce58af4247c8c",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH04 TRUE"
+      ],
+      "snapshot_bytes": 4935512,
+      "cursor": 27541,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH04_positive.cfg",
+      "phase": "shadow_SH04_positive",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 27545,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 27546,
+          "ack_before": 27544
+        },
+        {
+          "alias": "SH03",
+          "value_line": 27548,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 27549,
+          "ack_before": 27547
+        },
+        {
+          "alias": "SH04",
+          "value_line": 27551,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 27552,
+          "ack_before": 27550
+        },
+        {
+          "alias": "SH06",
+          "value_line": 27554,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 27555,
+          "ack_before": 27553
+        },
+        {
+          "alias": "SH08",
+          "value_line": 27557,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 27558,
+          "ack_before": 27556
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "B0-CE-B5-F4-F8-73-9E-4C-72-7C-40-0D-B5-7C-94-D3-D5-9F-00-A8-7B-52-76-E9-10-F4-F3-B0-72-EC-41-E8",
+      "command_sha256": "adb3b05f3b74522a4fe0d27ea5aac2241e55c473cb821d0fef66365372f33125",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "FALSE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH04 FALSE"
+      ],
+      "snapshot_bytes": 5144400,
+      "cursor": 28653,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH04_negative.cfg",
+      "phase": "shadow_SH04_negative",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 28660,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 28661,
+          "ack_before": 28659
+        },
+        {
+          "alias": "SH03",
+          "value_line": 28663,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 28664,
+          "ack_before": 28662
+        },
+        {
+          "alias": "SH04",
+          "value_line": 28666,
+          "value": "FALSE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 28667,
+          "ack_before": 28665
+        },
+        {
+          "alias": "SH06",
+          "value_line": 28669,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 28670,
+          "ack_before": 28668
+        },
+        {
+          "alias": "SH08",
+          "value_line": 28672,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 28673,
+          "ack_before": 28671
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "13-E8-F7-D9-76-20-80-5D-76-FD-13-1B-43-17-54-3F-F8-8B-3C-9B-C9-F5-5F-F7-AE-72-BE-53-A5-7E-B6-D7",
+      "command_sha256": "fa9115e27f49d61fc3f8a5b23d8580e355a4745d367e002ca06ce58af4247c8c",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH04 TRUE"
+      ],
+      "snapshot_bytes": 5355843,
+      "cursor": 29787,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH04_restore.cfg",
+      "phase": "shadow_SH04_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 29795,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 29796,
+          "ack_before": 29794
+        },
+        {
+          "alias": "SH03",
+          "value_line": 29798,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 29799,
+          "ack_before": 29797
+        },
+        {
+          "alias": "SH04",
+          "value_line": 29801,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 29802,
+          "ack_before": 29800
+        },
+        {
+          "alias": "SH06",
+          "value_line": 29804,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 29805,
+          "ack_before": 29803
+        },
+        {
+          "alias": "SH08",
+          "value_line": 29807,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 29808,
+          "ack_before": 29806
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "2E-C2-67-9A-5E-16-DB-F8-01-90-CA-02-C1-E2-EF-E5-47-38-8E-D9-0B-AD-25-56-28-1F-9E-4B-73-8A-14-AB",
+      "command_sha256": "26b1dcc2a17a767df33afbe27d9c2e994183977e04c7928838570ced6dc9b1c3",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH06 TRUE"
+      ],
+      "snapshot_bytes": 5558512,
+      "cursor": 30968,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH06_positive.cfg",
+      "phase": "shadow_SH06_positive",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 30974,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 30975,
+          "ack_before": 30973
+        },
+        {
+          "alias": "SH03",
+          "value_line": 30977,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 30978,
+          "ack_before": 30976
+        },
+        {
+          "alias": "SH04",
+          "value_line": 30980,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 30981,
+          "ack_before": 30979
+        },
+        {
+          "alias": "SH06",
+          "value_line": 30983,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 30984,
+          "ack_before": 30982
+        },
+        {
+          "alias": "SH08",
+          "value_line": 30986,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 30987,
+          "ack_before": 30985
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "EA-24-10-64-92-1C-26-DA-D6-44-57-4C-0C-C7-B8-A9-A2-01-65-73-0C-B0-A4-44-DA-15-3C-82-B6-AD-42-B0",
+      "command_sha256": "d0ba12b8b01bae947d6549c6e87a9509f300d3aeba36b453c047ac6ae9da4dce",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "FALSE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH06 FALSE"
+      ],
+      "snapshot_bytes": 5723246,
+      "cursor": 31984,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH06_negative.cfg",
+      "phase": "shadow_SH06_negative",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 31988,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 31989,
+          "ack_before": 31987
+        },
+        {
+          "alias": "SH03",
+          "value_line": 31991,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 31992,
+          "ack_before": 31990
+        },
+        {
+          "alias": "SH04",
+          "value_line": 31994,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 31995,
+          "ack_before": 31993
+        },
+        {
+          "alias": "SH06",
+          "value_line": 31997,
+          "value": "FALSE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 31998,
+          "ack_before": 31996
+        },
+        {
+          "alias": "SH08",
+          "value_line": 32000,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 32001,
+          "ack_before": 31999
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "1A-B2-86-AB-FE-53-60-02-9C-39-20-EC-18-16-C0-DA-1A-3A-E0-46-B3-FC-4B-F9-EB-12-29-BA-24-88-92-53",
+      "command_sha256": "26b1dcc2a17a767df33afbe27d9c2e994183977e04c7928838570ced6dc9b1c3",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH06 TRUE"
+      ],
+      "snapshot_bytes": 5830037,
+      "cursor": 32354,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH06_restore.cfg",
+      "phase": "shadow_SH06_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 32357,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 32358,
+          "ack_before": 32356
+        },
+        {
+          "alias": "SH03",
+          "value_line": 32360,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 32361,
+          "ack_before": 32359
+        },
+        {
+          "alias": "SH04",
+          "value_line": 32363,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 32364,
+          "ack_before": 32362
+        },
+        {
+          "alias": "SH06",
+          "value_line": 32366,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 32367,
+          "ack_before": 32365
+        },
+        {
+          "alias": "SH08",
+          "value_line": 32369,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 32370,
+          "ack_before": 32368
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "17-B3-A9-19-E8-C1-30-54-75-1A-2C-86-1A-A3-A5-3C-12-56-5D-1A-CB-70-0D-24-A9-DA-05-C0-38-A4-14-52",
+      "command_sha256": "70fc1831c9ce3f46d56a82922acb5cc72cfb5c3a155eee172486313357b77566",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH08 TRUE"
+      ],
+      "snapshot_bytes": 6010949,
+      "cursor": 33481,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH08_positive.cfg",
+      "phase": "shadow_SH08_positive",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 33487,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 33488,
+          "ack_before": 33486
+        },
+        {
+          "alias": "SH03",
+          "value_line": 33490,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 33491,
+          "ack_before": 33489
+        },
+        {
+          "alias": "SH04",
+          "value_line": 33493,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 33494,
+          "ack_before": 33492
+        },
+        {
+          "alias": "SH06",
+          "value_line": 33496,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 33497,
+          "ack_before": 33495
+        },
+        {
+          "alias": "SH08",
+          "value_line": 33499,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 33500,
+          "ack_before": 33498
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "66-94-07-46-FE-65-AB-71-03-4C-01-4F-8F-4A-94-BD-1C-C1-65-CB-55-76-4B-99-73-57-C4-31-89-D7-83-A0",
+      "command_sha256": "5d2832d09c962d3e25bae2330c804eee595f9b3832e486182e5c90dd6f898d06",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "FALSE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH08 FALSE"
+      ],
+      "snapshot_bytes": 6210498,
+      "cursor": 34492,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH08_negative.cfg",
+      "phase": "shadow_SH08_negative",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 34500,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 34501,
+          "ack_before": 34499
+        },
+        {
+          "alias": "SH03",
+          "value_line": 34503,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 34504,
+          "ack_before": 34502
+        },
+        {
+          "alias": "SH04",
+          "value_line": 34506,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 34507,
+          "ack_before": 34505
+        },
+        {
+          "alias": "SH06",
+          "value_line": 34509,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 34510,
+          "ack_before": 34508
+        },
+        {
+          "alias": "SH08",
+          "value_line": 34512,
+          "value": "FALSE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 34513,
+          "ack_before": 34511
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "2F-B2-0E-F2-5C-BC-EE-E7-1B-B1-18-05-06-58-F9-B2-C9-E4-F3-6D-1F-C4-6F-4B-F1-00-54-B2-7E-D4-54-3B",
+      "command_sha256": "70fc1831c9ce3f46d56a82922acb5cc72cfb5c3a155eee172486313357b77566",
+      "expected": {
+        "SH02": "TRUE",
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH08 TRUE"
+      ],
+      "snapshot_bytes": 6366801,
+      "cursor": 35352,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_shadow_SH08_restore.cfg",
+      "phase": "shadow_SH08_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 35357,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 35358,
+          "ack_before": 35356
+        },
+        {
+          "alias": "SH03",
+          "value_line": 35360,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 35361,
+          "ack_before": 35359
+        },
+        {
+          "alias": "SH04",
+          "value_line": 35363,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 35364,
+          "ack_before": 35362
+        },
+        {
+          "alias": "SH06",
+          "value_line": 35366,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 35367,
+          "ack_before": 35365
+        },
+        {
+          "alias": "SH08",
+          "value_line": 35369,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 35370,
+          "ack_before": 35368
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "8D-29-45-87-59-76-18-27-26-20-9F-D8-01-94-F9-32-DB-6F-BF-79-DD-C9-4F-E6-10-54-D1-30-39-B0-63-24",
+      "command_sha256": "b5f0691632b579a42139785c94f4a08fc29a426b5305af3b3f05c9f7c96d6789",
+      "expected": {
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH02": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [
+        "set SH02 TRUE",
+        "set SH03 TRUE",
+        "set SH04 TRUE",
+        "set SH06 TRUE",
+        "set SH08 TRUE"
+      ],
+      "snapshot_bytes": 6568709,
+      "cursor": 36327,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_terminal_restore.cfg",
+      "phase": "terminal_restore",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 36336,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 36337,
+          "ack_before": 36335
+        },
+        {
+          "alias": "SH03",
+          "value_line": 36339,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 36340,
+          "ack_before": 36338
+        },
+        {
+          "alias": "SH04",
+          "value_line": 36342,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 36343,
+          "ack_before": 36341
+        },
+        {
+          "alias": "SH06",
+          "value_line": 36345,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 36346,
+          "ack_before": 36344
+        },
+        {
+          "alias": "SH08",
+          "value_line": 36348,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 36349,
+          "ack_before": 36347
+        }
+      ]
+    },
+    {
+      "snapshot_hash": "8F-99-94-B3-CF-96-52-D0-1A-B0-D9-F2-83-85-5E-F0-92-28-7C-C8-6F-14-2A-DC-32-BF-EB-97-3A-E1-BA-72",
+      "command_sha256": "4b809bfd5a683c0349509a8271e50f80ff6654a6328e25237719aaf04d8c7932",
+      "expected": {
+        "SH06": "TRUE",
+        "SH03": "TRUE",
+        "SH04": "TRUE",
+        "SH02": "TRUE",
+        "SH08": "TRUE"
+      },
+      "commands": [],
+      "snapshot_bytes": 6766448,
+      "cursor": 37436,
+      "command_file": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\shadow5_native_20261031\\runs\\shadow5_62190_20261031_200355_3cdd46b6434e45958b8e06c4e16b3657\\phase_post_restore_readback.cfg",
+      "phase": "post_restore_readback",
+      "proofs": [
+        {
+          "alias": "SH02",
+          "value_line": 37442,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render Shadow map",
+          "ack_after": 37443,
+          "ack_before": 37441
+        },
+        {
+          "alias": "SH03",
+          "value_line": 37445,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from world",
+          "ack_after": 37446,
+          "ack_before": 37444
+        },
+        {
+          "alias": "SH04",
+          "value_line": 37448,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from cars",
+          "ack_after": 37449,
+          "ack_before": 37447
+        },
+        {
+          "alias": "SH06",
+          "value_line": 37451,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Cast shadows from props",
+          "ack_after": 37452,
+          "ack_before": 37450
+        },
+        {
+          "alias": "SH08",
+          "value_line": 37454,
+          "value": "TRUE",
+          "path": "World/ShadowMap/Render multiple shadow maps (CSM)",
+          "ack_after": 37455,
+          "ack_before": 37453
+        }
+      ]
+    }
+  ],
+  "terminal_restore_verified": true,
+  "site_credit": 0,
+  "max_raw_frames": 18,
+  "max_other_game_count": 0,
+  "concurrent_sample_count": 185,
+  "concurrent_game_ledger": "CONCURRENT_GAME_RUNTIME.jsonl",
+  "allowed_concurrent_game": null,
+  "planned_max_frames": 18,
+  "note": "Typed field behavior only; live consumer conditions and pixels require independent review."
+}

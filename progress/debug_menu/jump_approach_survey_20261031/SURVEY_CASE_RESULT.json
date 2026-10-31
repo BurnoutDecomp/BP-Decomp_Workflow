@@ -1,0 +1,58 @@
+{
+  "as_expected": true,
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_road_survey_20261031\\Case.ps1",
+  "label": "48 zero-speed road-seat observations, no control credit",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_road_survey_20261031\\run",
+  "phase": "DRIVING",
+  "verdict": "PASS",
+  "slot": 62205,
+  "provenance": {
+    "exe_mtime": "2026-10-31T20:56:00.8223138+01:00",
+    "exe_size": 11777024,
+    "exe_mtime_before_lock": "2026-10-31T20:56:00.8223138+01:00",
+    "b5_dirty": 4,
+    "exe_sha": "052112a5aa52",
+    "exe_b5": "ca802777",
+    "parent_head": "cd2febc38",
+    "b5_head": "ca8027774"
+  },
+  "bug": "Find the actual elevated approach to original jump355882; no control verdict",
+  "asserts": 0,
+  "flow_exit": 0,
+  "when": "2026-10-31T20:58:44.5538764+01:00",
+  "expected": "PASS",
+  "checks": [
+    {
+      "pass": true,
+      "kind": "TerminalFlow",
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "name": "original strict flow completed and owned game exited"
+    },
+    {
+      "pass": true,
+      "kind": "NewAsserts",
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "name": "no new assertions"
+    },
+    {
+      "pass": true,
+      "kind": "LogCount",
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "name": "no exceptions"
+    },
+    {
+      "pass": true,
+      "kind": "Mark",
+      "detail": "final phase DRIVING, want DRIVING",
+      "name": "DRIVING reached"
+    },
+    {
+      "pass": true,
+      "kind": "Script",
+      "detail": "seats=True identity=True exact_phase=True cleanup=True collection=True; survey only, no camera/physics credit",
+      "name": "all48 road seats and genuine current-save proof"
+    }
+  ],
+  "area": "director",
+  "case": "jump_road_survey_62205"
+}

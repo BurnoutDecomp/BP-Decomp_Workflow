@@ -1,5 +1,7 @@
 # Debug-menu behavior campaign
 
+**October 31 shadows:** two more controls now have bounded native P/N/restore proof: Render Shadow map and Cast shadows from cars. The world, props and multiple-cascade controls still need their visible receiver scenes. The 48-point jump-approach survey found only lower road surfaces; enabled-jump camera proof stays pending. [Shadow evidence](shadow5_native_20261031/README.md).
+
 **October 31 Scene/Director:** seven additional bounded native outcomes are accepted: the triangle-test gate, padding draw/radius, TriZ response, cached triangles/spheres and moment diagnostic-output gate. The 28-control aggregate remains FAIL; 21 controls need their actual producer/scene or visible consumer. Captured P/N/restore, original source and the 87-frame archive are reviewed. [Decision and limits](scene28_native_20261031/ROOT_DECISION.json), [combined review](scene28_native_20261031/REVIEW.md).
 
 **October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof remains pending; the clean playable build is refreshed below. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
@@ -51,7 +53,7 @@ Six BoostBar controls now pass original-source, raw native and pixel review: thr
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **167 verified, twenty-eight original no-ops and 1,160 pending**. That is 195/1,355 (14.4%) with a final site-level disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **169 verified, twenty-eight original no-ops and 1,158 pending**. That is 197/1,355 (14.5%) with a final site-level disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 
