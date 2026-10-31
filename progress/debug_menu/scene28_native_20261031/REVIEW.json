@@ -1,0 +1,2235 @@
+{
+  "schema_version": 1,
+  "review_id": "scene28_native_20261031_combined",
+  "verdict": "fail",
+  "review_scope": "All 28 controls in the pinned Scene28 native run; bounded visible behavior adjudication only.",
+  "verdict_basis": "Seven controls have bounded visible consumer evidence. Twenty-one remain insufficient or context-limited. The original case result remains FAIL.",
+  "proposed_accepted_count": 7,
+  "insufficient_count": 21,
+  "proposed_accepted_ids": [
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+    "BrnDirector::DebugComponent::OnActivate#0019"
+  ],
+  "insufficient_ids": [
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+    "BrnWorld::ShadowMap::Construct#0002",
+    "BrnWorld::ShadowMap::Construct#0003",
+    "BrnWorld::ShadowMap::Construct#0004",
+    "BrnWorld::ShadowMap::Construct#0006",
+    "BrnWorld::ShadowMap::Construct#0008",
+    "BrnDirector::DebugComponent::OnActivate#0008",
+    "BrnDirector::DebugComponent::OnActivate#0014",
+    "BrnDirector::DebugComponent::OnActivate#0015",
+    "BrnDirector::DebugComponent::OnActivate#0016",
+    "BrnDirector::DebugComponent::OnActivate#0018",
+    "BrnDirector::DebugComponent::OnActivate#0022",
+    "BrnDirector::DebugComponent::OnActivate#0023",
+    "BrnDirector::DebugComponent::OnActivate#0026",
+    "BrnDirector::DebugComponent::OnActivate#0043",
+    "BrnDirector::DebugComponent::OnActivate#0044",
+    "BrnDirector::DebugComponent::OnActivate#0045",
+    "BrnDirector::DebugComponent::OnActivate#0054"
+  ],
+  "source_and_build_pins": {
+    "b5_published_commit": "3f4f9c06e1a694d491effd1cbe28407ce9df1d4b",
+    "workflow_main_commit": "a6e4457a6d09c4d321dc0c9b066dfd70fd0e6c7b",
+    "exe_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+    "map_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f",
+    "build_receipt_sha256": "bfa1c512b4b9585a7eb8564017e2739f11cb55fbcaac129a007d03eda3b606c1",
+    "source_blob_checks": [
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+        "expected_blob": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+        "actual_blob": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "expected_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "actual_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "expected_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "actual_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/BrnWorldModule.cpp",
+        "expected_blob": "73c1040b0bee6a39336a64e1e0d841c6c5787099",
+        "actual_blob": "73c1040b0bee6a39336a64e1e0d841c6c5787099",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Graphics/BrnRendererModule.cpp",
+        "expected_blob": "10fae0043a47c3a86b20f960969b7ada72622972",
+        "actual_blob": "10fae0043a47c3a86b20f960969b7ada72622972",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule_Render.cpp",
+        "expected_blob": "92fe995fb0051a3e7eaff3156349d21e83a622aa",
+        "actual_blob": "92fe995fb0051a3e7eaff3156349d21e83a622aa",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Render.cpp",
+        "expected_blob": "d84859a5333d0e5767dc165f01e8d974a5fbeb08",
+        "actual_blob": "d84859a5333d0e5767dc165f01e8d974a5fbeb08",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+        "expected_blob": "8db987950fd699e5bfa16a6bde244c0d1cf310f2",
+        "actual_blob": "8db987950fd699e5bfa16a6bde244c0d1cf310f2",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "expected_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "actual_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/BrnMainDirector.cpp",
+        "expected_blob": "e3e92754a74db76a243ad9fe75cb479b6e5c3a58",
+        "actual_blob": "e3e92754a74db76a243ad9fe75cb479b6e5c3a58",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/Arbitrator/BrnDirectorArbitratorState.cpp",
+        "expected_blob": "d568cd4c683a30c266ca7c84df554b6087de8966",
+        "actual_blob": "d568cd4c683a30c266ca7c84df554b6087de8966",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp",
+        "expected_blob": "ff8a25be213dc9cecf61b3ddd7a8f1f5556e40ad",
+        "actual_blob": "ff8a25be213dc9cecf61b3ddd7a8f1f5556e40ad",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/Camera/Behaviours/BrnBehaviourGameplayExternal.cpp",
+        "expected_blob": "da6f6de2e8863d4c157c620bd553db78bef9ba47",
+        "actual_blob": "da6f6de2e8863d4c157c620bd553db78bef9ba47",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/Camera/Camera.cpp",
+        "expected_blob": "62f1749f9dce171daa0b0d3f8f14a8708df72fc6",
+        "actual_blob": "62f1749f9dce171daa0b0d3f8f14a8708df72fc6",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugPrinter.cpp",
+        "expected_blob": "c3ec7b3aed49ee1b198bd5e22af2983751cdad12",
+        "actual_blob": "c3ec7b3aed49ee1b198bd5e22af2983751cdad12",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp",
+        "expected_blob": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+        "actual_blob": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariable.cpp",
+        "expected_blob": "57ef21e60ca586eb45bce85ecbc8bef4aa0733d5",
+        "actual_blob": "57ef21e60ca586eb45bce85ecbc8bef4aa0733d5",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.cpp",
+        "expected_blob": "f99467327f036dcdf1b117ab7a7c6af41c7b33e6",
+        "actual_blob": "f99467327f036dcdf1b117ab7a7c6af41c7b33e6",
+        "match": true
+      },
+      {
+        "path": "src/pc/debug/DebugIni.h",
+        "expected_blob": "c96bac8d2a0de937eb75efe28ba059f6ff9301f7",
+        "actual_blob": "c96bac8d2a0de937eb75efe28ba059f6ff9301f7",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+        "expected_blob": "d45b01607594efa4dc67959f6ccf250e8f5fb674",
+        "actual_blob": "d45b01607594efa4dc67959f6ccf250e8f5fb674",
+        "match": true
+      }
+    ],
+    "source_blob_match_count": 20,
+    "path_attestation_checks": [
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+        "expected_blob": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+        "actual_blob": "e3c380da4b3d123ba3274979384bce81dc7d770c",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Interface/CgsDebugInterface.cpp",
+        "expected_blob": "1aeddd58550cfe8784769ab8b90d2e77c1326730",
+        "actual_blob": "1aeddd58550cfe8784769ab8b90d2e77c1326730",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Variables/CgsVariableManager.cpp",
+        "expected_blob": "4ee38f2d55214932e8dc227eaaab3951494d1b00",
+        "actual_blob": "4ee38f2d55214932e8dc227eaaab3951494d1b00",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Menu/CgsMenuManager.cpp",
+        "expected_blob": "e42e9c080a70bca0d00166997c2704df2208dfbd",
+        "actual_blob": "e42e9c080a70bca0d00166997c2704df2208dfbd",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "expected_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "actual_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.cpp",
+        "expected_blob": "685a423bb65b67ab883e9b39ffe5213f74c89101",
+        "actual_blob": "685a423bb65b67ab883e9b39ffe5213f74c89101",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent.h",
+        "expected_blob": "d6fce31f1dbeaa63d5640a4572a931878d9b7abe",
+        "actual_blob": "d6fce31f1dbeaa63d5640a4572a931878d9b7abe",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/Director/DirectorModule/BrnDirectorModuleDebugCompononent_wS34_02.cpp",
+        "expected_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "actual_blob": "5417f8bf8d20362e855c3bb1d6a34198e1646080",
+        "match": true
+      },
+      {
+        "path": "src/GameSource/World/ShadowMap/BrnShadowMap.cpp",
+        "expected_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "actual_blob": "1e0ff0bd979ede4b23ce84c6033d4081b301487e",
+        "match": true
+      },
+      {
+        "path": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugManager.cpp",
+        "expected_blob": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+        "actual_blob": "f4932839efbc962c6b0e5fa8c913449dfc3dd29a",
+        "match": true
+      },
+      {
+        "path": "src/pc/debug/DebugIni.h",
+        "expected_blob": "c96bac8d2a0de937eb75efe28ba059f6ff9301f7",
+        "actual_blob": "c96bac8d2a0de937eb75efe28ba059f6ff9301f7",
+        "match": true
+      }
+    ],
+    "path_attestation_match_count": 11,
+    "artist_evidence_checks": [
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828D04E8.json",
+        "expected_sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a",
+        "actual_sha256": "55f7a0bd6bdd793186c235cbe9dc2e3bf1b9735fe3527e6458f82f20ac337e8a",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_trianglecollision_draw_test_recovery_20261028/evidence/ARTIST_EXPORT/0x828C2E70.json",
+        "expected_sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7",
+        "actual_sha256": "2275267d6bd1f24f5e8b8ba263af664dafbe719f0b60280a697782ad3a3408b7",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2560.json",
+        "expected_sha256": "dbce72ae298b1422d359b54de0b3f6292a1b670caa182755bf09183e26496f51",
+        "actual_sha256": "dbce72ae298b1422d359b54de0b3f6292a1b670caa182755bf09183e26496f51",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_scenemanager_controls_04_10_recovery_20261029/evidence/exports/ARTIST/0x828C2B80.json",
+        "expected_sha256": "ed610010023e6cd635838257c869377b0045f28425527bd90de433ab4ae9df20",
+        "actual_sha256": "ed610010023e6cd635838257c869377b0045f28425527bd90de433ab4ae9df20",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827DADF8.json",
+        "expected_sha256": "3e96b89b693a47012eebe5270b7f3b3cd26044ba288767b690fa4ee1d6f85b04",
+        "actual_sha256": "3e96b89b693a47012eebe5270b7f3b3cd26044ba288767b690fa4ee1d6f85b04",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_shadow_map_controls_01_18_recovery_20261029/evidence/BURNOUT_X360_ARTIST.XEX/0x827C96D8.json",
+        "expected_sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2",
+        "actual_sha256": "737a1c8311daf4046592b2907f64f22c14d67873391def13a502ec26a65f78d2",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82240828.json",
+        "expected_sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4",
+        "actual_sha256": "6b07347a7936339428dbdd5c6bddb00b1731ef63a1e10ec687739f90615f11d4",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82250268.json",
+        "expected_sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754",
+        "actual_sha256": "5041e4551fdebe52395772a94a10ff534a77a319008cc19cfa511e8d9a0c3754",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82239DE8.json",
+        "expected_sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2",
+        "actual_sha256": "65bf880a09307ef2520025fe2db7a7a8b0cfc6caf4dfb6d598d0774964909df2",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F71D8.json",
+        "expected_sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922",
+        "actual_sha256": "93d9b6ba621d8e7b09fb6e29580fc32d0a108121168af9ade7c0339b46e2c922",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8226BFB0.json",
+        "expected_sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf",
+        "actual_sha256": "c5ee1a58ff573b0ff3ff523c9e988cff6efed3d0c006f789fa36c34e6e94e8cf",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x821F6740.json",
+        "expected_sha256": "c9e97e55dec5014596e6b975974fa6d12e2e07ba2b9d321cb73feee324adfce6",
+        "actual_sha256": "c9e97e55dec5014596e6b975974fa6d12e2e07ba2b9d321cb73feee324adfce6",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82274070.json",
+        "expected_sha256": "fb1371819dd55a0426a5fb23cef6d8db2b37179bd688f22b612408f4d5ea98b9",
+        "actual_sha256": "fb1371819dd55a0426a5fb23cef6d8db2b37179bd688f22b612408f4d5ea98b9",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8221C6D8.json",
+        "expected_sha256": "9c06c4735ca8fa2fddcce1ed24bc2d0444378bb7359f64fa88343d06fd889d40",
+        "actual_sha256": "9c06c4735ca8fa2fddcce1ed24bc2d0444378bb7359f64fa88343d06fd889d40",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x82205B68.json",
+        "expected_sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801",
+        "actual_sha256": "b4bdb32f73198d48301cd0f7767c23ce67f68bf6c02884b8ee7ff8ae6fb7e801",
+        "match": true
+      },
+      {
+        "path": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x8220AC48.json",
+        "expected_sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd",
+        "actual_sha256": "c6f26b57f17cc2669beb2e33e02856a896c0b6fa831c0994aaabe768e073efbd",
+        "match": true
+      },
+      {
+        "path": "scratch/DEBUG_MENU_1011/swarm_director_native_20261027/ARTIST_ASM_EXCERPTS.md",
+        "expected_sha256": "610203d307aa36ca7c341276d013b96e84fcbad43fb9d3b7e7f859e6a834dcf8",
+        "actual_sha256": "610203d307aa36ca7c341276d013b96e84fcbad43fb9d3b7e7f859e6a834dcf8",
+        "match": true
+      }
+    ],
+    "artist_evidence_match_count": 17,
+    "current_dev_jump_fix_credit": false,
+    "note": "The captured executable is pinned to B5 3f; no behavior is inferred from later current-dev source."
+  },
+  "capture_archive": {
+    "path": "D:\\Reverse\\BP-Decomp_Evidence\\debug_menu\\scene28_native_20261031\\originals.zip",
+    "sha256": "c241c6e15355b0691c525bd1c08a707f2b598b7c305c3a057f708560cf708a8f",
+    "manifest_sha256": "c241c6e15355b0691c525bd1c08a707f2b598b7c305c3a057f708560cf708a8f",
+    "sha256_matches_manifest": true,
+    "zip_member_count": 222,
+    "retained_raw_bmp_count": 87,
+    "capture_audit_frame_count": 87,
+    "capture_audit_pass": true,
+    "expected_dimensions": [
+      1280,
+      720
+    ],
+    "actual_bmp_file_count": 87,
+    "capture_hash_errors": [],
+    "archive_frame_roundtrip_mismatches": [],
+    "all_87_original_frames_retained": true
+  },
+  "readback_and_restore_audit": {
+    "driver_status": "machine_complete_awaiting_independent_pixels",
+    "completed_targets": 28,
+    "target_phase_count": 84,
+    "all_target_phase_receipts_checked": true,
+    "all_target_phase_receipt_errors": 0,
+    "all_alias_phase_proofs_checked": 2580,
+    "all_alias_phase_receipt_errors": 0,
+    "natural_baseline_alias_receipts_checked": 30,
+    "natural_baseline_receipt_errors": 0,
+    "command_file_hash_mismatches": 0,
+    "per_control_restore_verified_count": 28,
+    "terminal_restore_verified": true,
+    "terminal_and_postrestore_match_natural_baseline": {
+      "terminal_restore": true,
+      "post_restore_readback": true
+    },
+    "machine_site_credit": 0,
+    "source_default_vs_same_run_baseline_differences": [
+      {
+        "alias": "E18",
+        "source_default": true,
+        "natural_baseline": "FALSE",
+        "restore_value": "FALSE"
+      },
+      {
+        "alias": "E19",
+        "source_default": true,
+        "natural_baseline": "FALSE",
+        "restore_value": "FALSE"
+      }
+    ],
+    "scene_f32_baselines": {
+      "SC04": {
+        "alias": "SC04",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 398,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      },
+      "SC06": {
+        "alias": "SC06",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 400,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      },
+      "SC05": {
+        "alias": "SC05",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 399,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      },
+      "SC08": {
+        "alias": "SC08",
+        "kind": "published_constructor_source_default",
+        "value": "0.3",
+        "bits": "3E99999A",
+        "finite": true,
+        "display": "0.300",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 402,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      },
+      "SC07": {
+        "alias": "SC07",
+        "kind": "published_constructor_source_default",
+        "value": "1",
+        "bits": "3F800000",
+        "finite": true,
+        "display": "1.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 401,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    "clip_restore_exact_bits": {
+      "E43": "3DCCCCCD",
+      "E44": "3E19999A",
+      "E45": "461C4000"
+    },
+    "path_line_semantics": "In BrnGame.log each triple is alias:/full/path, typed value, alias:/full/path. driver-result.value_line is the first path echo; ack_after is the typed-value line."
+  },
+  "original_case_and_collection": {
+    "original_case_verdict": "FAIL",
+    "original_case_as_expected": false,
+    "original_case_exit_code": 1,
+    "original_failure": "Case queried the wrong stop-event field; actual phase_collection_stop_requested=true",
+    "root_collection_status": "collection_closed_effects_unreviewed",
+    "phase_collection_stop_requested": true,
+    "exact_phase_done_event_set": true,
+    "phase_done_event_name": "Local\\BurnoutPC_HarnessPhaseDone_56108_62190_639290644275978168",
+    "flow_exit": 0,
+    "flow_success": true,
+    "observed_asserts": 0,
+    "owned_cleanup_complete": true,
+    "input_reset_complete": true,
+    "foreign_game": false,
+    "profile_restoration_complete": true,
+    "original_case_fail_preserved": true
+  },
+  "normal_file_and_profile_protection": {
+    "normal_payload_rechecks": [
+      {
+        "name": "avcodec-63.dll",
+        "expected_sha256": "df7221b0b336d8475c8201b47d82fa982f6feb85dbc5780c7b4b1faba94b51da",
+        "actual_sha256": "df7221b0b336d8475c8201b47d82fa982f6feb85dbc5780c7b4b1faba94b51da",
+        "match": true
+      },
+      {
+        "name": "avdevice-63.dll",
+        "expected_sha256": "ec81e8fd1d4ff236225f67bf09b8317faf7916442b0774ffb558999af918c077",
+        "actual_sha256": "ec81e8fd1d4ff236225f67bf09b8317faf7916442b0774ffb558999af918c077",
+        "match": true
+      },
+      {
+        "name": "avfilter-12.dll",
+        "expected_sha256": "f8666ccb6b7e9d37934bfa5a997c6a3f662cf538ab00f3cf7bc61acfcf316411",
+        "actual_sha256": "f8666ccb6b7e9d37934bfa5a997c6a3f662cf538ab00f3cf7bc61acfcf316411",
+        "match": true
+      },
+      {
+        "name": "avformat-63.dll",
+        "expected_sha256": "d18213d29780dad7ccd29f801aa69943d14f989dae956b4ddb2c1d5b874343c4",
+        "actual_sha256": "d18213d29780dad7ccd29f801aa69943d14f989dae956b4ddb2c1d5b874343c4",
+        "match": true
+      },
+      {
+        "name": "avutil-61.dll",
+        "expected_sha256": "9eea6110a1c7c9d3ef67d80f978bd826de9a53aa08fd7e6bae318a98a64929c4",
+        "actual_sha256": "9eea6110a1c7c9d3ef67d80f978bd826de9a53aa08fd7e6bae318a98a64929c4",
+        "match": true
+      },
+      {
+        "name": "Burnout_PC.cgsmap",
+        "expected_sha256": "2ec90c9566010c98a5496b3ce9c63917be474456b0645a1e9e9b34efe3600a95",
+        "actual_sha256": "2ec90c9566010c98a5496b3ce9c63917be474456b0645a1e9e9b34efe3600a95",
+        "match": true
+      },
+      {
+        "name": "Burnout_PC.exe",
+        "expected_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+        "actual_sha256": "39b62961b59261ac8e1b9894d5a69c8ab365bf7ea39e89793d654fcf93ca47da",
+        "match": true
+      },
+      {
+        "name": "Burnout_PC.exe.provenance.json",
+        "expected_sha256": "a163838f6d61c5b2d912b0955fd692a9e654f02a1c117dd2ad9e329018ba22d9",
+        "actual_sha256": "a163838f6d61c5b2d912b0955fd692a9e654f02a1c117dd2ad9e329018ba22d9",
+        "match": true
+      },
+      {
+        "name": "Burnout_PC.map",
+        "expected_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f",
+        "actual_sha256": "8604a5b8c23a031dcd773e1fbe2570402df385b869354215db243aeb5cbf646f",
+        "match": true
+      },
+      {
+        "name": "SDL3.dll",
+        "expected_sha256": "741c36b98bf6f247164edffbcb83c416879ecb15fedb2ecf3ae0e9a29e81969d",
+        "actual_sha256": "741c36b98bf6f247164edffbcb83c416879ecb15fedb2ecf3ae0e9a29e81969d",
+        "match": true
+      },
+      {
+        "name": "swresample-7.dll",
+        "expected_sha256": "e4e7a9122ce8ed2a31648a0b13db8f658760946755fdd1309358fd157c81264d",
+        "actual_sha256": "e4e7a9122ce8ed2a31648a0b13db8f658760946755fdd1309358fd157c81264d",
+        "match": true
+      },
+      {
+        "name": "swscale-10.dll",
+        "expected_sha256": "913ccdc3367ada39bff64d5e156087e1d8ae7c9501479cdbac211818e9ec7a24",
+        "actual_sha256": "913ccdc3367ada39bff64d5e156087e1d8ae7c9501479cdbac211818e9ec7a24",
+        "match": true
+      },
+      {
+        "name": "xaudio2_9redist.dll",
+        "expected_sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+        "actual_sha256": "f1fc84807c8f25849b604eb091d62dda5f81e5108c3b53e7cbc542df1f5f289c",
+        "match": true
+      },
+      {
+        "name": "DualSenseTriggerEffects-LICENSE.txt",
+        "expected_sha256": "f8f37843cb3463f6b078839c818655b7a1793b10b2d4fb5e38bbaa0a62f6949b",
+        "actual_sha256": "f8f37843cb3463f6b078839c818655b7a1793b10b2d4fb5e38bbaa0a62f6949b",
+        "match": true
+      },
+      {
+        "name": "SDL3-LICENSE.txt",
+        "expected_sha256": "f4c406cd23df8e2ea3e8bb1af62f15cb6b2439e4e5385828cf90301baea4d944",
+        "actual_sha256": "f4c406cd23df8e2ea3e8bb1af62f15cb6b2439e4e5385828cf90301baea4d944",
+        "match": true
+      }
+    ],
+    "normal_payload_recheck_match_count": 15,
+    "normal_payload_recheck_mismatches": [],
+    "normal_payload_count": 15,
+    "run_exit_normal_payload_unchanged": true,
+    "config_actual_sha256": "b3f43dfebc363955ea612d4ea13f5d60e74adcd8f539c3ec08eb5aa509a7684d",
+    "config_expected_sha256": "b3f43dfebc363955ea612d4ea13f5d60e74adcd8f539c3ec08eb5aa509a7684d",
+    "config_matches_pre_run": true,
+    "normal_profile_observed_changed": false,
+    "normal_config_observed_changed": false,
+    "normal_user_data_written": false,
+    "private_fixture_load_gate_pass": true,
+    "current_save_load_gate_pass": true,
+    "private_profile_binding_receipt": {
+      "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\native_scene_batch_20261031_v4\\stage\\data\\Memcard_62190\\Profile.sav",
+      "status": "regular_single_link_private_file",
+      "link_count": 1,
+      "bytes": 1223256,
+      "sha256": "4e4526ed40c8fa57f1100503351c68285f9eba69421e4bdab1bb8ce63ec3a23c"
+    },
+    "private_stage_path_exists_after_cleanup": false,
+    "live_profile_access_during_review": "none",
+    "profile_evidence_limit": "The archived private-slot binding and restore receipts are available, but the staged profile file was cleaned after collection and cannot be rehashed now."
+  },
+  "controls": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+      "alias": "SC01",
+      "caption": "Draw Collision Volumes",
+      "type": "bool",
+      "raw_readback_path": "/Scene manager/Draw Collision Volumes",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828D04E8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw Collision Volumes",
+          "frame_sequence": 2,
+          "frame_file": "bb_004908.bmp",
+          "frame_sha256": "ce58ab7c3506aa7e375f98135769698ab49f106726716f5e0957da3413ae423d",
+          "log_path_echo_line": 13638,
+          "log_typed_value_line": 13639,
+          "log_repeat_path_line": 13640,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Collision Volumes",
+          "frame_sequence": 3,
+          "frame_file": "bb_004955.bmp",
+          "frame_sha256": "4b8879f4669bc4349dec3937d8587d18ca19ac7707df683b535d2a5dd1743ae8",
+          "log_path_echo_line": 13944,
+          "log_typed_value_line": 13945,
+          "log_repeat_path_line": 13946,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Collision Volumes",
+          "frame_sequence": 4,
+          "frame_file": "bb_004998.bmp",
+          "frame_sha256": "8635d3a6257aad6b58f48a674d95d1438f9ec8b03d000c5633149f2be78ace45",
+          "log_path_echo_line": 14301,
+          "log_typed_value_line": 14302,
+          "log_repeat_path_line": 14303,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "The field toggles and restores, but the positive BMP shows no attributable live collision-volume geometry. No volume producer is established; this is not a no-op disposition."
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "alias": "SC02",
+      "caption": "Draw Triangle Test",
+      "type": "bool",
+      "raw_readback_path": "/Scene manager/Draw Triangle Test",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828D04E8",
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 5,
+          "frame_file": "bb_005069.bmp",
+          "frame_sha256": "6633939d8dd97383c8e6e79e938e3bd945f0547fcde41363ea9afc970066114f",
+          "log_path_echo_line": 14744,
+          "log_typed_value_line": 14745,
+          "log_repeat_path_line": 14746,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 6,
+          "frame_file": "bb_005120.bmp",
+          "frame_sha256": "6963443ccbe47cb09ebca67e1d3edf231588f4e91a23ff66dbcacff534b63a01",
+          "log_path_echo_line": 15055,
+          "log_typed_value_line": 15056,
+          "log_repeat_path_line": 15057,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 7,
+          "frame_file": "bb_005169.bmp",
+          "frame_sha256": "692bf66181416223ae8e4641a486d71115ffd2a0f87f17dd9257179148aad0aa",
+          "log_path_echo_line": 15382,
+          "log_typed_value_line": 15383,
+          "log_repeat_path_line": 15384,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "A horizontal test edge is visible only in the positive BMP and is absent in the negative and captured-baseline restore BMPs. ARTIST RenderWorld calls DrawTriangleTest under this flag. Acceptance is limited to this visible edge; the full swept-sphere/contact set is not claimed."
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "alias": "SC03",
+      "caption": "Draw Padding",
+      "type": "bool",
+      "raw_readback_path": "/Scene manager/Draw Padding",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 8,
+          "frame_file": "bb_005249.bmp",
+          "frame_sha256": "e435497b07a981d19836466913c4dbd480629529a02c80dec96ec57796940d61",
+          "log_path_echo_line": 15714,
+          "log_typed_value_line": 15715,
+          "log_repeat_path_line": 15716,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 9,
+          "frame_file": "bb_005301.bmp",
+          "frame_sha256": "01605d4057bae8cd106faa700944c2f3de5b23abbdc65efb7d8d491119cff46d",
+          "log_path_echo_line": 16187,
+          "log_typed_value_line": 16188,
+          "log_repeat_path_line": 16189,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 10,
+          "frame_file": "bb_005351.bmp",
+          "frame_sha256": "665da38b516792df6f490356d8181e0bf8a85bc15b7aa6e50fac7a1271d447e6",
+          "log_path_echo_line": 16517,
+          "log_typed_value_line": 16518,
+          "log_repeat_path_line": 16519,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "With SC02 held true, the positive BMP adds cyan padding geometry; the negative BMP removes it and restore returns SC02 to its captured baseline. Acceptance is limited to the visible padding draw."
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+      "alias": "SC04",
+      "caption": "TriX",
+      "type": "f32",
+      "raw_readback_path": "/Scene manager/TriX",
+      "source_default": 0.0,
+      "natural_baseline": "0",
+      "positive": 0.5,
+      "negative": -0.5,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "0.500",
+          "full_path": "/Scene manager/TriX",
+          "frame_sequence": 11,
+          "frame_file": "bb_005400.bmp",
+          "frame_sha256": "3d285d856616d7d65b3d4cb8aa082ec1a01bf5b7a034db26e643ff446220e3ca",
+          "log_path_echo_line": 16866,
+          "log_typed_value_line": 16867,
+          "log_repeat_path_line": 16868,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "-0.500",
+          "full_path": "/Scene manager/TriX",
+          "frame_sequence": 12,
+          "frame_file": "bb_005484.bmp",
+          "frame_sha256": "6edc13f0592045961bca225118cbb424dc05f436fbd6f172b8b46965b171aeeb",
+          "log_path_echo_line": 17363,
+          "log_typed_value_line": 17364,
+          "log_repeat_path_line": 17365,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.000",
+          "full_path": "/Scene manager/TriX",
+          "frame_sequence": 13,
+          "frame_file": "bb_005529.bmp",
+          "frame_sha256": "a55718cbdb64db5bf4554758476b8378dc27244069b34a055f5bd9f014ce61de",
+          "log_path_echo_line": 17722,
+          "log_typed_value_line": 17723,
+          "log_repeat_path_line": 17724,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "With the triangle test enabled in P/N, the visible edge has the same span in both images. The TriX values are attributed and typed, but no x-dependent consumer change is visible.",
+      "natural_f32_baseline": {
+        "alias": "SC04",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 398,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+      "alias": "SC05",
+      "caption": "TriY",
+      "type": "f32",
+      "raw_readback_path": "/Scene manager/TriY",
+      "source_default": 0.0,
+      "natural_baseline": "0",
+      "positive": 0.5,
+      "negative": -0.5,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "0.500",
+          "full_path": "/Scene manager/TriY",
+          "frame_sequence": 14,
+          "frame_file": "bb_005579.bmp",
+          "frame_sha256": "03f6fbf3e76d9a0897bb28a33aedec6c95d440c17198c73f7c2f1bb647fd59d9",
+          "log_path_echo_line": 18037,
+          "log_typed_value_line": 18038,
+          "log_repeat_path_line": 18039,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "-0.500",
+          "full_path": "/Scene manager/TriY",
+          "frame_sequence": 15,
+          "frame_file": "bb_005657.bmp",
+          "frame_sha256": "48db9dfd7081c67edbd91b37b2bc6b745e5f857def970fe6fa7880227c57e707",
+          "log_path_echo_line": 18329,
+          "log_typed_value_line": 18330,
+          "log_repeat_path_line": 18331,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.000",
+          "full_path": "/Scene manager/TriY",
+          "frame_sequence": 16,
+          "frame_file": "bb_005707.bmp",
+          "frame_sha256": "216fcc9d40442574c7ae5d5a76b82451fefa566c02659c8dafcdb540ecc8840c",
+          "log_path_echo_line": 18770,
+          "log_typed_value_line": 18771,
+          "log_repeat_path_line": 18772,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "With the triangle test enabled in P/N, no distinct y-dependent geometry change is visible. Typed field movement alone is insufficient.",
+      "natural_f32_baseline": {
+        "alias": "SC05",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 399,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "alias": "SC06",
+      "caption": "TriZ",
+      "type": "f32",
+      "raw_readback_path": "/Scene manager/TriZ",
+      "source_default": 0.0,
+      "natural_baseline": "0",
+      "positive": 0.5,
+      "negative": -0.5,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "0.500",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 17,
+          "frame_file": "bb_005755.bmp",
+          "frame_sha256": "0f3b43698ed06a44d861b83cad8ab517f2ef49820722101e8e09fe5f9e0288c2",
+          "log_path_echo_line": 19081,
+          "log_typed_value_line": 19082,
+          "log_repeat_path_line": 19083,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "-0.500",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 18,
+          "frame_file": "bb_005804.bmp",
+          "frame_sha256": "154124a214b50a77f1534987660e57c1d99ff1efe743bd83c8d7e133c1179566",
+          "log_path_echo_line": 19364,
+          "log_typed_value_line": 19365,
+          "log_repeat_path_line": 19366,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.000",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 19,
+          "frame_file": "bb_005885.bmp",
+          "frame_sha256": "182398e9781d0573f1e90c5c7525c0ee31112e50faa2243c5270bb015807ffd3",
+          "log_path_echo_line": 19655,
+          "log_typed_value_line": 19656,
+          "log_repeat_path_line": 19657,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "With SC02 true in P/N, the visible test edge changes span between +0.5 and -0.5; restore removes the test draw by restoring SC02 to baseline. Acceptance is limited to this TriZ-dependent edge response.",
+      "natural_f32_baseline": {
+        "alias": "SC06",
+        "kind": "published_constructor_source_default",
+        "value": "0",
+        "bits": "00000000",
+        "finite": true,
+        "display": "0.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 400,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+      "alias": "SC07",
+      "caption": "TriScale",
+      "type": "f32",
+      "raw_readback_path": "/Scene manager/TriScale",
+      "source_default": 1.0,
+      "natural_baseline": "1",
+      "positive": 1.5,
+      "negative": 0.5,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "1.500",
+          "full_path": "/Scene manager/TriScale",
+          "frame_sequence": 20,
+          "frame_file": "bb_005931.bmp",
+          "frame_sha256": "e9750269575b2d1812ca03593b2a4fb5712379904970447752580e1bffbaf8f5",
+          "log_path_echo_line": 20079,
+          "log_typed_value_line": 20080,
+          "log_repeat_path_line": 20081,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "0.500",
+          "full_path": "/Scene manager/TriScale",
+          "frame_sequence": 21,
+          "frame_file": "bb_005978.bmp",
+          "frame_sha256": "d3cb294093d7d0fd6440273d7081a1e59f0da7b49398c9f64ed607f7fa9e3df6",
+          "log_path_echo_line": 20373,
+          "log_typed_value_line": 20374,
+          "log_repeat_path_line": 20375,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "1.000",
+          "full_path": "/Scene manager/TriScale",
+          "frame_sequence": 22,
+          "frame_file": "bb_006060.bmp",
+          "frame_sha256": "10fc9e42f95ef725956a2eba2249d3cb0516a83d734bf3049932260aa2939237",
+          "log_path_echo_line": 20663,
+          "log_typed_value_line": 20664,
+          "log_repeat_path_line": 20665,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "With SC02 true in P/N, the visible edge has the same span for scales 1.5 and 0.5. No scale-dependent consumer change is visible.",
+      "natural_f32_baseline": {
+        "alias": "SC07",
+        "kind": "published_constructor_source_default",
+        "value": "1",
+        "bits": "3F800000",
+        "finite": true,
+        "display": "1.000",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 401,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "alias": "SC08",
+      "caption": "Padding",
+      "type": "f32",
+      "raw_readback_path": "/Scene manager/Padding",
+      "source_default": 0.3,
+      "natural_baseline": "0.3",
+      "positive": 0.8,
+      "negative": 0.05,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828C2E70"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "0.800",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 23,
+          "frame_file": "bb_006112.bmp",
+          "frame_sha256": "ea790772dcb844018295a2809b2522ff046dc2104dbb6a4a62812f323dc1a4d4",
+          "log_path_echo_line": 21134,
+          "log_typed_value_line": 21135,
+          "log_repeat_path_line": 21136,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "0.050",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 24,
+          "frame_file": "bb_006163.bmp",
+          "frame_sha256": "845e1366e0c90f7e6913417583c552bb8a80b144edf586c69aa04a1eeeb51591",
+          "log_path_echo_line": 21440,
+          "log_typed_value_line": 21441,
+          "log_repeat_path_line": 21442,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.300",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 25,
+          "frame_file": "bb_006215.bmp",
+          "frame_sha256": "954699b681b8df25517ef01cab837386757b2121a1469d0e295004a0c89b2780",
+          "log_path_echo_line": 21751,
+          "log_typed_value_line": 21752,
+          "log_repeat_path_line": 21753,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "With SC02 and SC03 held true, the positive 0.8 value produces a visible cyan padding wire-sphere; the 0.05 negative and captured-baseline restore show no comparable large sphere. This accepts the visible radius effect only; the small-value view does not establish a no-op.",
+      "natural_f32_baseline": {
+        "alias": "SC08",
+        "kind": "published_constructor_source_default",
+        "value": "0.3",
+        "bits": "3E99999A",
+        "finite": true,
+        "display": "0.300",
+        "display_digits": 3,
+        "matching_debug_ini_rows": [],
+        "log_snapshot_lines": 12919,
+        "source_path": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerDebugComponent.cpp",
+        "source_line": 402,
+        "source_blob": "c801cf545b6d071ed6021efb049b12f30f585a1d"
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "alias": "SC09",
+      "caption": "Draw cached triangles",
+      "type": "bool",
+      "raw_readback_path": "/Scene manager/Draw cached triangles",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828D04E8",
+        "0x828C2560"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 26,
+          "frame_file": "bb_006290.bmp",
+          "frame_sha256": "327a87a8046bb7f198ee12306d1b4f5962f8e67a3fd24910706276d826c2a5ac",
+          "log_path_echo_line": 22187,
+          "log_typed_value_line": 22188,
+          "log_repeat_path_line": 22189,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 27,
+          "frame_file": "bb_006336.bmp",
+          "frame_sha256": "6cabb7145542031d6a1f78fb810a1b5d86f6f22f75e8a391407c6f78c7ce0d5b",
+          "log_path_echo_line": 22464,
+          "log_typed_value_line": 22465,
+          "log_repeat_path_line": 22466,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 28,
+          "frame_file": "bb_006384.bmp",
+          "frame_sha256": "1b72f3ad5bc4743a5a993e0e791a62199d455f34931799751495b5932fb92d3f",
+          "log_path_echo_line": 22756,
+          "log_typed_value_line": 22757,
+          "log_repeat_path_line": 22758,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "The positive BMP contains a large translucent blue cached-triangle overlay; negative and restore do not. The pinned ARTIST reader walks used cache slots and draws valid triangle batches, so this run supplies a visible cache producer/consumer witness."
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "alias": "SC10",
+      "caption": "Draw cache spheres",
+      "type": "bool",
+      "raw_readback_path": "/Scene manager/Draw cache spheres",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x828AB568",
+      "artist_witness_addresses": [
+        "0x828D04E8",
+        "0x828C2B80"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 29,
+          "frame_file": "bb_006460.bmp",
+          "frame_sha256": "f768b23e2246a23137f9ea2ee46cdb0bb338bd1cd92291a8f71ebc41b3ed394d",
+          "log_path_echo_line": 23042,
+          "log_typed_value_line": 23043,
+          "log_repeat_path_line": 23044,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 30,
+          "frame_file": "bb_006503.bmp",
+          "frame_sha256": "9bccd48d01d0ebde9b4d429f599057c196304899ba903b55a426f38f428fad98",
+          "log_path_echo_line": 23443,
+          "log_typed_value_line": 23444,
+          "log_repeat_path_line": 23445,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 31,
+          "frame_file": "bb_006546.bmp",
+          "frame_sha256": "b35ae05503b0d2ed73f47056c5423f3f53b2aff46f86e7386a58119e8ff4e15e",
+          "log_path_echo_line": 23714,
+          "log_typed_value_line": 23715,
+          "log_repeat_path_line": 23716,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "The positive BMP shows cache wireframe geometry; negative and restore remove it. The pinned ARTIST reader walks populated sphere records and calls DrawHollowSphere, supplying a visible cache-sphere witness."
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0002",
+      "alias": "SH02",
+      "caption": "Render Shadow map",
+      "type": "bool",
+      "raw_readback_path": "/World/ShadowMap/Render Shadow map",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x827B43E8",
+      "artist_witness_addresses": [
+        "0x827DADF8",
+        "0x827C96D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Render Shadow map",
+          "frame_sequence": 32,
+          "frame_file": "bb_006589.bmp",
+          "frame_sha256": "ec0d66268f2bb7b8fdb1b4e1bc7cb21dbf6198045603933f388e8018e6b793d4",
+          "log_path_echo_line": 23984,
+          "log_typed_value_line": 23985,
+          "log_repeat_path_line": 23986,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/World/ShadowMap/Render Shadow map",
+          "frame_sequence": 33,
+          "frame_file": "bb_006672.bmp",
+          "frame_sha256": "b84079eedbcc482a9e84535914f6108067afa3d4bbc5d4a9647739bf685516d9",
+          "log_path_echo_line": 24432,
+          "log_typed_value_line": 24433,
+          "log_repeat_path_line": 24434,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Render Shadow map",
+          "frame_sequence": 34,
+          "frame_file": "bb_006727.bmp",
+          "frame_sha256": "b15981d64b6d72517fab718d7f508d5b4900628f91969e2ee0e6fdc1079fbe64",
+          "log_path_echo_line": 24527,
+          "log_typed_value_line": 24528,
+          "log_repeat_path_line": 24529,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "P/N values are read back, but no shadow-map pass/receiver delta is attributable. The required update-set, key-light and renderer gates remain unproved."
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0003",
+      "alias": "SH03",
+      "caption": "Cast shadows from world",
+      "type": "bool",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from world",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x827B43E8",
+      "artist_witness_addresses": [
+        "0x827C96D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from world",
+          "frame_sequence": 35,
+          "frame_file": "bb_006772.bmp",
+          "frame_sha256": "a7f8519d64f627f2f601278b6d012d0d3934095257a6f2fac809b58d20803215",
+          "log_path_echo_line": 24843,
+          "log_typed_value_line": 24844,
+          "log_repeat_path_line": 24845,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/World/ShadowMap/Cast shadows from world",
+          "frame_sequence": 36,
+          "frame_file": "bb_006863.bmp",
+          "frame_sha256": "257961f8bfa774e211c9936bcdaa23ccd38d9e801b66bc538f1b8990503bf213",
+          "log_path_echo_line": 25122,
+          "log_typed_value_line": 25123,
+          "log_repeat_path_line": 25124,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from world",
+          "frame_sequence": 37,
+          "frame_file": "bb_006913.bmp",
+          "frame_sha256": "25881890bf6134e637324baed7138a6a5afe167cb0b8b5f3b3d69bf685adfd22",
+          "log_path_echo_line": 25587,
+          "log_typed_value_line": 25588,
+          "log_repeat_path_line": 25589,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No changed world-caster shadow is visible, and the separate world-render/caster/receiver gates are not established."
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0004",
+      "alias": "SH04",
+      "caption": "Cast shadows from cars",
+      "type": "bool",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from cars",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x827B43E8",
+      "artist_witness_addresses": [
+        "0x827C96D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from cars",
+          "frame_sequence": 38,
+          "frame_file": "bb_006954.bmp",
+          "frame_sha256": "7d1f0aff82cc147e0397243f0f27474b7cda7a25c2ea501d8973eaec915f6f8e",
+          "log_path_echo_line": 25877,
+          "log_typed_value_line": 25878,
+          "log_repeat_path_line": 25879,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/World/ShadowMap/Cast shadows from cars",
+          "frame_sequence": 39,
+          "frame_file": "bb_006999.bmp",
+          "frame_sha256": "a8c6bc4309fa553c5db8949a2a8f3a09ee438181f809b7a9c492a3403d49038d",
+          "log_path_echo_line": 26140,
+          "log_typed_value_line": 26141,
+          "log_repeat_path_line": 26142,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from cars",
+          "frame_sequence": 40,
+          "frame_file": "bb_007075.bmp",
+          "frame_sha256": "09339427d125604ddb7c932875ea14d82c4c1475106ce446b57cd1da029b6ad4",
+          "log_path_echo_line": 26428,
+          "log_typed_value_line": 26429,
+          "log_repeat_path_line": 26430,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "A car is in view, but no changed car-caster shadow is visible and the shadow pass/caster/receiver chain is not established."
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0006",
+      "alias": "SH06",
+      "caption": "Cast shadows from props",
+      "type": "bool",
+      "raw_readback_path": "/World/ShadowMap/Cast shadows from props",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x827B43E8",
+      "artist_witness_addresses": [
+        "0x827C96D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from props",
+          "frame_sequence": 41,
+          "frame_file": "bb_007128.bmp",
+          "frame_sha256": "708f6ac24cfb46992d824e3fbacdb2cbba0fc0615797f10ecd34f4160ea01c5e",
+          "log_path_echo_line": 26847,
+          "log_typed_value_line": 26848,
+          "log_repeat_path_line": 26849,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/World/ShadowMap/Cast shadows from props",
+          "frame_sequence": 42,
+          "frame_file": "bb_007180.bmp",
+          "frame_sha256": "8e7fcbdfff1d8a8bf359f3b528fdc15e85f1a50cb164f13bef900419b4f8ad9a",
+          "log_path_echo_line": 27180,
+          "log_typed_value_line": 27181,
+          "log_repeat_path_line": 27182,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Cast shadows from props",
+          "frame_sequence": 43,
+          "frame_file": "bb_007222.bmp",
+          "frame_sha256": "2796d3535a6f228abc361ab2a05970ef523ec95805193e540a58f0c35b99720f",
+          "log_path_echo_line": 27284,
+          "log_typed_value_line": 27285,
+          "log_repeat_path_line": 27286,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No changed prop-caster shadow is visible; a live prop caster/receiver through the shadow pass is not established."
+    },
+    {
+      "id": "BrnWorld::ShadowMap::Construct#0008",
+      "alias": "SH08",
+      "caption": "Render multiple shadow maps (CSM)",
+      "type": "bool",
+      "raw_readback_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x827B43E8",
+      "artist_witness_addresses": [
+        "0x827C96D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+          "frame_sequence": 44,
+          "frame_file": "bb_007295.bmp",
+          "frame_sha256": "f798e5902a6e6e568546dd9ad8a772e87803c384511650e42ff7541959896c13",
+          "log_path_echo_line": 27680,
+          "log_typed_value_line": 27681,
+          "log_repeat_path_line": 27682,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+          "frame_sequence": 45,
+          "frame_file": "bb_007346.bmp",
+          "frame_sha256": "dc1fdf5d49dde34b4b3edd8e0433301c0ce3ad5e3283908a3543c100fed07c29",
+          "log_path_echo_line": 27954,
+          "log_typed_value_line": 27955,
+          "log_repeat_path_line": 27956,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/World/ShadowMap/Render multiple shadow maps (CSM)",
+          "frame_sequence": 46,
+          "frame_file": "bb_007393.bmp",
+          "frame_sha256": "a5fffec12515362ed6a0d2e74a6688d3e940a0d8dad8e7410237b1ccc11a55f9",
+          "log_path_echo_line": 28152,
+          "log_typed_value_line": 28153,
+          "log_repeat_path_line": 28154,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No near/distant cascade difference is visible. The CSM value readback does not prove three-cascade output."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0008",
+      "alias": "E08",
+      "caption": "Draw follow-cam pivot",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Draw follow-cam pivot",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82240828"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Draw follow-cam pivot",
+          "frame_sequence": 47,
+          "frame_file": "bb_007465.bmp",
+          "frame_sha256": "665ddeae1387c6ae8394e8f4e0b75bca1dae076a1def16518422250189adb52e",
+          "log_path_echo_line": 28432,
+          "log_typed_value_line": 28433,
+          "log_repeat_path_line": 28434,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Draw follow-cam pivot",
+          "frame_sequence": 48,
+          "frame_file": "bb_007508.bmp",
+          "frame_sha256": "80efea68b25291854831b360d8e08f72a63e1284ab0e34b6aab6d0d6f4c56d6f",
+          "log_path_echo_line": 28857,
+          "log_typed_value_line": 28858,
+          "log_repeat_path_line": 28859,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Draw follow-cam pivot",
+          "frame_sequence": 49,
+          "frame_file": "bb_007551.bmp",
+          "frame_sha256": "9ae6cccd8e758d5a89686814ce0cc2296742d1626040723c6abd6ff3dcea9768",
+          "log_path_echo_line": 29123,
+          "log_typed_value_line": 29124,
+          "log_repeat_path_line": 29125,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No follow-camera pivot box/line is visible, and an allocated active GameplayExternal consumer is not demonstrated."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0014",
+      "alias": "E14",
+      "caption": "Allow Jump Moment",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Moment Options/Allow Jump Moment",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82250268",
+        "0x82239DE8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Moment Options/Allow Jump Moment",
+          "frame_sequence": 50,
+          "frame_file": "bb_007597.bmp",
+          "frame_sha256": "be6b6243152faa6a5dd778aed6239ded88eccbbb84a63e033171d0f198d1787c",
+          "log_path_echo_line": 29417,
+          "log_typed_value_line": 29418,
+          "log_repeat_path_line": 29419,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Moment Options/Allow Jump Moment",
+          "frame_sequence": 51,
+          "frame_file": "bb_007671.bmp",
+          "frame_sha256": "c4f34c84b46f05fc07b2f8f1e46fcaf042e8d63e5171c06b3fc295002e05508c",
+          "log_path_echo_line": 29672,
+          "log_typed_value_line": 29673,
+          "log_repeat_path_line": 29674,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Moment Options/Allow Jump Moment",
+          "frame_sequence": 52,
+          "frame_file": "bb_007722.bmp",
+          "frame_sha256": "a722fb39f1b55368df8633f7d804048ff711be2725bf5a95fc2cf60a62541bda",
+          "log_path_echo_line": 30113,
+          "log_typed_value_line": 30114,
+          "log_repeat_path_line": 30115,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "Only the field is toggled. No real jump attempt is captured; the pinned 3f source reaches a PC BehaviourCollection::Prepare trap/assert if the eligible filming closure is entered. No no-op or current-dev jump-fix credit."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0015",
+      "alias": "E15",
+      "caption": "Allow Stunt Moment",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Moment Options/Allow Stunt Moment",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82250268",
+        "0x82239DE8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Moment Options/Allow Stunt Moment",
+          "frame_sequence": 53,
+          "frame_file": "bb_007770.bmp",
+          "frame_sha256": "962ce7e8489eff7860617b3deb83648abd9b174fea98dcd9a7bd4b5002a9f563",
+          "log_path_echo_line": 30430,
+          "log_typed_value_line": 30431,
+          "log_repeat_path_line": 30432,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Moment Options/Allow Stunt Moment",
+          "frame_sequence": 54,
+          "frame_file": "bb_007819.bmp",
+          "frame_sha256": "6f768b7961b2419e4afb26679cf49c0944894b5ed35627a0a4949a8624705304",
+          "log_path_echo_line": 30727,
+          "log_typed_value_line": 30728,
+          "log_repeat_path_line": 30729,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/Camera/Moment Options/Allow Stunt Moment",
+          "frame_sequence": 55,
+          "frame_file": "bb_007893.bmp",
+          "frame_sha256": "47b1a8ce8ce9ee8904bb3234bd78c4624092211466028c7491a23a1ed7d572da",
+          "log_path_echo_line": 31005,
+          "log_typed_value_line": 31006,
+          "log_repeat_path_line": 31007,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No named stunt-moment attempt or moment-selection window is witnessed; the readbacks are field-only."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0016",
+      "alias": "E16",
+      "caption": "Allow Hard Stop Moment",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Moment Options/Allow Hard Stop Moment",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82250268",
+        "0x82239DE8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Moment Options/Allow Hard Stop Moment",
+          "frame_sequence": 56,
+          "frame_file": "bb_007945.bmp",
+          "frame_sha256": "f267230c2fff9ec3fed475c9a5ed813e20357c52177332cc888c26b3718bdda2",
+          "log_path_echo_line": 31437,
+          "log_typed_value_line": 31438,
+          "log_repeat_path_line": 31439,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Moment Options/Allow Hard Stop Moment",
+          "frame_sequence": 57,
+          "frame_file": "bb_007998.bmp",
+          "frame_sha256": "e9937fcc37747cf208d05643a029c8103f9b574786da033fba5e774556af5c1b",
+          "log_path_echo_line": 31768,
+          "log_typed_value_line": 31769,
+          "log_repeat_path_line": 31770,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/Camera/Moment Options/Allow Hard Stop Moment",
+          "frame_sequence": 58,
+          "frame_file": "bb_008076.bmp",
+          "frame_sha256": "f5484c66571562270ebf757a20f3d84f314c419013c7e55ea107f83e5d53dfd0",
+          "log_path_echo_line": 32094,
+          "log_typed_value_line": 32095,
+          "log_repeat_path_line": 32096,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No named hard-stop attempt is witnessed. The visible news overlay is unrelated to this flag."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0018",
+      "alias": "E18",
+      "caption": "Enable Behaviour Debug Output",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Debug Ouput/Enable Behaviour Debug Output",
+      "source_default": true,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x821F71D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Enable Behaviour Debug Output",
+          "frame_sequence": 59,
+          "frame_file": "bb_008116.bmp",
+          "frame_sha256": "39609b7962a4c3767d5f0cb701f5237451df87c0affb62ca15c4806945e5316a",
+          "log_path_echo_line": 32518,
+          "log_typed_value_line": 32519,
+          "log_repeat_path_line": 32520,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Behaviour Debug Output",
+          "frame_sequence": 60,
+          "frame_file": "bb_008162.bmp",
+          "frame_sha256": "55409568ee480b4ed91e4044e9f18bd774c8585cd27b0965b49111b6d2cf9948",
+          "log_path_echo_line": 32779,
+          "log_typed_value_line": 32780,
+          "log_repeat_path_line": 32781,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Behaviour Debug Output",
+          "frame_sequence": 61,
+          "frame_file": "bb_008213.bmp",
+          "frame_sha256": "5e6f7315918966fb500f983cdbc1648ce2bcb5c1dc1b0feb9f04c553a27ba8f3",
+          "log_path_echo_line": 33090,
+          "log_typed_value_line": 33091,
+          "log_repeat_path_line": 33092,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "The visible Paradise City News Flash is a standard update overlay present across P/N/R, not a behaviour-printer message. Natural baseline and restore are FALSE despite source_default TRUE."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "alias": "E19",
+      "caption": "Enable Moment Debug Output",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+      "source_default": true,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x821F71D8",
+        "0x82239DE8",
+        "0x8226BFB0"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 62,
+          "frame_file": "bb_008290.bmp",
+          "frame_sha256": "f15067cfb25ee3b897365ecf7449ebf7dfe3b42f3f53e330115143d9478824ae",
+          "log_path_echo_line": 33511,
+          "log_typed_value_line": 33512,
+          "log_repeat_path_line": 33513,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 63,
+          "frame_file": "bb_008335.bmp",
+          "frame_sha256": "81dd68b3c56565f24b6f10546af35bae47d243a0a917755a8cd9c868132335f1",
+          "log_path_echo_line": 33791,
+          "log_typed_value_line": 33792,
+          "log_repeat_path_line": 33793,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 64,
+          "frame_file": "bb_008384.bmp",
+          "frame_sha256": "ff6ff9d20e02c3ea208c81f68eb00163f205c8c10a27af944cf46934e4fef405",
+          "log_path_echo_line": 34104,
+          "log_typed_value_line": 34105,
+          "log_repeat_path_line": 34106,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "accepted",
+      "basis": "With E19 TRUE the positive BMP shows the moment-selector candidate/status diagnostic list; the FALSE negative and same-run FALSE restore show no such output. X360 ActualDebugRender calls DebugPrinter output. Acceptance is for the output gate only; the messages say conditions are not met and prove no successful moment."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0022",
+      "alias": "E22",
+      "caption": "Show debug camera names",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Debug Ouput/Show debug camera names",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x821F6740"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Show debug camera names",
+          "frame_sequence": 65,
+          "frame_file": "bb_008467.bmp",
+          "frame_sha256": "745ca0fbf5e5096123bc84b4726f3dc85945d0852f2b28bf2d0ab1a404c9c810",
+          "log_path_echo_line": 34406,
+          "log_typed_value_line": 34407,
+          "log_repeat_path_line": 34408,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Show debug camera names",
+          "frame_sequence": 66,
+          "frame_file": "bb_008509.bmp",
+          "frame_sha256": "458a9d3fd6cfc6417c2a3d0a0527e0fcca1ae7e453ec9ed945c892d1ef526c1b",
+          "log_path_echo_line": 34838,
+          "log_typed_value_line": 34839,
+          "log_repeat_path_line": 34840,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Show debug camera names",
+          "frame_sequence": 67,
+          "frame_file": "bb_008557.bmp",
+          "frame_sha256": "149b690d8749b37eb43282a0a378dd20110347d3323965a99f984f1eb7cd1315",
+          "log_path_echo_line": 35113,
+          "log_typed_value_line": 35114,
+          "log_repeat_path_line": 35115,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No debug-camera names appear and the normal-camera selector cycling condition is not witnessed. E21 is a validated temporary context only."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0023",
+      "alias": "E23",
+      "caption": "Show World Map debug",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Debug Ouput/Show World Map debug",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82274070"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Show World Map debug",
+          "frame_sequence": 68,
+          "frame_file": "bb_008645.bmp",
+          "frame_sha256": "e03c10541c547030f25ad1716739333c3cb48984ae1fa0ffd935a86a0100e456",
+          "log_path_echo_line": 35411,
+          "log_typed_value_line": 35412,
+          "log_repeat_path_line": 35413,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Show World Map debug",
+          "frame_sequence": 69,
+          "frame_file": "bb_008691.bmp",
+          "frame_sha256": "04aa5826a6be782139b5d84de25ab9e173e060c8aed2253282057be46739bc5e",
+          "log_path_echo_line": 35838,
+          "log_typed_value_line": 35839,
+          "log_repeat_path_line": 35840,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Show World Map debug",
+          "frame_sequence": 70,
+          "frame_file": "bb_008737.bmp",
+          "frame_sha256": "bb9ad73c5739a21c197424ebb65cd5be146f92a738cf55a9d7b5f78fa78f6ae5",
+          "log_path_echo_line": 36118,
+          "log_typed_value_line": 36119,
+          "log_repeat_path_line": 36120,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "The positive BMP has a lone green line, but no moving DRIVING positions, two-position journal or verified world-map producer is present. The line cannot be attributed as recovered world-map behavior."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0026",
+      "alias": "E26",
+      "caption": "Show Crash Info",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Debug Ouput/Show Crash Info",
+      "source_default": false,
+      "natural_baseline": "FALSE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x8226BFB0",
+        "0x821F71D8",
+        "0x8221C6D8"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Show Crash Info",
+          "frame_sequence": 71,
+          "frame_file": "bb_008781.bmp",
+          "frame_sha256": "f2dd984cac00f7967d59cd5b365114ab31cdcd57b02f5c2c496b7e3867d584ef",
+          "log_path_echo_line": 36402,
+          "log_typed_value_line": 36403,
+          "log_repeat_path_line": 36404,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Show Crash Info",
+          "frame_sequence": 72,
+          "frame_file": "bb_008864.bmp",
+          "frame_sha256": "8932e7e9e608448a66cce4184b2ac6ebf62f0656262ff38aedc453cc8411ed94",
+          "log_path_echo_line": 36699,
+          "log_typed_value_line": 36700,
+          "log_repeat_path_line": 36701,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Show Crash Info",
+          "frame_sequence": 73,
+          "frame_file": "bb_008918.bmp",
+          "frame_sha256": "376a0e3e7abdea7fd4e66f8b64d8b16905a30713aef5207c4186c96440bd378f",
+          "log_path_echo_line": 37132,
+          "log_typed_value_line": 37133,
+          "log_repeat_path_line": 37134,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "No crash-info text is visible and no active ArbStateCrashing update window is established; a damaged-looking car alone is not a crash-state witness."
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0043",
+      "alias": "E43",
+      "caption": "Small Near Clip",
+      "type": "f32",
+      "raw_readback_path": "/Camera/Clipping/Small Near Clip",
+      "source_default": 0.1,
+      "natural_baseline": "0.1",
+      "positive": 0.5,
+      "negative": 0.05,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82205B68",
+        "0x8220AC48"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "0.500",
+          "full_path": "/Camera/Clipping/Small Near Clip",
+          "frame_sequence": 74,
+          "frame_file": "bb_008971.bmp",
+          "frame_sha256": "0fe4ba26cb1b4aa357b98a889db64a55e6fceaa5ce0b27a5c4fd65d5a88554fd",
+          "log_path_echo_line": 37452,
+          "log_typed_value_line": 37453,
+          "log_repeat_path_line": 37454,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "0.050",
+          "full_path": "/Camera/Clipping/Small Near Clip",
+          "frame_sequence": 75,
+          "frame_file": "bb_009018.bmp",
+          "frame_sha256": "5b4b0b6024e32c11c2e0e60e871915e02e24fa982c5b39cd56fe469f91c1f40e",
+          "log_path_echo_line": 37734,
+          "log_typed_value_line": 37735,
+          "log_repeat_path_line": 37736,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.100",
+          "full_path": "/Camera/Clipping/Small Near Clip",
+          "frame_sequence": 76,
+          "frame_file": "bb_009105.bmp",
+          "frame_sha256": "1eb789fd789e7b874afc4087c63dbad139cb48055bdaf7ac9cfc5c311979da4e",
+          "log_path_echo_line": 38201,
+          "log_typed_value_line": 38202,
+          "log_repeat_path_line": 38203,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": "3DCCCCCD",
+      "outcome": "insufficient",
+      "basis": "Typed P/N and exact captured baseline bits are verified, but the required small-near state bit producer is unknown and no active near-clip effect is visible.",
+      "natural_f32_baseline": {
+        "address": "0x7FF76EB97E18",
+        "value": "0.1",
+        "rva": "0xAB7E18",
+        "bytes_le": "CDCCCC3D",
+        "alias": "E43",
+        "bits": "3DCCCCCD",
+        "finite": true
+      }
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0044",
+      "alias": "E44",
+      "caption": "Default Near Clip",
+      "type": "f32",
+      "raw_readback_path": "/Camera/Clipping/Default Near Clip",
+      "source_default": 0.15,
+      "natural_baseline": "0.15",
+      "positive": 2.0,
+      "negative": 0.15,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82205B68",
+        "0x8220AC48"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "2.000",
+          "full_path": "/Camera/Clipping/Default Near Clip",
+          "frame_sequence": 77,
+          "frame_file": "bb_009155.bmp",
+          "frame_sha256": "ed0a7ea172e8e4e320c300d5753db3fc4fc344b05fb54b8304f71b4105cb56ec",
+          "log_path_echo_line": 38521,
+          "log_typed_value_line": 38522,
+          "log_repeat_path_line": 38523,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "0.150",
+          "full_path": "/Camera/Clipping/Default Near Clip",
+          "frame_sequence": 78,
+          "frame_file": "bb_009201.bmp",
+          "frame_sha256": "f78f5158cbb18a187553bb3b8e5a2ed01252fd3e1a9427837aacdbc6e32f176e",
+          "log_path_echo_line": 38810,
+          "log_typed_value_line": 38811,
+          "log_repeat_path_line": 38812,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.150",
+          "full_path": "/Camera/Clipping/Default Near Clip",
+          "frame_sequence": 79,
+          "frame_file": "bb_009277.bmp",
+          "frame_sha256": "1d3caf4b3695a6ac4f9d1966352452c869fd47c21aaa1a9d1c19c8d47078e32f",
+          "log_path_echo_line": 39082,
+          "log_typed_value_line": 39083,
+          "log_repeat_path_line": 39084,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": "3E19999A",
+      "outcome": "insufficient",
+      "basis": "P/N/restore values are typed and restored, but the standard external-camera/no-custom-near consumer and a stable clipping delta are not established.",
+      "natural_f32_baseline": {
+        "address": "0x7FF76EB97E1C",
+        "value": "0.15",
+        "rva": "0xAB7E1C",
+        "bytes_le": "9A99193E",
+        "alias": "E44",
+        "bits": "3E19999A",
+        "finite": true
+      }
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0045",
+      "alias": "E45",
+      "caption": "Default Far Clip",
+      "type": "f32",
+      "raw_readback_path": "/Camera/Clipping/Default Far Clip",
+      "source_default": 10000.0,
+      "natural_baseline": "10000",
+      "positive": 500.0,
+      "negative": 10000.0,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x8220AC48"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "500.000",
+          "full_path": "/Camera/Clipping/Default Far Clip",
+          "frame_sequence": 80,
+          "frame_file": "bb_009326.bmp",
+          "frame_sha256": "b671d8eb7fb18cf65e5ed06fae984312c9e036b73803285eadc2c13b48a24822",
+          "log_path_echo_line": 39523,
+          "log_typed_value_line": 39524,
+          "log_repeat_path_line": 39525,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "10000.000",
+          "full_path": "/Camera/Clipping/Default Far Clip",
+          "frame_sequence": 81,
+          "frame_file": "bb_009369.bmp",
+          "frame_sha256": "ea1b583581f047024b8fe921717c9cfbb583991e840d2a4f1ad677ee984abd67",
+          "log_path_echo_line": 39789,
+          "log_typed_value_line": 39790,
+          "log_repeat_path_line": 39791,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "10000.000",
+          "full_path": "/Camera/Clipping/Default Far Clip",
+          "frame_sequence": 82,
+          "frame_file": "bb_009418.bmp",
+          "frame_sha256": "b204057f4cf22f656ccafedb5f51820c3f0b0511610a30be1b6f992fbd74648f",
+          "log_path_echo_line": 40091,
+          "log_typed_value_line": 40092,
+          "log_repeat_path_line": 40093,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": "461C4000",
+      "outcome": "insufficient",
+      "basis": "P/N/restore values are typed and restored, but the view has no controlled distant landmark and no far-clip change is visible.",
+      "natural_f32_baseline": {
+        "address": "0x7FF76EB97E20",
+        "value": "10000",
+        "rva": "0xAB7E20",
+        "bytes_le": "00401C46",
+        "alias": "E45",
+        "bits": "461C4000",
+        "finite": true
+      }
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0054",
+      "alias": "E54",
+      "caption": "Enable Boost Effects",
+      "type": "bool",
+      "raw_readback_path": "/Camera/Enable Boost Effects",
+      "source_default": true,
+      "natural_baseline": "TRUE",
+      "positive": true,
+      "negative": false,
+      "registration_address": "0x82275F68",
+      "artist_witness_addresses": [
+        "0x82240828"
+      ],
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Enable Boost Effects",
+          "frame_sequence": 83,
+          "frame_file": "bb_009493.bmp",
+          "frame_sha256": "f812053a640605e1bb0f7bd31ceece45828efe5c180632faaf8dcdcf9eb1326a",
+          "log_path_echo_line": 40556,
+          "log_typed_value_line": 40557,
+          "log_repeat_path_line": 40558,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Enable Boost Effects",
+          "frame_sequence": 84,
+          "frame_file": "bb_009530.bmp",
+          "frame_sha256": "667637b1ae4de3b9cae05585b656d47084448643159a5f5177372865a76586a0",
+          "log_path_echo_line": 40816,
+          "log_typed_value_line": 40817,
+          "log_repeat_path_line": 40818,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "TRUE",
+          "full_path": "/Camera/Enable Boost Effects",
+          "frame_sequence": 85,
+          "frame_file": "bb_009567.bmp",
+          "frame_sha256": "4695367e7ac8cf890e475ce36890c43079fd27fbb9bbab594306ac1669a9e4d7",
+          "log_path_echo_line": 41068,
+          "log_typed_value_line": 41069,
+          "log_repeat_path_line": 41070,
+          "target_restore_verified": true
+        }
+      },
+      "restore_verified": true,
+      "restore_exact_bits": null,
+      "outcome": "insufficient",
+      "basis": "P/N/restore values are read back, but the capture has zero vehicle velocity and no ordinary Boost input; no boost camera effect is witnessed."
+    }
+  ],
+  "canonical_verdicts_modified": false
+}

@@ -1,5 +1,7 @@
 # Debug-menu behavior campaign
 
+**October31 Scene/Director:** seven additional bounded native outcomes are accepted: the triangle-test gate, padding draw/radius, TriZ response, cached triangles/spheres and moment diagnostic-output gate. The28-control aggregate remains FAIL;21 controls need their actual producer/scene or visible consumer. Captured P/N/restore, original source and the87-frame archive are reviewed. [Decision and limits](scene28_native_20261031/ROOT_DECISION.json), [combined review](scene28_native_20261031/REVIEW.md).
+
 **October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof and the playable-build refresh remain pending. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
 
 Match every entry to ARTIST, including authentic no-ops and broken leftovers.
@@ -47,7 +49,7 @@ Six BoostBar controls now pass original-source, raw native and pixel review: thr
 
 **October24 renderer checkpoint:** both independent occlusion controls pass retained-native review on exact3d7/slot62068. The current-dev merge36ae passed hosted40103324586: eleven groups,3003 TUs and14 verified payloads. Its separate native refresh and normal installation now pass. [Two-site evidence](occlusion_independent_native_20261024/REPORT.md).
 
-The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **160 verified, twenty-eight original no-ops and 1,167 pending**. That is 188/1,355 (13.9%) with a final site-level disposition. The number fully implemented but awaiting verification is still unknown.
+The static inventory contains **1,355 unique original registration-site IDs**. Final dispositions are **167 verified, twenty-eight original no-ops and 1,160 pending**. That is 195/1,355 (14.4%) with a final site-level disposition. The number fully implemented but awaiting verification is still unknown.
 
 Seven additional GUI visibility/gating sites passed retained-native review on exact91a. The original twelve-control aggregate remains FAIL; four controls were initially inconclusive. The earlier91a SatNav outline evidence remains excluded because its colour differs from the original assembly. [Per-site scope and limits](gui12_retained_native_subset_20261023/CHECKPOINT.json).
 

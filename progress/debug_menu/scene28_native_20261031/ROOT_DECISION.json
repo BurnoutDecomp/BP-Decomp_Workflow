@@ -1,0 +1,350 @@
+{
+  "schema": 1,
+  "date_utc": "2026-10-31T18:31:11.188138+00:00",
+  "accepted_count": 7,
+  "accepted": [
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0002",
+      "alias": "SC02",
+      "scope": "A horizontal test edge is visible only in the positive BMP and is absent in the negative and captured-baseline restore BMPs. ARTIST RenderWorld calls DrawTriangleTest under this flag. Acceptance is limited to this visible edge; the full swept-sphere/contact set is not claimed.",
+      "natural_baseline": "FALSE",
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 5,
+          "frame_file": "bb_005069.bmp",
+          "frame_sha256": "6633939d8dd97383c8e6e79e938e3bd945f0547fcde41363ea9afc970066114f",
+          "log_path_echo_line": 14744,
+          "log_typed_value_line": 14745,
+          "log_repeat_path_line": 14746,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 6,
+          "frame_file": "bb_005120.bmp",
+          "frame_sha256": "6963443ccbe47cb09ebca67e1d3edf231588f4e91a23ff66dbcacff534b63a01",
+          "log_path_echo_line": 15055,
+          "log_typed_value_line": 15056,
+          "log_repeat_path_line": 15057,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Triangle Test",
+          "frame_sequence": 7,
+          "frame_file": "bb_005169.bmp",
+          "frame_sha256": "692bf66181416223ae8e4641a486d71115ffd2a0f87f17dd9257179148aad0aa",
+          "log_path_echo_line": 15382,
+          "log_typed_value_line": 15383,
+          "log_repeat_path_line": 15384,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0003",
+      "alias": "SC03",
+      "scope": "With SC02 held true, the positive BMP adds cyan padding geometry; the negative BMP removes it and restore returns SC02 to its captured baseline. Acceptance is limited to the visible padding draw.",
+      "natural_baseline": "FALSE",
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 8,
+          "frame_file": "bb_005249.bmp",
+          "frame_sha256": "e435497b07a981d19836466913c4dbd480629529a02c80dec96ec57796940d61",
+          "log_path_echo_line": 15714,
+          "log_typed_value_line": 15715,
+          "log_repeat_path_line": 15716,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 9,
+          "frame_file": "bb_005301.bmp",
+          "frame_sha256": "01605d4057bae8cd106faa700944c2f3de5b23abbdc65efb7d8d491119cff46d",
+          "log_path_echo_line": 16187,
+          "log_typed_value_line": 16188,
+          "log_repeat_path_line": 16189,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw Padding",
+          "frame_sequence": 10,
+          "frame_file": "bb_005351.bmp",
+          "frame_sha256": "665da38b516792df6f490356d8181e0bf8a85bc15b7aa6e50fac7a1271d447e6",
+          "log_path_echo_line": 16517,
+          "log_typed_value_line": 16518,
+          "log_repeat_path_line": 16519,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0006",
+      "alias": "SC06",
+      "scope": "With SC02 true in P/N, the visible test edge changes span between +0.5 and -0.5; restore removes the test draw by restoring SC02 to baseline. Acceptance is limited to this TriZ-dependent edge response.",
+      "natural_baseline": "0",
+      "readbacks": {
+        "positive": {
+          "value": "0.500",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 17,
+          "frame_file": "bb_005755.bmp",
+          "frame_sha256": "0f3b43698ed06a44d861b83cad8ab517f2ef49820722101e8e09fe5f9e0288c2",
+          "log_path_echo_line": 19081,
+          "log_typed_value_line": 19082,
+          "log_repeat_path_line": 19083,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "-0.500",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 18,
+          "frame_file": "bb_005804.bmp",
+          "frame_sha256": "154124a214b50a77f1534987660e57c1d99ff1efe743bd83c8d7e133c1179566",
+          "log_path_echo_line": 19364,
+          "log_typed_value_line": 19365,
+          "log_repeat_path_line": 19366,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.000",
+          "full_path": "/Scene manager/TriZ",
+          "frame_sequence": 19,
+          "frame_file": "bb_005885.bmp",
+          "frame_sha256": "182398e9781d0573f1e90c5c7525c0ee31112e50faa2243c5270bb015807ffd3",
+          "log_path_echo_line": 19655,
+          "log_typed_value_line": 19656,
+          "log_repeat_path_line": 19657,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0008",
+      "alias": "SC08",
+      "scope": "With SC02 and SC03 held true, the positive 0.8 value produces a visible cyan padding wire-sphere; the 0.05 negative and captured-baseline restore show no comparable large sphere. This accepts the visible radius effect only; the small-value view does not establish a no-op.",
+      "natural_baseline": "0.3",
+      "readbacks": {
+        "positive": {
+          "value": "0.800",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 23,
+          "frame_file": "bb_006112.bmp",
+          "frame_sha256": "ea790772dcb844018295a2809b2522ff046dc2104dbb6a4a62812f323dc1a4d4",
+          "log_path_echo_line": 21134,
+          "log_typed_value_line": 21135,
+          "log_repeat_path_line": 21136,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "0.050",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 24,
+          "frame_file": "bb_006163.bmp",
+          "frame_sha256": "845e1366e0c90f7e6913417583c552bb8a80b144edf586c69aa04a1eeeb51591",
+          "log_path_echo_line": 21440,
+          "log_typed_value_line": 21441,
+          "log_repeat_path_line": 21442,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "0.300",
+          "full_path": "/Scene manager/Padding",
+          "frame_sequence": 25,
+          "frame_file": "bb_006215.bmp",
+          "frame_sha256": "954699b681b8df25517ef01cab837386757b2121a1469d0e295004a0c89b2780",
+          "log_path_echo_line": 21751,
+          "log_typed_value_line": 21752,
+          "log_repeat_path_line": 21753,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0009",
+      "alias": "SC09",
+      "scope": "The positive BMP contains a large translucent blue cached-triangle overlay; negative and restore do not. The pinned ARTIST reader walks used cache slots and draws valid triangle batches, so this run supplies a visible cache producer/consumer witness.",
+      "natural_baseline": "FALSE",
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 26,
+          "frame_file": "bb_006290.bmp",
+          "frame_sha256": "327a87a8046bb7f198ee12306d1b4f5962f8e67a3fd24910706276d826c2a5ac",
+          "log_path_echo_line": 22187,
+          "log_typed_value_line": 22188,
+          "log_repeat_path_line": 22189,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 27,
+          "frame_file": "bb_006336.bmp",
+          "frame_sha256": "6cabb7145542031d6a1f78fb810a1b5d86f6f22f75e8a391407c6f78c7ce0d5b",
+          "log_path_echo_line": 22464,
+          "log_typed_value_line": 22465,
+          "log_repeat_path_line": 22466,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cached triangles",
+          "frame_sequence": 28,
+          "frame_file": "bb_006384.bmp",
+          "frame_sha256": "1b72f3ad5bc4743a5a993e0e791a62199d455f34931799751495b5932fb92d3f",
+          "log_path_echo_line": 22756,
+          "log_typed_value_line": 22757,
+          "log_repeat_path_line": 22758,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0010",
+      "alias": "SC10",
+      "scope": "The positive BMP shows cache wireframe geometry; negative and restore remove it. The pinned ARTIST reader walks populated sphere records and calls DrawHollowSphere, supplying a visible cache-sphere witness.",
+      "natural_baseline": "FALSE",
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 29,
+          "frame_file": "bb_006460.bmp",
+          "frame_sha256": "f768b23e2246a23137f9ea2ee46cdb0bb338bd1cd92291a8f71ebc41b3ed394d",
+          "log_path_echo_line": 23042,
+          "log_typed_value_line": 23043,
+          "log_repeat_path_line": 23044,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 30,
+          "frame_file": "bb_006503.bmp",
+          "frame_sha256": "9bccd48d01d0ebde9b4d429f599057c196304899ba903b55a426f38f428fad98",
+          "log_path_echo_line": 23443,
+          "log_typed_value_line": 23444,
+          "log_repeat_path_line": 23445,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Scene manager/Draw cache spheres",
+          "frame_sequence": 31,
+          "frame_file": "bb_006546.bmp",
+          "frame_sha256": "b35ae05503b0d2ed73f47056c5423f3f53b2aff46f86e7386a58119e8ff4e15e",
+          "log_path_echo_line": 23714,
+          "log_typed_value_line": 23715,
+          "log_repeat_path_line": 23716,
+          "target_restore_verified": true
+        }
+      }
+    },
+    {
+      "id": "BrnDirector::DebugComponent::OnActivate#0019",
+      "alias": "E19",
+      "scope": "With E19 TRUE the positive BMP shows the moment-selector candidate/status diagnostic list; the FALSE negative and same-run FALSE restore show no such output. X360 ActualDebugRender calls DebugPrinter output. Acceptance is for the output gate only; the messages say conditions are not met and prove no successful moment.",
+      "natural_baseline": "FALSE",
+      "readbacks": {
+        "positive": {
+          "value": "TRUE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 62,
+          "frame_file": "bb_008290.bmp",
+          "frame_sha256": "f15067cfb25ee3b897365ecf7449ebf7dfe3b42f3f53e330115143d9478824ae",
+          "log_path_echo_line": 33511,
+          "log_typed_value_line": 33512,
+          "log_repeat_path_line": 33513,
+          "target_restore_verified": null
+        },
+        "negative": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 63,
+          "frame_file": "bb_008335.bmp",
+          "frame_sha256": "81dd68b3c56565f24b6f10546af35bae47d243a0a917755a8cd9c868132335f1",
+          "log_path_echo_line": 33791,
+          "log_typed_value_line": 33792,
+          "log_repeat_path_line": 33793,
+          "target_restore_verified": null
+        },
+        "restore": {
+          "value": "FALSE",
+          "full_path": "/Camera/Debug Ouput/Enable Moment Debug Output",
+          "frame_sequence": 64,
+          "frame_file": "bb_008384.bmp",
+          "frame_sha256": "ff6ff9d20e02c3ea208c81f68eb00163f205c8c10a27af944cf46934e4fef405",
+          "log_path_echo_line": 34104,
+          "log_typed_value_line": 34105,
+          "log_repeat_path_line": 34106,
+          "target_restore_verified": true
+        }
+      }
+    }
+  ],
+  "remaining_21_ids": [
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0001",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0004",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0005",
+    "CgsSceneManager::SceneManagerDebugComponent::OnActivate#0007",
+    "BrnWorld::ShadowMap::Construct#0002",
+    "BrnWorld::ShadowMap::Construct#0003",
+    "BrnWorld::ShadowMap::Construct#0004",
+    "BrnWorld::ShadowMap::Construct#0006",
+    "BrnWorld::ShadowMap::Construct#0008",
+    "BrnDirector::DebugComponent::OnActivate#0008",
+    "BrnDirector::DebugComponent::OnActivate#0014",
+    "BrnDirector::DebugComponent::OnActivate#0015",
+    "BrnDirector::DebugComponent::OnActivate#0016",
+    "BrnDirector::DebugComponent::OnActivate#0018",
+    "BrnDirector::DebugComponent::OnActivate#0022",
+    "BrnDirector::DebugComponent::OnActivate#0023",
+    "BrnDirector::DebugComponent::OnActivate#0026",
+    "BrnDirector::DebugComponent::OnActivate#0043",
+    "BrnDirector::DebugComponent::OnActivate#0044",
+    "BrnDirector::DebugComponent::OnActivate#0045",
+    "BrnDirector::DebugComponent::OnActivate#0054"
+  ],
+  "original_case_verdict_preserved": "FAIL",
+  "collection_reconciliation": "Original case queried wrong stop field; actual exact-owned phase collection stop, terminal restore, cleanup and input reset are independently recorded. No aggregate PASS claimed.",
+  "root_independent_checks": {
+    "archived_raw_log_typed_triplets": 21,
+    "rehash_original_frames": 21,
+    "contact_sheet_inspected": "scene_CONTACT.webp, all scene rows P/N/R",
+    "full_original_frames_inspected": [
+      "bb_005069.bmp",
+      "bb_005120.bmp",
+      "bb_008290.bmp",
+      "bb_008335.bmp"
+    ],
+    "source_consumer_read": "Pinned SceneManager DrawTriangleTest, DrawCachedObjectTriangles, DrawCachedObjectSpheres and DrawCachedTriangle; fresh combined reviewer checked source and original assembly for all28."
+  },
+  "review_sha256": "4498d1ebef6907bb93548c3992e22090fb187670cb60be952f7998ef02418394",
+  "review_md_sha256": "72bd1291d15bf5b45b4eef4db359d5ce8081c4eb62c23da00eb135f79756298c",
+  "archive_sha256": "c241c6e15355b0691c525bd1c08a707f2b598b7c305c3a057f708560cf708a8f",
+  "scope_limits": [
+    "SC02 visible test edge only; no full swept-sphere/contact-set claim",
+    "SC03/SC08 visible padding geometry/radius response",
+    "SC06 visible TriZ-dependent edge response",
+    "SC09/SC10 populated cache triangle/sphere draws",
+    "E19 moment-selector diagnostic gate only, not a successful moment",
+    "E18/E19 actual captured FALSE baseline overrides stale TRUE scope metadata; no metadata-default restore claim",
+    "Remaining controls receive neither behavior credit nor original-noop classification"
+  ],
+  "canonical_counts_after": {
+    "verified": 167,
+    "original_noop": 28,
+    "pending": 1160,
+    "total": 1355
+  },
+  "installed_build_unchanged": true
+}
