@@ -1,0 +1,24 @@
+VERDICT: pass
+
+The exact candidate `5a4a19cace1dc080c0b61de4ba15130035706d19` passes this **complex ABI/wire-fidelity source and focused-regression review** against `ca80277748eb098822a035093cff9d306d079e2a`. No blocking finding. This is not full-game/native/audio delivery, and no canonical debug verdict/count was changed.
+
+Only four paths differ: callback CPP plus the runner, C++ fixture and original-data oracle. The production change restores `ON_LEFTSWEEP`/`ON_RIGHTSWEEP` and publishes the existing named100-byte projection through `OutputBuffer::AddGuiOutEvent` as457. Legacy201/112 carrier and consumer compatibility remain.
+
+Original assembly supports the change directly. Callback825112BC..D0 pins the five pointer arguments:userData/component/movie/action/label; its call at825113BC..D0 reorders strings into the original constructor, then calls the module-output helper. Constructor824F6350 writes component/action/label/movie at0/32/36/68 with31-character termination and100 total pointer-free bytes. Output helper8250BE84..90 checks the write lock;8250BF0C..1C queues raw100/event457. The candidate's existing projection/generic helper matches that boundary. StateInterface's separate channel40 wrapper is untouched. The old nonconst queue getter already asserted the write lock; no missing-lock defect/repair is claimed.
+
+Both original action tables were independently matched against actual ARTIST image pointer/string bytes, including14authorednames at82F277A8 and27loglabels. Sweeps are exactly indices11/13 without the extra underscore; unknown action still maps14. Original bridge and Sound consumer assembly show the unchanged queue path and raw100->sound6/116 continuation. Host queue/message headers preserve their own pointer representation; no console+4bias was introduced. DecFIGS confirms declaration shape and five-pointer callback; its older452 ID does not override ARTIST457.
+
+Fresh hosted tests reproduced **323/0 candidate** and **323/112 baseline**. Baseline executable exits1 with real oracle failures, not setup/compile failure; the runner accepts only exact201/112 plus11/13->14 observations and the exact112failure set. I independently reconstructed that set:18case prefixes*6publication/raw-layout failures plus2sweeps*2downstream-action failures. Candidate executable exits0 with all fourteen457/100/action0..13 observations. Both assert once for the deliberately unlocked test, preserve legacy201 compatibility, and reject unrelated HideDriveThru201/raw8.
+
+Fixture code was inspected: it extracts actual callback/constructor/SPrintf, real IO lock/OutputBuffer/VariableEventQueue/Message headers, productionGetGuiPayload/QueueSoundMessage/case201+457, realIDHashString andPresentationEffect::Notify. Only assert handling and Resolve/Play/log destinations are observed boundaries. Oracle actions come from independently pinned original data, not the implementation;31-character field cases exercise all100payloadbytes. Unknown fallback, truncation, component fallback, resolution-failure and invalid-entry guards are included. All110fresh source/header inputs match base/candidate committed text after documented line-ending normalization, and actual filehash receipts remain unchanged. Only extracted callback differs. Three checked-in tests/oracle match candidateGittext.
+
+Retained completeGUI TU compile and faithfulness receipts bind the exact candidate postimage; canonical flag/include and log/source hashes were checked. Faithfulness is0total/new. I ran only the bounded hosted test builds, not a full game build/native/stage/profile operation.
+
+Remaining delivery: full shipping link/build with candidate provenance, actual normalUI authoredactions (especially sweeps) through callback/bridge/presentation, and an appropriate real asset/audio witness. Resolve/Play calls are not asset resolution, audibility or hardware proof. Input1/navigation restoration, Apt runtime, fullGUI and existing wholeTU audit debt are outside this callback change. No credit is assigned to Sound#0105. Root retains integration, native validation, publication and playable refresh authority.
+
+Candidate callback Gitblob:`15b93b1564f84e42c0d227ebc6227cd69595c61f`
+Candidate callback GitbytesSHA:`e7a09128a57cdffcd41384e261fdf43239f4a490a6db125ee1afe980c2347050`
+Candidate callback physicalCRLFSHA:`e7ebcea6c0565236c429f109b124d298c6f763ef52691217db6e6804bee1d892`
+Fresh candidate receipts:`D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\gui_audio_route_20261101\review_candidate01`
+Fresh baseline receipts:`D:\Reverse\BP-Decomp_Workflow\scratch\DEBUG_MENU_1011\gui_audio_route_20261101\review_baseline01`
+All exact source/test/original/tool/receipt pins and test limits are recorded in SOURCE_REVIEW.json. No source/Git/ledger/status/build-game/native/profile/staging edits or additional agents.

@@ -1,0 +1,1476 @@
+{
+  "schema": 1,
+  "verdict": "pass",
+  "classification": "complex ABI/wire fidelity",
+  "review_scope": "Exact callback source repair and focused hosted regressions; no full-game/native/audio delivery verdict",
+  "base_b5": "ca80277748eb098822a035093cff9d306d079e2a",
+  "candidate_b5": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+  "source_commit": "747a347c8fd9bb8d1637e967c2c9a782f89a5638",
+  "branch": "codex/debug-gui-audio-20261101",
+  "source_root": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp",
+  "changed_paths": [
+    "src/GameSource/Gui/BrnGuiModule.cpp",
+    "tests/run_gui_audio_trigger.py",
+    "tests/GuiAudioTrigger.cpp",
+    "tests/data/gui_audio_actions_artist.json"
+  ],
+  "source_and_test_pins": [
+    {
+      "path": "src/GameSource/Gui/BrnGuiModule.cpp",
+      "candidate_worktree_sha256": "e7ebcea6c0565236c429f109b124d298c6f763ef52691217db6e6804bee1d892",
+      "base": {
+        "git_blob": "4e6bf8bd4caac00f0c273d8c7a3a9454f9a853d7",
+        "git_bytes_sha256": "f109f7e7de4e9af61c787094341ba2579f80dbcf1cf9ec26172a93ea9f0dc0fd"
+      },
+      "candidate": {
+        "git_blob": "15b93b1564f84e42c0d227ebc6227cd69595c61f",
+        "git_bytes_sha256": "e7a09128a57cdffcd41384e261fdf43239f4a490a6db125ee1afe980c2347050"
+      }
+    },
+    {
+      "path": "tests/run_gui_audio_trigger.py",
+      "candidate_worktree_sha256": "fed2bb384356447fe5421b7bb5d226d7a9df8cc27d198dd73b73e020e4098ebf",
+      "base": null,
+      "candidate": {
+        "git_blob": "2a6334b9e5b25a06a6dd8fbd033a419b69ca4367",
+        "git_bytes_sha256": "8e79cec3e831d5dc211a7e6788ecd727174ad1f2b20ef3bbda49cec6909f7071"
+      }
+    },
+    {
+      "path": "tests/GuiAudioTrigger.cpp",
+      "candidate_worktree_sha256": "84323ba8d393eba3e2752e6ea084caf570b718fab4779a9db011ab67fe4d97db",
+      "base": null,
+      "candidate": {
+        "git_blob": "6b0d6cf4113fe17a534cd48d5c031a7884b0d706",
+        "git_bytes_sha256": "84323ba8d393eba3e2752e6ea084caf570b718fab4779a9db011ab67fe4d97db"
+      }
+    },
+    {
+      "path": "tests/data/gui_audio_actions_artist.json",
+      "candidate_worktree_sha256": "7eadb821067bfe64acec3cbe103df789505e872fc4c277b0ef9accc6b3fcd57b",
+      "base": null,
+      "candidate": {
+        "git_blob": "890679776d2e967e5d6cdc0806e48bd991b9ad8a",
+        "git_bytes_sha256": "6c9b816c832c951f128c397f10e9baaee6220e8d85cb98a5392d6db847e30550"
+      }
+    }
+  ],
+  "findings": [],
+  "semantics": {
+    "abi": "ARTIST825112BC..D0 r3=userData,r4=component,r5=movie,r6=action,r7=label; candidate static five-pointer callback preserves order. Enum/string constructor call register usage checked rather than trusting Hex-Rays packed signatures.",
+    "raw_body": "ARTIST824F6350 formats three32byte strings with terminal31/67/99 and s32action32, so pointer-free100byte offsets0/32/36/68. Existing PC carrier retains112bytes/header12; existing projection copies only named100byte fields.",
+    "publication": "ARTIST8250BE84..90 write-lock guard and8250BF0C..1C raw100/event457. Existing generic OutputBuffer::AddGuiOutEvent<T> publishes same size/type; callback uses it on projection. StateInterface channel40 wrapper is a different boundary and remains untouched.",
+    "actions": "Actual ARTIST table82F277A8 fourteen case-sensitive names independently read via existingx360rd; indices11/13 are ON_LEFTSWEEP/ON_RIGHTSWEEP. Fallback14 and other12 actions unchanged.27log names also independently checked.",
+    "lock": "Prior nonconst getter already asserted writing; new AddGuiOutEvent preserves the lock invariant. No missing-lock bug or repair is claimed.",
+    "consumer": "Original bridge passes outputqueue pointer; original consumer copies100 into message6 body, original typedqueue uses serialized116. Existing hostcase457 and realMessage headers/queue tested. No console+4pointer bias imported into host representation.",
+    "compatibility": "Unchanged case201 typed112 compatibility passes; unrelated HideDriveThru201/raw8 rejected. No global201remap or carrier/header migration.",
+    "declarations": "DecFIGS corroborates component32/actionint32/label32/movie32 and five-pointer callback. DecFIGS452 is older build identity; ARTIST457 governs target."
+  },
+  "original_evidence_hashes": {
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_823C0A58.json": "c48bf406e1229d565a50b472107956f434f620b32eea248fe5dc6acd8964dcaa",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_82436890.json": "c3b161ccc29ebc9c450dba0c5ef0ad0d5e40f245e79bae2fc2a4da357813aa11",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_824F6350.json": "87dd5034fc9271c381b92c96453d1a88e0c60fac1cdda209f3a442788890fd12",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_824FB9A8.json": "bb62d75c154245c213f1af990c846dfd6dcbc468c0aabfafe92dbf6940660d44",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_8250BE70.json": "1e8806116b98c1639419905706fbc615d8d0ca5b6816d3d1bbe1a947dd7585f4",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_825112B0.json": "b2a3afa455a799d4d534fb6a140473834321fb3e7639391ccb9c8e365b5878a9",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_826DEE00.json": "0019e7cebbda3640e12de0c81339f30e3bb8aa57d92b27e8603354ba93459e7a",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_826ED6C8.json": "3ef59f754c30998598163cb8596bab9a42f49ba442ccb31bfdcf4f708d7b0da9",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_826FF840.json": "5b94e1d6bf7947fbd1321db762cf0b47476bf198c83015f24a04706e1f6961c3",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_action_tables.json": "09ca4ec288d615c260fa0c920faa0a00d8f88cf3b9af991bca86c62df7fe4d54",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\ARTIST_Update_two_audio_call_sites.asm.txt": "c96fca5641b8da6356dd0927e9595a7b5a7c4692a0f8b2a1df47912a6261ecdd",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\manifest.json": "21cb3ae3b6d515b8720351edcf00f1fe7eab755ce784903535ee723987b54f51",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\regression_cases.json": "6365cafd0772c57c385e78dcdd6d4e71777e1da370ac860de6f69d5d543470cc",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\evidence\\source_excerpts.txt": "065ab57143e57fa335929dbe19de34b60afc01b2c842e141796f8d68f1e7d44c"
+  },
+  "dwarf_shape_pins": {
+    "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Gui\\Events\\BrnGuiAudioEvent.h": "cc3aa63e6e68f74dcc2b88a603f041fa534138b84112e3a94858f6dd7265a5e9",
+    "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameSource\\Gui\\BrnGuiModule.h": "cf3cf65a44ac135fa961481d5f1a3edefb61b619af0e46916e712ccf09272809",
+    "D:\\Reverse\\BP-Decomp_Workflow\\references\\DecFIGS\\dwarfdump\\GameShared\\GameClasses\\Gui\\CgsGuiEvent.h": "4a947e5dbcc8e51f3e97aacb19be0e906c093aa7965367f95dac5f96750b4919"
+  },
+  "raw_artist_image": {
+    "path": "D:/Reverse/IDA_Files/artist_i64.raw",
+    "sha256": "9c15e6b269d6f6e5248038092cd77d48af098d8b3a682e60cc6175bbcb420bad",
+    "direct_checks": "Both14authored/27log pointer tables, all strings and8250BF0C bytes38c0006438a001c9 independently match retained oracle; originalexport instructions independently corroborate100/457."
+  },
+  "reader_sha256": "cbfbcdb8eee42c57f8b1392f75b8b20880642f90785cf133185ad7b19cfb2b3d",
+  "postmortem_packet_sha256": "ce652fce319c047dc025457aa79159881194bfff4203e1b9f2a3276e2897147f",
+  "checkpoint_packet_hashes": {
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\README.md": "7dc975dba1ae3322a9f37876459e2e97e56e5cb0628a02cf17a9e3784dcfdeca",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\CHECKPOINT.json": "5045e719cc346aa7e9dde601235828728e8047ee372ffe8e2a27470f77dedcfa",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\report.md": "e0591864110ab3c5ccbbb1f0fe689e5b08132bc3a029eda5b8c4fcd892a5ba8c",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\SELF_REVIEW.md": "6cc653a698d2743b15fea02f4407a3ff9fc5fd294592fa2278ba5d7d399e920e",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\TU_COMPILE.json": "269a5aa231b1181b8119e1c6c2c09b2854e5ebd27f8d4e90f7e6002db212351a",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\TU_COMPILE.log": "3226c6945a71b013e24872602dfd5adb82fc62502edf91a1f0a7b5601d90546a",
+    "D:\\Reverse\\BP-Decomp_Workflow\\progress\\debug_menu\\gui_audio_route_20261101\\FAITHFULNESS.json": "1a136282377b4fc19a786fc73f68bf91c049cfafc79f732b7bb5c0f1dc48c23c"
+  },
+  "review_packet_sha256": "8b6dce87f8071883f92b467d31f4b2971d02940ab3b3941fdbc2ec93e5574f98",
+  "independent_hosted_runs": {
+    "candidate": {
+      "output_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01",
+      "fixture_sha256": "1c5f38718be539c8040ac65bbe5b3ab07fe47f314b25597909c1c3423a8737b1",
+      "result_sha256": "eb7fd17d705d30f4cb523cae844d909a8e47a9a5ba2f0d96bbb90f4c3caa7af2",
+      "stdout_sha256": "45f1fd3ace7ae7f226dd88a809213526f262a0de73e75a57f0c149c0aa738d0d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixture": {
+        "source_root": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp",
+        "expect_original_divergence": false,
+        "scope": "Actual callback, constructor, IO locks/queues, GUI sound case201/457 and PresentationEffect::Notify. Resolve/Play are observed boundaries; no game launch or audible proof.",
+        "numeric": {
+          "checks": 323,
+          "failures": 0
+        },
+        "inputs": {
+          "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp": "498741202b7413a3352b948acf42779e63f63b68a2867afd0da7d742ad063fa7",
+          "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp": "ac343db719261ec8e5e6060d22bbdb2c29f3d5adeeb645ab44556a63a19b3b26",
+          "src/GameSource/Gui/BrnGuiModule.cpp": "e7ebcea6c0565236c429f109b124d298c6f763ef52691217db6e6804bee1d892",
+          "src/GameSource/Gui/BrnGuiEventTypeDefs.cpp": "5144ec99d8293f29c39d903592ab1e527a9d0ee26a21bdf3006039939613a863",
+          "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp": "9b7582887b531b6f5a3e8b98463bf64da82175ab804b2b54677b8f52b7e46ebc",
+          "src/GameSource/Sound/Global/BrnPresentationEffect.cpp": "6fe8288c58231ecb2af6bd094b5d9d4f174a5c348c367c042a80408cab8fe7db",
+          "src/GameSource/Sound/Global/BrnPresentationEffect.h": "de17732f3fe5b9dd46ab586236a8ae68fcba609d55f4c92dda02b82e4fdb3157",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp": "7aacf8e39f050d3571f4c4c50587394be65bf867973aa9f5c96794c60d0a0c07",
+          "src/GameShared/GameClasses/Core/CgsStringUtils.cpp": "822b48880219105e5a0c6c0fb91ee51aaf64ab26306765c2d06c78abc9cafb22",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceID.h": "4ef4177f407605714412417aaf1a33713ca6c4b0e317e4154f2345e56794b240",
+          "src/types.hpp": "e675db0646e1d2c28f63729330ce7a8b3a4f74add97667b07872b316ef7f3f86",
+          "src/GameShared/GameClasses/Core/CgsStringUtils.h": "fb9769965af2c498a634faec3015069622659e6f9bce9303168466e0ec9e62ee",
+          "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h": "9b6e3574c5977c69174afc1313518340793dfab994571e9b74fe6581f2d4c03b",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceRequestQueue.h": "4dd681dbaa78f1ff794b7f11010d8c6eb1787d76690b21dc72c07767fcdcfdd6",
+          "src/GameShared/GameClasses/Module/CgsIOBuffer.h": "485da3933c855a3973d0011cd8fa71c8b47978b61ef716d57e7dc98ae3dd4ecc",
+          "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h": "f126ee47297d0964d962e731b044681a563a52a9bfd48aac0cf60dd214bd07ab",
+          "src/GameShared/GameClasses/Gui/CgsGuiEvent.h": "d213d3e5abf3425306effb798e8a28d964247f308fd7aca99030bc63e1fa7b42",
+          "src/GameShared/GameClasses/Core/CgsAssert.h": "25074c8926ec352aa133cbee4e114af4b8a4dcf6f30cf1584d65dbfe61769880",
+          "src/GameShared/GameClasses/Graphics/CgsCamera.h": "68ec606fbe5c1cb3e3d05dbd1d0bc3b996bde4e48c62683cc4df08b3d76c3e2e",
+          "src/GameShared/GameClasses/Gui/View/CustomRenderer/CgsCustomRenderer.h": "f3736d111b682e22d270d01c726173faa5b0d938dd3f35713abcdd41f8f7638c",
+          "src/BrnCommonTypes.h": "c8b01fe4a87a1b4a95b8600fb76907d85149e369ad0ea7c5aeb824ecf64750c2",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h": "09c1822ab26e2dfc62c09e77d719fdd1a3274afa29cfd1f2fc3192842aed3536",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.h": "36a54219be32c6ef15c29789a53f825808b8fb5602996a9e83dd9303800cd949",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredVertex.h": "d8703b0faee766cc2058bd62e8248bcf8e6ff1c0ce3fa7ead78a929cbc06a7af",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredTexturedVertex.h": "acf1dd64e1eb63dc2a97906c898f8ca68845ec669311400c5de84bc26d54c118",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsPositionOnlyVertex.h": "439ebb7622f6b81149a0902277cf50c563db7e530a96641ef77756320568de2d",
+          "src/SDKs/RenderEngineClub/MAIN/components/src/states/programbuffer.h": "e4a6881542c09ca6d53bdd1232c18f656e29f0d7dc35fbbd25953331b55ed7f5",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsIm3dRenderBuffer.h": "9f7d5ddac745aa53813d422b9076425271e787c725c7b087990bcee4556c8f91",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferTemplate.h": "a1fd82f573f1b623db83e773ef57b88fb18b1472a43856e43f3499f34fc71a1d",
+          "src/GameShared/GameClasses/Physics/CgsRigidBody.h": "773f9dcf721b41587fa4a8513d195defe6a11bce7478371fdd4c6612a1e27ce6",
+          "src/GameShared/GameClasses/SceneManager/CgsEntityId.h": "950f4dbe363db54df9c6c608fa62d879a404007e951ee0499394ed614219acda",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasic2dColouredTexturedVertex.h": "7515a72542cc0f347f77dcc71edccc28c48ed81f3ddf70842009902a36840929",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h": "d320314328237982bde284a68d77861e03c0f2b5557d5f3c132aeb48ad7caa9b",
+          "src/GameShared/GameClasses/RenderWare/Math/RwMathVectorTemplates.h": "f199f6089e78f92db83598ee6a255718089f49ae2e1d8314d1cb9438e7bb4d2b",
+          "src/pc/gcm/renderengine/renderstates.h": "8d526f44235977a1a6c3a2446a105494299625cbb691c35f1b941645e7eed250",
+          "src/pc/gcm/renderengine/VertexDescriptor.h": "1fb3218669bd0a4b4ff520358e54deb4029567ce15beffb21ebda7c0a75404e4",
+          "src/GameShared/GameClasses/Geometric/Primitives/CgsFrustum.h": "1bc27136975f74a64796716adb8d32d4fdd4ac9e4907cb26d0ed63734cf5f335",
+          "src/vendor/renderware/collision/Plane.hpp": "fff2c0d7405699b575e195757b53c5049559e57d2a418cb7f26625b4b455661c",
+          "src/GameShared/GameClasses/Geometric/Primitives/CgsSphere.h": "12762288b954ad37d0b549a24314d4de47e8f3c66d2d9d3d27a679f32ef047f1",
+          "src/GameShared/GameClasses/Development/CgsStrStream.h": "4f2e34d5f0e7e90baba11650bcd9c4875e7c68cf4703a46aabba85dc94099bb3",
+          "src/GameShared/GameClasses/Development/Log/CgsLog.h": "bb970fe8aa72b3fe285b3de0247e1c88c5becc9e4cd33f09b2a131d6f495a7cb",
+          "src/GameShared/GameClasses/Module/CgsEventQueue.h": "089f12e02fdf4f70bdf3d654168cb661c2c4e5a0145c90fd47639682d36ca73f",
+          "src/GameShared/GameClasses/Module/CgsBaseEventQueue.h": "880d3984bcf575ad4fb5e32f5a5c075053e7096e418d67476f53c46b8e0f7434",
+          "src/GameShared/GameClasses/Containers/CgsFlagSet.h": "488c35a0e50a7c42595ce031e47fbe7f68af0f02f85155cc6f617c2f415b9b49",
+          "src/GameSource/Gui/BrnGuiEventTypeDefs.h": "dcf82645225a637a637af9c80c490a4d2358aa88b3396211f8417560dce3b995",
+          "src/GameSource/Gui/Events/BrnGuiEventSetAvailablePresetRaces.h": "098bc0ec3967fa6fb8ece5acd250fd7a47465187fdcd72ba5d0d57b713f969b6",
+          "src/GameSource/Gui/Events/BrnGuiEventRacePositionInfo.h": "43bfcc780d3a2261327cf8165b4829db306a7df6102e057fa12932ee60c946a1",
+          "src/GameSource/Gui/Events/BrnGuiEventPreRaceMessages.h": "47fb151a28178da7ca87dc6304e8a5c4caf03fdf5ca0fa078b27ec4e4d9ffe10",
+          "src/GameSource/GameState/BrnGameActions.h": "b79cccf675e2f7458f017c47cc6185eac93c05c4e08d7d21d2bc80ff511e6a22",
+          "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "35eb88f7f55ae3a31252f54df50dd0468ad54bd7f7fcba086e0c6635ffdbcc01",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h": "65565f5429ef8dd8d56185797fafae3b0083720eb9e9e3a666e4144147b011ba",
+          "src/GameShared/GameClasses/Containers/CgsFastBitArray.h": "e8756cef5e89a89cab1920f853e7e1e1058bb76dc2e2a0956895ee148dd41bf4",
+          "src/GameShared/GameClasses/Containers/CgsBitArray.h": "a4b11919071bf2a8588341747a82a40dd7aea2d91b55b5b7d0e5ad83140ba3bd",
+          "src/GameShared/GameClasses/Containers/CgsArray.h": "bdbe0748f9daf2503551f40aa6f598ac6b7c13fc84810f6f491ac317a54b4d71",
+          "src/GameSource/BurnoutConstants.h": "5f56f512614c71b69463ac375ebd246f96a574e9edbdf9e620bdfb69202ab6f7",
+          "src/SharedClasses/World/BrnWorldRegion.h": "bc39e0db62c62c3464d2f4c614968bb18d3e266877623ca654d697eeb09e4146",
+          "src/GameShared/GameClasses/Core/CgsID.h": "b8be1d0f66862aa4fa81deaeb8daf17209de486e7fd96183e6190ddd484c0cfd",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiPopupResource.h": "8228f180f55b9b4f0d50b1b65cc95c1362594c1fe41956311380c167fa73ba90",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiHudMessage.h": "fb7f7b52d7c215a0e5ed9d5e002675de2b5a5789b50a9beedb3e86f1d2b2503c",
+          "src/GameShared/GameClasses/Fonts/CgsUnicode.h": "6ff93c25d402c8c97782db744b85e0b10c4c549aea420682e03aefa83517e16d",
+          "src/GameSource/GameState/ModeManager/Scoring/BrnBurnoutSkillzData.h": "6a8ce4f47bb1eb3f04e0a7414446ce1f749255eaf6b16a55e8070ad4b78d18eb",
+          "src/SharedClasses/StreetData/BrnStreetData.h": "a2f9606f3a10787ae40de0665b87cb057b595122203e0926516d3d0a3d130820",
+          "src/SharedClasses/StreetData/BrnChallengeData.h": "9f5b0303f1e66d4f57a4ecfd72d167f3704c657ff86d21e5583c8cf33e45c7e6",
+          "src/GameSource/GameState/BrnGameStateSharedIO.h": "8057c9c835bd62c0cbe772b875edeabd0165018ca656d34eb22e0a4ac967b98b",
+          "src/GameSource/GameState/BrnTakedownType.h": "5ed47fc9f236a328f78e84d9cbfbf9e0c5067695501a1a7b775eae988625c559",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostType.h": "9ef96b6402bea6a3c71677b0590211a2592f39603814c04dc8e34e0d83f75180",
+          "src/GameSource/GameState/BrnCgsPlayerName.h": "f752a5853921ce716b143f467ab613677c6827ee138d83279a2ba59c189775c7",
+          "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h": "1eb11b260f329f18f7403aefeb4cbf5d734d398b4a4f12eec4b3202de6af67f9",
+          "src/GameSource/Network/SharedIO/BrnNetworkSharedIO.h": "fefbb880a61a234d055402d80ca9831dd262dbeb3ee84dba531199c408a42052",
+          "src/GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficGuiInterface.h": "c3739a79b4b2ddcfa0ef7eacf087d1f4ebb965fbb5367fec4987bb1c65b6d78c",
+          "src/GameSource/GameState/SharedIO/BrnGameStateToGuiEvents.h": "973d8f5fb64fd4281c95625c2dcd97ba1a2d9af201ffcc486bdd7ca6e0340dc6",
+          "src/GameSource/Network/SharedIO/BrnBuddyInformation.h": "8a37db61b25ebc1ca0ec414a9ec194c73b68b2e8714a71b5e8236e7b16387ba2",
+          "src/GameSource/GameState/BrnGameStateTypes.h": "b56ccd4732ec5148794fd0c1192e42021ede9713faee8f6675c44d524098ba73",
+          "src/GameShared/GameClasses/Containers/CgsRingBuffer.h": "1a594bd6122effec97c2e17a17bc73889b62e0b9fcb01781e774495dfdc0d1b4",
+          "src/GameShared/GameClasses/Containers/CgsSet.h": "07f296aa2bd73829ea77adc32119e3d301cfe50379340a2c7da9bcdc8f69467d",
+          "src/SharedClasses/Progression/BrnRace.h": "bb956aa41e38ba0ff3914249a72429711701470c58bffc14a44b54fe7f74d26c",
+          "src/GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h": "ce3c5688e45f17dd45ce33e633b6d7d308325726bda5a55018ccb82db2a4a767",
+          "src/GameSource/GameState/SharedIO/BrnGameActionData.h": "dbc2055aae9f38170e64fff623cc89dac712b94a561ffe91c0f8670bf63158e7",
+          "src/GameSource/GameState/ModeManager/GameModes/BrnGameModeParams.h": "ef6d7285b5baaf6d155a1805254dadde5b2103aa8827af6c336d672e701fe407",
+          "src/GameShared/GameClasses/System/Timer/PS3/CgsDateAndTimePS3.h": "9198c2992cbaf52cdf0c7398507730d63bf242bd42a9c4b81b9d00c441790479",
+          "src/GameSource/GameState/Offences/BrnDriveThruManager.h": "9cc7e2fc7ccee8727345c55ea3d4d0b2d5c28ade95f007fdb7bd438d9acc3aec",
+          "src/SharedClasses/Trigger/BrnRegion.h": "66192aa0325e67ffcefdc22a72bac88241fb5504e466728893d6f8b759ddb2de",
+          "src/GameShared/GameClasses/System/Timer/CgsTime.h": "b29aadbd71c8c6bc8aaa849137e71ffab642aeed6bd55d792d378e2793132ac7",
+          "src/SharedClasses/Progression/BrnTrainingTypes.h": "4ae82ac0fa920f7b384d3f28e18243f832d51996e93e4dad8153869f13fb215e",
+          "src/SharedClasses/Progression/BrnTrophyUnlockData.h": "87a380839ebf043710f3b7d51be04e6160e915868e42020e79d8d31e54e664d4",
+          "src/SharedClasses/Traffic/BrnTrafficVehicleType.h": "b8cf185d38ae61c42515cc5218df2da44ad277f2dd7e48149614edc5440cfe6e",
+          "src/GameSource/World/BrnWorldSharedConstants.h": "fd014bb2318e6a6d492e3ee40609b6196c0846a6ec0c736d7ce8b094d81d3200",
+          "src/SharedClasses/Progression/BrnRival.h": "b27b1b8968c8be36c5c16681ef9b4c0c8363dbaeb227fe8bdd2d61526fb509b4",
+          "src/GameSource/GameState/Progression/BrnProgressionRivalData.h": "1489391de8333593dfe12377d1bc4bb6d289ba128dea7a11651adbbe9ce64d89",
+          "src/SharedClasses/Progression/BrnRaceEventData.h": "7848a8f4a7a678c7dcf37a06d9c6e31db6daa80813620718a10ad92798c3f6cb",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingManager.h": "063500b843aa37b7dbabe3a9e2f969efa4aaab724c9e6240f89aa7c2a8ce24ad",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingDebugComponent.h": "d91d659827fe5cc9f592f2a564e93d4ecf4f9ba27f21fa0c157449c21e52457d",
+          "src/GameSource/Math/BrnMathUtils.h": "2bb4c4aad53e6cfdf48ec6e0f2ca350d5fa695b3aa9603821c2d5a9337d3f4a5",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h": "0346d82eec52f950af062c54af6ded245b9c3371ace6ad95fe9deb8bdaecf88d",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/Internal/CgsDebugInternal.h": "37fc6cc7ff62a4bb570705456af866e5b09f16f8f9fedb675d8fd6d70638f4b4",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h": "3639528b5acc9978ac73f673d4ee4cba790d94c80570f6957268f55a6c9a8428",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Functions/CgsFunction.h": "e59b116998e6c8eb6cf13074ff3701d2e390d44fe91dff94a7d9cae919da8b3a",
+          "src/GameShared/GameClasses/System/Resource/CgsResourcePtr.h": "3a4a1b7d529fcdfdde1315472465f79932fb343755b647db6673aed002ce5a35",
+          "src/SharedClasses/Trigger/BrnGenericRegion.h": "835869a04dc628879d6e8d55e9fb3f69539685f874de0c2f4c039620de2a68f2",
+          "src/SharedClasses/Trigger/BrnTriggerBase.h": "931ec56a27914ac1c93ad79136c28986a039d2f4158dc77382b49a0f8172e469",
+          "src/GameSource/GameState/BrnCheckpointData.h": "e7d4fccd6c2fb717e18232aecdc902d4b4e243cfcc31749799d7007be582557b",
+          "src/SharedClasses/Progression/BrnProgressionRankData.h": "a457e10c9bb37ff74cf5db972efbe6f7875ee1c40ca7fbeb3046eab0d2262d29",
+          "src/GameSource/GameState/BrnOpponentData.h": "3fd9f41cb6eca0f7a6dfb9004caa6a47acd67dda7b4593bc08b14ee1217a540a",
+          "src/SharedClasses/Progression/BrnRaceBalance.h": "663e05b77cf36c989b01a72512d9671cde3895f40557199aca910819ea6bf9d1",
+          "src/SharedClasses/Progression/BrnBaseRace.h": "8b5a93837d80a2e50f31fa70c936c73e0e7f858544c421f16a4065f24b59a962",
+          "src/GameShared/GameClasses/Gui/CgsGuiShared.h": "7c8c885c9140a48ef528de73ef5467019b647153e9dbad04e55166624d32e98c",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiResourceModuleIO.h": "e51040537e0775d696c6366a38387ea23f9089ee915ea91eccd5e06c85e4d410",
+          "src/GameSource/Sound/Module/LogicModule/BrnMessageData.h": "6aa94c7bc8efb9cec95da1c8d50fdb1e1d593a9cfc1a5086a4a378fea611c510",
+          "src/GameShared/GameClasses/Sound/IO/CgsMessage.h": "6035addd32d62911f5c28a2bc477da89bda039f93378e5dff2eeb04d5cd16a39",
+          "src/GameShared/GameClasses/Development/CgsStrStream.cpp": "17ef47bade79188d0aca7ab17f8c6380e4436146069a183a0bb48c53024f957e"
+        },
+        "extracted_sha256": {
+          "output_construct": "d14f4cbc795d5fd9af57746bf821d40bdc354f7662f550f6c169263d5bd971db",
+          "output_clear": "cd3ba378d7e4f66bf17244eb77b92bf34e05eb9451566f53910ecc392ebde373",
+          "output_get": "e48f7053d356debff6a4547aacf2a92e0c8e52634061b136fd12478a65b02bd2",
+          "output_get_nonconst": "10f68b819b5348c0ad232cabbcb5685f665b93b0aa2cc95a83705e4cb480156c",
+          "callback": "b1245f5661c3a22141b69f05c679bf8632d6a609d6ce910277bf1629f152a287",
+          "construct": "9ba34e487873d163df3646f241c9ef4b575dc224e1a94fa76696812cabbcc01a",
+          "log_names": "f5d0a7fe64e86f9a03d032007fd9a8e20e13f846d629c731acb5d1a6a681bae7",
+          "wire_header": "7b07602c2f41dc67188425875aa88af98efd47d710e4f23454f236a789893fae",
+          "get_payload": "279d583c3ba175b6e64c639b7f02541e8cf167e2845b54531c8c31c83f0d52a7",
+          "queue_sound": "4fe9abb7c56ae43c28a99bbb1847edf468b8fdc78e3d5e21abe13465458ea6b6",
+          "case201_457": "bf414da097a48c353e961dd82616dd23021563350e37683f78decd2376cfb889",
+          "presentation_notify": "c7eff4a85724f0b8e0014c7948465a657918f63298b1b3ce4bda93d36940fe27",
+          "presentation_entry": "0d4c68f43d1d5931e2a96492edb3e7ad0a6b86246e190229d0e141581e4d5dae",
+          "hash_string": "99a67d4d31117c2f62020e05531d703d9c51b60881bca83add9005a2393fe961",
+          "sprintf": "ca8ec6863b82da887387d5f211a63e3d36593f3bde74fd0ec3387362e2bf69c7"
+        },
+        "oracle_sha256": "7eadb821067bfe64acec3cbe103df789505e872fc4c277b0ef9accc6b3fcd57b",
+        "observations": [
+          "OBSERVED callback=0 type=457 size=100 action=0 asserts=0",
+          "OBSERVED callback=1 type=457 size=100 action=1 asserts=0",
+          "OBSERVED callback=2 type=457 size=100 action=2 asserts=0",
+          "OBSERVED callback=3 type=457 size=100 action=3 asserts=0",
+          "OBSERVED callback=4 type=457 size=100 action=4 asserts=0",
+          "OBSERVED callback=5 type=457 size=100 action=5 asserts=0",
+          "OBSERVED callback=6 type=457 size=100 action=6 asserts=0",
+          "OBSERVED callback=7 type=457 size=100 action=7 asserts=0",
+          "OBSERVED callback=8 type=457 size=100 action=8 asserts=0",
+          "OBSERVED callback=9 type=457 size=100 action=9 asserts=0",
+          "OBSERVED callback=10 type=457 size=100 action=10 asserts=0",
+          "OBSERVED callback=11 type=457 size=100 action=11 asserts=0",
+          "OBSERVED callback=12 type=457 size=100 action=12 asserts=0",
+          "OBSERVED callback=13 type=457 size=100 action=13 asserts=0",
+          "OBSERVED callback=fallback type=457 size=100 action=14 asserts=0",
+          "OBSERVED callback=truncation type=457 size=100 action=4 asserts=0",
+          "OBSERVED callback=component_fallback type=457 size=100 action=2 asserts=0",
+          "OBSERVED callback=0 type=457 size=100 action=0 asserts=1"
+        ],
+        "failures": [],
+        "original_counterfactual_observed": false,
+        "original_expected_failure_count": 112,
+        "original_failure_set_matches": false,
+        "status": "pass"
+      },
+      "result": {
+        "tag": "GuiAudioTrigger",
+        "process_exit_code": 0,
+        "numeric": {
+          "checks": 323,
+          "failures": 0
+        },
+        "command": "cl /nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS /w14715 /w14716 /w14703 /D_ALLOW_KEYWORD_MACROS=1 /Dprivate=public /Dprotected=public  /I\"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\" /I\"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EABase\\include\\Common\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EASTL\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EAThread\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\renderware\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\PPMalloc\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\coreallocator\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\zlib\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\ffmpeg-build\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\lua\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\src\\GameShared\\GameClasses\\Development\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\dirtysdk\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\zlib\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\xaudio2redist\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\sdl3\\include\" \"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\tests\\GuiAudioTrigger.cpp\" \"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\CgsStrStream.cpp\" /Fe:regression.exe /link /OPT:REF",
+        "inputs": [
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\tests\\GuiAudioTrigger.cpp",
+            "sha256": "84323ba8d393eba3e2752e6ea084caf570b718fab4779a9db011ab67fe4d97db"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\gui_audio_extracted.inc",
+            "sha256": "1daa906ed063a0d4463ad69bba97085c274e214e6e3671008a3ea596a161e296"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\run.cmd",
+            "sha256": "6e6730eb0bfe9c0465049f9fe83847fa91dbad84f7183fc05ffced6b1f26b1f9"
+          },
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\tools\\build\\msvc_flags.txt",
+            "sha256": "a3c4f1a1189d2f1a74eeab9f2d8b4400bb4240f9d36410721f9fb621a4b2f46e"
+          },
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\tools\\build\\msvc_includes.txt",
+            "sha256": "ebaa2e32da497bdb80c9a297bcd9f0d54833bf37ff62431475a4db712f65f190"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\CgsStrStream.cpp",
+            "sha256": "17ef47bade79188d0aca7ab17f8c6380e4436146069a183a0bb48c53024f957e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\audio_oracle.inc",
+            "sha256": "97e63e7a4e768e5636c5acf32ffb1b4122349118ccf13408b96b2eae42b35ba4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\presentation_entry.inc",
+            "sha256": "91f5d892b2b22077b27feeba466ae68914d5c3c52f20e69325dc79aa00f05237"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\BrnCommonTypes.h",
+            "sha256": "c8b01fe4a87a1b4a95b8600fb76907d85149e369ad0ea7c5aeb824ecf64750c2"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\types.hpp",
+            "sha256": "e675db0646e1d2c28f63729330ce7a8b3a4f74add97667b07872b316ef7f3f86"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\BurnoutConstants.h",
+            "sha256": "5f56f512614c71b69463ac375ebd246f96a574e9edbdf9e620bdfb69202ab6f7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsArray.h",
+            "sha256": "bdbe0748f9daf2503551f40aa6f598ac6b7c13fc84810f6f491ac317a54b4d71"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsBitArray.h",
+            "sha256": "a4b11919071bf2a8588341747a82a40dd7aea2d91b55b5b7d0e5ad83140ba3bd"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsFastBitArray.h",
+            "sha256": "e8756cef5e89a89cab1920f853e7e1e1058bb76dc2e2a0956895ee148dd41bf4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsFlagSet.h",
+            "sha256": "488c35a0e50a7c42595ce031e47fbe7f68af0f02f85155cc6f617c2f415b9b49"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsRingBuffer.h",
+            "sha256": "1a594bd6122effec97c2e17a17bc73889b62e0b9fcb01781e774495dfdc0d1b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Containers\\CgsSet.h",
+            "sha256": "07f296aa2bd73829ea77adc32119e3d301cfe50379340a2c7da9bcdc8f69467d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Core\\CgsAssert.h",
+            "sha256": "25074c8926ec352aa133cbee4e114af4b8a4dcf6f30cf1584d65dbfe61769880"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Core\\CgsID.h",
+            "sha256": "b8be1d0f66862aa4fa81deaeb8daf17209de486e7fd96183e6190ddd484c0cfd"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Core\\CgsStringUtils.h",
+            "sha256": "fb9769965af2c498a634faec3015069622659e6f9bce9303168466e0ec9e62ee"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\CgsStrStream.h",
+            "sha256": "4f2e34d5f0e7e90baba11650bcd9c4875e7c68cf4703a46aabba85dc94099bb3"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Fonts\\CgsUnicode.h",
+            "sha256": "6ff93c25d402c8c97782db744b85e0b10c4c549aea420682e03aefa83517e16d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\CgsCamera.h",
+            "sha256": "68ec606fbe5c1cb3e3d05dbd1d0bc3b996bde4e48c62683cc4df08b3d76c3e2e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiEvent.h",
+            "sha256": "d213d3e5abf3425306effb798e8a28d964247f308fd7aca99030bc63e1fa7b42"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiModuleIO.h",
+            "sha256": "9b6e3574c5977c69174afc1313518340793dfab994571e9b74fe6581f2d4c03b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiShared.h",
+            "sha256": "7c8c885c9140a48ef528de73ef5467019b647153e9dbad04e55166624d32e98c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Module\\CgsBaseEventQueue.h",
+            "sha256": "880d3984bcf575ad4fb5e32f5a5c075053e7096e418d67476f53c46b8e0f7434"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Module\\CgsEventQueue.h",
+            "sha256": "089f12e02fdf4f70bdf3d654168cb661c2c4e5a0145c90fd47639682d36ca73f"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Module\\CgsIOBuffer.h",
+            "sha256": "485da3933c855a3973d0011cd8fa71c8b47978b61ef716d57e7dc98ae3dd4ecc"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Module\\CgsVariableEventQueue.h",
+            "sha256": "f126ee47297d0964d962e731b044681a563a52a9bfd48aac0cf60dd214bd07ab"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Physics\\CgsRigidBody.h",
+            "sha256": "773f9dcf721b41587fa4a8513d195defe6a11bce7478371fdd4c6612a1e27ce6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\SceneManager\\CgsEntityId.h",
+            "sha256": "950f4dbe363db54df9c6c608fa62d879a404007e951ee0499394ed614219acda"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\Log\\CgsLog.h",
+            "sha256": "bb970fe8aa72b3fe285b3de0247e1c88c5becc9e4cd33f09b2a131d6f495a7cb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\CgsDebugComponent.h",
+            "sha256": "0346d82eec52f950af062c54af6ded245b9c3371ace6ad95fe9deb8bdaecf88d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\Internal\\CgsDebugInternal.h",
+            "sha256": "37fc6cc7ff62a4bb570705456af866e5b09f16f8f9fedb675d8fd6d70638f4b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\UI\\CgsTypes.h",
+            "sha256": "3639528b5acc9978ac73f673d4ee4cba790d94c80570f6957268f55a6c9a8428"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\UI\\Functions\\CgsFunction.h",
+            "sha256": "e59b116998e6c8eb6cf13074ff3701d2e390d44fe91dff94a7d9cae919da8b3a"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Geometric\\Primitives\\CgsFrustum.h",
+            "sha256": "1bc27136975f74a64796716adb8d32d4fdd4ac9e4907cb26d0ed63734cf5f335"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Geometric\\Primitives\\CgsSphere.h",
+            "sha256": "12762288b954ad37d0b549a24314d4de47e8f3c66d2d9d3d27a679f32ef047f1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsIm2dTransform.h",
+            "sha256": "d320314328237982bde284a68d77861e03c0f2b5557d5f3c132aeb48ad7caa9b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsIm3d.h",
+            "sha256": "09c1822ab26e2dfc62c09e77d719fdd1a3274afa29cfd1f2fc3192842aed3536"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsImRenderer.h",
+            "sha256": "36a54219be32c6ef15c29789a53f825808b8fb5602996a9e83dd9303800cd949"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasic2dColouredTexturedVertex.h",
+            "sha256": "7515a72542cc0f347f77dcc71edccc28c48ed81f3ddf70842009902a36840929"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasicColouredTexturedVertex.h",
+            "sha256": "acf1dd64e1eb63dc2a97906c898f8ca68845ec669311400c5de84bc26d54c118"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasicColouredVertex.h",
+            "sha256": "d8703b0faee766cc2058bd62e8248bcf8e6ff1c0ce3fa7ead78a929cbc06a7af"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsPositionOnlyVertex.h",
+            "sha256": "439ebb7622f6b81149a0902277cf50c563db7e530a96641ef77756320568de2d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\ImRenderBuffer\\CgsIm3dRenderBuffer.h",
+            "sha256": "9f7d5ddac745aa53813d422b9076425271e787c725c7b087990bcee4556c8f91"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\ImRenderBuffer\\CgsImRenderBufferTemplate.h",
+            "sha256": "a1fd82f573f1b623db83e773ef57b88fb18b1472a43856e43f3499f34fc71a1d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiHudMessage.h",
+            "sha256": "fb7f7b52d7c215a0e5ed9d5e002675de2b5a5789b50a9beedb3e86f1d2b2503c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiPopupResource.h",
+            "sha256": "8228f180f55b9b4f0d50b1b65cc95c1362594c1fe41956311380c167fa73ba90"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiResourceModuleIO.h",
+            "sha256": "e51040537e0775d696c6366a38387ea23f9089ee915ea91eccd5e06c85e4d410"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\State\\CgsGuiStateInterface.h",
+            "sha256": "35eb88f7f55ae3a31252f54df50dd0468ad54bd7f7fcba086e0c6635ffdbcc01"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Gui\\View\\CustomRenderer\\CgsCustomRenderer.h",
+            "sha256": "f3736d111b682e22d270d01c726173faa5b0d938dd3f35713abcdd41f8f7638c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\RenderWare\\Math\\RwMathVectorTemplates.h",
+            "sha256": "f199f6089e78f92db83598ee6a255718089f49ae2e1d8314d1cb9438e7bb4d2b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\Sound\\IO\\CgsMessage.h",
+            "sha256": "6035addd32d62911f5c28a2bc477da89bda039f93378e5dff2eeb04d5cd16a39"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceHandle.h",
+            "sha256": "65565f5429ef8dd8d56185797fafae3b0083720eb9e9e3a666e4144147b011ba"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceID.h",
+            "sha256": "4ef4177f407605714412417aaf1a33713ca6c4b0e317e4154f2345e56794b240"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourcePtr.h",
+            "sha256": "3a4a1b7d529fcdfdde1315472465f79932fb343755b647db6673aed002ce5a35"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceRequestQueue.h",
+            "sha256": "4dd681dbaa78f1ff794b7f11010d8c6eb1787d76690b21dc72c07767fcdcfdd6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Timer\\CgsTime.h",
+            "sha256": "b29aadbd71c8c6bc8aaa849137e71ffab642aeed6bd55d792d378e2793132ac7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameShared\\GameClasses\\System\\Timer\\PS3\\CgsDateAndTimePS3.h",
+            "sha256": "9198c2992cbaf52cdf0c7398507730d63bf242bd42a9c4b81b9d00c441790479"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnCgsPlayerName.h",
+            "sha256": "f752a5853921ce716b143f467ab613677c6827ee138d83279a2ba59c189775c7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnCheckpointData.h",
+            "sha256": "e7d4fccd6c2fb717e18232aecdc902d4b4e243cfcc31749799d7007be582557b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnGameActions.h",
+            "sha256": "b79cccf675e2f7458f017c47cc6185eac93c05c4e08d7d21d2bc80ff511e6a22"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnGameStateSharedIO.h",
+            "sha256": "8057c9c835bd62c0cbe772b875edeabd0165018ca656d34eb22e0a4ac967b98b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnGameStateTypes.h",
+            "sha256": "b56ccd4732ec5148794fd0c1192e42021ede9713faee8f6675c44d524098ba73"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnOpponentData.h",
+            "sha256": "3fd9f41cb6eca0f7a6dfb9004caa6a47acd67dda7b4593bc08b14ee1217a540a"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\BrnTakedownType.h",
+            "sha256": "5ed47fc9f236a328f78e84d9cbfbf9e0c5067695501a1a7b775eae988625c559"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Gui\\BrnGuiEventTypeDefs.h",
+            "sha256": "dcf82645225a637a637af9c80c490a4d2358aa88b3396211f8417560dce3b995"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Math\\BrnMathUtils.h",
+            "sha256": "2bb4c4aad53e6cfdf48ec6e0f2ca350d5fa695b3aa9603821c2d5a9337d3f4a5"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\World\\BrnWorldSharedConstants.h",
+            "sha256": "fd014bb2318e6a6d492e3ee40609b6196c0846a6ec0c736d7ce8b094d81d3200"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\Offences\\BrnDriveThruManager.h",
+            "sha256": "9cc7e2fc7ccee8727345c55ea3d4d0b2d5c28ade95f007fdb7bd438d9acc3aec"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\Progression\\BrnProgressionRivalData.h",
+            "sha256": "1489391de8333593dfe12377d1bc4bb6d289ba128dea7a11651adbbe9ce64d89"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\SharedIO\\BrnGameActionData.h",
+            "sha256": "dbc2055aae9f38170e64fff623cc89dac712b94a561ffe91c0f8670bf63158e7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\SharedIO\\BrnGameStateToGuiEvents.h",
+            "sha256": "973d8f5fb64fd4281c95625c2dcd97ba1a2d9af201ffcc486bdd7ca6e0340dc6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\StreetData\\BrnChallengeHighScoreEntry.h",
+            "sha256": "ce3c5688e45f17dd45ce33e633b6d7d308325726bda5a55018ccb82db2a4a767"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\ModeManager\\GameModes\\BrnGameModeParams.h",
+            "sha256": "ef6d7285b5baaf6d155a1805254dadde5b2103aa8827af6c336d672e701fe407"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\ModeManager\\Scoring\\BrnBurnoutSkillzData.h",
+            "sha256": "6a8ce4f47bb1eb3f04e0a7414446ce1f749255eaf6b16a55e8070ad4b78d18eb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\GameState\\ModeManager\\Scoring\\BrnStuntModeScoring.h",
+            "sha256": "1eb11b260f329f18f7403aefeb4cbf5d734d398b4a4f12eec4b3202de6af67f9"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventPreRaceMessages.h",
+            "sha256": "47fb151a28178da7ca87dc6304e8a5c4caf03fdf5ca0fa078b27ec4e4d9ffe10"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventRacePositionInfo.h",
+            "sha256": "43bfcc780d3a2261327cf8165b4829db306a7df6102e057fa12932ee60c946a1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventSetAvailablePresetRaces.h",
+            "sha256": "098bc0ec3967fa6fb8ece5acd250fd7a47465187fdcd72ba5d0d57b713f969b6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Network\\SharedIO\\BrnBuddyInformation.h",
+            "sha256": "8a37db61b25ebc1ca0ec414a9ec194c73b68b2e8714a71b5e8236e7b16387ba2"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Network\\SharedIO\\BrnNetworkSharedIO.h",
+            "sha256": "fefbb880a61a234d055402d80ca9831dd262dbeb3ee84dba531199c408a42052"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\Sound\\Module\\LogicModule\\BrnMessageData.h",
+            "sha256": "6aa94c7bc8efb9cec95da1c8d50fdb1e1d593a9cfc1a5086a4a378fea611c510"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\Boost\\BrnBoostType.h",
+            "sha256": "9ef96b6402bea6a3c71677b0590211a2592f39603814c04dc8e34e0d83f75180"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\PowerParking\\BrnPowerParkingDebugComponent.h",
+            "sha256": "d91d659827fe5cc9f592f2a564e93d4ecf4f9ba27f21fa0c157449c21e52457d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\PowerParking\\BrnPowerParkingManager.h",
+            "sha256": "063500b843aa37b7dbabe3a9e2f969efa4aaab724c9e6240f89aa7c2a8ce24ad"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\GameSource\\World\\EntityModules\\TrafficEntityModule\\SharedIO\\BrnTrafficGuiInterface.h",
+            "sha256": "c3739a79b4b2ddcfa0ef7eacf087d1f4ebb965fbb5367fec4987bb1c65b6d78c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\pc\\gcm\\renderengine\\renderstates.h",
+            "sha256": "8d526f44235977a1a6c3a2446a105494299625cbb691c35f1b941645e7eed250"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\pc\\gcm\\renderengine\\VertexDescriptor.h",
+            "sha256": "1fb3218669bd0a4b4ff520358e54deb4029567ce15beffb21ebda7c0a75404e4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SDKs\\RenderEngineClub\\MAIN\\components\\src\\states\\programbuffer.h",
+            "sha256": "e4a6881542c09ca6d53bdd1232c18f656e29f0d7dc35fbbd25953331b55ed7f5"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnBaseRace.h",
+            "sha256": "8b5a93837d80a2e50f31fa70c936c73e0e7f858544c421f16a4065f24b59a962"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnProgressionRankData.h",
+            "sha256": "a457e10c9bb37ff74cf5db972efbe6f7875ee1c40ca7fbeb3046eab0d2262d29"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnRace.h",
+            "sha256": "bb956aa41e38ba0ff3914249a72429711701470c58bffc14a44b54fe7f74d26c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnRaceBalance.h",
+            "sha256": "663e05b77cf36c989b01a72512d9671cde3895f40557199aca910819ea6bf9d1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnRaceEventData.h",
+            "sha256": "7848a8f4a7a678c7dcf37a06d9c6e31db6daa80813620718a10ad92798c3f6cb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnRival.h",
+            "sha256": "b27b1b8968c8be36c5c16681ef9b4c0c8363dbaeb227fe8bdd2d61526fb509b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnTrainingTypes.h",
+            "sha256": "4ae82ac0fa920f7b384d3f28e18243f832d51996e93e4dad8153869f13fb215e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Progression\\BrnTrophyUnlockData.h",
+            "sha256": "87a380839ebf043710f3b7d51be04e6160e915868e42020e79d8d31e54e664d4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\StreetData\\BrnChallengeData.h",
+            "sha256": "9f5b0303f1e66d4f57a4ecfd72d167f3704c657ff86d21e5583c8cf33e45c7e6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\StreetData\\BrnStreetData.h",
+            "sha256": "a2f9606f3a10787ae40de0665b87cb057b595122203e0926516d3d0a3d130820"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Traffic\\BrnTrafficVehicleType.h",
+            "sha256": "b8cf185d38ae61c42515cc5218df2da44ad277f2dd7e48149614edc5440cfe6e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Trigger\\BrnGenericRegion.h",
+            "sha256": "5a9e37a4f86577c2de4f81516bf5c35b9d09b22b4d8765eeda4af48a5d29d470"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Trigger\\BrnRegion.h",
+            "sha256": "66192aa0325e67ffcefdc22a72bac88241fb5504e466728893d6f8b759ddb2de"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\Trigger\\BrnTriggerBase.h",
+            "sha256": "931ec56a27914ac1c93ad79136c28986a039d2f4158dc77382b49a0f8172e469"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\SharedClasses\\World\\BrnWorldRegion.h",
+            "sha256": "bc39e0db62c62c3464d2f4c614968bb18d3e266877623ca654d697eeb09e4146"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_candidate01\\shadow\\vendor\\renderware\\collision\\Plane.hpp",
+            "sha256": "fff2c0d7405699b575e195757b53c5049559e57d2a418cb7f26625b4b455661c"
+          }
+        ],
+        "executable_sha256": "f12c623d2b6a13f544201b92b26879339fe2129e80d588e4070e00d485aa1933"
+      }
+    },
+    "baseline": {
+      "output_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01",
+      "fixture_sha256": "7187317975f3aa4fbb3887c19778eea8231deed141b67a495ad7faec23797b34",
+      "result_sha256": "0cb44242628d17a7636cd2ac12f8b48ebe20abeae0b44a4061ee2c567b369866",
+      "stdout_sha256": "c3fb49f99b9965b20398912b1c4e7f27cb5cc76bf06bdc0f263c66a1dc6253f8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "fixture": {
+        "source_root": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+        "expect_original_divergence": true,
+        "scope": "Actual callback, constructor, IO locks/queues, GUI sound case201/457 and PresentationEffect::Notify. Resolve/Play are observed boundaries; no game launch or audible proof.",
+        "numeric": {
+          "checks": 323,
+          "failures": 112
+        },
+        "inputs": {
+          "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp": "498741202b7413a3352b948acf42779e63f63b68a2867afd0da7d742ad063fa7",
+          "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp": "ac343db719261ec8e5e6060d22bbdb2c29f3d5adeeb645ab44556a63a19b3b26",
+          "src/GameSource/Gui/BrnGuiModule.cpp": "7f41a14dc2f6a1f47db5f1ce55fa7648f040fcd95e7698a17d00072bb3db3a56",
+          "src/GameSource/Gui/BrnGuiEventTypeDefs.cpp": "5144ec99d8293f29c39d903592ab1e527a9d0ee26a21bdf3006039939613a863",
+          "src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp": "9b7582887b531b6f5a3e8b98463bf64da82175ab804b2b54677b8f52b7e46ebc",
+          "src/GameSource/Sound/Global/BrnPresentationEffect.cpp": "6fe8288c58231ecb2af6bd094b5d9d4f174a5c348c367c042a80408cab8fe7db",
+          "src/GameSource/Sound/Global/BrnPresentationEffect.h": "de17732f3fe5b9dd46ab586236a8ae68fcba609d55f4c92dda02b82e4fdb3157",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceID.cpp": "7aacf8e39f050d3571f4c4c50587394be65bf867973aa9f5c96794c60d0a0c07",
+          "src/GameShared/GameClasses/Core/CgsStringUtils.cpp": "822b48880219105e5a0c6c0fb91ee51aaf64ab26306765c2d06c78abc9cafb22",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceID.h": "4ef4177f407605714412417aaf1a33713ca6c4b0e317e4154f2345e56794b240",
+          "src/types.hpp": "e675db0646e1d2c28f63729330ce7a8b3a4f74add97667b07872b316ef7f3f86",
+          "src/GameShared/GameClasses/Core/CgsStringUtils.h": "fb9769965af2c498a634faec3015069622659e6f9bce9303168466e0ec9e62ee",
+          "src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h": "9b6e3574c5977c69174afc1313518340793dfab994571e9b74fe6581f2d4c03b",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceRequestQueue.h": "4dd681dbaa78f1ff794b7f11010d8c6eb1787d76690b21dc72c07767fcdcfdd6",
+          "src/GameShared/GameClasses/Module/CgsIOBuffer.h": "485da3933c855a3973d0011cd8fa71c8b47978b61ef716d57e7dc98ae3dd4ecc",
+          "src/GameShared/GameClasses/Module/CgsVariableEventQueue.h": "3c4da2211eddabcd7c31d97bc7a6a69e6c2a3222598fa0618bca428694d04e60",
+          "src/GameShared/GameClasses/Gui/CgsGuiEvent.h": "d213d3e5abf3425306effb798e8a28d964247f308fd7aca99030bc63e1fa7b42",
+          "src/GameShared/GameClasses/Core/CgsAssert.h": "25074c8926ec352aa133cbee4e114af4b8a4dcf6f30cf1584d65dbfe61769880",
+          "src/GameShared/GameClasses/Graphics/CgsCamera.h": "68ec606fbe5c1cb3e3d05dbd1d0bc3b996bde4e48c62683cc4df08b3d76c3e2e",
+          "src/GameShared/GameClasses/Gui/View/CustomRenderer/CgsCustomRenderer.h": "f3736d111b682e22d270d01c726173faa5b0d938dd3f35713abcdd41f8f7638c",
+          "src/BrnCommonTypes.h": "c8b01fe4a87a1b4a95b8600fb76907d85149e369ad0ea7c5aeb824ecf64750c2",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.h": "09c1822ab26e2dfc62c09e77d719fdd1a3274afa29cfd1f2fc3192842aed3536",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.h": "36a54219be32c6ef15c29789a53f825808b8fb5602996a9e83dd9303800cd949",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredVertex.h": "d8703b0faee766cc2058bd62e8248bcf8e6ff1c0ce3fa7ead78a929cbc06a7af",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasicColouredTexturedVertex.h": "acf1dd64e1eb63dc2a97906c898f8ca68845ec669311400c5de84bc26d54c118",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsPositionOnlyVertex.h": "439ebb7622f6b81149a0902277cf50c563db7e530a96641ef77756320568de2d",
+          "src/SDKs/RenderEngineClub/MAIN/components/src/states/programbuffer.h": "e4a6881542c09ca6d53bdd1232c18f656e29f0d7dc35fbbd25953331b55ed7f5",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsIm3dRenderBuffer.h": "149e5c6a279705e442092f77caaa89818e71e9ffe0b288288029bd84dc1df82c",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferTemplate.h": "a1fd82f573f1b623db83e773ef57b88fb18b1472a43856e43f3499f34fc71a1d",
+          "src/GameShared/GameClasses/Physics/CgsRigidBody.h": "773f9dcf721b41587fa4a8513d195defe6a11bce7478371fdd4c6612a1e27ce6",
+          "src/GameShared/GameClasses/SceneManager/CgsEntityId.h": "950f4dbe363db54df9c6c608fa62d879a404007e951ee0499394ed614219acda",
+          "src/GameShared/GameClasses/Graphics/VertexDescriptors/CgsBasic2dColouredTexturedVertex.h": "7515a72542cc0f347f77dcc71edccc28c48ed81f3ddf70842009902a36840929",
+          "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dTransform.h": "d320314328237982bde284a68d77861e03c0f2b5557d5f3c132aeb48ad7caa9b",
+          "src/GameShared/GameClasses/RenderWare/Math/RwMathVectorTemplates.h": "f199f6089e78f92db83598ee6a255718089f49ae2e1d8314d1cb9438e7bb4d2b",
+          "src/pc/gcm/renderengine/renderstates.h": "8d526f44235977a1a6c3a2446a105494299625cbb691c35f1b941645e7eed250",
+          "src/pc/gcm/renderengine/VertexDescriptor.h": "1fb3218669bd0a4b4ff520358e54deb4029567ce15beffb21ebda7c0a75404e4",
+          "src/GameShared/GameClasses/Geometric/Primitives/CgsFrustum.h": "1bc27136975f74a64796716adb8d32d4fdd4ac9e4907cb26d0ed63734cf5f335",
+          "src/vendor/renderware/collision/Plane.hpp": "fff2c0d7405699b575e195757b53c5049559e57d2a418cb7f26625b4b455661c",
+          "src/GameShared/GameClasses/Geometric/Primitives/CgsSphere.h": "12762288b954ad37d0b549a24314d4de47e8f3c66d2d9d3d27a679f32ef047f1",
+          "src/GameShared/GameClasses/Development/CgsStrStream.h": "4f2e34d5f0e7e90baba11650bcd9c4875e7c68cf4703a46aabba85dc94099bb3",
+          "src/GameShared/GameClasses/Development/Log/CgsLog.h": "bb970fe8aa72b3fe285b3de0247e1c88c5becc9e4cd33f09b2a131d6f495a7cb",
+          "src/GameShared/GameClasses/Module/CgsEventQueue.h": "089f12e02fdf4f70bdf3d654168cb661c2c4e5a0145c90fd47639682d36ca73f",
+          "src/GameShared/GameClasses/Module/CgsBaseEventQueue.h": "880d3984bcf575ad4fb5e32f5a5c075053e7096e418d67476f53c46b8e0f7434",
+          "src/GameShared/GameClasses/Containers/CgsFlagSet.h": "488c35a0e50a7c42595ce031e47fbe7f68af0f02f85155cc6f617c2f415b9b49",
+          "src/GameSource/Gui/BrnGuiEventTypeDefs.h": "dcf82645225a637a637af9c80c490a4d2358aa88b3396211f8417560dce3b995",
+          "src/GameSource/Gui/Events/BrnGuiEventSetAvailablePresetRaces.h": "098bc0ec3967fa6fb8ece5acd250fd7a47465187fdcd72ba5d0d57b713f969b6",
+          "src/GameSource/Gui/Events/BrnGuiEventRacePositionInfo.h": "43bfcc780d3a2261327cf8165b4829db306a7df6102e057fa12932ee60c946a1",
+          "src/GameSource/Gui/Events/BrnGuiEventPreRaceMessages.h": "bba54e69ca187476d780432273b4a8929f11bc9f8e76fe267113a9e6a298991e",
+          "src/GameSource/GameState/BrnGameActions.h": "b79cccf675e2f7458f017c47cc6185eac93c05c4e08d7d21d2bc80ff511e6a22",
+          "src/GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface.h": "35eb88f7f55ae3a31252f54df50dd0468ad54bd7f7fcba086e0c6635ffdbcc01",
+          "src/GameShared/GameClasses/System/Resource/CgsResourceHandle.h": "65565f5429ef8dd8d56185797fafae3b0083720eb9e9e3a666e4144147b011ba",
+          "src/GameShared/GameClasses/Containers/CgsFastBitArray.h": "e8756cef5e89a89cab1920f853e7e1e1058bb76dc2e2a0956895ee148dd41bf4",
+          "src/GameShared/GameClasses/Containers/CgsBitArray.h": "a4b11919071bf2a8588341747a82a40dd7aea2d91b55b5b7d0e5ad83140ba3bd",
+          "src/GameShared/GameClasses/Containers/CgsArray.h": "bdbe0748f9daf2503551f40aa6f598ac6b7c13fc84810f6f491ac317a54b4d71",
+          "src/GameSource/BurnoutConstants.h": "5f56f512614c71b69463ac375ebd246f96a574e9edbdf9e620bdfb69202ab6f7",
+          "src/SharedClasses/World/BrnWorldRegion.h": "bc39e0db62c62c3464d2f4c614968bb18d3e266877623ca654d697eeb09e4146",
+          "src/GameShared/GameClasses/Core/CgsID.h": "b8be1d0f66862aa4fa81deaeb8daf17209de486e7fd96183e6190ddd484c0cfd",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiPopupResource.h": "8228f180f55b9b4f0d50b1b65cc95c1362594c1fe41956311380c167fa73ba90",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiHudMessage.h": "fb7f7b52d7c215a0e5ed9d5e002675de2b5a5789b50a9beedb3e86f1d2b2503c",
+          "src/GameShared/GameClasses/Fonts/CgsUnicode.h": "6ff93c25d402c8c97782db744b85e0b10c4c549aea420682e03aefa83517e16d",
+          "src/GameSource/GameState/ModeManager/Scoring/BrnBurnoutSkillzData.h": "6a8ce4f47bb1eb3f04e0a7414446ce1f749255eaf6b16a55e8070ad4b78d18eb",
+          "src/SharedClasses/StreetData/BrnStreetData.h": "a2f9606f3a10787ae40de0665b87cb057b595122203e0926516d3d0a3d130820",
+          "src/SharedClasses/StreetData/BrnChallengeData.h": "9f5b0303f1e66d4f57a4ecfd72d167f3704c657ff86d21e5583c8cf33e45c7e6",
+          "src/GameSource/GameState/BrnGameStateSharedIO.h": "8057c9c835bd62c0cbe772b875edeabd0165018ca656d34eb22e0a4ac967b98b",
+          "src/GameSource/GameState/BrnTakedownType.h": "5ed47fc9f236a328f78e84d9cbfbf9e0c5067695501a1a7b775eae988625c559",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostType.h": "9ef96b6402bea6a3c71677b0590211a2592f39603814c04dc8e34e0d83f75180",
+          "src/GameSource/GameState/BrnCgsPlayerName.h": "f752a5853921ce716b143f467ab613677c6827ee138d83279a2ba59c189775c7",
+          "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoring.h": "1eb11b260f329f18f7403aefeb4cbf5d734d398b4a4f12eec4b3202de6af67f9",
+          "src/GameSource/Network/SharedIO/BrnNetworkSharedIO.h": "fefbb880a61a234d055402d80ca9831dd262dbeb3ee84dba531199c408a42052",
+          "src/GameSource/World/EntityModules/TrafficEntityModule/SharedIO/BrnTrafficGuiInterface.h": "c3739a79b4b2ddcfa0ef7eacf087d1f4ebb965fbb5367fec4987bb1c65b6d78c",
+          "src/GameSource/GameState/SharedIO/BrnGameStateToGuiEvents.h": "973d8f5fb64fd4281c95625c2dcd97ba1a2d9af201ffcc486bdd7ca6e0340dc6",
+          "src/GameSource/Network/SharedIO/BrnBuddyInformation.h": "8a37db61b25ebc1ca0ec414a9ec194c73b68b2e8714a71b5e8236e7b16387ba2",
+          "src/GameSource/GameState/BrnGameStateTypes.h": "b56ccd4732ec5148794fd0c1192e42021ede9713faee8f6675c44d524098ba73",
+          "src/GameShared/GameClasses/Containers/CgsRingBuffer.h": "1a594bd6122effec97c2e17a17bc73889b62e0b9fcb01781e774495dfdc0d1b4",
+          "src/GameShared/GameClasses/Containers/CgsSet.h": "07f296aa2bd73829ea77adc32119e3d301cfe50379340a2c7da9bcdc8f69467d",
+          "src/SharedClasses/Progression/BrnRace.h": "bb956aa41e38ba0ff3914249a72429711701470c58bffc14a44b54fe7f74d26c",
+          "src/GameSource/GameState/StreetData/BrnChallengeHighScoreEntry.h": "ce3c5688e45f17dd45ce33e633b6d7d308325726bda5a55018ccb82db2a4a767",
+          "src/GameSource/GameState/SharedIO/BrnGameActionData.h": "dbc2055aae9f38170e64fff623cc89dac712b94a561ffe91c0f8670bf63158e7",
+          "src/GameSource/GameState/ModeManager/GameModes/BrnGameModeParams.h": "ef6d7285b5baaf6d155a1805254dadde5b2103aa8827af6c336d672e701fe407",
+          "src/GameShared/GameClasses/System/Timer/PS3/CgsDateAndTimePS3.h": "9198c2992cbaf52cdf0c7398507730d63bf242bd42a9c4b81b9d00c441790479",
+          "src/GameSource/GameState/Offences/BrnDriveThruManager.h": "9cc7e2fc7ccee8727345c55ea3d4d0b2d5c28ade95f007fdb7bd438d9acc3aec",
+          "src/SharedClasses/Trigger/BrnRegion.h": "66192aa0325e67ffcefdc22a72bac88241fb5504e466728893d6f8b759ddb2de",
+          "src/GameShared/GameClasses/System/Timer/CgsTime.h": "b29aadbd71c8c6bc8aaa849137e71ffab642aeed6bd55d792d378e2793132ac7",
+          "src/SharedClasses/Progression/BrnTrainingTypes.h": "4ae82ac0fa920f7b384d3f28e18243f832d51996e93e4dad8153869f13fb215e",
+          "src/SharedClasses/Progression/BrnTrophyUnlockData.h": "2fc6c56ce30defeaa7d9bfc42ab466cf8cbb5204c19f5f82f99f320b8239f8ca",
+          "src/SharedClasses/Traffic/BrnTrafficVehicleType.h": "b8cf185d38ae61c42515cc5218df2da44ad277f2dd7e48149614edc5440cfe6e",
+          "src/GameSource/World/BrnWorldSharedConstants.h": "fd014bb2318e6a6d492e3ee40609b6196c0846a6ec0c736d7ce8b094d81d3200",
+          "src/SharedClasses/Progression/BrnRival.h": "b27b1b8968c8be36c5c16681ef9b4c0c8363dbaeb227fe8bdd2d61526fb509b4",
+          "src/GameSource/GameState/Progression/BrnProgressionRivalData.h": "1489391de8333593dfe12377d1bc4bb6d289ba128dea7a11651adbbe9ce64d89",
+          "src/SharedClasses/Progression/BrnRaceEventData.h": "7848a8f4a7a678c7dcf37a06d9c6e31db6daa80813620718a10ad92798c3f6cb",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingManager.h": "063500b843aa37b7dbabe3a9e2f969efa4aaab724c9e6240f89aa7c2a8ce24ad",
+          "src/GameSource/World/EntityModules/RaceCarEntityModule/PowerParking/BrnPowerParkingDebugComponent.h": "d91d659827fe5cc9f592f2a564e93d4ecf4f9ba27f21fa0c157449c21e52457d",
+          "src/GameSource/Math/BrnMathUtils.h": "2bb4c4aad53e6cfdf48ec6e0f2ca350d5fa695b3aa9603821c2d5a9337d3f4a5",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.h": "0346d82eec52f950af062c54af6ded245b9c3371ace6ad95fe9deb8bdaecf88d",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/Internal/CgsDebugInternal.h": "37fc6cc7ff62a4bb570705456af866e5b09f16f8f9fedb675d8fd6d70638f4b4",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/CgsTypes.h": "3639528b5acc9978ac73f673d4ee4cba790d94c80570f6957268f55a6c9a8428",
+          "src/GameShared/GameClasses/Development/DebugSystem/Core/UI/Functions/CgsFunction.h": "e59b116998e6c8eb6cf13074ff3701d2e390d44fe91dff94a7d9cae919da8b3a",
+          "src/GameShared/GameClasses/System/Resource/CgsResourcePtr.h": "3a4a1b7d529fcdfdde1315472465f79932fb343755b647db6673aed002ce5a35",
+          "src/SharedClasses/Trigger/BrnGenericRegion.h": "5a9e37a4f86577c2de4f81516bf5c35b9d09b22b4d8765eeda4af48a5d29d470",
+          "src/SharedClasses/Trigger/BrnTriggerBase.h": "931ec56a27914ac1c93ad79136c28986a039d2f4158dc77382b49a0f8172e469",
+          "src/GameSource/GameState/BrnCheckpointData.h": "e7d4fccd6c2fb717e18232aecdc902d4b4e243cfcc31749799d7007be582557b",
+          "src/SharedClasses/Progression/BrnProgressionRankData.h": "a457e10c9bb37ff74cf5db972efbe6f7875ee1c40ca7fbeb3046eab0d2262d29",
+          "src/GameSource/GameState/BrnOpponentData.h": "3fd9f41cb6eca0f7a6dfb9004caa6a47acd67dda7b4593bc08b14ee1217a540a",
+          "src/SharedClasses/Progression/BrnRaceBalance.h": "663e05b77cf36c989b01a72512d9671cde3895f40557199aca910819ea6bf9d1",
+          "src/SharedClasses/Progression/BrnBaseRace.h": "8b5a93837d80a2e50f31fa70c936c73e0e7f858544c421f16a4065f24b59a962",
+          "src/GameShared/GameClasses/Gui/CgsGuiShared.h": "7c8c885c9140a48ef528de73ef5467019b647153e9dbad04e55166624d32e98c",
+          "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiResourceModuleIO.h": "e51040537e0775d696c6366a38387ea23f9089ee915ea91eccd5e06c85e4d410",
+          "src/GameSource/Sound/Module/LogicModule/BrnMessageData.h": "6aa94c7bc8efb9cec95da1c8d50fdb1e1d593a9cfc1a5086a4a378fea611c510",
+          "src/GameShared/GameClasses/Sound/IO/CgsMessage.h": "6035addd32d62911f5c28a2bc477da89bda039f93378e5dff2eeb04d5cd16a39",
+          "src/GameShared/GameClasses/Development/CgsStrStream.cpp": "17ef47bade79188d0aca7ab17f8c6380e4436146069a183a0bb48c53024f957e"
+        },
+        "extracted_sha256": {
+          "output_construct": "d14f4cbc795d5fd9af57746bf821d40bdc354f7662f550f6c169263d5bd971db",
+          "output_clear": "cd3ba378d7e4f66bf17244eb77b92bf34e05eb9451566f53910ecc392ebde373",
+          "output_get": "e48f7053d356debff6a4547aacf2a92e0c8e52634061b136fd12478a65b02bd2",
+          "output_get_nonconst": "10f68b819b5348c0ad232cabbcb5685f665b93b0aa2cc95a83705e4cb480156c",
+          "callback": "10351c1318a697ba4c654a20fe68b5f4024905efe46b501ebf28e739c8489c61",
+          "construct": "9ba34e487873d163df3646f241c9ef4b575dc224e1a94fa76696812cabbcc01a",
+          "log_names": "f5d0a7fe64e86f9a03d032007fd9a8e20e13f846d629c731acb5d1a6a681bae7",
+          "wire_header": "7b07602c2f41dc67188425875aa88af98efd47d710e4f23454f236a789893fae",
+          "get_payload": "279d583c3ba175b6e64c639b7f02541e8cf167e2845b54531c8c31c83f0d52a7",
+          "queue_sound": "4fe9abb7c56ae43c28a99bbb1847edf468b8fdc78e3d5e21abe13465458ea6b6",
+          "case201_457": "bf414da097a48c353e961dd82616dd23021563350e37683f78decd2376cfb889",
+          "presentation_notify": "c7eff4a85724f0b8e0014c7948465a657918f63298b1b3ce4bda93d36940fe27",
+          "presentation_entry": "0d4c68f43d1d5931e2a96492edb3e7ad0a6b86246e190229d0e141581e4d5dae",
+          "hash_string": "99a67d4d31117c2f62020e05531d703d9c51b60881bca83add9005a2393fe961",
+          "sprintf": "ca8ec6863b82da887387d5f211a63e3d36593f3bde74fd0ec3387362e2bf69c7"
+        },
+        "oracle_sha256": "7eadb821067bfe64acec3cbe103df789505e872fc4c277b0ef9accc6b3fcd57b",
+        "observations": [
+          "OBSERVED callback=0 type=201 size=112 action=0 asserts=0",
+          "OBSERVED callback=1 type=201 size=112 action=1 asserts=0",
+          "OBSERVED callback=2 type=201 size=112 action=2 asserts=0",
+          "OBSERVED callback=3 type=201 size=112 action=3 asserts=0",
+          "OBSERVED callback=4 type=201 size=112 action=4 asserts=0",
+          "OBSERVED callback=5 type=201 size=112 action=5 asserts=0",
+          "OBSERVED callback=6 type=201 size=112 action=6 asserts=0",
+          "OBSERVED callback=7 type=201 size=112 action=7 asserts=0",
+          "OBSERVED callback=8 type=201 size=112 action=8 asserts=0",
+          "OBSERVED callback=9 type=201 size=112 action=9 asserts=0",
+          "OBSERVED callback=10 type=201 size=112 action=10 asserts=0",
+          "OBSERVED callback=11 type=201 size=112 action=14 asserts=0",
+          "OBSERVED callback=12 type=201 size=112 action=12 asserts=0",
+          "OBSERVED callback=13 type=201 size=112 action=14 asserts=0",
+          "OBSERVED callback=fallback type=201 size=112 action=14 asserts=0",
+          "OBSERVED callback=truncation type=201 size=112 action=4 asserts=0",
+          "OBSERVED callback=component_fallback type=201 size=112 action=2 asserts=0",
+          "OBSERVED callback=0 type=201 size=112 action=0 asserts=1"
+        ],
+        "failures": [
+          "FAIL 0 original GUI id457",
+          "FAIL 0 original GUI size100",
+          "FAIL 0 raw component offset0",
+          "FAIL 0 raw action offset32",
+          "FAIL 0 raw label offset36",
+          "FAIL 0 raw movie offset68",
+          "FAIL 1 original GUI id457",
+          "FAIL 1 original GUI size100",
+          "FAIL 1 raw component offset0",
+          "FAIL 1 raw action offset32",
+          "FAIL 1 raw label offset36",
+          "FAIL 1 raw movie offset68",
+          "FAIL 2 original GUI id457",
+          "FAIL 2 original GUI size100",
+          "FAIL 2 raw component offset0",
+          "FAIL 2 raw action offset32",
+          "FAIL 2 raw label offset36",
+          "FAIL 2 raw movie offset68",
+          "FAIL 3 original GUI id457",
+          "FAIL 3 original GUI size100",
+          "FAIL 3 raw component offset0",
+          "FAIL 3 raw action offset32",
+          "FAIL 3 raw label offset36",
+          "FAIL 3 raw movie offset68",
+          "FAIL 4 original GUI id457",
+          "FAIL 4 original GUI size100",
+          "FAIL 4 raw component offset0",
+          "FAIL 4 raw action offset32",
+          "FAIL 4 raw label offset36",
+          "FAIL 4 raw movie offset68",
+          "FAIL 5 original GUI id457",
+          "FAIL 5 original GUI size100",
+          "FAIL 5 raw component offset0",
+          "FAIL 5 raw action offset32",
+          "FAIL 5 raw label offset36",
+          "FAIL 5 raw movie offset68",
+          "FAIL 6 original GUI id457",
+          "FAIL 6 original GUI size100",
+          "FAIL 6 raw component offset0",
+          "FAIL 6 raw action offset32",
+          "FAIL 6 raw label offset36",
+          "FAIL 6 raw movie offset68",
+          "FAIL 7 original GUI id457",
+          "FAIL 7 original GUI size100",
+          "FAIL 7 raw component offset0",
+          "FAIL 7 raw action offset32",
+          "FAIL 7 raw label offset36",
+          "FAIL 7 raw movie offset68",
+          "FAIL 8 original GUI id457",
+          "FAIL 8 original GUI size100",
+          "FAIL 8 raw component offset0",
+          "FAIL 8 raw action offset32",
+          "FAIL 8 raw label offset36",
+          "FAIL 8 raw movie offset68",
+          "FAIL 9 original GUI id457",
+          "FAIL 9 original GUI size100",
+          "FAIL 9 raw component offset0",
+          "FAIL 9 raw action offset32",
+          "FAIL 9 raw label offset36",
+          "FAIL 9 raw movie offset68",
+          "FAIL 10 original GUI id457",
+          "FAIL 10 original GUI size100",
+          "FAIL 10 raw component offset0",
+          "FAIL 10 raw action offset32",
+          "FAIL 10 raw label offset36",
+          "FAIL 10 raw movie offset68",
+          "FAIL 11 original GUI id457",
+          "FAIL 11 original GUI size100",
+          "FAIL 11 raw component offset0",
+          "FAIL 11 raw action offset32",
+          "FAIL 11 raw label offset36",
+          "FAIL 11 raw movie offset68",
+          "FAIL 11 sound action",
+          "FAIL 11 actual Notify reaches Resolve/Play with original action and name hashes",
+          "FAIL 12 original GUI id457",
+          "FAIL 12 original GUI size100",
+          "FAIL 12 raw component offset0",
+          "FAIL 12 raw action offset32",
+          "FAIL 12 raw label offset36",
+          "FAIL 12 raw movie offset68",
+          "FAIL 13 original GUI id457",
+          "FAIL 13 original GUI size100",
+          "FAIL 13 raw component offset0",
+          "FAIL 13 raw action offset32",
+          "FAIL 13 raw label offset36",
+          "FAIL 13 raw movie offset68",
+          "FAIL 13 sound action",
+          "FAIL 13 actual Notify reaches Resolve/Play with original action and name hashes",
+          "FAIL fallback original GUI id457",
+          "FAIL fallback original GUI size100",
+          "FAIL fallback raw component offset0",
+          "FAIL fallback raw action offset32",
+          "FAIL fallback raw label offset36",
+          "FAIL fallback raw movie offset68",
+          "FAIL truncation original GUI id457",
+          "FAIL truncation original GUI size100",
+          "FAIL truncation raw component offset0",
+          "FAIL truncation raw action offset32",
+          "FAIL truncation raw label offset36",
+          "FAIL truncation raw movie offset68",
+          "FAIL component_fallback original GUI id457",
+          "FAIL component_fallback original GUI size100",
+          "FAIL component_fallback raw component offset0",
+          "FAIL component_fallback raw action offset32",
+          "FAIL component_fallback raw label offset36",
+          "FAIL component_fallback raw movie offset68",
+          "FAIL 0 unlocked original GUI id457",
+          "FAIL 0 unlocked original GUI size100",
+          "FAIL 0 unlocked raw component offset0",
+          "FAIL 0 unlocked raw action offset32",
+          "FAIL 0 unlocked raw label offset36",
+          "FAIL 0 unlocked raw movie offset68"
+        ],
+        "original_counterfactual_observed": true,
+        "original_expected_failure_count": 112,
+        "original_failure_set_matches": true,
+        "status": "accepted_original_divergence"
+      },
+      "result": {
+        "tag": "GuiAudioTrigger",
+        "process_exit_code": 1,
+        "numeric": {
+          "checks": 323,
+          "failures": 112
+        },
+        "command": "cl /nologo /EHsc /std:c++17 /permissive- /O2 /Gy /DWIN32 /D_WINDOWS /w14715 /w14716 /w14703 /D_ALLOW_KEYWORD_MACROS=1 /Dprivate=public /Dprotected=public  /I\"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\" /I\"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EABase\\include\\Common\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EASTL\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\EAThread\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\renderware\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\PPMalloc\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\coreallocator\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\zlib\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\ffmpeg-build\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\lua\\src\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\src\\GameShared\\GameClasses\\Development\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\dirtysdk\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\zlib\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\xaudio2redist\\include\" /I\"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\vendor\\sdl3\\include\" \"C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\tests\\GuiAudioTrigger.cpp\" \"D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\CgsStrStream.cpp\" /Fe:regression.exe /link /OPT:REF",
+        "inputs": [
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp\\tests\\GuiAudioTrigger.cpp",
+            "sha256": "84323ba8d393eba3e2752e6ea084caf570b718fab4779a9db011ab67fe4d97db"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\gui_audio_extracted.inc",
+            "sha256": "fa4b50952adea35f6dd5dbc67dcb3bc46b108b73f06dd8520f80b740f36ba154"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\run.cmd",
+            "sha256": "a741e6583b6704e41302fdfd756bc7c3fc69393214b09cc876097a1cf3afcd71"
+          },
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\tools\\build\\msvc_flags.txt",
+            "sha256": "a3c4f1a1189d2f1a74eeab9f2d8b4400bb4240f9d36410721f9fb621a4b2f46e"
+          },
+          {
+            "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\tools\\build\\msvc_includes.txt",
+            "sha256": "ebaa2e32da497bdb80c9a297bcd9f0d54833bf37ff62431475a4db712f65f190"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\CgsStrStream.cpp",
+            "sha256": "17ef47bade79188d0aca7ab17f8c6380e4436146069a183a0bb48c53024f957e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\audio_oracle.inc",
+            "sha256": "97e63e7a4e768e5636c5acf32ffb1b4122349118ccf13408b96b2eae42b35ba4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\presentation_entry.inc",
+            "sha256": "91f5d892b2b22077b27feeba466ae68914d5c3c52f20e69325dc79aa00f05237"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\BrnCommonTypes.h",
+            "sha256": "c8b01fe4a87a1b4a95b8600fb76907d85149e369ad0ea7c5aeb824ecf64750c2"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\types.hpp",
+            "sha256": "e675db0646e1d2c28f63729330ce7a8b3a4f74add97667b07872b316ef7f3f86"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\BurnoutConstants.h",
+            "sha256": "5f56f512614c71b69463ac375ebd246f96a574e9edbdf9e620bdfb69202ab6f7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsArray.h",
+            "sha256": "bdbe0748f9daf2503551f40aa6f598ac6b7c13fc84810f6f491ac317a54b4d71"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsBitArray.h",
+            "sha256": "a4b11919071bf2a8588341747a82a40dd7aea2d91b55b5b7d0e5ad83140ba3bd"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsFastBitArray.h",
+            "sha256": "e8756cef5e89a89cab1920f853e7e1e1058bb76dc2e2a0956895ee148dd41bf4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsFlagSet.h",
+            "sha256": "488c35a0e50a7c42595ce031e47fbe7f68af0f02f85155cc6f617c2f415b9b49"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsRingBuffer.h",
+            "sha256": "1a594bd6122effec97c2e17a17bc73889b62e0b9fcb01781e774495dfdc0d1b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Containers\\CgsSet.h",
+            "sha256": "07f296aa2bd73829ea77adc32119e3d301cfe50379340a2c7da9bcdc8f69467d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Core\\CgsAssert.h",
+            "sha256": "25074c8926ec352aa133cbee4e114af4b8a4dcf6f30cf1584d65dbfe61769880"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Core\\CgsID.h",
+            "sha256": "b8be1d0f66862aa4fa81deaeb8daf17209de486e7fd96183e6190ddd484c0cfd"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Core\\CgsStringUtils.h",
+            "sha256": "fb9769965af2c498a634faec3015069622659e6f9bce9303168466e0ec9e62ee"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\CgsStrStream.h",
+            "sha256": "4f2e34d5f0e7e90baba11650bcd9c4875e7c68cf4703a46aabba85dc94099bb3"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Fonts\\CgsUnicode.h",
+            "sha256": "6ff93c25d402c8c97782db744b85e0b10c4c549aea420682e03aefa83517e16d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\CgsCamera.h",
+            "sha256": "68ec606fbe5c1cb3e3d05dbd1d0bc3b996bde4e48c62683cc4df08b3d76c3e2e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiEvent.h",
+            "sha256": "d213d3e5abf3425306effb798e8a28d964247f308fd7aca99030bc63e1fa7b42"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiModuleIO.h",
+            "sha256": "9b6e3574c5977c69174afc1313518340793dfab994571e9b74fe6581f2d4c03b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\CgsGuiShared.h",
+            "sha256": "7c8c885c9140a48ef528de73ef5467019b647153e9dbad04e55166624d32e98c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Module\\CgsBaseEventQueue.h",
+            "sha256": "880d3984bcf575ad4fb5e32f5a5c075053e7096e418d67476f53c46b8e0f7434"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Module\\CgsEventQueue.h",
+            "sha256": "089f12e02fdf4f70bdf3d654168cb661c2c4e5a0145c90fd47639682d36ca73f"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Module\\CgsIOBuffer.h",
+            "sha256": "485da3933c855a3973d0011cd8fa71c8b47978b61ef716d57e7dc98ae3dd4ecc"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Module\\CgsVariableEventQueue.h",
+            "sha256": "f126ee47297d0964d962e731b044681a563a52a9bfd48aac0cf60dd214bd07ab"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Physics\\CgsRigidBody.h",
+            "sha256": "773f9dcf721b41587fa4a8513d195defe6a11bce7478371fdd4c6612a1e27ce6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\SceneManager\\CgsEntityId.h",
+            "sha256": "950f4dbe363db54df9c6c608fa62d879a404007e951ee0499394ed614219acda"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\Log\\CgsLog.h",
+            "sha256": "bb970fe8aa72b3fe285b3de0247e1c88c5becc9e4cd33f09b2a131d6f495a7cb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\CgsDebugComponent.h",
+            "sha256": "0346d82eec52f950af062c54af6ded245b9c3371ace6ad95fe9deb8bdaecf88d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\Internal\\CgsDebugInternal.h",
+            "sha256": "37fc6cc7ff62a4bb570705456af866e5b09f16f8f9fedb675d8fd6d70638f4b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\UI\\CgsTypes.h",
+            "sha256": "3639528b5acc9978ac73f673d4ee4cba790d94c80570f6957268f55a6c9a8428"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Development\\DebugSystem\\Core\\UI\\Functions\\CgsFunction.h",
+            "sha256": "e59b116998e6c8eb6cf13074ff3701d2e390d44fe91dff94a7d9cae919da8b3a"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Geometric\\Primitives\\CgsFrustum.h",
+            "sha256": "1bc27136975f74a64796716adb8d32d4fdd4ac9e4907cb26d0ed63734cf5f335"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Geometric\\Primitives\\CgsSphere.h",
+            "sha256": "12762288b954ad37d0b549a24314d4de47e8f3c66d2d9d3d27a679f32ef047f1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsIm2dTransform.h",
+            "sha256": "d320314328237982bde284a68d77861e03c0f2b5557d5f3c132aeb48ad7caa9b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsIm3d.h",
+            "sha256": "09c1822ab26e2dfc62c09e77d719fdd1a3274afa29cfd1f2fc3192842aed3536"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\CgsImRenderer.h",
+            "sha256": "36a54219be32c6ef15c29789a53f825808b8fb5602996a9e83dd9303800cd949"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasic2dColouredTexturedVertex.h",
+            "sha256": "7515a72542cc0f347f77dcc71edccc28c48ed81f3ddf70842009902a36840929"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasicColouredTexturedVertex.h",
+            "sha256": "acf1dd64e1eb63dc2a97906c898f8ca68845ec669311400c5de84bc26d54c118"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsBasicColouredVertex.h",
+            "sha256": "d8703b0faee766cc2058bd62e8248bcf8e6ff1c0ce3fa7ead78a929cbc06a7af"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\VertexDescriptors\\CgsPositionOnlyVertex.h",
+            "sha256": "439ebb7622f6b81149a0902277cf50c563db7e530a96641ef77756320568de2d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\ImRenderBuffer\\CgsIm3dRenderBuffer.h",
+            "sha256": "9f7d5ddac745aa53813d422b9076425271e787c725c7b087990bcee4556c8f91"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Graphics\\ImmediateMode\\ImRenderBuffer\\CgsImRenderBufferTemplate.h",
+            "sha256": "a1fd82f573f1b623db83e773ef57b88fb18b1472a43856e43f3499f34fc71a1d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiHudMessage.h",
+            "sha256": "fb7f7b52d7c215a0e5ed9d5e002675de2b5a5789b50a9beedb3e86f1d2b2503c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiPopupResource.h",
+            "sha256": "8228f180f55b9b4f0d50b1b65cc95c1362594c1fe41956311380c167fa73ba90"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\Resources\\CgsGuiResourceModuleIO.h",
+            "sha256": "e51040537e0775d696c6366a38387ea23f9089ee915ea91eccd5e06c85e4d410"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\Model\\State\\CgsGuiStateInterface.h",
+            "sha256": "35eb88f7f55ae3a31252f54df50dd0468ad54bd7f7fcba086e0c6635ffdbcc01"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Gui\\View\\CustomRenderer\\CgsCustomRenderer.h",
+            "sha256": "f3736d111b682e22d270d01c726173faa5b0d938dd3f35713abcdd41f8f7638c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\RenderWare\\Math\\RwMathVectorTemplates.h",
+            "sha256": "f199f6089e78f92db83598ee6a255718089f49ae2e1d8314d1cb9438e7bb4d2b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\Sound\\IO\\CgsMessage.h",
+            "sha256": "6035addd32d62911f5c28a2bc477da89bda039f93378e5dff2eeb04d5cd16a39"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceHandle.h",
+            "sha256": "65565f5429ef8dd8d56185797fafae3b0083720eb9e9e3a666e4144147b011ba"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceID.h",
+            "sha256": "4ef4177f407605714412417aaf1a33713ca6c4b0e317e4154f2345e56794b240"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourcePtr.h",
+            "sha256": "3a4a1b7d529fcdfdde1315472465f79932fb343755b647db6673aed002ce5a35"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Resource\\CgsResourceRequestQueue.h",
+            "sha256": "4dd681dbaa78f1ff794b7f11010d8c6eb1787d76690b21dc72c07767fcdcfdd6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Timer\\CgsTime.h",
+            "sha256": "b29aadbd71c8c6bc8aaa849137e71ffab642aeed6bd55d792d378e2793132ac7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameShared\\GameClasses\\System\\Timer\\PS3\\CgsDateAndTimePS3.h",
+            "sha256": "9198c2992cbaf52cdf0c7398507730d63bf242bd42a9c4b81b9d00c441790479"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnCgsPlayerName.h",
+            "sha256": "f752a5853921ce716b143f467ab613677c6827ee138d83279a2ba59c189775c7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnCheckpointData.h",
+            "sha256": "e7d4fccd6c2fb717e18232aecdc902d4b4e243cfcc31749799d7007be582557b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnGameActions.h",
+            "sha256": "b79cccf675e2f7458f017c47cc6185eac93c05c4e08d7d21d2bc80ff511e6a22"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnGameStateSharedIO.h",
+            "sha256": "8057c9c835bd62c0cbe772b875edeabd0165018ca656d34eb22e0a4ac967b98b"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnGameStateTypes.h",
+            "sha256": "b56ccd4732ec5148794fd0c1192e42021ede9713faee8f6675c44d524098ba73"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnOpponentData.h",
+            "sha256": "3fd9f41cb6eca0f7a6dfb9004caa6a47acd67dda7b4593bc08b14ee1217a540a"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\BrnTakedownType.h",
+            "sha256": "5ed47fc9f236a328f78e84d9cbfbf9e0c5067695501a1a7b775eae988625c559"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Gui\\BrnGuiEventTypeDefs.h",
+            "sha256": "dcf82645225a637a637af9c80c490a4d2358aa88b3396211f8417560dce3b995"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Math\\BrnMathUtils.h",
+            "sha256": "2bb4c4aad53e6cfdf48ec6e0f2ca350d5fa695b3aa9603821c2d5a9337d3f4a5"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\World\\BrnWorldSharedConstants.h",
+            "sha256": "fd014bb2318e6a6d492e3ee40609b6196c0846a6ec0c736d7ce8b094d81d3200"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\Offences\\BrnDriveThruManager.h",
+            "sha256": "9cc7e2fc7ccee8727345c55ea3d4d0b2d5c28ade95f007fdb7bd438d9acc3aec"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\Progression\\BrnProgressionRivalData.h",
+            "sha256": "1489391de8333593dfe12377d1bc4bb6d289ba128dea7a11651adbbe9ce64d89"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\SharedIO\\BrnGameActionData.h",
+            "sha256": "dbc2055aae9f38170e64fff623cc89dac712b94a561ffe91c0f8670bf63158e7"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\SharedIO\\BrnGameStateToGuiEvents.h",
+            "sha256": "973d8f5fb64fd4281c95625c2dcd97ba1a2d9af201ffcc486bdd7ca6e0340dc6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\StreetData\\BrnChallengeHighScoreEntry.h",
+            "sha256": "ce3c5688e45f17dd45ce33e633b6d7d308325726bda5a55018ccb82db2a4a767"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\ModeManager\\GameModes\\BrnGameModeParams.h",
+            "sha256": "ef6d7285b5baaf6d155a1805254dadde5b2103aa8827af6c336d672e701fe407"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\ModeManager\\Scoring\\BrnBurnoutSkillzData.h",
+            "sha256": "6a8ce4f47bb1eb3f04e0a7414446ce1f749255eaf6b16a55e8070ad4b78d18eb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\GameState\\ModeManager\\Scoring\\BrnStuntModeScoring.h",
+            "sha256": "1eb11b260f329f18f7403aefeb4cbf5d734d398b4a4f12eec4b3202de6af67f9"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventPreRaceMessages.h",
+            "sha256": "47fb151a28178da7ca87dc6304e8a5c4caf03fdf5ca0fa078b27ec4e4d9ffe10"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventRacePositionInfo.h",
+            "sha256": "43bfcc780d3a2261327cf8165b4829db306a7df6102e057fa12932ee60c946a1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Gui\\Events\\BrnGuiEventSetAvailablePresetRaces.h",
+            "sha256": "098bc0ec3967fa6fb8ece5acd250fd7a47465187fdcd72ba5d0d57b713f969b6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Network\\SharedIO\\BrnBuddyInformation.h",
+            "sha256": "8a37db61b25ebc1ca0ec414a9ec194c73b68b2e8714a71b5e8236e7b16387ba2"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Network\\SharedIO\\BrnNetworkSharedIO.h",
+            "sha256": "fefbb880a61a234d055402d80ca9831dd262dbeb3ee84dba531199c408a42052"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\Sound\\Module\\LogicModule\\BrnMessageData.h",
+            "sha256": "6aa94c7bc8efb9cec95da1c8d50fdb1e1d593a9cfc1a5086a4a378fea611c510"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\Boost\\BrnBoostType.h",
+            "sha256": "9ef96b6402bea6a3c71677b0590211a2592f39603814c04dc8e34e0d83f75180"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\PowerParking\\BrnPowerParkingDebugComponent.h",
+            "sha256": "d91d659827fe5cc9f592f2a564e93d4ecf4f9ba27f21fa0c157449c21e52457d"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\World\\EntityModules\\RaceCarEntityModule\\PowerParking\\BrnPowerParkingManager.h",
+            "sha256": "063500b843aa37b7dbabe3a9e2f969efa4aaab724c9e6240f89aa7c2a8ce24ad"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\GameSource\\World\\EntityModules\\TrafficEntityModule\\SharedIO\\BrnTrafficGuiInterface.h",
+            "sha256": "c3739a79b4b2ddcfa0ef7eacf087d1f4ebb965fbb5367fec4987bb1c65b6d78c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\pc\\gcm\\renderengine\\renderstates.h",
+            "sha256": "8d526f44235977a1a6c3a2446a105494299625cbb691c35f1b941645e7eed250"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\pc\\gcm\\renderengine\\VertexDescriptor.h",
+            "sha256": "1fb3218669bd0a4b4ff520358e54deb4029567ce15beffb21ebda7c0a75404e4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SDKs\\RenderEngineClub\\MAIN\\components\\src\\states\\programbuffer.h",
+            "sha256": "e4a6881542c09ca6d53bdd1232c18f656e29f0d7dc35fbbd25953331b55ed7f5"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnBaseRace.h",
+            "sha256": "8b5a93837d80a2e50f31fa70c936c73e0e7f858544c421f16a4065f24b59a962"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnProgressionRankData.h",
+            "sha256": "a457e10c9bb37ff74cf5db972efbe6f7875ee1c40ca7fbeb3046eab0d2262d29"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnRace.h",
+            "sha256": "bb956aa41e38ba0ff3914249a72429711701470c58bffc14a44b54fe7f74d26c"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnRaceBalance.h",
+            "sha256": "663e05b77cf36c989b01a72512d9671cde3895f40557199aca910819ea6bf9d1"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnRaceEventData.h",
+            "sha256": "7848a8f4a7a678c7dcf37a06d9c6e31db6daa80813620718a10ad92798c3f6cb"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnRival.h",
+            "sha256": "b27b1b8968c8be36c5c16681ef9b4c0c8363dbaeb227fe8bdd2d61526fb509b4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnTrainingTypes.h",
+            "sha256": "4ae82ac0fa920f7b384d3f28e18243f832d51996e93e4dad8153869f13fb215e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Progression\\BrnTrophyUnlockData.h",
+            "sha256": "87a380839ebf043710f3b7d51be04e6160e915868e42020e79d8d31e54e664d4"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\StreetData\\BrnChallengeData.h",
+            "sha256": "9f5b0303f1e66d4f57a4ecfd72d167f3704c657ff86d21e5583c8cf33e45c7e6"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\StreetData\\BrnStreetData.h",
+            "sha256": "a2f9606f3a10787ae40de0665b87cb057b595122203e0926516d3d0a3d130820"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Traffic\\BrnTrafficVehicleType.h",
+            "sha256": "b8cf185d38ae61c42515cc5218df2da44ad277f2dd7e48149614edc5440cfe6e"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Trigger\\BrnGenericRegion.h",
+            "sha256": "5a9e37a4f86577c2de4f81516bf5c35b9d09b22b4d8765eeda4af48a5d29d470"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Trigger\\BrnRegion.h",
+            "sha256": "66192aa0325e67ffcefdc22a72bac88241fb5504e466728893d6f8b759ddb2de"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\Trigger\\BrnTriggerBase.h",
+            "sha256": "931ec56a27914ac1c93ad79136c28986a039d2f4158dc77382b49a0f8172e469"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\SharedClasses\\World\\BrnWorldRegion.h",
+            "sha256": "bc39e0db62c62c3464d2f4c614968bb18d3e266877623ca654d697eeb09e4146"
+          },
+          {
+            "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\gui_audio_route_20261101\\review_baseline01\\shadow\\vendor\\renderware\\collision\\Plane.hpp",
+            "sha256": "fff2c0d7405699b575e195757b53c5049559e57d2a418cb7f26625b4b455661c"
+          }
+        ],
+        "executable_sha256": "92e96c56af850912f0023e2634df7a85059abdd43f0d6eb39be43de2de54476f"
+      }
+    }
+  },
+  "verification": {
+    "candidate": "323checks0failures,process_exit0",
+    "baseline": "323checks112expectedfailures,process_exit1; wrapper accepted only exact201/112/action14for11/13counterfactual",
+    "exact_baseline_failure_set": "Independently reconstructed18caseprefixes*6publication/raw-layout failures plus2sweeps*2downstream-action failures =112; exactsetandlengthmatch",
+    "source_binding": "All110source/headerclosureinputs per fresh run match exact base/candidate committedtext afterCRLFnormalization; actual physicalsha receipts unchanged. Onlycallback extractedtext differs. Three test/oracle files also match candidateGittext.",
+    "fixture_review": "Actualcallback,enumconstructor,logtable,SPrintf,IOlocks,OutputBuffer,rawVariableEventQueue andMessageheaders,GetGuiPayload/QueueSoundMessage+actual201/457arms,IDHashString andPresentationEffectNotify extracted. Fixture supplies minimalGuiModule carrier and observedassert/Resolve/Play/log boundaries. No rewrittencallback/mockedqueue/publication helper.",
+    "oracle": "14actions from independent rawARTISTdata; deterministic31charfields exercise all100payloadbytes; truncation/componentfallback/unknown14/unlocked+lockinvariant/raw457/legacy201/Hide201 cases retained.",
+    "full_tu_and_faithfulness": "Retained completeGUI TU compile with canonicalflags/includes passes; exactsourcepostimage matches worktreee7ebcea6... andcompileloghash verifies. Faithfulness0total/new andsamepostimage verified; reviewer did not rebuild whole game."
+  },
+  "test_scope_limits": [
+    "Resolve/Play are observed calls; no actual asset Resolve implementation, voice/backend output, audible/hardware or nativeGUI callback proof",
+    "Focused consumer extraction does not execute full game bridge scheduling, environment dispatch, Apt runtime or navigation/input1 producer",
+    "Log destinations and debugfilterpaths are observed/muted; this does not credit Sound#0105 or allGUI behavior",
+    "Existing wholeTU audit debt outside touchedcallback remains outside this pass"
+  ],
+  "remaining_live_validation": [
+    "Fullshippinglink/buildofexactcandidateandattributableexecutableprovenance",
+    "Actual normalUI authoredactions including left/right sweeps reaching callback457/100,bridgeandpresentation6 with original action11/13 and appropriateasset resolution/playback witness",
+    "Bounded native owner/profile/normalfile safety and same-run evidence before any debug-site completion",
+    "Root devintegration/publication/playablerefresh remain separate delivery work"
+  ],
+  "canonical_verdicts_or_counts_modified": false,
+  "site_credit_applied": 0,
+  "prohibited_work_performed": false
+}
