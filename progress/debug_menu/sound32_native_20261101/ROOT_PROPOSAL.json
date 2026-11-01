@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "status": "pending_fresh_review_zero_new_site_credit",
+  "machine": "PASS all32 P/N/captured restore,99 frames,3267 unique raw triplets,98 command hashes, terminal restore and exact owner cleanup, actual current-save copy, normal17 files unchanged; no assertions/exceptions",
+  "log_candidates": [
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0007",
+      "alias": "SND_0007",
+      "caption": "Loop Data Info",
+      "counts": {
+        "positive": 661,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "---------- \\[(?:Eng|Exh)\\]",
+      "original_expected_witness": "`---------- [Eng]`/`[Exh] ----------` plus `DebugDumpContentsToTty()` rows",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0009",
+      "alias": "SND_0009",
+      "caption": "Boost Info",
+      "counts": {
+        "positive": 333,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "vel\\[.*?ss2\\[",
+      "original_expected_witness": "original fields `vel[`, `ss2[`, `rem[`, `spd[`, `vol[`, `ctrl[`, `tin[`, `tout[`, `tbst[`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0052",
+      "alias": "SND_0052",
+      "caption": "Wheel Info",
+      "counts": {
+        "positive": 289,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Sp-MPS:",
+      "original_expected_witness": "TTY rows `[Sp-MPS:]`, `Lat(...)`, `Brake(...)`, `Peel(...)`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0053",
+      "alias": "SND_0053",
+      "caption": "Skid Info",
+      "counts": {
+        "positive": 1956,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Brk:|\\[Pel:|\\[Lat:",
+      "original_expected_witness": "original per-side `[Brk:]`, `[Pel:]`, `[Lat:]` output; newline sites `0x826B5EFC`/`0x826B624C`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0054",
+      "alias": "SND_0054",
+      "caption": "Wheel Side Info",
+      "counts": {
+        "positive": 1806,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "SideLat\\(|SideBrake\\(|SidePeel\\(",
+      "original_expected_witness": "`SideLat(...)`, `SideBrake(...)`, `SidePeel(...)` and normalized variants; do not rely on a literal-cell scan alone",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0084",
+      "alias": "SND_0084",
+      "caption": "Engine Info",
+      "counts": {
+        "positive": 313,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "Idx\\[.*Azi\\[",
+      "original_expected_witness": "`Idx[`, `Azi[`, `Vel[`, `Srf[`, `Car[`, `Pit[`, `VRn[`, `VEn[`, `DCr[`, `DCa[`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0086",
+      "alias": "SND_0086",
+      "caption": "Management Info",
+      "counts": {
+        "positive": 320,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Traffic\\] (?:Successfully Culled\\.|Failed to Cull)",
+      "original_expected_witness": "`[Traffic] Successfully Culled.` or `[Traffic] Failed to Cull for item @ distance of`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0087",
+      "alias": "SND_0087",
+      "caption": "Effect Info",
+      "counts": {
+        "positive": 2,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Passby\\]\\[",
+      "original_expected_witness": "`[Passby][... ] T[... ] Type[...]` and effect values",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0089",
+      "alias": "SND_0089",
+      "caption": "Traffic Cull Info",
+      "counts": {
+        "positive": 438,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "VelocityThreshold \\[PASS\\]|Distance \\[(?:PASS|FAIL!)\\]",
+      "original_expected_witness": "`VelocityThreshold [PASS]`, `Distance [PASS]`, or `Distance [FAIL!]`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0090",
+      "alias": "SND_0090",
+      "caption": "State Info",
+      "counts": {
+        "positive": 315,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[PassbyStateMgr\\]",
+      "original_expected_witness": "`[PassbyStateMgr]` plus original Loaded/Attached state strings",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    }
+  ],
+  "pixel_candidates": [
+    "BrnSound::Debug::DebugComponent::OnActivate#0055",
+    "BrnSound::Debug::DebugComponent::OnActivate#0116"
+  ],
+  "already_credited": [
+    "BrnSound::Debug::DebugComponent::OnActivate#0002",
+    "BrnSound::Debug::DebugComponent::OnActivate#0005",
+    "BrnSound::Debug::DebugComponent::OnActivate#0006"
+  ],
+  "no_op_inference": false,
+  "counts_current": {
+    "verified": 178,
+    "original_noop": 28,
+    "pending": 1149,
+    "total": 1355
+  },
+  "limits": "Regex counts are candidate locators. Fresh original/source and actual producer/output/visible drawing must support each bounded disposition; field P/N/R or absence alone is insufficient."
+}

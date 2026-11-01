@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "reader": "tools/re/x360rd.py via tools/re/ppcdis.py, existing calibrated ID1/flat reader; not a raw XEX decoder",
+  "image_path": "D:\\Reverse\\IDA_Files\\artist_i64.raw",
+  "image_sha256": "9c15e6b269d6f6e5248038092cd77d48af098d8b3a682e60cc6175bbcb420bad",
+  "reader_sha256": "cbfbcdb8eee42c57f8b1392f75b8b20880642f90785cf133185ad7b19cfb2b3d",
+  "disassembler_sha256": "6138358d92853af75b453cb55f588f758a98d7181bf506cd4ee2b7f35efc26d0",
+  "raw_asm_sha256": "cca387cbf6bdbc4c19d49a8d3413d2550124043eb274a2486933b18333fb051c",
+  "registration_export_sha256": "c543baf5b08eaba2b1a406cf09125742456a8f772d0305235c14697d8ca9de43",
+  "registration_export_anchors": [
+    "0x826D68C8  lis       r11, dword_82FFB8B0@ha",
+    "0x826D68D0  addi      r4, r11, dword_82FFB8B0@l",
+    "0x826D68D4  bl        sub_8282D640"
+  ],
+  "raw_opcode_checks": {
+    "0x826d68c8": "3D608300",
+    "0x826d68d0": "388BB8B0",
+    "0x826d68d4": "48156D6D",
+    "0x826b5ee8": "3EE08300",
+    "0x826b5efc": "8157B8B0",
+    "0x826b624c": "8177B8B0"
+  },
+  "address_formed_by_both_registration_and_reads": "0x83000000-0x4750=0x82FFB8B0",
+  "literal_reads": {
+    "0x820b4cac": "Skid Info",
+    "0x820b1c18": "[Brk: ",
+    "0x820b1b58": "]\t",
+    "0x820b1c20": "[Pel: ",
+    "0x82001cc4": "\n"
+  },
+  "limits": "Raw branch/cell/format evidence for this existing named consumer; no whole-program xref or behavior verdict inferred."
+}

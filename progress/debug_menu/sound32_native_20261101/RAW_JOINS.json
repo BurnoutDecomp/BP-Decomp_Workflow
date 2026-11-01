@@ -1,0 +1,2450 @@
+{
+  "schema": 1,
+  "status": "complete_raw_collection_verified_pending_independent_behavior_review",
+  "site_credit": 0,
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261101_v5\\runs\\sound32_62207_20261101_001526_b030fa3c98b74a18bb0c1a7021895ec7",
+  "pid": 53872,
+  "start_ticks": "639290889426565413",
+  "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+  "raw_log_sha256": "4294b1554ae07ae8390de82091e88086e7bbbcbbaa8d3535a87ea1c42e7d4759",
+  "profile_gate_sha256": "baf12ffebe9b6de00aaf8c211d5a856de18dd0d4f5fa67b9bffee8e107a6d929",
+  "unique_raw_triplets": 3267,
+  "command_hashes_verified": 98,
+  "frame_joins_verified": 99,
+  "prefixed_frame_ack_count": 0,
+  "exact_owner_stop_cleanup_profile_restore": true,
+  "normal17_files_unchanged": true,
+  "assertions": 0,
+  "exceptions": 0,
+  "controls": [
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0002",
+      "alias": "SND_0002",
+      "caption": "Engine Info",
+      "counts": {
+        "positive": 602,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[raw_rpm\\]",
+      "original_expected_witness": "Clutch `Attack Begin`/`Idle Begin`/`Boost`/`Infinite Gear`; Hybrid labels `[AI Inst]`, `[raw_rpm]`, `[phys_rpm]`, `[aud_rpm]`; shift-stage names",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0003",
+      "alias": "SND_0003",
+      "caption": "Closest AI",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[AI Inst\\]",
+      "original_expected_witness": "nearest-AI record with `[AI Inst]`; original green sphere is a separate render cue. Requires an attached AI engine",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0005",
+      "alias": "SND_0005",
+      "caption": "Rpm Info",
+      "counts": {
+        "positive": 520,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[HybGinsuRPM\\]",
+      "original_expected_witness": "`[Eng ...] [HybGinsuRPM] [CBGinsuRPMA] [CBGinsuRPMD] [LoopModelRPM] [DeltaRPM]` line",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0006",
+      "alias": "SND_0006",
+      "caption": "Loop Info",
+      "counts": {
+        "positive": 590,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Eng\\]|\\[Exh\\]",
+      "original_expected_witness": "original per-partial pitch/gain trace bracketed by `Eng]`/`Exh]`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0007",
+      "alias": "SND_0007",
+      "caption": "Loop Data Info",
+      "counts": {
+        "positive": 661,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "---------- \\[(?:Eng|Exh)\\]",
+      "original_expected_witness": "`---------- [Eng]`/`[Exh] ----------` plus `DebugDumpContentsToTty()` rows",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0009",
+      "alias": "SND_0009",
+      "caption": "Boost Info",
+      "counts": {
+        "positive": 333,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "vel\\[.*?ss2\\[",
+      "original_expected_witness": "original fields `vel[`, `ss2[`, `rem[`, `spd[`, `vol[`, `ctrl[`, `tin[`, `tout[`, `tbst[`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0052",
+      "alias": "SND_0052",
+      "caption": "Wheel Info",
+      "counts": {
+        "positive": 289,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Sp-MPS:",
+      "original_expected_witness": "TTY rows `[Sp-MPS:]`, `Lat(...)`, `Brake(...)`, `Peel(...)`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0053",
+      "alias": "SND_0053",
+      "caption": "Skid Info",
+      "counts": {
+        "positive": 1956,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Brk:|\\[Pel:|\\[Lat:",
+      "original_expected_witness": "original per-side `[Brk:]`, `[Pel:]`, `[Lat:]` output; newline sites `0x826B5EFC`/`0x826B624C`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0054",
+      "alias": "SND_0054",
+      "caption": "Wheel Side Info",
+      "counts": {
+        "positive": 1806,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "SideLat\\(|SideBrake\\(|SidePeel\\(",
+      "original_expected_witness": "`SideLat(...)`, `SideBrake(...)`, `SidePeel(...)` and normalized variants; do not rely on a literal-cell scan alone",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0055",
+      "alias": "SND_0055",
+      "caption": "Surface Types",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "two 2D road-noise loop IDs at (900,50) and (900,80), size25, green; visible frame witness",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0056",
+      "alias": "SND_0056",
+      "caption": "Ai Skids info",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "lf32Drift:|mDriftInterp:",
+      "original_expected_witness": "`lf32Drift:`, `YAW:`, `mDriftInterp:`, `Speed:` and nearest-AI drift-factor text",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0058",
+      "alias": "SND_0058",
+      "caption": "Collision Info",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Collision:",
+      "original_expected_witness": "`[Collision:` with original material, entity, sample ID and impulse fields",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0061",
+      "alias": "SND_0061",
+      "caption": "Print Detaching",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "Detaching playing Collision:",
+      "original_expected_witness": "`Detaching playing Collision:` / `to attach this:`",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0062",
+      "alias": "SND_0062",
+      "caption": "print Ducking",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "ducking:.*E_ENTITYTYPE_",
+      "original_expected_witness": "original `ducking: ... E_ENTITYTYPE_...` line",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0063",
+      "alias": "SND_0063",
+      "caption": "Print All Inputs",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "Input Collision",
+      "original_expected_witness": "`Input Collision` followed by `OutputCollision::DebugPrint`",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0076",
+      "alias": "SND_0076",
+      "caption": "Scrape Info",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[SCRAPE\\]",
+      "original_expected_witness": "`[SCRAPE][id]:` with pitch, volume, friction/normal stress, duration and material fields",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0077",
+      "alias": "SND_0077",
+      "caption": "Scrapes Draw",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "visible scrape debug geometry through the original 3D debug callback",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0080",
+      "alias": "SND_0080",
+      "caption": "Render Collisions",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "posts original debug sphere (height0, radius0.25, duration1); visible frame witness",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0081",
+      "alias": "SND_0081",
+      "caption": "Orientation Spew",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "Orientation:|Position:|Normal:",
+      "original_expected_witness": "original `Orientation:`, `Position:`, `Normal:` and face-distance text",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0082",
+      "alias": "SND_0082",
+      "caption": "Draw Orientation Box",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "original DrawBox/DrawSphere/DrawArrow submissions; visible frame witness",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0083",
+      "alias": "SND_0083",
+      "caption": "Spew Prop Resource IDs",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[PropSpew\\] PropID:",
+      "original_expected_witness": "`[PropSpew] PropID:`; absence without a prop lookup is insufficient",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0084",
+      "alias": "SND_0084",
+      "caption": "Engine Info",
+      "counts": {
+        "positive": 313,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "Idx\\[.*Azi\\[",
+      "original_expected_witness": "`Idx[`, `Azi[`, `Vel[`, `Srf[`, `Car[`, `Pit[`, `VRn[`, `VEn[`, `DCr[`, `DCa[`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0085",
+      "alias": "SND_0085",
+      "caption": "Draw Attached",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "posts original debug sphere (height1, radius1, duration0.1); visible frame witness",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0086",
+      "alias": "SND_0086",
+      "caption": "Management Info",
+      "counts": {
+        "positive": 320,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Traffic\\] (?:Successfully Culled\\.|Failed to Cull)",
+      "original_expected_witness": "`[Traffic] Successfully Culled.` or `[Traffic] Failed to Cull for item @ distance of`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0087",
+      "alias": "SND_0087",
+      "caption": "Effect Info",
+      "counts": {
+        "positive": 2,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Passby\\]\\[",
+      "original_expected_witness": "`[Passby][... ] T[... ] Type[...]` and effect values",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0088",
+      "alias": "SND_0088",
+      "caption": "Verbose Info",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Passby\\].*Culled with a velocity of",
+      "original_expected_witness": "`[Passby] ... Culled with a velocity of` / detailed passby state",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0089",
+      "alias": "SND_0089",
+      "caption": "Traffic Cull Info",
+      "counts": {
+        "positive": 438,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "VelocityThreshold \\[PASS\\]|Distance \\[(?:PASS|FAIL!)\\]",
+      "original_expected_witness": "`VelocityThreshold [PASS]`, `Distance [PASS]`, or `Distance [FAIL!]`",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0090",
+      "alias": "SND_0090",
+      "caption": "State Info",
+      "counts": {
+        "positive": 315,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[PassbyStateMgr\\]",
+      "original_expected_witness": "`[PassbyStateMgr]` plus original Loaded/Attached state strings",
+      "candidate_log_effect": true,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0104",
+      "alias": "SND_0104",
+      "caption": "Spew Messages",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[HUD\\] (?:Received|Ignoring)",
+      "original_expected_witness": "`[HUD] Received` or `[HUD] Ignoring` with event/time",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0105",
+      "alias": "SND_0105",
+      "caption": "Spew GUI Messages",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "PresentationEffect : Received audio trigger:",
+      "original_expected_witness": "`PresentationEffect : Received audio trigger: Component ... Action ... Movie ... Label ...`",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0116",
+      "alias": "SND_0116",
+      "caption": "Debug",
+      "counts": {
+        "positive": null,
+        "negative": null,
+        "restore": null
+      },
+      "regex": null,
+      "original_expected_witness": "ARTIST query debug flag is the consumer witness; accept only an actual visible emitter marker in the frame",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0117",
+      "alias": "SND_0117",
+      "caption": "Spew Info",
+      "counts": {
+        "positive": 0,
+        "negative": 0,
+        "restore": 0
+      },
+      "regex": "\\[Deform\\] DeformAmmount:",
+      "original_expected_witness": "`[Deform] DeformAmmount:`, `DeformDelta:`, `IntensityLagged:`, `AEMS-Intensity:`",
+      "candidate_log_effect": false,
+      "behavior_credit": 0
+    }
+  ],
+  "output_windows": [
+    {
+      "phase": "sound_SND_0002_positive",
+      "start": 24060,
+      "end_exclusive": 26075,
+      "own_marker_count": 602
+    },
+    {
+      "phase": "sound_SND_0002_negative",
+      "start": 26188,
+      "end_exclusive": 27465,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0002_restore",
+      "start": 27569,
+      "end_exclusive": 28828,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0003_positive",
+      "start": 28931,
+      "end_exclusive": 30365,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0003_negative",
+      "start": 30471,
+      "end_exclusive": 31747,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0003_restore",
+      "start": 31854,
+      "end_exclusive": 33237,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0005_positive",
+      "start": 33340,
+      "end_exclusive": 34986,
+      "own_marker_count": 520
+    },
+    {
+      "phase": "sound_SND_0005_negative",
+      "start": 35092,
+      "end_exclusive": 36403,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0005_restore",
+      "start": 36506,
+      "end_exclusive": 37680,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0006_positive",
+      "start": 37786,
+      "end_exclusive": 39769,
+      "own_marker_count": 590
+    },
+    {
+      "phase": "sound_SND_0006_negative",
+      "start": 39881,
+      "end_exclusive": 41142,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0006_restore",
+      "start": 41250,
+      "end_exclusive": 42540,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0007_positive",
+      "start": 42647,
+      "end_exclusive": 109705,
+      "own_marker_count": 661
+    },
+    {
+      "phase": "sound_SND_0007_negative",
+      "start": 113789,
+      "end_exclusive": 115228,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0007_restore",
+      "start": 115335,
+      "end_exclusive": 116551,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0009_positive",
+      "start": 116656,
+      "end_exclusive": 118342,
+      "own_marker_count": 333
+    },
+    {
+      "phase": "sound_SND_0009_negative",
+      "start": 118456,
+      "end_exclusive": 119858,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0009_restore",
+      "start": 119968,
+      "end_exclusive": 121326,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0052_positive",
+      "start": 121434,
+      "end_exclusive": 122707,
+      "own_marker_count": 289
+    },
+    {
+      "phase": "sound_SND_0052_negative",
+      "start": 122820,
+      "end_exclusive": 124356,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0052_restore",
+      "start": 124466,
+      "end_exclusive": 125668,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0053_positive",
+      "start": 125779,
+      "end_exclusive": 127330,
+      "own_marker_count": 1956
+    },
+    {
+      "phase": "sound_SND_0053_negative",
+      "start": 127442,
+      "end_exclusive": 128705,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0053_restore",
+      "start": 128818,
+      "end_exclusive": 130184,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0054_positive",
+      "start": 130295,
+      "end_exclusive": 131977,
+      "own_marker_count": 1806
+    },
+    {
+      "phase": "sound_SND_0054_negative",
+      "start": 132092,
+      "end_exclusive": 133365,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0054_restore",
+      "start": 133478,
+      "end_exclusive": 134791,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0055_positive",
+      "start": 134903,
+      "end_exclusive": 136331,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0055_negative",
+      "start": 136439,
+      "end_exclusive": 137547,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0055_restore",
+      "start": 137655,
+      "end_exclusive": 138727,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0056_positive",
+      "start": 138834,
+      "end_exclusive": 139855,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0056_negative",
+      "start": 139960,
+      "end_exclusive": 140981,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0056_restore",
+      "start": 141089,
+      "end_exclusive": 142068,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0058_positive",
+      "start": 142173,
+      "end_exclusive": 143276,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0058_negative",
+      "start": 143385,
+      "end_exclusive": 144352,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0058_restore",
+      "start": 144457,
+      "end_exclusive": 145525,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0061_positive",
+      "start": 145631,
+      "end_exclusive": 146614,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0061_negative",
+      "start": 146727,
+      "end_exclusive": 147852,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0061_restore",
+      "start": 147960,
+      "end_exclusive": 149088,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0062_positive",
+      "start": 149200,
+      "end_exclusive": 150199,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0062_negative",
+      "start": 150311,
+      "end_exclusive": 151373,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0062_restore",
+      "start": 151482,
+      "end_exclusive": 152392,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0063_positive",
+      "start": 152502,
+      "end_exclusive": 153548,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0063_negative",
+      "start": 153657,
+      "end_exclusive": 154751,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0063_restore",
+      "start": 154863,
+      "end_exclusive": 155948,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0076_positive",
+      "start": 156058,
+      "end_exclusive": 157204,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0076_negative",
+      "start": 157314,
+      "end_exclusive": 158251,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0076_restore",
+      "start": 158359,
+      "end_exclusive": 159321,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0077_positive",
+      "start": 159429,
+      "end_exclusive": 160513,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0077_negative",
+      "start": 160622,
+      "end_exclusive": 161665,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0077_restore",
+      "start": 161773,
+      "end_exclusive": 162851,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0080_positive",
+      "start": 162959,
+      "end_exclusive": 164034,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0080_negative",
+      "start": 164143,
+      "end_exclusive": 165075,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0080_restore",
+      "start": 165189,
+      "end_exclusive": 166247,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0081_positive",
+      "start": 166357,
+      "end_exclusive": 167380,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0081_negative",
+      "start": 167488,
+      "end_exclusive": 168415,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0081_restore",
+      "start": 168528,
+      "end_exclusive": 169607,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0082_positive",
+      "start": 169717,
+      "end_exclusive": 170805,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0082_negative",
+      "start": 170918,
+      "end_exclusive": 171956,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0082_restore",
+      "start": 172064,
+      "end_exclusive": 173100,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0083_positive",
+      "start": 173209,
+      "end_exclusive": 174198,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0083_negative",
+      "start": 174307,
+      "end_exclusive": 175252,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0083_restore",
+      "start": 175361,
+      "end_exclusive": 176319,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0084_positive",
+      "start": 176428,
+      "end_exclusive": 177789,
+      "own_marker_count": 313
+    },
+    {
+      "phase": "sound_SND_0084_negative",
+      "start": 177904,
+      "end_exclusive": 178817,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0084_restore",
+      "start": 178925,
+      "end_exclusive": 179990,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0085_positive",
+      "start": 180103,
+      "end_exclusive": 181177,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0085_negative",
+      "start": 181286,
+      "end_exclusive": 182320,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0085_restore",
+      "start": 182430,
+      "end_exclusive": 183543,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0086_positive",
+      "start": 183657,
+      "end_exclusive": 185000,
+      "own_marker_count": 320
+    },
+    {
+      "phase": "sound_SND_0086_negative",
+      "start": 185116,
+      "end_exclusive": 186037,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0086_restore",
+      "start": 186148,
+      "end_exclusive": 187225,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0087_positive",
+      "start": 187337,
+      "end_exclusive": 188403,
+      "own_marker_count": 2
+    },
+    {
+      "phase": "sound_SND_0087_negative",
+      "start": 188514,
+      "end_exclusive": 189501,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0087_restore",
+      "start": 189614,
+      "end_exclusive": 190731,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0088_positive",
+      "start": 190843,
+      "end_exclusive": 191766,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0088_negative",
+      "start": 191877,
+      "end_exclusive": 192947,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0088_restore",
+      "start": 193058,
+      "end_exclusive": 194137,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0089_positive",
+      "start": 194252,
+      "end_exclusive": 195425,
+      "own_marker_count": 438
+    },
+    {
+      "phase": "sound_SND_0089_negative",
+      "start": 195541,
+      "end_exclusive": 196661,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0089_restore",
+      "start": 196773,
+      "end_exclusive": 197918,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0090_positive",
+      "start": 198029,
+      "end_exclusive": 199434,
+      "own_marker_count": 315
+    },
+    {
+      "phase": "sound_SND_0090_negative",
+      "start": 199553,
+      "end_exclusive": 200666,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0090_restore",
+      "start": 200780,
+      "end_exclusive": 201896,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0104_positive",
+      "start": 202012,
+      "end_exclusive": 203151,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0104_negative",
+      "start": 203265,
+      "end_exclusive": 204315,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0104_restore",
+      "start": 204434,
+      "end_exclusive": 205587,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0105_positive",
+      "start": 205699,
+      "end_exclusive": 206758,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0105_negative",
+      "start": 206875,
+      "end_exclusive": 207955,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0105_restore",
+      "start": 208068,
+      "end_exclusive": 209233,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0116_positive",
+      "start": 209346,
+      "end_exclusive": 210662,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0116_negative",
+      "start": 210786,
+      "end_exclusive": 212072,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0116_restore",
+      "start": 212195,
+      "end_exclusive": 213615,
+      "own_marker_count": null
+    },
+    {
+      "phase": "sound_SND_0117_positive",
+      "start": 213730,
+      "end_exclusive": 215411,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0117_negative",
+      "start": 215531,
+      "end_exclusive": 216937,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "sound_SND_0117_restore",
+      "start": 217053,
+      "end_exclusive": 218494,
+      "own_marker_count": 0
+    },
+    {
+      "phase": "terminal_restore",
+      "start": 218614,
+      "end_exclusive": 220013,
+      "own_marker_count": null
+    },
+    {
+      "phase": "post_restore_readback",
+      "start": 220133,
+      "end_exclusive": 222463,
+      "own_marker_count": null
+    }
+  ],
+  "raw_groups": [
+    {
+      "phase": "natural_baseline",
+      "first_ack": 21960,
+      "last_ack": 22058,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0002_positive",
+      "first_ack": 23961,
+      "last_ack": 24059,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0002_negative",
+      "first_ack": 26089,
+      "last_ack": 26187,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0002_restore",
+      "first_ack": 27470,
+      "last_ack": 27568,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0003_positive",
+      "first_ack": 28832,
+      "last_ack": 28930,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0003_negative",
+      "first_ack": 30372,
+      "last_ack": 30470,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0003_restore",
+      "first_ack": 31755,
+      "last_ack": 31853,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0005_positive",
+      "first_ack": 33241,
+      "last_ack": 33339,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0005_negative",
+      "first_ack": 34993,
+      "last_ack": 35091,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0005_restore",
+      "first_ack": 36407,
+      "last_ack": 36505,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0006_positive",
+      "first_ack": 37687,
+      "last_ack": 37785,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0006_negative",
+      "first_ack": 39782,
+      "last_ack": 39880,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0006_restore",
+      "first_ack": 41151,
+      "last_ack": 41249,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0007_positive",
+      "first_ack": 42548,
+      "last_ack": 42646,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0007_negative",
+      "first_ack": 113690,
+      "last_ack": 113788,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0007_restore",
+      "first_ack": 115236,
+      "last_ack": 115334,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0009_positive",
+      "first_ack": 116557,
+      "last_ack": 116655,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0009_negative",
+      "first_ack": 118357,
+      "last_ack": 118455,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0009_restore",
+      "first_ack": 119869,
+      "last_ack": 119967,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0052_positive",
+      "first_ack": 121335,
+      "last_ack": 121433,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0052_negative",
+      "first_ack": 122721,
+      "last_ack": 122819,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0052_restore",
+      "first_ack": 124367,
+      "last_ack": 124465,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0053_positive",
+      "first_ack": 125680,
+      "last_ack": 125778,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0053_negative",
+      "first_ack": 127343,
+      "last_ack": 127441,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0053_restore",
+      "first_ack": 128719,
+      "last_ack": 128817,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0054_positive",
+      "first_ack": 130196,
+      "last_ack": 130294,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0054_negative",
+      "first_ack": 131993,
+      "last_ack": 132091,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0054_restore",
+      "first_ack": 133379,
+      "last_ack": 133477,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0055_positive",
+      "first_ack": 134804,
+      "last_ack": 134902,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0055_negative",
+      "first_ack": 136340,
+      "last_ack": 136438,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0055_restore",
+      "first_ack": 137556,
+      "last_ack": 137654,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0056_positive",
+      "first_ack": 138735,
+      "last_ack": 138833,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0056_negative",
+      "first_ack": 139861,
+      "last_ack": 139959,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0056_restore",
+      "first_ack": 140990,
+      "last_ack": 141088,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0058_positive",
+      "first_ack": 142074,
+      "last_ack": 142172,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0058_negative",
+      "first_ack": 143286,
+      "last_ack": 143384,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0058_restore",
+      "first_ack": 144358,
+      "last_ack": 144456,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0061_positive",
+      "first_ack": 145532,
+      "last_ack": 145630,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0061_negative",
+      "first_ack": 146628,
+      "last_ack": 146726,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0061_restore",
+      "first_ack": 147861,
+      "last_ack": 147959,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0062_positive",
+      "first_ack": 149101,
+      "last_ack": 149199,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0062_negative",
+      "first_ack": 150212,
+      "last_ack": 150310,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0062_restore",
+      "first_ack": 151383,
+      "last_ack": 151481,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0063_positive",
+      "first_ack": 152403,
+      "last_ack": 152501,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0063_negative",
+      "first_ack": 153558,
+      "last_ack": 153656,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0063_restore",
+      "first_ack": 154764,
+      "last_ack": 154862,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0076_positive",
+      "first_ack": 155959,
+      "last_ack": 156057,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0076_negative",
+      "first_ack": 157215,
+      "last_ack": 157313,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0076_restore",
+      "first_ack": 158260,
+      "last_ack": 158358,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0077_positive",
+      "first_ack": 159330,
+      "last_ack": 159428,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0077_negative",
+      "first_ack": 160523,
+      "last_ack": 160621,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0077_restore",
+      "first_ack": 161674,
+      "last_ack": 161772,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0080_positive",
+      "first_ack": 162860,
+      "last_ack": 162958,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0080_negative",
+      "first_ack": 164044,
+      "last_ack": 164142,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0080_restore",
+      "first_ack": 165090,
+      "last_ack": 165188,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0081_positive",
+      "first_ack": 166258,
+      "last_ack": 166356,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0081_negative",
+      "first_ack": 167389,
+      "last_ack": 167487,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0081_restore",
+      "first_ack": 168429,
+      "last_ack": 168527,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0082_positive",
+      "first_ack": 169618,
+      "last_ack": 169716,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0082_negative",
+      "first_ack": 170819,
+      "last_ack": 170917,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0082_restore",
+      "first_ack": 171965,
+      "last_ack": 172063,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0083_positive",
+      "first_ack": 173110,
+      "last_ack": 173208,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0083_negative",
+      "first_ack": 174208,
+      "last_ack": 174306,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0083_restore",
+      "first_ack": 175262,
+      "last_ack": 175360,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0084_positive",
+      "first_ack": 176329,
+      "last_ack": 176427,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0084_negative",
+      "first_ack": 177805,
+      "last_ack": 177903,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0084_restore",
+      "first_ack": 178826,
+      "last_ack": 178924,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0085_positive",
+      "first_ack": 180004,
+      "last_ack": 180102,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0085_negative",
+      "first_ack": 181187,
+      "last_ack": 181285,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0085_restore",
+      "first_ack": 182331,
+      "last_ack": 182429,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0086_positive",
+      "first_ack": 183558,
+      "last_ack": 183656,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0086_negative",
+      "first_ack": 185017,
+      "last_ack": 185115,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0086_restore",
+      "first_ack": 186049,
+      "last_ack": 186147,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0087_positive",
+      "first_ack": 187238,
+      "last_ack": 187336,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0087_negative",
+      "first_ack": 188415,
+      "last_ack": 188513,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0087_restore",
+      "first_ack": 189515,
+      "last_ack": 189613,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0088_positive",
+      "first_ack": 190744,
+      "last_ack": 190842,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0088_negative",
+      "first_ack": 191778,
+      "last_ack": 191876,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0088_restore",
+      "first_ack": 192959,
+      "last_ack": 193057,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0089_positive",
+      "first_ack": 194153,
+      "last_ack": 194251,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0089_negative",
+      "first_ack": 195442,
+      "last_ack": 195540,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0089_restore",
+      "first_ack": 196674,
+      "last_ack": 196772,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0090_positive",
+      "first_ack": 197930,
+      "last_ack": 198028,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0090_negative",
+      "first_ack": 199454,
+      "last_ack": 199552,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0090_restore",
+      "first_ack": 200681,
+      "last_ack": 200779,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0104_positive",
+      "first_ack": 201913,
+      "last_ack": 202011,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0104_negative",
+      "first_ack": 203166,
+      "last_ack": 203264,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0104_restore",
+      "first_ack": 204335,
+      "last_ack": 204433,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0105_positive",
+      "first_ack": 205600,
+      "last_ack": 205698,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0105_negative",
+      "first_ack": 206776,
+      "last_ack": 206874,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0105_restore",
+      "first_ack": 207969,
+      "last_ack": 208067,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0116_positive",
+      "first_ack": 209247,
+      "last_ack": 209345,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0116_negative",
+      "first_ack": 210687,
+      "last_ack": 210785,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0116_restore",
+      "first_ack": 212096,
+      "last_ack": 212194,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0117_positive",
+      "first_ack": 213631,
+      "last_ack": 213729,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0117_negative",
+      "first_ack": 215432,
+      "last_ack": 215530,
+      "aliases": 33
+    },
+    {
+      "phase": "sound_SND_0117_restore",
+      "first_ack": 216954,
+      "last_ack": 217052,
+      "aliases": 33
+    },
+    {
+      "phase": "terminal_restore",
+      "first_ack": 218515,
+      "last_ack": 218613,
+      "aliases": 33
+    },
+    {
+      "phase": "post_restore_readback",
+      "first_ack": 220034,
+      "last_ack": 220132,
+      "aliases": 33
+    }
+  ],
+  "frame_joins": [
+    {
+      "phase": "natural_baseline",
+      "sequence": 1,
+      "file": "bb_009463.bmp",
+      "sha256": "097ab4838787c116a0a4d056b29a806585aaad251ea3e5e0c6ee86e14f40280a",
+      "ack_index": 23205,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0002_positive",
+      "sequence": 2,
+      "file": "bb_009789.bmp",
+      "sha256": "e36be61ce7389aa80b7fee835ddcc7e81be7d63ca64e279a9002d9a340e4151e",
+      "ack_index": 25054,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0002_negative",
+      "sequence": 3,
+      "file": "bb_010077.bmp",
+      "sha256": "5702a0ef8f85060f0f74b0eb8eb7ceceb5569434797e46886a8353b11a16ab26",
+      "ack_index": 26717,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0002_restore",
+      "sequence": 4,
+      "file": "bb_010404.bmp",
+      "sha256": "00bd919758bc300f99723ce74e530aff34834b19c69350a0a82b6cdc8dbd1764",
+      "ack_index": 28262,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0003_positive",
+      "sequence": 5,
+      "file": "bb_010693.bmp",
+      "sha256": "01ca29be34df5774a5d4229ac54e02dbc43421e7d9fa45e4d5a3f5a0601e83f3",
+      "ack_index": 29636,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0003_negative",
+      "sequence": 6,
+      "file": "bb_011026.bmp",
+      "sha256": "1d2c41802c5e7b413d3c47972869c5df7b626b7b664fbac666cbf09bfb3799d9",
+      "ack_index": 31187,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0003_restore",
+      "sequence": 7,
+      "file": "bb_011314.bmp",
+      "sha256": "463a73815419b9f09f2083cc5a3b174f8747feb539370d96ccaacd08151696a3",
+      "ack_index": 32544,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0005_positive",
+      "sequence": 8,
+      "file": "bb_011605.bmp",
+      "sha256": "7952a0466bcff636f6731332b5ad2a2d0a90b41e182e1deb447000345c03ac1f",
+      "ack_index": 34215,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0005_negative",
+      "sequence": 9,
+      "file": "bb_011887.bmp",
+      "sha256": "d51e9d3f0de94b382e2dee28ef3e46d479204236275c10b261b2c03001da0cbd",
+      "ack_index": 35756,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0005_restore",
+      "sequence": 10,
+      "file": "bb_012182.bmp",
+      "sha256": "cce5f7c2dc92f66e9e64a62c34138ccf4165a66f52eeb5142977e83e5b55711f",
+      "ack_index": 37149,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0006_positive",
+      "sequence": 11,
+      "file": "bb_012457.bmp",
+      "sha256": "e9428d8b82b4f2ec4e7df1f3c1e576ba5bdc9f4a0a4d15f27c0172325c5f5a86",
+      "ack_index": 38764,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0006_negative",
+      "sequence": 12,
+      "file": "bb_012769.bmp",
+      "sha256": "10cea51f980f51a4e27fdabd23650a2afb4813c0fb4065b331810d4ed1d3356d",
+      "ack_index": 40545,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0006_restore",
+      "sequence": 13,
+      "file": "bb_013074.bmp",
+      "sha256": "bc126bcc95787f87420f2fa380b2d5689359b66f4486d160e17d2278cf64fd31",
+      "ack_index": 41958,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0007_positive",
+      "sequence": 14,
+      "file": "bb_013306.bmp",
+      "sha256": "7a671eaa04009512f3bc1c8d0bf64b513c721a976ed267b9a03de89dbecfe19a",
+      "ack_index": 77703,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0007_negative",
+      "sequence": 15,
+      "file": "bb_013602.bmp",
+      "sha256": "9bb291589dcaefd5f33023836750183978ffb1f55150a6ad8b36f71fa85ee640",
+      "ack_index": 114519,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0007_restore",
+      "sequence": 16,
+      "file": "bb_013878.bmp",
+      "sha256": "a4c27a73a46e19d9aed05e1b0bd36498fb4df231423466130c6819e835e5bd9e",
+      "ack_index": 115826,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0009_positive",
+      "sequence": 17,
+      "file": "bb_014182.bmp",
+      "sha256": "2a0bf2e97cc9764b98c4d61703c9672388e0da3211dc87b17fe81abd59847d35",
+      "ack_index": 117445,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0009_negative",
+      "sequence": 18,
+      "file": "bb_014509.bmp",
+      "sha256": "4dd2ff1a6e88119af290e7a483f58bb5880ba24263568c12ce89adf47882641f",
+      "ack_index": 119151,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0009_restore",
+      "sequence": 19,
+      "file": "bb_014821.bmp",
+      "sha256": "f74e5df0ce8f8cde1e7e5755ea73f93bb80a7d6e7d0e497266b6be9e193ec9fa",
+      "ack_index": 120632,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0052_positive",
+      "sequence": 20,
+      "file": "bb_015079.bmp",
+      "sha256": "d0e455f5d60b0311a14be245a8cdff7ad2bb354ae9cf0138ad7f3e51aa7fb801",
+      "ack_index": 121983,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0052_negative",
+      "sequence": 21,
+      "file": "bb_015402.bmp",
+      "sha256": "15c25cb5a47f4d4b4b211335f02adc5c1e83c26e9c586a9cea6dbefbf1f569ca",
+      "ack_index": 123655,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0052_restore",
+      "sequence": 22,
+      "file": "bb_015705.bmp",
+      "sha256": "cfab77bcee5c171968827fb155921c0fd0545095441d8fc806259648379fc984",
+      "ack_index": 125114,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0053_positive",
+      "sequence": 23,
+      "file": "bb_015950.bmp",
+      "sha256": "4d5c0b5b014eac86465eb86592dc07b6df705d1220ba914d100c6a46e44bce02",
+      "ack_index": 126485,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0053_negative",
+      "sequence": 24,
+      "file": "bb_016239.bmp",
+      "sha256": "9a4d61fcd2ff5568066373742c246508b2c675192b08e78d8862a2bc9fe92807",
+      "ack_index": 128045,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0053_restore",
+      "sequence": 25,
+      "file": "bb_016549.bmp",
+      "sha256": "38692d6337db9ab98f745c8dc68ddba1c7d290c9879f63688f0cfdf19644ecee",
+      "ack_index": 129479,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0054_positive",
+      "sequence": 26,
+      "file": "bb_016864.bmp",
+      "sha256": "cb62c17cf988157495066359670d41c08eea6a85cd535a5a21a717f500eeea27",
+      "ack_index": 131093,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0054_negative",
+      "sequence": 27,
+      "file": "bb_017149.bmp",
+      "sha256": "b3b41943571b8091f93fd77f6756c545c3efc5af22e39f8c64f44e4e7bf46bbb",
+      "ack_index": 132604,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0054_restore",
+      "sequence": 28,
+      "file": "bb_017480.bmp",
+      "sha256": "59836fb0a8fd12a771059f7f2eef2f81bea935300a8d52bcf2164f500f165883",
+      "ack_index": 134196,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0055_positive",
+      "sequence": 29,
+      "file": "bb_017788.bmp",
+      "sha256": "5b7ffc78e2c03654db019c886bd02ffdd3f74ed6f17ab3bfc3004b415710eb14",
+      "ack_index": 135626,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0055_negative",
+      "sequence": 30,
+      "file": "bb_018135.bmp",
+      "sha256": "2261cc5f2f6823032db85d7773436f002d3e58a957adc28995d4ac9f56a33490",
+      "ack_index": 137001,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0055_restore",
+      "sequence": 31,
+      "file": "bb_018454.bmp",
+      "sha256": "220b5fbf9b5edc662e11e59c7a2c541b29396bb8217552c1597eeb0ebb3dfc27",
+      "ack_index": 138143,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0056_positive",
+      "sequence": 32,
+      "file": "bb_018784.bmp",
+      "sha256": "342d0653f50611d83ab789434d05f21b983ed903a9b489b44c0f2f5cb4df44b4",
+      "ack_index": 139342,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0056_negative",
+      "sequence": 33,
+      "file": "bb_019067.bmp",
+      "sha256": "52621fb4f7a03b514d8bef7cd3eb5904a0aa61a84f4ee16592f07674b027dd95",
+      "ack_index": 140415,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0056_restore",
+      "sequence": 34,
+      "file": "bb_019347.bmp",
+      "sha256": "f6347ebd3b5490d19407b4e18ae4e8b37584ffea7300329489986c8389471ff2",
+      "ack_index": 141488,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0058_positive",
+      "sequence": 35,
+      "file": "bb_019669.bmp",
+      "sha256": "d317a86848c58213363b3a772e6d1fe954a4598565f4c82e4e916e77573262d3",
+      "ack_index": 142691,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0058_negative",
+      "sequence": 36,
+      "file": "bb_020003.bmp",
+      "sha256": "42fcc56ae60e0eb3f9d569c800d54709db20742a6ec322e6d362501dbfee6706",
+      "ack_index": 143921,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0058_restore",
+      "sequence": 37,
+      "file": "bb_020287.bmp",
+      "sha256": "334917606621cc651787d6c4454e7edc456ceaf71714d35a8570b8a09202c4cd",
+      "ack_index": 144980,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0061_positive",
+      "sequence": 38,
+      "file": "bb_020603.bmp",
+      "sha256": "4ca655dd93abd5e241ad93c0cc99056c93b4c2af4c6b5e66cc812cd1eb6c0775",
+      "ack_index": 146124,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0061_negative",
+      "sequence": 39,
+      "file": "bb_020927.bmp",
+      "sha256": "ab95c3a269ad7b3fd6e05d2b5a49eb2b4ea3081ad1aa180270129484fcb2d58c",
+      "ack_index": 147306,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0061_restore",
+      "sequence": 40,
+      "file": "bb_021254.bmp",
+      "sha256": "4597e05fde6086ef4283c206ac43d65fe2c0c3e4a307950e697dc925b251046b",
+      "ack_index": 148516,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0062_positive",
+      "sequence": 41,
+      "file": "bb_021545.bmp",
+      "sha256": "53e5826d4787fd0c2fa82134d06f2448f5f9126465b140ffb7392709b4c4203b",
+      "ack_index": 149614,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0062_negative",
+      "sequence": 42,
+      "file": "bb_021874.bmp",
+      "sha256": "88e5ca4e7caea6471f3a56a402d8e1741c1275769c89fd9246b71d38a7f379d9",
+      "ack_index": 150837,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0062_restore",
+      "sequence": 43,
+      "file": "bb_022188.bmp",
+      "sha256": "e2ec0e1fcf68b5e675e964e64524d7451d36e29b58f0d5a450b7b3c17c4d097d",
+      "ack_index": 151998,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0063_positive",
+      "sequence": 44,
+      "file": "bb_022463.bmp",
+      "sha256": "78852e6e74c3b05ce6f94d031330f71111aff990dc99776b7e8f5cfd6ba48b11",
+      "ack_index": 152997,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0063_negative",
+      "sequence": 45,
+      "file": "bb_022782.bmp",
+      "sha256": "ef58a76bf762357e5859ab06abd78281c66416310ebd7f09a10470614041f90d",
+      "ack_index": 154191,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0063_restore",
+      "sequence": 46,
+      "file": "bb_023103.bmp",
+      "sha256": "7daaab1d145002f213629b07bc2e47baadf779f6d2363a799342e9ccbb4f620b",
+      "ack_index": 155369,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0076_positive",
+      "sequence": 47,
+      "file": "bb_023447.bmp",
+      "sha256": "172b68fb89d1e8db4e48db981d9b0adc92f02eaf7483d44e2de2579b956a502e",
+      "ack_index": 156610,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0076_negative",
+      "sequence": 48,
+      "file": "bb_023734.bmp",
+      "sha256": "a54745e5eeb655b37f1940c98d8773941e3c56f41f658ed3fe0e6be62cbe2d29",
+      "ack_index": 157677,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0076_restore",
+      "sequence": 49,
+      "file": "bb_024065.bmp",
+      "sha256": "a18202f2104e357fa410c33670a29c18725f5a85b9e744a4987ea0d021106c99",
+      "ack_index": 158876,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0077_positive",
+      "sequence": 50,
+      "file": "bb_024352.bmp",
+      "sha256": "49d95fe84b3ca0ee5a365336861c6a84f8d14413bea80d151a9e7e3602d72cfa",
+      "ack_index": 159940,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0077_negative",
+      "sequence": 51,
+      "file": "bb_024678.bmp",
+      "sha256": "9bf5f70aa529bd36a3a65e296b00dae370e9cdc7ec361cb931f029d65be79f17",
+      "ack_index": 161135,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0077_restore",
+      "sequence": 52,
+      "file": "bb_024970.bmp",
+      "sha256": "a83ba3ec5a93455205ccd0a3c1f898c7da6d26466cd9745ee1a32ffadfe633bf",
+      "ack_index": 162260,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0080_positive",
+      "sequence": 53,
+      "file": "bb_025309.bmp",
+      "sha256": "d6e5a52c2090a0bafdf6c5bb2e6e23ac9fad074e50061f2f576db31f50d08123",
+      "ack_index": 163496,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0080_negative",
+      "sequence": 54,
+      "file": "bb_025583.bmp",
+      "sha256": "9fe8533e759abd9466e26ea9d42f067fc9a12923eaa3a0a35c0066b0275e1eaa",
+      "ack_index": 164528,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0080_restore",
+      "sequence": 55,
+      "file": "bb_025891.bmp",
+      "sha256": "9b4b10ebd9e65e2b09e85f4aa7edf2e287351be28ed45f640fb5e896162a8d19",
+      "ack_index": 165690,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0081_positive",
+      "sequence": 56,
+      "file": "bb_026209.bmp",
+      "sha256": "6ebbebdc4a2f0562000b1c65beb409e8ef70d0d41247ae5332a247f4cad313e6",
+      "ack_index": 166870,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0081_negative",
+      "sequence": 57,
+      "file": "bb_026476.bmp",
+      "sha256": "88f40691eec154229ff792b6a05d12c94333ff0ae69769d52db4aecb694a63a2",
+      "ack_index": 167875,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0081_restore",
+      "sequence": 58,
+      "file": "bb_026791.bmp",
+      "sha256": "c3bec137c143b9f39fca00a9c34dcb8a89e7fb62df746a88b3b3ec86326691fb",
+      "ack_index": 169072,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0082_positive",
+      "sequence": 59,
+      "file": "bb_027103.bmp",
+      "sha256": "6758daa285047a937bfcdfa661918fc280416fa35dcfaf1fff7f04a68ed25f18",
+      "ack_index": 170245,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0082_negative",
+      "sequence": 60,
+      "file": "bb_027394.bmp",
+      "sha256": "fd3c7c2b7a760bead54fb036ba226fa6ca0ea650face32f132e004bfafe39b88",
+      "ack_index": 171336,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0082_restore",
+      "sequence": 61,
+      "file": "bb_027739.bmp",
+      "sha256": "69aeb8a96ee2f88b2370212e2e2377f06262b2122cb7b06fff0087d35ed2341d",
+      "ack_index": 172579,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0083_positive",
+      "sequence": 62,
+      "file": "bb_028035.bmp",
+      "sha256": "25d63907da0c7d343d0c998e103756c40464b1f516320c09ea52e3d219b814ed",
+      "ack_index": 173685,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0083_negative",
+      "sequence": 63,
+      "file": "bb_028295.bmp",
+      "sha256": "66a5910599e1c70a9d4da9ee987c61137ca240a333cadc9063a24ae9aa942a44",
+      "ack_index": 174718,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0083_restore",
+      "sequence": 64,
+      "file": "bb_028581.bmp",
+      "sha256": "9e854a5fcad0dda4ed7db02d19c17b559c3bd7c320268e71494e8f295e3585c6",
+      "ack_index": 175822,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0084_positive",
+      "sequence": 65,
+      "file": "bb_028879.bmp",
+      "sha256": "1234d2c13ae1f649011d40ca56dfe671528cb012675a53c85f2961aa598e211c",
+      "ack_index": 177094,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0084_negative",
+      "sequence": 66,
+      "file": "bb_029187.bmp",
+      "sha256": "d076725a036c3d0c54fd6c8a8e24797ecf23882e4cd73872433ad1f2e2831f31",
+      "ack_index": 178401,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0084_restore",
+      "sequence": 67,
+      "file": "bb_029466.bmp",
+      "sha256": "1db6cce4bbfe97c47ed24a3ac5285ebd123544052bda958566fff6592c960eb4",
+      "ack_index": 179435,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0085_positive",
+      "sequence": 68,
+      "file": "bb_029789.bmp",
+      "sha256": "34a81127f11823f7a4c6bfe025e837a6a9306f4edecc04550bcf08254b1fddad",
+      "ack_index": 180634,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0085_negative",
+      "sequence": 69,
+      "file": "bb_030075.bmp",
+      "sha256": "161bd009af7742e3b759551ab2e3e2e26a653db9d2a1801e7ed12e6853693873",
+      "ack_index": 181707,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0085_restore",
+      "sequence": 70,
+      "file": "bb_030424.bmp",
+      "sha256": "820f71528f85b1831d82070914428935a5917ac46e36bd3e07a9176df54a3082",
+      "ack_index": 182986,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0086_positive",
+      "sequence": 71,
+      "file": "bb_030732.bmp",
+      "sha256": "df7f05c4122c2535f69a2fd3b9d1aa28374cc1de501c6845f640a80ca7c78ede",
+      "ack_index": 184307,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0086_negative",
+      "sequence": 72,
+      "file": "bb_031008.bmp",
+      "sha256": "4c91caca2f417f9237d35bbdf9080b35d174ab19e5c7af92c3bab5435646c616",
+      "ack_index": 185488,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0086_restore",
+      "sequence": 73,
+      "file": "bb_031324.bmp",
+      "sha256": "eddd5845f8ff30eedb32ea7cba9a6028b9f20cb25f45fcb56afff3868118bcb4",
+      "ack_index": 186683,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0087_positive",
+      "sequence": 74,
+      "file": "bb_031638.bmp",
+      "sha256": "4ad523be68e5a0ebedf8ebe856073429da809e26736d70914679717834bf821c",
+      "ack_index": 187849,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0087_negative",
+      "sequence": 75,
+      "file": "bb_031904.bmp",
+      "sha256": "efe23847fc0a40ee1241d609e6765773f26a95cb6e08cbc7f82b03ed6c691d92",
+      "ack_index": 188888,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0087_restore",
+      "sequence": 76,
+      "file": "bb_032247.bmp",
+      "sha256": "2a5435025df8e486cc9d532df22db063f96363235b27638d9eb81fbf87a5cb7b",
+      "ack_index": 190133,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0088_positive",
+      "sequence": 77,
+      "file": "bb_032532.bmp",
+      "sha256": "3d182fc545451c16caf39f6fff05fb6ecb43bdc1977002e650764dcd6f6381c0",
+      "ack_index": 191219,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0088_negative",
+      "sequence": 78,
+      "file": "bb_032850.bmp",
+      "sha256": "24d44818e79f4cdd7825a5b736a0eb27f6df1dcd2420af0d938612d7307d6213",
+      "ack_index": 192403,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0088_restore",
+      "sequence": 79,
+      "file": "bb_033176.bmp",
+      "sha256": "290f1ab9d3a8efc9057ed2ff8eb4b898f3adbc7d0547e21c5753ae46689aa375",
+      "ack_index": 193582,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0089_positive",
+      "sequence": 80,
+      "file": "bb_033453.bmp",
+      "sha256": "66e0bf0de98ed105bbbd650c71a499e3377a4a3e3003f32bd1e38ccadb9f37a4",
+      "ack_index": 194715,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0089_negative",
+      "sequence": 81,
+      "file": "bb_033784.bmp",
+      "sha256": "784ef4f561de17aaa41b71e2b9eef255f2828cd4d1a62a04a9d3edd19c22a061",
+      "ack_index": 196091,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0089_restore",
+      "sequence": 82,
+      "file": "bb_034169.bmp",
+      "sha256": "939808c381dd5604b2fa70a53bef0ed8ae45fce25990e8b6244252b62e059e4e",
+      "ack_index": 197461,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0090_positive",
+      "sequence": 83,
+      "file": "bb_034463.bmp",
+      "sha256": "ca510dec1768e034999853a7cc532e65de227fc55143e906c9c1f6b3c7a36376",
+      "ack_index": 198705,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0090_negative",
+      "sequence": 84,
+      "file": "bb_034792.bmp",
+      "sha256": "17b57e6fc53373c1ea82ce553c12b4870306fa2f1ca38a508368634840956f75",
+      "ack_index": 200072,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0090_restore",
+      "sequence": 85,
+      "file": "bb_035134.bmp",
+      "sha256": "7043f6d6bface49c20d40b9ad82e22a2a7e8a2cbde61adaf5a300bfaaa8d4d8a",
+      "ack_index": 201333,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0104_positive",
+      "sequence": 86,
+      "file": "bb_035455.bmp",
+      "sha256": "e530fcfef76931388fd04f0f3c287d4d7cc3a90ba95a09cbf935eb6ee0b7ebb6",
+      "ack_index": 202556,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0104_negative",
+      "sequence": 87,
+      "file": "bb_035773.bmp",
+      "sha256": "a61aed3f1486024e7853a7d4e04dbf0158097666484c085f05994b9d585de73b",
+      "ack_index": 203764,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0104_restore",
+      "sequence": 88,
+      "file": "bb_036116.bmp",
+      "sha256": "486217bd4f09767fba089f63b1a8c3955bf940c622bd4e1549e9f3ba0d8244d8",
+      "ack_index": 204992,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0105_positive",
+      "sequence": 89,
+      "file": "bb_036437.bmp",
+      "sha256": "6fc04aea6c8d34bda938f985d3162e1826f51ff4f53230c71b75eaf59111ac25",
+      "ack_index": 206204,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0105_negative",
+      "sequence": 90,
+      "file": "bb_036762.bmp",
+      "sha256": "9dd159f57a6b3f44701bcb2811cade1f4f3adde4a4cf32c7ea5ffeb6389850ce",
+      "ack_index": 207401,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0105_restore",
+      "sequence": 91,
+      "file": "bb_037084.bmp",
+      "sha256": "f9016f7381821ba666020a1a6bae8456e0338c6bcac2de96d2ec88080ca78160",
+      "ack_index": 208614,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0116_positive",
+      "sequence": 92,
+      "file": "bb_037418.bmp",
+      "sha256": "24c39f590ef57d1b6a44c34d00676a4603236a79abed6913470c0b8191413d8f",
+      "ack_index": 209867,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0116_negative",
+      "sequence": 93,
+      "file": "bb_037739.bmp",
+      "sha256": "dbc35a5701eb757382a9f5737ce9685abf066da309221f0d56e067ed96939ada",
+      "ack_index": 211352,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0116_restore",
+      "sequence": 94,
+      "file": "bb_038065.bmp",
+      "sha256": "02026e1e764955b9cc46ff736f77102b63bb7f093b4366e78fec2406b5640c0e",
+      "ack_index": 212893,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0117_positive",
+      "sequence": 95,
+      "file": "bb_038371.bmp",
+      "sha256": "f30323e1d66a646a60081f7fb50b4e6c0a768b9d869b2fab45c089e7be85b6f0",
+      "ack_index": 214516,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0117_negative",
+      "sequence": 96,
+      "file": "bb_038692.bmp",
+      "sha256": "f8b74c892c765a6ed6c68ae08a7099686ed63d5ffd7ceef162220717fcfdaf61",
+      "ack_index": 216176,
+      "ack_column": 0
+    },
+    {
+      "phase": "sound_SND_0117_restore",
+      "sequence": 97,
+      "file": "bb_039032.bmp",
+      "sha256": "154a3483ef840aac7ee77808f0aeab5561dec1cc860f24c0ce1017e026b5f2fa",
+      "ack_index": 217794,
+      "ack_column": 0
+    },
+    {
+      "phase": "terminal_restore",
+      "sequence": 98,
+      "file": "bb_039369.bmp",
+      "sha256": "13f9656831d1914f73a41b18091b1e3ff1e34ee677573b408c3f316f718347b3",
+      "ack_index": 219370,
+      "ack_column": 0
+    },
+    {
+      "phase": "post_restore_readback",
+      "sequence": 99,
+      "file": "bb_039682.bmp",
+      "sha256": "472f11b23c405be11e8508d197e3a84b967d74da532b3c75eb9a0ae5af571df9",
+      "ack_index": 220835,
+      "ack_column": 0
+    }
+  ],
+  "scope": "Regex counts locate candidates only; source/assembly and positive producer/output/pixels still require fresh review. None proves no-op."
+}

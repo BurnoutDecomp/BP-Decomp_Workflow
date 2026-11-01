@@ -23697,14 +23697,21 @@
       "pseudocode_line": 20,
       "original_call": "sub_8282D640(v0, &dword_82FFB890, \"Engines\", \"Loop Data Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0007",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Loop Data Info: 82FFB890 -> DualGinsu826F202C..2058 flag branch -> original Eng/Exh header and DebugDumpContentsToTty call826F20D8; ca802 DualGinsu857..864; actual indexed loop-data rows inspected. Log dump gate only, no full table/numeric parity claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -23751,14 +23758,21 @@
       "pseudocode_line": 22,
       "original_call": "sub_8282D640(v0, &dword_82FFB8A4, \"Engines\", \"Boost Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0009",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Boost Info: 82FFB8A4 -> Boost826B440C..4414 zero branch -> vel/ss2/rem/spd/vol/ctrl/tin/tout/tbst original strings; ca802 Boost209..220. Parameter spew gate only, no active boost/audio claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -24912,14 +24926,21 @@
       "pseudocode_line": 138,
       "original_call": "sub_8282D640(v0, &dword_82FFB8C0, \"Wheels\", \"Wheel Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0052",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Wheel Info: 82FFB8C0 -> Wheel826B7978..7988 and826B7BF8..7C0C -> speed and per-wheel Lat/Brake/Peel log; ca802 Wheel198..259. Wheel diagnostic gate only, no tire/physics numeric validation. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -24939,14 +24960,21 @@
       "pseudocode_line": 139,
       "original_call": "sub_8282D640(v0, &dword_82FFB8B0, \"Wheels\", \"Skid Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0053",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Skid Info: Raw image: lis r23,8300 at826B5EE8; lwz -4750 at5EFC, compare5F04, beq5F50 skips diagnostic to60EC; second load624C/zero branch6254 gates newline. Original Brk/Pel/Lat literals read directly. ca802 Skid195..217. Per-side output gate only, no skid/audio behavior claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -24966,14 +24994,21 @@
       "pseudocode_line": 140,
       "original_call": "sub_8282D640(v0, &unk_82FFB8C4, \"Wheels\", \"Wheel Side Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0054",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Wheel Side Info: Wheel826B7A90 forms83000000 saved in var13C;826B80D0..80DC loads -473C=82FFB8C4 and skips to8584 when0; side format pointers at7A0C..7A88 and original per-side fields. ca802 Wheel276..293. Side-total/normalized log gate only. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -24993,14 +25028,21 @@
       "pseudocode_line": 141,
       "original_call": "sub_8282D640(v0, &byte_82FFB8BD, \"Wheels\", \"Surface Types\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0055",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Surface Types: byte82FFB8BD -> Roadnoise826E5E60..5E74 calls DrawDebug8269ADB8; two current roadnoise-loop IDs read and formatted %d, Draw2DText8269AE68. Original floats900,50,30,25 read directly; ca802 RoadNoise302..321. Two green2 values at(900,50)/(900,80) appear P, absent N/R. Loop-ID text only, not a full surface classification test. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -25776,14 +25818,21 @@
       "pseudocode_line": 188,
       "original_call": "sub_8282D640(v0, &dword_82FFB840, \"Traffic\", \"Engine Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0084",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Engine Info: 82FFB840 -> TrafficEngine826F0104..0120 flag and masked entity-id guard -> original Idx/Azi/Vel/Srf/Car/Pit/VRn/VEn/DCr/DCa text; ca802 TrafficEngine292..303. Existing traffic-sound-engine telemetry gate only. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -25830,14 +25879,21 @@
       "pseudocode_line": 190,
       "original_call": "sub_8282D640(v0, &dword_82FFB84C, \"Traffic\", \"Management Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0086",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Management Info: 82FFB84C -> TrafficStateManager82703684..368C and36C4..36CC -> original successful/failed cull messages; ca802 TrafficStateManager289..308.3success/317failure log records; no general traffic sound fidelity claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -25857,14 +25913,21 @@
       "pseudocode_line": 191,
       "original_call": "sub_8282D640(v0, &dword_82FFB934, \"Passby\", \"Effect Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0087",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Effect Info: 82FFB934 -> Passby826F9BA4..9BC0 flag plus first-update then unpaused guards -> original Passby details; ca802 Passby614..624. Two actual TrafficSmall records only; no audible sample/playback claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -25911,14 +25974,21 @@
       "pseudocode_line": 193,
       "original_call": "sub_8282D640(v0, &dword_82FFB850, \"Passby\", \"Traffic Cull Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0089",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Traffic Cull Info: 82FFB850 -> TrafficControl82698DF8 and8EE0 flag branches -> original VelocityThreshold PASS and Distance PASS/FAIL; ca802 TrafficControl128..155.219velocity rows plus2distancePASS/217FAIL (438 marker matches); diagnostic log gate only. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -25938,14 +26008,21 @@
       "pseudocode_line": 194,
       "original_call": "sub_8282D640(v0, &dword_82FFB930, \"Passby\", \"State Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0090",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "State Info: 82FFB930 -> PassbyStateManager826D4E8C..4E94 -> original state dump with Attached/NOT-Attached and Loaded/NOT-LOADED strings; ca802500..511. Observed315 dump lines with8 NOT-Attached/NOT-LOADED states each; no loaded/attachment transition claim. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -26640,14 +26717,21 @@
       "pseudocode_line": 227,
       "original_call": "sub_8282D640(v0, &byte_82FFB8CB, \"Emitters\", \"Debug\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0116",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Debug: byte82FFB8CB loaded into r7 at826E6FEC -> SoundWorldScene::Query826E6788 stores debug flag -> QuerySoundMap826D18F0 tests it at1A10..1A3C and entity-center query-radius condition1A40..58, then DrawSphere1AD0. ca802 EmitterStateManager310 and SoundWorldScene query/draw body match. Visible yellow/green sphere-wire arcs across left building/sky appear P, absent N/R. Nearby static-sound-entity query-sphere drawing only; not emitter attachment, return-buffer occupancy, emitter type, location correctness or sound playback. Native positive/negative/captured baseline restore, actual current-save ca802/EXE052, explicit Console2 and exact owned cleanup are reviewed. Scope excludes full audio/hardware/parameter-domain fidelity.",
+      "evidence": [
+        "progress/debug_menu/sound32_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound32_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound32_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound32_native_20261101/ARCHIVE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -38801,8 +38885,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1149,
-      "verified": 178,
+      "pending": 1137,
+      "verified": 190,
       "original-noop": 28
     }
   }

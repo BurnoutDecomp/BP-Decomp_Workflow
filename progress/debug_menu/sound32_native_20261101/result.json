@@ -1,0 +1,58 @@
+{
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261101_v5\\runs\\sound32_62207_20261101_001526_b030fa3c98b74a18bb0c1a7021895ec7",
+  "flow_exit": 0,
+  "asserts": 0,
+  "verdict": "PASS",
+  "case_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261101_v5\\Case.ps1",
+  "as_expected": true,
+  "label": "",
+  "phase": "DRIVING",
+  "case": "native_sound32_log_display_62207",
+  "provenance": {
+    "exe_sha": "052112a5aa52",
+    "exe_b5": "ca802777",
+    "b5_dirty": 4,
+    "exe_size": 11777024,
+    "exe_mtime_before_lock": "2026-11-01T01:15:25.3003626+01:00",
+    "exe_mtime": "2026-11-01T01:15:25.3003626+01:00",
+    "parent_head": "30e1cd8ea",
+    "b5_head": "ca8027774"
+  },
+  "slot": 62207,
+  "expected": "PASS",
+  "when": "2026-11-01T01:25:34.4918252+01:00",
+  "area": "debug-menu-native-sound32",
+  "bug": "Thirty-two original Sound log/display gates; typed P/N/captured restore; event and rendered-consumer evidence pending.",
+  "checks": [
+    {
+      "pass": true,
+      "detail": "original flow_exit=0 success=True assert_stop=False foreign_game=False cleanup=True",
+      "name": "original strict flow completed and owned game exited",
+      "kind": "TerminalFlow"
+    },
+    {
+      "pass": true,
+      "detail": "0 assert family(ies), all known (0 lines)",
+      "name": "no new assertions",
+      "kind": "NewAsserts"
+    },
+    {
+      "pass": true,
+      "detail": "0 line(s) match /\\[EXCEPTION\\]/, want [-inf, 0]",
+      "name": "no exceptions",
+      "kind": "LogCount"
+    },
+    {
+      "pass": true,
+      "detail": "final phase DRIVING, want DRIVING",
+      "name": "reached DRIVING",
+      "kind": "Mark"
+    },
+    {
+      "pass": true,
+      "detail": "save=True targets=32 skipped=0 frames=99 prebootstrap=True rwac_live=True console_context2=True phase_console_writes=False phase_clock=True phase_stop=True site_credit=0; context is a bootstrap precondition; output/pixel review still required",
+      "name": "current save, Sound Console context, 32 typed targets, restore, frames and PhaseDone",
+      "kind": "Script"
+    }
+  ]
+}

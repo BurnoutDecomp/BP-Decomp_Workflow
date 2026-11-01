@@ -1,0 +1,7 @@
+# Sound32 native collection and twelve bounded new effects
+
+The current-save ca802/EXE052 private run completed all32 positive/negative/captured-restore targets plus terminal/post-restore:99 frames,3,267 unique typed raw triplets,98 command hashes and zero assertions/exceptions. Exact owner stop/cleanup/profile restore and normal17-file protection pass. A verified276-member lossless archive preserves original logs, frames, scripts and receipts; profile bytes are excluded.
+
+The99 captures and typed state changes are collection proof. Fresh source/native review and Root accepted10 new log effects plus Surface Types #0055 (two current roadnoise-loop IDs2/2) and Emitter Debug #0116 (static-sound-entity query-radius wire spheres only). The three previously accepted Engine/RPM/Loop Info gates are not recounted. All other sites stay pending unless the independent review supports their actual effect. No no-op is inferred from missing text/geometry.
+
+Eight contact sheets cover all96 target frames; baseline/terminal originals remain archived. The frame-token repair was separately reviewed; this run happened to have0 prefixed ACKs, while the actual prior failure and offline capture regression preserve that case. No production or normal-build changes. Exactly12 new dispositions are accepted;3 already-credited gates are not recounted and17 remain pending. Counts:190 verified /28 original no-ops /1,137 pending. See REVIEW.md and ROOT_DECISION.json. The original ROOT_PROPOSAL.json remains the pre-review snapshot.
