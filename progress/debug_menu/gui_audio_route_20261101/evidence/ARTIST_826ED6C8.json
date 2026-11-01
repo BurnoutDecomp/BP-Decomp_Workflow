@@ -1,0 +1,1357 @@
+{
+  "address": "0x826ED6C8",
+  "name": "BrnSound::Module::SoundLogicModule::ProcessGuiEvents",
+  "prototype": "int BrnSound::Module::SoundLogicModule::ProcessGuiEventsint __fastcall(int a1, GuiEventQueue *a2)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "GuiEventQueue *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v9",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v11",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v13",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v14",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v15",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v16",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "Environment",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v18",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v19",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v20",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v21",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v22",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v23",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v24",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v25",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v26",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v27",
+      "type": "__int128",
+      "is_reg": true,
+      "size": 16
+    },
+    {
+      "name": "v28",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v29",
+      "type": "char",
+      "is_reg": true,
+      "size": 1
+    },
+    {
+      "name": "v30",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v31",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v32",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v33",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "Hash",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v35",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v36",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v37",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v38",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v39",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v40",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v41",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v42",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v43",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v44",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v45",
+      "type": "CgsModule::Event[4]",
+      "is_reg": false,
+      "size": 16
+    },
+    {
+      "name": "v46",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v47",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v48",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v49",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v50",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v51",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v52",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v53",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v54",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v55",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v56",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v57",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v58",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v59",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v60",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v61",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v62",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v63",
+      "type": "int (**)()",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v64",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v65",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v66",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v67",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v68",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v69",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v70",
+      "type": "char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v71",
+      "type": "const char *",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v72",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v73",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v74",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v75",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v76",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v77",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v78",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v79",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v80",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v81",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v82",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v83",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v84",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v85",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v86",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v87",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v88",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v89",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v90",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v91",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v92",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v93",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v94",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v95",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v96",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v97",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v98",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v99",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v100",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v101",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v102",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v103",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v104",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v105",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v106",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v107",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v108",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v109",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v110",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v111",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v112",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v113",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v114",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v115",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v116",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v117",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v118",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v119",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v120",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v121",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v122",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v123",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v124",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v125",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v126",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v127",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v128",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v129",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v130",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v131",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v132",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v133",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v134",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v135",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    },
+    {
+      "name": "v136",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v137",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v138",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v139",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v140",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v141",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    },
+    {
+      "name": "v142",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v143",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v144",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v145",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v146",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v147",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v148",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v149",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v150",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v151",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v152",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v153",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v154",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v155",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v156",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v157",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v158",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v159",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v160",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v161",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v162",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v163",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v164",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v165",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v166",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v167",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v168",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v169",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v170",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v171",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v172",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v173",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v174",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v175",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v176",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v177",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v178",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v179",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v180",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v181",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v182",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v183",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v184",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v185",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v186",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v187",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v188",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v189",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v190",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v191",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v192",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v193",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v194",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v195",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v196",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v197",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v198",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v199",
+      "type": "_DWORD[2]",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v200",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v201",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v202",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v203",
+      "type": "__int16",
+      "is_reg": false,
+      "size": 2
+    },
+    {
+      "name": "v204",
+      "type": "_BYTE[256]",
+      "is_reg": false,
+      "size": 256
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": false,
+      "size": 4
+    }
+  ],
+  "pseudocode": "// local variable allocation has failed, the output may be wrong!\nint __fastcall BrnSound::Module::SoundLogicModule::ProcessGuiEvents(int a1, GuiEventQueue *a2)\n{\n  int v3; // r10\n  int v4; // r9\n  int v5; // r8\n  int v6; // r7\n  int v7; // r6\n  int v8; // r5\n  int v9; // r4\n  int result; // r3\n  int v11; // r30\n  char *v12; // r27\n  int v13; // r11\n  __int64 v14; // r10\n  int v15; // r11\n  int v16; // r3\n  int Environment; // r3\n  int v18; // r3\n  int v19; // r11\n  __int64 v20; // r11\n  __int64 v21; // r8 OVERLAPPED\n  __int64 v22; // r10 OVERLAPPED\n  __int64 v23; // r11\n  int v24; // r5\n  _DWORD *v25; // r4\n  int v26; // r11\n  __int128 v27; // r8 OVERLAPPED\n  __int64 v28; // r10\n  char v29; // r11\n  int v30; // r7\n  int v31; // r6\n  int v32; // r5\n  int v33; // r4\n  int Hash; // r11\n  __int64 v35; // r8 OVERLAPPED\n  __int64 v36; // r10 OVERLAPPED\n  __int64 v37; // r11\n  int v38; // r11\n  __int64 v39; // r11\n  __int64 v40; // r8 OVERLAPPED\n  __int64 v41; // r10 OVERLAPPED\n  _DWORD *v42; // r11\n  int v43; // r11\n  int v44; // r11\n  CgsModule::Event v45[4]; // [sp+50h] [-420h] BYREF\n  int (**v46)(); // [sp+60h] [-410h] BYREF\n  int v47; // [sp+64h] [-40Ch]\n  __int16 v48; // [sp+68h] [-408h]\n  __int16 v49; // [sp+6Ah] [-406h]\n  __int16 v50; // [sp+6Ch] [-404h]\n  __int16 v51; // [sp+6Eh] [-402h]\n  int v52; // [sp+70h] [-400h]\n  char *v53; // [sp+74h] [-3FCh]\n  int v54; // [sp+78h] [-3F8h]\n  char *v55; // [sp+7Ch] [-3F4h]\n  int (**v56)(); // [sp+80h] [-3F0h]\n  int (**v57)(); // [sp+84h] [-3ECh]\n  int (**v58)(); // [sp+88h] [-3E8h]\n  char *v59; // [sp+8Ch] [-3E4h]\n  int (**v60)(); // [sp+90h] [-3E0h]\n  char *v61; // [sp+94h] [-3DCh]\n  int v62; // [sp+98h] [-3D8h]\n  int (**v63)(); // [sp+9Ch] [-3D4h]\n  char *v64; // [sp+A0h] [-3D0h]\n  char *v65; // [sp+A4h] [-3CCh]\n  char *v66; // [sp+A8h] [-3C8h]\n  char *v67; // [sp+ACh] [-3C4h]\n  char *v68; // [sp+B0h] [-3C0h]\n  int v69; // [sp+B4h] [-3BCh] BYREF\n  char *v70; // [sp+B8h] [-3B8h]\n  const char *v71; // [sp+BCh] [-3B4h]\n  _DWORD v72[2]; // [sp+C0h] [-3B0h] BYREF\n  __int16 v73; // [sp+C8h] [-3A8h]\n  __int16 v74; // [sp+CAh] [-3A6h]\n  __int16 v75; // [sp+CCh] [-3A4h]\n  __int16 v76; // [sp+CEh] [-3A2h]\n  int v77; // [sp+D0h] [-3A0h]\n  char v78; // [sp+D4h] [-39Ch]\n  char v79; // [sp+D5h] [-39Bh]\n  _DWORD v80[2]; // [sp+E0h] [-390h] BYREF\n  __int16 v81; // [sp+E8h] [-388h]\n  __int16 v82; // [sp+EAh] [-386h]\n  __int16 v83; // [sp+ECh] [-384h]\n  __int16 v84; // [sp+EEh] [-382h]\n  int v85; // [sp+F0h] [-380h]\n  char v86; // [sp+F4h] [-37Ch]\n  char v87; // [sp+F5h] [-37Bh]\n  _DWORD v88[2]; // [sp+100h] [-370h] BYREF\n  __int16 v89; // [sp+108h] [-368h]\n  __int16 v90; // [sp+10Ah] [-366h]\n  __int16 v91; // [sp+10Ch] [-364h]\n  __int16 v92; // [sp+10Eh] [-362h]\n  int v93; // [sp+110h] [-360h]\n  _DWORD v94[2]; // [sp+120h] [-350h] BYREF\n  __int16 v95; // [sp+128h] [-348h]\n  __int16 v96; // [sp+12Ah] [-346h]\n  __int16 v97; // [sp+12Ch] [-344h]\n  __int16 v98; // [sp+12Eh] [-342h]\n  int v99; // [sp+130h] [-340h]\n  _DWORD v100[2]; // [sp+140h] [-330h] BYREF\n  __int16 v101; // [sp+148h] [-328h]\n  __int16 v102; // [sp+14Ah] [-326h]\n  __int16 v103; // [sp+14Ch] [-324h]\n  __int16 v104; // [sp+14Eh] [-322h]\n  int v105; // [sp+150h] [-320h]\n  _DWORD v106[2]; // [sp+160h] [-310h] BYREF\n  __int16 v107; // [sp+168h] [-308h]\n  __int16 v108; // [sp+16Ah] [-306h]\n  __int16 v109; // [sp+16Ch] [-304h]\n  __int16 v110; // [sp+16Eh] [-302h]\n  char v111; // [sp+170h] [-300h]\n  _DWORD v112[2]; // [sp+180h] [-2F0h] BYREF\n  __int16 v113; // [sp+188h] [-2E8h]\n  __int16 v114; // [sp+18Ah] [-2E6h]\n  __int16 v115; // [sp+18Ch] [-2E4h]\n  __int16 v116; // [sp+18Eh] [-2E2h]\n  int v117; // [sp+190h] [-2E0h]\n  _DWORD v118[2]; // [sp+1A0h] [-2D0h] BYREF\n  __int16 v119; // [sp+1A8h] [-2C8h]\n  __int16 v120; // [sp+1AAh] [-2C6h]\n  __int16 v121; // [sp+1ACh] [-2C4h]\n  __int16 v122; // [sp+1AEh] [-2C2h]\n  int v123; // [sp+1B0h] [-2C0h]\n  _DWORD v124[2]; // [sp+1C0h] [-2B0h] BYREF\n  __int16 v125; // [sp+1C8h] [-2A8h]\n  __int16 v126; // [sp+1CAh] [-2A6h]\n  __int16 v127; // [sp+1CCh] [-2A4h]\n  __int16 v128; // [sp+1CEh] [-2A2h]\n  int v129; // [sp+1D0h] [-2A0h]\n  _DWORD v130[2]; // [sp+1E0h] [-290h] BYREF\n  __int16 v131; // [sp+1E8h] [-288h]\n  __int16 v132; // [sp+1EAh] [-286h]\n  __int16 v133; // [sp+1ECh] [-284h]\n  __int16 v134; // [sp+1EEh] [-282h]\n  char v135; // [sp+1F0h] [-280h]\n  _DWORD v136[2]; // [sp+200h] [-270h] BYREF\n  __int16 v137; // [sp+208h] [-268h]\n  __int16 v138; // [sp+20Ah] [-266h]\n  __int16 v139; // [sp+20Ch] [-264h]\n  __int16 v140; // [sp+20Eh] [-262h]\n  int v141; // [sp+210h] [-260h]\n  _DWORD v142[2]; // [sp+220h] [-250h] BYREF\n  __int16 v143; // [sp+228h] [-248h]\n  __int16 v144; // [sp+22Ah] [-246h]\n  __int16 v145; // [sp+22Ch] [-244h]\n  __int16 v146; // [sp+22Eh] [-242h]\n  __int64 v147; // [sp+230h] [-240h]\n  _DWORD v148[2]; // [sp+240h] [-230h] BYREF\n  __int16 v149; // [sp+248h] [-228h]\n  __int16 v150; // [sp+24Ah] [-226h]\n  __int16 v151; // [sp+24Ch] [-224h]\n  __int16 v152; // [sp+24Eh] [-222h]\n  __int64 v153; // [sp+250h] [-220h]\n  _DWORD v154[2]; // [sp+260h] [-210h] BYREF\n  __int16 v155; // [sp+268h] [-208h]\n  __int16 v156; // [sp+26Ah] [-206h]\n  __int16 v157; // [sp+26Ch] [-204h]\n  __int16 v158; // [sp+26Eh] [-202h]\n  __int64 v159; // [sp+270h] [-200h]\n  _DWORD v160[2]; // [sp+280h] [-1F0h] BYREF\n  __int16 v161; // [sp+288h] [-1E8h]\n  __int16 v162; // [sp+28Ah] [-1E6h]\n  __int16 v163; // [sp+28Ch] [-1E4h]\n  __int16 v164; // [sp+28Eh] [-1E2h]\n  __int64 v165; // [sp+290h] [-1E0h]\n  _DWORD v166[2]; // [sp+2A0h] [-1D0h] BYREF\n  __int16 v167; // [sp+2A8h] [-1C8h]\n  __int16 v168; // [sp+2AAh] [-1C6h]\n  __int16 v169; // [sp+2ACh] [-1C4h]\n  __int16 v170; // [sp+2AEh] [-1C2h]\n  __int64 v171; // [sp+2B0h] [-1C0h]\n  __int64 v172; // [sp+2B8h] [-1B8h]\n  __int64 v173; // [sp+2C0h] [-1B0h]\n  _DWORD v174[2]; // [sp+2D0h] [-1A0h] BYREF\n  __int16 v175; // [sp+2D8h] [-198h]\n  __int16 v176; // [sp+2DAh] [-196h]\n  __int16 v177; // [sp+2DCh] [-194h]\n  __int16 v178; // [sp+2DEh] [-192h]\n  __int64 v179; // [sp+2E0h] [-190h]\n  __int64 v180; // [sp+2E8h] [-188h]\n  __int64 v181; // [sp+2F0h] [-180h]\n  _DWORD v182[2]; // [sp+300h] [-170h] BYREF\n  __int16 v183; // [sp+308h] [-168h]\n  __int16 v184; // [sp+30Ah] [-166h]\n  __int16 v185; // [sp+30Ch] [-164h]\n  __int16 v186; // [sp+30Eh] [-162h]\n  __int64 v187; // [sp+310h] [-160h]\n  __int64 v188; // [sp+318h] [-158h]\n  __int64 v189; // [sp+320h] [-150h]\n  _DWORD v190[2]; // [sp+330h] [-140h] BYREF\n  __int16 v191; // [sp+338h] [-138h]\n  __int16 v192; // [sp+33Ah] [-136h]\n  __int16 v193; // [sp+33Ch] [-134h]\n  __int16 v194; // [sp+33Eh] [-132h]\n  __int64 v195; // [sp+340h] [-130h]\n  __int64 v196; // [sp+348h] [-128h]\n  __int64 v197; // [sp+350h] [-120h]\n  __int64 v198; // [sp+358h] [-118h]\n  _DWORD v199[2]; // [sp+360h] [-110h] BYREF\n  __int16 v200; // [sp+368h] [-108h]\n  __int16 v201; // [sp+36Ah] [-106h]\n  __int16 v202; // [sp+36Ch] [-104h]\n  __int16 v203; // [sp+36Eh] [-102h]\n  _BYTE v204[256]; // [sp+370h] [-100h] BYREF\n\n  _savegprlr_14();\n  result = CgsModule::VariableEventQueue<18432,16>::GetFirstEvent(a2, v45, &v69);\n  v11 = v45[0].field_0;\n  if ( v45[0].field_0 )\n  {\n    v56 = off_820ABDE0;\n    v63 = off_820ABE10;\n    v57 = off_820ABE04;\n    v60 = off_820ABDE8;\n    v58 = off_820ABDF8;\n    v66 = \"100_Percent_And_Elite\";\n    v55 = \"lpLoadingScreenEvent\";\n    v70 = \"lpLanguageEvent\";\n    v67 = \"lpResultsEvent\";\n    v65 = \"lpIntroEvent\";\n    v61 = \"lpSettingsEvent\";\n    v59 = \"lpPlayOrderEvent\";\n    v53 = \"lpPreviewEvent\";\n    v12 = \"lpTraxEvent\";\n    v71 = \"lpTraxEvent\";\n    v68 = \"lpTriggerEvent\";\n    v64 = \"lpAudioEvent\";\n    v54 = -2097086464;\n    v62 = -2098003968;\n    while ( 1 )\n    {\n      if ( result > 458 )\n      {\n        switch ( result )\n        {\n          case 459:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v12,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                1941);\n              CgsDev::Assert::EndAssert();\n            }\n            v35 = *(v11 + 16);\n            v182[0] = off_820ABE00;\n            v184 = 0;\n            v185 = 0;\n            v183 = 8;\n            v36 = *v11;\n            v186 = 2;\n            v182[1] = 1;\n            v187 = v36;\n            v188 = *(&v35 - 4);\n            v189 = v35;\n            ___AddEvent_V__Message_VGuiEventAudioTraxLastPlayedIndexes_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__Cgs(\n              a1 + 11380,\n              v182,\n              8);\n            break;\n          case 460:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v53,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                1954);\n              CgsDev::Assert::EndAssert();\n            }\n            v37 = *v11;\n            v150 = 0;\n            v151 = 0;\n            v152 = 2;\n            v148[1] = 1;\n            v153 = v37;\n            v148[0] = v57;\n            v149 = 9;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiEventAudioTraxPreview>>(\n              a1 + 11380,\n              v148,\n              9);\n            break;\n          case 461:\n            v130[0] = &off_820AEC04;\n            v132 = 0;\n            v133 = 0;\n            v134 = 2;\n            v130[1] = 1;\n            v131 = 10;\n            v135 = 1;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<bool>>(a1 + 11380, v130, 10);\n            break;\n          case 462:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v59,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                1976);\n              CgsDev::Assert::EndAssert();\n            }\n            v38 = *v11;\n            v94[0] = off_820ABE08;\n            v96 = 0;\n            v97 = 0;\n            v98 = 2;\n            v99 = v38;\n            v94[1] = 1;\n            v95 = 11;\n            ___AddEvent_V__Message_VGuiEventAudioTraxPlayOrder_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__(\n              a1 + 11380,\n              v94,\n              11);\n            break;\n          case 463:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v61,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                2007);\n              CgsDev::Assert::EndAssert();\n            }\n            v39 = *v11;\n            v162 = 0;\n            v163 = 0;\n            v164 = 0;\n            v160[1] = 2;\n            v165 = v39;\n            v160[0] = v63;\n            v161 = 12;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiEventAudioSettings>>(\n              a1 + 11380,\n              v160,\n              12);\n            break;\n          case 464:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v65,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                2020);\n              CgsDev::Assert::EndAssert();\n            }\n            v40 = *(v11 + 16);\n            v174[0] = off_820ABE14;\n            v176 = 0;\n            v177 = 0;\n            v175 = 31;\n            v41 = *v11;\n            v178 = 5;\n            v174[1] = 1;\n            v179 = v41;\n            v180 = *(&v40 - 4);\n            v181 = v40;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiEventAudioEventIntros>>(\n              (a1 + 11380),\n              v174,\n              31);\n            break;\n          case 465:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v67,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                2034);\n              CgsDev::Assert::EndAssert();\n            }\n            v42 = (*(a1 + 19604) + 79664);\n            *v42 = *v11;\n            v42[1] = *(v11 + 4);\n            break;\n          case 466:\n            v43 = *v11;\n            v24 = 36;\n            v25 = v100;\n            v100[0] = off_820ABDD0;\n            v102 = 0;\n            v103 = 0;\n            v104 = 5;\n            v105 = v43;\n            v100[1] = 1;\n            v101 = 36;\n            goto LABEL_66;\n          case 468:\n            v44 = *v11;\n            v24 = 28;\n            v25 = v112;\n            v112[0] = off_820ABDD0;\n            v114 = 0;\n            v115 = 0;\n            v116 = 2;\n            v117 = v44;\n            v112[1] = 1;\n            v113 = 28;\nLABEL_66:\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<CgsSound::Playback::Name>>(\n              a1 + 11380,\n              v25,\n              v24);\n            break;\n          case 469:\n            v29 = *v11;\n            v106[0] = &off_820AEC04;\n            v108 = 0;\n            v109 = 0;\n            v110 = 1;\n            v111 = v29;\n            v106[1] = 2;\n            v107 = 44;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<bool>>(a1 + 11380, v106, 44);\n            if ( *v11 )\n              Hash = CgsSound::Playback::Name::MakeHash(*(v62 - 12708), v33, v32, v31, v30);\n            else\n              Hash = *(v54 - 32088);\n            v72[0] = off_820ABDF4;\n            v74 = 0;\n            v75 = 0;\n            v76 = 2;\n            v72[1] = 1;\n            v73 = 13;\n            v77 = Hash;\n            v78 = 1;\n            v79 = 0;\n            ___AddEvent_V__Message_VGuiEventPlayMusicOnMenuStream_CgsGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModul(\n              a1 + 11380,\n              v72,\n              13);\n            break;\n          default:\n            break;\n        }\n      }\n      else if ( result == 458 )\n      {\n        if ( !v11 )\n        {\n          CgsDev::Assert::BeginAssert();\n          CgsDev::Assert::FireAssert(\n            v12,\n            \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n            1928);\n          CgsDev::Assert::EndAssert();\n        }\n        *(&v27 + 1) = *(v11 + 16);\n        *(&v27 + 4) = *(v11 + 24);\n        v190[0] = off_820ABDFC;\n        v192 = 0;\n        v191 = 7;\n        v28 = *v11;\n        v193 = 0;\n        v194 = 2;\n        v190[1] = 1;\n        v195 = v28;\n        v196 = *(&v27 - 4);\n        v197 = v27;\n        v198 = *(&v27 + 4);\n        CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiEventAudioTraxUpdate>>(\n          a1 + 11380,\n          v190,\n          7,\n          DWORD1(v27));\n      }\n      else if ( result > 298 )\n      {\n        switch ( result )\n        {\n          case 302:\n            v23 = *v11;\n            v154[0] = off_820ABE0C;\n            v156 = 0;\n            v157 = 0;\n            v158 = 5;\n            v159 = v23;\n            v154[1] = 1;\n            v155 = 35;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<unsigned __int64>>(\n              a1 + 11380,\n              v154,\n              35);\n            break;\n          case 303:\n            if ( *(v11 + 4) && *v11 == 6 )\n            {\n              v136[0] = off_820ABDD0;\n              v138 = 0;\n              v139 = 0;\n              v140 = 5;\n              v137 = 36;\n              v136[1] = 1;\n              v141 = CgsSound::Playback::Name::MakeHash(v66, v9, v8, v7, v6);\n              v24 = 36;\n              v25 = v136;\n              goto LABEL_66;\n            }\n            v26 = *v11;\n            v118[0] = &off_820ABE1C;\n            v120 = 0;\n            v121 = 0;\n            v122 = 5;\n            v123 = v26;\n            v118[1] = 1;\n            v119 = 27;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<int>>(a1 + 11380, v118, 27);\n            break;\n          case 456:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v64,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                1902);\n              CgsDev::Assert::EndAssert();\n            }\n            v21 = *(v11 + 16);\n            v167 = 5;\n            v168 = 0;\n            v166[0] = v58;\n            v22 = *v11;\n            v169 = 0;\n            v170 = 1;\n            v166[1] = 1;\n            v171 = v22;\n            v172 = *(&v21 - 4);\n            v173 = v21;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiAudioEvent>>(\n              a1 + 11380,\n              v166,\n              5);\n            break;\n          case 457:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v68,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                1915);\n              CgsDev::Assert::EndAssert();\n            }\n            v201 = 0;\n            v202 = 0;\n            v203 = 0;\n            v199[1] = 1;\n            v199[0] = v60;\n            v200 = 6;\n            memcpy(v204, v11, 100, v7, v6, v5, v4, v3);\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiAudioTriggerEvent>>(\n              a1 + 11380,\n              v199,\n              6);\n            break;\n          default:\n            break;\n        }\n      }\n      else if ( result == 298 )\n      {\n        v19 = *v11;\n        v124[0] = off_820ABDD0;\n        v126 = 0;\n        v127 = 0;\n        v128 = 2;\n        v129 = v19;\n        v124[1] = 1;\n        v125 = 28;\n        CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<CgsSound::Playback::Name>>(\n          a1 + 11380,\n          v124,\n          28);\n        v20 = *(v11 + 8);\n        v142[0] = off_820ABE0C;\n        v144 = 0;\n        v145 = 0;\n        v146 = 5;\n        v147 = v20;\n        v142[1] = 1;\n        v143 = 25;\n        CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<unsigned __int64>>(a1 + 11380, v142, 25);\n      }\n      else\n      {\n        switch ( result )\n        {\n          case 23:\n            v15 = *v11;\n            v80[0] = off_820ABDF4;\n            v82 = 0;\n            v83 = 0;\n            v84 = 2;\n            v85 = v15;\n            v86 = *(v11 + 4);\n            v80[1] = 1;\n            v87 = *(v11 + 5);\n            v81 = 13;\n            ___AddEvent_V__Message_VGuiEventPlayMusicOnMenuStream_CgsGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModul(\n              a1 + 11380,\n              v80,\n              13);\n            break;\n          case 31:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v70,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                2042);\n              CgsDev::Assert::EndAssert();\n            }\n            v13 = *v11;\n            v46 = off_820ABE18;\n            v49 = 0;\n            v50 = 0;\n            v51 = 5;\n            v52 = v13;\n            v47 = 1;\n            v48 = 33;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<enum CgsLanguage::ELanguage>>(\n              a1 + 11380,\n              &v46,\n              33);\n            v49 = 0;\n            v50 = 0;\n            v51 = 2;\n            v47 = 1;\n            CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<enum CgsLanguage::ELanguage>>(\n              a1 + 11380,\n              &v46,\n              v48);\n            break;\n          case 33:\n            if ( !v11 )\n            {\n              CgsDev::Assert::BeginAssert();\n              CgsDev::Assert::FireAssert(\n                v55,\n                \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Module/LogicModule/BrnSoundLogicModule.cpp\",\n                2060);\n              CgsDev::Assert::EndAssert();\n            }\n            v14 = *(a1 + 79216);\n            if ( *v11 )\n              LODWORD(v14) = v14 | 2;\n            else\n              LODWORD(v14) = v14 & 0xFFFFFFFD;\n            *(a1 + 79216) = v14;\n            break;\n          case 88:\n            v16 = a1 + 568;\n            if ( *v11 )\n            {\n              Environment = CgsSound::Playback::Module::Module::GetEnvironment(v16);\n              CgsSound::Playback::Environment::StopDac(Environment);\n            }\n            else\n            {\n              v18 = CgsSound::Playback::Module::Module::GetEnvironment(v16);\n              CgsSound::Playback::Environment::StartDac(v18);\n            }\n            break;\n          case 256:\n            if ( *(v11 + 440) == 15 )\n            {\n              v90 = 0;\n              v91 = 0;\n              v92 = 5;\n              v88[1] = 1;\n              v88[0] = v56;\n              v93 = 1;\n              v89 = 37;\n              ___AddEvent_V__Message_W4OnlineVoiceOver_1Enums_AttribSys___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__(\n                a1 + 11380,\n                v88,\n                37);\n            }\n            break;\n          default:\n            break;\n        }\n      }\n      result = CgsModule::VariableEventQueue<18432,16>::GetNextEvent(a2, v11, v45, &v69);\n      v11 = v45[0].field_0;\n      if ( !v45[0].field_0 )\n        break;\n      v12 = v71;\n    }\n  }\n  _restgprlr();\n  return result;\n}\n",
+  "assembly": "0x826ED6C8  mflr      r12\n0x826ED6CC  bl        __savegprlr_14\n0x826ED6D0  stwu      r1, back_chain(r1)\n0x826ED6D4  mr        r28, r3\n0x826ED6D8  mr        r3, r4\n0x826ED6DC  addi      r5, r1, 0x470+var_3BC\n0x826ED6E0  addi      r4, r1, 0x470+var_420\n0x826ED6E4  stw       r3, 0x470+arg_1C(r1)\n0x826ED6E8  bl        CgsModule__VariableEventQueue_18432_16___GetFirstEvent\n0x826ED6EC  lwz       r30, 0x470+var_420(r1)\n0x826ED6F0  cmplwi    cr6, r30, 0\n0x826ED6F4  beq       cr6, loc_826EE674\n0x826ED6F8  lis       r11, off_820ABE1C@ha\n0x826ED6FC  li        r31, 0\n0x826ED700  addi      r15, r11, off_820ABE1C@l\n0x826ED704  lis       r11, off_820ABDE0@ha\n0x826ED708  li        r25, 5\n0x826ED70C  addi      r11, r11, off_820ABDE0@l\n0x826ED710  li        r29, 1\n0x826ED714  li        r26, 2\n0x826ED718  stw       r11, 0x470+var_3F0(r1)\n0x826ED71C  lis       r11, off_820ABE18@ha\n0x826ED720  addi      r19, r11, off_820ABE18@l\n0x826ED724  lis       r11, off_820ABE14@ha\n0x826ED728  addi      r18, r11, off_820ABE14@l\n0x826ED72C  lis       r11, off_820ABE10@ha\n0x826ED730  addi      r11, r11, off_820ABE10@l\n0x826ED734  stw       r11, 0x470+var_3D4(r1)\n0x826ED738  lis       r11, off_820ABE0C@ha\n0x826ED73C  addi      r22, r11, off_820ABE0C@l\n0x826ED740  lis       r11, off_820ABDD0@ha\n0x826ED744  addi      r24, r11, off_820ABDD0@l\n0x826ED748  lis       r11, off_820ABE08@ha\n0x826ED74C  addi      r14, r11, off_820ABE08@l\n0x826ED750  lis       r11, off_820ABE04@ha\n0x826ED754  addi      r11, r11, off_820ABE04@l\n0x826ED758  stw       r11, 0x470+var_3EC(r1)\n0x826ED75C  lis       r11, off_820ABE00@ha\n0x826ED760  addi      r17, r11, off_820ABE00@l\n0x826ED764  lis       r11, off_820ABDFC@ha\n0x826ED768  addi      r16, r11, off_820ABDFC@l\n0x826ED76C  lis       r11, off_820ABDE8@ha\n0x826ED770  addi      r11, r11, off_820ABDE8@l\n0x826ED774  stw       r11, 0x470+var_3E0(r1)\n0x826ED778  lis       r11, off_820ABDF8@ha\n0x826ED77C  addi      r11, r11, off_820ABDF8@l\n0x826ED780  stw       r11, 0x470+var_3E8(r1)\n0x826ED784  lis       r11, off_820ABDF4@ha\n0x826ED788  addi      r21, r11, off_820ABDF4@l\n0x826ED78C  lis       r11, off_820AEC04@ha\n0x826ED790  addi      r20, r11, off_820AEC04@l\n0x826ED794  lis       r11, a100PercentAndE@ha\n0x826ED798  addi      r11, r11, a100PercentAndE@l# \"100_Percent_And_Elite\"\n0x826ED79C  stw       r11, 0x470+var_3C8(r1)\n0x826ED7A0  lis       r11, aLploadingscree@ha\n0x826ED7A4  addi      r11, r11, aLploadingscree@l# \"lpLoadingScreenEvent\"\n0x826ED7A8  stw       r11, 0x470+var_3F4(r1)\n0x826ED7AC  lis       r11, aLplanguageeven@ha\n0x826ED7B0  addi      r11, r11, aLplanguageeven@l# \"lpLanguageEvent\"\n0x826ED7B4  stw       r11, 0x470+var_3B8(r1)\n0x826ED7B8  lis       r11, aLpresultsevent@ha\n0x826ED7BC  addi      r11, r11, aLpresultsevent@l# \"lpResultsEvent\"\n0x826ED7C0  stw       r11, 0x470+var_3C4(r1)\n0x826ED7C4  lis       r11, aLpintroevent@ha\n0x826ED7C8  addi      r11, r11, aLpintroevent@l# \"lpIntroEvent\"\n0x826ED7CC  stw       r11, 0x470+var_3CC(r1)\n0x826ED7D0  lis       r11, aLpsettingseven@ha\n0x826ED7D4  addi      r11, r11, aLpsettingseven@l# \"lpSettingsEvent\"\n0x826ED7D8  stw       r11, 0x470+var_3DC(r1)\n0x826ED7DC  lis       r11, aLpplayordereve@ha\n0x826ED7E0  addi      r11, r11, aLpplayordereve@l# \"lpPlayOrderEvent\"\n0x826ED7E4  stw       r11, 0x470+var_3E4(r1)\n0x826ED7E8  lis       r11, aLppreviewevent@ha\n0x826ED7EC  addi      r11, r11, aLppreviewevent@l# \"lpPreviewEvent\"\n0x826ED7F0  stw       r11, 0x470+var_3FC(r1)\n0x826ED7F4  lis       r11, aLptraxevent@ha\n0x826ED7F8  addi      r27, r11, aLptraxevent@l# \"lpTraxEvent\"\n0x826ED7FC  lis       r11, aLptriggerevent@ha\n0x826ED800  addi      r11, r11, aLptriggerevent@l# \"lpTriggerEvent\"\n0x826ED804  stw       r27, 0x470+var_3B4(r1)\n0x826ED808  stw       r11, 0x470+var_3C0(r1)\n0x826ED80C  lis       r11, aLpaudioevent@ha\n0x826ED810  addi      r11, r11, aLpaudioevent@l# \"lpAudioEvent\"\n0x826ED814  stw       r11, 0x470+var_3D0(r1)\n0x826ED818  lis       r11, aDP4B5MainBurno_262@ha\n0x826ED81C  addi      r23, r11, aDP4B5MainBurno_262@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x826ED820  lis       r11, -0x7CFF\n0x826ED824  stw       r11, 0x470+var_3F8(r1)\n0x826ED828  lis       r11, -0x7D0D\n0x826ED82C  stw       r11, 0x470+var_3D8(r1)\n0x826ED830  b         loc_826ED838\n0x826ED834  lwz       r27, 0x470+var_3B4(r1)\n0x826ED838  cmpwi     cr6, r3, 0x1CA\n0x826ED83C  bgt       cr6, loc_826EE2A8\n0x826ED840  beq       cr6, loc_826EE234\n0x826ED844  cmpwi     cr6, r3, 0x12A\n0x826ED848  bgt       cr6, loc_826EDE14\n0x826ED84C  beq       cr6, loc_826EDDA4\n0x826ED850  addi      r11, r3, -0x17\n0x826ED854  cmplwi    cr6, r11, 0xE9# switch 234 cases  ; switch 234 cases\n0x826ED858  bgt       cr6, def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826ED85C  lis       r12, jpt_826ED870@ha\n0x826ED860  addi      r12, r12, jpt_826ED870@l\n0x826ED864  slwi      r0, r11, 2\n0x826ED868  lwzx      r0, r12, r0\n0x826ED86C  mtctr     r0\n0x826ED870  bctr# switch jump  ; switch jump\n0x826ED874  .long loc_826EDCF0, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, loc_826EDC1C, def_826ED870, loc_826EDC9C, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870# jump table for switch statement  ; jump table for switch statement\n0x826EDC1C  cmplwi    cr6, r30, 0# jumptable 826ED870 case 8  ; jumptable 826ED870 case 8\n0x826EDC20  bne       cr6, loc_826EDC3C\n0x826EDC24  bl        CgsDev__Assert__BeginAssert\n0x826EDC28  li        r5, 0x7FA\n0x826EDC2C  mr        r4, r23\n0x826EDC30  lwz       r3, 0x470+var_3B8(r1)\n0x826EDC34  bl        CgsDev__Assert__FireAssert\n0x826EDC38  bl        CgsDev__Assert__EndAssert\n0x826EDC3C  lwz       r11, 0(r30)\n0x826EDC40  addi      r27, r28, 0x2C74\n0x826EDC44  li        r5, 0x21 # '!'\n0x826EDC48  stw       r19, 0x470+var_410(r1)\n0x826EDC4C  addi      r4, r1, 0x470+var_410\n0x826EDC50  sth       r31, 0x470+var_406(r1)\n0x826EDC54  mr        r3, r27\n0x826EDC58  sth       r31, 0x470+var_404(r1)\n0x826EDC5C  sth       r25, 0x470+var_402(r1)\n0x826EDC60  stw       r11, 0x470+var_400(r1)\n0x826EDC64  li        r11, 0x21 # '!'\n0x826EDC68  stw       r29, 0x470+var_40C(r1)\n0x826EDC6C  sth       r11, 0x470+var_408(r1)\n0x826EDC70  bl        ___AddEvent_V__Message_W4ELanguage_CgsLanguage___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__M\n0x826EDC74  lhz       r11, 0x470+var_408(r1)\n0x826EDC78  addi      r4, r1, 0x470+var_410\n0x826EDC7C  mr        r3, r27\n0x826EDC80  sth       r31, 0x470+var_406(r1)\n0x826EDC84  extsh     r5, r11\n0x826EDC88  sth       r31, 0x470+var_404(r1)\n0x826EDC8C  sth       r26, 0x470+var_402(r1)\n0x826EDC90  stw       r29, 0x470+var_40C(r1)\n0x826EDC94  bl        ___AddEvent_V__Message_W4ELanguage_CgsLanguage___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__M\n0x826EDC98  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDC9C  cmplwi    cr6, r30, 0# jumptable 826ED870 case 10  ; jumptable 826ED870 case 10\n0x826EDCA0  bne       cr6, loc_826EDCBC\n0x826EDCA4  bl        CgsDev__Assert__BeginAssert\n0x826EDCA8  li        r5, 0x80C\n0x826EDCAC  mr        r4, r23\n0x826EDCB0  lwz       r3, 0x470+var_3F4(r1)\n0x826EDCB4  bl        CgsDev__Assert__FireAssert\n0x826EDCB8  bl        CgsDev__Assert__EndAssert\n0x826EDCBC  lbz       r11, 0(r30)\n0x826EDCC0  cmplwi    cr6, r11, 0\n0x826EDCC4  addis     r11, r28, 1\n0x826EDCC8  addi      r11, r11, 0x3570\n0x826EDCCC  ld        r10, 0(r11)\n0x826EDCD0  beq       cr6, loc_826EDCE0\n0x826EDCD4  ori       r10, r10, 2\n0x826EDCD8  std       r10, 0(r11)\n0x826EDCDC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDCE0  li        r12, -3\n0x826EDCE4  and       r10, r10, r12\n0x826EDCE8  std       r10, 0(r11)\n0x826EDCEC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDCF0  lwz       r11, 0(r30)# jumptable 826ED870 case 0  ; jumptable 826ED870 case 0\n0x826EDCF4  li        r5, 0xD\n0x826EDCF8  addi      r4, r1, 0x470+var_390\n0x826EDCFC  stw       r21, 0x470+var_390(r1)\n0x826EDD00  addi      r3, r28, 0x2C74\n0x826EDD04  sth       r31, 0x470+var_386(r1)\n0x826EDD08  sth       r31, 0x470+var_384(r1)\n0x826EDD0C  sth       r26, 0x470+var_382(r1)\n0x826EDD10  stw       r11, 0x470+var_380(r1)\n0x826EDD14  lbz       r11, 4(r30)\n0x826EDD18  stw       r29, 0x470+var_38C(r1)\n0x826EDD1C  stb       r11, 0x470+var_37C(r1)\n0x826EDD20  lbz       r11, 5(r30)\n0x826EDD24  stb       r11, 0x470+var_37B(r1)\n0x826EDD28  li        r11, 0xD\n0x826EDD2C  sth       r11, 0x470+var_388(r1)\n0x826EDD30  bl        ___AddEvent_V__Message_VGuiEventPlayMusicOnMenuStream_CgsGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModul\n0x826EDD34  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDD38  lwz       r11, 0x1B8(r30)# jumptable 826ED870 case 233  ; jumptable 826ED870 case 233\n0x826EDD3C  cmpwi     cr6, r11, 0xF\n0x826EDD40  bne       cr6, def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDD44  lwz       r11, 0x470+var_3F0(r1)\n0x826EDD48  li        r5, 0x25 # '%'\n0x826EDD4C  addi      r4, r1, 0x470+var_370\n0x826EDD50  sth       r31, 0x470+var_366(r1)\n0x826EDD54  addi      r3, r28, 0x2C74\n0x826EDD58  sth       r31, 0x470+var_364(r1)\n0x826EDD5C  sth       r25, 0x470+var_362(r1)\n0x826EDD60  stw       r29, 0x470+var_36C(r1)\n0x826EDD64  stw       r11, 0x470+var_370(r1)\n0x826EDD68  li        r11, 0x25 # '%'\n0x826EDD6C  stw       r29, 0x470+var_360(r1)\n0x826EDD70  sth       r11, 0x470+var_368(r1)\n0x826EDD74  bl        ___AddEvent_V__Message_W4OnlineVoiceOver_1Enums_AttribSys___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__\n0x826EDD78  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDD7C  lbz       r11, 0(r30)# jumptable 826ED870 case 65  ; jumptable 826ED870 case 65\n0x826EDD80  addi      r3, r28, 0x238\n0x826EDD84  cmplwi    cr6, r11, 0\n0x826EDD88  beq       cr6, loc_826EDD98\n0x826EDD8C  bl        CgsSound__Playback__Module__Module__GetEnvironment\n0x826EDD90  bl        CgsSound__Playback__Environment__StopDac\n0x826EDD94  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDD98  bl        CgsSound__Playback__Module__Module__GetEnvironment\n0x826EDD9C  bl        CgsSound__Playback__Environment__StartDac\n0x826EDDA0  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDDA4  lwz       r11, 0(r30)\n0x826EDDA8  addi      r27, r28, 0x2C74\n0x826EDDAC  li        r5, 0x1C\n0x826EDDB0  stw       r24, 0x470+var_2B0(r1)\n0x826EDDB4  addi      r4, r1, 0x470+var_2B0\n0x826EDDB8  sth       r31, 0x470+var_2A6(r1)\n0x826EDDBC  mr        r3, r27\n0x826EDDC0  sth       r31, 0x470+var_2A4(r1)\n0x826EDDC4  sth       r26, 0x470+var_2A2(r1)\n0x826EDDC8  stw       r11, 0x470+var_2A0(r1)\n0x826EDDCC  li        r11, 0x1C\n0x826EDDD0  stw       r29, 0x470+var_2AC(r1)\n0x826EDDD4  sth       r11, 0x470+var_2A8(r1)\n0x826EDDD8  bl        ___AddEvent_V__Message_VName_Playback_CgsSound___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__M\n0x826EDDDC  ld        r11, 8(r30)\n0x826EDDE0  li        r5, 0x19\n0x826EDDE4  addi      r4, r1, 0x470+var_250\n0x826EDDE8  stw       r22, 0x470+var_250(r1)\n0x826EDDEC  mr        r3, r27\n0x826EDDF0  sth       r31, 0x470+var_246(r1)\n0x826EDDF4  sth       r31, 0x470+var_244(r1)\n0x826EDDF8  sth       r25, 0x470+var_242(r1)\n0x826EDDFC  std       r11, 0x470+var_240(r1)\n0x826EDE00  li        r11, 0x19\n0x826EDE04  stw       r29, 0x470+var_24C(r1)\n0x826EDE08  sth       r11, 0x470+var_248(r1)\n0x826EDE0C  bl        ___AddEvent_V__Message__K_Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Message__K_Io_CgsSound__\n0x826EDE10  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDE14  addi      r11, r3, -0x12E\n0x826EDE18  cmplwi    cr6, r11, 0x9B# switch 156 cases  ; switch 156 cases\n0x826EDE1C  bgt       cr6, def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EDE20  lis       r12, jpt_826EDE34@ha\n0x826EDE24  addi      r12, r12, jpt_826EDE34@l\n0x826EDE28  slwi      r0, r11, 2\n0x826EDE2C  lwzx      r0, r12, r0\n0x826EDE30  mtctr     r0\n0x826EDE34  bctr# switch jump  ; switch jump\n0x826EDE38  .long loc_826EE178, loc_826EE1B0, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870, def_826ED870# jump table for switch statement  ; jump table for switch statement\n0x826EE0A8  cmplwi    cr6, r30, 0# jumptable 826EDE34 case 154  ; jumptable 826EDE34 case 154\n0x826EE0AC  bne       cr6, loc_826EE0C8\n0x826EE0B0  bl        CgsDev__Assert__BeginAssert\n0x826EE0B4  li        r5, 0x76E\n0x826EE0B8  mr        r4, r23\n0x826EE0BC  lwz       r3, 0x470+var_3D0(r1)\n0x826EE0C0  bl        CgsDev__Assert__FireAssert\n0x826EE0C4  bl        CgsDev__Assert__EndAssert\n0x826EE0C8  lwz       r10, 0x470+var_3E8(r1)\n0x826EE0CC  addi      r11, r1, 0x470+var_1C0\n0x826EE0D0  ld        r9, 8(r30)\n0x826EE0D4  li        r5, 5\n0x826EE0D8  ld        r8, 0x10(r30)\n0x826EE0DC  addi      r4, r1, 0x470+var_1D0\n0x826EE0E0  sth       r25, 0x470+var_1C8(r1)\n0x826EE0E4  addi      r3, r28, 0x2C74\n0x826EE0E8  sth       r31, 0x470+var_1C6(r1)\n0x826EE0EC  stw       r10, 0x470+var_1D0(r1)\n0x826EE0F0  ld        r10, 0(r30)\n0x826EE0F4  sth       r31, 0x470+var_1C4(r1)\n0x826EE0F8  sth       r29, 0x470+var_1C2(r1)\n0x826EE0FC  stw       r29, 0x470+var_1CC(r1)\n0x826EE100  std       r10, 0(r11)\n0x826EE104  std       r9, 8(r11)\n0x826EE108  std       r8, 0x10(r11)\n0x826EE10C  bl        ___AddEvent_V__Message_VGuiAudioEvent_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Mes\n0x826EE110  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE114  cmplwi    cr6, r30, 0# jumptable 826EDE34 case 155  ; jumptable 826EDE34 case 155\n0x826EE118  bne       cr6, loc_826EE134\n0x826EE11C  bl        CgsDev__Assert__BeginAssert\n0x826EE120  li        r5, 0x77B\n0x826EE124  mr        r4, r23\n0x826EE128  lwz       r3, 0x470+var_3C0(r1)\n0x826EE12C  bl        CgsDev__Assert__FireAssert\n0x826EE130  bl        CgsDev__Assert__EndAssert\n0x826EE134  lwz       r11, 0x470+var_3E0(r1)\n0x826EE138  addi      r3, r1, 0x470+var_100# Dst  ; Dst\n0x826EE13C  li        r5, 0x64 # 'd'# Size  ; Size\n0x826EE140  sth       r31, 0x470+var_106(r1)\n0x826EE144  mr        r4, r30# Src  ; Src\n0x826EE148  sth       r31, 0x470+var_104(r1)\n0x826EE14C  sth       r31, 0x470+var_102(r1)\n0x826EE150  stw       r29, 0x470+var_10C(r1)\n0x826EE154  stw       r11, 0x470+var_110(r1)\n0x826EE158  li        r11, 6\n0x826EE15C  sth       r11, 0x470+var_108(r1)\n0x826EE160  bl        memcpy\n0x826EE164  li        r5, 6\n0x826EE168  addi      r4, r1, 0x470+var_110\n0x826EE16C  addi      r3, r28, 0x2C74\n0x826EE170  bl        ___AddEvent_V__Message_VGuiAudioTriggerEvent_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NA\n0x826EE174  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE178  ld        r11, 0(r30)# jumptable 826EDE34 case 0  ; jumptable 826EDE34 case 0\n0x826EE17C  li        r5, 0x23 # '#'\n0x826EE180  addi      r4, r1, 0x470+var_210\n0x826EE184  stw       r22, 0x470+var_210(r1)\n0x826EE188  addi      r3, r28, 0x2C74\n0x826EE18C  sth       r31, 0x470+var_206(r1)\n0x826EE190  sth       r31, 0x470+var_204(r1)\n0x826EE194  sth       r25, 0x470+var_202(r1)\n0x826EE198  std       r11, 0x470+var_200(r1)\n0x826EE19C  li        r11, 0x23 # '#'\n0x826EE1A0  stw       r29, 0x470+var_20C(r1)\n0x826EE1A4  sth       r11, 0x470+var_208(r1)\n0x826EE1A8  bl        ___AddEvent_V__Message__K_Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Message__K_Io_CgsSound__\n0x826EE1AC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE1B0  lbz       r11, 4(r30)# jumptable 826EDE34 case 1  ; jumptable 826EDE34 case 1\n0x826EE1B4  cmplwi    cr6, r11, 0\n0x826EE1B8  beq       cr6, loc_826EE1FC\n0x826EE1BC  lwz       r11, 0(r30)\n0x826EE1C0  cmpwi     cr6, r11, 6\n0x826EE1C4  bne       cr6, loc_826EE1FC\n0x826EE1C8  li        r11, 0x24 # '$'\n0x826EE1CC  lwz       r3, 0x470+var_3C8(r1)\n0x826EE1D0  stw       r24, 0x470+var_270(r1)\n0x826EE1D4  sth       r31, 0x470+var_266(r1)\n0x826EE1D8  sth       r31, 0x470+var_264(r1)\n0x826EE1DC  sth       r25, 0x470+var_262(r1)\n0x826EE1E0  sth       r11, 0x470+var_268(r1)\n0x826EE1E4  stw       r29, 0x470+var_26C(r1)\n0x826EE1E8  bl        CgsSound__Playback__Name__MakeHash\n0x826EE1EC  stw       r3, 0x470+var_260(r1)\n0x826EE1F0  li        r5, 0x24 # '$'\n0x826EE1F4  addi      r4, r1, 0x470+var_270\n0x826EE1F8  b         loc_826EE64C\n0x826EE1FC  lwz       r11, 0(r30)\n0x826EE200  li        r5, 0x1B\n0x826EE204  addi      r4, r1, 0x470+var_2D0\n0x826EE208  stw       r15, 0x470+var_2D0(r1)\n0x826EE20C  addi      r3, r28, 0x2C74\n0x826EE210  sth       r31, 0x470+var_2C6(r1)\n0x826EE214  sth       r31, 0x470+var_2C4(r1)\n0x826EE218  sth       r25, 0x470+var_2C2(r1)\n0x826EE21C  stw       r11, 0x470+var_2C0(r1)\n0x826EE220  li        r11, 0x1B\n0x826EE224  stw       r29, 0x470+var_2CC(r1)\n0x826EE228  sth       r11, 0x470+var_2C8(r1)\n0x826EE22C  bl        ___AddEvent_V__Message_H_Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Message_H_Io_CgsSound__H_# CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<int>>(CgsSound::Io::Message<int> const &,int)\n0x826EE230  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE234  cmplwi    cr6, r30, 0\n0x826EE238  bne       cr6, loc_826EE254\n0x826EE23C  bl        CgsDev__Assert__BeginAssert\n0x826EE240  li        r5, 0x788\n0x826EE244  mr        r4, r23\n0x826EE248  mr        r3, r27\n0x826EE24C  bl        CgsDev__Assert__FireAssert\n0x826EE250  bl        CgsDev__Assert__EndAssert\n0x826EE254  li        r10, 7\n0x826EE258  ld        r9, 8(r30)\n0x826EE25C  addi      r11, r1, 0x470+var_130\n0x826EE260  ld        r8, 0x10(r30)\n0x826EE264  ld        r7, 0x18(r30)\n0x826EE268  li        r5, 7\n0x826EE26C  stw       r16, 0x470+var_140(r1)\n0x826EE270  addi      r4, r1, 0x470+var_140\n0x826EE274  sth       r31, 0x470+var_136(r1)\n0x826EE278  addi      r3, r28, 0x2C74\n0x826EE27C  sth       r10, 0x470+var_138(r1)\n0x826EE280  ld        r10, 0(r30)\n0x826EE284  sth       r31, 0x470+var_134(r1)\n0x826EE288  sth       r26, 0x470+var_132(r1)\n0x826EE28C  stw       r29, 0x470+var_13C(r1)\n0x826EE290  std       r10, 0(r11)\n0x826EE294  std       r9, 8(r11)\n0x826EE298  std       r8, 0x10(r11)\n0x826EE29C  std       r7, 0x18(r11)\n0x826EE2A0  bl        ___AddEvent_V__Message_VGuiEventAudioTraxUpdate_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA\n0x826EE2A4  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE2A8  addi      r11, r3, -0x1CB\n0x826EE2AC  cmplwi    cr6, r11, 0xA# switch 11 cases  ; switch 11 cases\n0x826EE2B0  bgt       cr6, def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE2B4  lis       r12, jpt_826EE2C8@ha\n0x826EE2B8  addi      r12, r12, jpt_826EE2C8@l\n0x826EE2BC  slwi      r0, r11, 2\n0x826EE2C0  lwzx      r0, r12, r0\n0x826EE2C4  mtctr     r0\n0x826EE2C8  bctr# switch jump  ; switch jump\n0x826EE2CC  .long loc_826EE394# jump table for switch statement  ; jump table for switch statement\n0x826EE2F8  lbz       r11, 0(r30)# jumptable 826EE2C8 case 10  ; jumptable 826EE2C8 case 10\n0x826EE2FC  addi      r27, r28, 0x2C74\n0x826EE300  li        r5, 0x2C # ','\n0x826EE304  stw       r20, 0x470+var_310(r1)\n0x826EE308  addi      r4, r1, 0x470+var_310\n0x826EE30C  sth       r31, 0x470+var_306(r1)\n0x826EE310  mr        r3, r27\n0x826EE314  sth       r31, 0x470+var_304(r1)\n0x826EE318  sth       r29, 0x470+var_302(r1)\n0x826EE31C  stb       r11, 0x470+var_300(r1)\n0x826EE320  li        r11, 0x2C # ','\n0x826EE324  stw       r26, 0x470+var_30C(r1)\n0x826EE328  sth       r11, 0x470+var_308(r1)\n0x826EE32C  bl        ___AddEvent_V__Message__N_Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Message__N_Io_CgsSound__\n0x826EE330  lbz       r11, 0(r30)\n0x826EE334  cmplwi    cr6, r11, 0\n0x826EE338  beq       cr6, loc_826EE350\n0x826EE33C  lwz       r11, 0x470+var_3D8(r1)\n0x826EE340  lwz       r3, -0x31A4(r11)\n0x826EE344  bl        CgsSound__Playback__Name__MakeHash\n0x826EE348  mr        r11, r3\n0x826EE34C  b         loc_826EE358\n0x826EE350  lwz       r11, 0x470+var_3F8(r1)\n0x826EE354  lwz       r11, -0x7D58(r11)\n0x826EE358  li        r10, 0xD\n0x826EE35C  stw       r21, 0x470+var_3B0(r1)\n0x826EE360  li        r5, 0xD\n0x826EE364  sth       r31, 0x470+var_3A6(r1)\n0x826EE368  addi      r4, r1, 0x470+var_3B0\n0x826EE36C  sth       r31, 0x470+var_3A4(r1)\n0x826EE370  mr        r3, r27\n0x826EE374  sth       r26, 0x470+var_3A2(r1)\n0x826EE378  stw       r29, 0x470+var_3AC(r1)\n0x826EE37C  sth       r10, 0x470+var_3A8(r1)\n0x826EE380  stw       r11, 0x470+var_3A0(r1)\n0x826EE384  stb       r29, 0x470+var_39C(r1)\n0x826EE388  stb       r31, 0x470+var_39B(r1)\n0x826EE38C  bl        ___AddEvent_V__Message_VGuiEventPlayMusicOnMenuStream_CgsGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModul\n0x826EE390  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE394  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 0  ; jumptable 826EE2C8 case 0\n0x826EE398  bne       cr6, loc_826EE3B4\n0x826EE39C  bl        CgsDev__Assert__BeginAssert\n0x826EE3A0  li        r5, 0x795\n0x826EE3A4  mr        r4, r23\n0x826EE3A8  mr        r3, r27\n0x826EE3AC  bl        CgsDev__Assert__FireAssert\n0x826EE3B0  bl        CgsDev__Assert__EndAssert\n0x826EE3B4  li        r10, 8\n0x826EE3B8  ld        r9, 8(r30)\n0x826EE3BC  addi      r11, r1, 0x470+var_160\n0x826EE3C0  ld        r8, 0x10(r30)\n0x826EE3C4  stw       r17, 0x470+var_170(r1)\n0x826EE3C8  li        r5, 8\n0x826EE3CC  sth       r31, 0x470+var_166(r1)\n0x826EE3D0  addi      r4, r1, 0x470+var_170\n0x826EE3D4  sth       r31, 0x470+var_164(r1)\n0x826EE3D8  addi      r3, r28, 0x2C74\n0x826EE3DC  sth       r10, 0x470+var_168(r1)\n0x826EE3E0  ld        r10, 0(r30)\n0x826EE3E4  sth       r26, 0x470+var_162(r1)\n0x826EE3E8  stw       r29, 0x470+var_16C(r1)\n0x826EE3EC  std       r10, 0(r11)\n0x826EE3F0  std       r9, 8(r11)\n0x826EE3F4  std       r8, 0x10(r11)\n0x826EE3F8  bl        ___AddEvent_V__Message_VGuiEventAudioTraxLastPlayedIndexes_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__Cgs\n0x826EE3FC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE400  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 1  ; jumptable 826EE2C8 case 1\n0x826EE404  bne       cr6, loc_826EE420\n0x826EE408  bl        CgsDev__Assert__BeginAssert\n0x826EE40C  li        r5, 0x7A2\n0x826EE410  mr        r4, r23\n0x826EE414  lwz       r3, 0x470+var_3FC(r1)\n0x826EE418  bl        CgsDev__Assert__FireAssert\n0x826EE41C  bl        CgsDev__Assert__EndAssert\n0x826EE420  ld        r11, 0(r30)\n0x826EE424  li        r5, 9\n0x826EE428  addi      r4, r1, 0x470+var_230\n0x826EE42C  sth       r31, 0x470+var_226(r1)\n0x826EE430  addi      r3, r28, 0x2C74\n0x826EE434  sth       r31, 0x470+var_224(r1)\n0x826EE438  sth       r26, 0x470+var_222(r1)\n0x826EE43C  stw       r29, 0x470+var_22C(r1)\n0x826EE440  std       r11, 0x470+var_220(r1)\n0x826EE444  lwz       r11, 0x470+var_3EC(r1)\n0x826EE448  stw       r11, 0x470+var_230(r1)\n0x826EE44C  li        r11, 9\n0x826EE450  sth       r11, 0x470+var_228(r1)\n0x826EE454  bl        ___AddEvent_V__Message_VGuiEventAudioTraxPreview_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QA\n0x826EE458  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE45C  li        r11, 0xA# jumptable 826EE2C8 case 2  ; jumptable 826EE2C8 case 2\n0x826EE460  stw       r20, 0x470+var_290(r1)\n0x826EE464  li        r5, 0xA\n0x826EE468  sth       r31, 0x470+var_286(r1)\n0x826EE46C  addi      r4, r1, 0x470+var_290\n0x826EE470  sth       r31, 0x470+var_284(r1)\n0x826EE474  addi      r3, r28, 0x2C74\n0x826EE478  sth       r26, 0x470+var_282(r1)\n0x826EE47C  stw       r29, 0x470+var_28C(r1)\n0x826EE480  sth       r11, 0x470+var_288(r1)\n0x826EE484  stb       r29, 0x470+var_280(r1)\n0x826EE488  bl        ___AddEvent_V__Message__N_Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__Message__N_Io_CgsSound__\n0x826EE48C  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE490  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 3  ; jumptable 826EE2C8 case 3\n0x826EE494  bne       cr6, loc_826EE4B0\n0x826EE498  bl        CgsDev__Assert__BeginAssert\n0x826EE49C  li        r5, 0x7B8\n0x826EE4A0  mr        r4, r23\n0x826EE4A4  lwz       r3, 0x470+var_3E4(r1)\n0x826EE4A8  bl        CgsDev__Assert__FireAssert\n0x826EE4AC  bl        CgsDev__Assert__EndAssert\n0x826EE4B0  lwz       r11, 0(r30)\n0x826EE4B4  li        r5, 0xB\n0x826EE4B8  addi      r4, r1, 0x470+var_350\n0x826EE4BC  stw       r14, 0x470+var_350(r1)\n0x826EE4C0  addi      r3, r28, 0x2C74\n0x826EE4C4  sth       r31, 0x470+var_346(r1)\n0x826EE4C8  sth       r31, 0x470+var_344(r1)\n0x826EE4CC  sth       r26, 0x470+var_342(r1)\n0x826EE4D0  stw       r11, 0x470+var_340(r1)\n0x826EE4D4  li        r11, 0xB\n0x826EE4D8  stw       r29, 0x470+var_34C(r1)\n0x826EE4DC  sth       r11, 0x470+var_348(r1)\n0x826EE4E0  bl        ___AddEvent_V__Message_VGuiEventAudioTraxPlayOrder_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__\n0x826EE4E4  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE4E8  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 4  ; jumptable 826EE2C8 case 4\n0x826EE4EC  bne       cr6, loc_826EE508\n0x826EE4F0  bl        CgsDev__Assert__BeginAssert\n0x826EE4F4  li        r5, 0x7D7\n0x826EE4F8  mr        r4, r23\n0x826EE4FC  lwz       r3, 0x470+var_3DC(r1)\n0x826EE500  bl        CgsDev__Assert__FireAssert\n0x826EE504  bl        CgsDev__Assert__EndAssert\n0x826EE508  ld        r11, 0(r30)\n0x826EE50C  li        r5, 0xC\n0x826EE510  addi      r4, r1, 0x470+var_1F0\n0x826EE514  sth       r31, 0x470+var_1E6(r1)\n0x826EE518  addi      r3, r28, 0x2C74\n0x826EE51C  sth       r31, 0x470+var_1E4(r1)\n0x826EE520  sth       r31, 0x470+var_1E2(r1)\n0x826EE524  stw       r26, 0x470+var_1EC(r1)\n0x826EE528  std       r11, 0x470+var_1E0(r1)\n0x826EE52C  lwz       r11, 0x470+var_3D4(r1)\n0x826EE530  stw       r11, 0x470+var_1F0(r1)\n0x826EE534  li        r11, 0xC\n0x826EE538  sth       r11, 0x470+var_1E8(r1)\n0x826EE53C  bl        ___AddEvent_V__Message_VGuiEventAudioSettings_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_N\n0x826EE540  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE544  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 5  ; jumptable 826EE2C8 case 5\n0x826EE548  bne       cr6, loc_826EE564\n0x826EE54C  bl        CgsDev__Assert__BeginAssert\n0x826EE550  li        r5, 0x7E4\n0x826EE554  mr        r4, r23\n0x826EE558  lwz       r3, 0x470+var_3CC(r1)\n0x826EE55C  bl        CgsDev__Assert__FireAssert\n0x826EE560  bl        CgsDev__Assert__EndAssert\n0x826EE564  li        r10, 0x1F\n0x826EE568  ld        r9, 8(r30)\n0x826EE56C  addi      r11, r1, 0x470+var_190\n0x826EE570  ld        r8, 0x10(r30)\n0x826EE574  stw       r18, 0x470+var_1A0(r1)\n0x826EE578  li        r5, 0x1F\n0x826EE57C  sth       r31, 0x470+var_196(r1)\n0x826EE580  addi      r4, r1, 0x470+var_1A0\n0x826EE584  sth       r31, 0x470+var_194(r1)\n0x826EE588  addi      r3, r28, 0x2C74\n0x826EE58C  sth       r10, 0x470+var_198(r1)\n0x826EE590  ld        r10, 0(r30)\n0x826EE594  sth       r25, 0x470+var_192(r1)\n0x826EE598  stw       r29, 0x470+var_19C(r1)\n0x826EE59C  std       r10, 0(r11)\n0x826EE5A0  std       r9, 8(r11)\n0x826EE5A4  std       r8, 0x10(r11)\n0x826EE5A8  bl        ___AddEvent_V__Message_VGuiEventAudioEventIntros_BrnGui___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QA\n0x826EE5AC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE5B0  cmplwi    cr6, r30, 0# jumptable 826EE2C8 case 6  ; jumptable 826EE2C8 case 6\n0x826EE5B4  bne       cr6, loc_826EE5D0\n0x826EE5B8  bl        CgsDev__Assert__BeginAssert\n0x826EE5BC  li        r5, 0x7F2\n0x826EE5C0  mr        r4, r23\n0x826EE5C4  lwz       r3, 0x470+var_3C4(r1)\n0x826EE5C8  bl        CgsDev__Assert__FireAssert\n0x826EE5CC  bl        CgsDev__Assert__EndAssert\n0x826EE5D0  lwz       r11, 0x4C94(r28)\n0x826EE5D4  lwz       r10, 0(r30)\n0x826EE5D8  addis     r11, r11, 1\n0x826EE5DC  addi      r11, r11, 0x3730\n0x826EE5E0  stw       r10, 0(r11)\n0x826EE5E4  lwz       r10, 4(r30)\n0x826EE5E8  stw       r10, 4(r11)\n0x826EE5EC  b         def_826ED870# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\n0x826EE5F0  lwz       r11, 0(r30)# jumptable 826EE2C8 case 7  ; jumptable 826EE2C8 case 7\n0x826EE5F4  li        r5, 0x24 # '$'\n0x826EE5F8  addi      r4, r1, 0x470+var_330\n0x826EE5FC  stw       r24, 0x470+var_330(r1)\n0x826EE600  sth       r31, 0x470+var_326(r1)\n0x826EE604  sth       r31, 0x470+var_324(r1)\n0x826EE608  sth       r25, 0x470+var_322(r1)\n0x826EE60C  stw       r11, 0x470+var_320(r1)\n0x826EE610  li        r11, 0x24 # '$'\n0x826EE614  stw       r29, 0x470+var_32C(r1)\n0x826EE618  sth       r11, 0x470+var_328(r1)\n0x826EE61C  b         loc_826EE64C\n0x826EE620  lwz       r11, 0(r30)# jumptable 826EE2C8 case 9  ; jumptable 826EE2C8 case 9\n0x826EE624  li        r5, 0x1C\n0x826EE628  addi      r4, r1, 0x470+var_2F0\n0x826EE62C  stw       r24, 0x470+var_2F0(r1)\n0x826EE630  sth       r31, 0x470+var_2E6(r1)\n0x826EE634  sth       r31, 0x470+var_2E4(r1)\n0x826EE638  sth       r26, 0x470+var_2E2(r1)\n0x826EE63C  stw       r11, 0x470+var_2E0(r1)\n0x826EE640  li        r11, 0x1C\n0x826EE644  stw       r29, 0x470+var_2EC(r1)\n0x826EE648  sth       r11, 0x470+var_2E8(r1)\n0x826EE64C  addi      r3, r28, 0x2C74\n0x826EE650  bl        ___AddEvent_V__Message_VName_Playback_CgsSound___Io_CgsSound_____VariableEventQueue__0CAAA__0BA__CgsModule__QAA_NABV__M\n0x826EE654  addi      r6, r1, 0x470+var_3BC# jumptable 826ED870 default case, cases 1-7,9,11-64,66-232  ; jumptable 826ED870 default case, cases 1-7,9,11-64,66-232\njumptable 826EDE34 default case, cases 2-153\njumptable 826EE2C8 default case, case 8\n0x826EE658  lwz       r3, 0x470+arg_1C(r1)\n0x826EE65C  addi      r5, r1, 0x470+var_420\n0x826EE660  mr        r4, r30\n0x826EE664  bl        CgsModule__VariableEventQueue_18432_16___GetNextEvent\n0x826EE668  lwz       r30, 0x470+var_420(r1)\n0x826EE66C  cmplwi    cr6, r30, 0\n0x826EE670  bne       cr6, loc_826ED834\n0x826EE674  addi      r1, r1, 0x470\n0x826EE678  b         __restgprlr",
+  "xrefs_to": [
+    {
+      "address": "0x827029D0",
+      "name": "BrnSound::Module::SoundLogicModule::Update"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EB0",
+      "name": "__savegprlr_14"
+    },
+    {
+      "address": "0x82360FD8",
+      "name": "CgsModule::VariableEventQueue<18432,16>::GetFirstEvent"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x826DF760",
+      "name": "??$AddEvent@V?$Message@W4ELanguage@CgsLanguage@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$M"
+    },
+    {
+      "address": "0x826DF058",
+      "name": "??$AddEvent@V?$Message@VGuiEventPlayMusicOnMenuStream@CgsGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModul"
+    },
+    {
+      "address": "0x826DEC70",
+      "name": "??$AddEvent@V?$Message@W4OnlineVoiceOver@1Enums@AttribSys@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@"
+    },
+    {
+      "address": "0x82694130",
+      "name": "CgsSound::Playback::Module::Module::GetEnvironment"
+    },
+    {
+      "address": "0x82680FE8",
+      "name": "CgsSound::Playback::Environment::StopDac"
+    },
+    {
+      "address": "0x82680F50",
+      "name": "CgsSound::Playback::Environment::StartDac"
+    },
+    {
+      "address": "0x826DE950",
+      "name": "??$AddEvent@V?$Message@VName@Playback@CgsSound@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$M"
+    },
+    {
+      "address": "0x826DF508",
+      "name": "??$AddEvent@V?$Message@_K@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$Message@_K@Io@CgsSound@@"
+    },
+    {
+      "address": "0x826DF120",
+      "name": "??$AddEvent@V?$Message@VGuiAudioEvent@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$Mes"
+    },
+    {
+      "address": "0x82C0A630",
+      "name": "memcpy"
+    },
+    {
+      "address": "0x826DEE00",
+      "name": "??$AddEvent@V?$Message@VGuiAudioTriggerEvent@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NA"
+    },
+    {
+      "address": "0x82689A50",
+      "name": "CgsSound::Playback::Name::MakeHash"
+    },
+    {
+      "address": "0x826DF828",
+      "name": "??$AddEvent@V?$Message@H@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$Message@H@Io@CgsSound@@H@"
+    },
+    {
+      "address": "0x826DF1E8",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioTraxUpdate@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA"
+    },
+    {
+      "address": "0x826DDF28",
+      "name": "??$AddEvent@V?$Message@_N@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NABV?$Message@_N@Io@CgsSound@@"
+    },
+    {
+      "address": "0x826DF2B0",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioTraxLastPlayedIndexes@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@Cgs"
+    },
+    {
+      "address": "0x826DF378",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioTraxPreview@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QA"
+    },
+    {
+      "address": "0x826DF440",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioTraxPlayOrder@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@"
+    },
+    {
+      "address": "0x826DF5D0",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioSettings@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_N"
+    },
+    {
+      "address": "0x826DF698",
+      "name": "??$AddEvent@V?$Message@VGuiEventAudioEventIntros@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QA"
+    },
+    {
+      "address": "0x8236A5E0",
+      "name": "CgsModule::VariableEventQueue<18432,16>::GetNextEvent"
+    }
+  ]
+}

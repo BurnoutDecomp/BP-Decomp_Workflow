@@ -1,0 +1,114 @@
+{
+  "address": "0x825112B0",
+  "name": "BrnGui::GuiModule::FlaptSoundTriggerCallback",
+  "prototype": "int BrnGui::GuiModule::FlaptSoundTriggerCallbackint __fastcall(int a1, int a2, int a3, int a4, int a5)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "_DWORD *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "_BYTE[160]",
+      "is_reg": false,
+      "size": 160
+    }
+  ],
+  "pseudocode": "int __fastcall BrnGui::GuiModule::FlaptSoundTriggerCallback(int a1, int a2, int a3, int a4, int a5)\n{\n  _DWORD *v10; // r30\n  int result; // r3\n  _BYTE v12[160]; // [sp+50h] [-A0h] BYREF\n\n  _savegprlr_26();\n  if ( !a1 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpUserData\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3184);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !a2 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpcComponentName\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3185);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !a3 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpcSwfName\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3186);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !a4 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpcActionName\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3187);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( !a5 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpcLabel\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3188);\n    CgsDev::Assert::EndAssert();\n  }\n  v10 = (a1 + 949188);\n  if ( !*v10 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpThis->mpOutputBuffer\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModule.cpp\", 3192);\n    CgsDev::Assert::EndAssert();\n  }\n  sub_824FB9A8(v12, a2, a4, a5, a3);\n  result = CgsGui::CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<BrnGui::GuiAudioTriggerEvent>(*v10, v12);\n  _restgprlr_26();\n  return result;\n}\n",
+  "assembly": "0x825112B0  mflr      r12\n0x825112B4  bl        __savegprlr_26\n0x825112B8  stwu      r1, back_chain(r1)\n0x825112BC  mr        r30, r3\n0x825112C0  lis       r11, aGamesourceGuiB_14@ha\n0x825112C4  mr        r29, r4\n0x825112C8  mr        r28, r5\n0x825112CC  mr        r27, r6\n0x825112D0  mr        r26, r7\n0x825112D4  cmplwi    cr6, r30, 0\n0x825112D8  addi      r31, r11, aGamesourceGuiB_14@l# \"..\\\\..\\\\..\\\\GameSource\\\\Gui/BrnGuiModul\"...\n0x825112DC  bne       cr6, loc_825112FC\n0x825112E0  bl        CgsDev__Assert__BeginAssert\n0x825112E4  lis       r11, aLpuserdata@ha\n0x825112E8  li        r5, 0xC70\n0x825112EC  addi      r3, r11, aLpuserdata@l# \"lpUserData\"\n0x825112F0  mr        r4, r31\n0x825112F4  bl        CgsDev__Assert__FireAssert\n0x825112F8  bl        CgsDev__Assert__EndAssert\n0x825112FC  cmplwi    cr6, r29, 0\n0x82511300  bne       cr6, loc_82511320\n0x82511304  bl        CgsDev__Assert__BeginAssert\n0x82511308  lis       r11, aLpccomponentna@ha\n0x8251130C  li        r5, 0xC71\n0x82511310  addi      r3, r11, aLpccomponentna@l# \"lpcComponentName\"\n0x82511314  mr        r4, r31\n0x82511318  bl        CgsDev__Assert__FireAssert\n0x8251131C  bl        CgsDev__Assert__EndAssert\n0x82511320  cmplwi    cr6, r28, 0\n0x82511324  bne       cr6, loc_82511344\n0x82511328  bl        CgsDev__Assert__BeginAssert\n0x8251132C  lis       r11, aLpcswfname@ha\n0x82511330  li        r5, 0xC72\n0x82511334  addi      r3, r11, aLpcswfname@l# \"lpcSwfName\"\n0x82511338  mr        r4, r31\n0x8251133C  bl        CgsDev__Assert__FireAssert\n0x82511340  bl        CgsDev__Assert__EndAssert\n0x82511344  cmplwi    cr6, r27, 0\n0x82511348  bne       cr6, loc_82511368\n0x8251134C  bl        CgsDev__Assert__BeginAssert\n0x82511350  lis       r11, aLpcactionname@ha\n0x82511354  li        r5, 0xC73\n0x82511358  addi      r3, r11, aLpcactionname@l# \"lpcActionName\"\n0x8251135C  mr        r4, r31\n0x82511360  bl        CgsDev__Assert__FireAssert\n0x82511364  bl        CgsDev__Assert__EndAssert\n0x82511368  cmplwi    cr6, r26, 0\n0x8251136C  bne       cr6, loc_8251138C\n0x82511370  bl        CgsDev__Assert__BeginAssert\n0x82511374  lis       r11, aLpclabel@ha\n0x82511378  li        r5, 0xC74\n0x8251137C  addi      r3, r11, aLpclabel@l# \"lpcLabel\"\n0x82511380  mr        r4, r31\n0x82511384  bl        CgsDev__Assert__FireAssert\n0x82511388  bl        CgsDev__Assert__EndAssert\n0x8251138C  addis     r30, r30, 0xE\n0x82511390  addi      r30, r30, 0x7BC4\n0x82511394  lwz       r11, 0(r30)\n0x82511398  cmplwi    cr6, r11, 0\n0x8251139C  bne       cr6, loc_825113BC\n0x825113A0  bl        CgsDev__Assert__BeginAssert\n0x825113A4  lis       r11, aLpthisMpoutput@ha\n0x825113A8  li        r5, 0xC78\n0x825113AC  addi      r3, r11, aLpthisMpoutput@l# \"lpThis->mpOutputBuffer\"\n0x825113B0  mr        r4, r31\n0x825113B4  bl        CgsDev__Assert__FireAssert\n0x825113B8  bl        CgsDev__Assert__EndAssert\n0x825113BC  mr        r7, r28\n0x825113C0  mr        r6, r26\n0x825113C4  mr        r5, r27\n0x825113C8  mr        r4, r29\n0x825113CC  addi      r3, r1, 0xF0+var_A0\n0x825113D0  bl        sub_824FB9A8\n0x825113D4  addi      r4, r1, 0xF0+var_A0\n0x825113D8  lwz       r3, 0(r30)\n0x825113DC  bl        ___AddGuiOutEvent_VGuiAudioTriggerEvent_BrnGui___OutputBuffer_CgsGuiModuleIO_CgsGui__QAAXAAVGuiAudioTriggerEvent_BrnGui\n0x825113E0  addi      r1, r1, 0xF0\n0x825113E4  b         __restgprlr_26",
+  "xrefs_to": [],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE0",
+      "name": "__savegprlr_26"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x824FB9A8",
+      "name": "sub_824FB9A8"
+    },
+    {
+      "address": "0x8250BE70",
+      "name": "??$AddGuiOutEvent@VGuiAudioTriggerEvent@BrnGui@@@OutputBuffer@CgsGuiModuleIO@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGui"
+    }
+  ]
+}

@@ -1,0 +1,221 @@
+{
+  "address": "0x82436890",
+  "name": "??$OutputGuiEvent@VGuiAudioTriggerEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGui@@@Z",
+  "prototype": "int ??$OutputGuiEvent@VGuiAudioTriggerEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGui@@@Zint __fastcall(int a1, int a2, int a3, int a4, int a5, int a6, int a7, int a8)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a5",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a7",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "_DWORD[3]",
+      "is_reg": false,
+      "size": 12
+    },
+    {
+      "name": "v11",
+      "type": "_BYTE[100]",
+      "is_reg": false,
+      "size": 100
+    }
+  ],
+  "pseudocode": "int __fastcall CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>(\n        int a1,\n        int a2,\n        int a3,\n        int a4,\n        int a5,\n        int a6,\n        int a7,\n        int a8)\n{\n  _DWORD v10[3]; // [sp+50h] [-80h] BYREF\n  _BYTE v11[100]; // [sp+5Ch] [-74h] BYREF\n\n  memcpy(v11, a2, 100, a4, a5, a6, a7, a8);\n  v10[2] = 12;\n  v10[0] = 100;\n  v10[1] = 457;\n  return CgsModule::VariableEventQueue<65536,16>::AddEvent(a1 + 12, v10, 40, 112);\n}\n",
+  "assembly": "0x82436890  mflr      r12\n0x82436894  stw       r12, var_8(r1)\n0x82436898  std       r31, var_10(r1)\n0x8243689C  stwu      r1, back_chain(r1)\n0x824368A0  mr        r31, r3\n0x824368A4  addi      r3, r1, 0xD0+var_74# Dst  ; Dst\n0x824368A8  li        r5, 0x64 # 'd'# Size  ; Size\n0x824368AC  bl        memcpy\n0x824368B0  li        r11, 0xC\n0x824368B4  li        r6, 0x70 # 'p'\n0x824368B8  li        r5, 0x28 # '('\n0x824368BC  addi      r4, r1, 0xD0+var_80\n0x824368C0  addi      r3, r31, 0xC\n0x824368C4  stw       r11, 0xD0+var_78(r1)\n0x824368C8  li        r11, 0x64 # 'd'\n0x824368CC  stw       r11, 0xD0+var_80(r1)\n0x824368D0  li        r11, 0x1C9\n0x824368D4  stw       r11, 0xD0+var_7C(r1)\n0x824368D8  bl        CgsModule__VariableEventQueue_65536_16___AddEvent\n0x824368DC  addi      r1, r1, 0xD0\n0x824368E0  lwz       r12, var_8(r1)\n0x824368E4  mtlr      r12\n0x824368E8  ld        r31, var_10(r1)\n0x824368EC  blr",
+  "xrefs_to": [
+    {
+      "address": "0x82437BB0",
+      "name": "BrnGui::PlayerPositionSingleComponent::Update"
+    },
+    {
+      "address": "0x82439040",
+      "name": "BrnGui::FriendsListComponent::HandleBranchInteraction"
+    },
+    {
+      "address": "0x8243B040",
+      "name": "BrnGui::SelectRoutes::HandleControllerInput"
+    },
+    {
+      "address": "0x8243BC40",
+      "name": "BrnGui::EATraxMenuComponent::HandleInput"
+    },
+    {
+      "address": "0x82442E50",
+      "name": "BrnGui::FriendsListComponent::HandleTableInteraction"
+    },
+    {
+      "address": "0x82469A38",
+      "name": "BrnGui::MainMapComponent::SetZoom"
+    },
+    {
+      "address": "0x82477270",
+      "name": "BrnGui::BootLegal::Update"
+    },
+    {
+      "address": "0x82478610",
+      "name": "BrnGui::BootProfile::HandleControllerInput"
+    },
+    {
+      "address": "0x82498120",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputPlayerOptionsSubState"
+    },
+    {
+      "address": "0x8249DF58",
+      "name": "BrnGui::OnlineSelectRoute::HandleControllerInputSelectPoint"
+    },
+    {
+      "address": "0x8249E2D0",
+      "name": "BrnGui::OnlineSelectRoute::HandleControllerInputSelectPresetEvent"
+    },
+    {
+      "address": "0x8249F060",
+      "name": "BrnGui::OnlineSelectRoute::UpdateCursor"
+    },
+    {
+      "address": "0x824A1BF0",
+      "name": "BrnGui::OnlineTeamSelection::HandleControllerInputMainSubState"
+    },
+    {
+      "address": "0x824A25A0",
+      "name": "BrnGui::OnlineInstantResultsState::CheckForCompletedLoads"
+    },
+    {
+      "address": "0x824A4670",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputMainSubState"
+    },
+    {
+      "address": "0x824A4B60",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputChallengesSubState"
+    },
+    {
+      "address": "0x824A4F28",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputViewEventSubState"
+    },
+    {
+      "address": "0x824A5130",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputPressedMapSubState"
+    },
+    {
+      "address": "0x824A56A0",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleOverlayComplete"
+    },
+    {
+      "address": "0x824A8A08",
+      "name": "BrnGui::OnlineGameOptionsSummary::HandleControllerInputCreateGame"
+    },
+    {
+      "address": "0x824A8C58",
+      "name": "BrnGui::OnlineGameOptionsSummary::HandleControllerInputSaveOptions"
+    },
+    {
+      "address": "0x824A9168",
+      "name": "BrnGui::OnlineSelectRoute::HandleControllerInputSelectMainOption"
+    },
+    {
+      "address": "0x824ACFC0",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputPauseSubState"
+    },
+    {
+      "address": "0x824AD120",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputSecurityOptionsSubState"
+    },
+    {
+      "address": "0x824AD248",
+      "name": "BrnGui::OnlineGameRoomPlayerInfo::HandleControllerInputSettingsSubState"
+    },
+    {
+      "address": "0x824C60B8",
+      "name": "BrnGui::ShowtimeInstantResultsState::UpdateScoreTotalling"
+    },
+    {
+      "address": "0x824C7B70",
+      "name": "BrnGui::PreRaceFlyByState::UpdateIconManager"
+    },
+    {
+      "address": "0x824CB8B0",
+      "name": "BrnGui::CrashNavMap::UpdateSoundEvents"
+    },
+    {
+      "address": "0x824CC3F8",
+      "name": "BrnGui::CrashNavMap::UpdateEvent"
+    },
+    {
+      "address": "0x824CCAE8",
+      "name": "BrnGui::CrashNavMapMain::HandleCrashNavInputPressed"
+    },
+    {
+      "address": "0x824D9978",
+      "name": "BrnGui::CrashNavColourCalibrate::HandleControllerInput"
+    },
+    {
+      "address": "0x824DE418",
+      "name": "BrnGui::CrashNavOptions::HandleControllerInput"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C0A630",
+      "name": "memcpy"
+    },
+    {
+      "address": "0x82435188",
+      "name": "CgsModule::VariableEventQueue<65536,16>::AddEvent"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "address": "0x8250BE70",
+  "name": "??$AddGuiOutEvent@VGuiAudioTriggerEvent@BrnGui@@@OutputBuffer@CgsGuiModuleIO@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGui",
+  "prototype": "int ??$AddGuiOutEvent@VGuiAudioTriggerEvent@BrnGui@@@OutputBuffer@CgsGuiModuleIO@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGuiint __fastcall(unsigned __int8 *a1, int a2)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "unsigned __int8 *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v4",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v5",
+      "type": "char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v7",
+      "type": "_DWORD[16]",
+      "is_reg": false,
+      "size": 64
+    }
+  ],
+  "pseudocode": "int __fastcall CgsGui::CgsGuiModuleIO::OutputBuffer::AddGuiOutEvent<BrnGui::GuiAudioTriggerEvent>(\n        unsigned __int8 *a1,\n        int a2)\n{\n  int v4; // r29\n  char *v5; // r31\n  int result; // r3\n  _DWORD v7[16]; // [sp+50h] [-40h] BYREF\n\n  _savegprlr_27();\n  if ( ((*a1 >> 3) & 1) == 0 )\n  {\n    CgsDev::Assert::BeginAssert();\n    v4 = dword_82F32264;\n    v7[0] = off_82000D00;\n    v5 = CgsDev::Assert::gpcMessageBuffer;\n    CgsContainers::BasePriorityQueue::Clear(v7);\n    v7[2] = v5;\n    v7[3] = v4;\n    v7[0] = off_82000D08;\n    *v5 = 0;\n    (*(v7[0] + 4))(v7, \"Not locked for writing\\n\");\n    CgsDev::Assert::FireAssert(\n      CgsDev::Assert::gpcMessageBuffer,\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gameshared\\\\gameclasses\\\\gui\\\\CgsGuiModuleIO.h\",\n      235);\n    CgsDev::Assert::EndAssert();\n  }\n  result = CgsModule::VariableEventQueue<18432,16>::AddEvent(a1 + 2068, a2, 457, 100);\n  _restgprlr_27();\n  return result;\n}\n",
+  "assembly": "0x8250BE70  mflr      r12\n0x8250BE74  bl        __savegprlr_27\n0x8250BE78  stwu      r1, back_chain(r1)\n0x8250BE7C  mr        r28, r3\n0x8250BE80  mr        r27, r4\n0x8250BE84  lbz       r11, 0(r28)\n0x8250BE88  extrwi    r11, r11, 1,28\n0x8250BE8C  cmplwi    cr6, r11, 0\n0x8250BE90  bne       cr6, loc_8250BF0C\n0x8250BE94  bl        CgsDev__Assert__BeginAssert\n0x8250BE98  lis       r11, off_82000D00@ha\n0x8250BE9C  lis       r10, dword_82F32264@ha\n0x8250BEA0  addi      r11, r11, off_82000D00@l\n0x8250BEA4  lis       r30, CgsDev__Assert__gpcMessageBuffer@ha\n0x8250BEA8  addi      r3, r1, 0x90+var_40\n0x8250BEAC  lwz       r29, dword_82F32264@l(r10)\n0x8250BEB0  stw       r11, 0x90+var_40(r1)\n0x8250BEB4  lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150\n0x8250BEB8  bl        CgsContainers__BasePriorityQueue__Clear\n0x8250BEBC  lis       r11, off_82000D08@ha\n0x8250BEC0  stw       r31, 0x90+var_38(r1)\n0x8250BEC4  li        r9, 0\n0x8250BEC8  stw       r29, 0x90+var_34(r1)\n0x8250BECC  addi      r11, r11, off_82000D08@l\n0x8250BED0  lis       r10, aNotLockedForWr@ha\n0x8250BED4  addi      r3, r1, 0x90+var_40\n0x8250BED8  addi      r4, r10, aNotLockedForWr@l# \"Not locked for writing\\n\"\n0x8250BEDC  stw       r11, 0x90+var_40(r1)\n0x8250BEE0  stb       r9, (byte_83018150 - 0x83018150)(r31)\n0x8250BEE4  lwz       r11, 0x90+var_40(r1)\n0x8250BEE8  lwz       r11, 4(r11)\n0x8250BEEC  mtctr     r11\n0x8250BEF0  bctrl\n0x8250BEF4  lis       r11, aDP4B5MainBurno_138@ha\n0x8250BEF8  li        r5, 0xEB\n0x8250BEFC  lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150\n0x8250BF00  addi      r4, r11, aDP4B5MainBurno_138@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x8250BF04  bl        CgsDev__Assert__FireAssert\n0x8250BF08  bl        CgsDev__Assert__EndAssert\n0x8250BF0C  li        r6, 0x64 # 'd'\n0x8250BF10  li        r5, 0x1C9\n0x8250BF14  mr        r4, r27\n0x8250BF18  addi      r3, r28, 0x814\n0x8250BF1C  bl        CgsModule__VariableEventQueue_18432_16___AddEvent\n0x8250BF20  addi      r1, r1, 0x90\n0x8250BF24  b         __restgprlr_27",
+  "xrefs_to": [
+    {
+      "address": "0x825112B0",
+      "name": "BrnGui::GuiModule::FlaptSoundTriggerCallback"
+    },
+    {
+      "address": "0x82527A58",
+      "name": "BrnGui::GuiModule::Update"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE4",
+      "name": "__savegprlr_27"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82815E58",
+      "name": "CgsContainers::BasePriorityQueue::Clear"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x8237FA20",
+      "name": "CgsModule::VariableEventQueue<18432,16>::AddEvent"
+    }
+  ]
+}

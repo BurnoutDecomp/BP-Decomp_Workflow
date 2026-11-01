@@ -1,0 +1,158 @@
+{
+  "address": "0x826FF840",
+  "name": "BrnSound::Logic::PresentationEffect::Notify",
+  "prototype": "int BrnSound::Logic::PresentationEffect::Notifyint __fastcall(int a1, int a2, int a3)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v5",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v6",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v7",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v9",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v13",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v14",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v15",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v16",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v17",
+      "type": "__int64",
+      "is_reg": false,
+      "size": 8
+    },
+    {
+      "name": "v18",
+      "type": "char",
+      "is_reg": false,
+      "size": 1
+    }
+  ],
+  "pseudocode": "int __fastcall BrnSound::Logic::PresentationEffect::Notify(int a1, int a2, int a3)\n{\n  __int64 v5; // r10\n  __int64 v6; // r8\n  __int64 v7; // r6\n  int v8; // r4\n  int v9; // r31\n  const char *v10; // r4\n  int result; // r3\n  int v12; // r8\n  int v13; // r7\n  int v14; // r11\n  __int64 v15; // r10\n  __int64 v16; // [sp+50h] [-50h] BYREF\n  __int64 v17; // [sp+58h] [-48h]\n  char v18; // [sp+67h] [-39h]\n\n  _savegprlr_28();\n  if ( !a2 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpMessageHeader\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Global/BrnPresentationEffect.cpp\",\n      257);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( *(a2 + 8) != 6 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpMessageHeader->GetEventId() == E_SOUNDMESSAGE_GUI_AUDIO_TRIGGER\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Sound/Global/BrnPresentationEffect.cpp\",\n      258);\n    CgsDev::Assert::EndAssert();\n  }\n  if ( byte_82FFB8D3 )\n  {\n    (off_82F2F9BC[1])(&off_82F2F9BC, \"[\", a3);\n    v9 = sub_821F0F40(&off_82F2F9BC, *(a1 + 24), v8, v7, v6, v5);\n    (*(*v9 + 4))(v9, \"] \");\n    (*(*v9 + 4))(v9, \"PresentationEffect : Received audio trigger: Component \");\n    (*(*v9 + 4))(v9);\n    (*(*v9 + 4))(v9, \" Action \");\n    v10 = off_82F2CFC0[*(a2 + 48)];\n    if ( !v10 )\n      v10 = \"<NULLSTRING>\";\n    (*(*v9 + 4))(v9, v10);\n    (*(*v9 + 4))(v9, \" Movie \");\n    (*(*v9 + 4))(v9);\n    (*(*v9 + 4))(v9, \" Label \");\n    (*(*v9 + 4))(v9);\n    (*(*v9 + 4))(v9, \"\\n\");\n  }\n  result = sub_8269E368(a1 - 4, &v16, a2 + 16);\n  if ( *(a2 + 48) == 6 )\n  {\n    v12 = v17;\n    v13 = v16;\n    v14 = a1 - 4 + 160;\n    do\n    {\n      v15 = *(v14 - 8);\n      if ( v15 == v13 )\n      {\n        v15 = *v14;\n        if ( *(v14 + 4) == v12 )\n          *(v14 + 24) = 0.0;\n      }\n      v14 += 128;\n    }\n    while ( HIDWORD(v15) != 1 );\n  }\n  if ( v18 == 1 )\n    result = BrnSound::Logic::PresentationEffect::Play(a1 - 4, &v16);\n  _restgprlr_28();\n  return result;\n}\n",
+  "assembly": "0x826FF840  mflr      r12\n0x826FF844  bl        __savegprlr_28\n0x826FF848  stwu      r1, back_chain(r1)\n0x826FF84C  mr        r30, r4\n0x826FF850  lis       r11, aDP4B5MainBurno_290@ha\n0x826FF854  mr        r28, r3\n0x826FF858  cmplwi    cr6, r30, 0\n0x826FF85C  addi      r31, r11, aDP4B5MainBurno_290@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x826FF860  bne       cr6, loc_826FF880\n0x826FF864  bl        CgsDev__Assert__BeginAssert\n0x826FF868  lis       r11, aLpmessageheade_0@ha\n0x826FF86C  li        r5, 0x101\n0x826FF870  addi      r3, r11, aLpmessageheade_0@l# \"lpMessageHeader\"\n0x826FF874  mr        r4, r31\n0x826FF878  bl        CgsDev__Assert__FireAssert\n0x826FF87C  bl        CgsDev__Assert__EndAssert\n0x826FF880  lhz       r11, 8(r30)\n0x826FF884  cmplwi    cr6, r11, 6\n0x826FF888  beq       cr6, loc_826FF8A8\n0x826FF88C  bl        CgsDev__Assert__BeginAssert\n0x826FF890  lis       r11, aLpmessageheade_5@ha\n0x826FF894  li        r5, 0x102\n0x826FF898  addi      r3, r11, aLpmessageheade_5@l# \"lpMessageHeader->GetEventId() == E_SOUN\"...\n0x826FF89C  mr        r4, r31\n0x826FF8A0  bl        CgsDev__Assert__FireAssert\n0x826FF8A4  bl        CgsDev__Assert__EndAssert\n0x826FF8A8  lis       r11, byte_82FFB8D3@ha\n0x826FF8AC  lbz       r11, byte_82FFB8D3@l(r11)\n0x826FF8B0  cmplwi    cr6, r11, 0\n0x826FF8B4  beq       cr6, loc_826FFA38\n0x826FF8B8  lis       r11, asc_820187DC@ha\n0x826FF8BC  addi      r4, r11, asc_820187DC@l# \"[\"\n0x826FF8C0  lis       r11, off_82F2F9BC@ha\n0x826FF8C4  addi      r31, r11, off_82F2F9BC@l\n0x826FF8C8  mr        r3, r31\n0x826FF8CC  lwz       r11, (off_82F2F9BC - 0x82F2F9BC)(r31)# off_82000D00\n0x826FF8D0  lwz       r11, (off_82000D04 - 0x82000D00)(r11)# _purecall\n0x826FF8D4  mtctr     r11\n0x826FF8D8  bctrl# _purecall\n0x826FF8DC  mr        r3, r31\n0x826FF8E0  lfs       f1, 0x18(r28)\n0x826FF8E4  bl        sub_821F0F40\n0x826FF8E8  mr        r31, r3\n0x826FF8EC  lis       r11, asc_820B0FA8@ha\n0x826FF8F0  addi      r4, r11, asc_820B0FA8@l# \"] \"\n0x826FF8F4  lwz       r11, 0(r31)\n0x826FF8F8  lwz       r11, 4(r11)\n0x826FF8FC  mtctr     r11\n0x826FF900  bctrl\n0x826FF904  lwz       r10, 0(r31)\n0x826FF908  lis       r11, aPresentationef_0@ha\n0x826FF90C  mr        r3, r31\n0x826FF910  addi      r4, r11, aPresentationef_0@l# \"PresentationEffect : Received audio tri\"...\n0x826FF914  lwz       r11, 4(r10)\n0x826FF918  mtctr     r11\n0x826FF91C  bctrl\n0x826FF920  lis       r11, aNullstring@ha\n0x826FF924  addi      r4, r30, 0x10\n0x826FF928  addi      r29, r11, aNullstring@l# \"<NULLSTRING>\"\n0x826FF92C  lwz       r11, 0(r31)\n0x826FF930  cmplwi    cr6, r4, 0\n0x826FF934  mr        r3, r31\n0x826FF938  lwz       r11, 4(r11)\n0x826FF93C  bne       cr6, loc_826FF944\n0x826FF940  mr        r4, r29\n0x826FF944  mtctr     r11\n0x826FF948  bctrl\n0x826FF94C  lwz       r10, 0(r31)\n0x826FF950  lis       r11, aAction_0@ha\n0x826FF954  mr        r3, r31\n0x826FF958  addi      r4, r11, aAction_0@l# \" Action \"\n0x826FF95C  lwz       r11, 4(r10)\n0x826FF960  mtctr     r11\n0x826FF964  bctrl\n0x826FF968  lwz       r10, 0x30(r30)\n0x826FF96C  lis       r11, off_82F2CFC0@ha\n0x826FF970  slwi      r10, r10, 2\n0x826FF974  addi      r11, r11, off_82F2CFC0@l# \"OnEnter\"\n0x826FF978  mr        r3, r31\n0x826FF97C  lwzx      r4, r10, r11# \"OnEnter\"\n0x826FF980  lwz       r11, 0(r31)\n0x826FF984  cmplwi    cr6, r4, 0\n0x826FF988  lwz       r11, 4(r11)\n0x826FF98C  bne       cr6, loc_826FF994\n0x826FF990  mr        r4, r29\n0x826FF994  mtctr     r11\n0x826FF998  bctrl\n0x826FF99C  lwz       r10, 0(r31)\n0x826FF9A0  lis       r11, aMovie_0@ha\n0x826FF9A4  mr        r3, r31\n0x826FF9A8  addi      r4, r11, aMovie_0@l# \" Movie \"\n0x826FF9AC  lwz       r11, 4(r10)\n0x826FF9B0  mtctr     r11\n0x826FF9B4  bctrl\n0x826FF9B8  lwz       r11, 0(r31)\n0x826FF9BC  addi      r4, r30, 0x54 # 'T'\n0x826FF9C0  mr        r3, r31\n0x826FF9C4  cmplwi    cr6, r4, 0\n0x826FF9C8  lwz       r11, 4(r11)\n0x826FF9CC  bne       cr6, loc_826FF9D4\n0x826FF9D0  mr        r4, r29\n0x826FF9D4  mtctr     r11\n0x826FF9D8  bctrl\n0x826FF9DC  lwz       r10, 0(r31)\n0x826FF9E0  lis       r11, aLabel_0@ha\n0x826FF9E4  mr        r3, r31\n0x826FF9E8  addi      r4, r11, aLabel_0@l# \" Label \"\n0x826FF9EC  lwz       r11, 4(r10)\n0x826FF9F0  mtctr     r11\n0x826FF9F4  bctrl\n0x826FF9F8  lwz       r11, 0(r31)\n0x826FF9FC  addi      r4, r30, 0x34 # '4'\n0x826FFA00  mr        r3, r31\n0x826FFA04  cmplwi    cr6, r4, 0\n0x826FFA08  lwz       r11, 4(r11)\n0x826FFA0C  bne       cr6, loc_826FFA14\n0x826FFA10  mr        r4, r29\n0x826FFA14  mtctr     r11\n0x826FFA18  bctrl\n0x826FFA1C  lwz       r10, 0(r31)\n0x826FFA20  lis       r11, asc_82001CC4@ha\n0x826FFA24  mr        r3, r31\n0x826FFA28  addi      r4, r11, asc_82001CC4@l# \"\\n\"\n0x826FFA2C  lwz       r11, 4(r10)\n0x826FFA30  mtctr     r11\n0x826FFA34  bctrl\n0x826FFA38  addi      r31, r28, -4\n0x826FFA3C  addi      r5, r30, 0x10\n0x826FFA40  addi      r4, r1, 0xA0+var_50\n0x826FFA44  mr        r3, r31\n0x826FFA48  bl        sub_8269E368\n0x826FFA4C  lwz       r11, 0x30(r30)\n0x826FFA50  cmpwi     cr6, r11, 6\n0x826FFA54  bne       cr6, loc_826FFA9C\n0x826FFA58  lis       r10, flt_82001CC0@ha\n0x826FFA5C  ld        r8, 0xA0+var_48(r1)\n0x826FFA60  ld        r7, 0xA0+var_50(r1)\n0x826FFA64  li        r9, 4\n0x826FFA68  addi      r11, r31, 0xA0\n0x826FFA6C  lfs       f0, flt_82001CC0@l(r10)\n0x826FFA70  ld        r10, -8(r11)\n0x826FFA74  cmpld     cr6, r10, r7\n0x826FFA78  bne       cr6, loc_826FFA8C\n0x826FFA7C  ld        r10, 0(r11)\n0x826FFA80  cmpld     cr6, r10, r8\n0x826FFA84  bne       cr6, loc_826FFA8C\n0x826FFA88  stfs      f0, 0x18(r11)\n0x826FFA8C  addi      r9, r9, -1\n0x826FFA90  addi      r11, r11, 0x80\n0x826FFA94  cmplwi    cr6, r9, 0\n0x826FFA98  bne       cr6, loc_826FFA70\n0x826FFA9C  lbz       r11, 0xA0+var_39(r1)\n0x826FFAA0  cmplwi    cr6, r11, 1\n0x826FFAA4  bne       cr6, loc_826FFAB4\n0x826FFAA8  addi      r4, r1, 0xA0+var_50\n0x826FFAAC  mr        r3, r31\n0x826FFAB0  bl        BrnSound__Logic__PresentationEffect__Play\n0x826FFAB4  addi      r1, r1, 0xA0\n0x826FFAB8  b         __restgprlr_28",
+  "xrefs_to": [],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE8",
+      "name": "__savegprlr_28"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x82C08F60",
+      "name": "_purecall"
+    },
+    {
+      "address": "0x821F0F40",
+      "name": "sub_821F0F40"
+    },
+    {
+      "address": "0x8269E368",
+      "name": "sub_8269E368"
+    },
+    {
+      "address": "0x826F78D8",
+      "name": "BrnSound::Logic::PresentationEffect::Play"
+    }
+  ]
+}

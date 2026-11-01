@@ -1,0 +1,237 @@
+{
+  "address": "0x824FB9A8",
+  "name": "sub_824FB9A8",
+  "prototype": "int sub_824FB9A8int __fastcall(int a1, const char *a2, _BYTE *a3, const char *a4, const char *a5)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "_BYTE *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a4",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a5",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "unsigned int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v11",
+      "type": "unsigned int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v12",
+      "type": "char **",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v13",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v14",
+      "type": "_BYTE *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v15",
+      "type": "__int64",
+      "is_reg": true,
+      "size": 8
+    },
+    {
+      "name": "v16",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v18",
+      "type": "int (***)()",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v19",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v20",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v21",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v22",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v23",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v24",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v25",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v26",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v27",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v28",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v29",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v30",
+      "type": "const char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v31",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    }
+  ],
+  "pseudocode": "int __fastcall sub_824FB9A8(int a1, const char *a2, _BYTE *a3, const char *a4, const char *a5)\n{\n  unsigned int v10; // r31\n  unsigned int v11; // r6\n  char **v12; // r7\n  __int64 v13; // r10\n  _BYTE *v14; // r11\n  __int64 v15; // r8\n  int v16; // r5\n  int result; // r3\n  int (***v18)(); // r31\n  int v19; // r5\n  int v20; // r5\n  const char *v21; // r4\n  int v22; // r5\n  int v23; // r5\n  const char *v24; // r4\n  int v25; // r5\n  int v26; // r5\n  const char *v27; // r4\n  int v28; // r5\n  int v29; // r5\n  const char *v30; // r4\n  int v31; // r5\n\n  _savegprlr_26();\n  if ( !a3 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\"lpActionName\", \"..\\\\..\\\\..\\\\GameSource\\\\Gui/Events/BrnGuiAudioEvent.cpp\", 49);\n    CgsDev::Assert::EndAssert();\n  }\n  v10 = 14;\n  v11 = 0;\n  v12 = off_82F277A8;\n  while ( 1 )\n  {\n    LODWORD(v13) = *v12;\n    v14 = a3;\n    do\n    {\n      HIDWORD(v13) = *v14;\n      LODWORD(v15) = HIDWORD(v13) - *v13;\n      if ( !*v14 )\n        break;\n      ++v14;\n      LODWORD(v13) = v13 + 1;\n    }\n    while ( !v15 );\n    if ( !v15 )\n      break;\n    ++v12;\n    ++v11;\n    if ( v12 >= off_82F277E0 )\n      goto LABEL_11;\n  }\n  v10 = v11;\nLABEL_11:\n  HIDWORD(v15) = a5;\n  result = BrnGui::GuiAudioTriggerEvent::Construct(a1, v10, __SPAIR64__(a2, a4), v15, v13);\n  if ( v10 >= 0xE && byte_82FB5098 && (CgsDev::Message::gxMessageFilterFlags & 1) != 0 )\n  {\n    v18 = CgsDev::Log::gpDebugPrint;\n    ((*CgsDev::Log::gpDebugPrint)[1])(CgsDev::Log::gpDebugPrint, \"\\nGUI AUDIO TRIGGERS: \", v16);\n    ((*v18)[1])(v18, \"Received invalid sound action. Component: \", v19);\n    v21 = a2;\n    if ( !a2 )\n      v21 = \"<NULLSTRING>\";\n    ((*v18)[1])(v18, v21, v20);\n    ((*v18)[1])(v18, \" Action: \", v22);\n    v24 = a3;\n    if ( !a3 )\n      v24 = \"<NULLSTRING>\";\n    ((*v18)[1])(v18, v24, v23);\n    ((*v18)[1])(v18, \" Label: \", v25);\n    v27 = a4;\n    if ( !a4 )\n      v27 = \"<NULLSTRING>\";\n    ((*v18)[1])(v18, v27, v26);\n    ((*v18)[1])(v18, \" Movie: \", v28);\n    v30 = a5;\n    if ( !a5 )\n      v30 = \"<NULLSTRING>\";\n    ((*v18)[1])(v18, v30, v29);\n    result = ((*v18)[1])(v18, \"\\n\", v31);\n  }\n  _restgprlr_26();\n  return result;\n}\n",
+  "assembly": "0x824FB9A8  mflr      r12\n0x824FB9AC  bl        __savegprlr_26\n0x824FB9B0  stwu      r1, back_chain(r1)\n0x824FB9B4  mr        r28, r5\n0x824FB9B8  mr        r30, r3\n0x824FB9BC  mr        r29, r4\n0x824FB9C0  mr        r27, r6\n0x824FB9C4  mr        r26, r7\n0x824FB9C8  cmplwi    cr6, r28, 0\n0x824FB9CC  bne       cr6, loc_824FB9F0\n0x824FB9D0  bl        CgsDev__Assert__BeginAssert\n0x824FB9D4  lis       r11, aGamesourceGuiE@ha\n0x824FB9D8  li        r5, 0x31 # '1'\n0x824FB9DC  addi      r4, r11, aGamesourceGuiE@l# \"..\\\\..\\\\..\\\\GameSource\\\\Gui/Events/BrnG\"...\n0x824FB9E0  lis       r11, aLpactionname@ha\n0x824FB9E4  addi      r3, r11, aLpactionname@l# \"lpActionName\"\n0x824FB9E8  bl        CgsDev__Assert__FireAssert\n0x824FB9EC  bl        CgsDev__Assert__EndAssert\n0x824FB9F0  lis       r11, off_82F277A8@ha\n0x824FB9F4  li        r31, 0xE\n0x824FB9F8  addi      r5, r11, off_82F277A8@l# \"ON_ENTER\"\n0x824FB9FC  li        r6, 0\n0x824FBA00  mr        r7, r5\n0x824FBA04  lwz       r10, 0(r7)\n0x824FBA08  mr        r11, r28\n0x824FBA0C  lbz       r9, 0(r11)\n0x824FBA10  lbz       r8, 0(r10)\n0x824FBA14  cmpwi     cr6, r9, 0\n0x824FBA18  subf      r8, r8, r9\n0x824FBA1C  beq       cr6, loc_824FBA30\n0x824FBA20  addi      r11, r11, 1\n0x824FBA24  addi      r10, r10, 1\n0x824FBA28  cmpwi     cr6, r8, 0\n0x824FBA2C  beq       cr6, loc_824FBA0C\n0x824FBA30  cmpwi     cr6, r8, 0\n0x824FBA34  beq       cr6, loc_824FBA50\n0x824FBA38  addi      r7, r7, 4\n0x824FBA3C  addi      r11, r5, (off_82F277E0 - 0x82F277A8)# \"POSITION_FIRST\"\n0x824FBA40  addi      r6, r6, 1\n0x824FBA44  cmpw      cr6, r7, r11\n0x824FBA48  blt       cr6, loc_824FBA04\n0x824FBA4C  b         loc_824FBA54\n0x824FBA50  mr        r31, r6\n0x824FBA54  mr        r7, r26\n0x824FBA58  mr        r6, r27\n0x824FBA5C  mr        r5, r29\n0x824FBA60  mr        r4, r31\n0x824FBA64  mr        r3, r30\n0x824FBA68  bl        BrnGui__GuiAudioTriggerEvent__Construct\n0x824FBA6C  cmpwi     cr6, r31, 0\n0x824FBA70  blt       cr6, loc_824FBA7C\n0x824FBA74  cmpwi     cr6, r31, 0xE\n0x824FBA78  blt       cr6, loc_824FBBE8\n0x824FBA7C  lis       r11, byte_82FB5098@ha\n0x824FBA80  lbz       r11, byte_82FB5098@l(r11)\n0x824FBA84  cmplwi    cr6, r11, 0\n0x824FBA88  beq       cr6, loc_824FBBE8\n0x824FBA8C  lis       r11, CgsDev__Message__gxMessageFilterFlags@ha\n0x824FBA90  ld        r11, CgsDev__Message__gxMessageFilterFlags@l(r11)\n0x824FBA94  clrldi    r11, r11, 63\n0x824FBA98  cmpldi    cr6, r11, 0\n0x824FBA9C  beq       cr6, loc_824FBBE8\n0x824FBAA0  lis       r11, CgsDev__Log__gpDebugPrint@ha\n0x824FBAA4  lwz       r31, CgsDev__Log__gpDebugPrint@l(r11)# off_82F31918\n0x824FBAA8  lis       r11, aGuiAudioTrigge@ha\n0x824FBAAC  addi      r4, r11, aGuiAudioTrigge@l# \"\\nGUI AUDIO TRIGGERS: \"\n0x824FBAB0  mr        r3, r31\n0x824FBAB4  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBAB8  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBABC  mtctr     r11\n0x824FBAC0  bctrl# _purecall\n0x824FBAC4  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBAC8  lis       r11, aReceivedInvali@ha\n0x824FBACC  mr        r3, r31\n0x824FBAD0  addi      r4, r11, aReceivedInvali@l# \"Received invalid sound action. Componen\"...\n0x824FBAD4  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBAD8  mtctr     r11\n0x824FBADC  bctrl# _purecall\n0x824FBAE0  lis       r11, aNullstring@ha\n0x824FBAE4  cmplwi    cr6, r29, 0\n0x824FBAE8  addi      r30, r11, aNullstring@l# \"<NULLSTRING>\"\n0x824FBAEC  lwz       r11, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBAF0  mr        r3, r31\n0x824FBAF4  mr        r4, r29\n0x824FBAF8  lwz       r11, (off_82000D04 - 0x82000D00)(r11)# _purecall\n0x824FBAFC  bne       cr6, loc_824FBB04\n0x824FBB00  mr        r4, r30\n0x824FBB04  mtctr     r11\n0x824FBB08  bctrl# _purecall\n0x824FBB0C  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBB10  lis       r11, aAction@ha\n0x824FBB14  mr        r3, r31\n0x824FBB18  addi      r4, r11, aAction@l# \" Action: \"\n0x824FBB1C  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBB20  mtctr     r11\n0x824FBB24  bctrl# _purecall\n0x824FBB28  lwz       r11, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBB2C  cmplwi    cr6, r28, 0\n0x824FBB30  mr        r3, r31\n0x824FBB34  mr        r4, r28\n0x824FBB38  lwz       r11, (off_82000D04 - 0x82000D00)(r11)# _purecall\n0x824FBB3C  bne       cr6, loc_824FBB44\n0x824FBB40  mr        r4, r30\n0x824FBB44  mtctr     r11\n0x824FBB48  bctrl# _purecall\n0x824FBB4C  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBB50  lis       r11, aLabel@ha\n0x824FBB54  mr        r3, r31\n0x824FBB58  addi      r4, r11, aLabel@l# \" Label: \"\n0x824FBB5C  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBB60  mtctr     r11\n0x824FBB64  bctrl# _purecall\n0x824FBB68  lwz       r11, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBB6C  cmplwi    cr6, r27, 0\n0x824FBB70  mr        r3, r31\n0x824FBB74  mr        r4, r27\n0x824FBB78  lwz       r11, (off_82000D04 - 0x82000D00)(r11)# _purecall\n0x824FBB7C  bne       cr6, loc_824FBB84\n0x824FBB80  mr        r4, r30\n0x824FBB84  mtctr     r11\n0x824FBB88  bctrl# _purecall\n0x824FBB8C  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBB90  lis       r11, aMovie@ha\n0x824FBB94  mr        r3, r31\n0x824FBB98  addi      r4, r11, aMovie@l# \" Movie: \"\n0x824FBB9C  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBBA0  mtctr     r11\n0x824FBBA4  bctrl# _purecall\n0x824FBBA8  lwz       r11, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBBAC  cmplwi    cr6, r26, 0\n0x824FBBB0  mr        r3, r31\n0x824FBBB4  mr        r4, r26\n0x824FBBB8  lwz       r11, (off_82000D04 - 0x82000D00)(r11)# _purecall\n0x824FBBBC  bne       cr6, loc_824FBBC4\n0x824FBBC0  mr        r4, r30\n0x824FBBC4  mtctr     r11\n0x824FBBC8  bctrl# _purecall\n0x824FBBCC  lwz       r10, (off_82F31918 - 0x82F31918)(r31)# off_82000D00\n0x824FBBD0  lis       r11, asc_82001CC4@ha\n0x824FBBD4  mr        r3, r31\n0x824FBBD8  addi      r4, r11, asc_82001CC4@l# \"\\n\"\n0x824FBBDC  lwz       r11, (off_82000D04 - 0x82000D00)(r10)# _purecall\n0x824FBBE0  mtctr     r11\n0x824FBBE4  bctrl# _purecall\n0x824FBBE8  addi      r1, r1, 0x90\n0x824FBBEC  b         __restgprlr_26",
+  "xrefs_to": [
+    {
+      "address": "0x825112B0",
+      "name": "BrnGui::GuiModule::FlaptSoundTriggerCallback"
+    },
+    {
+      "address": "0x82527A58",
+      "name": "BrnGui::GuiModule::Update"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE0",
+      "name": "__savegprlr_26"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x824F6350",
+      "name": "BrnGui::GuiAudioTriggerEvent::Construct"
+    },
+    {
+      "address": "0x82C08F60",
+      "name": "_purecall"
+    }
+  ]
+}

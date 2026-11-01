@@ -1,0 +1,758 @@
+
+b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp:1733-1792
+1733: 
+1734: 
+1735:     // ARTIST @0x825112B0 converts the FLApt action string to a
+1736:     // GuiAudioTriggerEvent and publishes it through the module output buffer.
+1737:     void GuiModule::FlaptSoundTriggerCallback(void* lpUserData,
+1738:                                               const char* lpcComponentName,
+1739:                                               const char* lpcSwfName,
+1740:                                               const char* lpcActionName,
+1741:                                               const char* lpcLabel)
+1742:     {
+1743:         CGS_ASSERT(lpUserData != 0, "lpUserData");
+1744:         CGS_ASSERT(lpcComponentName != 0, "lpcComponentName");
+1745:         CGS_ASSERT(lpcSwfName != 0, "lpcSwfName");
+1746:         CGS_ASSERT(lpcActionName != 0, "lpcActionName");
+1747:         CGS_ASSERT(lpcLabel != 0, "lpcLabel");
+1748: 
+1749:         GuiModule* lpThis = static_cast<GuiModule*>(lpUserData);
+1750:         CGS_ASSERT(lpThis->mpOutputBuffer != 0, "mpOutputBuffer");
+1751: 
+1752:         // off_82F277A8..off_82F277E0: the fourteen authored presentation actions.
+1753:         static const char* const KAPC_ACTION_NAMES[14] = {
+1754:             "ON_ENTER", "ON_LEAVE", "ON_FOCUS", "ON_LOSE_FOCUS",
+1755:             "ON_ACCEPT", "ON_CANCEL", "ON_TICK", "ON_CHANGE",
+1756:             "ON_UP", "ON_DOWN", "ON_LEFT", "ON_LEFT_SWEEP",
+1757:             "ON_RIGHT", "ON_RIGHT_SWEEP"
+1758:         };
+1759: 
+1760:         s32 liAction = 14;
+1761:         for (s32 li = 0; li < 14; ++li)
+1762:         {
+1763:             if (std::strcmp(lpcActionName, KAPC_ACTION_NAMES[li]) == 0)
+1764:             {
+1765:                 liAction = li;
+1766:                 break;
+1767:             }
+1768:         }
+1769: 
+1770:         GuiAudioTriggerEvent lAudioEvent;
+1771:         lAudioEvent.Construct(liAction, lpcComponentName, lpcLabel, lpcSwfName);
+1772:         // ARTIST sub_824FB9A8 emits this diagnostic after Construct for any action >= 14.
+1773:         if (liAction >= 14 && ::gbLogGuiAudioTriggers &&
+1774:             (CgsDev::Message::gxMessageFilterFlags & 1) != 0)
+1775:         {
+1776:             const char* lpcLogComponent = lpcComponentName != 0 ? lpcComponentName : "<NULLSTRING>";
+1777:             const char* lpcLogAction = lpcActionName != 0 ? lpcActionName : "<NULLSTRING>";
+1778:             const char* lpcLogLabel = lpcLabel != 0 ? lpcLabel : "<NULLSTRING>";
+1779:             const char* lpcLogMovie = lpcSwfName != 0 ? lpcSwfName : "<NULLSTRING>";
+1780:             *CgsDev::Log::gpDebugPrint
+1781:                 << "\nGUI AUDIO TRIGGERS: "
+1782:                 << "Received invalid sound action. Component: " << lpcLogComponent
+1783:                 << " Action: " << lpcLogAction
+1784:                 << " Label: " << lpcLogLabel
+1785:                 << " Movie: " << lpcLogMovie
+1786:                 << "\n";
+1787:         }
+1788:         lpThis->mpOutputBuffer->GetOutEventQueueNonConst()->AddEvent(
+1789:             reinterpret_cast<const CgsModule::Event*>(&lAudioEvent),
+1790:             lAudioEvent.GetEventType(), static_cast<s32>(sizeof(lAudioEvent)));
+1791:     }
+1792: 
+
+b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp:525-546
+525: 
+526:         // X360 GuiModule::Construct @0x82518028, pseudocode lines 327-332 -- the console's
+527:         // own argument assert, fired before anything is built.
+528:         CGS_ASSERT(lpHudMessageController != 0, "lpHudMessageController");   // BrnGuiModule.cpp:229
+529:         CGS_ASSERT(lpPopupController != 0, "lpPopupController");
+530: 
+531:         // Route through the real BrnGui::ViewModule::Construct @0x824F13B8 with the X360
+532:         // caller's recovered args: the view flapt count (7), a 16:9 aspect, and the real
+533:         // alternate-text-colours table + count 8 (see the static above). The
+534:         // X360 passes a null debug name here; the descriptive "BrnGuiView" is a harmless
+535:         // non-null label the base accepts.
+536:         mViewModule.Construct(this, "BrnGuiView", 7, 1280.0f / 720.0f,
+537:                               KA_ALTERNATE_TEXT_COLOURS, 8);
+538:         // ARTIST825184E4: construct the actual shared Model and stored-event
+539:         // owner. Native preparation/update selection remains with its caller.
+540:         CgsGui::GuiModule::Construct(&mViewModule, lbHighDef);
+541:         mViewModule.GetFlaptManager()->SetSoundTriggerHandler(
+542:             &GuiModule::FlaptSoundTriggerCallback, this);
+543:         // X360 GuiModule::Construct @0x82518B18: EffectsArbitrator::Construct just ahead of
+544:         // MovieManager::Construct + ColourCalibrationScreen::Construct.
+545:         muFrameUpdateSet = 0;
+546:         mEffectsArbitrator.Construct();
+
+b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp:1927-1940
+1927:                     mHudMessageDirector.SetBlackBarSize(*reinterpret_cast<const f32*>(lpEvent));
+1928:                     break;
+1929: 
+1930:                 case 22:   // ARTIST82528444..82528468: stored Apt sound trigger.
+1931:                 {
+1932:                     const GuiEventSoundTriggerPayload22* lpSound =
+1933:                         reinterpret_cast<const GuiEventSoundTriggerPayload22*>(lpEvent);
+1934:                     const char* lpcMovieName = mViewModule.GetMovieNameByLevel(lpSound->miLayer);
+1935:                     FlaptSoundTriggerCallback(this, lpSound->macTypeName, lpcMovieName,
+1936:                         lpSound->macActionName, lpSound->macLabel);
+1937:                     break;
+1938:                 }
+1939: 
+1940:                 case 26:    // GuiEventTimeInfo -- the per-frame { delta, now } pair
+
+b5-decomp/src/GameSource/Gui/BrnGuiModule.cpp:2472-2482
+2472:         }
+2473:         muFrameUpdateSet = leUpdateSet;
+2474:         mpGuiEventInputBuffer = lpGuiInput;
+2475:         mGuiAccessPointers.SetGDMInput(lpGameDataInput);
+2476:         CGS_ASSERT(mpOutputBuffer == 0, "mpOutputBuffer == NULL");
+2477:         lpGuiOutput->LockForWrite();
+2478:         mpOutputBuffer = lpGuiOutput;
+2479:         // FLAG PC-platform leaf: preserve any current-frame host/harness staging.
+2480:         lpGuiOutput->AddGuiOutEvents(&mGuiOutQueue);
+2481:         mGuiOutQueue.Clear();
+2482:         lpGuiInput->LockForWrite();
+
+b5-decomp/src/GameSource/Gui/BrnGuiEventTypeDefs.h:109-162
+109: // BrnGuiAudioEvent.cpp / ARTIST @0x824F6350. The native payload is exactly
+110: // { component[32], action, label[32], movie[32] } (100 bytes). The committed PC
+111: // GuiEvent<N> carries its 12-byte queue header explicitly, making this queued
+112: // record 112 bytes in total.
+113: struct GuiAudioTriggerEvent : public CgsGui::GuiEvent<201>
+114: {
+115:     char macComponent[32];
+116:     s32  meAction;
+117:     char macLabel[32];
+118:     char macMovie[32];
+119: 
+120:     GuiAudioTriggerEvent() : CgsGui::GuiEvent<201>(0, 12), meAction(0)
+121:     {
+122:         macComponent[0] = 0;
+123:         macLabel[0] = 0;
+124:         macMovie[0] = 0;
+125:     }
+126: 
+127:     void Construct(s32 leAction, const char* lpComponentName,
+128:                    const char* lpLabel, const char* lpMovieName = "");
+129: };
+130: 
+131: static_assert(sizeof(GuiAudioTriggerEvent) == 112,
+132:               "GuiAudioTriggerEvent is a 100-byte payload plus the 12-byte PC GuiEvent header");
+133: 
+134: // ARTIST wire id 457 carries the same 100-byte payload without the PC
+135: // GuiEvent<201> header. OutputGuiEvent wraps this record with its own 12-byte
+136: // queue header before publication.
+137: struct GuiAudioTriggerWirePayload457
+138: {
+139:     char macComponent[32];
+140:     s32  meAction;
+141:     char macLabel[32];
+142:     char macMovie[32];
+143: 
+144:     GuiAudioTriggerWirePayload457() = default;
+145: 
+146:     // FLAG PC-platform leaf: the existing internal carrier retains its legacy
+147:     // header. Project only its named payload fields into the attested raw wire
+148:     // representation; never wrap or reinterpret that header as event data.
+149:     explicit GuiAudioTriggerWirePayload457(const GuiAudioTriggerEvent& lrEvent)
+150:         : meAction(lrEvent.meAction)
+151:     {
+152:         std::memcpy(macComponent, lrEvent.macComponent, sizeof(macComponent));
+153:         std::memcpy(macLabel, lrEvent.macLabel, sizeof(macLabel));
+154:         std::memcpy(macMovie, lrEvent.macMovie, sizeof(macMovie));
+155:     }
+156: 
+157:     s32 GetEventType() const { return 457; }
+158: };
+159: 
+160: static_assert(sizeof(GuiAudioTriggerWirePayload457) == 100,
+161:               "ARTIST GUI audio trigger payload is exactly 100 bytes");
+162: 
+
+b5-decomp/src/GameSource/Gui/BrnGuiEventTypeDefs.h:3250-3276
+3250: }
+3251: 
+3252: // ARTIST82436890: the raw100-byte audio trigger is boxed on channel40.
+3253: // This typed boundary does not remap unrelated event201 records.
+3254: namespace CgsGui
+3255: {
+3256:     template <>
+3257:     inline void StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerWirePayload457>(
+3258:         BrnGui::GuiAudioTriggerWirePayload457& lrEvent)
+3259:     {
+3260:         GuiEventWrapper<BrnGui::GuiAudioTriggerWirePayload457, 40> lWrapper(lrEvent);
+3261:         mOutEventQueue.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lWrapper),
+3262:             40, static_cast<s32>(sizeof(lWrapper)));
+3263:     }
+3264: 
+3265:     // ARTIST82436890 is the shared instance used by all32 original callers.
+3266:     // The PC carrier owns a legacy header; project its named100-byte body
+3267:     // before boxing. This specializes the type, never the numeric event201.
+3268:     template <>
+3269:     inline void StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>(
+3270:         BrnGui::GuiAudioTriggerEvent& lrEvent)
+3271:     {
+3272:         BrnGui::GuiAudioTriggerWirePayload457 lPayload(lrEvent);
+3273:         OutputGuiEvent<BrnGui::GuiAudioTriggerWirePayload457>(lPayload);
+3274:     }
+3275: 
+3276: }
+
+b5-decomp/src/GameSource/Gui/BrnGuiEventTypeDefs.cpp:38-81
+38: static const f32 KF_WORST_CASE_PHASE_LIMIT = 100.0f; // flt_820049E0
+39: static const f32 KF_WORST_CASE_PHASE_STEP  = 1.5f;   // flt_82004D04
+40: static const f32 KF_WORST_CASE_PHASE_RESET = 0.0f;   // flt_82001CC0
+41: static const f32 KF_WORST_CASE_RING_STEP   = 50.0f;  // flt_820138DC (ring Z spacing & X offset)
+42: 
+43: // ARTIST off_82F2CFC0: 27 exact action labels, read from the calibrated original image.
+44: static const char* const KAPC_GUI_AUDIO_ACTION_NAMES[27] = {
+45:     "OnEnter", "OnExit", "OnFocus", "OnLoseFocus", "OnAccept", "OnCancel",
+46:     "OnTick", "OnChange", "OnUp", "OnDown", "OnLeft", "OnLeftSweep",
+47:     "OnRight", "OnRightSweep", "Pitch", "Azimuth", "Cutoff", "VolumeMenu",
+48:     "VolumeMenu2", "VolumeMenu3", "VolumeInGame", "VolumeInGame2", "VolumeInGame3", "VolumeStream",
+49:     "Off", "On", "SwitchedOn"
+50: };
+51: // @0x824F6350 -- copy the three names into their fixed 32-byte fields, force
+52: // termination at byte 31, then store the action enum between component and label.
+53: void GuiAudioTriggerEvent::Construct(s32 leAction, const char* lpComponentName,
+54:                                      const char* lpLabel, const char* lpMovieName)
+55: {
+56:     CGS_ASSERT(lpComponentName && lpLabel && lpMovieName,
+57:                "lpComponentName && lpLabel && lpMovieName");
+58: 
+59:     CgsCore::SPrintf(macComponent, sizeof(macComponent), lpComponentName);
+60:     macComponent[31] = 0;
+61:     CgsCore::SPrintf(macLabel, sizeof(macLabel), lpLabel);
+62:     macLabel[31] = 0;
+63:     CgsCore::SPrintf(macMovie, sizeof(macMovie), lpMovieName);
+64:     macMovie[31] = 0;
+65:     meAction = leAction;
+66:     if (::gbLogGuiAudioTriggers && (CgsDev::Message::gxMessageFilterFlags & 1) != 0)
+67:     {
+68:         *CgsDev::Log::gpDebugPrint
+69:             << "\nGUI AUDIO TRIGGERS: "
+70:             << "Received sound action. Sending GuiAudioEvent to Audio guys. Component: "
+71:             << lpComponentName
+72:             << " Action: " << KAPC_GUI_AUDIO_ACTION_NAMES[leAction]
+73:             << " Label: " << lpLabel
+74:             << " Movie: " << lpMovieName
+75:             << "\n";
+76:     }
+77: }
+78: 
+79: // @ 0x823A6A20 — zero-extended byte; guards leCounty >= 0 (vacuous for an unsigned
+80: // byte but the X360 still emits it) and leCounty < BrnWorld::E_COUNTY_COUNT.
+81: BrnWorld::ECounty GuiEventUpdateSatNav::SatNavIconInfo::GetCounty() const
+
+b5-decomp/src/GameShared/GameClasses/Gui/CgsGuiModuleIO.h:120-137
+120:         // The concrete instantiations (??$AddGuiOutEvent@V...) are emitted out-of-line and owned
+121:         // by the catch-all class:<global> TU, so this header provides ONLY the inline generic;
+122:         // no explicit instantiation is defined here (that would collide -- LNK2005 -- with the
+123:         // global TU's definitions). Bodied inline so any using TU can instantiate it.
+124:         template <class T>
+125:         int AddGuiOutEvent(T& lrEvent)
+126:         {
+127:             CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
+128:             // The on-queue payload byte count is sizeof(T) (the X360 AddEvent size arg varies per
+129:             // event type, e.g. 1/4/24/80/404); the event-type id is the GuiEvent<N> id carried by T.
+130:             return mOutEvents.AddEvent(reinterpret_cast<const CgsModule::Event*>(&lrEvent),
+131:                                        lrEvent.GetEventType(), static_cast<s32>(sizeof(T)))
+132:                        ? 1
+133:                        : 0;
+134:         }
+135: 
+136:     private:
+137:         u8                             maStatusPad[3];        // +1..+3 (force +4 placement)
+
+b5-decomp/src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp:60-81
+60:     // X360 0x8284F388: write-lock handle to the resource-request queue. The pseudocode tests
+61:     // ((*a1 >> 3) & 1) == write-lock bit; returns this + 4.
+62:     OutputBuffer::GuiResourceRequestQueueStorage* OutputBuffer::GetGuiResourceRequestQueue()
+63:     {
+64:         CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
+65:         return &mResourceRequestQueue;
+66:     }
+67: 
+68:     // X360 0x823B4130: read-lock handle to the out-event queue. Tests ((*a1 >> 4) & 1) ==
+69:     // read-lock bit; returns this + 2068.
+70:     const OutputBuffer::GuiEventQueue* OutputBuffer::GetOutEventQueue() const
+71:     {
+72:         CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
+73:         return &mOutEvents;
+74:     }
+75: 
+76:     // FLAG PC-platform leaf: same original queue, checked under its owner's lock.
+77:     OutputBuffer::GuiEventQueue* OutputBuffer::GetOutEventQueueNonConst()
+78:     {
+79:         CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
+80:         return &mOutEvents;
+81:     }
+
+b5-decomp/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp:47-66
+47:     const u8* GetGuiPayload(const CgsModule::Event* apEvent, s32 aiEventType,
+48:                             s32 aiEventSize)
+49:     {
+50:         const u8* lpuBytes = reinterpret_cast<const u8*>(apEvent);
+51:         if (aiEventSize >= static_cast<s32>(sizeof(GuiEventWireHeader)))
+52:         {
+53:             const GuiEventWireHeader* lpHeader =
+54:                 reinterpret_cast<const GuiEventWireHeader*>(apEvent);
+55:             if (lpHeader->muEventType == static_cast<u32>(aiEventType) &&
+56:                 lpHeader->muPayloadOffset >= sizeof(GuiEventWireHeader) &&
+57:                 lpHeader->muPayloadOffset < static_cast<u32>(aiEventSize))
+58:             {
+59:                 return lpuBytes + lpHeader->muPayloadOffset;
+60:             }
+61:         }
+62:         return lpuBytes;
+63:     }
+64: 
+65:     template <typename T>
+66:     void QueueSoundMessage(CgsModule::VariableEventQueue<8192, 16>& arQueue,
+
+b5-decomp/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp:471-484
+471: void SoundLogicModule::ProcessGuiEvents(
+472:     const CgsModule::VariableEventQueue<18432, 16>* apGuiEvents)
+473: {
+474:     if (!apGuiEvents)
+475:         return;
+476: 
+477:     const CgsModule::Event* lpEvent = 0;
+478:     s32 liSize = 0;
+479:     s32 liType = apGuiEvents->GetFirstEvent(&lpEvent, &liSize);
+480:     while (lpEvent)
+481:     {
+482:         const u8* lpuPayload = GetGuiPayload(lpEvent, liType, liSize);
+483:         switch (liType)
+484:         {
+
+b5-decomp/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp:533-570
+533:         case 201: // PC's typed GuiAudioTriggerEvent id
+534:         case 457: // ARTIST wire id
+535:         {
+536:             // Retain only the existing typed112-byte PC compatibility carrier.
+537:             // Unrelated raw8-byte event201 is HideDriveThru, not an audio trigger.
+538:             if (liType == 201 && liSize < static_cast<s32>(sizeof(BrnGui::GuiAudioTriggerEvent)))
+539:                 break;
+540:             CgsSound::Io::Message<BrnGui::GuiAudioTriggerWirePayload457> lMessage;
+541:             lMessage.Construct(6, 0, 0, 0, CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT);
+542:             if (liType == 201)
+543:             {
+544:                 lMessage.mData = BrnGui::GuiAudioTriggerWirePayload457(
+545:                     *reinterpret_cast<const BrnGui::GuiAudioTriggerEvent*>(lpEvent));
+546:             }
+547:             else
+548:             {
+549:                 const BrnGui::GuiAudioTriggerWirePayload457& lrPayload =
+550:                     *reinterpret_cast<const BrnGui::GuiAudioTriggerWirePayload457*>(
+551:                         lpuPayload);
+552:                 // ARTIST copies the already constructed raw100-byte payload.
+553:                 // Copy fields into the existing internal carrier without running
+554:                 // its formatting/logging constructor a second time.
+555:                 std::memcpy(lMessage.mData.macComponent, lrPayload.macComponent,
+556:                     sizeof(lrPayload.macComponent));
+557:                 lMessage.mData.meAction = lrPayload.meAction;
+558:                 std::memcpy(lMessage.mData.macLabel, lrPayload.macLabel,
+559:                     sizeof(lrPayload.macLabel));
+560:                 std::memcpy(lMessage.mData.macMovie, lrPayload.macMovie,
+561:                     sizeof(lrPayload.macMovie));
+562:             }
+563:             QueueSoundMessage(mMessageQueue, lMessage);
+564:             break;
+565:         }
+566:         case 456:
+567:         {
+568:             CgsSound::Io::Message<GuiAudioEventData> lMessage;
+569:             lMessage.Construct(5, 0, 0, 1, CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT);
+570:             std::memcpy(lMessage.mData.maData, lpuPayload, sizeof(lMessage.mData.maData));
+
+b5-decomp/src/GameSource/Sound/Module/LogicModule/BrnSoundLogicModule.cpp:1436-1448
+1436:     ProcessGameActionQueue(lePlayerCarIndex, lpReadInput->GetGameActionQueue());
+1437:     ProcessCarDataLoadingQueue(*lpInput->GetAudioCarDataLoadedQueueForRead());
+1438:     ProcessGameEventQueue(lePlayerCarIndex, lpReadInput->GetGameEventQueue());
+1439:     const Io::RootInputBuffer::GuiEventQueue* lpGuiQueue = lpInput->GetGuiEventQueue();
+1440:     ProcessGuiEvents(reinterpret_cast<const CgsModule::VariableEventQueue<18432, 16>*>(
+1441:         lpGuiQueue));
+1442:     ProcessCameraFlags(*lpReadInput->GetDirectorCamera());
+1443:     lpInput->UnlockForRead();
+1444: 
+1445:     if (mSoundSerialiser.IsRecording())
+1446:         mSoundSerialiser.GetStaticLayout()->mfC5C = af32SimDt;
+1447: 
+1448:     CgsSound::Logic::Module::Update(af32GameDt, af32SimDt, apInputBuffer, apOutputBuffer);
+
+b5-decomp/src/GameSource/Game/GameBridgeGUIToX_Sound.cpp:24-42
+24: {
+25:     // @ 0x823C0A58 -- hand the GUI output buffer's out-event queue to the sound root input
+26:     // buffer (SetGuiEventQueue) so the sound module can drain GUI events.
+27:     void BrnGameModule::BridgeGuiToSound(
+28:         BrnSound::Module::Io::RootInputBuffer* lpSoundModuleInputBuffer,
+29:         const CgsGui::CgsGuiModuleIO::OutputBuffer* lpGuiOutputBuffer)
+30:     {
+31:         CGS_ASSERT(lpSoundModuleInputBuffer != 0 && lpGuiOutputBuffer != 0,
+32:                    "lpSoundModuleInputBuffer && lpGuiOutputBuffer");
+33: 
+34:         const CgsModule::VariableEventQueue<18432, 16>* lpGuiEventQueue =
+35:             GetGuiOutEventQueue(lpGuiOutputBuffer);
+36:         CGS_ASSERT(lpGuiEventQueue != 0, "lpGuiEventQueue");
+37:         lpSoundModuleInputBuffer->SetGuiEventQueue(
+38:             reinterpret_cast<const BrnSound::Module::Io::RootInputBuffer::GuiEventQueue*>(
+39:                 lpGuiEventQueue));
+40:     }
+41: }
+
+b5-decomp/src/GameSource/Sound/Module/BrnRootSoundModuleIO.cpp:190-197
+190: // X360 0x82695078 -- read-lock accessor for the gui event queue pointer @ +0xEBA8.
+191: const RootInputBuffer::GuiEventQueue* RootInputBuffer::GetGuiEventQueue() const
+192: {
+193:     CGS_ASSERT(IsBufferLockedForReading(), "Not locked for reading\n");
+194:     return mpGuiEventQueue;
+195: }
+196: 
+197: // X360 0x82694F28 -- read-lock accessor for the player's active-race-car slot @ +0x2F10.
+
+b5-decomp/src/GameSource/Sound/Module/BrnRootSoundModuleIO.cpp:353-361
+353: // X360 0x823B89B8 @ +0xEBA8 -- stores the caller's queue pointer (not a copy).
+354: void RootInputBuffer::SetGuiEventQueue(const GuiEventQueue* lpQueue)
+355: {
+356:     CGS_ASSERT(IsBufferLockedForWriting(), "Not locked for writing\n");
+357:     mpGuiEventQueue = lpQueue;
+358: }
+359: 
+360: // X360 0x823B8028 @ +0xEBAC.
+361: void RootInputBuffer::SetGameModeInterface(const GameModeOutputInterface* lpInterface)
+
+b5-decomp/src/GameShared/GameClasses/Sound/Logic/CgsSoundLogicModule.cpp:177-190
+177:                     CgsModule::IOBuffer* apOutputBuffer)
+178: {
+179:     CGS_ASSERT(apInputBuffer != 0, "lpInputBuffer");
+180:     CGS_ASSERT(apOutputBuffer != 0, "lpOutputBuffer");
+181: 
+182:     AttachBuffers(apInputBuffer, apOutputBuffer);
+183:     mpLogicInputBuffer->LockForRead();
+184:     mpLogicOutputBuffer->LockForWrite();
+185: 
+186:     ProcessMessageQueue(&mMessageQueue);
+187:     mMessageQueue.Clear();
+188: 
+189:     mEnvironment.Update(af32GameDt, af32SimDt);
+190: 
+
+b5-decomp/src/GameShared/GameClasses/Sound/Logic/CgsSoundLogicModule.cpp:197-226
+197: // Module::ProcessMessageQueue @0x826C45A8
+198: //
+199: // Walk every queued message, dispatching each to Environment::Notify. The
+200: // console's `event - 4` back-step recovers the message START from the queue's
+201: // returned first-serializable-field pointer (the console record view skips the
+202: // message's leading vtable-pointer word); the host queue's GetFirstEvent
+203: // already returns the record payload start == the Message, so no adjustment.
+204: // ---------------------------------------------------------------------------
+205: void Module::ProcessMessageQueue(CgsModule::VariableEventQueue<8192, 16>* apQueue)
+206: {
+207:     const CgsModule::Event* lpEvent = 0;
+208:     s32 liSize = 0;
+209: 
+210:     apQueue->GetFirstEvent(&lpEvent, &liSize);
+211:     while (lpEvent)
+212:     {
+213:         mEnvironment.Notify(reinterpret_cast<const Io::MessageHeader*>(lpEvent));
+214: 
+215:         const CgsModule::Event* lpNext = 0;
+216:         apQueue->GetNextEvent(lpEvent, &lpNext, &liSize);
+217:         lpEvent = lpNext;
+218:     }
+219: }
+220: 
+221: // ---------------------------------------------------------------------------
+222: // Module::AttachBuffers @0x8268D3F0 / DetachBuffers @0x8268D400
+223: // ---------------------------------------------------------------------------
+224: void Module::AttachBuffers(CgsModule::IOBuffer* apInputBuffer,
+225:                            CgsModule::IOBuffer* apOutputBuffer)
+226: {
+
+b5-decomp/src/GameShared/GameClasses/Sound/Logic/CgsEnvironment.cpp:184-249
+184: static void NotifyStateAndEffects(State* apState,
+185:                                   const CgsSound::Io::MessageHeader* apkMessage)
+186: {
+187:     apState->Notify(apkMessage);
+188:     const u16 luEffectId = apkMessage->GetEffectId();
+189:     if (luEffectId == CgsSound::Io::MessageHeader::KU16_NO_DESTINATION)
+190:         return;
+191: 
+192:     EffectBase* lpHead = 0;
+193:     if (apkMessage->GetEffectType() == CgsSound::Io::MessageHeader::E_EFFECT_TYPE_OBJECT)
+194:         lpHead = apState->GetHeadEffectObject();
+195:     else if (apkMessage->GetEffectType() == CgsSound::Io::MessageHeader::E_EFFECT_TYPE_CONTROL)
+196:         lpHead = apState->GetHeadEffectControl();
+197:     else
+198:     {
+199:         CGS_ASSERT(false, "Unknown sound effect type\n");
+200:         return;
+201:     }
+202: 
+203:     if (luEffectId == CgsSound::Io::MessageHeader::KU16_ALL_DESTINATIONS)
+204:     {
+205:         for (EffectBase* lpEffect = lpHead; lpEffect; lpEffect = lpEffect->mpNextEffectBase)
+206:             lpEffect->Notify(apkMessage);
+207:         return;
+208:     }
+209: 
+210:     for (EffectBase* lpEffect = lpHead; lpEffect; lpEffect = lpEffect->mpNextEffectBase)
+211:     {
+212:         if (lpEffect->GetEffectID() == luEffectId)
+213:         {
+214:             lpEffect->Notify(apkMessage);
+215:             return;
+216:         }
+217:     }
+218: }
+219: 
+220: void Environment::Notify(const CgsSound::Io::MessageHeader* apkMessage) const
+221: {
+222:     CGS_ASSERT(apkMessage != 0, "lpMessageHeader");
+223:     if (!apkMessage)
+224:         return;
+225: 
+226:     const u16 luManagerId = apkMessage->GetStateManagerId();
+227:     const u16 luInstanceId = apkMessage->GetInstanceId();
+228:     const u32 luBegin = (luManagerId == CgsSound::Io::MessageHeader::KU16_NO_DESTINATION)
+229:                       ? 0u : static_cast<u32>(luManagerId);
+230:     const u32 luEnd = (luManagerId == CgsSound::Io::MessageHeader::KU16_NO_DESTINATION)
+231:                     ? mu32StateManagerCount : luBegin + 1u;
+232: 
+233:     for (u32 luManager = luBegin; luManager < luEnd; ++luManager)
+234:     {
+235:         StateManager* lpManager = GetStateManager(static_cast<s32>(luManager));
+236:         if (!lpManager)
+237:             continue;
+238:         lpManager->Notify(apkMessage);
+239: 
+240:         for (State* lpState = lpManager->GetHeadState(); lpState; lpState = lpState->GetNextState())
+241:         {
+242:             if (luInstanceId == CgsSound::Io::MessageHeader::KU16_NO_DESTINATION ||
+243:                 lpState->GetInstanceID() == static_cast<s32>(luInstanceId))
+244:                 NotifyStateAndEffects(lpState, apkMessage);
+245:         }
+246:     }
+247: }
+248: 
+249: // The one rodata ModuleParams record (X360 unk_820AA480, XEX-recovered big-endian
+
+b5-decomp/src/GameSource/Sound/Global/BrnPresentationEffect.cpp:264-300
+264: 
+265: void PresentationEffect::Notify(const CgsSound::Io::MessageHeader* apMessage)
+266: {
+267:     if (!apMessage || apMessage->GetEventId() != 6)
+268:         return;
+269:     const CgsSound::Io::Message<BrnGui::GuiAudioTriggerWirePayload457>* lpMessage =
+270:         static_cast<const CgsSound::Io::Message<BrnGui::GuiAudioTriggerWirePayload457>*>(apMessage);
+271:     const BrnGui::GuiAudioTriggerWirePayload457& lrEvent = lpMessage->mData;
+272:     if (KB_SPEW_PRESENTATION_MESSAGES)
+273:     {
+274:         // ARTIST pointer table82F2CFC0:27 action labels, indexed as in the original.
+275:         static const char* const laActionNames[27] = {
+276:             "OnEnter", "OnExit", "OnFocus", "OnLoseFocus", "OnAccept", "OnCancel",
+277:             "OnTick", "OnChange", "OnUp", "OnDown", "OnLeft", "OnLeftSweep",
+278:             "OnRight", "OnRightSweep", "Pitch", "Azimuth", "Cutoff", "VolumeMenu",
+279:             "VolumeMenu2", "VolumeMenu3", "VolumeInGame", "VolumeInGame2",
+280:             "VolumeInGame3", "VolumeStream", "Off", "On", "SwitchedOn"
+281:         };
+282:         const char* lpcAction = laActionNames[lrEvent.meAction];
+283:         BrnSound::Debug::DebugComponent::mLogCombined << "[" << mfRunningTime << "] "
+284:             << "PresentationEffect : Received audio trigger: Component " << lrEvent.macComponent
+285:             << " Action " << (lpcAction ? lpcAction : "<NULLSTRING>")
+286:             << " Movie " << lrEvent.macMovie << " Label " << lrEvent.macLabel << "\n";
+287:     }
+288:     const char* lpString = std::strcmp(lrEvent.macLabel, "uninitialised") == 0
+289:         ? lrEvent.macComponent : lrEvent.macLabel;
+290:     const u64 luStringId = static_cast<u32>(CgsResource::ID::HashString(
+291:         reinterpret_cast<const u8*>(lpString)));
+292:     const u64 luScreenId = static_cast<u32>(CgsResource::ID::HashString(
+293:         reinterpret_cast<const u8*>(lrEvent.macMovie)));
+294:     PresentationEntry lEntry = {};
+295:     const bool lbResolved = Resolve(lrEvent.meAction, luStringId, luScreenId, lEntry);
+296:     if (lbResolved && lEntry.mu8Valid)
+297:         Play(lEntry);
+298: }
+299: 
+300: void PresentationEffect::UpdateParams(f32 afDeltaTime)
+
+b5-decomp/src/GameSource/Gui/BrnGuiDemangledEventTypes.h:235-240
+235:     struct GuiEventFburnChallengeEveryPlayerStatus : public CgsGui::GuiEvent<581> { u8 maPayload[2092]; };  // id 581 size 2104 (12B GuiEvent header + opaque payload)
+236:     struct GuiEventFinishedModeResults { u8 maData[1]; s32 GetEventType() const { return 321; } };  // id 321 size 1 (raw; size not GuiEvent-shaped)
+237:     struct GuiEventGameCompleted { u8 maData[2]; s32 GetEventType() const { return 309; } };  // id 309 size 2 (raw; size not GuiEvent-shaped)
+238:     struct GuiEventGameCompletedOnline { u8 maData[2]; s32 GetEventType() const { return 310; } };  // id 310 size 2 (raw; size not GuiEvent-shaped)
+239:     struct GuiEventHideDriveThru { u8 maData[8]; s32 GetEventType() const { return 201; } };  // id 201 size 8 (raw; size not GuiEvent-shaped)
+240:     struct GuiEventInviteComplete { u8 maData[1]; s32 GetEventType() const { return 132; } };  // id 132 size 1 (raw; size not GuiEvent-shaped)
+
+references/DecFIGS/dwarfdump/GameSource/Gui/Events/BrnGuiAudioEvent.h:1-28
+1: // BrnGuiAudioEvent.h:43
+2: struct BrnGui::GuiAudioTriggerEvent : public GuiEvent<452> {
+3: 	// BrnGuiAudioEvent.h:45
+4: 	extern const int32_t KI_EVENT_NAME_LENGTH = 32;
+5: 
+6: 	// BrnGuiAudioEvent.h:80
+7: 	char[32] macComponent;
+8: 
+9: 	// BrnGuiAudioEvent.h:81
+10: 	int32_t meAction;
+11: 
+12: 	// BrnGuiAudioEvent.h:82
+13: 	char[32] macLabel;
+14: 
+15: 	// BrnGuiAudioEvent.h:83
+16: 	char[32] macMovie;
+17: 
+18: public:
+19: 	// BrnGuiAudioEvent.h:58
+20: 	void Construct(const char *, const char *, const char *, const char *);
+21: 
+22: 	// BrnGuiAudioEvent.h:69
+23: 	void Construct(int32_t, const char *, const char *, const char *);
+24: 
+25: 	// BrnGuiAudioEvent.h:75
+26: 	void Construct(const char *, const char *);
+27: 
+28: }
+
+references/DecFIGS/dwarfdump/GameShared/GameClasses/Gui/CgsGuiEvent.h:4467-4476
+4467: // CgsGuiEvent.h:58
+4468: struct CgsGui::GuiEvent<452> : public Event {
+4469: public:
+4470: 	// CgsGuiEvent.h:265
+4471: 	int32_t GetEventType() const;
+4472: 
+4473: }
+4474: 
+4475: // CgsGuiEvent.h:58
+4476: struct CgsGui::GuiEvent<451> : public Event {
+
+references/DecFIGS/dwarfdump/GameSource/Gui/BrnGuiModule.h:722-727
+722: 	void UpdateAndRenderMovieManager(InputBuffer *);
+723: 
+724: 	// BrnGuiModule.cpp:2988
+725: 	void FlaptSoundTriggerCallback(void *, const char *, const char *, const char *, const char *);
+726: 
+727: 	// BrnGuiModule.cpp:1539
+
+b5-decomp/tests/run_gui_menu_music_wire.py:1-12
+1: """Compile/run the extracted menu-GUI event 23 consumer and a B595 negative control.
+2: 
+3: This runner is intended for hosted Windows/MSVC CI. It is deliberately not run from
+4: the proposal workspace. It extracts the case arm and helpers from the selected source
+5: tree, compiles them against that tree's actual headers, and retains all generated inputs,
+6: commands, stdout/stderr, hashes, and numeric receipts under --output-dir.
+7: """
+8: from __future__ import annotations
+9: 
+10: import argparse
+11: import hashlib
+12: import json
+
+b5-decomp/tests/run_gui_menu_music_wire.py:91-106
+91:     """Shadow the actual queue/message/event headers and their src-local include closure."""
+92:     pending = list(HEADER_ROOTS)
+93:     visited: dict[str, str] = {}
+94:     include_re = re.compile(r'^\s*#\s*include\s*"([^"]+)"', re.MULTILINE)
+95:     while pending:
+96:         relative = posixpath.normpath(pending.pop())
+97:         if relative in visited:
+98:             continue
+99:         text = tree.read(relative)
+100:         if not text:
+101:             if relative in HEADER_ROOTS:
+102:                 raise ValueError("missing required header: " + relative)
+103:             continue
+104:         visited[relative] = text
+105:         for include in include_re.findall(text):
+106:             candidates = (
+
+b5-decomp/tests/run_gui_menu_music_wire.py:124-157
+124:     snippets = {
+125:         "wire_header": definition(sound, "struct GuiEventWireHeader") + ";",
+126:         "get_gui_payload": definition(sound, "const u8* GetGuiPayload("),
+127:         "event_s32_at": definition(sound, "s32 EventS32At("),
+128:         "event_u8_at": definition(sound, "u8 EventU8At("),
+129:         "queue_sound_message": definition(sound,
+130:             "template <typename T>\n    void QueueSoundMessage("),
+131:         "post_sound_message": definition(sound,
+132:             "template <typename T>\n    void PostSoundMessage("),
+133:         "case23": case23,
+134:         "channel155_record": definition(boot, "struct MusicOnMenuStreamEvent") + ";",
+135:     }
+136:     generated = [
+137:         "// Generated from the selected production revision by run_gui_menu_music_wire.py.",
+138:         "namespace Menu23Fixture {", snippets["channel155_record"], "}",
+139:         "namespace BrnSound { namespace Module { namespace {",
+140:         snippets["wire_header"], snippets["get_gui_payload"],
+141:         snippets["event_s32_at"], snippets["event_u8_at"],
+142:         snippets["queue_sound_message"], snippets["post_sound_message"],
+143:         "} // anonymous production-helper scope",
+144:         "void ProcessMenu23Case(CgsModule::VariableEventQueue<8192, 16>& mMessageQueue,",
+145:         "                       s32 liType, const CgsModule::Event* lpEvent, s32 liSize)",
+146:         "{",
+147:         "    const u8* lpuPayload = GetGuiPayload(lpEvent, liType, liSize);",
+148:         "    switch (liType) {", snippets["case23"], "    }",
+149:         "}", "}} // namespace BrnSound::Module",
+150:     ]
+151:     source_hashes = {SOUND_CPP: sha256_text(sound), BOOT_CPP: sha256_text(boot)}
+152:     source_hashes.update({"extracted." + name: sha256_text(text)
+153:                           for name, text in snippets.items()})
+154:     return "\n\n".join(generated) + "\n", source_hashes
+155: 
+156: 
+157: def numeric_from_result(output_dir: Path) -> dict | None:
+
+b5-decomp/tests/fxgs_common.py:25-58
+25: class Tree:
+26:     """A b5 source tree: the working tree (rev None) or a git revision."""
+27: 
+28:     def __init__(self, rev=None):
+29:         self.rev = rev
+30: 
+31:     def read(self, relative):
+32:         if self.rev is None:
+33:             return (REPO / relative).read_text(encoding="utf-8-sig")
+34:         result = subprocess.run(["git", "-C", str(REPO), "show", f"{self.rev}:{relative}"],
+35:                                 capture_output=True, text=True, encoding="utf-8")
+36:         if result.returncode != 0:
+37:             return ""
+38:         text = result.stdout
+39:         return text[1:] if text.startswith("\ufeff") else text
+40: 
+41: 
+42: def definition(source, signature):
+43:     """The full text of the definition starting at `signature` (brace-balanced, comments and
+44:     string literals skipped when counting)."""
+45:     start = source.index(signature)
+46:     depth = 0
+47:     for token in re.finditer(r'//[^\n]*|/\*[\s\S]*?\*/|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|[{}]',
+48:                              source[start:]):
+49:         if token[0] == "{":
+50:             depth += 1
+51:         elif token[0] == "}":
+52:             depth -= 1
+53:             if depth == 0:
+54:                 return source[start:start + token.end()]
+55:     raise ValueError("unterminated body: " + signature)
+56: 
+57: 
+58: def code_only(text):
+
+b5-decomp/tests/fxgs_common.py:91-105
+91: def compile_and_run(test_cpp, inc_name, inc_text, tag, extra_flags="", shadow=None, extra_sources=(),
+92:                     extra_files=None, output_dir=None):
+93:     """Write inc_text as <tmp>/<inc_name>, compile test_cpp (+ extra_sources, e.g. the real
+94:     CgsStrStream.cpp the assert-message paths need) with the canonical flags (+ the access macros
+95:     the fixtures need) and run it. `shadow` maps a src-relative header path to the revision's text
+96:     so the extracted bodies compile against their own revision's header. `extra_files` maps more
+97:     file names to texts written beside the .inc (e.g. a generated configuration include).
+98:     `output_dir` retains generated inputs, commands and execution receipts in a new/empty directory.
+99:     Default callers retain their temporary-directory behavior.
+100:     Returns (checks, failures) parsed from the '<tag>: N checks, M failures' line, or None."""
+101:     if output_dir is None:
+102:         directory_context = tempfile.TemporaryDirectory(prefix="brn_fxgs_")
+103:     else:
+104:         destination = Path(output_dir).resolve()
+105:         if destination.exists() and any(destination.iterdir()):

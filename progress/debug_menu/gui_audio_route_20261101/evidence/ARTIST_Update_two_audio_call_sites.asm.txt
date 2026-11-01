@@ -1,0 +1,22 @@
+0x82528358  addis     r5, r26, 3# jumptable 82528154 case 0  ; jumptable 82528154 case 0
+0x8252835C  mr        r4, r30
+0x82528360  addi      r5, r5, -0x1C40
+0x82528364  addi      r3, r1, 0x490+var_100
+0x82528368  bl        sub_824F64B0
+0x8252836C  addi      r4, r1, 0x490+var_100
+0x82528370  lwz       r3, 0x490+arg_3C(r1)
+0x82528374  bl        ___AddGuiOutEvent_VGuiAudioTriggerEvent_BrnGui___OutputBuffer_CgsGuiModuleIO_CgsGui__QAAXAAVGuiAudioTriggerEvent_BrnGui
+0x82528378  b         def_82528154# jumptable 82528154 default case, cases 1-4,7-12,14,16-20,22-26,28,30-41,43-49,51-91,93,95-107,109-126
+0x8252837C  mr        r4, r30# jumptable 82528154 case 5  ; jumptable 82528154 case 5
+0x82528440  addi      r3, r3, 0x480
+0x82528444  bl        CgsGui__ViewModule__GetMovieNameByLevel
+0x82528448  mr        r7, r3
+0x8252844C  addi      r6, r30, 0x40 # '@'
+0x82528450  addi      r5, r30, 0x20 # ' '
+0x82528454  mr        r4, r30
+0x82528458  addi      r3, r1, 0x490+var_100
+0x8252845C  bl        sub_824FB9A8
+0x82528460  addi      r4, r1, 0x490+var_100
+0x82528464  lwz       r3, 0x490+arg_3C(r1)
+0x82528468  bl        ___AddGuiOutEvent_VGuiAudioTriggerEvent_BrnGui___OutputBuffer_CgsGuiModuleIO_CgsGui__QAAXAAVGuiAudioTriggerEvent_BrnGui
+0x8252846C  b         def_82528154# jumptable 82528154 default case, cases 1-4,7-12,14,16-20,22-26,28,30-41,43-49,51-91,93,95-107,109-126
