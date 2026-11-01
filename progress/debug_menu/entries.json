@@ -23541,14 +23541,21 @@
       "pseudocode_line": 13,
       "original_call": "sub_8282D640(v0, &dword_82FFB854, \"Engines\", \"Engine Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0002",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Engine Info: original player-engine diagnostic log gate. Actual current-save ca802/EXE052 native P/N/captured restore emits696 raw_rpm records when enabled and0 in negative/restored windows; same-run Boolean restore and explicit Console2 verified. Aggregate32 FAIL is preserved; no AI/render/hardware/audibility claim.",
+      "evidence": [
+        "progress/debug_menu/sound3_retained_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound3_retained_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound3_retained_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound3_retained_native_20261101/SOURCE_SCOPE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -23622,14 +23629,21 @@
       "pseudocode_line": 18,
       "original_call": "sub_8282D640(v0, &dword_82FFB888, \"Engines\", \"Rpm Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0005",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Rpm Info: original player dual-Ginsu RPM diagnostic log gate. Actual current-save ca802/EXE052 native P/N/captured restore emits696 HybGinsuRPM records when enabled and0 in negative/restored windows; same-run Boolean restore and explicit Console2 verified. Aggregate32 FAIL is preserved; no full numeric-domain/audio/hardware claim.",
+      "evidence": [
+        "progress/debug_menu/sound3_retained_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound3_retained_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound3_retained_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound3_retained_native_20261101/SOURCE_SCOPE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -23649,14 +23663,21 @@
       "pseudocode_line": 19,
       "original_call": "sub_8282D640(v0, &dword_82FFB88C, \"Engines\", \"Loop Info\")",
       "caption_resolution": "literal",
-      "state": "pending",
+      "state": "verified",
       "id": "BrnSound::Debug::DebugComponent::OnActivate#0006",
       "function": "BrnSound::Debug::DebugComponent::OnActivate",
       "original_address": "0x826D5CB0",
       "original_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
       "component": "BrnSound::Debug::DebugComponent",
       "component_name": "Sound",
-      "component_path": "Sound Module"
+      "component_path": "Sound Module",
+      "notes": "Loop Info: original loop diagnostic log gate. Actual current-save ca802/EXE052 native P/N/captured restore emits684 Eng/Exh output markers when enabled and0 in negative/restored windows; same-run Boolean restore and explicit Console2 verified. Aggregate32 FAIL is preserved; no LoopData/render/hardware/audibility claim.",
+      "evidence": [
+        "progress/debug_menu/sound3_retained_native_20261101/ROOT_DECISION.json",
+        "progress/debug_menu/sound3_retained_native_20261101/REVIEW.md",
+        "progress/debug_menu/sound3_retained_native_20261101/RAW_JOINS.json",
+        "progress/debug_menu/sound3_retained_native_20261101/SOURCE_SCOPE.json"
+      ]
     },
     {
       "kind": "variable",
@@ -38780,8 +38801,8 @@
     "activation_functions": 64,
     "symbolic_captions": 15,
     "states": {
-      "pending": 1152,
-      "verified": 175,
+      "pending": 1149,
+      "verified": 178,
       "original-noop": 28
     }
   }

@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "status": "failed_capture_ack_prefix_after_four_complete_targets",
+  "run_dir": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\sound32_native_prepare_20261101_v4\\runs\\sound32_62207_20261031_235206_e1553a7b600b458590fc5bbd8787d272",
+  "archive_path": "D:\\Reverse\\BP-Decomp_Evidence\\debug_menu\\sound32_prepare_20261101\\failed_native_v4.zip",
+  "archive_sha256": "d3732f6b67313965e97999a396eca9e32c78e5af0906ed5e751919c9437f76a2",
+  "archive_members": 91,
+  "archive_all_member_bytes_verified": true,
+  "save_bytes_excluded": true,
+  "raw_triplets": 495,
+  "completed_targets": [
+    "SND_0002",
+    "SND_0003",
+    "SND_0005",
+    "SND_0006"
+  ],
+  "recorded_complete_frames": 13,
+  "physical_frame_files": 14,
+  "original_case_verdict": "FAIL",
+  "original_driver_verdict": "fail",
+  "target_restore_verified": true,
+  "assertions": 0,
+  "exceptions": 0,
+  "normal_17_files_unchanged": true,
+  "site_credit": 0,
+  "cause": "The complete native seq14 ACK follows an audio prefix on one physical log line; old start-of-line regex missed it. No game crash or missing capture.",
+  "repair": "Accept the exact final frame token after an opaque prefix, retain complete raw line and column, require one token, exact PID/slot/next sequence/present/filename plus unchanged BMP/CSV/hash/fresh cursor joins."
+}

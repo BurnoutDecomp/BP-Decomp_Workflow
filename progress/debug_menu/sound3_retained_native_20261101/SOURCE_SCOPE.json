@@ -1,0 +1,419 @@
+{
+  "schema": 1,
+  "candidate": {
+    "b5_commit": "ca80277748eb098822a035093cff9d306d079e2a",
+    "workflow_commit": "71be01e0cf78a3b4e7afe009a24f8ffa9faaad6a",
+    "exe_sha256": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+    "build_receipt_path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\jump_build_20261031\\clean\\BUILD_RECEIPT.json",
+    "build_receipt_sha256": "70bf9d59be6cdf87fccc4fd4e944f5bdbd1a3f3455f36140ba570124503df95c",
+    "map_sha256": "f4fca8c8ac6f0c34ae93f16ab00a487ccc80e0fee55ef2e4cc2a2e47e5a36bd6",
+    "cgsmap_sha256": "d5608810469e4dc35981a651ef666fcddf87349129cb6f96901bedb6374ae2b3",
+    "phase": "clean",
+    "status": "BUILD_PASS"
+  },
+  "proposed_controls": [
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0002",
+      "alias": "SND_0002",
+      "group": "Engines",
+      "caption": "Engine Info",
+      "component": "Sound Module/Sound",
+      "lookup_path": "Sound Module/Sound/Engines/Engine Info",
+      "raw_readback_path": "/Sound Module/Sound/Engines/Engine Info",
+      "type": "bool",
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after positive/negative and terminally; never assume the source default",
+      "context_overrides": [],
+      "registration": {
+        "source_path": "src/GameSource/Sound/BrnDebugComponent.cpp",
+        "source_line": 224,
+        "source_git_blob": "e643abf987f09627a5d7a2efc139634847e2d5ee",
+        "address": "0x826D5CB0",
+        "callsite": "0x826D5D28",
+        "storage_expression": "&dword_82FFB854",
+        "storage_label": "dword_82FFB854",
+        "variant_type": "bool*",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
+        "artist_export_sha256": "c543baf5b08eaba2b1a406cf09125742456a8f772d0305235c14697d8ca9de43"
+      },
+      "consumer_witness": "ClutchControl::UpdateParams@0x826FC448; HybridExhaustControl::UpdateMix@0x826CC878; ShiftControl::UpdateParams@0x826F1040; WheelControl::UpdateDriftingRPM@0x826B74F8/0x826B7570",
+      "positive_output_witness": "Clutch `Attack Begin`/`Idle Begin`/`Boost`/`Infinite Gear`; Hybrid labels `[AI Inst]`, `[raw_rpm]`, `[phys_rpm]`, `[aud_rpm]`; shift-stage names",
+      "artist_consumer_addresses": [
+        "0X826FC448",
+        "0X826CC878",
+        "0X826F1040",
+        "0X826B74F8",
+        "0X826B7570"
+      ],
+      "current_source_references": [
+        {
+          "text": "extern s32 KI_DEBUG_PRINT_ENGINE_INFO; // X360 dword_82FFB854",
+          "line": 15,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp"
+        },
+        {
+          "text": "if (KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1)",
+          "line": 180,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp"
+        },
+        {
+          "text": "if (KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1)",
+          "line": 189,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp"
+        },
+        {
+          "text": "if (KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1)",
+          "line": 202,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp"
+        },
+        {
+          "text": "if (KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1)",
+          "line": 223,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp"
+        },
+        {
+          "text": "extern s32 KI_DEBUG_PRINT_ENGINE_INFO; // X360 dword_82FFB854",
+          "line": 15,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp"
+        },
+        {
+          "text": "const bool lbPlayerEngineInfo = KI_DEBUG_PRINT_ENGINE_INFO != 0 &&",
+          "line": 529,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp"
+        },
+        {
+          "text": "s32 KI_DEBUG_PRINT_ENGINE_INFO = 0; // X360 dword_82FFB854",
+          "line": 21,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnPhysicsControl.cpp"
+        },
+        {
+          "text": "extern s32 KI_DEBUG_PRINT_ENGINE_INFO; // X360 dword_82FFB854",
+          "line": 14,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnShiftControl.cpp"
+        },
+        {
+          "text": "if ((KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1) ||",
+          "line": 365,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnShiftControl.cpp"
+        },
+        {
+          "text": "extern s32 KI_DEBUG_PRINT_ENGINE_INFO; // global ARTIST82FFB854; BrnPhysicsControl.cpp",
+          "line": 12,
+          "path": "src/GameSource/Sound/Vehicles/Wheels/BrnWheelControl.cpp"
+        },
+        {
+          "text": "if ((::KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1) ||",
+          "line": 320,
+          "path": "src/GameSource/Sound/Vehicles/Wheels/BrnWheelControl.cpp"
+        },
+        {
+          "text": "if ((::KI_DEBUG_PRINT_ENGINE_INFO != 0 && GetStateId() == 1) ||",
+          "line": 330,
+          "path": "src/GameSource/Sound/Vehicles/Wheels/BrnWheelControl.cpp"
+        }
+      ],
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0005",
+      "alias": "SND_0005",
+      "group": "Engines",
+      "caption": "Rpm Info",
+      "component": "Sound Module/Sound",
+      "lookup_path": "Sound Module/Sound/Engines/Rpm Info",
+      "raw_readback_path": "/Sound Module/Sound/Engines/Rpm Info",
+      "type": "bool",
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after positive/negative and terminally; never assume the source default",
+      "context_overrides": [],
+      "registration": {
+        "source_path": "src/GameSource/Sound/BrnDebugComponent.cpp",
+        "source_line": 232,
+        "source_git_blob": "e643abf987f09627a5d7a2efc139634847e2d5ee",
+        "address": "0x826D5CB0",
+        "callsite": "0x826D5DA4",
+        "storage_expression": "&dword_82FFB888",
+        "storage_label": "dword_82FFB888",
+        "variant_type": "bool*",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
+        "artist_export_sha256": "c543baf5b08eaba2b1a406cf09125742456a8f772d0305235c14697d8ca9de43"
+      },
+      "consumer_witness": "`DualGinsuEffect::ProcessUpdate@0x826FC7C8`; player state (`GetStateId()==1`) or separately selected AI slot",
+      "positive_output_witness": "`[Eng ...] [HybGinsuRPM] [CBGinsuRPMA] [CBGinsuRPMD] [LoopModelRPM] [DeltaRPM]` line",
+      "artist_consumer_addresses": [
+        "0X826FC7C8"
+      ],
+      "current_source_references": [
+        {
+          "text": "s32 KI_DEBUG_PRINT_RPM_OUTPUT = 0;             // dword_82FFB888",
+          "line": 40,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp"
+        },
+        {
+          "text": "// KI_DEBUG_PRINT_RPM_OUTPUT enables the detailed line for the player; otherwise",
+          "line": 782,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp"
+        },
+        {
+          "text": "if ((KI_DEBUG_PRINT_RPM_OUTPUT != 0 && GetStateId() == 1) ||",
+          "line": 804,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp"
+        }
+      ],
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0006",
+      "alias": "SND_0006",
+      "group": "Engines",
+      "caption": "Loop Info",
+      "component": "Sound Module/Sound",
+      "lookup_path": "Sound Module/Sound/Engines/Loop Info",
+      "raw_readback_path": "/Sound Module/Sound/Engines/Loop Info",
+      "type": "bool",
+      "positive": true,
+      "negative": false,
+      "restore_policy": "same-run captured Boolean baseline after positive/negative and terminally; never assume the source default",
+      "context_overrides": [],
+      "registration": {
+        "source_path": "src/GameSource/Sound/BrnDebugComponent.cpp",
+        "source_line": 234,
+        "source_git_blob": "e643abf987f09627a5d7a2efc139634847e2d5ee",
+        "address": "0x826D5CB0",
+        "callsite": "0x826D5DC0",
+        "storage_expression": "&dword_82FFB88C",
+        "storage_label": "dword_82FFB88C",
+        "variant_type": "bool*",
+        "artist_export": ".ida-exports/BURNOUT_X360_ARTIST.XEX/0x826D5CB0.json",
+        "artist_export_sha256": "c543baf5b08eaba2b1a406cf09125742456a8f772d0305235c14697d8ca9de43"
+      },
+      "consumer_witness": "`DualGinsuEffect::UpdateLoopModelParams@0x826F1F00`; active loop-model update",
+      "positive_output_witness": "original per-partial pitch/gain trace bracketed by `Eng]`/`Exh]`",
+      "artist_consumer_addresses": [
+        "0X826F1F00"
+      ],
+      "current_source_references": [
+        {
+          "text": "s32 KI_DEBUG_PRINT_LOOP_OUTPUT = 0;            // dword_82FFB88C",
+          "line": 41,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp"
+        },
+        {
+          "text": "const bool lbPrintLoopOutput = KI_DEBUG_PRINT_LOOP_OUTPUT != 0;",
+          "line": 867,
+          "path": "src/GameSource/Sound/Vehicles/Engines/BrnDualGinsuEffect.cpp"
+        }
+      ],
+      "status": "pending",
+      "site_credit": 0,
+      "behavior_credit": 0
+    }
+  ],
+  "all33_paths": [
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0002",
+      "alias": "SND_0002",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Engine Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0003",
+      "alias": "SND_0003",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Closest AI"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0005",
+      "alias": "SND_0005",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Rpm Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0006",
+      "alias": "SND_0006",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Loop Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0007",
+      "alias": "SND_0007",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Loop Data Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0009",
+      "alias": "SND_0009",
+      "type": "bool",
+      "path": "Sound Module/Sound/Engines/Boost Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0052",
+      "alias": "SND_0052",
+      "type": "bool",
+      "path": "Sound Module/Sound/Wheels/Wheel Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0053",
+      "alias": "SND_0053",
+      "type": "bool",
+      "path": "Sound Module/Sound/Wheels/Skid Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0054",
+      "alias": "SND_0054",
+      "type": "bool",
+      "path": "Sound Module/Sound/Wheels/Wheel Side Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0055",
+      "alias": "SND_0055",
+      "type": "bool",
+      "path": "Sound Module/Sound/Wheels/Surface Types"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0056",
+      "alias": "SND_0056",
+      "type": "bool",
+      "path": "Sound Module/Sound/Wheels/Ai Skids info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0058",
+      "alias": "SND_0058",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Collision Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0061",
+      "alias": "SND_0061",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Print Detaching"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0062",
+      "alias": "SND_0062",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/print Ducking"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0063",
+      "alias": "SND_0063",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Print All Inputs"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0076",
+      "alias": "SND_0076",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Scrape Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0077",
+      "alias": "SND_0077",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Scrapes Draw"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0080",
+      "alias": "SND_0080",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Render Collisions"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0081",
+      "alias": "SND_0081",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Orientation Spew"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0082",
+      "alias": "SND_0082",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Draw Orientation Box"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0083",
+      "alias": "SND_0083",
+      "type": "bool",
+      "path": "Sound Module/Sound/Collision/Spew Prop Resource IDs"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0084",
+      "alias": "SND_0084",
+      "type": "bool",
+      "path": "Sound Module/Sound/Traffic/Engine Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0085",
+      "alias": "SND_0085",
+      "type": "bool",
+      "path": "Sound Module/Sound/Traffic/Draw Attached"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0086",
+      "alias": "SND_0086",
+      "type": "bool",
+      "path": "Sound Module/Sound/Traffic/Management Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0087",
+      "alias": "SND_0087",
+      "type": "bool",
+      "path": "Sound Module/Sound/Passby/Effect Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0088",
+      "alias": "SND_0088",
+      "type": "bool",
+      "path": "Sound Module/Sound/Passby/Verbose Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0089",
+      "alias": "SND_0089",
+      "type": "bool",
+      "path": "Sound Module/Sound/Passby/Traffic Cull Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0090",
+      "alias": "SND_0090",
+      "type": "bool",
+      "path": "Sound Module/Sound/Passby/State Info"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0104",
+      "alias": "SND_0104",
+      "type": "bool",
+      "path": "Sound Module/Sound/Presentation/Spew Messages"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0105",
+      "alias": "SND_0105",
+      "type": "bool",
+      "path": "Sound Module/Sound/Presentation/Spew GUI Messages"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0116",
+      "alias": "SND_0116",
+      "type": "bool",
+      "path": "Sound Module/Sound/Emitters/Debug"
+    },
+    {
+      "id": "BrnSound::Debug::DebugComponent::OnActivate#0117",
+      "alias": "SND_0117",
+      "type": "bool",
+      "path": "Sound Module/Sound/Deformation/Spew Info"
+    },
+    {
+      "id": null,
+      "alias": "SND_OUT",
+      "type": "i32",
+      "path": "Sound Module/Sound/Console"
+    }
+  ],
+  "effects": "Only original log output gate in this loaded parked player-car context, explicit Console2. No render/hardware/audibility or full numeric-domain claim."
+}
