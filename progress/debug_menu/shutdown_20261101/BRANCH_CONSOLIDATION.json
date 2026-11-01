@@ -1,0 +1,876 @@
+{
+  "schema": 1,
+  "recorded_utc": "2026-11-01T17:18:11.903371+00:00",
+  "request": "Write complete root handoff, consolidate owned WIP histories, retire branches, then stop.",
+  "status": "source_consolidation_and_ref_retirement_complete_campaign_paused",
+  "validation_warning": "History-only merges retain candidates; they do not activate their divergent code or prove it equivalent to current source. Outstanding differences remain review/recovery work.",
+  "actual_content_integrations": [
+    {
+      "repository": "gameplay",
+      "kind": "fast_forward",
+      "from": "ca80277748eb098822a035093cff9d306d079e2a",
+      "to": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+      "description": "Current GUI audio callback repair and actual-source regression.",
+      "source_review": "pass",
+      "full_build": "pass",
+      "native_continuation": "pending",
+      "installed": false
+    },
+    {
+      "repository": "gameplay",
+      "kind": "normal_content_merge",
+      "merged_tip": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+      "merge_commit": "28de046ad8b4563538acc84af9e47f277341d5c9",
+      "description": "RaceCarAIInterface GetActiveRaceCarVelocity/GetActiveRaceCarSpeed accessors.",
+      "validation": "Earlier compile and hosted eight-slot fixture exist; independent source review, invalid-index/caller and live validation pending. Final combined head not rebuilt.",
+      "installed": false
+    }
+  ],
+  "repositories": [
+    {
+      "name": "gameplay",
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow\\b5-decomp",
+      "integration": "dev",
+      "audit_start_head": "ca80277748eb098822a035093cff9d306d079e2a",
+      "head_before_history_consolidation": "28de046ad8b4563538acc84af9e47f277341d5c9",
+      "published_consolidation_commit": "435d3dbe3f061d282cbc4566013eecbfdaab5d36",
+      "history_merge_strategy": "ours; exact current tree retained",
+      "history_only_parent_count": 50,
+      "history_only_parent_tips": [
+        "972593a4ac15d8caa87f2a9637fa031868e6b5d3",
+        "a1d5ee12ca77b767a795ef3371674b079885bdd7",
+        "b4611add19a5c6e90744511ad86668b1230cc8c1",
+        "5a431848ff616e00e33c6c1b3919e599e17914a9",
+        "a9d0895a2571ed5f8b8a34b78c35d7b66af5b277",
+        "a86d27f31c25fb1c08d81e6d9291b849f10988bc",
+        "6c911139683fecc617e6a525a51a255804d291e6",
+        "de53dc62ea165a11fcbcd5b250d9d8231d9cdcc9",
+        "879254e9d3260983aafa61a60dcbf59c85d722b3",
+        "b49d37a5c730c8b0a39fd0ed82198e7509f01072",
+        "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+        "ab98308c2679c8742001598353d861c4d73a1b36",
+        "2f194161468bdd1d3beffe536feaf95cdceb9548",
+        "55790e71bac80b6a3e23d20d8addcb5430b1b24f",
+        "005fa61ec14c19617bdecfdec15d6293faba90c8",
+        "21de354ba0c80de1460aec9aa9d64680df7d655a",
+        "73635984f43482202455854045bc953e56e95907",
+        "72497ef146ae371c5a49e8bca46deb853501c90b",
+        "3492f0641f78be3a74df9ec860b9a5dcc255c159",
+        "66613d8d31cee93059221e7ba68246f0566040f4",
+        "bbcbc7dcf7344288c3cbe6d2cbe6305c4bb6620e",
+        "6798c4db5a4eafa2580fc013baff3806e34d329a",
+        "77245ab0a5cf921b4ae71f744ae8145378bdbfcc",
+        "898e3d1be433571993e2e6f9d1be86d27d2d9585",
+        "554a37093a852bc67fcd2853d76f84653b2ae541",
+        "72fe9e2115ed38f7d89ebd5c56a3ae0b73f1017b",
+        "4baf5cf8cd002b4e99279b2b4a7e9132114dfa53",
+        "1d0e7789b577ab432ef1ecbcd1bbed48bd4f6bce",
+        "450b160f9967ef0243176258de1c2be38f21bb9d",
+        "fb6b9cfe0675a567401579cacd5ceb94b1cf755e",
+        "190e2412944694012a158acc9e10a68099b8c4f6",
+        "731a6c1c95f494ef1509820f2624482283b9409f",
+        "e41e711b8a60be2560a31bc64a0ae35511712a13",
+        "6d06bf57748a956fe4d942c5df2bab9cfe73f931",
+        "c723326b91c14d740dd5cd9114d03d7512c835d6",
+        "afdcdb7e0173ac8c767019cc2161f6c8af9e1172",
+        "9f02c9256ac77f01f290fdec2603011b547bfd5d",
+        "7dea614493e671a3162b2b653713b3697e72a957",
+        "c1126a67634e4f1a83a024fd75c61fe2ee77a894",
+        "d85f4acbb45a1295f65a4dffd88e19bf90b54ee7",
+        "758bf8bfdb553eaee39199096179feecc45ce168",
+        "2a3a7a38404ea2e16c8308a722570774ff4f259e",
+        "f687dccc03ac4e951991e061556559ac29d4e7ce",
+        "39ebdc0aa3c0e65a54564ff67e384da4bc91f4e5",
+        "78b0ceecce268c38cdf70ce7d8887b507d0dcbde",
+        "e592c3fd9e632e05b9c9bdb2ff161b5b2a0ef24f",
+        "d5aed3b88dd884587f26d3dd62d198d532c168b5",
+        "2fba86e175ac100da44993d81e4d5d3c64448173",
+        "d7197e9f87b4e4ac71f33ff061d79ef60d6d44ad",
+        "93843c059cf754ec18d362c980f771d1e9a49581"
+      ],
+      "history_merge_tree_unchanged": true,
+      "retirement_proof": "Every deleted ref tip was unchanged, was retained as an exact ancestor of the published integration tip, and remote deletions used exact-tip leases.",
+      "local_deleted_count": 55,
+      "remote_deleted_count": 31,
+      "deleted_local_refs": [
+        {
+          "ref": "refs/heads/backup-detached-972593a",
+          "sha": "972593a4ac15d8caa87f2a9637fa031868e6b5d3",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/boost-particles-0923",
+          "sha": "f39011a23237f7ca4a36a69d0490136f3ce6908b",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-consumers-20261023",
+          "sha": "a1d5ee12ca77b767a795ef3371674b079885bdd7",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-gui-audio-20261101",
+          "sha": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-allocator-startup-validation",
+          "sha": "b4611add19a5c6e90744511ad86668b1230cc8c1",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-dlc-review-repairs",
+          "sha": "5a431848ff616e00e33c6c1b3919e599e17914a9",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-dlc-worker-20261019",
+          "sha": "a9d0895a2571ed5f8b8a34b78c35d7b66af5b277",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-environment-148",
+          "sha": "a86d27f31c25fb1c08d81e6d9291b849f10988bc",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-game-prepare",
+          "sha": "6c911139683fecc617e6a525a51a255804d291e6",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-gamestate-debug-consumers",
+          "sha": "de53dc62ea165a11fcbcd5b250d9d8231d9cdcc9",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-gamestate-lifecycle-20261019",
+          "sha": "879254e9d3260983aafa61a60dcbf59c85d722b3",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-global-graphics-provider",
+          "sha": "b49d37a5c730c8b0a39fd0ed82198e7509f01072",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-graphics-query-consumers",
+          "sha": "b49d37a5c730c8b0a39fd0ed82198e7509f01072",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-large132",
+          "sha": "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-loading-repair-validation",
+          "sha": "ab98308c2679c8742001598353d861c4d73a1b36",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-memorymap-validation",
+          "sha": "2f194161468bdd1d3beffe536feaf95cdceb9548",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-original-allocator-creation-validation",
+          "sha": "55790e71bac80b6a3e23d20d8addcb5430b1b24f",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-pool-reviewed-repairs",
+          "sha": "005fa61ec14c19617bdecfdec15d6293faba90c8",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-query-repair-validation",
+          "sha": "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-remaining130-candidate",
+          "sha": "21de354ba0c80de1460aec9aa9d64680df7d655a",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-resource-list-histogram",
+          "sha": "73635984f43482202455854045bc953e56e95907",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-resource-windows",
+          "sha": "72497ef146ae371c5a49e8bca46deb853501c90b",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-sampler-visual-investigation",
+          "sha": "3492f0641f78be3a74df9ec860b9a5dcc255c159",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-selected-consumer-integration",
+          "sha": "66613d8d31cee93059221e7ba68246f0566040f4",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-supporting-review-repairs",
+          "sha": "bbcbc7dcf7344288c3cbe6d2cbe6305c4bb6620e",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-texturestate-producer-fixture",
+          "sha": "6798c4db5a4eafa2580fc013baff3806e34d329a",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-traffic-consumers",
+          "sha": "77245ab0a5cf921b4ae71f744ae8145378bdbfcc",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-traffic-followup-20261021",
+          "sha": "898e3d1be433571993e2e6f9d1be86d27d2d9585",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-vehicle-deformation-131",
+          "sha": "554a37093a852bc67fcd2853d76f84653b2ae541",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/gui-original-frame-source-20261024",
+          "sha": "72fe9e2115ed38f7d89ebd5c56a3ae0b73f1017b",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/lowmem-allocation-20261025",
+          "sha": "4baf5cf8cd002b4e99279b2b4a7e9132114dfa53",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/online-dev-integration",
+          "sha": "efb5f8061b7d14b5f7ddf65bcda02055a7347ea3",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/online-v1",
+          "sha": "1d0e7789b577ab432ef1ecbcd1bbed48bd4f6bce",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/playtest-deferred-io-1007",
+          "sha": "450b160f9967ef0243176258de1c2be38f21bb9d",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/renderer-prepare-recovery-20261023",
+          "sha": "fb6b9cfe0675a567401579cacd5ceb94b1cf755e",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/road-rules-persistence",
+          "sha": "190e2412944694012a158acc9e10a68099b8c4f6",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/rwac-command-overwrite-diagnostic-20261021",
+          "sha": "731a6c1c95f494ef1509820f2624482283b9409f",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue20b",
+          "sha": "e41e711b8a60be2560a31bc64a0ae35511712a13",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue21",
+          "sha": "6d06bf57748a956fe4d942c5df2bab9cfe73f931",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue21b",
+          "sha": "c723326b91c14d740dd5cd9114d03d7512c835d6",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue21c",
+          "sha": "afdcdb7e0173ac8c767019cc2161f6c8af9e1172",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue24",
+          "sha": "9f02c9256ac77f01f290fdec2603011b547bfd5d",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue25",
+          "sha": "7dea614493e671a3162b2b653713b3697e72a957",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue26",
+          "sha": "c1126a67634e4f1a83a024fd75c61fe2ee77a894",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue27",
+          "sha": "d85f4acbb45a1295f65a4dffd88e19bf90b54ee7",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue28",
+          "sha": "758bf8bfdb553eaee39199096179feecc45ce168",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/issue31",
+          "sha": "2a3a7a38404ea2e16c8308a722570774ff4f259e",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundA",
+          "sha": "f687dccc03ac4e951991e061556559ac29d4e7ce",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundB",
+          "sha": "39ebdc0aa3c0e65a54564ff67e384da4bc91f4e5",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundC",
+          "sha": "78b0ceecce268c38cdf70ce7d8887b507d0dcbde",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundD",
+          "sha": "e592c3fd9e632e05b9c9bdb2ff161b5b2a0ef24f",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundE",
+          "sha": "d5aed3b88dd884587f26d3dd62d198d532c168b5",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundF",
+          "sha": "2fba86e175ac100da44993d81e4d5d3c64448173",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundG",
+          "sha": "d7197e9f87b4e4ac71f33ff061d79ef60d6d44ad",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/soundH",
+          "sha": "93843c059cf754ec18d362c980f771d1e9a49581",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        }
+      ],
+      "deleted_remote_refs": [
+        {
+          "ref": "refs/heads/codex/debug-consumers-20261023",
+          "sha": "a1d5ee12ca77b767a795ef3371674b079885bdd7",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-gui-audio-20261101",
+          "sha": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-allocator-startup-validation",
+          "sha": "b4611add19a5c6e90744511ad86668b1230cc8c1",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-dlc-review-repairs",
+          "sha": "5a431848ff616e00e33c6c1b3919e599e17914a9",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-dlc-worker-20261019",
+          "sha": "a9d0895a2571ed5f8b8a34b78c35d7b66af5b277",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-environment-148",
+          "sha": "a86d27f31c25fb1c08d81e6d9291b849f10988bc",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-game-prepare",
+          "sha": "6c911139683fecc617e6a525a51a255804d291e6",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-gamestate-debug-consumers",
+          "sha": "de53dc62ea165a11fcbcd5b250d9d8231d9cdcc9",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-gamestate-lifecycle-20261019",
+          "sha": "879254e9d3260983aafa61a60dcbf59c85d722b3",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-graphics-query-consumers",
+          "sha": "b49d37a5c730c8b0a39fd0ed82198e7509f01072",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-large132",
+          "sha": "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-memorymap-validation",
+          "sha": "2f194161468bdd1d3beffe536feaf95cdceb9548",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-original-allocator-creation-validation",
+          "sha": "55790e71bac80b6a3e23d20d8addcb5430b1b24f",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-pool-reviewed-repairs",
+          "sha": "005fa61ec14c19617bdecfdec15d6293faba90c8",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-remaining130-candidate",
+          "sha": "21de354ba0c80de1460aec9aa9d64680df7d655a",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-resource-list-histogram",
+          "sha": "73635984f43482202455854045bc953e56e95907",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-resource-windows",
+          "sha": "72497ef146ae371c5a49e8bca46deb853501c90b",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-selected-consumer-integration",
+          "sha": "66613d8d31cee93059221e7ba68246f0566040f4",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-supporting-review-repairs",
+          "sha": "bbcbc7dcf7344288c3cbe6d2cbe6305c4bb6620e",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-texturestate-producer-fixture",
+          "sha": "6798c4db5a4eafa2580fc013baff3806e34d329a",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-traffic-consumers",
+          "sha": "77245ab0a5cf921b4ae71f744ae8145378bdbfcc",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-traffic-followup-20261021",
+          "sha": "898e3d1be433571993e2e6f9d1be86d27d2d9585",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-vehicle-deformation-131",
+          "sha": "554a37093a852bc67fcd2853d76f84653b2ae541",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/debug-source-batch-20261028",
+          "sha": "a963bba6a5ffc92ebce621668e773ffeea020f4a",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/gui-original-frame-source-20261024",
+          "sha": "72fe9e2115ed38f7d89ebd5c56a3ae0b73f1017b",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/lowmem-allocation-20261025",
+          "sha": "4baf5cf8cd002b4e99279b2b4a7e9132114dfa53",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/online-v1",
+          "sha": "1d0e7789b577ab432ef1ecbcd1bbed48bd4f6bce",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/playtest-deferred-io-1007",
+          "sha": "450b160f9967ef0243176258de1c2be38f21bb9d",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/renderer-prepare-recovery-20261023",
+          "sha": "fb6b9cfe0675a567401579cacd5ceb94b1cf755e",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/road-rules-persistence",
+          "sha": "190e2412944694012a158acc9e10a68099b8c4f6",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        },
+        {
+          "ref": "refs/heads/codex/rwac-command-overwrite-diagnostic-20261021",
+          "sha": "731a6c1c95f494ef1509820f2624482283b9409f",
+          "retained_in": "435d3dbe3f061d282cbc4566013eecbfdaab5d36"
+        }
+      ],
+      "detached_worktrees": [
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\boost_particles_0923\\publish",
+          "head": "f39011a23237f7ca4a36a69d0490136f3ce6908b",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "C:\\Users\\adri1\\.codex\\worktrees\\swarm-shipping-build-20261027\\BP-Decomp_Workflow\\b5-decomp",
+          "head": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\resource-list-histogram",
+          "head": "5a431848ff616e00e33c6c1b3919e599e17914a9",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\dlc-xcontent-20261019",
+          "head": "a9d0895a2571ed5f8b8a34b78c35d7b66af5b277",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\vehicle-deformation-131",
+          "head": "879254e9d3260983aafa61a60dcbf59c85d722b3",
+          "status_before_and_after_identical": true,
+          "status": [
+            "?? graphify-out/",
+            "?? scratch/alloc1013/",
+            "?? scratch/allocator_original_construct_20261013/",
+            "?? scratch/constructresource1013/",
+            "?? scratch/createallocators1013/",
+            "?? scratch/createbanks1013/",
+            "?? scratch/createpools1013/",
+            "?? scratch/dlcconstruct1013/",
+            "?? scratch/gdmtypes1013/",
+            "?? scratch/linearborrow1013/",
+            "?? scratch/linearhooks1013/",
+            "?? scratch/linearprovider1013/",
+            "?? scratch/linearrelease1013/",
+            "?? scratch/memoryalloc1013/",
+            "?? scratch/memoryraw1013/",
+            "?? scratch/memorywrapper1013/",
+            "?? scratch/poolprotocol1013/",
+            "?? scratch/prepare_wait_for_streaming_20261015/",
+            "?? scratch/ws_20261019/ARTIST/",
+            "?? scratch/ws_20261019/DecFIGS/",
+            "?? scratch/ws_20261019/REPORT.md",
+            "?? scratch/ws_20261019/REVIEW_PACKET.md",
+            "?? scratch/ws_20261019/artist_manifest.json",
+            "?? scratch/ws_20261019/compile_bridge.log",
+            "?? scratch/ws_20261019/compile_include_dirs.txt",
+            "?? scratch/ws_20261019/decfigs_manifest.json",
+            "?? scratch/ws_20261019/fixtures/",
+            "?? scratch/ws_20261019/followup_update_boot/",
+            "?? scratch/ws_20261019/gamestate_25/",
+            "?? scratch/ws_20261019/gamestate_debug_compile.log",
+            "?? scratch/ws_20261019/gamestate_debug_test.log",
+            "?? scratch/ws_20261019/preimage/",
+            "?? scratch/ws_20261019/source_packets/",
+            "?? scratch/ws_20261019/source_packets_manifest.json",
+            "?? scratch/ws_20261019/source_preimage_manifest.json",
+            "?? src/GameSource/GameState/graphify-out/"
+          ]
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\environment-148",
+          "head": "b49d37a5c730c8b0a39fd0ed82198e7509f01072",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\resource-prepare-validation",
+          "head": "55790e71bac80b6a3e23d20d8addcb5430b1b24f",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\allocator-heap-report",
+          "head": "005fa61ec14c19617bdecfdec15d6293faba90c8",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\scene-query-validation",
+          "head": "594365bd0ade92cd3e6b06abf8c44ce5fafb85fa",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\scratch\\DEBUG_MENU_1011\\recovery_lanes\\gui-replay-integration",
+          "head": "190e2412944694012a158acc9e10a68099b8c4f6",
+          "status_before_and_after_identical": true,
+          "status": []
+        }
+      ],
+      "remaining_refs": [
+        {
+          "ref": "refs/heads/dev",
+          "sha": "435d3dbe3f061d282cbc4566013eecbfdaab5d36",
+          "reason": "Gameplay integration branch."
+        },
+        {
+          "ref": "refs/heads/wip/pause-driverdetails",
+          "sha": "48068f0192b38c3902592e51b15f914d5869eb04",
+          "reason": "Unique pause/driver-details work outside this campaign."
+        },
+        {
+          "ref": "refs/remotes/origin/apt-audit",
+          "sha": "a95c17e743b8381d03f6b4ae207a19ac4cfe4eec",
+          "reason": "Unique other-contributor Apt audit work; not a campaign branch."
+        },
+        {
+          "ref": "refs/remotes/origin/codex/experimental-x360-byte-match",
+          "sha": "3534f7f16103a58ff904bbd1604e18e9934868f4",
+          "reason": "Separate active experimental work; its published tip advanced during this audit."
+        },
+        {
+          "ref": "refs/remotes/origin/dev",
+          "sha": "435d3dbe3f061d282cbc4566013eecbfdaab5d36",
+          "reason": "Gameplay integration branch."
+        },
+        {
+          "ref": "refs/remotes/origin/physics",
+          "sha": "2e280169e36d4cb663defd9d316f27ce7d204362",
+          "reason": "Unique other-contributor physics work; not a campaign branch."
+        },
+        {
+          "ref": "refs/remotes/origin/wip/pause-driverdetails",
+          "sha": "48068f0192b38c3902592e51b15f914d5869eb04",
+          "reason": "Unique pause/driver-details work outside this campaign."
+        }
+      ],
+      "remaining_local_count": 2,
+      "remaining_remote_count": 5,
+      "raw_audit_directory": "audit/"
+    },
+    {
+      "name": "workflow",
+      "repository": "D:\\Reverse\\BP-Decomp_Workflow",
+      "integration": "main",
+      "audit_start_head": "e38f58627d64a653f39b48d85fadaad17a34259a",
+      "head_before_history_consolidation": "e38f58627d64a653f39b48d85fadaad17a34259a",
+      "published_consolidation_commit": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4",
+      "history_merge_strategy": "ours; exact current tree retained",
+      "history_only_parent_count": 7,
+      "history_only_parent_tips": [
+        "eb9fc4831bb2ecda7d276facfce6b2538993257d",
+        "04b914cb39899905c6a231e814de33e4f6a1ae98",
+        "2bc659f733919f50669b35604b64991b8320f238",
+        "fde0e31cd2d20b6e23a7b6cbdd2c1cd3c206dca4",
+        "8c0be18f76a1fc5c2ad4ac106c9c3c204cb6256d",
+        "06e7420180eba473f417860d3691387bd262ded8",
+        "276638aa7407e224b182423308e81aded28fcc76"
+      ],
+      "history_merge_tree_unchanged": true,
+      "retirement_proof": "Every deleted ref tip was unchanged, was retained as an exact ancestor of the published integration tip, and remote deletions used exact-tip leases.",
+      "local_deleted_count": 11,
+      "remote_deleted_count": 8,
+      "deleted_local_refs": [
+        {
+          "ref": "refs/heads/codex/debug-consumers-20261023",
+          "sha": "eb9fc4831bb2ecda7d276facfce6b2538993257d",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-runtime-candidate-20261020",
+          "sha": "04b914cb39899905c6a231e814de33e4f6a1ae98",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/debug-source-composition-20261028",
+          "sha": "cfdd5a6efb0519eaaa8a519144a11c3ec5de16ad",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/gui-original-frame-source-20261024",
+          "sha": "2bc659f733919f50669b35604b64991b8320f238",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/lowmem-allocation-20261025",
+          "sha": "fde0e31cd2d20b6e23a7b6cbdd2c1cd3c206dca4",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/online-dev-integration",
+          "sha": "6dfe9082e93387c69ca69c55eec9eba0e14f1d2a",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/online-v1",
+          "sha": "8c0be18f76a1fc5c2ad4ac106c9c3c204cb6256d",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/renderer-prepare-recovery-20261023",
+          "sha": "06e7420180eba473f417860d3691387bd262ded8",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/sdl-gamepads",
+          "sha": "e118848ccd8a8740df5f73a363fa99ad37e32405",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/ui-pass-mounts",
+          "sha": "55eb47c3ed2d5b4bb69b710ebc3b045fa4ffdbc8",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/issue20b",
+          "sha": "276638aa7407e224b182423308e81aded28fcc76",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        }
+      ],
+      "deleted_remote_refs": [
+        {
+          "ref": "refs/heads/codex/debug-consumers-20261023",
+          "sha": "eb9fc4831bb2ecda7d276facfce6b2538993257d",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/debug-menu-runtime-candidate-20261020",
+          "sha": "04b914cb39899905c6a231e814de33e4f6a1ae98",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/debug-source-batch-20261028",
+          "sha": "3ccc48fa401e03a99a4c28708e9d20b97ad3e22b",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/debug-source-composition-20261028",
+          "sha": "cfdd5a6efb0519eaaa8a519144a11c3ec5de16ad",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/gui-original-frame-source-20261024",
+          "sha": "2bc659f733919f50669b35604b64991b8320f238",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/lowmem-allocation-20261025",
+          "sha": "fde0e31cd2d20b6e23a7b6cbdd2c1cd3c206dca4",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/online-v1",
+          "sha": "8c0be18f76a1fc5c2ad4ac106c9c3c204cb6256d",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        },
+        {
+          "ref": "refs/heads/codex/renderer-prepare-recovery-20261023",
+          "sha": "06e7420180eba473f417860d3691387bd262ded8",
+          "retained_in": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4"
+        }
+      ],
+      "detached_worktrees": [
+        {
+          "path": "C:\\Users\\adri1\\.codex\\worktrees\\debug-consumers-20261028\\BP-Decomp_Workflow",
+          "head": "cfdd5a6efb0519eaaa8a519144a11c3ec5de16ad",
+          "status_before_and_after_identical": true,
+          "status": []
+        },
+        {
+          "path": "D:\\Reverse\\BP-Decomp_Workflow\\.scratch\\ui-pass\\workflow-mounts",
+          "head": "55eb47c3ed2d5b4bb69b710ebc3b045fa4ffdbc8",
+          "status_before_and_after_identical": true,
+          "status": [
+            " D b5-decomp",
+            " D tools/nushaders",
+            " D tools/volatility",
+            " D tools/yap"
+          ]
+        }
+      ],
+      "remaining_refs": [
+        {
+          "ref": "refs/heads/codex/experimental-x360-byte-match",
+          "sha": "54a7fd30253542a9b001923b4aad206a33b4e379",
+          "reason": "Separate active experiment with dirty worktree; preserved."
+        },
+        {
+          "ref": "refs/heads/docs/reconcile-with-repo-state",
+          "sha": "5be0462c07a204fd53d7a3ab00429065ced68119",
+          "reason": "Separate unique documentation work."
+        },
+        {
+          "ref": "refs/heads/main",
+          "sha": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4",
+          "reason": "Workflow integration branch."
+        },
+        {
+          "ref": "refs/heads/worktree-agent-a7f8d48e1b9570604",
+          "sha": "064c41bd867d520a0c1228a80adb915ab26be079",
+          "reason": "Separate active worktree ref; preserved."
+        },
+        {
+          "ref": "refs/remotes/origin/boot_goal_progress",
+          "sha": "9e0ccdf34eb9688678dcb75591257cf14377bbc7",
+          "reason": "Separate unique boot-goal work."
+        },
+        {
+          "ref": "refs/remotes/origin/dev",
+          "sha": "532d35558e4485fd2264ef635f8f8bba3b3ba365",
+          "reason": "Existing separate workflow branch; not gameplay dev and not an owned campaign branch."
+        },
+        {
+          "ref": "refs/remotes/origin/docs/reconcile-with-repo-state",
+          "sha": "5be0462c07a204fd53d7a3ab00429065ced68119",
+          "reason": "Separate unique documentation work."
+        },
+        {
+          "ref": "refs/remotes/origin/main",
+          "sha": "f1aed7b5c9d9f494b89d7e01613b7546398c61f4",
+          "reason": "Workflow integration branch."
+        }
+      ],
+      "remaining_local_count": 4,
+      "remaining_remote_count": 4,
+      "raw_audit_directory": "audit/"
+    }
+  ],
+  "deleted_total": {
+    "local": 66,
+    "remote": 39
+  },
+  "preserved_work": "Same-head detached worktrees retained their exact HEAD and status. No worktree directories were removed. Unrelated dirty/untracked main-checkout work was not staged or reset.",
+  "workflow_gitlink": "ca80277748eb098822a035093cff9d306d079e2a",
+  "workflow_gitlink_policy": "Existing parent gitlink kept; active b5 checkout is published dev with unrelated dirty files. No automatic parent-pointer staging.",
+  "native_tests_or_builds_during_finalization": 0,
+  "installed_exe_sha256_unchanged": "052112a5aa5286a001015f123d90e80a02142bdb58195552acab6e1e623ace52",
+  "registry_sha256": {
+    "entries.json": "4da8f2d99c874c8bde66fa8062f91a1a88781ccc293c74fddb6c1dc72c778403",
+    "verdicts.json": "bf3b512ddd363657f0809f9e946714b5a5de34d99733e7f2c54202d414ec8648"
+  },
+  "final_dispositions": {
+    "verified": 190,
+    "original_noop": 28,
+    "pending": 1137,
+    "total": 1355
+  },
+  "finalization_commit": "This record is included in the subsequent workflow main handoff commit; use git log for that commit hash."
+}

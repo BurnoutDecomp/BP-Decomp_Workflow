@@ -28,3 +28,9 @@
 /progress/debug_menu/gui_audio_route_20261101/BUILD.console.log -whitespace
 /progress/debug_menu/gui_audio_route_20261101/evidence/source_excerpts.txt -whitespace
 /progress/debug_menu/gui_audio_route_20261101/proposed.patch -whitespace
+
+# Preserve byte-pinned final handoff audit and unfinished authored snapshots.
+/progress/debug_menu/shutdown_20261101/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# These two frozen originals include a terminal blank line; preserve their manifest bytes.
+/progress/debug_menu/shutdown_20261101/pending_work/gui_audio_native62209/CaptureAudit.ps1 -whitespace
+/progress/debug_menu/shutdown_20261101/pending_work/gui_audio_native62209/ConcurrentOwner.ps1 -whitespace

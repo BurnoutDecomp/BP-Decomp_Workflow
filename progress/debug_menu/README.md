@@ -1,6 +1,8 @@
 # Debug-menu behavior campaign
 
-**November1 GUI audio source:** original callback event457/100 and the exact left/right sweep action names are restored on a published task branch. Full GUI TU compile, paired323-check regression, fresh source review and full3,019-TU build pass. Real GUI/native delivery and dev integration remain pending. No new entry credit. [Source checkpoint](gui_audio_route_20261101/README.md).
+**Stopped on 1 November at the user's request.** The complete [root handoff](../../DEBUG_MENU_HANDOFF.md) records work performed, remaining work, integrated source, retained historical alternatives and branch retirement. Current final dispositions: **190 verified / 28 original no-ops / 1,137 pending**. No reconstruction, agents, builds or game launches should resume without a new user instruction.
+
+**November1 GUI audio source:** original callback event457/100 and the exact left/right sweep action names are restored and integrated into dev; the task branch is retired. Full GUI TU compile, paired323-check regression, fresh source review and full3,019-TU build pass. Real GUI/native validation and playable installation remain pending. No new entry credit. [Source checkpoint](gui_audio_route_20261101/README.md).
 
 **November1 Sound32:** complete native collection passes all32 P/N/captured restores,99 frames and zero asserts/exceptions. Root accepted12 additional bounded original effects:10 log gates, the2 roadnoise-loop ID labels and static-sound-entity query-sphere drawing. Three earlier gates are not recounted;17 controls remain pending. [Decision and limits](sound32_native_20261101/README.md).
 
@@ -15,7 +17,7 @@
 **October31 GUI:** two additional bounded outcomes pass fresh source/native review: the PC keyboard open/cancel path and EA Trax test notification through timeout. The17-entry aggregate remains FAIL; the other15 entries remain pending, including font/PFX effects, the invite residual icon and missing HUD restoration. The separately reviewed thirteen-body jump-filming recovery is merged to dev; enabled-jump native proof remains pending; the clean playable build is refreshed below. [GUI decision](gui17_native_20261031/ROOT_DECISION.json), [source checkpoint](jump_filming_recovery_20261031/README.md).
 
 Match every entry to ARTIST, including authentic no-ops and broken leftovers.
-Recovery, integration, review and behavior checks remain active.
+Recovery, integration, review and behavior checks are paused.
 
 ## Playable build
 

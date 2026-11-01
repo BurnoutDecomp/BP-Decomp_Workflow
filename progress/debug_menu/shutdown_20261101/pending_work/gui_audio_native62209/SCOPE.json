@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "status": "prepared_pending_fresh_review_no_native_run",
+  "slot": 62209,
+  "objective": "Current-save normal boot through EA/Criterion, drive, ordinary pause-map Next/Prev navigation, resume actual driving after GUI audio callback repair.",
+  "candidate_source": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+  "candidate_exe_sha256": "de1adb889abf5a4335c98566fdc83a452e2c993f1401b523d706b56e1a827ff6",
+  "maximum_manual_captures": 8,
+  "dimensions": [
+    1280,
+    720
+  ],
+  "max_bmp_bytes": 3686454,
+  "muted": true,
+  "audio_argument_present": false,
+  "skip_intro_argument_present": false,
+  "native_inputs": "Only existing retry03 flow scoped PauseAt22/map, MenuTapAt30:Next38:Prev, UnpauseAt46; driver creates only owned frame request event.",
+  "capture_phases": [
+    "ea_boot",
+    "criterion_boot",
+    "driving_before_pause",
+    "map_open",
+    "map_after_next",
+    "map_after_prev",
+    "driving_resumed",
+    "driving_continues"
+  ],
+  "proof_limits": [
+    "No audible proof",
+    "No native11/13 sweep proof",
+    "No Sound#0105 behavior credit",
+    "Pixels and menu selection changes require human review",
+    "Flow MENU receipts prove issue timing; their consumption/visible effects are judged from actual frame pairs"
+  ],
+  "normal_writes": false,
+  "stage_created": false,
+  "native_run": false,
+  "source_changes": false,
+  "build_operation": false,
+  "profile_operations": "No live normal profile access by package; Root materializes private current4e snapshot."
+}
