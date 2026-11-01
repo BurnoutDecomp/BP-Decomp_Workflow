@@ -1,6 +1,6 @@
 # Debug-menu behavior campaign
 
-**November1 GUI audio source:** original callback event457/100 and the exact left/right sweep action names are restored on a published task branch. Full GUI TU compile and paired323-check regression pass; fresh review, full build/native and dev integration remain pending. No new entry credit. [Source checkpoint](gui_audio_route_20261101/README.md).
+**November1 GUI audio source:** original callback event457/100 and the exact left/right sweep action names are restored on a published task branch. Full GUI TU compile, paired323-check regression, fresh source review and full3,019-TU build pass. Real GUI/native delivery and dev integration remain pending. No new entry credit. [Source checkpoint](gui_audio_route_20261101/README.md).
 
 **November1 Sound32:** complete native collection passes all32 P/N/captured restores,99 frames and zero asserts/exceptions. Root accepted12 additional bounded original effects:10 log gates, the2 roadnoise-loop ID labels and static-sound-entity query-sphere drawing. Three earlier gates are not recounted;17 controls remain pending. [Decision and limits](sound32_native_20261101/README.md).
 
