@@ -1,0 +1,87 @@
+{
+  "address": "0x823C0A58",
+  "name": "BrnGame::BrnGameModule::BridgeGuiToSound",
+  "prototype": "int BrnGame::BrnGameModule::BridgeGuiToSoundint __fastcall(int a1, int a2, unsigned __int8 *a3)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "unsigned __int8 *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "OutEventQueu",
+      "type": "unsigned __int8 *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    }
+  ],
+  "pseudocode": "int __fastcall BrnGame::BrnGameModule::BridgeGuiToSound(int a1, int a2, unsigned __int8 *a3)\n{\n  unsigned __int8 *OutEventQueu; // r30\n  int result; // r3\n\n  _savegprlr_29();\n  if ( !a2 || !a3 )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpSoundModuleInputBuffer && lpGuiOutputBuffer\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/GameBridgeGUIToX.cpp\",\n      1694);\n    CgsDev::Assert::EndAssert();\n  }\n  OutEventQueu = CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu(a3);\n  if ( !OutEventQueu )\n  {\n    CgsDev::Assert::BeginAssert();\n    CgsDev::Assert::FireAssert(\n      \"lpGuiEventQueue\",\n      \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\gamesource\\\\unity\\\\../Game/GameBridgeGUIToX.cpp\",\n      1699);\n    CgsDev::Assert::EndAssert();\n  }\n  result = BrnSound::Module::Io::RootInputBuffer::SetGuiEventQueue(a2, OutEventQueu);\n  _restgprlr_29();\n  return result;\n}\n",
+  "assembly": "0x823C0A58  mflr      r12\n0x823C0A5C  bl        __savegprlr_29\n0x823C0A60  stwu      r1, back_chain(r1)\n0x823C0A64  mr        r29, r4\n0x823C0A68  lis       r11, aDP4B5MainBurno_571@ha\n0x823C0A6C  mr        r30, r5\n0x823C0A70  cmplwi    cr6, r29, 0\n0x823C0A74  addi      r31, r11, aDP4B5MainBurno_571@l# \"d:\\\\p4\\\\b5_main\\\\burnout\\\\main\\\\code\\\\g\"...\n0x823C0A78  beq       cr6, loc_823C0A84\n0x823C0A7C  cmplwi    cr6, r30, 0\n0x823C0A80  bne       cr6, loc_823C0AA0\n0x823C0A84  bl        CgsDev__Assert__BeginAssert\n0x823C0A88  lis       r11, aLpsoundmodulei_0@ha\n0x823C0A8C  li        r5, 0x69E\n0x823C0A90  addi      r3, r11, aLpsoundmodulei_0@l# \"lpSoundModuleInputBuffer && lpGuiOutput\"...\n0x823C0A94  mr        r4, r31\n0x823C0A98  bl        CgsDev__Assert__FireAssert\n0x823C0A9C  bl        CgsDev__Assert__EndAssert\n0x823C0AA0  mr        r3, r30\n0x823C0AA4  bl        CgsGui__CgsGuiModuleIO__OutputBuffer__GetOutEventQueu\n0x823C0AA8  mr        r30, r3\n0x823C0AAC  cmplwi    cr6, r30, 0\n0x823C0AB0  bne       cr6, loc_823C0AD0\n0x823C0AB4  bl        CgsDev__Assert__BeginAssert\n0x823C0AB8  lis       r11, aLpguieventqueu@ha\n0x823C0ABC  li        r5, 0x6A3\n0x823C0AC0  addi      r3, r11, aLpguieventqueu@l# \"lpGuiEventQueue\"\n0x823C0AC4  mr        r4, r31\n0x823C0AC8  bl        CgsDev__Assert__FireAssert\n0x823C0ACC  bl        CgsDev__Assert__EndAssert\n0x823C0AD0  mr        r4, r30\n0x823C0AD4  mr        r3, r29\n0x823C0AD8  bl        BrnSound__Module__Io__RootInputBuffer__SetGuiEventQueue\n0x823C0ADC  addi      r1, r1, 0x70 # 'p'\n0x823C0AE0  b         __restgprlr_29",
+  "xrefs_to": [
+    {
+      "address": "0x823DCEC0",
+      "name": "BrnGame::BrnGameModule::DoUpdate_Sound"
+    },
+    {
+      "address": "0x823F22D8",
+      "name": "LoadingScriptedState::Update"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EEC",
+      "name": "__savegprlr_29"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x823B4130",
+      "name": "CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu"
+    },
+    {
+      "address": "0x823B89B8",
+      "name": "BrnSound::Module::Io::RootInputBuffer::SetGuiEventQueue"
+    }
+  ]
+}

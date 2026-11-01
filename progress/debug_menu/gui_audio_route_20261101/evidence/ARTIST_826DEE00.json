@@ -1,0 +1,111 @@
+{
+  "address": "0x826DEE00",
+  "name": "??$AddEvent@V?$Message@VGuiAudioTriggerEvent@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NA",
+  "prototype": "int ??$AddEvent@V?$Message@VGuiAudioTriggerEvent@BrnGui@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$0BA@@CgsModule@@QAA_NAint __fastcall(_BYTE *a1, int a2, int a3)",
+  "variables": [
+    {
+      "name": "a1",
+      "type": "_BYTE *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a2",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "a3",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v6",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v7",
+      "type": "char *",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v8",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "result",
+      "type": "int",
+      "is_reg": true,
+      "size": 4
+    },
+    {
+      "name": "v10",
+      "type": "_DWORD[20]",
+      "is_reg": false,
+      "size": 80
+    }
+  ],
+  "pseudocode": "int __fastcall CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGui::GuiAudioTriggerEvent>>(\n        _BYTE *a1,\n        int a2,\n        int a3)\n{\n  int v6; // r29\n  char *v7; // r31\n  int v8; // r4\n  int result; // r3\n  _DWORD v10[20]; // [sp+50h] [-50h] BYREF\n\n  _savegprlr_26();\n  if ( !*a1 )\n  {\n    CgsDev::Assert::BeginAssert();\n    v6 = dword_82F32264;\n    v10[0] = off_82000D00;\n    v7 = CgsDev::Assert::gpcMessageBuffer;\n    CgsContainers::BasePriorityQueue::Clear(v10);\n    v10[2] = v7;\n    v10[3] = v6;\n    v10[0] = off_82000D08;\n    *v7 = 0;\n    (*(v10[0] + 4))(v10, \"Not Constructed\\n\");\n    CgsDev::Assert::FireAssert(\n      CgsDev::Assert::gpcMessageBuffer,\n      \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Module/CgsVariableEventQueue.h\",\n      688);\n    CgsDev::Assert::EndAssert();\n  }\n  v8 = a2 + 4;\n  if ( !a2 )\n    v8 = 0;\n  result = CgsModule::VariableEventQueue<8192,16>::AddEvent(a1, v8, a3, 116);\n  _restgprlr_26();\n  return result;\n}\n",
+  "assembly": "0x826DEE00  mflr      r12\n0x826DEE04  bl        __savegprlr_26\n0x826DEE08  stwu      r1, back_chain(r1)\n0x826DEE0C  mr        r27, r3\n0x826DEE10  mr        r28, r4\n0x826DEE14  mr        r26, r5\n0x826DEE18  lbz       r11, 0(r27)\n0x826DEE1C  cmplwi    cr6, r11, 0\n0x826DEE20  bne       cr6, loc_826DEE9C\n0x826DEE24  bl        CgsDev__Assert__BeginAssert\n0x826DEE28  lis       r11, off_82000D00@ha\n0x826DEE2C  lis       r10, dword_82F32264@ha\n0x826DEE30  addi      r11, r11, off_82000D00@l\n0x826DEE34  lis       r30, CgsDev__Assert__gpcMessageBuffer@ha\n0x826DEE38  addi      r3, r1, 0xA0+var_50\n0x826DEE3C  lwz       r29, dword_82F32264@l(r10)\n0x826DEE40  stw       r11, 0xA0+var_50(r1)\n0x826DEE44  lwz       r31, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150\n0x826DEE48  bl        CgsContainers__BasePriorityQueue__Clear\n0x826DEE4C  lis       r11, off_82000D08@ha\n0x826DEE50  stw       r31, 0xA0+var_48(r1)\n0x826DEE54  stw       r29, 0xA0+var_44(r1)\n0x826DEE58  lis       r10, aNotConstructed@ha\n0x826DEE5C  addi      r11, r11, off_82000D08@l\n0x826DEE60  addi      r4, r10, aNotConstructed@l# \"Not Constructed\\n\"\n0x826DEE64  addi      r3, r1, 0xA0+var_50\n0x826DEE68  stw       r11, 0xA0+var_50(r1)\n0x826DEE6C  li        r11, 0\n0x826DEE70  stb       r11, (byte_83018150 - 0x83018150)(r31)\n0x826DEE74  lwz       r11, 0xA0+var_50(r1)\n0x826DEE78  lwz       r11, 4(r11)\n0x826DEE7C  mtctr     r11\n0x826DEE80  bctrl\n0x826DEE84  lis       r11, aGamesharedGame_8@ha\n0x826DEE88  li        r5, 0x2B0\n0x826DEE8C  lwz       r3, CgsDev__Assert__gpcMessageBuffer@l(r30)# byte_83018150\n0x826DEE90  addi      r4, r11, aGamesharedGame_8@l# \"..\\\\..\\\\..\\\\GameShared\\\\GameClasses\\\\Mo\"...\n0x826DEE94  bl        CgsDev__Assert__FireAssert\n0x826DEE98  bl        CgsDev__Assert__EndAssert\n0x826DEE9C  cmplwi    cr6, r28, 0\n0x826DEEA0  addi      r4, r28, 4\n0x826DEEA4  bne       cr6, loc_826DEEAC\n0x826DEEA8  li        r4, 0\n0x826DEEAC  li        r6, 0x74 # 't'\n0x826DEEB0  mr        r5, r26\n0x826DEEB4  mr        r3, r27\n0x826DEEB8  bl        CgsModule__VariableEventQueue_8192_16___AddEvent\n0x826DEEBC  addi      r1, r1, 0xA0\n0x826DEEC0  b         __restgprlr_26",
+  "xrefs_to": [
+    {
+      "address": "0x826ED330",
+      "name": "BrnSound::Module::SoundLogicModule::ProcessCameraFlags"
+    },
+    {
+      "address": "0x826ED6C8",
+      "name": "BrnSound::Module::SoundLogicModule::ProcessGuiEvents"
+    }
+  ],
+  "xrefs_from": [
+    {
+      "address": "0x82C08EE0",
+      "name": "__savegprlr_26"
+    },
+    {
+      "address": "0x82817548",
+      "name": "CgsDev::Assert::BeginAssert"
+    },
+    {
+      "address": "0x82815E58",
+      "name": "CgsContainers::BasePriorityQueue::Clear"
+    },
+    {
+      "address": "0x82820810",
+      "name": "CgsDev::Assert::FireAssert"
+    },
+    {
+      "address": "0x82817558",
+      "name": "CgsDev::Assert::EndAssert"
+    },
+    {
+      "address": "0x822F1F58",
+      "name": "CgsModule::VariableEventQueue<8192,16>::AddEvent"
+    }
+  ]
+}

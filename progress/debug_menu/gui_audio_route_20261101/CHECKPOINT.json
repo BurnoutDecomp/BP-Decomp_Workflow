@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "status": "published_source_checkpoint_pending_fresh_review_full_build_native_and_dev_integration",
+  "base_b5": "ca80277748eb098822a035093cff9d306d079e2a",
+  "source_commit": "747a347c8fd9bb8d1637e967c2c9a782f89a5638",
+  "candidate_b5": "5a4a19cace1dc080c0b61de4ba15130035706d19",
+  "branch": "codex/debug-gui-audio-20261101",
+  "changed_paths": [
+    "src/GameSource/Gui/BrnGuiModule.cpp",
+    "tests/run_gui_audio_trigger.py",
+    "tests/GuiAudioTrigger.cpp",
+    "tests/data/gui_audio_actions_artist.json"
+  ],
+  "full_gui_tu_compile": "pass canonical flags/includes",
+  "faithfulness": "pass0 total/new",
+  "actual_source_regression": {
+    "candidate_checks": 323,
+    "candidate_failures": 0,
+    "baseline_checks": 323,
+    "baseline_expected_failures": 112,
+    "exact_failure_set_validated": true
+  },
+  "repairs": [
+    "Original ON_LEFTSWEEP/ON_RIGHTSWEEP map11/13 rather than fallback14",
+    "Original callback module-output publishes raw event457/100 rather than201/112"
+  ],
+  "limits": [
+    "Legacy typed201 compatibility retained",
+    "Original write-lock assertion already existed",
+    "Resolve/Play observed, audio/live behavior pending",
+    "No normal build/save changes",
+    "No debug entry credited by this source checkpoint"
+  ],
+  "debug_counts": {
+    "verified": 190,
+    "original_noop": 28,
+    "pending": 1137,
+    "total": 1355
+  }
+}

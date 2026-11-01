@@ -1,0 +1,312 @@
+{
+  "reader": "tools/re/x360rd.py",
+  "image_source": "D:/Reverse/IDA_Files/artist_i64.raw",
+  "calibration": {
+    "address": "0x8250BF0C",
+    "bytes_hex": "38c0006438a001c9",
+    "independent_export": "8250BF0C li r6,100; 8250BF10 li r5,457"
+  },
+  "tables": [
+    {
+      "name": "FLApt action names",
+      "base": "0x82f277a8",
+      "pointer_table_hex": "8206ecfc8206ecf08206ece48206ecd48206ecc88206ecbc8206ecb48206eca88206eca08206ec988206ec908206ec808206ec748206ec64",
+      "entries": [
+        {
+          "index": 0,
+          "pointer_slot": "0x82f277a8",
+          "string_address": "0x8206ecfc",
+          "value": "ON_ENTER",
+          "bytes_hex": "4f4e5f454e54455200"
+        },
+        {
+          "index": 1,
+          "pointer_slot": "0x82f277ac",
+          "string_address": "0x8206ecf0",
+          "value": "ON_LEAVE",
+          "bytes_hex": "4f4e5f4c4541564500"
+        },
+        {
+          "index": 2,
+          "pointer_slot": "0x82f277b0",
+          "string_address": "0x8206ece4",
+          "value": "ON_FOCUS",
+          "bytes_hex": "4f4e5f464f43555300"
+        },
+        {
+          "index": 3,
+          "pointer_slot": "0x82f277b4",
+          "string_address": "0x8206ecd4",
+          "value": "ON_LOSE_FOCUS",
+          "bytes_hex": "4f4e5f4c4f53455f464f43555300"
+        },
+        {
+          "index": 4,
+          "pointer_slot": "0x82f277b8",
+          "string_address": "0x8206ecc8",
+          "value": "ON_ACCEPT",
+          "bytes_hex": "4f4e5f41434345505400"
+        },
+        {
+          "index": 5,
+          "pointer_slot": "0x82f277bc",
+          "string_address": "0x8206ecbc",
+          "value": "ON_CANCEL",
+          "bytes_hex": "4f4e5f43414e43454c00"
+        },
+        {
+          "index": 6,
+          "pointer_slot": "0x82f277c0",
+          "string_address": "0x8206ecb4",
+          "value": "ON_TICK",
+          "bytes_hex": "4f4e5f5449434b00"
+        },
+        {
+          "index": 7,
+          "pointer_slot": "0x82f277c4",
+          "string_address": "0x8206eca8",
+          "value": "ON_CHANGE",
+          "bytes_hex": "4f4e5f4348414e474500"
+        },
+        {
+          "index": 8,
+          "pointer_slot": "0x82f277c8",
+          "string_address": "0x8206eca0",
+          "value": "ON_UP",
+          "bytes_hex": "4f4e5f555000"
+        },
+        {
+          "index": 9,
+          "pointer_slot": "0x82f277cc",
+          "string_address": "0x8206ec98",
+          "value": "ON_DOWN",
+          "bytes_hex": "4f4e5f444f574e00"
+        },
+        {
+          "index": 10,
+          "pointer_slot": "0x82f277d0",
+          "string_address": "0x8206ec90",
+          "value": "ON_LEFT",
+          "bytes_hex": "4f4e5f4c45465400"
+        },
+        {
+          "index": 11,
+          "pointer_slot": "0x82f277d4",
+          "string_address": "0x8206ec80",
+          "value": "ON_LEFTSWEEP",
+          "bytes_hex": "4f4e5f4c454654535745455000"
+        },
+        {
+          "index": 12,
+          "pointer_slot": "0x82f277d8",
+          "string_address": "0x8206ec74",
+          "value": "ON_RIGHT",
+          "bytes_hex": "4f4e5f524947485400"
+        },
+        {
+          "index": 13,
+          "pointer_slot": "0x82f277dc",
+          "string_address": "0x8206ec64",
+          "value": "ON_RIGHTSWEEP",
+          "bytes_hex": "4f4e5f5249474854535745455000"
+        }
+      ]
+    },
+    {
+      "name": "Audio action log names",
+      "base": "0x82f2cfc0",
+      "pointer_table_hex": "820690e4820a94c8820a94c0820a94b4820a94a8820a949c820a9494820a9488820a9480820a9478820a9470820a9464820a945c820a944c82006ff0820a9444820a943c820a9430820a9424820a9418820a9408820a93f8820a93e8820a93d882074dd8820a93d4820a93c8",
+      "entries": [
+        {
+          "index": 0,
+          "pointer_slot": "0x82f2cfc0",
+          "string_address": "0x820690e4",
+          "value": "OnEnter",
+          "bytes_hex": "4f6e456e74657200"
+        },
+        {
+          "index": 1,
+          "pointer_slot": "0x82f2cfc4",
+          "string_address": "0x820a94c8",
+          "value": "OnExit",
+          "bytes_hex": "4f6e4578697400"
+        },
+        {
+          "index": 2,
+          "pointer_slot": "0x82f2cfc8",
+          "string_address": "0x820a94c0",
+          "value": "OnFocus",
+          "bytes_hex": "4f6e466f63757300"
+        },
+        {
+          "index": 3,
+          "pointer_slot": "0x82f2cfcc",
+          "string_address": "0x820a94b4",
+          "value": "OnLoseFocus",
+          "bytes_hex": "4f6e4c6f7365466f63757300"
+        },
+        {
+          "index": 4,
+          "pointer_slot": "0x82f2cfd0",
+          "string_address": "0x820a94a8",
+          "value": "OnAccept",
+          "bytes_hex": "4f6e41636365707400"
+        },
+        {
+          "index": 5,
+          "pointer_slot": "0x82f2cfd4",
+          "string_address": "0x820a949c",
+          "value": "OnCancel",
+          "bytes_hex": "4f6e43616e63656c00"
+        },
+        {
+          "index": 6,
+          "pointer_slot": "0x82f2cfd8",
+          "string_address": "0x820a9494",
+          "value": "OnTick",
+          "bytes_hex": "4f6e5469636b00"
+        },
+        {
+          "index": 7,
+          "pointer_slot": "0x82f2cfdc",
+          "string_address": "0x820a9488",
+          "value": "OnChange",
+          "bytes_hex": "4f6e4368616e676500"
+        },
+        {
+          "index": 8,
+          "pointer_slot": "0x82f2cfe0",
+          "string_address": "0x820a9480",
+          "value": "OnUp",
+          "bytes_hex": "4f6e557000"
+        },
+        {
+          "index": 9,
+          "pointer_slot": "0x82f2cfe4",
+          "string_address": "0x820a9478",
+          "value": "OnDown",
+          "bytes_hex": "4f6e446f776e00"
+        },
+        {
+          "index": 10,
+          "pointer_slot": "0x82f2cfe8",
+          "string_address": "0x820a9470",
+          "value": "OnLeft",
+          "bytes_hex": "4f6e4c65667400"
+        },
+        {
+          "index": 11,
+          "pointer_slot": "0x82f2cfec",
+          "string_address": "0x820a9464",
+          "value": "OnLeftSweep",
+          "bytes_hex": "4f6e4c656674537765657000"
+        },
+        {
+          "index": 12,
+          "pointer_slot": "0x82f2cff0",
+          "string_address": "0x820a945c",
+          "value": "OnRight",
+          "bytes_hex": "4f6e526967687400"
+        },
+        {
+          "index": 13,
+          "pointer_slot": "0x82f2cff4",
+          "string_address": "0x820a944c",
+          "value": "OnRightSweep",
+          "bytes_hex": "4f6e5269676874537765657000"
+        },
+        {
+          "index": 14,
+          "pointer_slot": "0x82f2cff8",
+          "string_address": "0x82006ff0",
+          "value": "Pitch",
+          "bytes_hex": "506974636800"
+        },
+        {
+          "index": 15,
+          "pointer_slot": "0x82f2cffc",
+          "string_address": "0x820a9444",
+          "value": "Azimuth",
+          "bytes_hex": "417a696d75746800"
+        },
+        {
+          "index": 16,
+          "pointer_slot": "0x82f2d000",
+          "string_address": "0x820a943c",
+          "value": "Cutoff",
+          "bytes_hex": "4375746f666600"
+        },
+        {
+          "index": 17,
+          "pointer_slot": "0x82f2d004",
+          "string_address": "0x820a9430",
+          "value": "VolumeMenu",
+          "bytes_hex": "566f6c756d654d656e7500"
+        },
+        {
+          "index": 18,
+          "pointer_slot": "0x82f2d008",
+          "string_address": "0x820a9424",
+          "value": "VolumeMenu2",
+          "bytes_hex": "566f6c756d654d656e753200"
+        },
+        {
+          "index": 19,
+          "pointer_slot": "0x82f2d00c",
+          "string_address": "0x820a9418",
+          "value": "VolumeMenu3",
+          "bytes_hex": "566f6c756d654d656e753300"
+        },
+        {
+          "index": 20,
+          "pointer_slot": "0x82f2d010",
+          "string_address": "0x820a9408",
+          "value": "VolumeInGame",
+          "bytes_hex": "566f6c756d65496e47616d6500"
+        },
+        {
+          "index": 21,
+          "pointer_slot": "0x82f2d014",
+          "string_address": "0x820a93f8",
+          "value": "VolumeInGame2",
+          "bytes_hex": "566f6c756d65496e47616d653200"
+        },
+        {
+          "index": 22,
+          "pointer_slot": "0x82f2d018",
+          "string_address": "0x820a93e8",
+          "value": "VolumeInGame3",
+          "bytes_hex": "566f6c756d65496e47616d653300"
+        },
+        {
+          "index": 23,
+          "pointer_slot": "0x82f2d01c",
+          "string_address": "0x820a93d8",
+          "value": "VolumeStream",
+          "bytes_hex": "566f6c756d6553747265616d00"
+        },
+        {
+          "index": 24,
+          "pointer_slot": "0x82f2d020",
+          "string_address": "0x82074dd8",
+          "value": "Off",
+          "bytes_hex": "4f666600"
+        },
+        {
+          "index": 25,
+          "pointer_slot": "0x82f2d024",
+          "string_address": "0x820a93d4",
+          "value": "On",
+          "bytes_hex": "4f6e00"
+        },
+        {
+          "index": 26,
+          "pointer_slot": "0x82f2d028",
+          "string_address": "0x820a93c8",
+          "value": "SwitchedOn",
+          "bytes_hex": "53776974636865644f6e00"
+        }
+      ]
+    }
+  ]
+}
