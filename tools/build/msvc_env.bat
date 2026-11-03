@@ -2,7 +2,7 @@
 rem tools\build\msvc_env.bat -- THE one MSVC locator for this repo. `call` this from a
 rem consumer batch; it configures the CALLER's environment (deliberately no setlocal).
 rem Resolution order:
-rem   a) cl already on PATH *and* reporting "Version 19." -> trust it. Preserves the CI
+rem   a) cl already on PATH *and* reporting a 19.x version -> trust it. Preserves the CI
 rem      fast path (ilammy/msvc-dev-cmd) and rejects the Xbox 360 SDK's ancient cl 14.x
 rem      that shadows PATH on 360-SDK machines.
 rem   b) VCVARS64 env var -> that vcvars64.bat.
@@ -12,12 +12,15 @@ rem      toolset. Rescues non-C:\ / renamed installs. Preview-only boxes: set VC
 rem On success: sets MSVC_ENV_SOURCE (path-cl|vcvars64-env|probed|vswhere) and
 rem MSVC_VCVARS (vcvars used; empty for path-cl), prints one "[msvc_env] using" line,
 rem exit /b 0. On failure: named error, exit /b 1.
+rem The 19.x probe matches the "19.NN.N" version number, not the word "Version": the
+rem banner is localized (a French VS prints "version 19.38..." with a non-breaking
+rem space before the number, so neither the word nor a leading space can be matched).
 rem IMPORTANT: probe with "where cl" BEFORE piping cl into findstr. Piping a command
 rem that is not on PATH (cl 2>&1 | findstr ...) aborts the whole batch with exit 255.
 
 where cl >nul 2>&1
 if errorlevel 1 goto find_vcvars
-cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
+cl 2>&1 | findstr /R /C:"19\.[0-9][0-9]*\.[0-9]" >nul 2>&1
 if errorlevel 1 goto find_vcvars
 set "MSVC_ENV_SOURCE=path-cl"
 set "MSVC_VCVARS="
@@ -68,7 +71,7 @@ if errorlevel 1 (
   echo [msvc_env] ERROR: vcvars64 ran but cl is still not on PATH: "%MSVC_VCVARS%"
   exit /b 1
 )
-cl 2>&1 | findstr /C:"Version 19." >nul 2>&1
+cl 2>&1 | findstr /R /C:"19\.[0-9][0-9]*\.[0-9]" >nul 2>&1
 if errorlevel 1 (
   echo [msvc_env] ERROR: cl on PATH is not MSVC 19.x after vcvars ^(Xbox 360 SDK cl shadowing?^) -- check "%MSVC_VCVARS%"
   exit /b 1
@@ -80,7 +83,7 @@ exit /b 0
 
 :fail
 echo [msvc_env] ERROR: no MSVC 19.x toolchain found. Tried, in order:
-echo   1. cl already on PATH reporting "Version 19."
+echo   1. cl already on PATH reporting a 19.x version
 echo   2. the VCVARS64 environment variable
 echo   3. default VS2022 paths (Community/Enterprise/Professional/BuildTools)
 echo   4. vswhere.exe (no install with the C++ x64 toolset)
