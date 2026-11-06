@@ -21,6 +21,7 @@
   Bug     = 'issue #24 -- Marked Man too passive, too few enemies'
   Frames  = $false
   Run     = @{
+    TitleStart = $true   # sign the profile in (START, not A)
     Drive           = $true
     MotionProbe     = $true
     Teleport        = '1634.3,-1.9,-2284.1,292'

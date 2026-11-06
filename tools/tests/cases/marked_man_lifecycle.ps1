@@ -28,6 +28,7 @@
   Bug     = 'lane MM -- "Marked Man stalls at COUNTDOWN" (census 2026-09-25; not reproduced: the mode reaches IN_PROGRESS)'
   Frames  = $false
   Run     = @{
+    TitleStart = $true   # sign the profile in (START, not A)
     Drive           = $true
     MotionProbe     = $true
     Teleport        = '1634.3,-1.9,-2284.1,292'
