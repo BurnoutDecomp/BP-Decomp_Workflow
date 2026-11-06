@@ -54,7 +54,8 @@ OURS = ("GameSource/", "GameShared/", "SharedClasses/", "SDKs/", "pc/")
 # 1. THE C++ INDEX -- every member-function DEFINITION and DECLARATION in a source tree.
 # ---------------------------------------------------------------------------------------------
 IDENT = r"[A-Za-z_~][A-Za-z0-9_]*"
-RE_NS = re.compile(r"\bnamespace\s+(" + IDENT + r")\s*\{")
+# `namespace rw::math::fpu {` (C++17) is one opener; without the ::-tail IsSimilar<float> read "defined nowhere".
+RE_NS = re.compile(r"\bnamespace\s+(" + IDENT + r"(?:\s*::\s*" + IDENT + r")*)\s*\{")
 RE_ANONNS = re.compile(r"\bnamespace\s*\{")
 RE_CLASS = re.compile(r"\b(class|struct|union)\s+(?:__declspec\s*\([^)]*\)\s*)?(" + IDENT + r")\b")
 # ⛔ `template <class T>` -- the `class T` inside a TEMPLATE PARAMETER LIST is not a class
@@ -181,7 +182,12 @@ def scan_file(rel, text, defs, decls):
                 k = m.end()
                 while k < n and s[k] not in '{;':
                     k += 1
-                if k < n and s[k] == '{':
+                # `const struct Foo::Entry*`, then `Foo::in_word_set(...) {` names a type and opens
+                # nothing: only a base clause or `final` may stand between the name and its '{'.
+                between = s[m.end():k].strip()
+                isopener = (not between or between.startswith('final')
+                            or (between[0] == ':' and not between.startswith('::')))
+                if k < n and s[k] == '{' and isopener:
                     pending = ('class', m.group(2))
                     i = k
                     continue
