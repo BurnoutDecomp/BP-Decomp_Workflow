@@ -27,6 +27,7 @@
     Drive       = $true
     MotionProbe = $true            # the DRIVE verdict in marks.txt needs [motion] samples
     MaxSeconds  = 50
+    TitleStart = $true      # the default Accept pump signs no profile in, and the new-player intro holds the car
     SkipIntro  = $true      # the console -skipvideos latch (see the banner)
     AcceptGap  = 1.0        # harness pump latency, not a game gate
     Teleport    = '3040.7,-5.8,-1937.9,180'   # the road outside the junkyard exit

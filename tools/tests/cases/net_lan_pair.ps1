@@ -39,6 +39,7 @@ $lPairRoles = [ordered]@{
 
 $lRun = @{
   MaxSeconds = 150       # boot ~20 s + BRN_NET_DELAY 30 s + sign-in + create/quick-match retries
+  TitleStart = $true     # the default Accept pump signs no profile in, and the new-player intro holds the car
   SkipIntro  = $true
   AcceptGap  = 1.0
 }
