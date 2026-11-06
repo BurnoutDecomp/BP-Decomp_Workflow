@@ -28,6 +28,7 @@
   Bug     = 'no crash stream, ambience, speed stream or reverb: the environment effects were constructor-only'
   Frames  = $false
   Run     = @{
+    TitleStart = $true
     Drive       = $true
     MotionProbe = $true
     SkipIntro   = $true

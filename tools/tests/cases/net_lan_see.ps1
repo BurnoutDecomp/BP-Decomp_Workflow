@@ -80,6 +80,7 @@ $laOther = @($lR.OtherSpot.Split(',') | ForEach-Object { [double]::Parse($_, [Gl
 
 $lRun = @{
   MaxSeconds = 150
+  TitleStart = $true     # the default Accept pump signs no profile in, and the new-player intro holds the car
   SkipIntro  = $true
   AcceptGap  = 1.0
   Teleport   = $lR.Spot

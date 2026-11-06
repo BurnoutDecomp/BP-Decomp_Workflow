@@ -1,0 +1,39 @@
+# known_asserts.txt -- assert FAMILIES that fire on the current tip and are somebody else's lane.
+# One regex per line (PowerShell -match, applied to the `[ASSERT n] <message>` line with the
+# `[ASSERT n] ` prefix and the trailing `(file:line)` / `[repeat ...]` stripped). Lines starting
+# with # are comments.
+#
+# The `NewAsserts` check passes when every assert family in a run matches one of these. It is
+# NOT a licence to ignore asserts: a family listed here still counts in `asserts=` and a lane
+# whose bug IS one of these must check it explicitly with LogCount. Keep this list SHORT and
+# dated; remove a line the day its family stops firing on a baseline run.
+#
+# 2026-09-06 baseline (tip 473ff6f4 + the IsInWorld order fix): the upstream effects/Lion lane.
+# ALL THREE LEFT THE LIST 2026-09-07. "Not locked for writing": LoadEffectsModule's read-lock
+# forward used the write-lock accessors (case effects_load_readlock keeps it at zero).
+# "Can not instance resource pointer" + "Couldn't locate lion effect description": both were the
+# unported big-endian particles.bundle (every .lef hash read wrong); gone once the staged data
+# carries the ported bundle (case fx_bundles_load).
+# 2026-09-06 also on the tip before this wave (both 09-06 baseline runs, absent on 09-02 runs):
+# "LoadBundle failed" (left 2026-09-07: PostFx/postfxvault.bin and particles.bundle were unported
+# platform-2 copies in the staged data; case fx_bundles_load keeps both loads witnessed) and the
+# reset-on-track surface-list tripwire ("Surface list appears to be corrupt", left 2026-09-07:
+# the watchdog's collection key was a CRT-initialised global carried as 0; case
+# surface_list_tripwire keeps it witnessed).
+#
+# 2026-09-07: EMPTY. baseline_boot_drive runs with asserts=0 (run 20260907_111542). A new line
+# here needs a dated reason and a lane that owns it.
+
+# ---- net_lan_start_mode only: everything above is known_asserts.txt VERBATIM, plus ONE family. ----
+# 2026-11-05. "Invalid rival position for active race car" (AboveCarRenderer::UpdateCachedInfoForRival)
+# fires every frame of an online race's ONLINE_LOADING, while the sim is paused. Expected to be a debug
+# assert on the console too, proved on the GUI side only:
+#   - proved from the asm: GUI 238 is posted every frame during the pause (0x823EDD1C, unconditional;
+#     DoUpdate_GUI still runs), the game mode reaches the GUI cache before the pause (GUI 93 from action
+#     23, 0x8250E7E4), an unbound slot publishes ClearData's position 8 (0x8238F468, 0x8232AE98), and the
+#     position test and render loop match (0x82454B50, 0x82462A38).
+#   - NOT proved, world side: mbIsPlayerCarActive and maCarsInTheRace during the pause on the console.
+# It IS visible on screen during "STANDBY TO RACE". Listed so the case can run, not because it is fine:
+# the separate check fails if it fires once the mode is IN_PROGRESS. Remove this line if the family
+# ever stops firing during the load.
+^Invalid rival position for active race car$

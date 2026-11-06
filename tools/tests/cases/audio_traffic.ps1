@@ -25,6 +25,7 @@
   Bug     = 'traffic cars make no engine, horn or skid sound'
   Frames  = $false
   Run     = @{
+    TitleStart = $true
     Drive          = $true
     MotionProbe    = $true
     SkipIntro      = $true
