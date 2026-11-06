@@ -14,8 +14,9 @@
   Area    = 'gui/map'
   Bug     = 'issue #33 -- help-item prompts on the pause screens (driver details, settings, ...)'
   Frames  = $true
-  ProfileFixture = 'C:\Users\Niaz\burnout-pr\BP-Decomp_Workflow\scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'   # the pose save; run_case restores the box save
+  ProfileFixture = 'DISCO_collect_base.sav'   # the pose save; run_case restores the box save
   Run     = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive       = $true
     MaxSeconds  = 75
     SkipIntro   = $true

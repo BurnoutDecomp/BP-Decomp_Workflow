@@ -34,8 +34,9 @@
   Area           = 'gamestate/carselect'
   Bug            = 'GW4 census #6 -- the junkyard carousel never pre-streams neighbours (action 69 never posted)'
   Frames         = $false
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
+  ProfileFixture = 'DISCO_collect_base.sav'
   Run            = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive          = $true
     MotionProbe    = $true
     MaxSeconds     = 90

@@ -18,8 +18,9 @@
   Name    = 'online_play_ring'
   Area    = 'gui'
   Bug     = 'BurnoutDecomp/b5-decomp#34 -- the real OnlinePlay must keep the offline tab ring usable'
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
+  ProfileFixture = 'DISCO_collect_base.sav'
   Run     = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive          = $true
     MaxSeconds     = 80
     SkipIntro      = $true

@@ -26,8 +26,9 @@
   Area    = 'render'
   Bug     = 'BurnoutDecomp/b5-decomp#27 -- banding (shadow acne) on double-sided surfaces'
   Frames  = $true
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'   # pinned spawn; run_case restores the box save
+  ProfileFixture = 'DISCO_collect_base.sav'   # pinned spawn; run_case restores the box save
   Run     = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive          = $true
     MotionProbe    = $true
     MaxSeconds     = 48
