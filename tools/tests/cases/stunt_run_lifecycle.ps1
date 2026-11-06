@@ -54,6 +54,7 @@
   Bug     = 'stunt lane -- the stunt-run scoring feed: drift + handbrake stunts never register (the parked StuntOffencesManager::OutputStuntsInProgress publish)'
   Frames  = $false
   Run     = @{
+    TitleStart = $true   # sign the profile in (START, not A)
     Drive           = $true
     MotionProbe     = $true        # the DRIVE verdict -- so a run that scores nothing can be told
                                    # apart from a run whose car never moved

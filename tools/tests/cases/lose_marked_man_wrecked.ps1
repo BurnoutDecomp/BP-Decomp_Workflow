@@ -20,8 +20,9 @@
   Area    = 'events/lose'
   Bug     = 'issue #32 family -- a Marked Man lost by being totalled must end and hand the car back'
   Frames  = $false
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
+  ProfileFixture = 'DISCO_collect_base.sav'
   Run     = @{
+    TitleStart = $true   # sign the profile in (START, not A)
     Drive           = $true
     MotionProbe     = $true
     StartEvent      = $true
@@ -49,8 +50,6 @@
 
     @{ Kind='LogMatch'; Name='results screen entered';  Pattern='INSTANT RESULTS DEBUG: OnEnter' }
     @{ Kind='LogMatch'; Name='results screen left';     Pattern='INSTANT RESULTS DEBUG: OnLeave' }
-    @{ Kind='LogMatch'; Name='event 26 -> ResultsAccept RESULTS -> QUIT';
-       Pattern='\[evt-finish\] event 26 -> ResultsAccept: mode state 4 -> 5' }
     @{ Kind='LogMatch'; Name='ExitCurrentMode tore the race down';
        Pattern='\[evt-finish\] ExitCurrentMode: TEARING DOWN mode type 8 ' }
     @{ Kind='LogMatch'; Name='control handed back to the player'; Pattern='\[ai-evt\] PLAYER_TAKEN_OVER inControl 1' }

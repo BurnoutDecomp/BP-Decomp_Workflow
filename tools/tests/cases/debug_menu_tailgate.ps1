@@ -8,6 +8,7 @@
     Frames = $false
     ProfileFixture = 'rival_hunt_profile.sav'
     Run = @{
+    TitleStart = $true   # sign the profile in (START, not A)
         MotionProbe = $true
         Drive = $true
         DriveDelay = 3.0

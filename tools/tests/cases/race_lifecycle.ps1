@@ -41,6 +41,7 @@
   Bug     = 'race wave lane H -- no harness case had ever taken an offline race to RESULTS; the win teleport drives the real landmark finish'
   Frames  = $false
   Run     = @{
+    TitleStart = $true   # sign the profile in (START, not A)
     Drive           = $true
     MotionProbe     = $true
     Teleport        = '762.2,0.7,-2235.5,259'
