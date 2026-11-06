@@ -21,8 +21,9 @@
   Area           = 'gamestate/drivethru'
   Bug            = 'GW4 census #6 -- paint shop drive-thru: palette read faulted on an unloaded CarColours resource; no case drove one'
   Frames         = $true
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
+  ProfileFixture = 'DISCO_collect_base.sav'
   Run            = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive          = $true
     MotionProbe    = $true
     MaxSeconds     = 60

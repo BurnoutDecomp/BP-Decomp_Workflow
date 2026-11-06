@@ -18,8 +18,9 @@
   Area    = 'gui/abovecar'
   Bug     = 'Organic Showtime traffic hits must bank their cash through AboveCarRenderer (394 -> project -> fly to the counter) while the traffic cash labels draw.'
   Frames  = $true
-  ProfileFixture = 'scratch\gameplay_wave\profile_backup\Profile.sav.pose250700'
+  ProfileFixture = 'DISCO_collect_base.sav'
   Run     = @{
+    TitleStart = $true   # sign the fixture's profile in (START, not A)
     Drive          = $true
     MotionProbe    = $true
     MaxSeconds     = 105
