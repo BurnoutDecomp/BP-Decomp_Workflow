@@ -162,14 +162,15 @@ def section(text, heading_re):
     return out
 
 
-def table_skills(lines):
-    """{name: row} for each markdown table row whose first cell names a skill in backticks."""
+def table_skills(lines, column=0):
+    """{name: row} for each markdown table row whose cell at `column` names a skill in
+    backticks (the index puts the skill first; AGENTS.md's routing table puts it last)."""
     rows = {}
     for line in lines:
         if not line.lstrip().startswith("|"):
             continue
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        m = re.search(r"`([a-z0-9-]+)`", cells[0]) if cells else None
+        m = re.search(r"`([a-z0-9-]+)`", cells[column]) if cells else None
         if m:
             rows[m.group(1)] = line
     return rows
@@ -266,7 +267,7 @@ def check(strict=False):
     index_text = open(INDEX_MD, encoding="utf-8").read() if os.path.isfile(INDEX_MD) else ""
     index_rows = table_skills(section(index_text, r"^Index$"))
     agents_text = open(AGENTS_MD, encoding="utf-8").read() if os.path.isfile(AGENTS_MD) else ""
-    routing_rows = table_skills(section(agents_text, r"\bskills?\b"))
+    routing_rows = table_skills(section(agents_text, r"\bskills?\b"), column=-1)
     if not index_text:
         rep.err(".agents/skills/README.md", "missing (it is the contract and the index)")
     if not routing_rows:
