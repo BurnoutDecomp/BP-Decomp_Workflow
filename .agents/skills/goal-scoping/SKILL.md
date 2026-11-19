@@ -74,8 +74,10 @@ shipped in `goals.json` are approximate pattern slices, not runnable-milestone s
 
 ## Procedure: a milestone (trace goal)
 
-1. **Capture a trace** of the real X360 build in Xenia (header of
-   `tools/work/trace_import.py`). In the emulator's `*.config.toml`, `[CPU]` section, set:
+1. **The maintainer captures a trace** of the real X360 build in Xenia. Agents never
+   launch a game other than the decomp's own exe (`bug-test`): if you need a trace, ask
+   for one and give these settings (header of `tools/work/trace_import.py`). In the
+   emulator's `*.config.toml`, `[CPU]` section:
    ```toml
    trace_functions = true
    trace_function_data = true
