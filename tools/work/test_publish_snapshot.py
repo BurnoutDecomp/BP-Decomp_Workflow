@@ -178,6 +178,27 @@ def test_build_audit_updates_do_not_stage_a_runner_gitlink(world):
     assert json.loads(world.read("progress/funcaudit.json"))["meta"]["b5_commit"] == world.old
 
 
+def test_bytematch_publishes_against_the_native_branch_tip_only(world):
+    # The native branch is its own canonical ref: its tip publishes, the dev tip does not.
+    git(world.source, "checkout", "-q", "--detach", world.current)
+    native = commit_file(world.source, "native", "x360 tree")
+    git(world.source, "push", "-q", "origin", "HEAD:refs/heads/x360")
+
+    def stamp(source):
+        (world.repo / "progress/bytematch.json").write_text(json.dumps({"meta": {"b5_commit": source}}))
+        (world.repo / "progress/BYTEMATCH.md").write_text("# Byte matching " + source + "\n")
+
+    stamp(world.current)
+    skipped = world.publish(world.current, kind="bytematch")
+    assert skipped["status"] == "skipped" and skipped["canonical_source_commit"] == native
+    stamp(native)
+    result = world.publish(native, kind="bytematch")
+    assert result["status"] == "published"
+    assert json.loads(world.read("progress/bytematch.json"))["meta"]["b5_commit"] == native
+    assert world.pointer() == world.old          # never touches the dev gitlink
+    assert json.loads(world.read("progress/funcaudit.json"))["meta"]["b5_commit"] == world.old
+
+
 def test_unreachable_canonical_remote_fails_closed(world):
     before = world.head()
     with pytest.raises(subprocess.CalledProcessError):

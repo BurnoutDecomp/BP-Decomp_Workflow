@@ -1,4 +1,4 @@
-"""Publish global CI metadata only while its source is the live canonical dev tip.
+"""Publish global CI metadata only while its source is the live tip of its canonical branch.
 
 Historical/private runs keep their artifacts. They cannot replace main's gitlink,
 audits, dashboard snapshot or latest build merely because they finished later.
@@ -20,9 +20,12 @@ FILES = {
     "reconcile": {"progress/status.json", "progress/class_homes.json",
                   "progress/funcaudit.json", "progress/stubs.json", "progress/source_status.json"},
     "build": {"progress/asmaudit.json", "progress/linked_files.json"},
+    "bytematch": {"progress/bytematch.json", "progress/BYTEMATCH.md"},
 }
 STAMPED = {"progress/funcaudit.json", "progress/stubs.json", "progress/asmaudit.json",
-           "progress/linked_files.json", "progress/source_status.json"}
+           "progress/linked_files.json", "progress/source_status.json", "progress/bytematch.json"}
+# The source branch each kind describes: its runs publish only while they describe its tip.
+BRANCH = {"reconcile": "dev", "build": "dev", "bytematch": "x360"}
 
 
 def git(repo, *args, input=None, env=None, check=True):
@@ -33,21 +36,22 @@ def git(repo, *args, input=None, env=None, check=True):
     return result
 
 
-def eligibility(source_repo, source_commit, workflow_ref):
+def eligibility(source_repo, source_commit, workflow_ref, branch="dev"):
     if not re.fullmatch(r"[0-9a-f]{40}", source_commit):
         raise ValueError("source commit must be a full lowercase hexadecimal SHA")
     result = {"source_commit": source_commit, "workflow_ref": workflow_ref,
               "eligible": False, "canonical_source_commit": None}
     if workflow_ref != "refs/heads/main":
         return {**result, "reason": "workflow ref is not canonical main"}
+    ref = "refs/heads/" + branch
     remote = subprocess.run(["git", "ls-remote", "--exit-code", source_repo,
-                             "refs/heads/dev"], capture_output=True, text=True, check=True)
+                             ref], capture_output=True, text=True, check=True)
     rows = [line.split() for line in remote.stdout.splitlines()]
-    if len(rows) != 1 or rows[0][1] != "refs/heads/dev" or not re.fullmatch(r"[0-9a-f]{40}", rows[0][0]):
-        raise ValueError("canonical dev ref did not resolve unambiguously")
+    if len(rows) != 1 or rows[0][1] != ref or not re.fullmatch(r"[0-9a-f]{40}", rows[0][0]):
+        raise ValueError(f"canonical {branch} ref did not resolve unambiguously")
     tip = rows[0][0]
     return {**result, "canonical_source_commit": tip, "eligible": source_commit == tip,
-            "reason": "current canonical dev" if source_commit == tip else "source snapshot is not current canonical dev"}
+            "reason": f"current canonical {branch}" if source_commit == tip else f"source snapshot is not current canonical {branch}"}
 
 
 def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message,
@@ -55,7 +59,8 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
     repo = Path(repo).resolve()
     if not files or not set(files) <= FILES[kind] or len(set(files)) != len(files):
         raise ValueError("publication paths must be a nonempty unique subset of the named CI outputs")
-    decision = eligibility(source_repo, source_commit, workflow_ref)
+    branch = BRANCH[kind]
+    decision = eligibility(source_repo, source_commit, workflow_ref, branch)
     if not decision["eligible"]:
         return {**decision, "status": "skipped", "published": False, "attempt": 0}
     snapshots = {path: (repo / path).read_bytes() for path in files}
@@ -71,7 +76,7 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
             git(repo, "fetch", "--no-tags", remote, "refs/heads/main")
             parent = git(repo, "rev-parse", "FETCH_HEAD").stdout.decode().strip()
             # Every retry re-reads the remote, never the clone's cached origin/dev.
-            decision = eligibility(source_repo, source_commit, workflow_ref)
+            decision = eligibility(source_repo, source_commit, workflow_ref, branch)
             if not decision["eligible"]:
                 return {**decision, "status": "skipped", "published": False, "attempt": attempt}
             if status_server and "progress/status.json" in snapshots:
@@ -91,7 +96,7 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
             commit = parent if unchanged else git(repo, "commit-tree", tree, "-p", parent, input=message.encode()).stdout.decode().strip()
             # A status refresh/tree build can take time. Recheck immediately before
             # declaring this latest or attempting a push; retry failures recheck too.
-            decision = eligibility(source_repo, source_commit, workflow_ref)
+            decision = eligibility(source_repo, source_commit, workflow_ref, branch)
             if not decision["eligible"]:
                 return {**decision, "status": "skipped", "published": False, "attempt": attempt}
             if unchanged:
@@ -141,7 +146,8 @@ def main():
     if args.attempts < 1 or args.retry_delay < 0:
         parser.error("attempts must be positive and retry delay nonnegative")
     if args.action == "check":
-        result = eligibility(args.source_repo, args.source_commit, args.workflow_ref)
+        result = eligibility(args.source_repo, args.source_commit, args.workflow_ref,
+                             BRANCH.get(args.kind, "dev"))
     else:
         if not args.kind or not args.files or not args.message_file:
             parser.error("publish requires --kind, --files and --message-file")
