@@ -7,7 +7,7 @@ Everything here is produced and read by `tools/bytematch/` (`ledger.py` is the C
 
 | Path | Who writes it | What it is |
 |---|---|---|
-| `progress/bytematch/universe.json.gz` | a maintainer: `work match universe` | Every ARTIST function: `[address, size, name, category, area, tu]`. Sizes come from the image's `.pdata` (packed unwind records) and, for frameless leaves without one, the export's instruction count. `category` is `sdk` for bodies byte-identical to an XDK library function, `unnamed` for functions the ledger has not named, `game` otherwise. `meta.providers` maps each SDK body to its `lib:member`. |
+| `progress/bytematch/universe.json.gz` | a maintainer: `work match universe` | Every ARTIST function: `[address, size, name, category, area, tu]`. Sizes come from the image's `.pdata` (packed unwind records) and, for frameless leaves without one, the export's instruction count minus the trailing zero words (alignment padding, which IDA counts into the function). `category` is `sdk` for bodies the XDK provides (a library function, a CRT save/restore entry point confirmed by name, or a XEX import stub), `unnamed` for functions the ledger has not named, `game` otherwise. `meta.providers` maps each SDK body to its `lib:member` (`import stub`, `module N` for a stub). |
 | `progress/bytematch/objects/<source>.json` | `work match measure ... --record`, `work match refresh --record` | One record per native source, one function per line. |
 | `progress/bytematch/state.json` | `work match refresh --record` | `verified_commit`: every record was current at this `x360` commit. |
 | `progress/bytematch.json`, `progress/BYTEMATCH.md` | CI only | The summary: universe x records x the branch head. |
@@ -20,7 +20,7 @@ source      the source path in the native tree (also the record's own path)
 commit      the pushed x360 commit it was measured at
 blob        the source file's blob id at that commit
 toolchain   "cl <version> flags <fingerprint>": compiler banner + the flags with machine paths removed
-measured    when (UTC)
+measured    when (UTC); a re-measure that changes nothing else keeps the file and this time
 compiled    false when the XDK compile failed; `errors` then holds the first diagnostics
 functions   one per function the object defines:
             symbol (decorated), name (undecorated), artist (address) or none,

@@ -54,7 +54,7 @@ Not for:
 | `exact` | Same length; every instruction word identical outside the fields our object's relocations fill in at link time; every call relocation names the function ARTIST calls there (when ARTIST names it); every literal-pool constant (`__real@...`, `__xmm@...`) holds the same value at the address ARTIST loads it from. |
 | `nonmatching` | A body compiles and pairs by name, but differs. `score` is the fuzzy instruction match (0-100), address-shaped fields abstracted on both sides. Only `exact` scores 100. |
 | `missing` | A named game function no object of the native tree defines. |
-| `sdk` | Byte-identical to a function in the XDK's own `lib/xbox` libraries: linked, never written. |
+| `sdk` | Byte-identical to code the XDK provides: a function of its `lib/xbox` libraries, one of the CRT's register save/restore entry points (`__savegprlr_N`, `__restfpr_N`, ...), or a XEX import stub the linker emits for a kernel, XAM or network import. Linked, never written. |
 | `unnamed` | Not yet named in the ledger: nothing can pair with it until it is. |
 | `unpaired` | (records only) a function our object defines with no ARTIST function of that name: inlined on the console, a helper of ours, or a name that differs. Not progress either way. |
 
