@@ -1,0 +1,31 @@
+{
+ "blob": "b5ed57c5a5cc60ac7fa1b1d5852b854088527b4f",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/GameSource/GameState/RumbleManager/BrnRumbleManager.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 86,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 33.3, "size": 8, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@U__vector4@@@Z"},
+  {"artist": "821FC0A0", "artist_size": 224, "first_diff": 8, "name": "CgsModule::VariableEventQueue<13312,16>::GetFirstEvent", "score": 27.7, "size": 180, "status": "nonmatching", "symbol": "?GetFirstEvent@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@QBAHPAPBUEvent@2@PAH@Z"},
+  {"artist": "821FFA08", "artist_size": 176, "first_diff": 4, "name": "CgsModule::VariableEventQueue<13312,16>::GetEventPaddingSize", "score": 33.8, "size": 132, "status": "nonmatching", "symbol": "?GetEventPaddingSize@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@IBAHH@Z"},
+  {"artist": "82211400", "artist_size": 728, "first_diff": 8, "name": "CgsModule::VariableEventQueue<13312,16>::GetNextEvent", "score": 24.1, "size": 536, "status": "nonmatching", "symbol": "?GetNextEvent@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@QBAHPBUEvent@2@PAPBU32@PAH@Z"},
+  {"artist": "8227EFC8", "artist_size": 76, "calls_unverified": 1, "name": "Attrib::Gen::surfacelist::ChangeWithDefault", "score": 100.0, "size": 76, "status": "exact", "symbol": "?ChangeWithDefault@surfacelist@Gen@Attrib@@QAAPAUCollection@3@_K@Z"},
+  {"artist": "8227FAB0", "artist_size": 168, "first_diff": 32, "name": "Attrib::Gen::surface::surface", "score": 66.7, "size": 132, "status": "nonmatching", "symbol": "??0surface@Gen@Attrib@@QAA@PAUCollection@2@PAX@Z"},
+  {"artist": "82364828", "artist_size": 168, "first_diff": 32, "name": "Attrib::Gen::rumblesurface::rumblesurface", "score": 64.0, "size": 132, "status": "nonmatching", "symbol": "??0rumblesurface@Gen@Attrib@@QAA@ABURefSpec@2@PAX@Z"},
+  {"artist": "823648D0", "artist_size": 168, "first_diff": 52, "name": "BrnGameState::RumbleManager::Prepare", "score": 90.5, "size": 168, "status": "nonmatching", "symbol": "?Prepare@RumbleManager@BrnGameState@@QAA_NXZ"},
+  {"artist": "82364978", "artist_size": 628, "first_diff": 228, "name": "BrnGameState::RumbleManager::BridgeRumbleToInput", "score": 93.0, "size": 628, "status": "nonmatching", "symbol": "?BridgeRumbleToInput@RumbleManager@BrnGameState@@QAAXPAUPreWorldInputBuffer@InputIO@CgsInput@@PBVTimerStatusInterface@CgsSystem@@@Z"},
+  {"artist": "8236E728", "artist_size": 208, "first_diff": 32, "name": "BrnGameState::RumbleManager::UpdatePauseState", "score": 80.8, "size": 208, "status": "nonmatching", "symbol": "?UpdatePauseState@RumbleManager@BrnGameState@@QAAX_NPAV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@@Z"},
+  {"artist": "8236E7F8", "artist_size": 92, "calls_wrong": [{"artist": "CgsInput::InputIO::PlayJoltEffectEvent>::AddEventSafe", "at": 68, "ours": "CgsModule::BaseEventQueue<CgsInput::InputIO::PlayJoltEffectEvent>::AddEventSafe"}], "first_diff": 68, "name": "BrnGameState::RumbleManager::PlayJolt", "score": 95.7, "size": 92, "status": "nonmatching", "symbol": "?PlayJolt@RumbleManager@BrnGameState@@AAAXHABUJoltEffect@InputIO@CgsInput@@@Z"},
+  {"artist": "82378A70", "artist_size": 112, "calls_wrong": [{"artist": "CgsInput::InputIO::PlayJoltEffectEvent,4>::Construct", "at": 64, "ours": "CgsModule::EventQueue<CgsInput::InputIO::PlayJoltEffectEvent,4>::Construct"}, {"artist": "CgsInput::InputIO::PlayRumbleEffectEvent,4>::Construct", "at": 72, "ours": "CgsModule::EventQueue<CgsInput::InputIO::PlayRumbleEffectEvent,4>::Construct"}, {"artist": "CgsInput::InputIO::ChangeVolumeRumbleEffectEvent,4>::Construct", "at": 80, "ours": "CgsModule::EventQueue<CgsInput::InputIO::ChangeVolumeRumbleEffectEvent,4>::Construct"}, {"artist": "CgsInput::InputIO::StopRumbleEffectEvent,4>::Construct", "at": 88, "ours": "CgsModule::EventQueue<CgsInput::InputIO::StopRumbleEffectEvent,4>::Construct"}], "first_diff": 64, "name": "BrnGameState::RumbleManager::Construct", "score": 85.7, "size": 112, "status": "nonmatching", "symbol": "?Construct@RumbleManager@BrnGameState@@QAAXXZ"},
+  {"artist": "82378AE0", "artist_size": 2188, "first_diff": 8, "name": "BrnGameState::RumbleManager::UpdateSurfaceRumble", "score": 42.1, "size": 1856, "status": "nonmatching", "symbol": "?UpdateSurfaceRumble@RumbleManager@BrnGameState@@QAAXPAURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@W4EActiveRaceCarIndex@@@Z"},
+  {"artist": "82379370", "artist_size": 600, "first_diff": 16, "name": "BrnGameState::RumbleManager::UpdateImpacts", "score": 62.9, "size": 608, "status": "nonmatching", "symbol": "?UpdateImpacts@RumbleManager@BrnGameState@@AAAXPAURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@W4EActiveRaceCarIndex@@PAUContactSpyInterface@ContactSpy@BrnPhysics@@@Z"},
+  {"artist": "823795C8", "artist_size": 324, "first_diff": 64, "name": "BrnGameState::RumbleManager::OnVehicleAggressorImpact", "score": 87.7, "size": 324, "status": "nonmatching", "symbol": "?OnVehicleAggressorImpact@RumbleManager@BrnGameState@@QAAXW4EImpactType@Vehicle@BrnPhysics@@@Z"},
+  {"artist": "82386A98", "artist_size": 316, "first_diff": 60, "name": "BrnGameState::RumbleManager::Update", "score": 62.2, "size": 276, "status": "nonmatching", "symbol": "?Update@RumbleManager@BrnGameState@@QAAXPAURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@PAV?$EventQueue@URaceCarCrashEvent@Vehicle@BrnPhysics@@$07@CgsModule@@W4EActiveRaceCarIndex@@PAUContactSpyInterface@ContactSpy@BrnPhysics@@M@Z"},
+  {"artist": "82C130D0", "artist_size": 8, "name": "fabs", "score": 100.0, "size": 8, "status": "exact", "symbol": "?fabs@@YAMM@Z"}
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "blob": "3aac87f55851449b9217237bef94972182bccef9",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/GameSource/Network/Messages/BrnTeamSelectMessage.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 5,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "8257D438", "artist_size": 92, "calls_wrong": [{"artist": "XMemSet", "at": 48, "ours": "memset"}], "first_diff": 48, "name": "BrnNetwork::TeamSelectMessage::Construct", "score": 95.7, "size": 92, "status": "nonmatching", "symbol": "?Construct@TeamSelectMessage@BrnNetwork@@QAAXXZ"},
+  {"artist": "8257D498", "artist_size": 84, "calls_wrong": [{"artist": "XMemSet", "at": 32, "ours": "memset"}, {"artist": "CgsNetwork::TestConnectionMessage::GetPackedMessageSize", "at": 60, "ours": "CgsNetwork::ReliableMessage::GetPackedMessageSize"}], "first_diff": 32, "name": "BrnNetwork::TeamSelectMessage::GetPackedMessageSize", "score": 90.5, "size": 84, "status": "nonmatching", "symbol": "?GetPackedMessageSize@TeamSelectMessage@BrnNetwork@@UAAHXZ"},
+  {"artist": "8257D4F0", "artist_size": 264, "calls_unverified": 5, "calls_wrong": [{"artist": "BrnNetwork::BrnNetworkManager::PackOrUnpack", "at": 168, "ours": "CgsNetwork::Message::PackOrUnpack"}], "first_diff": 168, "name": "BrnNetwork::TeamSelectMessage::PackOrUnpack", "score": 90.9, "size": 264, "status": "nonmatching", "symbol": "?PackOrUnpack@TeamSelectMessage@BrnNetwork@@MAAEXZ"},
+  {"artist": "82580070", "artist_size": 264, "first_diff": 16, "name": "BrnNetwork::TeamSelectMessage::PrepareForSend", "score": 72.7, "size": 264, "status": "nonmatching", "symbol": "?PrepareForSend@TeamSelectMessage@BrnNetwork@@QAAXGPBUPlayerTeamInfo@12@HH_N1@Z"},
+  {"artist": "82580178", "artist_size": 364, "first_diff": 60, "name": "BrnNetwork::TeamSelectMessage::Retrieve", "score": 86.8, "size": 364, "status": "nonmatching", "symbol": "?Retrieve@TeamSelectMessage@BrnNetwork@@QAA_NPAUPlayerTeamInfo@12@PAH1PA_N2@Z"}
+ ]
+}

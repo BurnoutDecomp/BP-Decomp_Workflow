@@ -1,0 +1,26 @@
+{
+ "blob": "dacc72431c0103ea16ac926f217a37caeac9103b",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/GameShared/GameClasses/Sound/Playback/Splicer/SpliceManager.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 10,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "82680EF8", "artist_size": 88, "first_diff": 40, "name": "CgsSound::Playback::Environment::GetAllocator", "score": 95.5, "size": 88, "status": "nonmatching", "symbol": "?GetAllocator@Environment@Playback@CgsSound@@QAAPAUIResourceAllocator@rw@@XZ"},
+  {"artist": "8268AD60", "artist_size": 148, "first_diff": 8, "name": "SpliceManager::VoicePool::AllocateVoicePluginPairToSpliceSample", "score": 47.2, "size": 140, "status": "nonmatching", "symbol": "?AllocateVoicePluginPairToSpliceSample@VoicePool@SpliceManager@@QAAPAUVoicePluginPair@2@PAUSpliceSample@@@Z"},
+  {"artist": "8268ADF8", "artist_size": 128, "data_unchecked": 2, "name": "SpliceManager::VoicePool::FreeVoicePluginPair", "score": 100.0, "size": 128, "status": "exact", "symbol": "?FreeVoicePluginPair@VoicePool@SpliceManager@@QAAXPAUVoicePluginPair@2@@Z"},
+  {"artist": "826A3238", "artist_size": 164, "first_diff": 20, "name": "SpliceManager::FindSplice", "score": 72.5, "size": 156, "status": "nonmatching", "symbol": "?FindSplice@SpliceManager@@QAAPAUSPLICE_Data@@W4SPLICE_TYPE@@H@Z"},
+  {"artist": "826A32E0", "artist_size": 220, "first_diff": 8, "name": "SpliceManager::CreateMonoVoice", "score": 40.4, "size": 216, "status": "nonmatching", "symbol": "?CreateMonoVoice@SpliceManager@@QAAXPAUVoicePluginPair@1@@Z"},
+  {"artist": "826A33C0", "artist_size": 200, "first_diff": 8, "name": "SpliceManager::CreateStereoVoice", "score": 42.4, "size": 196, "status": "nonmatching", "symbol": "?CreateStereoVoice@SpliceManager@@QAAXPAUVoicePluginPair@1@@Z"},
+  {"artist": "826A3488", "artist_size": 352, "first_diff": 116, "name": "SpliceManager::DestroyVoice", "score": 70.5, "size": 352, "status": "nonmatching", "symbol": "?DestroyVoice@SpliceManager@@QAAXPAUVoicePluginPair@1@@Z"},
+  {"artist": "826A35E8", "artist_size": 84, "calls_wrong": [{"artist": "rw::audio::core::PlugIn::Event", "at": 44, "ours": "rw::audio::core::RwacPlugInEvent"}], "first_diff": 44, "name": "SpliceManager::FreeMonoVoicePlugInPair", "score": 95.2, "size": 84, "status": "nonmatching", "symbol": "?FreeMonoVoicePlugInPair@SpliceManager@@QAAXPAUVoicePluginPair@1@@Z"},
+  {"artist": "826A3640", "artist_size": 84, "calls_wrong": [{"artist": "rw::audio::core::PlugIn::Event", "at": 44, "ours": "rw::audio::core::RwacPlugInEvent"}], "first_diff": 44, "name": "SpliceManager::FreeStereoVoicePlugInPair", "score": 95.2, "size": 84, "status": "nonmatching", "symbol": "?FreeStereoVoicePlugInPair@SpliceManager@@QAAXPAUVoicePluginPair@1@@Z"},
+  {"artist": "826AD630", "artist_size": 128, "first_diff": 4, "name": "SpliceManager::Allocate", "score": 12.2, "size": 200, "status": "nonmatching", "symbol": "?Allocate@SpliceManager@@QAAPAXIPBD@Z"},
+  {"artist": "826C30C8", "artist_size": 596, "first_diff": 8, "name": "SpliceManager::SpliceManager", "score": 51.3, "size": 604, "status": "nonmatching", "symbol": "??0SpliceManager@@QAA@ABUEnvironment@Playback@CgsSound@@II@Z"},
+  {"artist": "826C3320", "artist_size": 124, "first_diff": 28, "name": "SpliceManager::LoadSplice", "score": 44.1, "size": 112, "status": "nonmatching", "symbol": "?LoadSplice@SpliceManager@@QAA_NPAXW4SPLICE_TYPE@@@Z"}
+ ]
+}

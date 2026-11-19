@@ -1,0 +1,17 @@
+{
+ "blob": "f89cf0587242285f29899abd5bed45bb7a2f10e2",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/GameSource/World/Bridges/WorldBridgeCrashInputs.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 5,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "827AB8B0", "artist_size": 92, "calls_unverified": 1, "calls_wrong": [{"artist": "BrnPhysics::PhysicsModuleIO::OutputBuffer::Ge", "at": 32, "ours": "BrnPhysics::PhysicsModuleIO::OutputBuffer::GetVehicleOutputInterface"}], "first_diff": 32, "name": "WorldModule::BridgePhysicsModuleToCrashModule_PostPhysics", "score": 91.3, "size": 92, "status": "nonmatching", "symbol": "?BridgePhysicsModuleToCrashModule_PostPhysics@WorldModule@@YAXPAXPAUInputBuffer_PostPhysics@CrashIO@BrnWorld@@PBVOutputBuffer@PhysicsModuleIO@BrnPhysics@@@Z"},
+  {"artist": "827AD708", "artist_size": 128, "first_diff": 44, "name": "WorldModule::BridgeTrafficToCrashModule_PostPhysics", "score": 90.6, "size": 128, "status": "nonmatching", "symbol": "?BridgeTrafficToCrashModule_PostPhysics@WorldModule@@YAXPAXPAUInputBuffer_PostPhysics@CrashIO@BrnWorld@@PBVOutputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@@Z"},
+  {"artist": "827ADEE8", "artist_size": 160, "calls_wrong": [{"artist": "BrnWorldIO::UpdateInputBuffer::GetCrashNetworkIn", "at": 60, "ours": "BrnWorldIO::UpdateInputBuffer::GetCrashNetworkInterface"}, {"artist": "BrnWorldIO::UpdateInputBuffer", "at": 80, "ours": "BrnWorldIO::UpdateInputBuffer::GetGameActionQueue"}, {"artist": "BrnWorldIO::UpdateInputBuffer::GetVehicl", "at": 100, "ours": "BrnWorldIO::UpdateInputBuffer::GetVehicleDriverInputInterface"}], "first_diff": 60, "name": "WorldModule::BridgeInputToCrashModule", "score": 92.5, "size": 160, "status": "nonmatching", "symbol": "?BridgeInputToCrashModule@WorldModule@@YAXPAXPAUInputBuffer_PreScene@CrashIO@BrnWorld@@PBUUpdateInputBuffer@BrnWorldIO@@@Z"}
+ ]
+}

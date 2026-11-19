@@ -1,0 +1,27 @@
+{
+ "blob": "21b2b0123751f35387bd92979bdb90db93275ada",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/SDKs/EATech/eajobs/job.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 12,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "82BC9978", "artist_size": 16, "first_diff": 12, "name": "EA::Jobs::Job::SetData", "score": 85.7, "size": 12, "status": "nonmatching", "symbol": "?SetData@Job@Jobs@EA@@QAAXPAXI@Z"},
+  {"artist": "82BCA110", "artist_size": 228, "first_diff": 4, "name": "EA::Jobs::Job::Clear", "score": 16.4, "size": 212, "status": "nonmatching", "symbol": "?Clear@Job@Jobs@EA@@QAAXXZ"},
+  {"artist": "82BCA1F8", "artist_size": 96, "first_diff": 12, "name": "EA::Jobs::Job::SleepOn", "score": 41.7, "size": 96, "status": "nonmatching", "symbol": "?SleepOn@Job@Jobs@EA@@QAAXXZ"},
+  {"artist": "82BCA258", "artist_size": 72, "first_diff": 0, "name": "EA::Jobs::Job::GetDependency", "score": 5.3, "size": 80, "status": "nonmatching", "symbol": "?GetDependency@Job@Jobs@EA@@QBAPAU123@H@Z"},
+  {"artist": "82BCA2A0", "artist_size": 72, "first_diff": 12, "name": "EA::Jobs::Job::GetDependent", "score": 46.2, "size": 84, "status": "nonmatching", "symbol": "?GetDependent@Job@Jobs@EA@@QBAPAU123@H@Z"},
+  {"artist": "82BCA2E8", "artist_size": 96, "first_diff": 0, "name": "EA::Jobs::Job::IsDone", "score": 29.0, "size": 152, "status": "nonmatching", "symbol": "?IsDone@Job@Jobs@EA@@QBA_NXZ"},
+  {"artist": "82BCA390", "artist_size": 72, "first_diff": 20, "name": "EA::Jobs::Job::GetNumDependents", "score": 61.9, "size": 96, "status": "nonmatching", "symbol": "?GetNumDependents@Job@Jobs@EA@@QBAHXZ"},
+  {"artist": "82BCA3D8", "artist_size": 148, "first_diff": 4, "name": "EA::Jobs::Job::INTERNAL_AddNotReady", "score": 33.8, "size": 160, "status": "nonmatching", "symbol": "?INTERNAL_AddNotReady@Job@Jobs@EA@@QAAPAUJobInstanceHandle@23@PAPAVSchedulerBackend@Detail@23@@Z"},
+  {"artist": "82BCB0C0", "artist_size": 228, "first_diff": 8, "name": "EA::Jobs::Job::Job", "score": 9.0, "size": 216, "status": "nonmatching", "symbol": "??0Job@Jobs@EA@@QAA@PBD@Z"},
+  {"artist": "82BCB1A8", "artist_size": 144, "first_diff": 12, "name": "EA::Jobs::Job::~Job", "score": 17.6, "size": 128, "status": "nonmatching", "symbol": "??1Job@Jobs@EA@@QAA@XZ"},
+  {"artist": "82BCB238", "artist_size": 72, "first_diff": 0, "name": "EA::Jobs::Job::WaitOn", "score": 26.7, "size": 48, "status": "nonmatching", "symbol": "?WaitOn@Job@Jobs@EA@@QBAXP6A?AW4WaitOnControl@23@PAX@Z0H@Z"},
+  {"artist": "82BCB280", "artist_size": 112, "calls_wrong": [{"artist": "EA::Jobs::Job::Dependency,10>::Add", "at": 68, "ours": "EA::Jobs::Detail::BucketListNode<EA::Jobs::Job::Dependency,10>::Add"}, {"artist": "*,6>::Add", "at": 84, "ours": "EA::Jobs::Detail::BucketListNode<EA::Jobs::Job*,6>::Add"}], "first_diff": 68, "name": "EA::Jobs::Job::DependsOn", "score": 92.9, "size": 112, "status": "nonmatching", "symbol": "?DependsOn@Job@Jobs@EA@@QAAXAAU123@W4When@Event@23@@Z"},
+  {"artist": "82BCB2F0", "artist_size": 424, "first_diff": 12, "name": "EA::Jobs::Job::INTERNAL_SubmitEventsAndDeps", "score": 44.2, "size": 480, "status": "nonmatching", "symbol": "?INTERNAL_SubmitEventsAndDeps@Job@Jobs@EA@@QAAXXZ"}
+ ]
+}

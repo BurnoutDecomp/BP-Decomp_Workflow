@@ -1,0 +1,29 @@
+{
+ "blob": "fc33aa23256918264617dccb88b13ae88a8755c2",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/GameShared/GameClasses/Gui/Model/CgsModelModule.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 59,
+ "functions": [
+  {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "8227CEC8", "artist_size": 160, "first_diff": 4, "name": "CgsModule::VariableEventQueue<2048,16>::GetLength", "score": 23.2, "size": 116, "status": "nonmatching", "symbol": "?GetLength@?$VariableEventQueue@$0IAA@$0BA@@CgsModule@@QBAHXZ"},
+  {"artist": "823B01D0", "artist_size": 168, "first_diff": 4, "name": "CgsModule::VariableEventQueue<32768,16>::GetLength", "score": 27.4, "size": 124, "status": "nonmatching", "symbol": "?GetLength@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QBAHXZ"},
+  {"artist": "823B6F30", "artist_size": 88, "data_unchecked": 2, "name": "CgsModule::LockBuffersForIO", "score": 100.0, "size": 88, "status": "exact", "symbol": "?LockBuffersForIO@CgsModule@@YAXPAUIOBuffer@1@@Z"},
+  {"artist": "823B6F88", "artist_size": 88, "data_unchecked": 2, "name": "CgsModule::UnlockBuffersForIO", "score": 100.0, "size": 88, "status": "exact", "symbol": "?UnlockBuffersForIO@CgsModule@@YAXPAUIOBuffer@1@@Z"},
+  {"artist": "827E4F10", "artist_size": 148, "calls_unverified": 5, "data_unchecked": 3, "name": "CgsGui::ModelModule::ModelModule", "score": 100.0, "size": 148, "status": "exact", "symbol": "??0ModelModule@CgsGui@@QAA@XZ"},
+  {"artist": "82847760", "artist_size": 128, "name": "CgsGui::ModelModule::Construct", "score": 100.0, "size": 128, "status": "exact", "symbol": "?Construct@ModelModule@CgsGui@@UAAX_N@Z"},
+  {"artist": "828477E0", "artist_size": 316, "first_diff": 280, "name": "CgsGui::ModelModule::Prepare", "score": 92.4, "size": 316, "status": "nonmatching", "symbol": "?Prepare@ModelModule@CgsGui@@UAA_NHHHHHHH@Z"},
+  {"artist": "82847920", "artist_size": 296, "first_diff": 4, "name": "CgsGui::ModelModule::Release", "score": 49.7, "size": 380, "status": "nonmatching", "symbol": "?Release@ModelModule@CgsGui@@UAA_NXZ"},
+  {"artist": "8284E870", "artist_size": 440, "first_diff": 0, "name": "CgsGui::EventInterpreterModule::sMapEntry::sMapEntry", "score": 0.0, "size": 48, "status": "nonmatching", "symbol": "??0sMapEntry@EventInterpreterModule@CgsGui@@QAA@XZ"},
+  {"artist": "8285B148", "artist_size": 196, "first_diff": 4, "name": "CgsGui::ModelModule::BridgeOutEventInterpreter", "score": 24.4, "size": 132, "status": "nonmatching", "symbol": "?BridgeOutEventInterpreter@ModelModule@CgsGui@@AAAXPAUOutputBuffer@ModelIO@2@PBU3EventInterpreterModuleIO@2@@Z"},
+  {"artist": "8285DE98", "artist_size": 184, "calls_unverified": 2, "calls_wrong": [{"artist": "??$CreateIOBuffer@VInputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@EventIn", "at": 60, "ours": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::EventInterpreterModuleIO::InputBuffer>"}, {"artist": "??$CreateIOBuffer@VOutputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Event", "at": 76, "ours": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::EventInterpreterModuleIO::OutputBuffer>"}, {"artist": "??$DestroyIOBuffer@VOutputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Even", "at": 160, "ours": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::EventInterpreterModuleIO::OutputBuffer>"}, {"artist": "??$DestroyIOBuffer@VInputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@EventI", "at": 172, "ours": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::EventInterpreterModuleIO::InputBuffer>"}], "data_unchecked": 1, "first_diff": 60, "name": "CgsGui::ModelModule::PreWorldUpdate", "score": 87.0, "size": 184, "status": "nonmatching", "symbol": "?PreWorldUpdate@ModelModule@CgsGui@@UAAXPAUIOBufferStack@CgsModule@@0PAUOutputBuffer@ModelIO@2@@Z"},
+  {"artist": "8285DF50", "artist_size": 168, "first_diff": 4, "name": "CgsGui::ModelModule::AddGuiEvents", "score": 27.5, "size": 152, "status": "nonmatching", "symbol": "?AddGuiEvents@ModelModule@CgsGui@@QAAXPBV?$VariableEventQueue@$0EIAA@$0BA@@CgsModule@@PAUInputBuffer@ModelIO@2@@Z"},
+  {"artist": "8285E0A0", "artist_size": 128, "first_diff": 52, "name": "CgsGui::ModelModule::BridgeInEventInterpreter", "score": 96.9, "size": 128, "status": "nonmatching", "symbol": "?BridgeInEventInterpreter@ModelModule@CgsGui@@AAAXPAUInputBuffer@EventInterpreterModuleIO@2@PBU3ModelIO@2@@Z"},
+  {"artist": "8285E120", "artist_size": 176, "first_diff": 44, "name": "CgsGui::ModelModule::BridgeOutGuiResource", "score": 86.4, "size": 176, "status": "nonmatching", "symbol": "?BridgeOutGuiResource@ModelModule@CgsGui@@AAAXPAUOutputBuffer@ModelIO@2@PBU3GuiResourceModuleIO@2@@Z"},
+  {"artist": "8285F360", "artist_size": 660, "first_diff": 16, "name": "CgsGui::ModelModule::Update", "score": 73.9, "size": 660, "status": "nonmatching", "symbol": "?Update@ModelModule@CgsGui@@UAAXPAUIOBufferStack@CgsModule@@0PAUInputBuffer@ModelIO@2@PAUOutputBuffer@62@@Z"}
+ ]
+}

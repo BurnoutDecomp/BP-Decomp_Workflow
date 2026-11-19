@@ -1,0 +1,22 @@
+{
+ "blob": "63e8d0c15e1453090100bc1de57ae9e695f54bb1",
+ "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "compiled": true,
+ "measured": "2026-11-19T20:44:25Z",
+ "schema": 1,
+ "source": "src/SDKs/XAudio/XAudioXenonRenderer.cpp",
+ "tool": 1,
+ "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
+ "unpaired": 0,
+ "functions": [
+  {"artist": "82962D78", "artist_size": 32, "first_diff": 4, "name": "XAUDIO::CXenonRenderer::Initialize", "score": 50.0, "size": 32, "status": "nonmatching", "symbol": "?Initialize@CXenonRenderer@XAUDIO@@QAAHPBUSXenonRendererInitParams@2@@Z"},
+  {"artist": "82962D98", "artist_size": 104, "calls_wrong": [{"artist": "XAudioUnregisterRenderDriverClient", "at": 44, "ours": "XAUDIO::XAudioUnregisterRenderDriverClient"}, {"artist": "XAudioRegisterRenderDriverClient", "at": 92, "ours": "XAUDIO::XAudioRegisterRenderDriverClient"}], "first_diff": 44, "name": "XAUDIO::CXenonRenderer::SetCallback", "score": 92.3, "size": 104, "status": "nonmatching", "symbol": "?SetCallback@CXenonRenderer@XAUDIO@@QAAHPAX@Z"},
+  {"artist": "82962E00", "artist_size": 192, "first_diff": 8, "name": "XAUDIO::CXenonRenderer::CaptureXBMAudioFrame", "score": 66.7, "size": 240, "status": "nonmatching", "symbol": "?CaptureXBMAudioFrame@CXenonRenderer@XAUDIO@@QAAPAXPAUCFrameBufferProcessingData@2@@Z"},
+  {"artist": "82962EC0", "artist_size": 184, "first_diff": 24, "name": "XAUDIO::CXenonRenderer::~CXenonRenderer", "score": 68.9, "size": 176, "status": "nonmatching", "symbol": "??1CXenonRenderer@XAUDIO@@QAA@XZ"},
+  {"artist": "82962F80", "artist_size": 72, "first_diff": 0, "name": "XAUDIO::CXenonRenderer::Release", "score": 0.0, "size": 8, "status": "nonmatching", "symbol": "?Release@CXenonRenderer@XAUDIO@@QAAHXZ"},
+  {"artist": "82962FC8", "artist_size": 24, "name": "XAUDIO::CXenonRenderer::GetInfo", "score": 100.0, "size": 24, "status": "exact", "symbol": "?GetInfo@CXenonRenderer@XAUDIO@@QAAHPAUSXenonRendererInfo@2@@Z"},
+  {"artist": "82963000", "artist_size": 96, "calls_wrong": [{"artist": "XAudioFrameBuffer_GetProcessingData", "at": 28, "ours": "XAUDIO::XAudioFrameBuffer_GetProcessingData"}, {"artist": "XAudioSubmitRenderDriverFrame", "at": 72, "ours": "XAUDIO::XAudioSubmitRenderDriverFrame"}], "first_diff": 28, "name": "XAUDIO::CXenonRenderer::Process", "score": 91.7, "size": 96, "status": "nonmatching", "symbol": "?Process@CXenonRenderer@XAUDIO@@QAAHPAX@Z"},
+  {"artist": "829630B0", "artist_size": 72, "first_diff": 0, "name": "XAUDIO::CXenonRenderer::CXenonRenderer", "score": 25.0, "size": 56, "status": "nonmatching", "symbol": "??0CXenonRenderer@XAUDIO@@QAA@PBUSXenonRendererCreateParams@1@@Z"},
+  {"artist": "8296B1E8", "artist_size": 8, "name": "XAUDIO::CXenonRenderer::QueryInterface", "score": 100.0, "size": 8, "status": "exact", "symbol": "?QueryInterface@CXenonRenderer@XAUDIO@@QAAPAXPAPAX@Z"}
+ ]
+}
