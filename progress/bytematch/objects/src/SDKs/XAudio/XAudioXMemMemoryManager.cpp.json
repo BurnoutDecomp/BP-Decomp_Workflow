@@ -2,14 +2,14 @@
  "blob": "aafffad8766bfa706ddcac9c6a096cef1dfa80e1",
  "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-19T21:08:30Z",
  "schema": 1,
  "source": "src/SDKs/XAudio/XAudioXMemMemoryManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
  "unpaired": 0,
  "functions": [
-  {"artist": "82964D78", "artist_size": 16, "first_diff": 12, "name": "XAUDIO::CXMemMemoryManager::XMemAlloc", "score": 57.1, "size": 12, "status": "nonmatching", "symbol": "?XMemAlloc@CXMemMemoryManager@XAUDIO@@QAAPAXII@Z"},
-  {"artist": "82964D88", "artist_size": 16, "first_diff": 12, "name": "XAUDIO::CXMemMemoryManager::XMemFree", "score": 57.1, "size": 12, "status": "nonmatching", "symbol": "?XMemFree@CXMemMemoryManager@XAUDIO@@QAAXPAXI@Z"}
+  {"artist": "82964D78", "artist_size": 12, "calls_wrong": [{"artist": "XMemAlloc", "at": 8, "ours": "XAUDIO::XMemAllocPlatform"}], "first_diff": 8, "name": "XAUDIO::CXMemMemoryManager::XMemAlloc", "score": 66.7, "size": 12, "status": "nonmatching", "symbol": "?XMemAlloc@CXMemMemoryManager@XAUDIO@@QAAPAXII@Z"},
+  {"artist": "82964D88", "artist_size": 12, "calls_wrong": [{"artist": "XMemFree", "at": 8, "ours": "XAUDIO::XMemFreePlatform"}], "first_diff": 8, "name": "XAUDIO::CXMemMemoryManager::XMemFree", "score": 66.7, "size": 12, "status": "nonmatching", "symbol": "?XMemFree@CXMemMemoryManager@XAUDIO@@QAAXPAXI@Z"}
  ]
 }
