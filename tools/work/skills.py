@@ -228,6 +228,8 @@ def check_paths(rep, path, text):
         if not token or token in seen or "/" not in token:
             continue
         seen.add(token)
+        if "..." in token or re.search(r"(?:^|/)(?:Foo|Bar|Baz|MyClass|Example)\w*(?:\.\w+)?$", token):
+            continue                                  # an illustrative placeholder path
         if token.startswith("b5-decomp/") and not b5_populated:
             continue
         if os.path.exists(os.path.join(ROOT, token)):

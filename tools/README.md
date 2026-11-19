@@ -7,7 +7,8 @@ root unless a section says otherwise.
 
 | Path | Purpose |
 | --- | --- |
-| [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. |
+| [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. Also `work skills` (the agent skills in [`../.agents/skills/`](../.agents/skills/README.md)), `work hooks` and `work mount`. |
+| [`githooks/`](githooks/) | Committed git hooks, switched on per checkout with `work hooks install` (`work bootstrap` does it). `pre-commit` refuses commits that stage the files the reconcile bot owns. |
 | [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
 | [`assets/build_game_data.py`](assets/build_game_data.py) | **The game-data stager.** Turns a stock X360 game folder into a launchable PC data folder, driven by [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml). See "Building the game data folder" below. |
@@ -185,5 +186,15 @@ work show <tu> --full
 work submit <tu>
 ```
 
-See [`../progress/README.md`](../progress/README.md) and
-[`../AGENTS.md`](../AGENTS.md) for the complete reconstruction workflow.
+Agent setup and guard rails:
+
+```powershell
+work skills link        # make Claude Code see .agents/skills (once per checkout)
+work skills check       # validate every skill: links, tool paths, flags, index, hygiene
+work skills show <name> # print a skill for a loop that has no skill loader
+work hooks install      # switch on tools/githooks (once per checkout)
+work mount <file> --commit --push   # mount a TU: ONLY your lines, on origin/main
+```
+
+See [`../progress/README.md`](../progress/README.md), [`../AGENTS.md`](../AGENTS.md) and
+the skills in [`../.agents/skills/`](../.agents/skills/README.md) for the complete workflow.
