@@ -190,7 +190,7 @@ and 2. Shared helpers live in `_net_pair_common.ps1` (outside `cases\`, dot-sour
   marks.txt gets `MENUSCRIPT done=<k>/<n>` plus one line per step; each step line ends in
   `(log line <n>)`, the BrnGame.log lines read when it ran, so a check can attribute a game line
   to the tap before it (`cases\pause_event_intro.ps1`).
-* **PROOF helpers** (`tools	ests	ools\PROOF_*.ps1`): `PROOF_run.ps1 -Case <c> [-Repeat n]`
+* **PROOF helpers** (`tools\tests\tools\PROOF_*.ps1`): `PROOF_run.ps1 -Case <c> [-Repeat n]`
   restores the pinned box save around a run while HOLDING the box lock; `PROOF_batch.ps1 -Cases
   "a,b,b"` runs a list through it into a progress file; `PROOF_boxfree` / `PROOF_waitbox` /
   `PROOF_waitexe` / `PROOF_waitfile` poll the lock, the exe, or a file.
