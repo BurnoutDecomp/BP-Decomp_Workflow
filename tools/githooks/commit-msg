@@ -1,0 +1,29 @@
+#!/bin/sh
+# Parent-repo commit-msg guard (see pre-commit). If this clone has an untracked
+# `.git/info/public-denylist` (one regex per line, `#` comments), the commit message must
+# match none of it. Override for one deliberate commit:  BP_ALLOW_DENYLIST=1 git commit ...
+
+[ "${BP_ALLOW_DENYLIST:-}" = "1" ] && exit 0
+for state in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD; do
+  git rev-parse -q --verify "$state" >/dev/null 2>&1 && exit 0
+done
+for dir in rebase-merge rebase-apply; do
+  [ -d "$(git rev-parse --git-path "$dir")" ] && exit 0
+done
+
+deny="$(git rev-parse --git-common-dir)/info/public-denylist"
+[ -f "$deny" ] || exit 0
+patterns=$(mktemp) || exit 1
+grep -v -E '^[[:space:]]*(#|$)' "$deny" > "$patterns"
+status=0
+if [ -s "$patterns" ]; then
+  found=$(grep -v '^#' "$1" | grep -n -i -E -f "$patterns" | cut -c1-160)
+  if [ -n "$found" ]; then
+    echo "commit-msg: the message matches this clone's public-denylist:" >&2
+    echo "$found" | sed 's/^/  /' >&2
+    echo "Reword it. Override for one deliberate commit: BP_ALLOW_DENYLIST=1 git commit ..." >&2
+    status=1
+  fi
+fi
+rm -f "$patterns"
+exit $status

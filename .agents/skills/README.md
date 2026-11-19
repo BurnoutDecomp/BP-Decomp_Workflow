@@ -108,4 +108,6 @@ This repository is public.
 
 `work skills check` validates every skill: frontmatter, name equals folder, description
 length, body length, relative links, tool paths that exist, the user-invoked flags, and
-that every skill is in this index and in AGENTS.md's routing table.
+that every skill is in this index and in AGENTS.md's routing table. It also rejects e-mail
+addresses, user-profile paths and any pattern in the clone's untracked
+`.git/info/public-denylist` (one regex per line), which the git hooks apply to every commit.

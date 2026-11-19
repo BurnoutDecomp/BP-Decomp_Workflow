@@ -58,6 +58,29 @@ HYGIENE = (
 )
 EMAIL_OK = ("noreply@anthropic.com", "@users.noreply.github.com", "@example.com", "@example.org",
             "git@github.com")   # the SSH remote user, not a person
+_DENYLIST = None
+
+
+def local_denylist():
+    """Extra patterns from the clone's untracked `<git-common-dir>/info/public-denylist`: one
+    regex per line, case-insensitive, `#` starts a comment. A maintainer keeps terms out of the
+    public files this way without naming them in a tracked one; tools/githooks/ reads it too."""
+    global _DENYLIST
+    if _DENYLIST is None:
+        _DENYLIST = []
+        try:
+            common = subprocess.run(["git", "rev-parse", "--git-common-dir"], cwd=ROOT,
+                                    capture_output=True, text=True).stdout.strip()
+            path = os.path.join(common if os.path.isabs(common) else os.path.join(ROOT, common),
+                                "info", "public-denylist")
+            with open(path, encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#"):
+                        _DENYLIST.append((re.compile(line, re.I), "matches the clone's public-denylist"))
+        except (OSError, re.error):
+            pass
+    return _DENYLIST
 
 
 # --------------------------------------------------------------------------- parsing
@@ -251,7 +274,7 @@ def check_paths(rep, path, text):
 
 def check_hygiene(rep, path, text):
     for n, line in enumerate(text.splitlines(), 1):
-        for rx, what in HYGIENE:
+        for rx, what in HYGIENE + tuple(local_denylist()):
             for m in rx.finditer(line):
                 if what == "e-mail address" and any(m.group(0).endswith(ok) for ok in EMAIL_OK):
                     continue
