@@ -12,16 +12,17 @@ an agent needs into a single document so it never has to hunt through
   - the ORIGINAL LegacySrc source file, when the TU's primary_file exists in the LegacySrc partial source
   - DecFIGS dwarfdump declaration/type/local-variable hints for the TU/source file
   - a pointer to relevant type headers
+  - which local inputs are missing, when one is (none of them is in git; each clone supplies them)
 
 Used by `work show <tu> --full`. Kept separate from work.py so the assembly logic
 is reusable and testable.
 """
-import json, os, re
+import json, os, re, sys
 from functools import lru_cache
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 X360_EXPORTS = os.path.join(ROOT, ".ida-exports", "BURNOUT_X360_ARTIST.XEX")
-FEB2007 = os.path.join(ROOT, "references", "LegacySrc", "BrnEntityModuleUnity")
+LEGACY_SRC = os.path.join(ROOT, "references", "LegacySrc", "BrnEntityModuleUnity")
 DECFIGS_DWARFDUMP = os.path.join(ROOT, "references", "DecFIGS", "dwarfdump")
 RW_INCLUDE = "b5-decomp/vendor/renderware/include"
 WIKI_TYPES = os.path.join(ROOT, "references", "Wiki", "types.json")
@@ -38,18 +39,46 @@ MAX_WIKI_TYPES = 12
 MAX_WIKI_FIELDS = 40
 
 
+# ---------------------------------------------------------------- local inputs
+# None of the overlays' inputs is in git: each clone supplies them. A missing one must not
+# read as "nothing found for this TU", so the dossier names it (and stderr says so once).
+def _rel(path):
+    return os.path.relpath(path, ROOT).replace("\\", "/")
+
+
+def missing_inputs():
+    """[(path relative to the repo, what the dossier loses without it)] for each absent input."""
+    inputs = ((X360_EXPORTS, "pseudocode, locals, asm and callee signatures"),
+              (LEGACY_SRC, "the LegacySrc partial-source section"),
+              (DECFIGS_DWARFDUMP, "the DecFIGS dwarfdump hints"),
+              (WIKI_TYPES, "the burnout.wiki type section"))
+    return [(_rel(path), lost) for path, lost in inputs if not os.path.exists(path)]
+
+
+_warned_missing = False
+
+
+def _warn_missing(missing):
+    """One stderr line per process, so a dossier written to a file (-o) still shows it."""
+    global _warned_missing
+    if missing and not _warned_missing:
+        _warned_missing = True
+        print("warning: dossier inputs missing (local inputs, not in git): "
+              + ", ".join(path for path, _ in missing), file=sys.stderr)
+
+
 # ---------------------------------------------------------------- LegacySrc overlay
 @lru_cache(maxsize=1)
 def feb2007_index():
     """Map normalized path-suffix -> absolute path for every source file in the LegacySrc partial source."""
     idx = {}
-    if not os.path.isdir(FEB2007):
+    if not os.path.isdir(LEGACY_SRC):
         return idx
-    for dp, _, fs in os.walk(FEB2007):
+    for dp, _, fs in os.walk(LEGACY_SRC):
         for f in fs:
             if f.endswith((".cpp", ".h", ".hpp", ".inl", ".c")):
                 full = os.path.join(dp, f)
-                rel = os.path.relpath(full, FEB2007).replace("\\", "/")
+                rel = os.path.relpath(full, LEGACY_SRC).replace("\\", "/")
                 idx[rel] = full
     return idx
 
@@ -256,6 +285,12 @@ def assemble(con, tu_row, funcs, with_asm=False):
     w("naming: all new owned code follows references/CXX_NAMING_CONVENTIONS.md "
       "(scope+type prefixes mpX/lfX, KI_/KU_/KF_ constants, E_ enums, PascalCase types). "
       "Convention wins over Hex-Rays names, except for external/generated/platform APIs.")
+    missing = missing_inputs()
+    if missing:
+        w("MISSING LOCAL INPUTS (not in git; each clone supplies them). This dossier lacks:")
+        for path, lost in missing:
+            w(f"  - {lost} ({path} not found)")
+        _warn_missing(missing)
 
     # which of this TU's functions the active goal's milestone actually exercised
     gname, executed = _active_goal_executed()
@@ -279,6 +314,8 @@ def assemble(con, tu_row, funcs, with_asm=False):
             w("    " + ln)
         if len(lines) > MAX_SRC_LINES:
             w(f"    ... [{len(lines)-MAX_SRC_LINES} more lines — open {src[1]}]")
+    elif tu_row["source"] == "decfigs" and not os.path.isdir(LEGACY_SRC):
+        w(f"\n--- LEGACYSRC PARTIAL SOURCE: not checked, {_rel(LEGACY_SRC)}/ is missing ---")
     else:
         w("\n--- ORIGINAL SOURCE: none in the LegacySrc partial source for this TU ---")
 
@@ -300,6 +337,8 @@ def assemble(con, tu_row, funcs, with_asm=False):
                 w("    " + ln)
             if len(lines) > MAX_DWARF_LINES:
                 w(f"    ... [{len(lines)-MAX_DWARF_LINES} more lines - open {full}]")
+    elif tu_row["source"] == "decfigs" and not os.path.isdir(DECFIGS_DWARFDUMP):
+        w(f"\n--- DECFIGS DWARFDUMP HINTS: not checked, {_rel(DECFIGS_DWARFDUMP)}/ is missing ---")
     else:
         w("\n--- DECFIGS DWARFDUMP HINTS: none found for this TU/source path ---")
 
@@ -338,6 +377,8 @@ def assemble(con, tu_row, funcs, with_asm=False):
         if len(wm) > MAX_WIKI_TYPES:
             extra = ", ".join(t for t, _ in wm[MAX_WIKI_TYPES:])
             w(f"\n  +{len(wm)-MAX_WIKI_TYPES} more documented types: {extra}")
+    elif not os.path.isfile(WIKI_TYPES):
+        w(f"\n--- WIKI TYPES: not checked, {_rel(WIKI_TYPES)} is missing ---")
 
     # per-function brief
     for f in funcs:

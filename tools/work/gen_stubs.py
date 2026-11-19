@@ -142,17 +142,28 @@ def report_headers(callees, identity, index):
 
     if not by_header and not no_attrib:
         return
-    ref_idx = build_ref_index() if any(
-        not os.path.exists(os.path.join(SRC_ROOT, h)) for h in by_header) else {}
+    need_refs = any(not os.path.exists(os.path.join(SRC_ROOT, h)) for h in by_header)
+    ref_idx = build_ref_index() if need_refs else {}
+    # the reference trees are local inputs (not in git); an absent one was not searched
+    absent = [(tag, root) for tag, root in REF_TREES if not os.path.isdir(root)] if need_refs else []
 
     print("\nHeaders to reconstruct & #include (rebuild the real header; do not fork the type locally):")
+    if absent:
+        print("  WARNING: reference tree(s) missing, not searched: "
+              + ", ".join(os.path.relpath(root, ROOT).replace("\\", "/") for _, root in absent)
+              + " (local inputs, not in git)")
     for h in sorted(by_header):
         if os.path.exists(os.path.join(SRC_ROOT, h)):
             status = "EXISTS in b5-decomp/src -- just #include it"
         else:
             refs = sorted(ref_idx.get(os.path.basename(h), []))
-            status = ("NEEDS REBUILD -- reference: " + ", ".join(refs)) if refs \
-                     else "NEEDS REBUILD -- no reference header found (forward-decl may be justified)"
+            if refs:
+                status = "NEEDS REBUILD -- reference: " + ", ".join(refs)
+            elif absent:
+                status = ("NEEDS REBUILD -- not in the reference trees present (missing: "
+                          + ", ".join(tag for tag, _ in absent) + ")")
+            else:
+                status = "NEEDS REBUILD -- no reference header found (forward-decl may be justified)"
         print(f'  #include "{h}"   [{status}]')
         for cn in sorted(by_header[h]):
             print(f"      - {cn}")
