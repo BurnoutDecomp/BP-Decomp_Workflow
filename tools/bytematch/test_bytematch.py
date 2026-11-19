@@ -293,7 +293,9 @@ def test_untyped_entry_points_run_to_the_next_symbol():
 
 def test_import_stub_shapes():
     import sdk
-    assert sdk.import_stub([0x386000A4, 0x38800001, 0x7D6903A6, 0x4E800420]) == (0xA4, 1)
+    # li r3,<module index>; li r4,<ordinal>: ARTIST's XGetLaunchData is module 0, ordinal 424
+    assert sdk.import_stub([0x38600000, 0x388001A8, 0x7D6903A6, 0x4E800420]) == (424, 0)
+    assert sdk.import_stub([0x38600001, 0x388000A4, 0x7D6903A6, 0x4E800420]) == (0xA4, 1)
     assert sdk.import_stub([0x3D608200, 0x816B1234, 0x7D6903A6, 0x4E800420]) == (-1, -1)
     assert sdk.import_stub([0x38600000, 0x38800000, 0x7D6903A6, BLR]) is None
 

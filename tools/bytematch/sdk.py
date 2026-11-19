@@ -28,13 +28,14 @@ def import_stub(words):
     """(ordinal, module) when four words are an XEX import stub, else None.
 
     The linker emits one per imported kernel/XAM/network function from the XDK's import
-    libraries. In the image the loader has not patched it yet: `li r3,<ordinal>;
-    li r4,<module>; mtctr r11; bctr`. A patched one reads `lis r11; lwz r11; mtctr; bctr`.
+    libraries. In the image the loader has not patched it yet: `li r3,<module index>;
+    li r4,<ordinal>; mtctr r11; bctr` (ARTIST's XGetLaunchData: module 0, ordinal 424).
+    A patched one reads `lis r11; lwz r11; mtctr; bctr` and gives (-1, -1).
     """
     if len(words) != 4 or words[2] != MTCTR_R11 or words[3] != BCTR:
         return None
     if words[0] >> 16 == 0x3860 and words[1] >> 16 == 0x3880:
-        return words[0] & 0xFFFF, words[1] & 0xFFFF
+        return words[1] & 0xFFFF, words[0] & 0xFFFF
     if words[0] >> 16 == 0x3D60 and words[1] >> 16 == 0x816B:
         return -1, -1
     return None
@@ -114,7 +115,8 @@ def identify(artist: Artist, lib_dir, log=print):
     out = {}
     for address, (ordinal, module) in stubs.items():
         if address not in claims:
-            out[address] = {"lib": "import stub", "member": f"module {module}", "symbol": artist.names.get(address, ""),
+            member = f"module {module} ordinal {ordinal}" if module >= 0 else "patched by the loader"
+            out[address] = {"lib": "import stub", "member": member, "symbol": artist.names.get(address, ""),
                             "ordinal": ordinal, "variants": 1}
     for address, providers in claims.items():
         # Prefer a name-confirmed provider, then the release library over d/i variants.
