@@ -71,6 +71,15 @@ def _spawn(cmd, dry):
 
 
 def run_bat(bat, *args, dry=False):
+    damaged = crlf_damage()
+    if damaged:
+        print(f"ERROR: {len(damaged)} batch file(s) are not pure CRLF -- cmd.exe mis-parses them, "
+              "and git reports them CLEAN because it normalises line endings:")
+        for path in damaged[:10]:
+            print(f"         {path}")
+        print("       An LF-writing tool (sed -i, tee, a heredoc) rewrote them. Repair each one: "
+              "delete it, then `git checkout -- <file>`, and redo the edit with a CRLF-preserving tool.")
+        return 2
     return _spawn(["cmd.exe", "/c", bat, *args], dry)
 
 
@@ -187,6 +196,33 @@ def missing_mounts():
                 if not os.path.exists(os.path.join(base, rel)):
                     out.append(tok)
                 break
+    return out
+
+
+def crlf_damage():
+    """Tracked .bat/.cmd files whose working copy is not pure CRLF.
+
+    WHY. .gitattributes stores batch files with LF and checks them out with CRLF, so a
+    tool that rewrites one with LF endings leaves a file git reports CLEAN (it normalises
+    to the very same blob) while cmd.exe cannot parse it: the build dies in parse garbage
+    with nothing in `git diff`. Git cannot see this, so the build driver looks before it
+    runs any batch file.
+    """
+    try:
+        res = subprocess.run(["git", "ls-files", "-z", "--", "*.bat", "*.cmd"], cwd=REPO,
+                             capture_output=True, check=True)
+        paths = [p for p in res.stdout.decode("utf-8", "replace").split("\0") if p]
+    except (OSError, subprocess.CalledProcessError):
+        return []
+    out = []
+    for p in paths:
+        try:
+            with open(os.path.join(REPO, p), "rb") as f:
+                data = f.read()
+        except OSError:
+            continue
+        if data.count(b"\n") != data.count(b"\r\n"):
+            out.append(p)
     return out
 
 
@@ -323,6 +359,13 @@ def cmd_doctor(cfg, args):
               "exe", "stale build_game_exe.bat -- fetch the parent and re-sync the mount list")
     else:
         r.row("ok", "every mounted TU exists on disk")
+    damaged = crlf_damage()
+    if damaged:
+        r.row("fail", f"{len(damaged)} batch file(s) not pure CRLF (first: {damaged[0]}) -- cmd.exe "
+                      "mis-parses them while git reports them clean", "exe, lua, ffmpeg",
+              "delete each one, then git checkout -- <file>")
+    else:
+        r.row("ok", "every tracked .bat/.cmd is pure CRLF")
     if exe_locked():
         r.row("warn", f"{EXE} is LOCKED -- the link would fail with LNK1104; "
                       "close the game running out of THIS tree before `build exe`")

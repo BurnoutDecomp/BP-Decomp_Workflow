@@ -37,6 +37,12 @@ Commands:
     work server-reset [--to REF]
                               full revert: git reset + drop ledger cache + reseed server
     work worker-add <name> | worker-list | worker-revoke <id>   (maintainer) manage ids
+    work skills link|check|list|show <name>
+                              agent skills in .agents/skills/ (link = make Claude Code see them)
+    work hooks install|status|uninstall
+                              the committed git hooks in tools/githooks/
+    work mount <file>... [--commit [--push]]
+                              add exe-build mount lines; --commit builds a commit of ONLY them on origin/main
 
 Coordination is OPTIONAL. By default `work` runs fully locally (ledger + git). To use the
 server, put config in a repo-root `.env` (copy `.env.example`, auto-loaded here): set
@@ -1688,7 +1694,10 @@ def cmd_server_update(args):
     if changed:
         msg = "chore: refresh server inputs (class_homes" + (" + status" if args.reconcile else "") + ")"
         print("\n== commit progress ==")
-        subprocess.run(["git", "commit", "--only", "-m", msg, "--", *progress_paths], cwd=ROOT, check=True)
+        # These are bot-owned files the parent pre-commit hook refuses; this maintainer
+        # command is the sanctioned way to commit them, so it passes the hook's override.
+        subprocess.run(["git", "commit", "--only", "-m", msg, "--", *progress_paths], cwd=ROOT, check=True,
+                       env={**os.environ, "BP_ALLOW_BOT_FILES": "1"})
         if args.no_push:
             print("  committed locally (--no-push); the server cannot pull it until you push the workflow branch")
         else:
@@ -2022,7 +2031,7 @@ def cmd_bootstrap(args):
     #    deeply self-referential test-package submodules that blow past Windows
     #    MAX_PATH). Only init what is NOT already populated, so we never run a
     #    checkout that could clobber uncommitted reconstruction work.
-    print("[1/5] git submodules ...", flush=True)
+    print("[1/6] git submodules ...", flush=True)
     b5 = os.path.join(ROOT, "b5-decomp")
     if not os.path.exists(os.path.join(b5, "CMakeLists.txt")):
         subprocess.run(["git", "submodule", "update", "--init"], cwd=ROOT)
@@ -2041,7 +2050,7 @@ def cmd_bootstrap(args):
             subprocess.run(["git", "submodule", "update", "--init", "--", f"vendor/{name}"], cwd=b5)
 
     # 2) the committed structure must be present (identity/tu_index are in git)
-    print("[2/5] checking committed artifacts ...", flush=True)
+    print("[2/6] checking committed artifacts ...", flush=True)
     missing = [p for p in (IDENTITY, TU_INDEX) if not os.path.exists(p)]
     if missing:
         print(f"  MISSING {', '.join(os.path.basename(m) for m in missing)} — these are committed;"
@@ -2053,7 +2062,7 @@ def cmd_bootstrap(args):
         print("        them — regenerate with: tools/export_db.ps1 -DbName BURNOUT_X360_ARTIST.XEX")
 
     # 3) DWARF inlining info (decfigs_inlining.json)
-    print("[3/5] DWARF inlining info ...", flush=True)
+    print("[3/6] DWARF inlining info ...", flush=True)
     inlining_json = os.path.join(ROOT, "references", "DecFIGS", "decfigs_inlining.json")
     if os.path.exists(inlining_json):
         print("  decfigs_inlining.json already exists — skipping")
@@ -2102,14 +2111,14 @@ def cmd_bootstrap(args):
             print("  warning: raw lineinfo JSON was not generated; decfigs_inlining.json remains missing.")
 
     # 4) (re)build the ledger from committed identity/tu_index + status + dep mirrors
-    print("[4/5] building ledger ...", flush=True)
+    print("[4/6] building ledger ...", flush=True)
     seed_args = argparse.Namespace(deps=have_exports, reset=False)
     cmd_seed(seed_args)
 
     # 4) refresh the burnout.wiki type index if the committed cache is stale vs. the
     #    newest dump (the dossier reads references/Wiki/types.json; committed so it
     #    works without Python, rebuilt here so a newer dump takes effect on resume)
-    print("[5/5] wiki type index ...", flush=True)
+    print("[5/6] wiki type index ...", flush=True)
     try:
         import wiki_index
         if wiki_index.needs_rebuild():
@@ -2121,13 +2130,38 @@ def cmd_bootstrap(args):
     except Exception as e:
         print(f"  skipped (wiki index unavailable: {e})")
 
+    # 6) agent skills + git hooks. Claude Code reads skills only from .claude/skills, and git
+    #    hooks are not cloned, so both are per-checkout opt-ins -- done here, once.
+    print("[6/6] agent skills + git hooks ...", flush=True)
+    try:
+        import skills as skills_mod
+        import githooks as githooks_mod
+        skills_mod.link()
+        githooks_mod.install()
+    except Exception as e:  # never let an optional step fail the bootstrap
+        print(f"  skipped ({e})")
+
     print("\n== ready ==  resume with:")
     print("  work status      # what's done")
     print("  work next        # the next leaf-first TU to reconstruct")
     cmd_status(argparse.Namespace())
 
 
+# Subcommands implemented in their own modules, each with its own argparse (so
+# `work skills --help` shows the module's help). main() delegates to them up front.
+DELEGATED = {
+    "skills": ("skills", "agent skills in .agents/skills/: link | check | list | show <name>"),
+    "hooks": ("githooks", "the committed git hooks in tools/githooks/: install | status | uninstall"),
+    "mount": ("mount", "add exe-build mount lines; --commit builds a commit of ONLY them on origin/main"),
+}
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] in DELEGATED:
+        import importlib
+        module = importlib.import_module(DELEGATED[sys.argv[1]][0])
+        sys.exit(module.main(sys.argv[2:]))
+
     if len(sys.argv) > 1 and sys.argv[1] == "jebobs":
         if any(a in ("-h", "--help") for a in sys.argv[2:]):
             print("usage: work jebobs [--apply]")
@@ -2246,6 +2280,8 @@ def main():
     wls.set_defaults(fn=cmd_worker_list)
     wrev = sub.add_parser("worker-revoke", help="(maintainer) revoke a server worker id")
     wrev.add_argument("token"); wrev.set_defaults(fn=cmd_worker_revoke)
+    for name, (_module, summary) in DELEGATED.items():   # listed for `work --help`; main() delegates first
+        sub.add_parser(name, help=summary, add_help=False)
 
     args = ap.parse_args()
     args.fn(args)

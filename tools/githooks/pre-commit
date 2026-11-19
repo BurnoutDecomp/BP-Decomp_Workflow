@@ -1,0 +1,40 @@
+#!/bin/sh
+# Parent-repo pre-commit guard. Installed by `work hooks install`
+# (git config core.hooksPath tools/githooks); `work hooks status` shows whether it is on.
+#
+# The reconcile bot commits these after every b5-decomp push. Committing them by hand
+# races the bot and hands everyone a conflicting pull (AGENTS.md, "Don't"), so they are
+# refused here: a `git add -A` or `git commit -a` cannot sweep them into your change.
+#
+# Override for one deliberate maintainer commit:  BP_ALLOW_BOT_FILES=1 git commit ...
+
+[ "${BP_ALLOW_BOT_FILES:-}" = "1" ] && exit 0
+
+# Merges, cherry-picks, reverts and rebases replay commits that already exist; the
+# bot's files arrive in them legitimately.
+for state in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD; do
+  git rev-parse -q --verify "$state" >/dev/null 2>&1 && exit 0
+done
+for dir in rebase-merge rebase-apply; do
+  [ -d "$(git rev-parse --git-path "$dir")" ] && exit 0
+done
+
+bot_owned="progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json progress/asmaudit.json progress/linked_files.json b5-decomp"
+
+hits=""
+for path in $bot_owned; do
+  if ! git diff --cached --quiet -- "$path" 2>/dev/null; then
+    hits="$hits $path"
+  fi
+done
+[ -z "$hits" ] && exit 0
+
+echo "pre-commit: refusing to commit files the reconcile bot owns:" >&2
+for path in $hits; do
+  echo "  $path" >&2
+done
+echo "" >&2
+echo "Unstage them and commit only your own paths:  git restore --staged -- <path>" >&2
+echo "The bot reconciles progress/status.json, the audit outputs and the b5-decomp pointer" >&2
+echo "after every push. Maintainer override for one commit: BP_ALLOW_BOT_FILES=1 git commit ..." >&2
+exit 1
