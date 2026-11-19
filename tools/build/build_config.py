@@ -39,6 +39,8 @@ ENV_MAP = [
     ("toolchain", "strawberry_root", "STRAWBERRY_ROOT"),
     ("toolchain", "ida_path",        "IDA_PATH"),
     ("toolchain", "undname_exe",     "UNDNAME_EXE"),
+    ("x360",      "xdk",             "BRN_XDK"),
+    ("x360",      "tree",            "BRN_X360_TREE"),
 ]
 
 # Keys that are read directly (driver/stager), never exported as env vars.

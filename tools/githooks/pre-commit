@@ -24,7 +24,7 @@ done
 status=0
 
 if [ "${BP_ALLOW_BOT_FILES:-}" != "1" ]; then
-  bot_owned="progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json progress/asmaudit.json progress/linked_files.json b5-decomp"
+  bot_owned="progress/status.json progress/class_homes.json progress/funcaudit.json progress/stubs.json progress/source_status.json progress/asmaudit.json progress/linked_files.json progress/bytematch.json progress/BYTEMATCH.md b5-decomp"
   hits=""
   for path in $bot_owned; do
     if ! git diff --cached --quiet -- "$path" 2>/dev/null; then

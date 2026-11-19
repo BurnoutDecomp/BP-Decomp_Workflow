@@ -74,6 +74,19 @@ ida_path = ""
 # Probed default: derived from the resolved VS install, newest toolset.
 undname_exe = ""
 
+[x360]
+# Byte matching (the byte-match and x360-toolchain skills). Both keys are optional.
+# The extracted Xbox 360 XDK root: it must hold bin/win32/cl.exe and include/xbox/xtl.h.
+# An installed SDK on a machine without Visual Studio 2008/2010 has neither; extract the
+# setup's embedded CAB instead (x360-toolchain skill).      -> env BRN_XDK
+# Probed default: none (an XEDK variable is used only when it holds the compiler).
+xdk = ""
+
+# The b5-decomp x360 checkout (a worktree of the b5-decomp submodule).
+#                                                          -> env BRN_X360_TREE
+# Probed default: b5-x360 beside b5-decomp.
+tree = ""
+
 [build]
 # Default parallel converter count for `build data` (stager default: 4).
 jobs = 4
