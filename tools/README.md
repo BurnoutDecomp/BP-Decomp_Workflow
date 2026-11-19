@@ -8,6 +8,7 @@ root unless a section says otherwise.
 | Path | Purpose |
 | --- | --- |
 | [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. Also `work skills` (the agent skills in [`../.agents/skills/`](../.agents/skills/README.md)), `work hooks` and `work mount`. |
+| [`bytematch/`](bytematch/) | **Byte matching** of the native X360 tree (b5-decomp `x360`) against ARTIST: PowerPC COFF reader, relocation-aware comparator, XDK-library identification, the `progress/bytematch/` ledger and its CI summary. Driven through `work match`; procedure in the `byte-match` and `x360-toolchain` skills. |
 | [`githooks/`](githooks/) | Committed git hooks, switched on per checkout with `work hooks install` (`work bootstrap` does it). `pre-commit` refuses commits that stage the files the reconcile bot owns. |
 | [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |

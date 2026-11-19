@@ -41,6 +41,8 @@ user-invoked ones below.
 | [`port-assets`](port-assets/SKILL.md) | changing or running an asset converter | agent |
 | [`verify-sweep`](verify-sweep/SKILL.md) | the verification sweep of already-done TUs | agent |
 | [`goal-scoping`](goal-scoping/SKILL.md) | setting, tuning or importing a `work goal` | agent |
+| [`byte-match`](byte-match/SKILL.md) | byte-matching functions on the native X360 tree; reading or landing byte-match progress | agent |
+| [`x360-toolchain`](x360-toolchain/SKILL.md) | setting up the XDK and the `x360` worktree; compiling or linking the native tree | agent |
 | [`campaign-lane`](campaign-lane/SKILL.md) | working as one lane of a multi-agent campaign | agent |
 | [`campaign-conductor`](campaign-conductor/SKILL.md) | planning and running a multi-agent campaign | agent |
 | [`apt-completion`](apt-completion/SKILL.md) | the one-time Apt path consolidation, once ActionScript works end to end | user only |

@@ -13,6 +13,13 @@ decomp — there is no asm-diff gate. A function is "done" when it is reconstruc
 in [`b5-decomp`](b5-decomp/), the project compiles, and a reviewer pass confirms
 the C++ does what the source build's pseudocode/asm does.
 
+**Byte matching is a second, separate track.** b5-decomp's `x360` branch is the native
+tree: it compiles with the Xbox 360 XDK's own PowerPC compiler and is compared, function by
+function, with ARTIST's bytes. Its progress lives in its own ledger,
+[`progress/bytematch/`](progress/bytematch/), published to the dashboard on every commit.
+It never redefines "done" for the PC tree above. Procedure: the `byte-match` and
+`x360-toolchain` skills.
+
 `external` is a separate durable TU status for existing vendor source or a host
 platform implementation that supplies a subsystem without reconstructing its
 console internals. Record the provider and scope with `work external <tu> "reason"`.

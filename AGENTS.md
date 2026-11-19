@@ -28,6 +28,8 @@ detailed rules — commands, flags, traps, the reasons behind them — live ther
 | change or run an asset converter | `port-assets` |
 | run the verification sweep of already-done TUs | `verify-sweep` |
 | set, tune or import a `work goal` | `goal-scoping` |
+| byte-match functions on the native X360 tree, or read or land byte-match progress | `byte-match` |
+| set up the XDK or the `x360` worktree, compile or link the native tree | `x360-toolchain` |
 | work as one lane of a multi-agent campaign | `campaign-lane` |
 | plan and run a multi-agent campaign | `campaign-conductor` |
 | *(only when the user asks)* the one-time Apt path consolidation | `apt-completion` |
@@ -76,6 +78,11 @@ Reconstructing the **X360 build** as compilable **PC C++**, one translation unit
 at a time, landing recovered code in [`b5-decomp/src`](b5-decomp/src/). Target is
 **semantic parity, not byte-matching**. A unit is done when: reconstructed → the
 TU compiles → a reviewer pass approves.
+
+A second track **byte-matches** the same build: b5-decomp's `x360` branch compiles natively
+with the XDK, function by function against ARTIST's own bytes, and keeps its own ledger in
+[`progress/bytematch/`](progress/bytematch/). It never changes `dev`'s target; load
+`byte-match` before working on it.
 
 **The standard is 1:1 with the original, visually and behaviourally, and the method is
 decompilation.** Transcribe what the console's code does and 1:1 follows; never tune toward
