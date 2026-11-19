@@ -249,9 +249,9 @@ def run(args):
             return 0
         res = git("push", "origin", f"{commit}:refs/heads/main", check=False)
         if res.returncode == 0:
-            print(f"pushed {commit[:12]} to origin/main. Your working file already has the same lines:\n"
-                  "update with `git pull --rebase --autostash` and they merge cleanly (a plain pull\n"
-                  "refuses, because the .bat is dirty).")
+            print(f"pushed {commit[:12]} to origin/main. Your working file already carries the same lines:\n"
+                  "do not re-apply or commit them again. Update the parent the way the land-change skill\n"
+                  "says -- never `git pull --autostash` or a bare stash/pop in a shared tree.")
             return 0
         err = res.stderr.decode(errors="replace")
         if args.no_fetch or not re.search(r"non-fast-forward|fetch first|rejected", err):

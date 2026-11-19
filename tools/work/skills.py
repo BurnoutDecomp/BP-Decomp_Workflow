@@ -224,6 +224,8 @@ def check_paths(rep, path, text):
     b5_populated = os.path.isdir(os.path.join(ROOT, "b5-decomp", "src"))
     seen = set()
     for m in PATH_TOKEN.finditer(text):
+        if text[m.end():m.end() + 1] in ("*", "<", "{", "$", "%"):
+            continue                                  # a glob or placeholder, not a path
         token = re.sub(r":\d+(?:-\d+)?$", "", m.group(1).replace("\\", "/")).rstrip(".:/")
         if not token or token in seen or "/" not in token:
             continue
