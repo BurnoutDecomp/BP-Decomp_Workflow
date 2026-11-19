@@ -54,6 +54,18 @@ jobs:
           submodules: false
           persist-credentials: true
 
+      # The audit committed at the end records the workflow commit it built (exe_commit),
+      # which on a quiet day is the bot's own previous audit commit -- so the bot used to
+      # commit every day even when nobody pushed anything. Only commit when someone other
+      # than the bot changed the source since the last audited build, or the b5-decomp
+      # pointer moved. The build and upload still run daily; manual runs always commit.
+      - name: Check for new source since the last audited build
+        id: gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python tools/build/build_audit_gate.py
+
       # Init ONLY the submodules the build needs, non-recursively. `recursive`
       # drags in EABase/EASTL's test/packages submodules, which reference each
       # other cyclically and overflow Windows' 260-char path limit. We need
@@ -178,7 +190,9 @@ jobs:
 
       - name: Commit the audit and the file inventory
         id: publish
-        if: steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success'
+        if: >-
+          (steps.asmaudit.outcome == 'success' || steps.linkedfiles.outcome == 'success') &&
+          (github.event_name == 'workflow_dispatch' || steps.gate.outputs.changed == 'true')
         continue-on-error: true
         shell: bash
         run: |
