@@ -1570,7 +1570,20 @@ def print_table(addr, tables, g, hy_rows):
     return 0
 
 
+USAGE = """usage: python tools/re/vtable_override_audit.py [--table HEX] [--control]
+                                               [--src DIR] [--image FILE] [--rebuild-cache]
+  --table HEX   print one console vtable against our classes (report untouched)
+  --control     re-find the seed misses against the pre-fix tree (report untouched)
+  (no flag)     the full audit: REWRITES progress/VTABLE_OVERRIDE_AUDIT.md and .json
+The method and its caveats are in the comment block at the top of this file."""
+
+
 def main(argv):
+    # `--help` used to fall through to the full audit, which rewrites the tracked report.
+    if "-h" in argv or "--help" in argv:
+        print(USAGE)
+        return 0
+
     def opt(flag):
         return argv[argv.index(flag) + 1] if flag in argv else None
     src, image, rebuild = opt("--src"), opt("--image"), "--rebuild-cache" in argv

@@ -10,7 +10,7 @@ naming conventions; the b5-decomp-only commit rule; `work` CLI). This doc covers
 
 Pull first.
 
-## The state file — `progress/verify_sweep.json`
+## The state file — `progress/sweep/verify_sweep.json`
 
 This IS your queue and your memory; **update it as you finish each TU**, or the
 progress is lost. It has self-documenting `legend` / `fields` / `summary` keys,
