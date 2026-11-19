@@ -37,7 +37,7 @@ ever existed in partfiles. Two shapes, two flags:
     mounted or the bodies leave the exe). --dry-run writes <Parent>.cpp.folded.txt and creates
     nothing.
 
-CONVENTION (pinned in AGENTS.md by the same change): <Parent>_w<Wave>_<NN>.cpp, Wave = one
+CONVENTION (pinned in the fold-partfiles skill, formerly AGENTS.md): <Parent>_w<Wave>_<NN>.cpp, Wave = one
 capital letter plus optional digits (B, C, Q4, T1, SQ1 ...), NN = two digits. Older ad-hoc
 suffixes (_wB_res, _wRR, _wH3b, _wG_Bridges_01 ...) are still recognised for folding, and
 `scan` flags them so they can be retired.

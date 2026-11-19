@@ -10,7 +10,7 @@ misses hard dependencies the compiler enforces:
   - by-value containment: `struct B { A a; }` needs A's complete layout.
 Without these, `work next` can hand you a leaf before its shared base — e.g. ~48
 resource handlers before `CgsResource::Type` — forcing a mid-stream reconstruction.
-See AGENTS.md "Reconstruct base/contained types before the classes that use them".
+See the reconstruct-tu skill: "Base classes and by-value members first".
 
 For each relation found in references/DecFIGS/dwarfdump, if both sides resolve to a
 reconstructable TU, add an edge Derived/Owner_TU -> Base/Member_TU (the user depends

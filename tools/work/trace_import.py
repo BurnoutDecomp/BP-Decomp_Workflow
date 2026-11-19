@@ -3,7 +3,7 @@
 trace_import - turn a Xenia function-trace into an execution-derived goal scope.
 
 The X360 TU call graph is a single ~75% strongly-connected component, so static
-reachability can't carve out a milestone (see STRATEGY.md / AGENTS.md "Goal scoping").
+reachability can't carve out a milestone (see STRATEGY.md and the goal-scoping skill).
 The reliable way to know *exactly* which functions a milestone needs is to run the real
 build to that point and record what executed. Xenia does this for us.
 

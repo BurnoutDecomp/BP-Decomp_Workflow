@@ -1172,7 +1172,7 @@ def cmd_audit(args):
 POSTMORTEM_CHECKLIST = """\
 ================ POSTMORTEM SELF-REVIEW: {tu} ================
 Walk your reconstruction against the source-of-truth ladder, IN ORDER. A lower rung never
-overrides a higher one. (Full procedure: AGENTS.md -> "Postmortem".)
+overrides a higher one. (Full procedure: the reconstruct-tu skill, "Postmortem".)
 
 [1] ARTIST (X360) - ACCURACY (pseudocode + ASSEMBLY above)
     [ ] Signature / calling convention taken from the ASM, not the pseudocode:
@@ -1195,7 +1195,7 @@ def cmd_postmortem(args):
     """Self-review packet: the full dossier WITH X360 asm, plus the postmortem checklist.
 
     This is the agent's OWN accuracy pass (verify vs ARTIST asm/pseudocode, then DecFIGS
-    DWARF) before submit/review — see AGENTS.md "Postmortem". Distinct from the fresh-eyes
+    DWARF) before submit/review — see the reconstruct-tu skill, "Postmortem". Distinct from the fresh-eyes
     reviewer packet that `work submit` writes.
     """
     import dossier

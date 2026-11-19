@@ -85,8 +85,8 @@ MSVC diagnostics and returns the TU to `in_progress`. On pass it writes a fresh-
 **reviewer packet** to `reviews/<tu>.md` (produced code + dossier, including
 DecFIGS dwarfdump hints when the TU has a matching source path). After a reviewer
 sub-agent judges it, `work review <tu> --verdict pass|fail` records the verdict —
-a pass marks the TU `done`. See [`../AGENTS.md`](../AGENTS.md) for the reviewer
-protocol.
+a pass marks the TU `done`. The reviewer protocol is the `reconstruct-tu` skill's review
+policy and the `review-tu` skill (routing: [`../AGENTS.md`](../AGENTS.md)).
 
 Prereq for non-trivial TUs: check out the EA submodules
 (`git -C b5-decomp submodule update --init`) so EASTL/EABase headers resolve.

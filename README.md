@@ -33,8 +33,9 @@ For reconstruction work, read these in order:
 2. [`STRATEGY.md`](STRATEGY.md) - the technical plan and rules of evidence.
 3. [`progress/README.md`](progress/README.md) - the ledger and `work` CLI reference.
 
-`CLAUDE.md` exists only as a redirect for Claude Code. The canonical instructions are
-shared in `AGENTS.md` so all agents follow the same process.
+`CLAUDE.md` exists only as a redirect for Claude Code (it imports `AGENTS.md`). The canonical
+instructions are shared in `AGENTS.md` and the skills under `.agents/skills/` so all agents
+follow the same process.
 
 ## Why Several Builds Are Used
 
@@ -57,7 +58,8 @@ Addresses are build-local and must not be treated as stable across binaries.
 
 | Path | What it is |
 | --- | --- |
-| [`AGENTS.md`](AGENTS.md) | Tool-agnostic operating guide: resume behavior, work loop, server coordination, reconstruction rules, review policy, and "don't" rules. |
+| [`AGENTS.md`](AGENTS.md) | Tool-agnostic operating guide, always loaded: resume behavior, coordination setup, the source-of-truth ladder, the rules for every task, "don't" rules, and the routing table that names the skill to load before each kind of work. |
+| [`.agents/skills/`](.agents/skills/README.md) | The skills: one procedure per kind of work (the TU loop, review, console evidence, bug triage, harness runs, landing, builds, partfiles, assets, the sweep, campaigns, maintenance). Codex and Antigravity read them natively; Claude Code after `work skills link`. |
 | [`STRATEGY.md`](STRATEGY.md) | Design document for the workflow: target, build roles, identity model, TU model, stubs, verification, goals, and phase status. |
 | [`BUILD.md`](BUILD.md) | The canonical build recipe: prerequisites, `build.config.toml`, `build doctor`, `build all`, run. |
 | [`build.config.example.toml`](build.config.example.toml) | Machine-path template; copy to the gitignored `build.config.toml`. |

@@ -52,8 +52,8 @@ ids are largely what got merged in — trust it, with ARTIST asm arbitrating the
 merge-window delta), while the **LegacySrc source is pre-merge old main** and thus the
 *stalest* reference for any FIGS-touched code (style/idiom only). The PS3 builds also
 uniquely expose, via DWARF + `__static_initialization_and_destruction_*`, the RTTI
-`ObjectID`/`typeName` literals the X360 leaves in stripped data. See AGENTS.md
-"BUILD LINEAGE".
+`ObjectID`/`typeName` literals the X360 leaves in stripped data. See the
+`console-evidence` skill (the ladder and its lineage).
 
 ## Cross-build identity: join on the normalized name, never structural matching
 
@@ -108,7 +108,8 @@ reconstruction dossier. It is DWARF-derived, C++-shaped reference material: use 
 for declaration structure, enum values, member names/types, globals, function
 signatures, and local-variable hints. It is not complete implementation source and
 not offset authority; X360 pseudocode/asm remains the source of truth for behavior
-and member placement, and LegacySrc partial source wins where it overlaps.
+and member placement, and where it differs from the LegacySrc partial source, DecFIGS
+wins (LegacySrc predates the FIGS merge: style and idiom only).
 
 **Ordering:** leaf-first (callees before callers) is the *quality* preference — a
 caller reconstructed after its callees sees real signatures and recovered types.
@@ -139,8 +140,8 @@ compile gate and structural parity are blind to them (they compiled; parity legi
 A decomp is only worth anything if every body traces to the binary, so `work submit` runs a **hard
 faithfulness gate** ([`tools/work/faithfulness_lint.py`](tools/work/faithfulness_lint.py)) that fails
 a TU introducing a new such smell, ratcheted against a grandfathered baseline
-([`progress/faithfulness_baseline.json`](progress/faithfulness_baseline.json)). See **AGENTS.md >
-Verification** (item 2b); scan the whole tree any time with `work faithfulness`.
+([`progress/faithfulness_baseline.json`](progress/faithfulness_baseline.json)). See the
+`reconstruct-tu` skill (its submit gates); scan the whole tree any time with `work faithfulness`.
 
 Caveat that the C++ nature of this codebase forces (unlike a flat C decomp): ~90%
 of functions are **methods on classes**. You cannot stub `int A::B::foo()` without
@@ -180,8 +181,8 @@ pointer/reference-only use, or where no reference exists (truly opaque/platform)
 does **not** change the gate or the ordering: per-TU `cl /c` is still the gate
 (declarations suffice — no eager whole-program link), leaf-first is still only a
 preference, and reference availability + the forward-decl escape hatch keep header
-reconstruction bounded rather than cascading into the whole program. See AGENTS.md
-("Reconstruct includes; don't fake them") for the operating rule; `work stubs` names
+reconstruction bounded rather than cascading into the whole program. See the
+`reconstruct-tu` skill (its writing rules) for the operating rule; `work stubs` names
 the owning header for each unresolved callee.
 
 ### Middleware and SDKs (RenderWare, EATech, etc.)
