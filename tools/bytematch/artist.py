@@ -113,6 +113,7 @@ class Artist:
             if address not in self.unnamed:
                 self.by_name.setdefault(normal_name(name), []).append(address)
         self._extents = None
+        self._trimmed = {}
 
     # -- bytes ------------------------------------------------------------------------
     @property
@@ -145,11 +146,27 @@ class Artist:
         return self._extents
 
     def size(self, address: int):
-        """(byte length, source): the .pdata length, else the export's instruction count."""
+        """(byte length, source): the .pdata length, else the export's instruction count.
+
+        IDA counts the alignment padding after a frameless leaf (zero words) as part of it,
+        so an IDA-derived length drops its trailing zero words; a .pdata length is exact.
+        """
         if address in self.extents:
             return self.extents[address], "pdata"
         size = self.ida_size.get(address) or 0
-        return (size, "ida") if size else (0, "none")
+        if not size:
+            return 0, "none"
+        trimmed = self._trimmed.get(address)
+        if trimmed is None:
+            try:
+                data = self.bytes(address, size)
+            except KeyError:
+                data = b""
+            trimmed = size
+            while trimmed > 4 and data[trimmed - 4:trimmed] == b"\0\0\0\0":
+                trimmed -= 4
+            self._trimmed[address] = trimmed
+        return trimmed, "ida"
 
     def name_at(self, address: int):
         name = self.names.get(address)

@@ -14,12 +14,30 @@ from __future__ import annotations
 
 from collections import defaultdict
 from pathlib import Path
+import struct
 
 from coff import ObjectFile, CoffError, archive_members
 from artist import Artist, demangle, normal_name
 from compare import compare
 
 TINY = 12  # bytes: three instructions or fewer match too many unrelated bodies
+MTCTR_R11, BCTR = 0x7D6903A6, 0x4E800420
+
+
+def import_stub(words):
+    """(ordinal, module) when four words are an XEX import stub, else None.
+
+    The linker emits one per imported kernel/XAM/network function from the XDK's import
+    libraries. In the image the loader has not patched it yet: `li r3,<ordinal>;
+    li r4,<module>; mtctr r11; bctr`. A patched one reads `lis r11; lwz r11; mtctr; bctr`.
+    """
+    if len(words) != 4 or words[2] != MTCTR_R11 or words[3] != BCTR:
+        return None
+    if words[0] >> 16 == 0x3860 and words[1] >> 16 == 0x3880:
+        return words[0] & 0xFFFF, words[1] & 0xFFFF
+    if words[0] >> 16 == 0x3D60 and words[1] >> 16 == 0x816B:
+        return -1, -1
+    return None
 
 
 def library_functions(lib_dir):
@@ -36,7 +54,10 @@ def library_functions(lib_dir):
                 continue  # LTCG intermediate code, import objects, non-PPC members
             for fn in obj.functions():
                 if fn.code:
-                    yield lib.name, member, obj, fn
+                    yield lib.name, member, obj, fn, False
+            for fn in obj.entry_points():
+                if fn.code:
+                    yield lib.name, member, obj, fn, True
 
 
 def identify(artist: Artist, lib_dir, log=print):
@@ -49,9 +70,17 @@ def identify(artist: Artist, lib_dir, log=print):
             by_size[size].append(address)
             by_head[(size, artist.bytes(address, 4))].append(address)
     claims = defaultdict(dict)   # address -> {(lib, member, symbol): named?}
+    stubs = {}
+    for address in artist.names:
+        size, _ = artist.size(address)
+        if size == 16:
+            stub = import_stub(list(struct.unpack(">4I", artist.bytes(address, 16))))
+            if stub:
+                stubs[address] = stub
+    log(f"sdk: {len(stubs)} XEX import stubs")
     seen = 0
     current = None
-    for lib, member, obj, fn in library_functions(lib_dir):
+    for lib, member, obj, fn, entry in library_functions(lib_dir):
         seen += 1
         if lib != current:
             current = lib
@@ -73,6 +102,8 @@ def identify(artist: Artist, lib_dir, log=print):
         named = [a for a, n in hits if n is not None and normal_name(n) == name]
         if named:
             chosen = named
+        elif entry:
+            continue   # an assembly entry point is claimed only where the names agree
         elif len(hits) == 1 and len(fn.code) > TINY:
             chosen = [hits[0][0]]
         else:
@@ -81,6 +112,10 @@ def identify(artist: Artist, lib_dir, log=print):
             claims[address][(lib, member, fn.symbol)] = bool(named)
     log(f"sdk: {seen} library functions scanned, {len(claims)} ARTIST functions provided")
     out = {}
+    for address, (ordinal, module) in stubs.items():
+        if address not in claims:
+            out[address] = {"lib": "import stub", "member": f"module {module}", "symbol": artist.names.get(address, ""),
+                            "ordinal": ordinal, "variants": 1}
     for address, providers in claims.items():
         # Prefer a name-confirmed provider, then the release library over d/i variants.
         (lib, member, symbol), _ = sorted(providers.items(), key=lambda kv: (not kv[1], kv[0][0].endswith(("d.lib", "i.lib")), kv[0]))[0]

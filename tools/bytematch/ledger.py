@@ -61,12 +61,27 @@ def dump_record(record: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _same_measurement(old_text: str, record: dict) -> bool:
+    """True when the stored record says what the new one says, measured at another time."""
+    try:
+        old = json.loads(old_text)
+    except ValueError:
+        return False
+    return ({k: v for k, v in old.items() if k != "measured"} ==
+            {k: v for k, v in json.loads(json.dumps(record)).items() if k != "measured"})
+
+
 def write_record(record: dict, root: Path = RECORDS) -> Path:
+    """Store a record; an unchanged measurement keeps its file (and its old time), so a full
+    re-measure touches only the records whose content changed."""
     path = record_path(record["source"], root)
     path.parent.mkdir(parents=True, exist_ok=True)
     text = dump_record(record)
-    if not path.exists() or path.read_text(encoding="utf-8") != text:
-        path.write_text(text, encoding="utf-8", newline="\n")
+    if path.exists():
+        old = path.read_text(encoding="utf-8")
+        if old == text or _same_measurement(old, record):
+            return path
+    path.write_text(text, encoding="utf-8", newline="\n")
     return path
 
 
@@ -222,6 +237,14 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
 
     game = totals["game"]
     game["fuzzy_bytes"] = round(game["fuzzy_bytes"], 1)
+    # The whole image is the real denominator: every ARTIST function, whoever provides it.
+    # "matched" = byte-identical to ARTIST: exact from our source, or linked from the XDK.
+    totals["all"] = {
+        "functions": game["functions"] + totals["sdk"]["functions"] + totals["unnamed"]["functions"],
+        "bytes": game["bytes"] + totals["sdk"]["bytes"] + totals["unnamed"]["bytes"],
+        "matched": game["exact"] + totals["sdk"]["functions"],
+        "matched_bytes": game["exact_bytes"] + totals["sdk"]["bytes"],
+    }
     objects = {"sources": len(records), "compiled": sum(1 for r in records if r.get("compiled", True)),
                "stale": len(stale_sources), "unpaired": sum(unpaired.values())}
     area_rows = []
@@ -259,8 +282,10 @@ def pct(part, whole):
 def render_markdown(summary) -> str:
     meta, totals = summary["meta"], summary["totals"]
     game, sdk, unnamed = totals["game"], totals["sdk"], totals["unnamed"]
-    all_functions = game["functions"] + sdk["functions"] + unnamed["functions"]
-    all_bytes = game["bytes"] + sdk["bytes"] + unnamed["bytes"]
+    whole = totals.get("all") or {
+        "functions": game["functions"] + sdk["functions"] + unnamed["functions"],
+        "bytes": game["bytes"] + sdk["bytes"] + unnamed["bytes"],
+        "matched": game["exact"] + sdk["functions"], "matched_bytes": game["exact_bytes"] + sdk["bytes"]}
     head = (meta.get("b5_commit") or "")[:12] or "unknown"
     lines = [
         "# Byte matching",
@@ -279,14 +304,19 @@ def render_markdown(summary) -> str:
         lines.append("- No full refresh recorded yet: records stand at the commits they name.")
     lines += [
         "",
-        "| Scope | Functions | Exact | Exact code | Fuzzy code |",
-        "|---|---:|---:|---:|---:|",
-        f"| Game and middleware (ours to write) | {game['functions']:,} | {game['exact']:,} ({pct(game['exact'], game['functions'])}) | "
-        f"{pct(game['exact_bytes'], game['bytes'])} of {game['bytes']:,} B | {pct(game['fuzzy_bytes'], game['bytes'])} |",
-        f"| XDK libraries (linked, not written) | {sdk['functions']:,} | provided | {sdk['bytes']:,} B | |",
-        f"| Not yet named | {unnamed['functions']:,} | - | {unnamed['bytes']:,} B | |",
-        f"| Whole image | {all_functions:,} | {game['exact'] + sdk['functions']:,} | "
-        f"{pct(game['exact_bytes'] + sdk['bytes'], all_bytes)} | |",
+        f"**{whole['matched']:,} of the image's {whole['functions']:,} functions "
+        f"({pct(whole['matched'], whole['functions'])}) byte-match ARTIST**, "
+        f"{pct(whole['matched_bytes'], whole['bytes'])} of its {whole['bytes']:,} bytes of code: "
+        f"{game['exact']:,} compiled from our source and {sdk['functions']:,} linked from the XDK's libraries.",
+        "",
+        "| Part of the image | Functions | Byte-match ARTIST | Code bytes | Code bytes matching | Fuzzy code match |",
+        "|---|---:|---:|---:|---:|---:|",
+        f"| **Whole image** | {whole['functions']:,} | {whole['matched']:,} ({pct(whole['matched'], whole['functions'])}) | "
+        f"{whole['bytes']:,} | {pct(whole['matched_bytes'], whole['bytes'])} | |",
+        f"| Our source (game and middleware) | {game['functions']:,} | {game['exact']:,} ({pct(game['exact'], game['functions'])}) | "
+        f"{game['bytes']:,} | {pct(game['exact_bytes'], game['bytes'])} | {pct(game['fuzzy_bytes'], game['bytes'])} |",
+        f"| XDK libraries (linked, not written) | {sdk['functions']:,} | {sdk['functions']:,} (all) | {sdk['bytes']:,} | 100.00% | |",
+        f"| Not yet named | {unnamed['functions']:,} | not measurable yet | {unnamed['bytes']:,} | | |",
         "",
         f"Game functions: {game['exact']:,} exact, {game['nonmatching']:,} compiled but not matching, "
         f"{game['missing']:,} with no compiled body yet. Objects: {totals['objects']['sources']:,} measured, "

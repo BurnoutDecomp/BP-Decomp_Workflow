@@ -160,6 +160,34 @@ class ObjectFile:
         return out
 
 
+    def entry_points(self):
+        """External code symbols without the function type: entry points into hand-written
+        assembly (the CRT's __savegprlr_N / __restgprlr_N / __savevmx_N ... helpers). Each
+        runs from its symbol to the next symbol of its section."""
+        by_section = {}
+        for sym in self.symbols.values():
+            if sym.section <= 0 or sym.storage not in (CLASS_EXTERNAL, CLASS_STATIC):
+                continue
+            section = self.sections.get(sym.section)
+            if section is None or not section.is_code or sym.name.startswith((".", "$")):
+                continue
+            by_section.setdefault(sym.section, []).append(sym)
+        out = []
+        for secnum, syms in by_section.items():
+            section = self.sections[secnum]
+            starts = sorted({s.value for s in syms})
+            for sym in syms:
+                if sym.type & 0xF0 == DTYPE_FUNCTION or sym.storage != CLASS_EXTERNAL:
+                    continue
+                later = [v for v in starts if v > sym.value]
+                end = later[0] if later else len(section.data)
+                relocs = [Reloc(r.offset - sym.value, r.symbol, r.type) for r in section.relocs
+                          if sym.value <= r.offset < end]
+                if end > sym.value:
+                    out.append(Function(sym.name, section.data[sym.value:end], relocs, secnum, sym.value, False))
+        return out
+
+
 def read_object(path):
     with open(path, "rb") as fh:
         return ObjectFile(fh.read(), str(path))

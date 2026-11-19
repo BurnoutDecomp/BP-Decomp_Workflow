@@ -217,6 +217,7 @@ def test_summary_counts_and_best_copy_wins():
     assert game["fuzzy_bytes"] == 40 + 80 * 0.75
     assert s["totals"]["sdk"] == {"functions": 1, "bytes": 64}
     assert s["totals"]["unnamed"] == {"functions": 1, "bytes": 12}
+    assert s["totals"]["all"] == {"functions": 5, "bytes": 216, "matched": 2, "matched_bytes": 104}
     rows = {r[0]: r for r in s["functions"]}
     assert rows["82100040"][4] == 75.0 and s["sources"][rows["82100040"][5]] == "src/b.cpp"
     assert rows["82100040"][6] == 1            # its best copy's source changed since it was measured
@@ -256,6 +257,17 @@ def test_record_round_trip_and_path_check(tmp_path):
         raise AssertionError("a record filed under the wrong path was accepted")
 
 
+def test_remeasuring_an_unchanged_object_keeps_its_record(tmp_path):
+    row = {"symbol": "s", "name": "X::f", "artist": "82100000", "status": "nonmatching", "score": 90.0}
+    first = dict(_record("src/Game/X.cpp", "c1", "b1", [row]), measured="2026-11-19T20:00:00Z")
+    path = ledger.write_record(first, tmp_path)
+    ledger.write_record(dict(first, measured="2026-11-19T21:00:00Z"), tmp_path)
+    assert json.loads(path.read_text(encoding="utf-8"))["measured"] == "2026-11-19T20:00:00Z"
+    ledger.write_record(dict(first, measured="2026-11-19T22:00:00Z", functions=[dict(row, status="exact", score=100.0)]), tmp_path)
+    after = json.loads(path.read_text(encoding="utf-8"))
+    assert after["measured"] == "2026-11-19T22:00:00Z" and after["functions"][0]["status"] == "exact"
+
+
 def test_universe_round_trip(tmp_path):
     path = tmp_path / "u.json.gz"
     ledger.write_universe(_universe(), path)
@@ -263,3 +275,33 @@ def test_universe_round_trip(tmp_path):
     first = path.read_bytes()
     ledger.write_universe(_universe(), path)
     assert path.read_bytes() == first          # deterministic: no gzip timestamp churn
+
+
+def test_untyped_entry_points_run_to_the_next_symbol():
+    # one code section holding two assembly entry points (type 0), like libcMT's crtgpr.obj
+    words = [0xF9C1FF68, 0xF9E1FF70, 0x4E800020]
+    code = struct.pack(">3I", *words)
+    syms = [("__sv_14", 0), ("__sv_15", 4)]   # short names: they live inline in the 8-byte field
+    head = struct.pack("<HHIIIHH", coff.MACHINE_PPCBE, 1, 0, 20 + 40 + len(code), len(syms), 0, 0)
+    sect = b".text\0\0\0" + struct.pack("<IIIIIIHHI", 0, 0, len(code), 60, 0, 0, 0, 0, coff.SCN_CNT_CODE | 0x60000000)
+    symtab = b"".join(n.encode().ljust(8, b"\0") + struct.pack("<IhHBB", v, 1, 0, coff.CLASS_EXTERNAL, 0) for n, v in syms)
+    obj = coff.ObjectFile(head + sect + code + symtab + struct.pack("<I", 4))
+    assert obj.functions() == []
+    entries = {f.symbol: f.code for f in obj.entry_points()}
+    assert entries == {"__sv_14": code[:4], "__sv_15": code[4:]}
+
+
+def test_import_stub_shapes():
+    import sdk
+    assert sdk.import_stub([0x386000A4, 0x38800001, 0x7D6903A6, 0x4E800420]) == (0xA4, 1)
+    assert sdk.import_stub([0x3D608200, 0x816B1234, 0x7D6903A6, 0x4E800420]) == (-1, -1)
+    assert sdk.import_stub([0x38600000, 0x38800000, 0x7D6903A6, BLR]) is None
+
+
+def test_ida_sizes_drop_trailing_padding():
+    address = 0x82100000
+    art = FakeArtist([(address, "F", [0x38600000, BLR, 0x00000000])])
+    assert art.size(address) == (8, "ida")
+    pdata_sized = FakeArtist([(address, "G", [0x38600000, BLR, 0x00000000])])
+    pdata_sized._extents = {address: 12}
+    assert pdata_sized.size(address) == (12, "pdata")
