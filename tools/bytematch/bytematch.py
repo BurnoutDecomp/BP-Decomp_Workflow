@@ -99,7 +99,7 @@ def need_xdk(args):
         raise SystemExit("No usable XDK: need a root holding bin/win32/cl.exe and include/xbox/xtl.h.\n"
                          "Set [x360].xdk in build.config.toml (or BRN_XDK). An installed SDK without\n"
                          "Visual Studio 2008/2010 lacks the compiler; extract the setup's CAB instead\n"
-                         "(see the x360-toolchain skill).")
+                         "(7z x -tcab XDKSetupXenon6534.4.exe -o<folder>; see the x360-toolchain skill).")
     return xdk
 
 
@@ -651,11 +651,19 @@ def summary(args):
 def setup(args):
     ok = True
     xdk = find_xdk(getattr(args, "xdk", None))
-    print(f"XDK      {'ok  ' + str(xdk) + '  (cl ' + compiler_version(xdk) + ')' if xdk else 'MISSING: set [x360].xdk'}")
+    if xdk:
+        print(f"XDK      ok  {xdk}  (cl {compiler_version(xdk)})")
+    else:
+        print("XDK      MISSING: no root holding bin/win32/cl.exe and include/xbox/xtl.h.\n"
+              "         Installing the XDK is not enough (without VS 2008/2010 it omits the compiler,\n"
+              "         and an XEDK it set is ignored). Extract the setup's CAB into an empty folder:\n"
+              "           7z x -tcab XDKSetupXenon6534.4.exe -o<folder>\n"
+              "         then set xdk = \"<folder>/XDK\" under [x360] in build.config.toml (or BRN_XDK).\n"
+              "         Details: the x360-toolchain skill, or README.md \"Byte Matching Setup\".")
     ok &= xdk is not None
     tree = find_tree(getattr(args, "tree", None))
     has_tree = (tree / "tools" / "build_x360.py").is_file()
-    print(f"tree     {'ok  ' + str(tree) + '  ' + git(tree, 'rev-parse', '--abbrev-ref', 'HEAD').strip() if has_tree else 'MISSING: ' + str(tree)}")
+    print(f"tree     {'ok  ' + str(tree) + '  ' + git(tree, 'rev-parse', '--abbrev-ref', 'HEAD').strip() if has_tree else 'MISSING: ' + str(tree) + '  (git -C b5-decomp fetch origin x360 && git -C b5-decomp worktree add ../b5-x360 x360; then the three vendor submodules, see README)'}")
     ok &= has_tree
     try:
         from artist import Artist

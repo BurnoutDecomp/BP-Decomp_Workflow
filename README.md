@@ -203,6 +203,54 @@ work reset-tu <tu>                  # delete produced files and return TU/functi
 The compile gate is per translation unit (`cl /c`, no link). The target is semantic
 parity with the X360 build expressed as source-like PC C++, not byte matching.
 
+## Byte Matching Setup (optional second track)
+
+Byte matching compiles b5-decomp's `x360` branch with the Xbox 360 XDK's own PowerPC
+compiler and compares it against ARTIST function by function. It needs a one-time setup
+on Windows. Agents get the full procedure from the `x360-toolchain` and `byte-match`
+skills; this is the short version for people.
+
+1. **Get the XDK setup yourself**: `XDKSetupXenon6534.4.exe` (Xbox 360 SDK 2.0.6534.4).
+   It is Microsoft's: never commit it, copy it into either repository or upload it.
+
+2. **Extract it; don't install it.** On a machine without Visual Studio 2008/2010 the
+   installer only puts down the tools: no `bin/win32/cl.exe`, no `link.exe`, no
+   `include/`, no `lib/`. It also sets a machine-wide `XEDK` variable pointing at that
+   incomplete folder. The setup is a self-extractor around one CAB holding the whole
+   `XDK/` tree, so extract it with [7-Zip](https://www.7-zip.org/) into a new, empty
+   folder outside both repositories:
+
+   ```powershell
+   7z x -tcab XDKSetupXenon6534.4.exe -oC:\xdk6534
+   ```
+
+   `C:\xdk6534\XDK` then holds `bin/win32/cl.exe`, `link.exe`, `include/xbox` and
+   `lib/xbox`.
+
+3. **Point the tools at it** in `build.config.toml` (or set `BRN_XDK`):
+
+   ```toml
+   [x360]
+   xdk = "C:/xdk6534/XDK"
+   ```
+
+   If you ran the installer earlier, this setting takes precedence over its `XEDK`.
+
+4. **Create the native worktree** beside `b5-decomp` (initialise only these three
+   submodules, never `--recursive`):
+
+   ```powershell
+   git -C b5-decomp fetch origin x360
+   git -C b5-decomp worktree add ../b5-x360 x360
+   git -C b5-x360 submodule update --init vendor/EABase vendor/EASTL vendor/EAThread
+   ```
+
+5. **Check it**: `work match setup` reports the XDK, worktree, ARTIST image and universe,
+   and names whatever is still missing.
+
+Then ask your agent to byte-match (it loads the `byte-match` skill), or see
+[`progress/bytematch/`](progress/bytematch/) for the current state.
+
 ## Tool Inventory
 
 The authoritative inventory of repo tools is [`tools/README.md`](tools/README.md).
