@@ -199,6 +199,35 @@ def test_bytematch_publishes_against_the_native_branch_tip_only(world):
     assert json.loads(world.read("progress/funcaudit.json"))["meta"]["b5_commit"] == world.old
 
 
+def test_bytematch_skips_when_main_records_change_during_measurement(world):
+    git(world.source, "push", "-q", "origin", world.current + ":refs/heads/x360")
+    state = "progress/bytematch/state.json"
+    record = "progress/bytematch/objects/src/Example.cpp.json"
+    older = json.dumps({"verified_commit": world.old})
+    current = json.dumps({"verified_commit": world.current})
+    commit_file(world.repo, state, older)
+    commit_file(world.repo, record, json.dumps({"commit": world.old}))
+    git(world.repo, "push", "-q", "origin", "main")
+
+    contributor = world.root / "contributor"
+    git(world.root, "clone", "-q", str(world.remote), str(contributor))
+    configure(contributor)
+    commit_file(contributor, state, current)
+    new_record = json.dumps({"commit": world.current})
+    commit_file(contributor, record, new_record)
+    git(contributor, "push", "-q", "origin", "main")
+    before = world.head()
+
+    (world.repo / "progress/bytematch.json").write_text(json.dumps({"meta": {"b5_commit": world.current}}))
+    (world.repo / "progress/BYTEMATCH.md").write_text("# Older measurement\n")
+    result = world.publish(kind="bytematch", files=[*sorted(publisher.FILES["bytematch"]), state, record])
+
+    assert result["status"] == "skipped" and result["published"] is False
+    assert world.head() == before
+    assert world.read(state) == current
+    assert world.read(record) == new_record
+
+
 def test_unreachable_canonical_remote_fails_closed(world):
     before = world.head()
     with pytest.raises(subprocess.CalledProcessError):

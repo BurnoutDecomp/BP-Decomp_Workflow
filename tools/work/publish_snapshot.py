@@ -32,6 +32,8 @@ BRANCH = {"reconcile": "dev", "build": "dev", "bytematch": "x360"}
 RECORDS = {"bytematch": re.compile(
     r"progress/bytematch/objects/(?:src|vendor)(?:/[A-Za-z0-9_+.-](?:[A-Za-z0-9_+. -]*[A-Za-z0-9_+.-])?)+\.(?:cpp|c)\.json")}
 EXTRA = {"bytematch": {"progress/bytematch/state.json"}}
+BYTEMATCH_INPUTS = ("progress/bytematch", "progress/bytematch.json", "progress/source_aliases.json",
+                    "progress/asmaudit_artist.json.gz", "progress/unidentified.json", "tools/bytematch")
 
 
 def is_record(kind, path):
@@ -81,6 +83,7 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
     decision = eligibility(source_repo, source_commit, workflow_ref, branch)
     if not decision["eligible"]:
         return {**decision, "status": "skipped", "published": False, "attempt": 0}
+    baseline = git(repo, "rev-parse", "HEAD").stdout.decode().strip() if kind == "bytematch" else None
     snapshots = {path: (repo / path).read_bytes() for path in files}
     for path, data in snapshots.items():
         if path in STAMPED:
@@ -97,6 +100,15 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
             decision = eligibility(source_repo, source_commit, workflow_ref, branch)
             if not decision["eligible"]:
                 return {**decision, "status": "skipped", "published": False, "attempt": attempt}
+            if baseline is not None:
+                # The summary joins the runner's records, so even a disjoint record update on
+                # main makes the bundle and its summary stale. A new ledger push queues a new run.
+                delta = git(repo, "diff", "--quiet", baseline, parent, "--", *BYTEMATCH_INPUTS, check=False)
+                if delta.returncode == 1:
+                    return {**decision, "eligible": False, "status": "skipped", "published": False,
+                            "attempt": attempt, "reason": "main byte-match inputs changed after checkout"}
+                if delta.returncode:
+                    raise RuntimeError(delta.stderr.decode(errors="replace").strip())
             if status_server and "progress/status.json" in snapshots:
                 subprocess.run([sys.executable, str(repo / "tools/work/fetch_server_status.py"),
                                 "--server", status_server], cwd=repo, check=True)
