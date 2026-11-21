@@ -47,7 +47,8 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
         functions = json.loads(gzip.decompress(fh.read()))["functions"]
     if aliases_path.is_file():
         with aliases_path.open(encoding="utf-8") as fh:
-            aliases = json.load(fh).get("functions", {})
+            registry = json.load(fh)
+        aliases = registry.get("functions", {}) | registry.get("xdk_functions", {})
         for exported_name, proof in aliases.items():
             if proof.get("byte_match") is not True:
                 continue

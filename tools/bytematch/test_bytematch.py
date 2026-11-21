@@ -142,7 +142,7 @@ def test_wrong_callee_is_not_exact():
     assert result.calls_wrong == [{"at": 4, "ours": "Leaf", "artist": "Other"}]
 
 
-def test_native_source_alias_requires_opt_in_and_the_exported_name_and_address(tmp_path):
+def test_native_alias_requires_opt_in_and_the_exported_name_and_address(tmp_path):
     pack_path = tmp_path / "artist.json.gz"
     aliases_path = tmp_path / "source_aliases.json"
     pack = {
@@ -150,12 +150,16 @@ def test_native_source_alias_requires_opt_in_and_the_exported_name_and_address(t
         "0x82200004": {"name": "Example::GetRes", "n": 1},
         "0x82200008": {"name": "Example::Release", "n": 1},
         "0x8220000C": {"name": "Other::GetRes", "n": 1},
+        "0x82200010": {"name": "__restgprlr", "n": 1},
+        "0x82200014": {"name": "__restgprlr", "n": 1},
     }
     pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode("utf-8")))
     aliases_path.write_text(json.dumps({"functions": {
         "Example::GetRes": {"x360_address": "0x82200000", "symbol": "Example::GetResource", "byte_match": True},
         "Example::GetSomething": {"x360_address": "0x82200008", "symbol": "Example::GetOther", "byte_match": True},
         "Other::GetRes": {"x360_address": "0x8220000C", "symbol": "Other::GetResource"},
+    }, "xdk_functions": {
+        "__restgprlr": {"x360_address": "0x82200010", "symbol": "__restgprlr_14", "byte_match": True},
     }}), encoding="utf-8")
 
     art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path))
@@ -165,6 +169,8 @@ def test_native_source_alias_requires_opt_in_and_the_exported_name_and_address(t
     assert art.name_at(0x82200004) == "Example::GetRes"
     assert art.name_at(0x82200008) == "Example::Release"
     assert art.name_at(0x8220000C) == "Other::GetRes"
+    assert art.name_at(0x82200010) == "__restgprlr_14"
+    assert art.name_at(0x82200014) == "__restgprlr"
 
 
 def test_unnamed_callee_is_unverified_not_wrong():
