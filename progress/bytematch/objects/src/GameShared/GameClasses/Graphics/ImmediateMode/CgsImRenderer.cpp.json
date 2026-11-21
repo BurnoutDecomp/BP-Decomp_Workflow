@@ -1,20 +1,25 @@
 {
  "blob": "d95dfe9f8239b39ef1cb7c34c6b2ca537823bd42",
- "commit": "52342c0a45b4a8b924e134fcbd62b4c00e28e52e",
+ "commit": "c04f659b4aeefb318d2a2a9f6dd383c895d8490e",
  "compiled": true,
- "measured": "2026-11-21T17:02:38Z",
+ "measured": "2026-11-21T18:50:01Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 16,
+ "unpaired": 11,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "822769E0", "artist_size": 136, "first_diff": 4, "name": "shadow::Device::SetState", "score": 3.8, "size": 72, "status": "nonmatching", "symbol": "?SetState@Device@shadow@@SAXPBVRenderTargetState@renderengine@@@Z"},
   {"artist": "82276D08", "artist_size": 156, "first_diff": 48, "name": "CgsGraphics::ImRendererBase::SetState", "score": 65.7, "size": 124, "status": "nonmatching", "symbol": "?SetState@ImRendererBase@CgsGraphics@@QAAXPBVRenderTargetState@renderengine@@@Z"},
   {"artist": "82276EE8", "artist_size": 156, "first_diff": 8, "name": "CgsGraphics::ImRendererBase::SetTexture", "score": 53.1, "size": 100, "status": "nonmatching", "symbol": "?SetTexture@ImRendererBase@CgsGraphics@@QAAXPAVTexture@renderengine@@@Z"},
+  {"artist": "827ED200", "artist_size": 228, "first_diff": 20, "name": "CgsGraphics::ImRendererBase::ConstructNoAlphaTestBlendState", "score": 45.0, "size": 288, "status": "nonmatching", "symbol": "?ConstructNoAlphaTestBlendState@ImRendererBase@CgsGraphics@@CAPBVBlendState@renderengine@@PAUIResourceAllocator@rw@@@Z"},
+  {"artist": "827ED2E8", "artist_size": 204, "first_diff": 20, "name": "CgsGraphics::ImRendererBase::ConstructNoBlendNoAlphaTestBlendState", "score": 47.9, "size": 280, "status": "nonmatching", "symbol": "?ConstructNoBlendNoAlphaTestBlendState@ImRendererBase@CgsGraphics@@CAPBVBlendState@renderengine@@PAUIResourceAllocator@rw@@@Z"},
+  {"artist": "827ED3B8", "artist_size": 172, "first_diff": 16, "name": "CgsGraphics::ImRendererBase::ConstructRasteriserState", "score": 65.1, "size": 172, "status": "nonmatching", "symbol": "?ConstructRasteriserState@ImRendererBase@CgsGraphics@@CAPBVRasterizerState@renderengine@@PAUIResourceAllocator@rw@@W4CullMode@34@@Z"},
+  {"artist": "827ED468", "artist_size": 204, "first_diff": 4, "name": "CgsGraphics::ImRendererBase::ConstructDepthStencilState", "score": 38.5, "size": 212, "status": "nonmatching", "symbol": "?ConstructDepthStencilState@ImRendererBase@CgsGraphics@@CAPBVDepthStencilState@renderengine@@PAUIResourceAllocator@rw@@_N1W4Function@34@@Z"},
   {"artist": "827ED538", "artist_size": 204, "first_diff": 16, "name": "CgsGraphics::ImRendererBase::ConstructSamplerState", "score": 76.5, "size": 204, "status": "nonmatching", "symbol": "?ConstructSamplerState@ImRendererBase@CgsGraphics@@CAPBVSamplerState@renderengine@@PAUIResourceAllocator@rw@@IIII@Z"},
+  {"artist": "827ED608", "artist_size": 212, "first_diff": 20, "name": "CgsGraphics::ImRendererBase::ConstructDefaultTextureState", "score": 62.3, "size": 212, "status": "nonmatching", "symbol": "?ConstructDefaultTextureState@ImRendererBase@CgsGraphics@@CAPBVTextureState@renderengine@@PAUIResourceAllocator@rw@@PAVTexture@4@@Z"},
   {"artist": "827F1AE8", "artist_size": 312, "first_diff": 8, "name": "CgsGraphics::ImRendererBase::ConstructWhiteTexture", "score": 51.1, "size": 408, "status": "nonmatching", "symbol": "?ConstructWhiteTexture@ImRendererBase@CgsGraphics@@CAPAVTexture@renderengine@@PAUIResourceAllocator@rw@@@Z"},
-  {"artist": "827F1C20", "artist_size": 480, "calls_wrong": [{"artist": "CgsGraphics::ImRendererBase::ConstructNoAlphaTestBlendSt", "at": 152, "ours": "CgsGraphics::ImRendererBase::ConstructNoAlphaTestBlendState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructNoBlendNoAlphaTest", "at": 164, "ours": "CgsGraphics::ImRendererBase::ConstructNoBlendNoAlphaTestBlendState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructRasteriserSta", "at": 180, "ours": "CgsGraphics::ImRendererBase::ConstructRasteriserState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructRasteriserSta", "at": 196, "ours": "CgsGraphics::ImRendererBase::ConstructRasteriserState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructRasteriserSta", "at": 212, "ours": "CgsGraphics::ImRendererBase::ConstructRasteriserState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructDepthStenci", "at": 236, "ours": "CgsGraphics::ImRendererBase::ConstructDepthStencilState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructDepthStenci", "at": 260, "ours": "CgsGraphics::ImRendererBase::ConstructDepthStencilState"}, {"artist": "CgsGraphics::ImRendererBase::ConstructDepthStenci", "at": 284, "ours": "CgsGraphics::ImRendererBase::ConstructDepthStencilState"}], "data_unchecked": 1, "first_diff": 152, "name": "CgsGraphics::ImRendererBase::ConstructOnceOnly", "score": 90.0, "size": 480, "status": "nonmatching", "symbol": "?ConstructOnceOnly@ImRendererBase@CgsGraphics@@KAXPAUIResourceAllocator@rw@@@Z"}
+  {"artist": "827F1C20", "artist_size": 480, "data_unchecked": 1, "name": "CgsGraphics::ImRendererBase::ConstructOnceOnly", "score": 100.0, "size": 480, "status": "exact", "symbol": "?ConstructOnceOnly@ImRendererBase@CgsGraphics@@KAXPAUIResourceAllocator@rw@@@Z"}
  ]
 }

@@ -1,13 +1,13 @@
 {
  "blob": "eae8a3f21eb4cba00ffb5a13c06052afd0c70075",
- "commit": "9a1465fb2bf21968be571bc525520d91ee08412e",
+ "commit": "c04f659b4aeefb318d2a2a9f6dd383c895d8490e",
  "compiled": true,
- "measured": "2026-11-21T17:15:43Z",
+ "measured": "2026-11-21T18:50:01Z",
  "schema": 1,
  "source": "src/GameSource/World/EntityModules/WorldEntityModule/PVSModule/BrnPVSModule.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 69,
+ "unpaired": 68,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -23,9 +23,10 @@
   {"artist": "822BAFF0", "artist_size": 120, "data_unchecked": 4, "name": "BrnWorld::PVSModule::GetOutputInterface", "score": 100.0, "size": 120, "status": "exact", "symbol": "?GetOutputInterface@PVSModule@BrnWorld@@QAAPAUOutputInterface@PVSIO@2@XZ"},
   {"artist": "822BB068", "artist_size": 120, "data_unchecked": 4, "name": "BrnWorld::PVSModule::GetGameDataRequestInt", "score": 100.0, "size": 120, "status": "exact", "symbol": "?GetGameDataRequestInt@PVSModule@BrnWorld@@QAAPAU?$RequestInterface@$0CAA@@GameDataIO@BrnResource@@XZ"},
   {"artist": "822C3F50", "artist_size": 104, "name": "BrnWorld::PVSModule::Construct", "score": 100.0, "size": 104, "status": "exact", "symbol": "?Construct@PVSModule@BrnWorld@@UAAXXZ"},
+  {"artist": "822E51B0", "artist_size": 112, "first_diff": 44, "name": "CgsModule::EventQueue<BrnWorld::PVSIO::GetZoneResponse,8>::Construct", "score": 96.4, "size": 112, "status": "nonmatching", "symbol": "?Construct@?$EventQueue@UGetZoneResponse@PVSIO@BrnWorld@@$07@CgsModule@@QAAXXZ"},
   {"artist": "822EE050", "artist_size": 1484, "first_diff": 8, "name": "BrnWorld::PVSModule::Update", "score": 20.2, "size": 1728, "status": "nonmatching", "symbol": "?Update@PVSModule@BrnWorld@@UAAXXZ"},
   {"artist": "822EE620", "artist_size": 52, "first_diff": 0, "name": "BrnWorld::PVSIO::InputBuffer::Construct", "score": 0.0, "size": 4, "status": "nonmatching", "symbol": "?Construct@InputBuffer@PVSIO@BrnWorld@@QAAXXZ"},
-  {"artist": "822EE658", "artist_size": 68, "calls_wrong": [{"artist": "BrnWorld::PVSIO::GetZoneResponse,8>::Construct", "at": 16, "ours": "CgsModule::EventQueue<BrnWorld::PVSIO::GetZoneResponse,8>::Construct"}], "first_diff": 16, "name": "BrnWorld::PVSIO::OutputBuffer::Construct", "score": 94.1, "size": 68, "status": "nonmatching", "symbol": "?Construct@OutputBuffer@PVSIO@BrnWorld@@QAAXXZ"},
+  {"artist": "822EE658", "artist_size": 68, "name": "BrnWorld::PVSIO::OutputBuffer::Construct", "score": 100.0, "size": 68, "status": "exact", "symbol": "?Construct@OutputBuffer@PVSIO@BrnWorld@@QAAXXZ"},
   {"artist": "82302E00", "artist_size": 580, "first_diff": 16, "name": "BrnWorld::PVSModule::Prepare", "score": 64.3, "size": 564, "status": "nonmatching", "symbol": "?Prepare@PVSModule@BrnWorld@@UAA_NXZ"},
   {"artist": "827E4CC8", "artist_size": 144, "first_diff": 8, "name": "BrnWorld::PVSModule::PVSModule", "score": 51.4, "size": 136, "status": "nonmatching", "symbol": "??0PVSModule@BrnWorld@@QAA@XZ"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"}
