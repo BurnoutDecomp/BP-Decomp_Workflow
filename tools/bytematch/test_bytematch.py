@@ -376,6 +376,28 @@ def test_import_stub_shapes():
     assert sdk.import_stub([0x38600000, 0x38800000, 0x7D6903A6, BLR]) is None
 
 
+def test_sdk_provider_accepts_only_attested_folded_names(monkeypatch, tmp_path):
+    import sdk
+
+    target, unrelated = 0x82100100, 0x82100200
+    art = FakeArtist([(target, "Canonical", [BLR]), (unrelated, "Unrelated", [BLR])])
+    art.folded_names[target] = {"Alias"}
+    obj = coff.ObjectFile(make_object([("Alias", [BLR], []), ("Canonical", [BLR], [])]))
+    alias, canonical = obj.functions()
+
+    monkeypatch.setattr(sdk, "library_functions", lambda _: [("a.lib", "alias.obj", obj, alias, False)])
+    providers = sdk.identify(art, tmp_path, log=lambda _: None)
+    assert set(providers) == {target}
+    assert providers[target]["symbol"] == "Alias"
+
+    monkeypatch.setattr(sdk, "library_functions", lambda _: [
+        ("a.lib", "alias.obj", obj, alias, False), ("b.lib", "canonical.obj", obj, canonical, False),
+    ])
+    providers = sdk.identify(art, tmp_path, log=lambda _: None)
+    assert set(providers) == {target}
+    assert providers[target]["symbol"] == "Canonical"
+
+
 def test_ida_sizes_drop_trailing_padding():
     address = 0x82100000
     art = FakeArtist([(address, "F", [0x38600000, BLR, 0x00000000])])

@@ -70,7 +70,7 @@ def identify(artist: Artist, lib_dir, log=print):
         if size:
             by_size[size].append(address)
             by_head[(size, artist.bytes(address, 4))].append(address)
-    claims = defaultdict(dict)   # address -> {(lib, member, symbol): named?}
+    claims = defaultdict(dict)   # address -> {(lib, member, symbol): name evidence rank}
     stubs = {}
     for address in artist.names:
         size, _ = artist.size(address)
@@ -100,7 +100,10 @@ def identify(artist: Artist, lib_dir, log=print):
                 hits.append((address, artist.name_at(address)))
         if not hits:
             continue
-        named = [a for a, n in hits if n is not None and normal_name(n) == name]
+        named = {
+            a: 2 if n is not None and normal_name(n) == name else 1
+            for a, n in hits if artist.matches_name(a, name)
+        }
         if named:
             chosen = named
         elif entry:
@@ -110,7 +113,7 @@ def identify(artist: Artist, lib_dir, log=print):
         else:
             continue
         for address in chosen:
-            claims[address][(lib, member, fn.symbol)] = bool(named)
+            claims[address][(lib, member, fn.symbol)] = named.get(address, 0)
     log(f"sdk: {seen} library functions scanned, {len(claims)} ARTIST functions provided")
     out = {}
     for address, (ordinal, module) in stubs.items():
@@ -119,7 +122,7 @@ def identify(artist: Artist, lib_dir, log=print):
             out[address] = {"lib": "import stub", "member": member, "symbol": artist.names.get(address, ""),
                             "ordinal": ordinal, "variants": 1}
     for address, providers in claims.items():
-        # Prefer a name-confirmed provider, then the release library over d/i variants.
-        (lib, member, symbol), _ = sorted(providers.items(), key=lambda kv: (not kv[1], kv[0][0].endswith(("d.lib", "i.lib")), kv[0]))[0]
+        # Prefer the canonical export, then a confirmed folded name, then the release library.
+        (lib, member, symbol), _ = min(providers.items(), key=lambda kv: (-kv[1], kv[0][0].endswith(("d.lib", "i.lib")), kv[0]))
         out[address] = {"lib": lib, "member": member, "symbol": symbol, "variants": len(providers)}
     return out
