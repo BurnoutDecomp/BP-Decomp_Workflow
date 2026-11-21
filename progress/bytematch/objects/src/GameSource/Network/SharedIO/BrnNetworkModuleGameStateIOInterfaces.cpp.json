@@ -1,19 +1,20 @@
 {
- "blob": "6d1c5d1e05ace4d9b06e89196a293e5779c6abba",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "aacd12b072d6d4f8ee61c4aa063cf565f3811db2",
+ "commit": "4d801b03e20013ae40b358695b118f93840f96f9",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-21T13:34:56Z",
  "schema": 1,
  "source": "src/GameSource/Network/SharedIO/BrnNetworkModuleGameStateIOInterfaces.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 33,
+ "unpaired": 34,
  "functions": [
   {"artist": "823558A0", "artist_size": 620, "first_diff": 12, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::SetActiveRaceCarIndex", "score": 42.9, "size": 256, "status": "nonmatching", "symbol": "?SetActiveRaceCarIndex@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QAAXHW4EActiveRaceCarIndex@@@Z"},
   {"artist": "82362528", "artist_size": 148, "first_diff": 20, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::Clear", "score": 56.0, "size": 152, "status": "nonmatching", "symbol": "?Clear@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QAAXXZ"},
   {"artist": "823C9360", "artist_size": 332, "first_diff": 108, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::Append", "score": 79.8, "size": 340, "status": "nonmatching", "symbol": "?Append@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QAAXPBU123@@Z"},
-  {"artist": "823C94B0", "artist_size": 160, "first_diff": 44, "name": "BrnNetwork::BrnNetworkModuleIO::NetworkToGameStateInterface::Append", "score": 85.0, "size": 160, "status": "nonmatching", "symbol": "?Append@NetworkToGameStateInterface@BrnNetworkModuleIO@BrnNetwork@@QAAXPBU123@@Z"},
-  {"artist": "82542228", "artist_size": 168, "first_diff": 44, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetNetworkPlayerID", "score": 95.2, "size": 168, "status": "nonmatching", "symbol": "?GetNetworkPlayerID@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QBA?BHW4EActiveRaceCarIndex@@@Z"},
-  {"artist": "825422D0", "artist_size": 116, "first_diff": 44, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetPlayerInFreeburnChallenge", "score": 93.1, "size": 116, "status": "nonmatching", "symbol": "?GetPlayerInFreeburnChallenge@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QBA?B_NW4EActiveRaceCarIndex@@@Z"}
+  {"artist": "823C94B0", "artist_size": 160, "calls_wrong": [{"artist": "BrnNetwork::BrnNetworkModuleIO::DirtyTrickEvent>::Append", "at": 76, "ours": "CgsModule::BaseEventQueue<BrnNetwork::BrnNetworkModuleIO::DirtyTrickEvent>::Append"}, {"artist": "BrnNetwork::RoadRulesRecvData>::Append", "at": 88, "ours": "CgsModule::BaseEventQueue<BrnNetwork::RoadRulesRecvData>::Append"}, {"artist": "BrnNetwork::RoadRulesDownloadEvent>::Append", "at": 100, "ours": "CgsModule::BaseEventQueue<BrnNetwork::RoadRulesDownloadEvent>::Append"}, {"artist": "BrnNetwork::RoadRulesMessageData>::Append", "at": 112, "ours": "CgsModule::BaseEventQueue<BrnNetwork::RoadRulesMessageData>::Append"}, {"artist": "BrnGameState::GameStateModuleIO::CompletedFburnChallengesData>::Ap", "at": 124, "ours": "CgsModule::BaseEventQueue<BrnGameState::GameStateModuleIO::CompletedFburnChallengesData>::Append"}], "data_unchecked": 2, "first_diff": 76, "name": "BrnNetwork::BrnNetworkModuleIO::NetworkToGameStateInterface::Append", "score": 87.5, "size": 160, "status": "nonmatching", "symbol": "?Append@NetworkToGameStateInterface@BrnNetworkModuleIO@BrnNetwork@@QAAXPBU123@@Z"},
+  {"artist": "82542228", "artist_size": 168, "data_unchecked": 3, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetNetworkPlayerID", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetNetworkPlayerID@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QBA?BHW4EActiveRaceCarIndex@@@Z"},
+  {"artist": "825422D0", "artist_size": 116, "data_unchecked": 3, "name": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetPlayerInFreeburnChallenge", "score": 100.0, "size": 116, "status": "exact", "symbol": "?GetPlayerInFreeburnChallenge@GameStateToNetworkInterface@BrnNetworkModuleIO@BrnNetwork@@QBA?B_NW4EActiveRaceCarIndex@@@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

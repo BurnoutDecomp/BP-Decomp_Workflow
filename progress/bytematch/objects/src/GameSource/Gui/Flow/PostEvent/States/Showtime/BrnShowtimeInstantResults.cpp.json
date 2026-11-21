@@ -1,13 +1,13 @@
 {
- "blob": "a17b3a6a4f00c39054ab8dc26ff11004b05752bc",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "39e5cc435160aea7214eac414fc5334330bb9f69",
+ "commit": "4d801b03e20013ae40b358695b118f93840f96f9",
  "compiled": true,
- "measured": "2026-11-19T21:08:30Z",
+ "measured": "2026-11-21T13:34:56Z",
  "schema": 1,
  "source": "src/GameSource/Gui/Flow/PostEvent/States/Showtime/BrnShowtimeInstantResults.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 32,
+ "unpaired": 33,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "8235F470", "artist_size": 376, "first_diff": 8, "name": "CgsModule::VariableEventQueue<18432,16>::Clear", "score": 22.2, "size": 272, "status": "nonmatching", "symbol": "?Clear@?$VariableEventQueue@$0EIAA@$0BA@@CgsModule@@QAAXXZ"},
@@ -22,9 +22,9 @@
   {"artist": "82435188", "artist_size": 676, "first_diff": 8, "name": "CgsModule::VariableEventQueue<65536,16>::AddEvent", "score": 15.4, "size": 568, "status": "nonmatching", "symbol": "?AddEvent@?$VariableEventQueue@$0BAAAA@$0BA@@CgsModule@@QAA_NPBUEvent@2@HH@Z"},
   {"artist": "824B3BD0", "artist_size": 104, "data_unchecked": 3, "name": "BrnGui::ShowtimeInstantResultsState::ResetStateTimer", "score": 100.0, "size": 104, "status": "exact", "symbol": "?ResetStateTimer@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824B3C38", "artist_size": 116, "first_diff": 4, "name": "BrnGui::ShowtimeInstantResultsState::SetMultiplierText", "score": 36.1, "size": 128, "status": "nonmatching", "symbol": "?SetMultiplierText@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
-  {"artist": "824B4998", "artist_size": 188, "first_diff": 36, "name": "BrnGui::ShowtimeInstantResultsState::AppendExpectedComponents", "score": 85.1, "size": 188, "status": "nonmatching", "symbol": "?AppendExpectedComponents@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
+  {"artist": "824B4998", "artist_size": 188, "calls_unverified": 6, "data_unchecked": 2, "name": "BrnGui::ShowtimeInstantResultsState::AppendExpectedComponents", "score": 100.0, "size": 188, "status": "exact", "symbol": "?AppendExpectedComponents@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824B4A58", "artist_size": 168, "first_diff": 44, "name": "BrnGui::ShowtimeInstantResultsState::HandleAptTriggers", "score": 95.2, "size": 168, "status": "nonmatching", "symbol": "?HandleAptTriggers@ShowtimeInstantResultsState@BrnGui@@AAAXPBUGuiEventAptTriggerPayload@CgsGui@@@Z"},
-  {"artist": "824B4B00", "artist_size": 188, "first_diff": 120, "name": "BrnGui::ShowtimeInstantResultsState::SetupComponents", "score": 95.7, "size": 188, "status": "nonmatching", "symbol": "?SetupComponents@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
+  {"artist": "824B4B00", "artist_size": 188, "first_diff": 8, "name": "BrnGui::ShowtimeInstantResultsState::SetupComponents", "score": 77.1, "size": 196, "status": "nonmatching", "symbol": "?SetupComponents@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824B4BC0", "artist_size": 124, "first_diff": 8, "name": "BrnGui::ShowtimeInstantResultsState::SetupSummary", "score": 68.8, "size": 132, "status": "nonmatching", "symbol": "?SetupSummary@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824B4C40", "artist_size": 288, "first_diff": 4, "name": "BrnGui::ShowtimeInstantResultsState::TickSubstateAndEndIfDone", "score": 76.0, "size": 312, "status": "nonmatching", "symbol": "?TickSubstateAndEndIfDone@ShowtimeInstantResultsState@BrnGui@@AAA_NXZ"},
   {"artist": "824B4D60", "artist_size": 76, "first_diff": 8, "name": "BrnGui::ShowtimeInstantResultsState::CalculateMultiplier", "score": 57.9, "size": 76, "status": "nonmatching", "symbol": "?CalculateMultiplier@ShowtimeInstantResultsState@BrnGui@@AAAHXZ"},
@@ -36,6 +36,7 @@
   {"artist": "824D5A78", "artist_size": 1420, "first_diff": 8, "name": "BrnGui::ShowtimeInstantResultsState::HandleIncomingEvents", "score": 36.4, "size": 996, "status": "nonmatching", "symbol": "?HandleIncomingEvents@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824D6008", "artist_size": 540, "first_diff": 4, "name": "BrnGui::ShowtimeInstantResultsState::UpdateEventResults", "score": 58.4, "size": 432, "status": "nonmatching", "symbol": "?UpdateEventResults@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
   {"artist": "824DC3C8", "artist_size": 372, "first_diff": 4, "name": "BrnGui::ShowtimeInstantResultsState::UpdateSubstate", "score": 26.0, "size": 212, "status": "nonmatching", "symbol": "?UpdateSubstate@ShowtimeInstantResultsState@BrnGui@@AAAXXZ"},
-  {"artist": "824DFB48", "artist_size": 392, "first_diff": 16, "name": "BrnGui::ShowtimeInstantResultsState::Update", "score": 41.0, "size": 388, "status": "nonmatching", "symbol": "?Update@ShowtimeInstantResultsState@BrnGui@@UAAXXZ"}
+  {"artist": "824DFB48", "artist_size": 392, "first_diff": 16, "name": "BrnGui::ShowtimeInstantResultsState::Update", "score": 41.0, "size": 388, "status": "nonmatching", "symbol": "?Update@ShowtimeInstantResultsState@BrnGui@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

@@ -1,13 +1,13 @@
 {
- "blob": "a4a1f481a15610f491a15a4d8740836f5905c38f",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "6f8b1fddde49048db5d65849ce93fb714d86c797",
+ "commit": "4d801b03e20013ae40b358695b118f93840f96f9",
  "compiled": true,
- "measured": "2026-11-19T21:08:30Z",
+ "measured": "2026-11-21T13:34:56Z",
  "schema": 1,
  "source": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 118,
+ "unpaired": 119,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 33.3, "size": 8, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@U__vector4@@@Z"},
@@ -17,7 +17,7 @@
   {"artist": "822A0D60", "artist_size": 96, "first_diff": 0, "name": "BrnWorld::RaceCar::IsPlayerDriven", "score": 21.4, "size": 16, "status": "nonmatching", "symbol": "?IsPlayerDriven@RaceCar@BrnWorld@@QBA_NXZ"},
   {"artist": "822A0E28", "artist_size": 100, "first_diff": 0, "name": "BrnWorld::RaceCar::IsAIDriven", "score": 26.7, "size": 20, "status": "nonmatching", "symbol": "?IsAIDriven@RaceCar@BrnWorld@@QBA_NXZ"},
   {"artist": "822A1F10", "artist_size": 164, "first_diff": 0, "name": "BrnWorld::ActiveRaceCar::IsAttached", "score": 17.4, "size": 20, "status": "nonmatching", "symbol": "?IsAttached@ActiveRaceCar@BrnWorld@@QBA_NXZ"},
-  {"artist": "822A1FB8", "artist_size": 164, "first_diff": 52, "name": "BrnWorld::ActiveRaceCar::IsActive", "score": 95.1, "size": 164, "status": "nonmatching", "symbol": "?IsActive@ActiveRaceCar@BrnWorld@@QBA_NXZ"},
+  {"artist": "822A1FB8", "artist_size": 164, "data_unchecked": 3, "name": "BrnWorld::ActiveRaceCar::IsActive", "score": 100.0, "size": 164, "status": "exact", "symbol": "?IsActive@ActiveRaceCar@BrnWorld@@QBA_NXZ"},
   {"artist": "822A2060", "artist_size": 116, "first_diff": 28, "name": "BrnWorld::ActiveRaceCar::IsOnRaceStartState", "score": 87.7, "size": 112, "status": "nonmatching", "symbol": "?IsOnRaceStartState@ActiveRaceCar@BrnWorld@@QBA_NH@Z"},
   {"artist": "822A20D8", "artist_size": 120, "first_diff": 20, "name": "BrnWorld::ActiveRaceCar::IsInAnyRaceStartState", "score": 91.5, "size": 116, "status": "nonmatching", "symbol": "?IsInAnyRaceStartState@ActiveRaceCar@BrnWorld@@QBA_NXZ"},
   {"artist": "822A2150", "artist_size": 92, "first_diff": 20, "name": "BrnWorld::ActiveRaceCar::IsCrashing", "score": 88.9, "size": 88, "status": "nonmatching", "symbol": "?IsCrashing@ActiveRaceCar@BrnWorld@@QBA_NXZ"},
@@ -50,7 +50,7 @@
   {"artist": "822BF4D8", "artist_size": 224, "first_diff": 8, "name": "BrnWorld::ActiveRaceCar::DetermineCullingGroup", "score": 32.1, "size": 224, "status": "nonmatching", "symbol": "?DetermineCullingGroup@ActiveRaceCar@BrnWorld@@QAAIXZ"},
   {"artist": "822BF5B8", "artist_size": 176, "first_diff": 52, "name": "BrnWorld::ActiveRaceCar::UpdateCullingGroup", "score": 75.9, "size": 172, "status": "nonmatching", "symbol": "?UpdateCullingGroup@ActiveRaceCar@BrnWorld@@QAAXPAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@@Z"},
   {"artist": "822BF668", "artist_size": 468, "first_diff": 8, "name": "BrnWorld::ActiveRaceCar::RemoveFromCollision", "score": 39.0, "size": 332, "status": "nonmatching", "symbol": "?RemoveFromCollision@ActiveRaceCar@BrnWorld@@QAAXPAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@PAUVehicleInputInterface@Vehicle@BrnPhysics@@@Z"},
-  {"artist": "822BF840", "artist_size": 140, "first_diff": 36, "name": "BrnWorld::ActiveRaceCar::SendAddedRemovedNetworkCarForCollisionEvents", "score": 88.6, "size": 140, "status": "nonmatching", "symbol": "?SendAddedRemovedNetworkCarForCollisionEvents@ActiveRaceCar@BrnWorld@@QAAXPAUVehicleInputInterface@Vehicle@BrnPhysics@@@Z"},
+  {"artist": "822BF840", "artist_size": 140, "calls_unverified": 1, "calls_wrong": [{"artist": "BrnPhysics::", "at": 96, "ours": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::VehicleAddedForCollisionEvent>::GetEvent"}, {"artist": "BrnPhysics::Vehicle::VehicleAddedForCollisionEvent>::AddEvent", "at": 108, "ours": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::VehicleAddedForCollisionEvent>::AddEvent"}], "data_unchecked": 2, "first_diff": 96, "name": "BrnWorld::ActiveRaceCar::SendAddedRemovedNetworkCarForCollisionEvents", "score": 91.4, "size": 140, "status": "nonmatching", "symbol": "?SendAddedRemovedNetworkCarForCollisionEvents@ActiveRaceCar@BrnWorld@@QAAXPAUVehicleInputInterface@Vehicle@BrnPhysics@@@Z"},
   {"artist": "822BF8D0", "artist_size": 348, "first_diff": 32, "name": "BrnWorld::ActiveRaceCar::UpdateResetTransform", "score": 36.6, "size": 416, "status": "nonmatching", "symbol": "?UpdateResetTransform@ActiveRaceCar@BrnWorld@@QAAXXZ"},
   {"artist": "822BFA30", "artist_size": 292, "first_diff": 4, "name": "BrnWorld::ActiveRaceCar::UpdateCarSelectStateOnline", "score": 20.2, "size": 144, "status": "nonmatching", "symbol": "?UpdateCarSelectStateOnline@ActiveRaceCar@BrnWorld@@QAAX_N@Z"},
   {"artist": "822BFB58", "artist_size": 416, "first_diff": 4, "name": "BrnWorld::ActiveRaceCar::RequestPlaceOnTrack", "score": 44.1, "size": 328, "status": "nonmatching", "symbol": "?RequestPlaceOnTrack@ActiveRaceCar@BrnWorld@@QAAXABVVector3@vpu@math@rw@@0M@Z"},
@@ -83,6 +83,7 @@
   {"artist": "822F78B0", "artist_size": 1604, "first_diff": 8, "name": "BrnWorld::ActiveRaceCar::Update", "score": 30.5, "size": 964, "status": "nonmatching", "symbol": "?Update@ActiveRaceCar@BrnWorld@@QAAXMMMM_N0HABUVector2@vpu@math@rw@@1PAUGameEventQueue@RaceCarEntityModuleIO@2@PAVRandom@CgsNumeric@@PAUVehicleInputInterface@Vehicle@BrnPhysics@@@Z"},
   {"artist": "822F7EF8", "artist_size": 164, "first_diff": 32, "name": "BrnWorld::ActiveRaceCar::OnHandlingModelAdded", "score": 88.9, "size": 160, "status": "nonmatching", "symbol": "?OnHandlingModelAdded@ActiveRaceCar@BrnWorld@@QAAXPAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@PAUVehicleInputInterface@Vehicle@BrnPhysics@@M@Z"},
   {"artist": "825B2620", "artist_size": 8, "name": "rw::math::vpu::operator+", "score": 100.0, "size": 8, "status": "exact", "symbol": "??Hvpu@math@rw@@YA?AVVector3@012@V3012@0@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"},
   {"artist": "82BAA188", "artist_size": 24, "first_diff": 0, "name": "rw::collision::BoxVolume::Initialize", "score": 9.5, "size": 60, "status": "nonmatching", "symbol": "?Initialize@BoxVolume@collision@rw@@SAPAU123@ABUResource@3@MMM@Z"},
   {"artist": "82C130D0", "artist_size": 8, "name": "fabs", "score": 100.0, "size": 8, "status": "exact", "symbol": "?fabs@@YAMM@Z"}
  ]
