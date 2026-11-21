@@ -1,13 +1,13 @@
 {
- "blob": "96783b5d3da39e5d9b9a072c63aee853afd30101",
- "commit": "f7c3ee633e4a827598f61f8ddf839c134da501b3",
+ "blob": "d06cf754b1b6a7102473b9b89b35b4d2653984ec",
+ "commit": "e8c5807d1751742fb044c626d239ebf018755f40",
  "compiled": true,
- "measured": "2026-11-21T12:20:14Z",
+ "measured": "2026-11-21T13:12:59Z",
  "schema": 1,
  "source": "src/GameSource/Network/BrnNetworkManager_wN1_02.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 72,
+ "unpaired": 73,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F1FA0", "artist_size": 224, "first_diff": 4, "name": "CgsSystem::Time::Time", "score": 42.6, "size": 152, "status": "nonmatching", "symbol": "??0Time@CgsSystem@@QAA@M@Z"},
@@ -48,7 +48,7 @@
   {"artist": "82581FA8", "artist_size": 196, "first_diff": 8, "name": "BrnNetwork::BrnNetworkManager::OnRoundFinish", "score": 63.8, "size": 180, "status": "nonmatching", "symbol": "?OnRoundFinish@BrnNetworkManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82582070", "artist_size": 168, "first_diff": 8, "name": "BrnNetwork::BrnNetworkManager::OnGameFinish", "score": 55.0, "size": 152, "status": "nonmatching", "symbol": "?OnGameFinish@BrnNetworkManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82582118", "artist_size": 12, "name": "BrnNetwork::BrnNetworkManager::JoinGameSession", "score": 100.0, "size": 12, "status": "exact", "symbol": "?JoinGameSession@BrnNetworkManager@BrnNetwork@@QAAXPAD@Z"},
-  {"artist": "82582178", "artist_size": 132, "first_diff": 48, "name": "BrnNetwork::BrnNetworkManager::CaptureTelemetryEvent", "score": 90.9, "size": 132, "status": "nonmatching", "symbol": "?CaptureTelemetryEvent@BrnNetworkManager@BrnNetwork@@QAAXW4ETelemetryHook@2@PBD@Z"},
+  {"artist": "82582178", "artist_size": 132, "calls_unverified": 1, "data_unchecked": 3, "name": "BrnNetwork::BrnNetworkManager::CaptureTelemetryEvent", "score": 100.0, "size": 132, "status": "exact", "symbol": "?CaptureTelemetryEvent@BrnNetworkManager@BrnNetwork@@QAAXW4ETelemetryHook@2@PBD@Z"},
   {"artist": "825822A0", "artist_size": 120, "first_diff": 52, "name": "BrnNetwork::BrnNetworkManager::GetActiveRaceCarIndex", "score": 86.2, "size": 112, "status": "nonmatching", "symbol": "?GetActiveRaceCarIndex@BrnNetworkManager@BrnNetwork@@QAA?AW4EActiveRaceCarIndex@@H@Z"},
   {"artist": "825885E8", "artist_size": 640, "first_diff": 0, "name": "BrnNetwork::BrnNetworkManager::GetMaxMessageSize", "score": 24.2, "size": 648, "status": "nonmatching", "symbol": "?GetMaxMessageSize@BrnNetworkManager@BrnNetwork@@AAAH_N@Z"},
   {"artist": "82588980", "artist_size": 176, "first_diff": 8, "name": "BrnNetwork::BrnNetworkManager::OnGameStart", "score": 54.8, "size": 160, "status": "nonmatching", "symbol": "?OnGameStart@BrnNetworkManager@BrnNetwork@@QAAXXZ"},
@@ -57,6 +57,7 @@
   {"artist": "825967F0", "artist_size": 216, "first_diff": 12, "name": "BrnNetwork::BrnNetworkManager::ProcessNetworkTextureDecodeEvent", "score": 67.9, "size": 208, "status": "nonmatching", "symbol": "?ProcessNetworkTextureDecodeEvent@BrnNetworkManager@BrnNetwork@@QAAXPBUNetworkInDxtDecodeImageEvent@BrnNetworkModuleIO@2@@Z"},
   {"artist": "825968C8", "artist_size": 356, "first_diff": 44, "name": "BrnNetwork::BrnNetworkManager::ProcessHLUpdateFlags", "score": 76.7, "size": 364, "status": "nonmatching", "symbol": "?ProcessHLUpdateFlags@BrnNetworkManager@BrnNetwork@@AAAXG@Z"},
   {"artist": "825977D0", "artist_size": 396, "calls_unverified": 1, "calls_wrong": [{"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 188, "ours": "BrnNetwork::StandingsManager::Update"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 204, "ours": "BrnNetwork::NetworkDirtyTrickManager::ProcessBeforeSimulation"}], "first_diff": 188, "name": "BrnNetwork::BrnNetworkManager::ProcessBeforeSimulation", "score": 97.0, "size": 396, "status": "nonmatching", "symbol": "?ProcessBeforeSimulation@BrnNetworkManager@BrnNetwork@@QAAXPBUPreSimulationInputBuffer@BrnNetworkModuleIO@2@PAUOutputBuffer@42@PAVTimerStatus@CgsSystem@@G@Z"},
-  {"artist": "82597960", "artist_size": 4736, "first_diff": 12, "name": "BrnNetwork::BrnNetworkManager::ProcessAfterSimulation", "score": 51.8, "size": 4904, "status": "nonmatching", "symbol": "?ProcessAfterSimulation@BrnNetworkManager@BrnNetwork@@QAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@G@Z"}
+  {"artist": "82597960", "artist_size": 4736, "first_diff": 12, "name": "BrnNetwork::BrnNetworkManager::ProcessAfterSimulation", "score": 51.8, "size": 4904, "status": "nonmatching", "symbol": "?ProcessAfterSimulation@BrnNetworkManager@BrnNetwork@@QAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@G@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

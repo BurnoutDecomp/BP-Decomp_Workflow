@@ -1,20 +1,20 @@
 {
- "blob": "906669591178d4ad55d0797b719a63e1a0f3edd9",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "0b9cc1af1878336b9987ea51467b89b8ecb1d118",
+ "commit": "e8c5807d1751742fb044c626d239ebf018755f40",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-21T13:12:59Z",
  "schema": 1,
  "source": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropZoneManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 103,
+ "unpaired": 104,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0DD8", "artist_size": 40, "first_diff": 0, "name": "rw::math::vpu::Vector3::Vector3", "score": 73.7, "size": 36, "status": "nonmatching", "symbol": "??0Vector3@vpu@math@rw@@QAA@MMM@Z"},
   {"artist": "82277C50", "artist_size": 124, "first_diff": 44, "name": "BrnPhysics::Props::PropPhysicsDataHeader::GetType", "score": 93.5, "size": 124, "status": "nonmatching", "symbol": "?GetType@PropPhysicsDataHeader@Props@BrnPhysics@@QBAPBVPropTypeData@23@I@Z"},
   {"artist": "822A41A8", "artist_size": 240, "first_diff": 48, "name": "BrnWorld::PropZoneManager::GetProp", "score": 93.3, "size": 240, "status": "nonmatching", "symbol": "?GetProp@PropZoneManager@BrnWorld@@QAAPAUPropEntityInstance@2@GI@Z"},
   {"artist": "822A4298", "artist_size": 244, "first_diff": 36, "name": "BrnWorld::PropZoneManager::GetPart", "score": 83.6, "size": 244, "status": "nonmatching", "symbol": "?GetPart@PropZoneManager@BrnWorld@@QAAPAUPropPartEntityInstance@2@GGG@Z"},
-  {"artist": "822A4390", "artist_size": 132, "first_diff": 44, "name": "BrnWorld::PropZoneManager::IsZoneLoaded", "score": 97.0, "size": 132, "status": "nonmatching", "symbol": "?IsZoneLoaded@PropZoneManager@BrnWorld@@QBA_NG@Z"},
+  {"artist": "822A4390", "artist_size": 132, "data_unchecked": 2, "name": "BrnWorld::PropZoneManager::IsZoneLoaded", "score": 100.0, "size": 132, "status": "exact", "symbol": "?IsZoneLoaded@PropZoneManager@BrnWorld@@QBA_NG@Z"},
   {"artist": "822A9DE8", "artist_size": 168, "first_diff": 12, "name": "BrnWorld::PropGraphicsManager::Register", "score": 63.5, "size": 172, "status": "nonmatching", "symbol": "?Register@PropGraphicsManager@BrnWorld@@QAA_NPBUPropGraphics@Props@BrnPhysics@@@Z"},
   {"artist": "822B7888", "artist_size": 92, "first_diff": 0, "name": "BrnWorld::PropEntityID::PropEntityID", "score": 8.3, "size": 4, "status": "nonmatching", "symbol": "??0PropEntityID@BrnWorld@@QAA@XZ"},
   {"artist": "822BC4D0", "artist_size": 1104, "first_diff": 8, "name": "BrnWorld::PropZoneManager::GetRespawnType", "score": 21.3, "size": 620, "status": "nonmatching", "symbol": "?GetRespawnType@PropZoneManager@BrnWorld@@QBA?AW4eRespawnType@Props@BrnPhysics@@UPropEntityID@2@@Z"},
@@ -35,7 +35,8 @@
   {"artist": "822F0880", "artist_size": 160, "first_diff": 8, "name": "BrnWorld::PropZoneManager::RemovePropPartsFromScene", "score": 55.7, "size": 156, "status": "nonmatching", "symbol": "?RemovePropPartsFromScene@PropZoneManager@BrnWorld@@QAAXPAUPropEntityInstance@2@PBVPropTypeData@Props@BrnPhysics@@UPropVolumeInstanceID@2@PAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@PAVPropEntitySerialiser@BrnReplays@@@Z"},
   {"artist": "822F0920", "artist_size": 4128, "first_diff": 8, "name": "BrnWorld::PropZoneManager::UpdateInstance", "score": 16.2, "size": 1780, "status": "nonmatching", "symbol": "?UpdateInstance@PropZoneManager@BrnWorld@@QAAXUPropEntityID@2@UMatrix44Affine@vpu@math@rw@@VVector3@567@2_NPBVPropPhysicsDataHeader@Props@BrnPhysics@@MPAVOutputBuffer_PostPhysics@PropEntityIO@2@PAVPropEntitySerialiser@BrnReplays@@@Z"},
   {"artist": "822F2EF0", "artist_size": 3788, "first_diff": 16, "name": "BrnWorld::PropZoneManager::LoadProp", "score": 16.9, "size": 3024, "status": "nonmatching", "symbol": "?LoadProp@PropZoneManager@BrnWorld@@AAAXPAH0HPBUPropZoneData@Props@BrnPhysics@@PBVPropPhysicsDataHeader@45@VVector3@vpu@math@rw@@PAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@_NPAVPropEntitySerialiser@BrnReplays@@@Z"},
-  {"artist": "822FC168", "artist_size": 1596, "first_diff": 8, "name": "BrnWorld::PropZoneManager::LoadZone", "score": 6.9, "size": 592, "status": "nonmatching", "symbol": "?LoadZone@PropZoneManager@BrnWorld@@QAAXPBUPropZoneData@Props@BrnPhysics@@PBVPropPhysicsDataHeader@45@VVector3@vpu@math@rw@@PAVOutputBuffer_PreScene@PropEntityIO@2@_NPAVPropEntitySerialiser@BrnReplays@@@Z"},
-  {"artist": "82303790", "artist_size": 1552, "first_diff": 8, "name": "BrnWorld::PropZoneManager::UnloadZone", "score": 29.3, "size": 1100, "status": "nonmatching", "symbol": "?UnloadZone@PropZoneManager@BrnWorld@@QAAXGPBVPropPhysicsDataHeader@Props@BrnPhysics@@PAV?$Set@UPropEntityID@BrnWorld@@$0CA@@@PAVOutputBuffer_PreScene@PropEntityIO@2@PAVPropEntitySerialiser@BrnReplays@@@Z"}
+  {"artist": "822FC168", "artist_size": 1596, "first_diff": 8, "name": "BrnWorld::PropZoneManager::LoadZone", "score": 17.5, "size": 596, "status": "nonmatching", "symbol": "?LoadZone@PropZoneManager@BrnWorld@@QAAXPBUPropZoneData@Props@BrnPhysics@@PBVPropPhysicsDataHeader@45@VVector3@vpu@math@rw@@PAVOutputBuffer_PreScene@PropEntityIO@2@_NPAVPropEntitySerialiser@BrnReplays@@@Z"},
+  {"artist": "82303790", "artist_size": 1552, "first_diff": 8, "name": "BrnWorld::PropZoneManager::UnloadZone", "score": 29.2, "size": 1108, "status": "nonmatching", "symbol": "?UnloadZone@PropZoneManager@BrnWorld@@QAAXGPBVPropPhysicsDataHeader@Props@BrnPhysics@@PAV?$Set@UPropEntityID@BrnWorld@@$0CA@@@PAVOutputBuffer_PreScene@PropEntityIO@2@PAVPropEntitySerialiser@BrnReplays@@@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
