@@ -119,12 +119,14 @@ Xbox One x64 export for Apt and every 64-bit width/offset, B4Extern, the X360 au
   file committed in b5-decomp.
 - **`progress/status.json`'s `reviewed` is the default, not a verdict.** Ask the tree:
   `python tools/re/hasbody.py <Class::Method> [--status]`.
-- **Commit trailer — the EXACT model that ran the work, from `work trailer`.** Every commit
-  ends with the line `work trailer` prints, which it reads from your tool's own session log:
-  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`,
-  `Co-Authored-By: Codex GPT-6.2 Sol <noreply@openai.com>`. Never write it from memory or as
-  a bare family name (`Codex GPT-6`, `Claude`): a model knows its family, not its exact
-  version. The user's most recent explicit instruction outranks it. Details: `commit-trailer`.
+- **Commit trailer — the EXACT models that wrote the work, from `work trailer`.** Stage your
+  paths, then end every commit with the lines `work trailer` prints, which it reads from the
+  tools' own session logs: your session's model, such as
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` or
+  `Co-Authored-By: Codex GPT-6.2 Sol <noreply@openai.com>`, plus one line per subagent or worker
+  model that edited a staged file. Never write it from memory or as a bare family name
+  (`Codex GPT-6`, `Claude`): a model knows its family, not its exact version. The user's most
+  recent explicit instruction outranks it. Details: `commit-trailer`.
 - **Naming.** New owned C/C++ follows `references/CXX_NAMING_CONVENTIONS.md` (a local
   input): scope+type prefixes (`mpBoostStrategy`, `lfTimeStep`), `KI_`/`KU_`/`KF_`
   constants, `E_` upper-snake enums.

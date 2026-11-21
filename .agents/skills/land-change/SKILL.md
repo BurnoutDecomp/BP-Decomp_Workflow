@@ -63,8 +63,9 @@ it uncommitted for the maintainer unless the request says to commit it.
    `git log --oneline HEAD..origin/main`. Another contributor may have landed the same body or
    mount; read origin's `.bat` before you write mount lines.
 4. Write the commit message to a file with your file-writing tool (a unique name in your scratch
-   folder, never a heredoc), ending with the line `work trailer` prints, and check it with
-   `work trailer --check <msgfile>` (see "Commit trailer"). Commit with `-F`.
+   folder, never a heredoc), ending with the lines `work trailer` prints once your paths are
+   staged, and check it with `work trailer --check <msgfile>` (see "Commit trailer"). Commit
+   with `-F`.
 5. Commit after every green gate, not at the end of a unit of work: a shared tree has been reset
    under a live wave and the uncommitted work vanished without an error (2026-08-29).
 
@@ -123,10 +124,11 @@ Build & Publish with one LNK2019: run `git status -sb` in the parent first.
 
 ## Commit trailer
 
-- Every commit ends with the `Co-Authored-By:` line that `work trailer` prints for the model that
-  **actually ran** the work, read from your tool's own session log. Never write it from memory
-  or as a bare family name. How it reads the model, the label form, a session that switched
-  models and committing another agent's work: [`commit-trailer`](../commit-trailer/SKILL.md).
+- Every commit ends with the `Co-Authored-By:` lines that `work trailer` prints for the models
+  that **actually wrote** the work: your session's model, plus any subagent or worker model that
+  edited a staged file, all read from the tools' own session logs. Never write them from memory
+  or as a bare family name. How it reads the models, the label form, helpers and committing
+  another agent's work: [`commit-trailer`](../commit-trailer/SKILL.md).
   The user's most recent explicit instruction outranks it.
 - The commit author stays whatever identity the committing contributor's git is configured
   with; only the trailer names the model.
@@ -193,7 +195,7 @@ Build & Publish with one LNK2019: run `git status -sb` in the parent first.
 |---|---|
 | `git -C b5-decomp status -sb` / `git status -sb` | dirty paths, ahead/behind, before every commit |
 | `git commit -F <msgfile> -- <paths>` | commit only your paths, message from a file |
-| `work trailer` (`tools/work/trailer.py`), `work trailer --check <msgfile>` | the exact `Co-Authored-By:` line for this session's model, and the check that a message has it |
+| `work trailer` (`tools/work/trailer.py`), `work trailer --check <msgfile>` | the exact `Co-Authored-By:` lines for the models that wrote the staged change, and the check that a message has them |
 | `git diff --stat origin/main <commit>`, `git show --stat <commit>` | the file count and line count you are about to push |
 | `tools/work/publish_snapshot.py` | the bot's publisher: `FILES` is the bot-owned list; its temp-index commit is the model for Route B |
 | `.github/workflows/reconcile-status.yml`, `.github/workflows/build-and-publish.yml` | what the bot commits, and when |

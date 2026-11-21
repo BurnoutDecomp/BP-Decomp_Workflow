@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
-"""work trailer: the Co-Authored-By line for the model that runs this session.
+"""work trailer: the Co-Authored-By lines for the models that wrote the change you are committing.
 
-It reads the model the tool itself recorded, never what the model believes it is (a model
+It reads the models the tools themselves recorded, never what a model believes it is (a model
 knows its family, rarely its exact version):
 
-  Claude Code  the newest assistant message of this session's transcript
-               (projects/*/<CLAUDE_CODE_SESSION_ID>.jsonl under ~/.claude or CLAUDE_CONFIG_DIR)
-  Codex        the newest turn_context of the session log started in this folder or a folder
-               above it whose last record is newest (sessions/**/rollout-*.jsonl under ~/.codex
-               or CODEX_HOME; the record's own timestamp, never the file time)
+  Claude Code  this session's transcript (projects/*/<CLAUDE_CODE_SESSION_ID>.jsonl under ~/.claude
+               or CLAUDE_CONFIG_DIR) and its subagents' transcripts (<session>/subagents/*.jsonl)
+  Codex        the session log started in this folder or a folder above it whose last record is
+               newest (sessions/**/rollout-*.jsonl under ~/.codex or CODEX_HOME; the record's own
+               timestamp, never the file time), never a worker's log, and the logs of that
+               session's workers (rollout-<time>-<session id>_<worker id>.jsonl)
 
-and turns the model id into the label the history uses:
+The first line is the model the session runs now. One more line follows for every other model
+(an earlier model of the session, a subagent, a worker) that edited a file of this change after
+that file's last commit. The change is the staged paths, or every changed path when nothing is
+staged. Edits are tool calls: Claude's Edit, Write, MultiEdit and NotebookEdit, and Codex patches.
+A file changed only through shell commands is not seen: add that model's line with --model.
 
   claude-opus-5-5  ->  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
   gpt-6.2-sol      ->  Co-Authored-By: Codex GPT-6.2 Sol <noreply@openai.com>
 
 usage:
-  work trailer                       print the line (exit 1 when no model can be read)
+  work trailer                       print the lines (exit 1 when no model can be read)
   work trailer --tool codex          when the tool is detected wrongly (claude | codex)
   work trailer --model gpt-6.2-sol   the line for a model id you already know
-  work trailer --check MSGFILE       exit 1 unless MSGFILE has that line
-  work trailer --why                 also say which log the model came from, and every
-                                     model that session recorded
+  work trailer --check MSGFILE       exit 1 unless MSGFILE has every line
+  work trailer --why                 also say where each line comes from
 """
 from __future__ import annotations
 
@@ -30,6 +34,7 @@ import glob
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -44,6 +49,10 @@ LABELS = (
 )
 TAIL_BYTES = 4 << 20          # the newest records sit at the end of a log: read that part first
 CODEX_RECENT_S = 12 * 3600    # a Codex log whose last record is this recent counts as a live session
+EDIT_TOOLS = {"Edit", "Write", "MultiEdit", "NotebookEdit"}
+CODEX_CALLS = {"custom_tool_call", "function_call", "local_shell_call"}
+PATCH_FILE = re.compile(r"\*\*\* (?:Update|Add|Delete) File: (.+?)(?=\\n|\\r|\r|\n|\"|`|$)")
+ROLLOUT = re.compile(r"rollout-\d{4}-\d\d-\d\dT\d\d-\d\d-\d\d-([0-9a-f-]{36})(?:_([0-9a-f-]{36}))?\.jsonl$")
 
 
 def trailer_for(model: str) -> str | None:
@@ -79,9 +88,11 @@ def newest(path: str, pick):
     return None
 
 
-def every(path: str, pick) -> list:
-    """Every model `pick` accepts in a log, in order of first use."""
-    return list(dict.fromkeys(m for m in (pick(r) for r in records(path, False)) if m))
+def parse_ts(ts) -> float | None:
+    try:
+        return datetime.fromisoformat(str(ts).replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
 
 
 def pick_claude(rec):
@@ -95,6 +106,107 @@ def pick_codex(rec):
     return (rec.get("payload") or {}).get("model") if rec.get("type") == "turn_context" else None
 
 
+# ------------------------------------------------------------------ the change being committed
+def _git(*args):
+    r = subprocess.run(["git", *args], capture_output=True)
+    return r.stdout.decode("utf-8", "surrogateescape") if r.returncode == 0 else None
+
+
+def _key(rel: str) -> str:
+    return os.path.normcase(os.path.normpath(rel))
+
+
+def repo_change():
+    """(repo top, {path key: epoch of its last commit, 0 if never committed}, basis) for the staged
+    paths, or for every changed path when nothing is staged; (None, {}, reason) outside a repo."""
+    top = _git("rev-parse", "--show-toplevel")
+    if not top:
+        return None, {}, "not inside a git repository"
+    top = os.path.normpath(top.strip())
+    paths = [p for p in (_git("diff", "--cached", "--name-only", "-z") or "").split("\0") if p]
+    basis = f"{len(paths)} staged path(s)"
+    if not paths:
+        entries = (_git("status", "--porcelain", "-z", "--untracked-files=all") or "").split("\0")
+        i = 0
+        while i < len(entries):
+            e = entries[i]
+            if len(e) > 3:
+                paths.append(e[3:])
+                if e[0] in "RC":
+                    i += 1                                    # a rename also lists its old path
+            i += 1
+        basis = f"{len(paths)} changed path(s), nothing staged"
+    times = {}
+    for p in paths[:400]:
+        ct = (_git("-C", top, "log", "-1", "--format=%ct", "--", p) or "").strip()
+        times[_key(p)] = int(ct) if ct.isdigit() else 0
+    return top, times, basis
+
+
+def rel_key(top: str, path: str, base: str | None = None) -> str | None:
+    if not os.path.isabs(path):
+        path = os.path.join(base or os.getcwd(), path)
+    try:
+        r = os.path.relpath(os.path.abspath(path), top)
+    except ValueError:                                         # another drive
+        return None
+    return None if r.startswith("..") else _key(r)
+
+
+def claude_edits(path, top, times):
+    """(time, model, path key) for each edit tool call in a transcript to a path of this change
+    made after that path's last commit."""
+    out = []
+    with open(path, "rb") as fh:
+        for line in fh:
+            if b'"tool_use"' not in line:
+                continue
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            msg = rec.get("message") or {}
+            model, ts = msg.get("model") or "", parse_ts(rec.get("timestamp"))
+            if rec.get("type") != "assistant" or not model.startswith("claude-") or ts is None:
+                continue
+            for item in msg.get("content") or []:
+                if isinstance(item, dict) and item.get("type") == "tool_use" and item.get("name") in EDIT_TOOLS:
+                    inp = item.get("input") or {}
+                    key = rel_key(top, inp.get("file_path") or inp.get("notebook_path") or "")
+                    if key in times and ts > times[key]:
+                        out.append((ts, model, key))
+    return out
+
+
+def codex_edits(path, top, times):
+    """(time, model, path key) for each patch in a Codex log to a path of this change made after
+    that path's last commit; the model is the one of the turn the patch belongs to."""
+    out, model, cwd = [], None, None
+    with open(path, "rb") as fh:
+        for line in fh:
+            if b"session_meta" not in line and b"turn_context" not in line and b"Begin Patch" not in line:
+                continue
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            kind, pl = rec.get("type"), rec.get("payload") or {}
+            if kind == "session_meta":
+                cwd = pl.get("cwd") or cwd
+            elif kind == "turn_context":
+                model = pl.get("model") or model
+            elif kind == "response_item" and pl.get("type") in CODEX_CALLS and model:
+                text = pl.get("input") or pl.get("arguments") or ""
+                text = text if isinstance(text, str) else json.dumps(text)
+                ts = parse_ts(rec.get("timestamp"))
+                for fp in PATCH_FILE.findall(text):
+                    key = rel_key(top, fp.strip(), cwd)
+                    if ts is not None and key in times and ts > times[key]:
+                        out.append((ts, model, key))
+    return out
+
+
+# ------------------------------------------------------------------ the session's own log
 def claude_log(why: list):
     sid = os.environ.get("CLAUDE_CODE_SESSION_ID")
     if not sid:
@@ -108,6 +220,10 @@ def claude_log(why: list):
     path = max(hits, key=os.path.getmtime)
     why.append(f"model read from the Claude Code transcript {path}")
     return path
+
+
+def claude_helpers(path: str) -> list:
+    return sorted(glob.glob(os.path.join(os.path.splitext(path)[0], "subagents", "*.jsonl")))
 
 
 def _inside(child: str, parent: str) -> bool:
@@ -127,18 +243,25 @@ def last_record_time(path: str) -> float:
         lines = fh.read().splitlines()
     for line in reversed(lines):
         try:
-            ts = json.loads(line).get("timestamp")
-            return datetime.fromisoformat(ts.replace("Z", "+00:00")).timestamp()
-        except (ValueError, AttributeError, TypeError):
+            at = parse_ts(json.loads(line).get("timestamp"))
+        except (ValueError, AttributeError):
             continue
+        if at is not None:
+            return at
     return os.path.getmtime(path)
 
 
-def codex_log(why: list, recent_only: bool):
+def _codex_logs():
     home = os.environ.get("CODEX_HOME") or os.path.join(os.path.expanduser("~"), ".codex")
-    logs = glob.glob(os.path.join(home, "sessions", "**", "rollout-*.jsonl"), recursive=True)
+    return glob.glob(os.path.join(home, "sessions", "**", "rollout-*.jsonl"), recursive=True)
+
+
+def codex_log(why: list, recent_only: bool):
     here, now, started_here = os.getcwd(), time.time(), []
-    for path in logs:
+    for path in _codex_logs():
+        m = ROLLOUT.search(os.path.basename(path))
+        if m and m[2]:
+            continue                                           # a worker's log is never the session
         try:
             with open(path, encoding="utf-8") as fh:
                 first = json.loads(fh.readline())
@@ -158,58 +281,101 @@ def codex_log(why: list, recent_only: bool):
     return None
 
 
+def codex_helpers(path: str) -> list:
+    m = ROLLOUT.search(os.path.basename(path))
+    if not m:
+        return []
+    return sorted(p for p in _codex_logs()
+                  if (w := ROLLOUT.search(os.path.basename(p))) and w[1] == m[1] and w[2])
+
+
+# ------------------------------------------------------------------ main
+def models_for_change(path, current, edits, helpers, why):
+    """[current, then every other model that edited this change, by first edit]."""
+    top, times, basis = repo_change()
+    if not times:
+        why.append(f"line 1: the model this session runs ({current}); no other model counted ({basis})")
+        return [current]
+    why.append(f"the change: {basis}")
+    why.append(f"line 1: the model this session runs ({current})")
+    first = {}
+    for label, log in [("this session, an earlier model", path)] + [(f"helper {os.path.basename(h)}", h) for h in helpers]:
+        for at, model, key in edits(log, top, times):
+            if model == current:
+                continue
+            entry = first.setdefault(model, [at, label, set()])
+            entry[0] = min(entry[0], at)
+            entry[2].add(key)
+    order = sorted(first, key=lambda m: first[m][0])
+    for n, model in enumerate(order, 2):
+        at, label, keys = first[model]
+        shown = ", ".join(sorted(keys)[:3]) + (f" and {len(keys) - 3} more" if len(keys) > 3 else "")
+        why.append(f"line {n}: {model}, {label}, edited {shown} after their last commit")
+    if helpers and not order:
+        why.append(f"{len(helpers)} subagent/worker log(s) found; none edited a path of this change "
+                   "with another model")
+    return [current] + order
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="work trailer", description=__doc__.split("\n\n")[0],
                                  formatter_class=argparse.RawDescriptionHelpFormatter,
                                  epilog=__doc__.split("usage:", 1)[1])
     ap.add_argument("--tool", choices=("claude", "codex"), help="which tool runs this session")
     ap.add_argument("--model", help="label this model id instead of reading a session log")
-    ap.add_argument("--check", metavar="MSGFILE", help="exit 1 unless this commit message has the line")
-    ap.add_argument("--why", action="store_true", help="say where the model came from")
+    ap.add_argument("--check", metavar="MSGFILE", help="exit 1 unless this commit message has every line")
+    ap.add_argument("--why", action="store_true", help="say where each line comes from")
     args = ap.parse_args(argv)
 
-    why, path, pick, model = [], None, None, args.model
-    if not model:
-        tool = args.tool
+    why, models = [], [args.model] if args.model else []
+    if not models:
+        tool, path = args.tool, None
         if tool in (None, "claude"):
-            path, pick = claude_log(why), pick_claude
-            tool = "claude" if path else tool
+            path = claude_log(why)
+            if path:
+                tool, pick, edits, helpers = "claude", pick_claude, claude_edits, claude_helpers
         if tool in (None, "codex") and not path:
-            path, pick = codex_log(why, recent_only=args.tool is None), pick_codex
-        model = newest(path, pick) if path else None
-        if not model:
+            path = codex_log(why, recent_only=args.tool is None)
+            if path:
+                tool, pick, edits, helpers = "codex", pick_codex, codex_edits, codex_helpers
+        current = newest(path, pick) if path else None
+        if not current:
             print("work trailer: no model recorded for this session: " + "; ".join(why), file=sys.stderr)
             print("  pass --tool claude|codex, or --model <exact model id> read from your tool's own "
                   "settings (never a family name from memory)", file=sys.stderr)
             return 1
-    line = trailer_for(model)
-    if not line:
-        print(f"work trailer: no label rule for model id {model!r}: write the line as "
-              "'Co-Authored-By: <Tool> <exact model> <vendor noreply address>' and add a rule "
-              "to LABELS in tools/work/trailer.py", file=sys.stderr)
-        return 1
+        models = models_for_change(path, current, edits, helpers(path), why)
+
+    lines = []
+    for model in models:
+        line = trailer_for(model)
+        if not line:
+            print(f"work trailer: no label rule for model id {model!r}: write the line as "
+                  "'Co-Authored-By: <Tool> <exact model> <vendor noreply address>' and add a rule "
+                  "to LABELS in tools/work/trailer.py", file=sys.stderr)
+            return 1
+        if line not in lines:
+            lines.append(line)
 
     if args.why:
         for w in why:
             print(f"# {w}")
-        seen = every(path, pick) if path else [model]
-        if len(seen) > 1:
-            print("# this session recorded several models, oldest first: " + ", ".join(seen))
-            print("# one trailer per model that wrote part of the change:")
-            for m in seen:
-                print("#   " + (trailer_for(m) or m))
     if args.check:
         with open(args.check, encoding="utf-8", errors="replace") as fh:
-            lines = [l.strip() for l in fh]
-        if line not in lines:
-            ai = [l for l in lines if l.lower().startswith("co-authored-by:")]
-            print(f"work trailer: {args.check} lacks this session's line:\n  {line}", file=sys.stderr)
+            have = [l.strip() for l in fh]
+        missing = [l for l in lines if l not in have]
+        if missing:
+            print(f"work trailer: {args.check} lacks " + ("this line:" if len(missing) == 1 else "these lines:"),
+                  file=sys.stderr)
+            for l in missing:
+                print(f"  {l}", file=sys.stderr)
+            ai = [l for l in have if l.lower().startswith("co-authored-by:")]
             if ai:
                 print("  it has: " + " | ".join(ai), file=sys.stderr)
             return 1
-        print(f"ok: {args.check} has {line}")
+        print(f"ok: {args.check} has " + " | ".join(lines))
         return 0
-    print(line)
+    print("\n".join(lines))
     return 0
 
 
