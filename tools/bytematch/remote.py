@@ -22,6 +22,7 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -118,8 +119,18 @@ def check_state(state, sha, sources):
     return state
 
 
-def adopt(bundle, sha, root=ledger.RECORDS, state_path=ledger.STATE):
-    """Write the server's measurement into the ledger; returns (changed paths, deleted paths)."""
+def not_older(b5, old, new):
+    """Whether native commit `new` is `old` or comes after it (b5: a clone of the native branch).
+    Without a clone every measurement counts as newer."""
+    if b5 is None or old == new:
+        return True
+    return subprocess.run(["git", "-C", str(b5), "merge-base", "--is-ancestor", str(old), new],
+                          capture_output=True).returncode == 0
+
+
+def adopt(bundle, sha, root=ledger.RECORDS, state_path=ledger.STATE, b5=None):
+    """Write the server's measurement into the ledger; returns (changed paths, deleted paths).
+    A record or state measured at a later commit than this measurement is kept as it is."""
     _need(isinstance(bundle, dict) and bundle.get("schema") == BUNDLE_SCHEMA and bundle.get("sha") == sha,
           "bundle: wrong schema or commit")
     records, removed = bundle.get("records"), bundle.get("removed")
@@ -129,21 +140,28 @@ def adopt(bundle, sha, root=ledger.RECORDS, state_path=ledger.STATE):
     _need(not set(gone) & set(checked), "bundle: a source both measured and removed")
     result = bundle.get("result") or {}
     state = check_state(bundle.get("state"), sha, result.get("sources"))
+    def stored(path):
+        return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
+
     changed, deleted = [], []
     for source, record in sorted(checked.items()):
         path = ledger.record_path(source, root)
-        if path.is_file() and content(json.loads(path.read_text(encoding="utf-8"))) == content(record):
+        old = stored(path)
+        if old is not None and (content(old) == content(record) or not not_older(b5, old.get("commit"), sha)):
             continue
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(ledger.dump_record(record), encoding="utf-8", newline="\n")
         changed.append(path)
     for source in gone:
         path = ledger.record_path(source, root)
-        if path.is_file():
+        old = stored(path)
+        if old is not None and not_older(b5, old.get("commit"), sha):
             path.unlink()
             deleted.append(path)
     text = json.dumps(state, indent=1, sort_keys=True) + "\n"
-    if not state_path.is_file() or state_path.read_text(encoding="utf-8") != text:
+    old = stored(state_path)
+    if old is None or (state_path.read_text(encoding="utf-8") != text
+                       and not_older(b5, old.get("verified_commit"), sha)):
         state_path.write_text(text, encoding="utf-8", newline="\n")
         changed.append(state_path)
     return changed, deleted
@@ -191,7 +209,7 @@ def measure(args):
         raise SystemExit(f"measurement {status.get('state')}: {status.get('error') or status}")
     bundle = json.loads(gzip.decompress(call(args.server, f"/admin/bytematch/measure/{sha}/bundle", token,
                                              timeout=300)))
-    changed, deleted = adopt(bundle, sha)
+    changed, deleted = adopt(bundle, sha, b5=args.b5)
     repo = ledger.REPO
     for target, paths in ((args.changes, changed), (args.deletions, deleted)):
         if target:
@@ -215,6 +233,7 @@ def main(argv=None):
     p.add_argument("--server", default=os.environ.get("WORK_SERVER", "https://decomp.adriwin.fr/"))
     p.add_argument("--timeout", type=int, default=4 * 3600, help="seconds to wait for the result")
     p.add_argument("--poll", type=int, default=20, help="seconds between status checks")
+    p.add_argument("--b5", help="a clone of the native branch: records measured later than this commit are kept")
     p.add_argument("--changes", help="write the changed ledger paths here (one per line)")
     p.add_argument("--deletions", help="write the deleted record paths here (one per line)")
     p.set_defaults(func=measure)

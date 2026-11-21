@@ -87,12 +87,26 @@ jobs:
         env:
           WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
         run: |
-          python tools/bytematch/remote.py measure --sha "${{ steps.target.outputs.sha }}" \
+          python tools/bytematch/remote.py measure --sha "${{ steps.target.outputs.sha }}" --b5 b5-x360 \
             --changes "$RUNNER_TEMP/bytematch-changes.txt" --deletions "$RUNNER_TEMP/bytematch-deletions.txt"
+
+      # A measurement can take long enough for x360 to move on, and only the tip publishes.
+      # Publish at the tip it reached: the summary marks each record whose source changed
+      # since it was measured, and the next run measures them.
+      - name: Resolve the tip to publish at
+        id: tip
+        run: |
+          set -euo pipefail
+          TIP="$(git ls-remote "$B5_REPO" "refs/heads/$B5_BRANCH" | cut -f1)"
+          TIP="${TIP,,}"
+          [[ "$TIP" =~ ^[0-9a-f]{40}$ ]] || { echo "No x360 tip"; exit 1; }
+          git -C b5-x360 fetch origin "$TIP"
+          echo "sha=$TIP" >> "$GITHUB_OUTPUT"
+          echo "Publishing at x360 $TIP (measured ${{ steps.target.outputs.sha }})"
 
       - name: Build the summary
         run: |
-          python tools/bytematch/bytematch.py summary --b5 b5-x360 --head "${{ steps.target.outputs.sha }}"
+          python tools/bytematch/bytematch.py summary --b5 b5-x360 --head "${{ steps.tip.outputs.sha }}"
           head -c 1200 progress/BYTEMATCH.md
 
       - name: Commit + push the summary
@@ -101,12 +115,13 @@ jobs:
           set -euo pipefail
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
-          SHA="${{ steps.target.outputs.sha }}"
+          SHA="${{ steps.tip.outputs.sha }}"
+          MEASURED="${{ steps.target.outputs.sha }}"
           CHANGED="${{ steps.measure.outputs.records_changed || 0 }}"
           DELETED="${{ steps.measure.outputs.records_deleted || 0 }}"
           if [ "$CHANGED" != 0 ] || [ "$DELETED" != 0 ]; then
-            TITLE="progress: byte-match records at x360 ${SHA:0:12}"
-            BODY="The work server measured the push: $CHANGED records changed, $DELETED deleted, summary rebuilt."
+            TITLE="progress: byte-match records at x360 ${MEASURED:0:12}"
+            BODY="The work server measured x360 ${MEASURED:0:12}: $CHANGED records changed, $DELETED deleted. Summary at ${SHA:0:12}."
           else
             TITLE="chore: byte-match summary at x360 ${SHA:0:12}"
             BODY="Automatic join of the committed byte-match records with the native branch head."

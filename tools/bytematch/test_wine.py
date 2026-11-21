@@ -163,12 +163,37 @@ def test_every_committed_record_passes_the_checks_ci_applies():
         assert publish_snapshot.is_record("bytematch", repo_path), repo_path
 
 
-def bundle(records, removed=(), sources=3):
-    return {"schema": remote.BUNDLE_SCHEMA, "sha": SHA, "removed": list(removed),
+def bundle(records, removed=(), sources=3, sha=SHA):
+    return {"schema": remote.BUNDLE_SCHEMA, "sha": sha, "removed": list(removed),
             "records": {r["source"]: ledger.dump_record(r) for r in records},
             "result": {"sources": sources, "measured": len(records)},
-            "state": {"verified_commit": SHA, "verified_at": "2026-11-21T15:00:00Z", "sources": sources,
+            "state": {"verified_commit": sha, "verified_at": "2026-11-21T15:00:00Z", "sources": sources,
                       "toolchain": "cl 14.00.6502 flags d23a3407ba6b"}}
+
+
+def test_adopt_keeps_what_was_measured_at_a_later_commit(tmp_path):
+    import subprocess
+    repo = tmp_path / "b5"
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+
+    def git(*args):
+        return subprocess.run(["git", "-C", str(repo), *args], capture_output=True, text=True, check=True).stdout.strip()
+
+    for message in ("older", "newer"):
+        git("-c", "user.name=t", "-c", "user.email=t@example.invalid", "commit", "-q", "--allow-empty", "-m", message)
+    newer, older = git("rev-parse", "HEAD"), git("rev-parse", "HEAD~1")
+    root, state = tmp_path / "objects", tmp_path / "state.json"
+    ledger.write_record(record("src/Game/Later.cpp", commit=newer, unpaired=9), root)
+    ledger.write_record(record("src/Game/Earlier.cpp", commit=older, unpaired=9), root)
+    ledger.write_record(record("src/Game/GoneLater.cpp", commit=newer), root)
+    state.write_text(json.dumps({"verified_commit": newer}), encoding="utf-8")
+    measured = bundle([record("src/Game/Later.cpp", commit=older), record("src/Game/Earlier.cpp", commit=older)],
+                      removed=["src/Game/GoneLater.cpp"], sha=older)
+    changed, deleted = remote.adopt(measured, older, root, state, b5=repo)
+    assert changed == [ledger.record_path("src/Game/Earlier.cpp", root)] and deleted == []
+    assert json.loads(ledger.record_path("src/Game/Later.cpp", root).read_text(encoding="utf-8"))["unpaired"] == 9
+    assert ledger.record_path("src/Game/GoneLater.cpp", root).exists()
+    assert json.loads(state.read_text(encoding="utf-8"))["verified_commit"] == newer
 
 
 def test_adopt_writes_changes_keeps_same_results_and_deletes_removed(tmp_path):

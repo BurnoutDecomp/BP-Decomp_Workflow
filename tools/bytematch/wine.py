@@ -478,7 +478,7 @@ def refresh(args):
     bundle = {"schema": BUNDLE_SCHEMA, "sha": head, "result": result, "state": state, "removed": removed,
               "records": {s: ledger.record_path(s, out / "records").read_text(encoding="utf-8") for s in written}}
     (out / "bundle.json.gz").write_bytes(gzip.compress(json.dumps(bundle, sort_keys=True).encode(), mtime=0))
-    print(f"measured {len(to_measure)}:{len(written)} records changed, {unchanged} unchanged, "
+    print(f"measured {len(to_measure)} sources: {len(written)} records changed, {unchanged} unchanged, "
           f"{len(removed)} removed, {len(failed)} failing to compile; {time.time() - started:.0f} s", flush=True)
 
 
