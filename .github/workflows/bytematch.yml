@@ -1,12 +1,14 @@
 name: Byte-match summary
 
 # The native Xbox 360 tree is b5-decomp's `x360` branch. Compiling it needs the XDK,
-# which no hosted runner has, so contributors measure it locally and commit per-object
-# records under progress/bytematch/ (`work match refresh --record`; byte-match skill).
-# This workflow joins those records with the branch head after every native push and
-# every record push, publishes progress/bytematch.json + progress/BYTEMATCH.md, and
-# refreshes the dashboard. A record whose source changed since it was measured is
-# published as stale, never silently kept current.
+# which no hosted runner may carry, so the work server measures each native push: it
+# compiles what changed with the XDK under Wine in a sandboxed container
+# (tools/bytematch/wine.py) and this workflow adopts the records whose result changed
+# (tools/bytematch/remote.py). It then joins the records with the branch head, publishes
+# them with progress/bytematch.json + progress/BYTEMATCH.md in one commit, and refreshes
+# the dashboard. Contributors may still record locally (`work match refresh --record`).
+# If the server cannot measure, the summary is published from the committed records,
+# and a record whose source changed since it was measured shows as stale.
 
 on:
   repository_dispatch:
@@ -53,7 +55,7 @@ jobs:
       - name: Test the ledger tools
         run: |
           python -m pip install pytest
-          python -m pytest tools/bytematch/test_bytematch.py -q
+          python -m pytest tools/bytematch/test_bytematch.py tools/bytematch/test_wine.py -q
 
       - name: Resolve the native branch commit
         id: target
@@ -78,6 +80,16 @@ jobs:
           git clone --filter=blob:none --no-checkout --branch "$B5_BRANCH" "$B5_REPO" b5-x360
           git -C b5-x360 fetch origin "${{ steps.target.outputs.sha }}"
 
+      - name: Measure the commit on the work server
+        id: measure
+        continue-on-error: true    # without the server, the summary still publishes
+        timeout-minutes: 300
+        env:
+          WORK_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}
+        run: |
+          python tools/bytematch/remote.py measure --sha "${{ steps.target.outputs.sha }}" \
+            --changes "$RUNNER_TEMP/bytematch-changes.txt" --deletions "$RUNNER_TEMP/bytematch-deletions.txt"
+
       - name: Build the summary
         run: |
           python tools/bytematch/bytematch.py summary --b5 b5-x360 --head "${{ steps.target.outputs.sha }}"
@@ -90,16 +102,23 @@ jobs:
           git config user.name  "bp-reconcile-bot"
           git config user.email "bp-reconcile-bot@users.noreply.github.com"
           SHA="${{ steps.target.outputs.sha }}"
-          cat > "$RUNNER_TEMP/bytematch-message.txt" <<EOF
-          chore: byte-match summary at x360 ${SHA:0:12}
-
-          Automatic join of the committed byte-match records with the native branch head.
-          EOF
+          CHANGED="${{ steps.measure.outputs.records_changed || 0 }}"
+          DELETED="${{ steps.measure.outputs.records_deleted || 0 }}"
+          if [ "$CHANGED" != 0 ] || [ "$DELETED" != 0 ]; then
+            TITLE="progress: byte-match records at x360 ${SHA:0:12}"
+            BODY="The work server measured the push: $CHANGED records changed, $DELETED deleted, summary rebuilt."
+          else
+            TITLE="chore: byte-match summary at x360 ${SHA:0:12}"
+            BODY="Automatic join of the committed byte-match records with the native branch head."
+          fi
+          printf '%s\n\n%s\n' "$TITLE" "$BODY" > "$RUNNER_TEMP/bytematch-message.txt"
           python tools/work/publish_snapshot.py publish \
             --source-repo "$B5_REPO" --source-commit "$SHA" \
             --kind bytematch --message-file "$RUNNER_TEMP/bytematch-message.txt" \
             --result bytematch-publication.json \
-            --files progress/bytematch.json progress/BYTEMATCH.md
+            --files progress/bytematch.json progress/BYTEMATCH.md \
+            --files-from "$RUNNER_TEMP/bytematch-changes.txt" \
+            --delete-from "$RUNNER_TEMP/bytematch-deletions.txt"
 
       - name: Refresh public dashboard snapshot
         if: steps.publish.outputs.published == 'true'

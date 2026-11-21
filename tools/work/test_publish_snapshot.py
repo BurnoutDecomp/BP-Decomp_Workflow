@@ -294,3 +294,37 @@ def test_existing_non_ci_source_status_publish_cli_remains_supported(world, monk
     monkeypatch.setattr(publisher, "eligibility", no_new_remote_policy)
     calls, _ = run_source_status(world, monkeypatch, guarded=False)
     assert [path for path, body in calls if body is not None] == ["/admin/source-status"]
+
+
+def test_bytematch_carries_adopted_records_and_deletions_in_the_summary_commit(world):
+    # The server's records land in the same commit as the summary built from them.
+    git(world.source, "checkout", "-q", "--detach", world.current)
+    native = commit_file(world.source, "native", "x360 tree")
+    git(world.source, "push", "-q", "origin", "HEAD:refs/heads/x360")
+    gone = "progress/bytematch/objects/src/Game/Gone.cpp.json"
+    commit_file(world.repo, gone, '{"source": "src/Game/Gone.cpp"}\n')
+    git(world.repo, "push", "-q", "origin", "main")
+    (world.repo / "progress/bytematch.json").write_text(json.dumps({"meta": {"b5_commit": native}}))
+    (world.repo / "progress/BYTEMATCH.md").write_text("# Byte matching\n")
+    record = "progress/bytematch/objects/src/Game/A.cpp.json"
+    (world.repo / record).parent.mkdir(parents=True, exist_ok=True)
+    (world.repo / record).write_text('{"source": "src/Game/A.cpp"}\n')
+    (world.repo / "progress/bytematch/state.json").write_text(json.dumps({"verified_commit": native}))
+    result = publisher.publish(world.repo, str(world.source_remote), native, "refs/heads/main", "bytematch",
+                               ["progress/bytematch.json", "progress/BYTEMATCH.md", record,
+                                "progress/bytematch/state.json"], "records\n", deletions=[gone], retry_delay=0)
+    assert result["status"] == "published"
+    assert json.loads(world.read(record))["source"] == "src/Game/A.cpp"
+    assert json.loads(world.read("progress/bytematch/state.json"))["verified_commit"] == native
+    assert gone not in git(world.remote, "ls-tree", "-r", "--name-only", "main")
+
+
+@pytest.mark.parametrize("path", ["progress/status.json", "progress/bytematch/objects/../../status.json",
+                                  "progress/bytematch/objects/tools/a.cpp.json", "progress/bytematch/universe.json.gz"])
+def test_bytematch_refuses_paths_outside_its_records(world, path):
+    with pytest.raises(ValueError):
+        publisher.publish(world.repo, str(world.source_remote), world.current, "refs/heads/main", "bytematch",
+                          ["progress/bytematch.json", path], "x\n", retry_delay=0)
+    with pytest.raises(ValueError):
+        publisher.publish(world.repo, str(world.source_remote), world.current, "refs/heads/main", "bytematch",
+                          ["progress/bytematch.json"], "x\n", deletions=[path], retry_delay=0)

@@ -222,6 +222,16 @@ def toolchain(command, tree, xdk):
 
 
 # ---------------------------------------------------------------------------- measure
+ANONYMOUS_NAMESPACE = re.compile(r"\?A0x[0-9a-f]{8}@")
+
+
+def portable_symbol(symbol):
+    """A decorated name as a record keeps it. MSVC names an anonymous namespace after a hash of
+    the source's full path (?A0x<8 hex digits>@), so the same source compiled in two checkouts
+    gives two names; records store ?A0x@ instead, and so read the same on every machine."""
+    return ANONYMOUS_NAMESPACE.sub("?A0x@", symbol)
+
+
 def measure_object(path, artist):
     from coff import read_object
     from artist import demangle, normal_name
@@ -247,10 +257,12 @@ def measure_object(path, artist):
                 continue
             taken_fn.add(id(fn))
             taken_addr.add(address)
-            rows.append({"symbol": fn.symbol, "name": demangle(fn.symbol), "artist": "%08X" % address, **result.row()})
+            rows.append({"symbol": portable_symbol(fn.symbol), "name": demangle(fn.symbol), "artist": "%08X" % address,
+                         **result.row()})
         for fn in fns:
             if id(fn) not in taken_fn:
-                rows.append({"symbol": fn.symbol, "name": demangle(fn.symbol), "status": "unpaired", "size": len(fn.code)})
+                rows.append({"symbol": portable_symbol(fn.symbol), "name": demangle(fn.symbol), "status": "unpaired",
+                             "size": len(fn.code)})
     rows.sort(key=lambda r: (r.get("artist") or "~", r["symbol"]))
     return rows
 

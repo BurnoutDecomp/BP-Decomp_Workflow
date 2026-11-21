@@ -26,6 +26,20 @@ STAMPED = {"progress/funcaudit.json", "progress/stubs.json", "progress/asmaudit.
            "progress/linked_files.json", "progress/source_status.json", "progress/bytematch.json"}
 # The source branch each kind describes: its runs publish only while they describe its tip.
 BRANCH = {"reconcile": "dev", "build": "dev", "bytematch": "x360"}
+# Besides its named outputs, a byte-match publication may carry the records CI adopted from the
+# measuring server (tools/bytematch/remote.py), written or deleted, and their state.json: any
+# number of them, in the same commit as the summary built from them.
+RECORDS = {"bytematch": re.compile(r"progress/bytematch/objects/(?:src|vendor)(?:/[A-Za-z0-9_+.-]+)+\.(?:cpp|c)\.json")}
+EXTRA = {"bytematch": {"progress/bytematch/state.json"}}
+
+
+def is_record(kind, path):
+    pattern = RECORDS.get(kind)
+    return bool(pattern and pattern.fullmatch(path) and ".." not in path.split("/"))
+
+
+def allowed(kind, path):
+    return path in FILES[kind] or path in EXTRA.get(kind, ()) or is_record(kind, path)
 
 
 def git(repo, *args, input=None, env=None, check=True):
@@ -55,9 +69,12 @@ def eligibility(source_repo, source_commit, workflow_ref, branch="dev"):
 
 
 def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message,
-            *, remote="origin", attempts=5, retry_delay=3, status_server=None):
+            *, deletions=(), remote="origin", attempts=5, retry_delay=3, status_server=None):
     repo = Path(repo).resolve()
-    if not files or not set(files) <= FILES[kind] or len(set(files)) != len(files):
+    files, deletions = list(files), list(deletions)
+    paths = files + deletions
+    if (not files or len(set(paths)) != len(paths) or not all(allowed(kind, p) for p in files)
+            or not all(is_record(kind, p) for p in deletions)):
         raise ValueError("publication paths must be a nonempty unique subset of the named CI outputs")
     branch = BRANCH[kind]
     decision = eligibility(source_repo, source_commit, workflow_ref, branch)
@@ -88,6 +105,8 @@ def publish(repo, source_repo, source_commit, workflow_ref, kind, files, message
             for path, data in snapshots.items():
                 oid = git(repo, "hash-object", "-w", "--stdin", input=data).stdout.decode().strip()
                 entries.append(f"100644 {oid}\t{path}\n")
+            for path in deletions:
+                entries.append(f"0 {'0' * 40}\t{path}\n")
             if kind == "reconcile":
                 entries.append(f"160000 {source_commit}\tb5-decomp\n")
             git(repo, "update-index", "--index-info", input="".join(entries).encode(), env=env)
@@ -138,6 +157,8 @@ def main():
     parser.add_argument("--remote", default="origin")
     parser.add_argument("--kind", choices=FILES)
     parser.add_argument("--files", nargs="+")
+    parser.add_argument("--files-from", help="more paths to publish, one per line (byte-match records)")
+    parser.add_argument("--delete-from", help="paths to delete, one per line (byte-match records)")
     parser.add_argument("--message-file")
     parser.add_argument("--attempts", type=int, default=5)
     parser.add_argument("--retry-delay", type=float, default=3)
@@ -151,10 +172,17 @@ def main():
     else:
         if not args.kind or not args.files or not args.message_file:
             parser.error("publish requires --kind, --files and --message-file")
+
+        def listed(path):
+            if not path or not Path(path).is_file():
+                return []
+            return [line.strip() for line in Path(path).read_text(encoding="utf-8").splitlines() if line.strip()]
+
+        files = list(dict.fromkeys(args.files + listed(args.files_from)))
         result = publish(args.repo, args.source_repo, args.source_commit, args.workflow_ref,
-                         args.kind, args.files, Path(args.message_file).read_text(encoding="utf-8"),
-                         remote=args.remote, attempts=args.attempts, retry_delay=args.retry_delay,
-                         status_server=args.status_server)
+                         args.kind, files, Path(args.message_file).read_text(encoding="utf-8"),
+                         deletions=listed(args.delete_from), remote=args.remote, attempts=args.attempts,
+                         retry_delay=args.retry_delay, status_server=args.status_server)
     report(result, args.result)
     return 3 if args.require_current and not result["eligible"] else 0
 
