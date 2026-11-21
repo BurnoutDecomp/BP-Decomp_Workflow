@@ -1,13 +1,13 @@
 {
- "blob": "3a153408583fd558fc492b2221144b2f8e1aff80",
- "commit": "f7c3ee633e4a827598f61f8ddf839c134da501b3",
+ "blob": "65fe9ba1cb501e54fd46612fa3aa487c45e5f76f",
+ "commit": "a3ab8d3edeeda1204fad6a2701afe42d0d77e072",
  "compiled": true,
- "measured": "2026-11-21T12:20:14Z",
+ "measured": "2026-11-21T12:53:52Z",
  "schema": 1,
  "source": "src/GameSource/Network/Managers/BrnChallengeSuccessManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 18,
+ "unpaired": 19,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "823AC258", "artist_size": 224, "first_diff": 8, "name": "CgsModule::VariableEventQueue<14000,16>::GetFirstEvent", "score": 27.7, "size": 180, "status": "nonmatching", "symbol": "?GetFirstEvent@?$VariableEventQueue@$0DGLA@$0BA@@CgsModule@@QBAHPAPBUEvent@2@PAH@Z"},
@@ -24,14 +24,15 @@
   {"artist": "82555DC0", "artist_size": 20, "name": "BrnNetwork::ChallengeSuccessManager::ProcessBeforeSimulation", "score": 100.0, "size": 20, "status": "exact", "symbol": "?ProcessBeforeSimulation@ChallengeSuccessManager@BrnNetwork@@QAAXPAUOutputBuffer@BrnNetworkModuleIO@2@@Z"},
   {"artist": "82555DD8", "artist_size": 1568, "first_diff": 4, "name": "BrnNetwork::ChallengeSuccessManager::TranslateSuccessUpdate60HzTo50Hz", "score": 8.1, "size": 1280, "status": "nonmatching", "symbol": "?TranslateSuccessUpdate60HzTo50Hz@ChallengeSuccessManager@BrnNetwork@@AAAXPAULastSecondChallengeSuccess@FburnChallengeSuccessUpdateAction@BrnGameState@@PBU345@@Z"},
   {"artist": "825563F8", "artist_size": 1532, "first_diff": 4, "name": "BrnNetwork::ChallengeSuccessManager::TranslateSuccessUpdate50HzTo60Hz", "score": 6.3, "size": 1012, "status": "nonmatching", "symbol": "?TranslateSuccessUpdate50HzTo60Hz@ChallengeSuccessManager@BrnNetwork@@AAAXPAULastSecondChallengeSuccess@FburnChallengeSuccessUpdateAction@BrnGameState@@PBU345@@Z"},
-  {"artist": "825569F8", "artist_size": 180, "first_diff": 48, "name": "BrnNetwork::ChallengeSuccessManager::RemovePlayer", "score": 91.1, "size": 180, "status": "nonmatching", "symbol": "?RemovePlayer@ChallengeSuccessManager@BrnNetwork@@QAAXH@Z"},
-  {"artist": "8255DCD8", "artist_size": 240, "first_diff": 52, "name": "BrnNetwork::ChallengeSuccessManager::Construct", "score": 93.3, "size": 240, "status": "nonmatching", "symbol": "?Construct@ChallengeSuccessManager@BrnNetwork@@QAAXPAVBrnNetworkModule@2@PAUPlayerManager@CgsNetwork@@PAUTimeManager@5@@Z"},
+  {"artist": "825569F8", "artist_size": 180, "calls_unverified": 1, "calls_wrong": [{"artist": "BrnNetwork::ChallengeSuccessManager:", "at": 120, "ours": "BrnNetwork::ChallengeSuccessManager::GetChallengeSuccessDataEntry"}], "data_unchecked": 3, "first_diff": 120, "name": "BrnNetwork::ChallengeSuccessManager::RemovePlayer", "score": 95.6, "size": 180, "status": "nonmatching", "symbol": "?RemovePlayer@ChallengeSuccessManager@BrnNetwork@@QAAXH@Z"},
+  {"artist": "8255DCD8", "artist_size": 240, "calls_unverified": 1, "data_unchecked": 4, "name": "BrnNetwork::ChallengeSuccessManager::Construct", "score": 100.0, "size": 240, "status": "exact", "symbol": "?Construct@ChallengeSuccessManager@BrnNetwork@@QAAXPAVBrnNetworkModule@2@PAUPlayerManager@CgsNetwork@@PAUTimeManager@5@@Z"},
   {"artist": "8255DDC8", "artist_size": 348, "first_diff": 12, "name": "BrnNetwork::ChallengeSuccessManager::ProcessNetworkEvents", "score": 42.9, "size": 360, "status": "nonmatching", "symbol": "?ProcessNetworkEvents@ChallengeSuccessManager@BrnNetwork@@AAAXPBUNetworkEventQueue@BrnNetworkModuleIO@2@@Z"},
   {"artist": "8255DF28", "artist_size": 136, "first_diff": 76, "name": "BrnNetwork::ChallengeSuccessManager::Disconnected", "score": 97.1, "size": 136, "status": "nonmatching", "symbol": "?Disconnected@ChallengeSuccessManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82565090", "artist_size": 616, "first_diff": 8, "name": "BrnNetwork::ChallengeSuccessManager::HandleReceivedUpdateMessage", "score": 56.7, "size": 696, "status": "nonmatching", "symbol": "?HandleReceivedUpdateMessage@ChallengeSuccessManager@BrnNetwork@@AAAXHHHPBULastSecondChallengeSuccess@FburnChallengeSuccessUpdateAction@BrnGameState@@@Z"},
   {"artist": "825652F8", "artist_size": 308, "first_diff": 48, "name": "BrnNetwork::ChallengeSuccessManager::_ChallengeSuccessMessageArrivedCallback", "score": 70.6, "size": 304, "status": "nonmatching", "symbol": "?_ChallengeSuccessMessageArrivedCallback@ChallengeSuccessManager@BrnNetwork@@CAXPAUReliableMessage@CgsNetwork@@HPAX@Z"},
   {"artist": "8256BE60", "artist_size": 192, "first_diff": 8, "name": "BrnNetwork::ChallengeSuccessManager::CheckForNewUpdateMessages", "score": 76.8, "size": 204, "status": "nonmatching", "symbol": "?CheckForNewUpdateMessages@ChallengeSuccessManager@BrnNetwork@@AAAXXZ"},
-  {"artist": "8256BF20", "artist_size": 236, "first_diff": 48, "name": "BrnNetwork::ChallengeSuccessManager::AddPlayer", "score": 94.9, "size": 236, "status": "nonmatching", "symbol": "?AddPlayer@ChallengeSuccessManager@BrnNetwork@@QAAXH@Z"},
-  {"artist": "8256FE78", "artist_size": 120, "first_diff": 44, "name": "BrnNetwork::ChallengeSuccessManager::ProcessAfterSimulation", "score": 93.3, "size": 120, "status": "nonmatching", "symbol": "?ProcessAfterSimulation@ChallengeSuccessManager@BrnNetwork@@QAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@@Z"}
+  {"artist": "8256BF20", "artist_size": 236, "calls_wrong": [{"artist": "BrnNetwork::ChallengeSuccessManager:", "at": 100, "ours": "BrnNetwork::ChallengeSuccessManager::GetChallengeSuccessDataEntry"}], "data_unchecked": 5, "first_diff": 100, "name": "BrnNetwork::ChallengeSuccessManager::AddPlayer", "score": 98.3, "size": 236, "status": "nonmatching", "symbol": "?AddPlayer@ChallengeSuccessManager@BrnNetwork@@QAAXH@Z"},
+  {"artist": "8256FE78", "artist_size": 120, "calls_wrong": [{"artist": "BrnNetwork::BrnNetworkModuleIO::PostSim", "at": 72, "ours": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetNetworkEventQueue"}], "data_unchecked": 2, "first_diff": 72, "name": "BrnNetwork::ChallengeSuccessManager::ProcessAfterSimulation", "score": 96.7, "size": 120, "status": "nonmatching", "symbol": "?ProcessAfterSimulation@ChallengeSuccessManager@BrnNetwork@@QAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

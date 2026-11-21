@@ -1,23 +1,24 @@
 {
- "blob": "5c74d9365caf60bfd239358601357d7e7b8355ae",
- "commit": "f7c3ee633e4a827598f61f8ddf839c134da501b3",
+ "blob": "9e9405a8829dfdd0ce2f02eedc29a2376f6fb388",
+ "commit": "a3ab8d3edeeda1204fad6a2701afe42d0d77e072",
  "compiled": true,
- "measured": "2026-11-21T12:20:14Z",
+ "measured": "2026-11-21T12:53:52Z",
  "schema": 1,
  "source": "src/GameSource/Network/BrnServerInterfaceBase.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 8,
+ "unpaired": 9,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "82582D38", "artist_size": 148, "calls_wrong": [{"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 32, "ours": "CgsNetwork::ServerInterfaceConnection::Suspend"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 40, "ours": "CgsNetwork::ServerInterfacePlayerInfo::Suspend"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 48, "ours": "CgsNetwork::ServerInterfaceBroadcastMessages::Suspend"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 56, "ours": "CgsNetwork::ServerInterfaceHttp::Suspend"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 64, "ours": "CgsNetwork::ServerInterfaceServerInfo::Suspend"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 108, "ours": "CgsNetwork::ServerInterfacePingRegions::Suspend"}], "first_diff": 32, "name": "BrnNetwork::BrnServerInterfaceBase::Suspend", "score": 83.8, "size": 148, "status": "nonmatching", "symbol": "?Suspend@BrnServerInterfaceBase@BrnNetwork@@UAAXH@Z"},
   {"artist": "82582DD0", "artist_size": 128, "calls_wrong": [{"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 28, "ours": "CgsNetwork::ServerInterfaceConnection::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 36, "ours": "CgsNetwork::ServerInterfacePlayerInfo::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 44, "ours": "CgsNetwork::ServerInterfaceBroadcastMessages::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 52, "ours": "CgsNetwork::ServerInterfaceHttp::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 60, "ours": "CgsNetwork::ServerInterfaceServerInfo::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 68, "ours": "CgsNetwork::ServerInterfaceDownloadableConfig::Resume"}, {"artist": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct", "at": 104, "ours": "CgsNetwork::ServerInterfacePingRegions::Resume"}], "first_diff": 28, "name": "BrnNetwork::BrnServerInterfaceBase::Resume", "score": 78.1, "size": 128, "status": "nonmatching", "symbol": "?Resume@BrnServerInterfaceBase@BrnNetwork@@UAAXXZ"},
-  {"artist": "825891F8", "artist_size": 1156, "first_diff": 708, "name": "BrnNetwork::BrnServerInterfaceBase::Construct", "score": 95.8, "size": 1156, "status": "nonmatching", "symbol": "?Construct@BrnServerInterfaceBase@BrnNetwork@@UAAXXZ"},
+  {"artist": "825891F8", "artist_size": 1156, "calls_unverified": 1, "data_unchecked": 23, "name": "BrnNetwork::BrnServerInterfaceBase::Construct", "score": 100.0, "size": 1156, "status": "exact", "symbol": "?Construct@BrnServerInterfaceBase@BrnNetwork@@UAAXXZ"},
   {"artist": "82589680", "artist_size": 724, "first_diff": 8, "name": "BrnNetwork::BrnServerInterfaceBase::Prepare", "score": 75.4, "size": 688, "status": "nonmatching", "symbol": "?Prepare@BrnServerInterfaceBase@BrnNetwork@@UAA_NPAUServerInterfacePrepareParams@CgsNetwork@@@Z"},
   {"artist": "82589958", "artist_size": 560, "first_diff": 4, "name": "BrnNetwork::BrnServerInterfaceBase::Release", "score": 70.0, "size": 572, "status": "nonmatching", "symbol": "?Release@BrnServerInterfaceBase@BrnNetwork@@UAA_NXZ"},
   {"artist": "82589B88", "artist_size": 232, "first_diff": 4, "name": "BrnNetwork::BrnServerInterfaceBase::Destruct", "score": 59.6, "size": 184, "status": "nonmatching", "symbol": "?Destruct@BrnServerInterfaceBase@BrnNetwork@@UAAXXZ"},
   {"artist": "825935D8", "artist_size": 332, "first_diff": 232, "name": "BrnNetwork::BrnServerInterfaceBase::Update", "score": 96.4, "size": 340, "status": "nonmatching", "symbol": "?Update@BrnServerInterfaceBase@BrnNetwork@@UAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@@Z"},
   {"artist": "8259A358", "artist_size": 56, "name": "BrnNetwork::BrnServerInterfaceBase::OnEvent", "score": 100.0, "size": 56, "status": "exact", "symbol": "?OnEvent@BrnServerInterfaceBase@BrnNetwork@@UAAXW4EServerInterfaceEvent@CgsNetwork@@PAX@Z"},
-  {"artist": "827E1710", "artist_size": 124, "first_diff": 8, "name": "BrnNetwork::BrnServerInterfaceBase::`scalar deleting destructor'", "score": 35.3, "size": 80, "status": "nonmatching", "symbol": "??_GBrnServerInterfaceBase@BrnNetwork@@UAAPAXI@Z"}
+  {"artist": "827E1710", "artist_size": 124, "first_diff": 8, "name": "BrnNetwork::BrnServerInterfaceBase::`scalar deleting destructor'", "score": 35.3, "size": 80, "status": "nonmatching", "symbol": "??_GBrnServerInterfaceBase@BrnNetwork@@UAAPAXI@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
