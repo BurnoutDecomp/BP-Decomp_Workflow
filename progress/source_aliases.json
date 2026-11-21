@@ -355,6 +355,14 @@
     }
   },
   "functions": {
+    "Attrib::Class::TablePolicy,1,96": {
+      "symbol": "Attrib::CollectionHashMap::FindIndex",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": true,
+      "x360_address": "0x82806210",
+      "byte_match": true,
+      "evidence": "The truncated TablePolicy symbol performs the 96-entry-threshold collection table index lookup. The collection Find at 0x82806334 and RemoveCollection at 0x8280AE2C pass their 64-bit keys to this body."
+    },
     "CgsAttribSys::AttribSysPackageAllocator>::DoC": {
       "symbol": "Attrib::AttribListClearNodes",
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
@@ -4870,6 +4878,34 @@
     }
   },
   "identified_functions": {
+    "0x82807C18": {
+      "exported_name": null,
+      "symbol": "Attrib::HashMap::RebuildTable",
+      "size": 440,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribhashmap.cpp",
+      "evidence": "HashMap construction passes the requested capacity at 0x82809560. The callee saves the old array and capacity, allocates an Attrib::HashMapTable array and reinserts the old entries."
+    },
+    "0x82808A98": {
+      "exported_name": "sub_82808A98",
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::RemoveIndex",
+      "size": 276,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "evidence": "ClassPrivate teardown passes the class table index at 0x8280F564. The callee vacates that bucket, repairs the probe run with the class table's UpdateSearchLength and returns the removed class."
+    },
+    "0x82806320": {
+      "exported_name": null,
+      "symbol": "Attrib::CollectionHashMap::Find",
+      "size": 156,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "evidence": "The collection lookup validates the index returned by FindIndex and reads the live bucket value. RefSpec::GetCollection calls it at 0x82808590, and the XDK wrapper matches the full extent once FindIndex is named."
+    },
+    "0x82808980": {
+      "exported_name": "sub_82808980",
+      "symbol": "Attrib::CollectionHashMap::RemoveIndex",
+      "size": 276,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "evidence": "Class::RemoveCollection passes its lookup index at 0x8280AE38. The callee vacates the collection bucket, updates the entry count and repairs its probe run before returning the removed collection."
+    },
     "0x828091A8": {
       "exported_name": "sub_828091A8",
       "symbol": "Attrib::AttribListAllocateNode<Attrib::Collection>",
