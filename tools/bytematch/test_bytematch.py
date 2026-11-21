@@ -17,10 +17,30 @@ sys.path.insert(0, str(HERE))
 import coff  # noqa: E402
 import ledger  # noqa: E402
 from artist import Artist, PDATA_START, load_pack, packed_extents  # noqa: E402
+from bytematch import BuildInputs, includes_from_log  # noqa: E402
 from compare import compare  # noqa: E402
 
 BLR = 0x4E800020
 BL = 0x48000001          # bl with a zero displacement, as the compiler leaves it
+
+
+def test_input_state_resolves_xdk_header_paths():
+    source = "src/User.cpp"
+    header = "src/Engine/Config.h"
+    submodule = "vendor/EAThread"
+    compiler_log = "\n".join((
+        r"Note: including file: D:\native\src\engine\Xbox\..\Config.h",
+        r"Note: including file: D:\native\VENDOR\eathread\include\Thread.h",
+        r"Note: including file: D:\XDK\include\xbox\xtl.h",
+    ))
+    index = {source: {"includes": includes_from_log(compiler_log, r"D:\native")}}
+    entries = {source: ("blob", "source-blob"), header: ("blob", "old-header"),
+               submodule: ("commit", "old-gitlink")}
+    before = BuildInputs(entries).state(source, index)
+    assert before == {source: "source-blob", header: "old-header", submodule: "old-gitlink"}
+
+    updated = {**entries, header: ("blob", "new-header"), submodule: ("commit", "new-gitlink")}
+    assert BuildInputs(updated).state(source, index) == {**before, header: "new-header", submodule: "new-gitlink"}
 
 
 def make_object(functions, extra_symbols=()):

@@ -367,8 +367,7 @@ def refresh(args):
         raise SystemExit("--head must be a full commit id")
     flags, includes = build_config(tree)
     entries = read_listing(Path(args.listing or out / "ls-tree.txt"))
-    blobs = {path: oid for path, (_kind, oid) in entries.items()}
-    submodules = {path: oid for path, (kind, oid) in entries.items() if kind == "commit"}
+    dependencies = bytematch.BuildInputs(entries)
     sources = native_sources(entries)
     every_source = set(sources)
     if args.sources:   # a trial over a few sources: nothing is pruned or reported removed
@@ -395,7 +394,7 @@ def refresh(args):
     to_compile, to_measure = [], []
     for source in sources:
         entry, record, known = index.get(source), records.get(source), deps.get(source)
-        inputs = bytematch.input_state(source, index, blobs, submodules) if entry else None
+        inputs = dependencies.state(source, index) if entry else None
         # Compile when an input or the flags changed; a failed compile is retried every run (it
         # is rare). Measure what was compiled, and any record that is not the one last measured.
         compile_ = not (entry is not None and known is not None and known.get("inputs") == inputs
@@ -436,7 +435,7 @@ def refresh(args):
     written, unchanged, failed = [], 0, []
     for source in to_measure:
         entry = index[source]
-        record = {"schema": ledger.SCHEMA, "source": source, "commit": head, "blob": blobs.get(source),
+        record = {"schema": ledger.SCHEMA, "source": source, "commit": head, "blob": dependencies.blobs.get(source),
                   "toolchain": compiler.fingerprint(entry["command"]), "measured": stamp,
                   "tool": bytematch.TOOL_VERSION, "compiled": bool(entry["passed"]), "functions": []}
         if entry["passed"]:
@@ -452,7 +451,7 @@ def refresh(args):
         else:
             ledger.write_record(record, out / "records")
             written.append(source)
-        deps[source] = {"inputs": bytematch.input_state(source, index, blobs, submodules),
+        deps[source] = {"inputs": dependencies.state(source, index),
                         "record": identity(record), "measure": measuring}
     compiler.stop()
     removed =[] if args.sources else sorted(s for s in records if s not in every_source)

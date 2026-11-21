@@ -28,6 +28,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import posixpath
 import re
 import subprocess
 import sys
@@ -281,14 +282,32 @@ def head_blobs(tree, commit="HEAD"):
     return {path: oid for path, (_kind, oid) in tree_entries(tree, commit).items()}
 
 
-def input_state(source, index, blobs, submodules):
-    """What a recorded measurement depended on: the source, each repo file it included
-    (by blob), each submodule it reached into (by its gitlink)."""
-    state = {source: blobs.get(source)}
-    for inc in index.get(source, {}).get("includes", []):
-        sub = next((s for s in submodules if inc.startswith(s + "/")), None)
-        state[sub or inc] = submodules[sub] if sub else blobs.get(inc)
-    return state
+class BuildInputs:
+    """Resolve the XDK's include paths to Git blobs and submodule gitlinks."""
+
+    def __init__(self, entries):
+        self.blobs = {path: oid for path, (_kind, oid) in entries.items()}
+        self._tracked_paths = {path.casefold(): path for path in entries}
+        self._gitlinks = [(path.casefold() + "/", path, oid)
+                          for path, (kind, oid) in entries.items() if kind == "commit"]
+
+    def state(self, source, index):
+        state = {source: self.blobs.get(source)}
+        for include in index.get(source, {}).get("includes", []):
+            # /showIncludes can preserve relative segments and the include's casing,
+            # including in cached logs from earlier measurements.
+            path = posixpath.normpath(include)
+            folded = path.casefold()
+            gitlink = next(((name, oid) for prefix, name, oid in self._gitlinks
+                            if folded.startswith(prefix)), None)
+            if gitlink is not None:
+                name, oid = gitlink
+                state[name] = oid
+            else:
+                if path not in self.blobs:
+                    path = self._tracked_paths.get(folded, path)
+                state[path] = self.blobs.get(path)
+        return state
 
 
 def load_deps(tree):
@@ -331,9 +350,7 @@ def measure(args):
         if missing:
             index = compile_sources(tree, xdk, missing, jobs=args.jobs)
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
-    entries = tree_entries(tree)
-    blobs = {path: oid for path, (_kind, oid) in entries.items()}
-    submodules = {path: oid for path, (kind, oid) in entries.items() if kind == "commit"}
+    inputs = BuildInputs(tree_entries(tree))
     deps = load_deps(tree) if args.record else None
     artist = Artist().preload() if len(sources) > 20 else Artist()
     stamp = ledger.now_iso()
@@ -343,7 +360,7 @@ def measure(args):
         if entry is None:
             print(f"SKIP {source}: not compiled")
             continue
-        record = {"schema": ledger.SCHEMA, "source": source, "commit": head, "blob": blobs.get(source),
+        record = {"schema": ledger.SCHEMA, "source": source, "commit": head, "blob": inputs.blobs.get(source),
                   "toolchain": toolchain(entry["command"], tree, xdk), "measured": stamp, "tool": TOOL_VERSION,
                   "compiled": bool(entry["passed"]), "functions": []}
         if entry["passed"]:
@@ -359,7 +376,7 @@ def measure(args):
             totals[row["status"]] += 1
         if args.record:
             ledger.write_record(record)
-            deps[source] = input_state(source, index, blobs, submodules)
+            deps[source] = inputs.state(source, index)
         if args.verbose or len(sources) <= 5:
             print(f"== {source}  {'compiled' if record['compiled'] else 'COMPILE FAILED'}")
             for row in record["functions"]:
@@ -379,9 +396,7 @@ def refresh(args):
     """Recompile and re-measure what changed; with --record, prove every record current."""
     tree, xdk = need_tree(args), need_xdk(args)
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
-    entries = tree_entries(tree)
-    blobs = {path: oid for path, (_kind, oid) in entries.items()}
-    submodules = {path: oid for path, (kind, oid) in entries.items() if kind == "commit"}
+    inputs = BuildInputs(tree_entries(tree))
     index = load_index(tree)
     deps = load_deps(tree)
     sources = native_sources(tree)
@@ -390,7 +405,7 @@ def refresh(args):
     stale = []
     for source in sources:
         entry, record, known = index.get(source), records.get(source), deps.get(source)
-        if entry is None or record is None or known is None or known != input_state(source, index, blobs, submodules):
+        if entry is None or record is None or known is None or known != inputs.state(source, index):
             stale.append(source)
         elif args.record and record.get("toolchain") != toolchain(entry["command"], tree, xdk):
             stale.append(source)
@@ -403,7 +418,7 @@ def refresh(args):
         if not args.record:   # a recorded measure already stored them
             deps = load_deps(tree)
             for source in stale:
-                deps[source] = input_state(source, index, blobs, submodules)
+                deps[source] = inputs.state(source, index)
             save_deps(tree, deps)
     if args.record:
         gone = [s for s in records if s not in set(sources)]
