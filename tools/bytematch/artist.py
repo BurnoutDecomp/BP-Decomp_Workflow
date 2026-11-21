@@ -20,6 +20,7 @@ import sys
 REPO = Path(__file__).resolve().parents[2]
 PACK = REPO / "progress" / "asmaudit_artist.json.gz"
 UNIDENTIFIED = REPO / "progress" / "unidentified.json"
+SOURCE_ALIASES = REPO / "progress" / "source_aliases.json"
 
 # Image layout of BURNOUT_X360_ARTIST.XEX (the same constants the native branch's
 # tools/x360/count_matches.py validated against its strict-linked census).
@@ -40,9 +41,21 @@ def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END):
     return sizes
 
 
-def load_pack(path=PACK):
+def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
+    """Read exported names and apply opted-in aliases at their attested addresses."""
     with open(path, "rb") as fh:
-        return json.loads(gzip.decompress(fh.read()))["functions"]
+        functions = json.loads(gzip.decompress(fh.read()))["functions"]
+    if aliases_path.is_file():
+        with aliases_path.open(encoding="utf-8") as fh:
+            aliases = json.load(fh).get("functions", {})
+        for exported_name, proof in aliases.items():
+            if proof.get("byte_match") is not True:
+                continue
+            address = f"0x{int(proof['x360_address'], 16):08X}"
+            row = functions.get(address)
+            if row and row["name"] == exported_name:
+                row["name"] = proof["symbol"]
+    return functions
 
 
 def load_unidentified(path=UNIDENTIFIED):

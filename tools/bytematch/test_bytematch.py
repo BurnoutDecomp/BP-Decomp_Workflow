@@ -5,6 +5,7 @@ Runs anywhere (CI is Linux): no XDK, no image, no dbghelp.
 """
 from __future__ import annotations
 
+import gzip
 import json
 import struct
 import sys
@@ -15,7 +16,7 @@ sys.path.insert(0, str(HERE))
 
 import coff  # noqa: E402
 import ledger  # noqa: E402
-from artist import Artist, packed_extents  # noqa: E402
+from artist import Artist, load_pack, packed_extents  # noqa: E402
 from compare import compare  # noqa: E402
 
 BLR = 0x4E800020
@@ -139,6 +140,31 @@ def test_wrong_callee_is_not_exact():
     result = compare(obj.functions()[0], obj, art, caller, 12)
     assert result.status == "nonmatching"
     assert result.calls_wrong == [{"at": 4, "ours": "Leaf", "artist": "Other"}]
+
+
+def test_native_source_alias_requires_opt_in_and_the_exported_name_and_address(tmp_path):
+    pack_path = tmp_path / "artist.json.gz"
+    aliases_path = tmp_path / "source_aliases.json"
+    pack = {
+        "0x82200000": {"name": "Example::GetRes", "n": 1},
+        "0x82200004": {"name": "Example::GetRes", "n": 1},
+        "0x82200008": {"name": "Example::Release", "n": 1},
+        "0x8220000C": {"name": "Other::GetRes", "n": 1},
+    }
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode("utf-8")))
+    aliases_path.write_text(json.dumps({"functions": {
+        "Example::GetRes": {"x360_address": "0x82200000", "symbol": "Example::GetResource", "byte_match": True},
+        "Example::GetSomething": {"x360_address": "0x82200008", "symbol": "Example::GetOther", "byte_match": True},
+        "Other::GetRes": {"x360_address": "0x8220000C", "symbol": "Other::GetResource"},
+    }}), encoding="utf-8")
+
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path))
+
+    assert art.name_at(0x82200000) == "Example::GetResource"
+    assert art.by_name["Example::GetResource"] == [0x82200000]
+    assert art.name_at(0x82200004) == "Example::GetRes"
+    assert art.name_at(0x82200008) == "Example::Release"
+    assert art.name_at(0x8220000C) == "Other::GetRes"
 
 
 def test_unnamed_callee_is_unverified_not_wrong():

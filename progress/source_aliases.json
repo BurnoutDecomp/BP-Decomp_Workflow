@@ -2,6 +2,14 @@
   "version": 1,
   "description": "Explicitly reviewed source identities for truncated or renamed ARTIST symbols. Exact C++ symbol and body file only; no prefix/leaf inference.",
   "functions": {
+    "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::": {
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::GetResourceRequestInterface",
+      "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_Prepare.cpp",
+      "const": false,
+      "x360_address": "0x822BA180",
+      "byte_match": true,
+      "evidence": "ARTIST tests the write-lock bit at 0x822BA194 and returns the member at this+4. WorldEntityModule::Prepare passes that address to RequestInterface::LoadBundle at 0x8230294C, 0x82302974 and 0x8230299C. The non-const accessor is declared in DecFIGS BrnWorldEntityModuleIO.h and implemented at the recorded source path."
+    },
     "rw::audio::core::GinsuPlayer::EventEvent": {
       "symbol": "rw::audio::core::GinsuPlayer::Event",
       "file": "GameShared/GameClasses/Sound/Playback/Plugins/Ginsu/GinsuPlayer.cpp",
