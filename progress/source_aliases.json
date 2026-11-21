@@ -355,6 +355,22 @@
     }
   },
   "functions": {
+    "CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided>::": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided>::Append",
+      "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventLineTestFastDoubleSided_Append.cpp",
+      "const": false,
+      "x360_address": "0x823C2160",
+      "byte_match": true,
+      "evidence": "SceneQueryInterface::Append at 0x823C50E8 calls the 64-byte-element queue append. The explicit XDK instantiation compares exact over all 220 bytes."
+    },
+    "CgsModule::BaseEventQ": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCollisionManagerIO::InEventAddPolySoupList>::GetEvent",
+      "file": "GameShared/GameClasses/SceneManager/TriangleCollision/BaseEventQueue_InEventAddPolySoupList_GetEvent.cpp",
+      "const": true,
+      "x360_address": "0x828ACE28",
+      "byte_match": true,
+      "evidence": "TriangleCollisionManager::ProcessAddPolySoupListEvents at 0x828B31E0 calls the event lookup for the add-list queue. The explicit XDK instantiation compares exact over all 164 bytes."
+    },
     "char>::Cl": {
       "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::Clear",
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
