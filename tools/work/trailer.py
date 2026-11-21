@@ -6,8 +6,9 @@ knows its family, rarely its exact version):
 
   Claude Code  the newest assistant message of this session's transcript
                (projects/*/<CLAUDE_CODE_SESSION_ID>.jsonl under ~/.claude or CLAUDE_CONFIG_DIR)
-  Codex        the newest turn_context of the newest session log started in this folder or a
-               folder above it (sessions/**/rollout-*.jsonl under ~/.codex or CODEX_HOME)
+  Codex        the newest turn_context of the session log started in this folder or a folder
+               above it whose last record is newest (sessions/**/rollout-*.jsonl under ~/.codex
+               or CODEX_HOME; the record's own timestamp, never the file time)
 
 and turns the model id into the label the history uses:
 
@@ -31,6 +32,7 @@ import os
 import re
 import sys
 import time
+from datetime import datetime, timezone
 
 LABELS = (
     (re.compile(r"claude-([a-z]+)-(\d+)(?:-(\d{1,2}))?(?:-\d{8})?"),
@@ -41,7 +43,7 @@ LABELS = (
                 "noreply@openai.com")),
 )
 TAIL_BYTES = 4 << 20          # the newest records sit at the end of a log: read that part first
-CODEX_RECENT_S = 12 * 3600    # a Codex log written this recently counts as a live session
+CODEX_RECENT_S = 12 * 3600    # a Codex log whose last record is this recent counts as a live session
 
 
 def trailer_for(model: str) -> str | None:
@@ -116,13 +118,27 @@ def _inside(child: str, parent: str) -> bool:
         return False
 
 
+def last_record_time(path: str) -> float:
+    """Epoch of the log's last record. Not the file time: Windows leaves a log's modified time at
+    its creation while Codex keeps the file open (a log that showed 13:10 was written until 14:18)."""
+    with open(path, "rb") as fh:
+        size = os.fstat(fh.fileno()).st_size
+        fh.seek(max(0, size - (64 << 10)))
+        lines = fh.read().splitlines()
+    for line in reversed(lines):
+        try:
+            ts = json.loads(line).get("timestamp")
+            return datetime.fromisoformat(ts.replace("Z", "+00:00")).timestamp()
+        except (ValueError, AttributeError, TypeError):
+            continue
+    return os.path.getmtime(path)
+
+
 def codex_log(why: list, recent_only: bool):
     home = os.environ.get("CODEX_HOME") or os.path.join(os.path.expanduser("~"), ".codex")
     logs = glob.glob(os.path.join(home, "sessions", "**", "rollout-*.jsonl"), recursive=True)
-    here, now = os.getcwd(), time.time()
-    for path in sorted(logs, key=os.path.getmtime, reverse=True):
-        if recent_only and now - os.path.getmtime(path) > CODEX_RECENT_S:
-            break
+    here, now, started_here = os.getcwd(), time.time(), []
+    for path in logs:
         try:
             with open(path, encoding="utf-8") as fh:
                 first = json.loads(fh.readline())
@@ -130,10 +146,15 @@ def codex_log(why: list, recent_only: bool):
             continue
         cwd = (first.get("payload") or {}).get("cwd") if first.get("type") == "session_meta" else None
         if cwd and _inside(here, cwd):
-            why.append(f"model read from the Codex session log {path} (started in {cwd})")
+            started_here.append((last_record_time(path), path, cwd))
+    if started_here:
+        at, path, cwd = max(started_here)
+        if not recent_only or now - at <= CODEX_RECENT_S:
+            when = datetime.fromtimestamp(at, timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+            why.append(f"model read from the Codex session log {path} (started in {cwd}, last record {when})")
             return path
     why.append(f"no Codex session log started in {here} or a folder above it"
-               + (" was written in the last 12 hours" if recent_only else ""))
+               + (" has a record from the last 12 hours" if recent_only else ""))
     return None
 
 

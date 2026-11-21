@@ -50,7 +50,7 @@ A family name from memory is never the fallback.
 | Tool | Log `work trailer` reads | Record |
 |---|---|---|
 | Claude Code | `projects/*/<CLAUDE_CODE_SESSION_ID>.jsonl` under `~/.claude` (or `CLAUDE_CONFIG_DIR`) | `message.model` of the newest assistant message |
-| Codex | the newest `sessions/**/rollout-*.jsonl` under `~/.codex` (or `CODEX_HOME`) started in this folder or a folder above it | `payload.model` of the newest `turn_context` |
+| Codex | the `sessions/**/rollout-*.jsonl` under `~/.codex` (or `CODEX_HOME`) started in this folder or a folder above it whose last record is newest (by the record's own `timestamp`: Windows leaves an open log's file time stale) | `payload.model` of the newest `turn_context` |
 
 `work trailer --why` names the log it read and lists every model that session recorded.
 
