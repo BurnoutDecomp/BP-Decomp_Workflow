@@ -355,6 +355,14 @@
     }
   },
   "functions": {
+    "CgsGraphics::Basic2dColouredTexturedVertex>::SetTransform": {
+      "symbol": "CgsGraphics::Im2dBase<CgsGraphics::Basic2dColouredTexturedVertex>::SetTransform",
+      "file": "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dColTex.cpp",
+      "const": false,
+      "x360_address": "0x823AC048",
+      "byte_match": true,
+      "evidence": "The truncated specialization is called with the current transform at 0x827F083C in Im2d::PushMask. It copies all four transform vectors to the Im2d current-transform field and uploads them through BeginShaderStates."
+    },
     "Attrib::CollectionHashMap::UpdateSearchLength": {
       "symbol": "Attrib::CollectionHashMap::UpdateSearchLength",
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
@@ -4934,6 +4942,14 @@
     }
   },
   "identified_functions": {
+    "0x827DBF38": {
+      "exported_name": null,
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::Basic2dColouredTexturedVertex>::SetProgram",
+      "size": 224,
+      "file": "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dColTex.cpp",
+      "tu": "GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dColTex.cpp",
+      "evidence": "Im2d::PushMask passes the next signed-byte program index at 0x827F0824. The callee asserts the vertex and pixel buffer slots, binds the vertex program and on a change stores the index and binds the pixel program."
+    },
     "0x82807C18": {
       "exported_name": null,
       "symbol": "Attrib::HashMap::RebuildTable",
@@ -8608,6 +8624,22 @@
       "size": 84,
       "file": "xmedia.lib:obj\\xbox\\interpolate.obj",
       "evidence": "The exact SDK caller ?InitBlockInterpolation@CWMVideoObjectEncoder@@QAAXXZ references this function pointer at 0x82AB2548. Its expected XDK symbol compares exact over 84 bytes with every referenced call and literal checked."
+    },
+    "0x82802138": {
+      "exported_name": "sub_82802138",
+      "symbol": "CgsAttribSys::AttribSysPackageAllocator::Free",
+      "size": 100,
+      "file": "GameShared/GameClasses/System/AttribSys/CgsAttribSysPackageAllocator.cpp",
+      "tu": "GameShared/GameClasses/System/AttribSys/CgsAttribSysPackageAllocator.cpp",
+      "evidence": "EditRecord::RevertReplace passes the block, byte count and tag at 0x8280DB48. The callee asserts the allocator is live, calls HeapMalloc::Free and adds the supplied count to miFreeTotal."
+    },
+    "0x8280D298": {
+      "exported_name": "sub_8280D298",
+      "symbol": "Attrib::RetrieveAttribDbDataPointer",
+      "size": 736,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
+      "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
+      "evidence": "EditRecord::RevertReplace passes the EditSpecifier and the two output references at 0x8280DAD4. The callee looks up the attribute definition and returns the addressed data with its type and definition."
     }
   }
 }
