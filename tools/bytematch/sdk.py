@@ -41,14 +41,18 @@ def import_stub(words):
     return None
 
 
-def library_functions(lib_dir):
+def library_functions(lib_dir, *, only_members=None):
     for lib in sorted(Path(lib_dir).glob("*.lib")):
+        if only_members is not None and lib.name not in only_members:
+            continue
         data = lib.read_bytes()
         try:
             members = list(archive_members(data, lib.name))
         except CoffError:
             continue
         for member, body in members:
+            if only_members is not None and member not in only_members[lib.name]:
+                continue
             try:
                 obj = ObjectFile(body, f"{lib.name}:{member}")
             except (CoffError, IndexError, ValueError):
@@ -59,6 +63,31 @@ def library_functions(lib_dir):
             for fn in obj.entry_points():
                 if fn.code:
                     yield lib.name, member, obj, fn, True
+
+
+def verify_leaf_providers(artist, lib_dir):
+    """Compare every attested leaf against its recorded archive member."""
+    members = defaultdict(set)
+    addresses = defaultdict(list)
+    for address, proof in artist.sdk_leaves.items():
+        members[proof["lib"]].add(proof["member"])
+        addresses[proof["lib"], proof["member"], proof["archive_symbol"]].append(address)
+
+    found = {}
+    for lib, member, obj, fn, entry in library_functions(lib_dir, only_members=members):
+        if entry:
+            continue
+        for address in addresses.get((lib, member, fn.symbol), ()):
+            size, _ = artist.size(address)
+            if (len(fn.code) == size and artist.matches_name(address, demangle(fn.symbol))
+                    and compare(fn, obj, artist, address, size, fuzzy=False).status == "exact"):
+                found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
+
+    missing = artist.sdk_leaves.keys() - found.keys()
+    if missing:
+        failed = ", ".join(f"{address:08X}" for address in sorted(missing))
+        raise ValueError(f"SDK leaf archive comparison failed at {failed}")
+    return found
 
 
 def identify(artist: Artist, lib_dir, log=print):

@@ -77,6 +77,11 @@ previous summary, dropped on a regression) and `recent`.
 
 ## Maintenance
 
+- An SDK leaf absent from both the export and `.pdata` can enter the catalogue through
+  `sdk_leaf_functions` in `progress/source_aliases.json`. Record its complete archive symbol and
+  extent together with an ARTIST branch whose caller's relocation identifies that symbol. The
+  catalogue checks that the extent fits a gap and that the branch reaches its start. An archive
+  comparison is required even when rebuilding with `--providers`.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,

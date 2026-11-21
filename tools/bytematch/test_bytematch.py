@@ -11,6 +11,8 @@ import struct
 import sys
 from pathlib import Path
 
+import pytest
+
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
@@ -324,6 +326,45 @@ def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(t
     assert overlap not in art.names
     assert art.name_at(wrong_size) is None
     assert art.name_at(wrong_export) is None
+
+
+def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_path):
+    import sdk
+
+    caller, leaf, unwind = 0x821F1000, 0x821F1010, 0x821F1020
+    body = [0x38600007, BLR]
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, leaf), BLR]), (leaf, "Leaf", body)])
+    pdata = struct.pack(">II", unwind, 0x40000100)
+
+    def read(address, size):
+        return pdata if address == PDATA_START else image.bytes(address, size)
+
+    pack_path = tmp_path / "artist.json.gz"
+    pack = {key: value for key, value in image.pack.items() if int(key, 16) != leaf}
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode()))
+    proof = {"symbol": "Leaf", "size": 8, "caller": f"{caller:X}", "call_site": f"{caller:X}",
+             "lib": "sdk.lib", "member": "leaf.obj", "archive_symbol": "Leaf"}
+    aliases = tmp_path / "source_aliases.json"
+    aliases.write_text(json.dumps({"sdk_leaf_functions": {f"0x{leaf:08X}": proof}}), encoding="utf-8")
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases), read=read)
+    assert art.size(leaf) == (8, "sdk_leaf")
+    assert art.by_name["Leaf"] == [leaf]
+
+    obj = coff.ObjectFile(make_object([("Leaf", body, [])]))
+    monkeypatch.setattr(sdk, "library_functions", lambda _, **opts: [
+        ("sdk.lib", "leaf.obj", obj, obj.functions()[0], False),
+    ])
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+    image.memory[leaf] = struct.pack(">I", 0x38600008)
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+    for address, claim, error in (
+        (unwind, proof, "overlapping SDK leaf"),
+        (leaf, {**proof, "call_site": f"{caller + 4:X}"}, "no matching branch"),
+    ):
+        with pytest.raises(ValueError, match=error):
+            Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
 def _universe():

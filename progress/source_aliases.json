@@ -4941,6 +4941,428 @@
       "evidence": "The definition's ARTIST annotation is at src/SDKs/EATech/eajobs/local_backend.cpp:727. The existing native body compares exact across the full 8-byte ARTIST extent."
     }
   },
+  "sdk_leaf_functions": {
+    "0x82964D98": {
+      "symbol": "XAudioFrameBuffer_AddRef",
+      "size": 32,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\framebuffer.obj",
+      "archive_symbol": "XAudioFrameBuffer_AddRef",
+      "caller": "0x82C32D28",
+      "call_site": "0x82C32DA0",
+      "evidence": "XAUDIO::CVoice::Initialize (xaudio.lib:obj\\xbox\\voice.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x8296C840": {
+      "symbol": "XMAPlaybackQueryAvailableData",
+      "size": 144,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\xmahardwareabstraction.obj",
+      "archive_symbol": "XMAPlaybackQueryAvailableData",
+      "caller": "0x8296A478",
+      "call_site": "0x8296A6A0",
+      "evidence": "XAUDIO::CXMASourceEffect::Process (xaudio.lib:obj\\xbox\\xmasourceeffect.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82981E68": {
+      "symbol": "XCAM::ResetToDefaults",
+      "size": 124,
+      "lib": "xcam.lib",
+      "member": "obj\\xbox\\xcamutil.obj",
+      "archive_symbol": "?ResetToDefaults@XCAM@@YAXXZ",
+      "caller": "0x82980600",
+      "call_site": "0x8298065C",
+      "evidence": "XCamInitialize (xcam.lib:obj\\xbox\\xcamapi.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829845B8": {
+      "symbol": "XCAM::CYUY2VideoOutput::Reset",
+      "size": 112,
+      "lib": "xcam.lib",
+      "member": "obj\\xbox\\videooutput.obj",
+      "archive_symbol": "?Reset@CYUY2VideoOutput@XCAM@@QAAXXZ",
+      "caller": "0x82985C80",
+      "call_site": "0x82985DA0",
+      "evidence": "XCAM::CYUY2VideoOutput::Initialize (xcam.lib:obj\\xbox\\videooutput.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x8298B8D0": {
+      "symbol": "PreFlush",
+      "size": 96,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\wmvdec.obj",
+      "archive_symbol": "PreFlush",
+      "caller": "0x8298F9A8",
+      "call_site": "0x8298FA98",
+      "evidence": "WMVideoDecGetOutputInternal (xmedia.lib:obj\\xbox\\wmvdec.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829939E0": {
+      "symbol": "CheckSupportedSourceCCFormat",
+      "size": 88,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\colorconvfrm.obj",
+      "archive_symbol": "?CheckSupportedSourceCCFormat@@YAJPAUtagBITMAPINFOHEADER@@@Z",
+      "caller": "0x829887C0",
+      "call_site": "0x82988840",
+      "evidence": "EMBEncEncodeAndLock (xmedia.lib:obj\\xbox\\embencoder_api.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x8299D398": {
+      "symbol": "decideMMXRoutines_ZigzagOnly",
+      "size": 88,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\frmdec_wmv.obj",
+      "archive_symbol": "decideMMXRoutines_ZigzagOnly",
+      "caller": "0x8298A9B8",
+      "call_site": "0x8298AEAC",
+      "evidence": "WMSpriteDecDecodeDataInternal (xmedia.lib:obj\\xbox\\wmvdec.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x8299F370": {
+      "symbol": "WMVideoDecSwapCurrAndRef",
+      "size": 240,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\frmdec_wmv.obj",
+      "archive_symbol": "WMVideoDecSwapCurrAndRef",
+      "caller": "0x829A1D48",
+      "call_site": "0x829A1F38",
+      "evidence": "HandleResolutionChange (xmedia.lib:obj\\xbox\\frmdec_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829A51B8": {
+      "symbol": "fitMvInRange",
+      "size": 108,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\vopdec_mp4x.obj",
+      "archive_symbol": "fitMvInRange",
+      "caller": "0x829A8498",
+      "call_site": "0x829A863C",
+      "evidence": "decodeMV (xmedia.lib:obj\\xbox\\vopdec_mp4x.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829D4970": {
+      "symbol": "CopyPixelIToPixelCBlockY_8x8_Clip_Xenon",
+      "size": 464,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interlacedecv2_emb.obj",
+      "archive_symbol": "CopyPixelIToPixelCBlockY_8x8_Clip_Xenon",
+      "caller": "0x82CAE718",
+      "call_site": "0x82CAE740",
+      "evidence": "CopyIntraFieldMBtoFrameMBInterlaceV2Add128_EMB (xmedia.lib:obj\\xbox\\interlacedecv2_emb.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829F40F8": {
+      "symbol": "CWMVideoObjectEncoder::SetWMVProfile",
+      "size": 148,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?SetWMVProfile@CWMVideoObjectEncoder@@AAAXUtagSeqHeader@@@Z",
+      "caller": "0x829FA9D8",
+      "call_site": "0x829FAA50",
+      "evidence": "CWMVideoObjectEncoder::SetWMVEncodingOptions (xmedia.lib:obj\\xbox\\voenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829F4E10": {
+      "symbol": "CWMVideoObjectEncoder::setNumBFrames",
+      "size": 72,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?setNumBFrames@CWMVideoObjectEncoder@@QAAXJ@Z",
+      "caller": "0x82992250",
+      "call_site": "0x829929A4",
+      "evidence": "SessionFrameEncoder::EncodeAndLock (xmedia.lib:obj\\xbox\\sesenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829F5F30": {
+      "symbol": "CWMVideoObjectEncoder::CodeVOPType_WMVA",
+      "size": 324,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?CodeVOPType_WMVA@CWMVideoObjectEncoder@@AAAXXZ",
+      "caller": "0x829FB8D0",
+      "call_site": "0x829FB944",
+      "evidence": "CWMVideoObjectEncoder::codeVOPHeadProgressiveWMVA (xmedia.lib:obj\\xbox\\voenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829F73D0": {
+      "symbol": "CWMVideoObjectEncoder::ParseVOLHead_V9",
+      "size": 604,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?ParseVOLHead_V9@CWMVideoObjectEncoder@@AAAXPAEPAUtagSeqHeader@@@Z",
+      "caller": "0x829FC348",
+      "call_site": "0x829FCE44",
+      "evidence": "CWMVideoObjectEncoder::CWMVideoObjectEncoder (xmedia.lib:obj\\xbox\\voenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x829F9078": {
+      "symbol": "CWMVideoObjectEncoder::SetupAutoBFrame",
+      "size": 24,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?SetupAutoBFrame@CWMVideoObjectEncoder@@QAAXXZ",
+      "caller": "0x829932F8",
+      "call_site": "0x829936D8",
+      "evidence": "SessionFrameEncoder::Init (xmedia.lib:obj\\xbox\\sesenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A04F10": {
+      "symbol": "CArrayLookahead::GetPreviousEventInArray",
+      "size": 308,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\histogram.obj",
+      "archive_symbol": "?GetPreviousEventInArray@CArrayLookahead@@QAA?AW4SCENE_EVENT@@KPAJ@Z",
+      "caller": "0x829916A0",
+      "call_site": "0x82991710",
+      "evidence": "SessionFrameEncoder::QuerySceneEventInQueue (xmedia.lib:obj\\xbox\\sesenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A05C10": {
+      "symbol": "CWMVideoObjectEncoder::setupSupportedSizeList",
+      "size": 304,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\rtcenc.obj",
+      "archive_symbol": "?setupSupportedSizeList@CWMVideoObjectEncoder@@AAAXJJ@Z",
+      "caller": "0x829FC348",
+      "call_site": "0x829FCCAC",
+      "evidence": "CWMVideoObjectEncoder::CWMVideoObjectEncoder (xmedia.lib:obj\\xbox\\voenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A06BD8": {
+      "symbol": "CWMVideoObjectEncoder::updateRangeReduxModelParameter",
+      "size": 96,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\rtcenc.obj",
+      "archive_symbol": "?updateRangeReduxModelParameter@CWMVideoObjectEncoder@@AAAXJJ@Z",
+      "caller": "0x82A0A448",
+      "call_site": "0x82A0A978",
+      "evidence": "CWMVideoObjectEncoder::ColorRangeReduxAndResizeControlRTC (xmedia.lib:obj\\xbox\\rtcenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A0D860": {
+      "symbol": "CWMVideoObjectEncoder::SetDMVCosts",
+      "size": 176,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\progme.obj",
+      "archive_symbol": "?SetDMVCosts@CWMVideoObjectEncoder@@QAAXJJPAJ@Z",
+      "caller": "0x82A3D0E8",
+      "call_site": "0x82A3DB5C",
+      "evidence": "CWMVideoObjectEncoder::ProgressiveModeDownsampledDynamicMVModeWithHalfPelSearchMotEst (xmedia.lib:obj\\xbox\\progme.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A596F8": {
+      "symbol": "RL_RemoveFrame",
+      "size": 80,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\reflibrary_wmv9.obj",
+      "archive_symbol": "RL_RemoveFrame",
+      "caller": "0x829BFE00",
+      "call_site": "0x829BFF74",
+      "evidence": "FreeFrameAreaDependentMemory (xmedia.lib:obj\\xbox\\init_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A66F88": {
+      "symbol": "CMSMtoN_Reset",
+      "size": 44,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\msmton_wmv.obj",
+      "archive_symbol": "CMSMtoN_Reset",
+      "caller": "0x829CA1A8",
+      "call_site": "0x829CA2B8",
+      "evidence": "WMSDKRESIZER_Reset (xmedia.lib:obj\\xbox\\wm_resz_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A7B010": {
+      "symbol": "ClassifyDCCConversion",
+      "size": 464,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\decolorconvfrm_wmv.obj",
+      "archive_symbol": "ClassifyDCCConversion",
+      "caller": "0x829EC918",
+      "call_site": "0x829ECCB0",
+      "evidence": "VideoDCCReset (xmedia.lib:obj\\xbox\\decolorconv_prc_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A88168": {
+      "symbol": "CWMVideoObjectEncoder::updateBStepsize",
+      "size": 104,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\ratecontrol.obj",
+      "archive_symbol": "?updateBStepsize@CWMVideoObjectEncoder@@QAAXXZ",
+      "caller": "0x82A02890",
+      "call_site": "0x82A0290C",
+      "evidence": "CWMVideoObjectEncoder::encodeFrameCbrWMVA (xmedia.lib:obj\\xbox\\frmenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A89DD0": {
+      "symbol": "CWMVideoObjectEncoder::SetRef1Pointers",
+      "size": 124,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\processenc.obj",
+      "archive_symbol": "?SetRef1Pointers@CWMVideoObjectEncoder@@AAAXXZ",
+      "caller": "0x82A89E50",
+      "call_site": "0x82A89E70",
+      "evidence": "CWMVideoObjectEncoder::swapRef0Ref1Pointers (xmedia.lib:obj\\xbox\\processenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A8C410": {
+      "symbol": "CWMVideoObjectEncoder::ResetParams",
+      "size": 288,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\multiresenc.obj",
+      "archive_symbol": "?ResetParams@CWMVideoObjectEncoder@@IAAXJ@Z",
+      "caller": "0x82A00C90",
+      "call_site": "0x82A00D68",
+      "evidence": "CWMVideoObjectEncoder::encodeIFrame (xmedia.lib:obj\\xbox\\frmenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A97708": {
+      "symbol": "CWMVideoObjectEncoder::DecideMVTable",
+      "size": 372,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\threadctr_wmv.obj",
+      "archive_symbol": "?DecideMVTable@CWMVideoObjectEncoder@@AAAXXZ",
+      "caller": "0x82A9A190",
+      "call_site": "0x82A9A5A8",
+      "evidence": "CWMVideoObjectEncoder::Pred_Conv_Eval_MultiThreads (xmedia.lib:obj\\xbox\\threadctr_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82A9AB78": {
+      "symbol": "CWMVideoObjectEncoder::SetupFieldPictureParams",
+      "size": 432,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interlaceencv2.obj",
+      "archive_symbol": "?SetupFieldPictureParams@CWMVideoObjectEncoder@@AAAXXZ",
+      "caller": "0x82A08218",
+      "call_site": "0x82A0839C",
+      "evidence": "CWMVideoObjectEncoder::reComputePars (xmedia.lib:obj\\xbox\\rtcenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82AA0650": {
+      "symbol": "CWMVideoObjectEncoder::QueryTwoPassCBRQP",
+      "size": 168,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\twopass.obj",
+      "archive_symbol": "?QueryTwoPassCBRQP@CWMVideoObjectEncoder@@AAAXXZ",
+      "caller": "0x82A02890",
+      "call_site": "0x82A02B78",
+      "evidence": "CWMVideoObjectEncoder::encodeFrameCbrWMVA (xmedia.lib:obj\\xbox\\frmenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82AA35E8": {
+      "symbol": "CWMVideoObjectEncoder::IsIntraB",
+      "size": 236,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\vopenc9.obj",
+      "archive_symbol": "?IsIntraB@CWMVideoObjectEncoder@@AAAJJJJ@Z",
+      "caller": "0x82A39D68",
+      "call_site": "0x82A3A3E8",
+      "evidence": "CWMVideoObjectEncoder::MotionEst_Progressive (xmedia.lib:obj\\xbox\\progme.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82ABBE10": {
+      "symbol": "EncSetupTopVMX",
+      "size": 820,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\emb_enc_xenon.obj",
+      "archive_symbol": "EncSetupTopVMX",
+      "caller": "0x82A4BF40",
+      "call_site": "0x82A4BFFC",
+      "evidence": "CWMVideoObjectEncoder::ReconstructPFrame (xmedia.lib:obj\\xbox\\vopenc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82AC1B18": {
+      "symbol": "CLocalHuffman::setCodes",
+      "size": 248,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\localhuffman.obj",
+      "archive_symbol": "?setCodes@CLocalHuffman@@QAAXJ@Z",
+      "caller": "0x82A7E970",
+      "call_site": "0x82A7EA0C",
+      "evidence": "CAltTablesEncoder::clear (src/SDKs/EATech/rwmovie/CAltTablesEncoder.cpp) has a matching branch relocation to this archive symbol."
+    },
+    "0x82AC91F8": {
+      "symbol": "g_BicubicV0HorzFilter2_EMB",
+      "size": 256,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate_emb_xenon.obj",
+      "archive_symbol": "g_BicubicV0HorzFilter2_EMB",
+      "caller": "0x82ACA080",
+      "call_site": "0x82ACA088",
+      "evidence": "g_InterpolateBlockBicubic_20_EMB (xmedia.lib:obj\\xbox\\interpolate_emb_xenon.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C096A0": {
+      "symbol": "cos",
+      "size": 216,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\sincos.obj",
+      "archive_symbol": "cos",
+      "caller": "0x829AFF88",
+      "call_site": "0x829B00E0",
+      "evidence": "WMVImage_GenerateFlipOutput (xmedia.lib:obj\\xbox\\effects_wmv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C0B180": {
+      "symbol": "memset",
+      "size": 160,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\memsetp.obj",
+      "archive_symbol": "memset",
+      "caller": "0x82935810",
+      "call_site": "0x82935D68",
+      "evidence": "RtlpGrowBlockInPlace (xapilibi.lib:obj\\xbox\\rtlheap.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C13968": {
+      "symbol": "strcat",
+      "size": 68,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\strcatp.obj",
+      "archive_symbol": "strcat",
+      "caller": "0x82BF1918",
+      "call_site": "0x82BF19E4",
+      "evidence": "luaO_chunkid (vendor/lua/src/lobject.c) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C1BF50": {
+      "symbol": "SkipUnwoundFrames",
+      "size": 60,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "SkipUnwoundFrames",
+      "caller": "0x82C1F340",
+      "call_site": "0x82C1F354",
+      "evidence": "_SkipUnwoundFrames (libcMT.lib:obj\\xbox\\unwind.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C2CDC8": {
+      "symbol": "XGRAPHICS::CFG::Number",
+      "size": 36,
+      "lib": "xgraphics.lib",
+      "member": "obj\\xbox\\interference.obj",
+      "archive_symbol": "?Number@CFG@XGRAPHICS@@QBAHPAVIRInst@2@@Z",
+      "caller": "0x82C26CA8",
+      "call_site": "0x82C26D10",
+      "evidence": "XGRAPHICS::IRAlu::AssembleSrcRegConst (xgraphics.lib:obj\\xbox\\asm.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C35B68": {
+      "symbol": "XHVEnginepFindRemoteTalker",
+      "size": 84,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\engine.obj",
+      "archive_symbol": "XHVEnginepFindRemoteTalker",
+      "caller": "0x82C36370",
+      "call_site": "0x82C363A0",
+      "evidence": "XHVEngineStartRemoteProcessingModes (xhv.lib:obj\\xbox\\engine.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C395D8": {
+      "symbol": "JitterBufReset",
+      "size": 184,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\jitter.obj",
+      "archive_symbol": "JitterBufReset",
+      "caller": "0x82C34E58",
+      "call_site": "0x82C34E8C",
+      "evidence": "VoiceChatStart (xhv.lib:obj\\xbox\\voicechat.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C3EA40": {
+      "symbol": "ScalarLUT",
+      "size": 24,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\libquan.obj",
+      "archive_symbol": "ScalarLUT",
+      "caller": "0x82C3F1B0",
+      "call_site": "0x82C3F1E4",
+      "evidence": "UnQuanPvSC3 (xhv.lib:obj\\xbox\\codepv.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C409C8": {
+      "symbol": "ModifyPv",
+      "size": 204,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\voicing.obj",
+      "archive_symbol": "ModifyPv",
+      "caller": "0x82C3DAB8",
+      "call_site": "0x82C3DD1C",
+      "evidence": "OuterFrameParam (xhv.lib:obj\\xbox\\encsc.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C93368": {
+      "symbol": "g_NewHorzFilter1_Xenon",
+      "size": 452,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate_wmv9_xenon_emb.obj",
+      "archive_symbol": "g_NewHorzFilter1_Xenon",
+      "caller": "0x82C93A90",
+      "call_site": "0x82C93AF8",
+      "evidence": "g_InterpolateBlockBicubic_10_Xenon (xmedia.lib:obj\\xbox\\interpolate_wmv9_xenon_emb.obj) has a matching branch relocation to this archive symbol."
+    }
+  },
   "identified_functions": {
     "0x827DBF38": {
       "exported_name": null,

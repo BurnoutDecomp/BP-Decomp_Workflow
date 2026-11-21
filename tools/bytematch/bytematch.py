@@ -582,10 +582,14 @@ def universe(args):
     xdk = need_xdk(args)
     artist = Artist().preload()
     artist.include_unlisted_unwind_functions()
+    lib_dir = xdk / "lib" / "xbox"
+    leaves = sdk.verify_leaf_providers(artist, lib_dir)
     if args.providers:
         provided = {int(a, 16): v for a, v in json.loads(Path(args.providers).read_text(encoding="utf-8")).items()}
     else:
-        provided = sdk.identify(artist, xdk / "lib" / "xbox", log=lambda line: print(line, flush=True))
+        provided = sdk.identify(artist, lib_dir, log=lambda line: print(line, flush=True))
+    provided.update(leaves)
+    if not args.providers:
         tree = find_tree(getattr(args, "tree", None))
         if tree.is_dir():   # keep it, so the next rebuild can pass --providers
             saved = cache_dir(tree) / "sdk_providers.json"
