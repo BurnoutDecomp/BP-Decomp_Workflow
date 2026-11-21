@@ -9,7 +9,7 @@ root unless a section says otherwise.
 | --- | --- |
 | [`work/`](work/) | Ledger, TU claiming, dossiers, reconstruction helpers, parity, compile verification, review packets, goals, and maintenance. The repo-root `work.cmd` is the normal entry point. Also `work skills` (the agent skills in [`../.agents/skills/`](../.agents/skills/README.md)), `work hooks`, `work mount` and `work trailer` (the exact `Co-Authored-By:` line for the model a session runs). |
 | [`bytematch/`](bytematch/) | **Byte matching** of the native X360 tree (b5-decomp `x360`) against ARTIST: PowerPC COFF reader, relocation-aware comparator, XDK-library identification, the `progress/bytematch/` ledger and its CI summary. Driven through `work match`; procedure in the `byte-match` and `x360-toolchain` skills. |
-| [`githooks/`](githooks/) | Committed git hooks, switched on per checkout with `work hooks install` (`work bootstrap` does it). `pre-commit` refuses commits that stage the files the reconcile bot owns. |
+| [`githooks/`](githooks/) | Committed git hooks, switched on per checkout with `work hooks install` (`work bootstrap` does it). `pre-commit` refuses commits that stage the files the reconcile bot owns; with a per-clone public denylist, both hooks also check added lines and messages. The same install points the b5-decomp submodule's repositories at them. |
 | [`ida/`](ida/) | IDAPython exporters, the parallel export driver, and DecFIGS source-attribution post-processing. |
 | [`build/`](build/) | Game, FFmpeg, and standalone-tool build drivers plus linker-map conversion. |
 | [`assets/build_game_data.py`](assets/build_game_data.py) | **The game-data stager.** Turns a stock X360 game folder into a launchable PC data folder, driven by [`assets/game_data_manifest.toml`](assets/game_data_manifest.toml). See "Building the game data folder" below. |
@@ -193,7 +193,7 @@ Agent setup and guard rails:
 work skills link        # make Claude Code see .agents/skills (once per checkout)
 work skills check       # validate every skill: links, tool paths, flags, index, hygiene
 work skills show <name> # print a skill for a loop that has no skill loader
-work hooks install      # switch on tools/githooks (once per checkout)
+work hooks install      # switch on tools/githooks, here and in b5-decomp (once per checkout)
 work mount <file> --commit --push   # mount a TU: ONLY your lines, on origin/main
 ```
 

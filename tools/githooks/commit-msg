@@ -1,7 +1,9 @@
 #!/bin/sh
-# Parent-repo commit-msg guard (see pre-commit). If this clone has an untracked
-# `.git/info/public-denylist` (one regex per line, `#` comments), the commit message must
-# match none of it. Override for one deliberate commit:  BP_ALLOW_DENYLIST=1 git commit ...
+# commit-msg guard for the parent repository and its b5-decomp submodule (see pre-commit).
+# If this clone has an untracked `.git/info/public-denylist` (one regex per line, `#`
+# comments; a b5-decomp repository reads the parent's through `bp.publicDenylist`), the
+# commit message must match none of it.
+# Override for one deliberate commit:  BP_ALLOW_DENYLIST=1 git commit ...
 
 [ "${BP_ALLOW_DENYLIST:-}" = "1" ] && exit 0
 for state in MERGE_HEAD CHERRY_PICK_HEAD REVERT_HEAD; do
@@ -11,7 +13,8 @@ for dir in rebase-merge rebase-apply; do
   [ -d "$(git rev-parse --git-path "$dir")" ] && exit 0
 done
 
-deny="$(git rev-parse --git-common-dir)/info/public-denylist"
+deny="$(git config --get bp.publicDenylist)"
+[ -n "$deny" ] || deny="$(git rev-parse --git-common-dir)/info/public-denylist"
 [ -f "$deny" ] || exit 0
 patterns=$(mktemp) || exit 1
 grep -v -E '^[[:space:]]*(#|$)' "$deny" > "$patterns"

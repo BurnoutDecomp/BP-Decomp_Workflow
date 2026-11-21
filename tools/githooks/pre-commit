@@ -1,16 +1,20 @@
 #!/bin/sh
-# Parent-repo pre-commit guard. Installed by `work hooks install`
-# (git config core.hooksPath tools/githooks); `work hooks status` shows whether it is on.
+# Pre-commit guard for the parent repository and its b5-decomp submodule. `work hooks install`
+# sets the parent's core.hooksPath to tools/githooks and points every b5-decomp repository of
+# the clone at the main checkout's copy of this directory; `work hooks status` shows both.
 #
 # 1. The reconcile bot commits progress/status.json, the audit outputs and the b5-decomp
 #    pointer after every b5-decomp push. Committing them by hand races the bot and hands
 #    everyone a conflicting pull (AGENTS.md, "Don't"), so they are refused: a `git add -A`
-#    or `git commit -a` cannot sweep them into your change.
+#    or `git commit -a` cannot sweep them into your change. None of these paths exists in
+#    b5-decomp, so there only rule 2 applies.
 #    Override for one deliberate maintainer commit:  BP_ALLOW_BOT_FILES=1 git commit ...
 # 2. If this clone has an untracked `.git/info/public-denylist` (one regex per line, `#`
 #    comments), staged added lines must match none of it: terms the maintainer keeps out of
-#    the public repository without naming them in a tracked file. The commit-msg hook
-#    applies the same list to the message.  Override:  BP_ALLOW_DENYLIST=1 git commit ...
+#    the public repositories without naming them in a tracked file. A b5-decomp repository
+#    reads the parent's list through `bp.publicDenylist`, which `work hooks install` sets.
+#    The commit-msg hook applies the same list to the message.
+#    Override:  BP_ALLOW_DENYLIST=1 git commit ...
 
 # Merges, cherry-picks, reverts and rebases replay commits that already exist; the bot's
 # files and existing text arrive in them legitimately.
@@ -42,7 +46,8 @@ if [ "${BP_ALLOW_BOT_FILES:-}" != "1" ]; then
   fi
 fi
 
-deny="$(git rev-parse --git-common-dir)/info/public-denylist"
+deny="$(git config --get bp.publicDenylist)"
+[ -n "$deny" ] || deny="$(git rev-parse --git-common-dir)/info/public-denylist"
 if [ "${BP_ALLOW_DENYLIST:-}" != "1" ] && [ -f "$deny" ]; then
   patterns=$(mktemp) || exit 1
   grep -v -E '^[[:space:]]*(#|$)' "$deny" > "$patterns"
