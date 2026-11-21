@@ -1,19 +1,20 @@
 {
- "blob": "c63d51355ff65a39e6b181c4e08bb02bd7fa1aff",
- "commit": "f7c3ee633e4a827598f61f8ddf839c134da501b3",
+ "blob": "b02ffb517ef96a5a261e6b6116d378d25f5cce40",
+ "commit": "896fbde19922772fbb94e0541e4d203d56920fae",
  "compiled": true,
- "measured": "2026-11-21T12:20:14Z",
+ "measured": "2026-11-21T13:04:18Z",
  "schema": 1,
  "source": "src/GameSource/Network/Messages/BrnDirtyTrickMessage.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 4,
+ "unpaired": 5,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "8257AB68", "artist_size": 88, "name": "BrnNetwork::DirtyTrickMessage::Construct", "score": 100.0, "size": 88, "status": "exact", "symbol": "?Construct@DirtyTrickMessage@BrnNetwork@@QAAXXZ"},
-  {"artist": "8257ABC0", "artist_size": 152, "first_diff": 108, "name": "BrnNetwork::DirtyTrickMessage::PrepareForSend", "score": 97.4, "size": 152, "status": "nonmatching", "symbol": "?PrepareForSend@DirtyTrickMessage@BrnNetwork@@QAAXGHHEE@Z"},
+  {"artist": "8257ABC0", "artist_size": 152, "data_unchecked": 2, "name": "BrnNetwork::DirtyTrickMessage::PrepareForSend", "score": 100.0, "size": 152, "status": "exact", "symbol": "?PrepareForSend@DirtyTrickMessage@BrnNetwork@@QAAXGHHEE@Z"},
   {"artist": "8257AC58", "artist_size": 28, "calls_wrong": [{"artist": "CgsNetwork::TestConnectionMessage::GetPackedMessageSize", "at": 24, "ours": "CgsNetwork::ReliableMessage::GetPackedMessageSize"}], "first_diff": 24, "name": "BrnNetwork::DirtyTrickMessage::GetPackedMessageSize", "score": 85.7, "size": 28, "status": "nonmatching", "symbol": "?GetPackedMessageSize@DirtyTrickMessage@BrnNetwork@@UAAHXZ"},
   {"artist": "8257AC78", "artist_size": 168, "calls_unverified": 2, "calls_wrong": [{"artist": "BrnNetwork::BrnNetworkManager::PackOrUnpack", "at": 40, "ours": "CgsNetwork::Message::PackOrUnpack"}, {"artist": "BrnNetwork::BrnNetworkManager::PackOrUnpack", "at": 64, "ours": "CgsNetwork::Message::PackOrUnpack"}], "first_diff": 40, "name": "BrnNetwork::DirtyTrickMessage::PackOrUnpack", "score": 90.5, "size": 168, "status": "nonmatching", "symbol": "?PackOrUnpack@DirtyTrickMessage@BrnNetwork@@MAAEXZ"},
-  {"artist": "8257E4E8", "artist_size": 308, "first_diff": 56, "name": "BrnNetwork::DirtyTrickMessage::Retrieve", "score": 88.3, "size": 308, "status": "nonmatching", "symbol": "?Retrieve@DirtyTrickMessage@BrnNetwork@@QAA_NPAH0PAE1@Z"}
+  {"artist": "8257E4E8", "artist_size": 308, "first_diff": 56, "name": "BrnNetwork::DirtyTrickMessage::Retrieve", "score": 88.3, "size": 308, "status": "nonmatching", "symbol": "?Retrieve@DirtyTrickMessage@BrnNetwork@@QAA_NPAH0PAE1@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

@@ -1,13 +1,13 @@
 {
- "blob": "012f3d9cafe413507acea7ab66908342733cf7d2",
- "commit": "f7c3ee633e4a827598f61f8ddf839c134da501b3",
+ "blob": "829fef959517db733242bd5bf0ad229549f28621",
+ "commit": "896fbde19922772fbb94e0541e4d203d56920fae",
  "compiled": true,
- "measured": "2026-11-21T12:20:14Z",
+ "measured": "2026-11-21T13:04:18Z",
  "schema": 1,
  "source": "src/GameSource/Network/Managers/BrnNetworkRoadRulesManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 29,
+ "unpaired": 30,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F1FA0", "artist_size": 224, "first_diff": 4, "name": "CgsSystem::Time::Time", "score": 42.6, "size": 152, "status": "nonmatching", "symbol": "??0Time@CgsSystem@@QAA@M@Z"},
@@ -34,7 +34,7 @@
   {"artist": "82554D30", "artist_size": 184, "first_diff": 52, "name": "BrnNetwork::NetworkRoadRulesManager::OnGameFinish", "score": 95.7, "size": 184, "status": "nonmatching", "symbol": "?OnGameFinish@NetworkRoadRulesManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82554DE8", "artist_size": 180, "first_diff": 52, "name": "BrnNetwork::NetworkRoadRulesManager::OnRoundFinish", "score": 95.6, "size": 180, "status": "nonmatching", "symbol": "?OnRoundFinish@NetworkRoadRulesManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82554EA0", "artist_size": 152, "first_diff": 52, "name": "BrnNetwork::NetworkRoadRulesManager::OnLeaveGame", "score": 97.4, "size": 152, "status": "nonmatching", "symbol": "?OnLeaveGame@NetworkRoadRulesManager@BrnNetwork@@QAAXXZ"},
-  {"artist": "8255C808", "artist_size": 248, "first_diff": 64, "name": "BrnNetwork::NetworkRoadRulesManager::Prepare", "score": 93.5, "size": 248, "status": "nonmatching", "symbol": "?Prepare@NetworkRoadRulesManager@BrnNetwork@@QAA_NPAVBrnNetworkModule@2@PAVBrnServerInterface@2@PAUPlayerManager@CgsNetwork@@PAUTimeManager@6@@Z"},
+  {"artist": "8255C808", "artist_size": 248, "data_unchecked": 5, "name": "BrnNetwork::NetworkRoadRulesManager::Prepare", "score": 100.0, "size": 248, "status": "exact", "symbol": "?Prepare@NetworkRoadRulesManager@BrnNetwork@@QAA_NPAVBrnNetworkModule@2@PAVBrnServerInterface@2@PAUPlayerManager@CgsNetwork@@PAUTimeManager@6@@Z"},
   {"artist": "8255CA48", "artist_size": 212, "first_diff": 12, "name": "BrnNetwork::NetworkRoadRulesManager::ProcessGameActions", "score": 44.4, "size": 220, "status": "nonmatching", "symbol": "?ProcessGameActions@NetworkRoadRulesManager@BrnNetwork@@AAAXPBV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@@Z"},
   {"artist": "825611D0", "artist_size": 416, "first_diff": 52, "name": "BrnNetwork::NetworkRoadRulesManager::HandleDownloadingRoadRulesScores", "score": 95.2, "size": 416, "status": "nonmatching", "symbol": "?HandleDownloadingRoadRulesScores@NetworkRoadRulesManager@BrnNetwork@@QAAXXZ"},
   {"artist": "82561370", "artist_size": 432, "first_diff": 52, "name": "BrnNetwork::NetworkRoadRulesManager::HandleDownloadingLocalRoadRulesScores", "score": 86.5, "size": 428, "status": "nonmatching", "symbol": "?HandleDownloadingLocalRoadRulesScores@NetworkRoadRulesManager@BrnNetwork@@QAAXXZ"},
@@ -42,6 +42,7 @@
   {"artist": "8256F648", "artist_size": 160, "calls_unverified": 1, "calls_wrong": [{"artist": "BrnNetwork::BrnNetworkModuleIO::PostSim", "at": 28, "ours": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetNetworkEventQueue"}], "first_diff": 28, "name": "BrnNetwork::NetworkRoadRulesManager::ProcessAfterSimulation", "score": 95.0, "size": 160, "status": "nonmatching", "symbol": "?ProcessAfterSimulation@NetworkRoadRulesManager@BrnNetwork@@QAAXPBUPostSimulationInputBuffer@BrnNetworkModuleIO@2@_N@Z"},
   {"artist": "827DFD50", "artist_size": 12, "data_unchecked": 1, "name": "BrnNetwork::RoadRulesMessage::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@RoadRulesMessage@BrnNetwork@@UBAPBDXZ"},
   {"artist": "827DFD60", "artist_size": 12, "data_unchecked": 1, "name": "BrnNetwork::RoadRulesPersonalBestMessage::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@RoadRulesPersonalBestMessage@BrnNetwork@@UBAPBDXZ"},
-  {"artist": "827E2BE8", "artist_size": 172, "first_diff": 0, "name": "BrnNetwork::NetworkRoadRulesManager::NetworkRoadRulesManager", "score": 11.5, "size": 244, "status": "nonmatching", "symbol": "??0NetworkRoadRulesManager@BrnNetwork@@QAA@XZ"}
+  {"artist": "827E2BE8", "artist_size": 172, "first_diff": 0, "name": "BrnNetwork::NetworkRoadRulesManager::NetworkRoadRulesManager", "score": 11.5, "size": 244, "status": "nonmatching", "symbol": "??0NetworkRoadRulesManager@BrnNetwork@@QAA@XZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
