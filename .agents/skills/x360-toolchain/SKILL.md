@@ -71,8 +71,11 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
 - The flags live in `build_x360.py` on the branch (`FLAGS`: `/O2 /Oi /Ob2 /GR- /GS- /EHs-c- /Gy
   /FAcs` and the platform defines) and apply to every object. `/Gy` is what puts each function in
   its own COMDAT section, so objects can be compared function by function. Changing a flag
-  changes every record's toolchain fingerprint: a maintainer decision, followed by a full
-  `work match refresh --record`.
+  changes every record's toolchain fingerprint: a maintainer decision, after which the work
+  server re-measures every object on the next push (a full `work match refresh --record` does
+  it locally). The server reads `FLAGS` and `INCLUDES` without running the script and measures
+  nothing while a flag falls outside its compile-only allow-list (`SAFE_FLAG` in
+  `tools/bytematch/wine.py`), so a new kind of flag is added there first.
 - Running the branch tool directly (`--source` and `--out` are relative to the native tree,
   whatever the current folder): `python -B b5-x360/tools/build_x360.py --sdk <XDK> --source src/...cpp --out build/x360/probe`.
   In Git Bash set `MSYS_NO_PATHCONV=1`, or an argument such as `/showIncludes` is rewritten into a path.
@@ -93,7 +96,7 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `C1083 Cannot open include file: '../../../build/x360/generated/BrnLoadingScreenTextures.generated.inc'` | a build input generated from the image | `python -B b5-x360/tools/extract_x360_loading_textures.py --reader tools/re/x360rd.py --out b5-x360/build/x360/generated` (never commit the output) |
+| `C1083 Cannot open include file: '../../../build/x360/generated/BrnLoadingScreenTextures.generated.inc'` | a build input generated from the image | `python -B b5-x360/tools/extract_x360_loading_textures.py --reader tools/re/x360rd.py --out b5-x360/build/x360/generated` (never commit the output). The work server makes it itself (`generated_includes` in `tools/bytematch/wine.py`, from the script's `ARRAYS` table); a new generated include needs a generator there too, or the server records its sources as failing to compile |
 | `C2065 'nullptr'`, `C2332 'enum' : missing tag name`, `missing ',' before ':'` | C++11 in shared code | rewrite in C++03 |
 | a host or PC header (`windows.h` paths, SDL, D3D11) | PC-only code reached a shared source | the console's implementation belongs in shared code; the PC one stays in `src/pc/`, which is never compiled |
 | an error in a file `dev` changed after the last merge | `dev` and `x360` diverge | see "Keeping x360 in step" |
