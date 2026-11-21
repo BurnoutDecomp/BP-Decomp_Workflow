@@ -153,11 +153,13 @@
     },
     "0x82AD5078": {
       "exported_name": "STUB",
-      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST.",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST. EA::Thread::Mutex::~Mutex compares exact across 4 bytes and the aligned caller at 0x82B6BD88 targets this address. MassiveAdClient3::MassiveLog compares exact across 4 bytes and the aligned caller at 0x82BD15C4 targets this address.",
       "aliases": {
         "MassiveAdClient3::CLog::Log": "xmassiveadclient.lib:obj\\xbox\\massiveadobject.obj",
         "MassiveAdClient3::CRequestObject::DumpByteArray": "xmassiveadclient.lib:obj\\xbox\\requestobject.obj",
-        "MassiveDNSCleanUp": "xmassiveadclient.lib:obj\\xbox\\x360massivednssecure.obj"
+        "MassiveDNSCleanUp": "xmassiveadclient.lib:obj\\xbox\\x360massivednssecure.obj",
+        "EA::Thread::Mutex::~Mutex": "src/SDKs/EATech/eathread/eathread_mutex.cpp",
+        "MassiveAdClient3::MassiveLog": "src/SDKs/Packages/MassiveAd/MassiveAdClient3ClientCore.cpp"
       }
     },
     "0x82579CC8": {
@@ -289,6 +291,53 @@
       "call_evidence": {
         "nciFreeEncodeSase3200": "The aligned XDK caller reaches this entry at 0x82C3B028. The archived symbol's instructions agree with the original body outside its relocation fields. Its relocated fields reference the same compiled symbols as the existing provider."
       }
+    },
+    "0x82C296C8": {
+      "exported_name": "CgsSound::Playback::Content::DoOnPostLoad",
+      "aliases": {
+        "CgsNetwork::ServerInterfaceCustomCommands::Prepare": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
+        "CgsNetwork::ServerInterfaceCustomCommands::Release": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
+        "BrnNetwork::LiveRevengeDebugComponent::Release": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp"
+      },
+      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address."
+    },
+    "0x82B42DC0": {
+      "exported_name": "rw::movie::VideoRenderable::~VideoRenderable",
+      "aliases": {
+        "EA::Thread::Thread::Thread": "src/SDKs/EATech/eathread/BrnEAThreadX360.cpp"
+      },
+      "evidence": "EA::Thread::Thread::Thread compares exact across 12 bytes and the aligned caller at 0x82BCAB6C targets this address."
+    },
+    "0x82AD4F48": {
+      "exported_name": "AptRenderItem::Manager_GetMask",
+      "aliases": {
+        "DispListCount": "vendor/dirtysdk/src/lobbydisplist.cpp"
+      },
+      "evidence": "DispListCount compares exact across 8 bytes and the aligned caller at 0x82889320 targets this address."
+    },
+    "0x82AD4920": {
+      "exported_name": "AptString::GetInternalString",
+      "aliases": {
+        "HLBBudGetName": "vendor/dirtysdk/src/x360/hlbudapi.cpp"
+      },
+      "evidence": "HLBBudGetName compares exact across 8 bytes and the aligned caller at 0x8287D660 targets this address."
+    },
+    "0x822DC3D0": {
+      "exported_name": "BrnWorld::PropEntityIO::OutputBuffer_PreScene::Destruct",
+      "aliases": {
+        "CgsGui::CgsGuiModuleIO::OutputBuffer::Destruct": "src/GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+        "CgsResource::ResourceIO::OutputBuffer::Destruct": "src/GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp",
+        "BrnReplays::ReplayIO::OutputBuffer_PostSim::Destruct": "src/GameSource/Replays/BrnReplayModuleIO.cpp",
+        "BrnReplays::ReplayIO::OutputBuffer_PreSim::Destruct": "src/GameSource/Replays/BrnReplayModuleIO.cpp"
+      },
+      "evidence": "CgsGui::CgsGuiModuleIO::OutputBuffer::Destruct compares exact across 4 bytes and the aligned caller at 0x823ACF1C targets this address. CgsResource::ResourceIO::OutputBuffer::Destruct compares exact across 4 bytes and the aligned caller at 0x8266389C targets this address. BrnReplays::ReplayIO::OutputBuffer_PostSim::Destruct compares exact across 4 bytes and the aligned caller at 0x823AE744 targets this address. BrnReplays::ReplayIO::OutputBuffer_PreSim::Destruct compares exact across 4 bytes and the aligned caller at 0x823AE59C targets this address."
+    },
+    "0x822D8BA0": {
+      "exported_name": "BrnWorld::WorldEntityIO::OutputBuffer_PrePhysics::Construct",
+      "aliases": {
+        "CgsModule::IOBuffer::Construct": "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp"
+      },
+      "evidence": "CgsModule::IOBuffer::Construct compares exact across 12 bytes and the aligned caller at 0x827B6C54 targets this address."
     }
   },
   "xdk_functions": {
@@ -4615,6 +4664,48 @@
       "x360_address": "0x827B9B18",
       "byte_match": true,
       "evidence": "The ARTIST identity map gives the full template type at this address. The XDK emits the same method and its entire ARTIST extent compares exact."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@CgsGuiModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@CgsGuiModuleIO": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::CgsGuiModuleIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823ACE78",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PreSim@Re": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PreSim>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823AE4F8",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer_PostSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PostSim@": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::OutputBuffer_PostSim>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823AE6A0",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
+    },
+    "??$CreateIOBuffer@VDispatchOutputBuffer@BrnWorldIO@@@IOBufferStack@CgsModule@@QAA_NPAPAVDispatchOutputBuffer@BrnWorldIO": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorldIO::DispatchOutputBuffer>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823AEAC8",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@ResourceIO@CgsResource@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@ResourceIO@Cg": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsResource::ResourceIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x826637F8",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
+    },
+    "??$CreateIOBuffer@VOutputBuffer_PostScene@PropEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PostS": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::PropEntityIO::OutputBuffer_PostScene>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x827B6BA0",
+      "byte_match": true,
+      "evidence": "The ARTIST identity map identifies the full specialization. Its native object compares exact after resolving the verified folded call target."
     }
   },
   "identified_functions": {
