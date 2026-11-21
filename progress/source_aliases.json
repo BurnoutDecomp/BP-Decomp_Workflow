@@ -4236,6 +4236,118 @@
       "file": "vendor/lua/src/lcode.c",
       "tu": "vendor:lua",
       "evidence": "The direct call at 0x82C06B50 is anchored by the exact Lua routine luaK_infix at 0x82C06AF0. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0920": {
+      "exported_name": "sub_82BE0920",
+      "symbol": "db_getlocal",
+      "size": 240,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration getlocal at 0x82188084 is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0A10": {
+      "exported_name": "sub_82BE0A10",
+      "symbol": "db_setlocal",
+      "size": 224,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration setlocal at 0x821880B4 is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0AF0": {
+      "exported_name": "sub_82BE0AF0",
+      "symbol": "db_getupvalue",
+      "size": 44,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration getupvalue at 0x8218809C is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0B20": {
+      "exported_name": "sub_82BE0B20",
+      "symbol": "auxupvalue",
+      "size": 220,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82BE0B08 is anchored by the exact Lua routine db_getupvalue at 0x82BE0AF0. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0C00": {
+      "exported_name": "sub_82BE0C00",
+      "symbol": "db_setupvalue",
+      "size": 56,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration setupvalue at 0x821880C4 is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0C38": {
+      "exported_name": "sub_82BE0C38",
+      "symbol": "db_sethook",
+      "size": 308,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration sethook at 0x821880AC is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0D70": {
+      "exported_name": "sub_82BE0D70",
+      "symbol": "hookf",
+      "size": 200,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The function pointer at 0x82BE0FC4 is anchored by the exact Lua routine db_gethook at 0x82BE0F78. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0E38": {
+      "exported_name": null,
+      "symbol": "makemask",
+      "size": 168,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82BE0CEC is anchored by the exact Lua routine db_sethook at 0x82BE0C38. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0EE0": {
+      "exported_name": "sub_82BE0EE0",
+      "symbol": "gethooktable",
+      "size": 148,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82BE0FEC is anchored by the exact Lua routine db_gethook at 0x82BE0F78. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE0F78": {
+      "exported_name": "sub_82BE0F78",
+      "symbol": "db_gethook",
+      "size": 236,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The Lua registration gethook at 0x82188074 is anchored by the exact Lua routine luaopen_debug at 0x82BE1510. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82BE1068": {
+      "exported_name": "sub_82BE1068",
+      "symbol": "unmakemask",
+      "size": 172,
+      "file": "vendor/lua/src/ldblib.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82BE102C is anchored by the exact Lua routine db_gethook at 0x82BE0F78. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82C07128": {
+      "exported_name": null,
+      "symbol": "luaK_codeABC",
+      "size": 108,
+      "file": "vendor/lua/src/lcode.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82C004E8 is anchored by the exact Lua routine leaveblock at 0x82C00478. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82C07198": {
+      "exported_name": "sub_82C07198",
+      "symbol": "luaK_code",
+      "size": 320,
+      "file": "vendor/lua/src/lcode.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82C07370 is anchored by the exact Lua routine luaK_codeABx at 0x82C07328. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x82C072D8": {
+      "exported_name": "sub_82C072D8",
+      "symbol": "dischargejpc",
+      "size": 80,
+      "file": "vendor/lua/src/lcode.c",
+      "tu": "vendor:lua",
+      "evidence": "The direct call at 0x82C071C0 is anchored by the exact Lua routine luaK_code at 0x82C07198. The Lua 5.1.1 object matches this full extent."
     }
   }
 }
