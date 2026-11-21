@@ -355,6 +355,46 @@
     }
   },
   "functions": {
+    "CgsAttribSys::AttribSysPackageAllocator>::DoC": {
+      "symbol": "Attrib::AttribListClearNodes",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "const": false,
+      "x360_address": "0x828054B0",
+      "byte_match": true,
+      "evidence": "The XDK list helper matches the full 192-byte body including the native EASTL heap and sized free accounting."
+    },
+    "CgsAttribSys::AttribSysPackageAllocator>::DoF": {
+      "symbol": "Attrib::AttribListFreeNode",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "const": false,
+      "x360_address": "0x82803FC8",
+      "byte_match": true,
+      "evidence": "The XDK list helper matches the full 172-byte body including the native EASTL heap and sized free accounting."
+    },
+    "CgsAttribSys::AttribSysMemoryManager::GetAttribS": {
+      "symbol": "CgsAttribSys::AttribSysMemoryManager::GetAttribSysAllocator",
+      "file": "GameShared/GameClasses/System/AttribSys/CgsAttribSysMemoryManager.cpp",
+      "const": false,
+      "x360_address": "0x821F02A0",
+      "byte_match": true,
+      "evidence": "The entry returns the AttribSys allocator at 0x83011B94 after checking the prepared flag. The XDK getter compares exact over all 84 bytes."
+    },
+    "??$QueueForDelete@VCollection@Attrib@@@DatabasePrivate@Attrib@@SAXPBVCollection@1@AAV?$list@PBVCollection@Attrib@@VAttr": {
+      "symbol": "Attrib::DatabasePrivate::QueueForDelete<Attrib::Collection>",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabaseprivate.cpp",
+      "const": false,
+      "x360_address": "0x8280BEA8",
+      "byte_match": true,
+      "evidence": "The mangled prefix and DecFIGS identify the Collection specialization. Collection::Release calls this address at 0x8280C350 with its collection garbage list."
+    },
+    "??$QueueForDelete@VClass@Attrib@@@DatabasePrivate@Attrib@@SAXPBVClass@1@AAV?$list@PBVClass@Attrib@@VAttribSysPackageAll": {
+      "symbol": "Attrib::DatabasePrivate::QueueForDelete<Attrib::Class>",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabaseprivate.cpp",
+      "const": false,
+      "x360_address": "0x8280BF78",
+      "byte_match": true,
+      "evidence": "The mangled prefix and DecFIGS identify the Class specialization. ClassPrivate::Release calls this address at 0x8280C3DC with its class garbage list."
+    },
     "CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided>::": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided>::Append",
       "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventLineTestFastDoubleSided_Append.cpp",
@@ -4830,6 +4870,22 @@
     }
   },
   "identified_functions": {
+    "0x828091A8": {
+      "exported_name": "sub_828091A8",
+      "symbol": "Attrib::AttribListAllocateNode<Attrib::Collection>",
+      "size": 128,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "The Collection garbage queue calls this node allocation at 0x8280BF40. The explicit XDK instantiation compares exact over the full 128-byte unwind extent."
+    },
+    "0x82809228": {
+      "exported_name": "sub_82809228",
+      "symbol": "Attrib::AttribListAllocateNode<Attrib::Class>",
+      "size": 128,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "The Class garbage queue calls this node allocation at 0x8280C014. The explicit XDK instantiation compares exact over the full 128-byte unwind extent."
+    },
     "0x8280A248": {
       "exported_name": "sub_8280A248",
       "symbol": "Attrib::Instance::Instance",
