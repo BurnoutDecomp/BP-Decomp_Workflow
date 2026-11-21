@@ -1,13 +1,13 @@
 {
  "blob": "354a9e9de8ce86856b5a3278b1f3c837a13d9023",
- "commit": "4f983f4d4b0795a1281ea2675a4391ed08d88049",
+ "commit": "096a127878cf5e7dd47602df5e6b6a724e5dfe7f",
  "compiled": true,
- "measured": "2026-11-21T20:02:27Z",
+ "measured": "2026-11-21T20:15:03Z",
  "schema": 1,
  "source": "src/GameSource/World/AI/BrnAIModule_ResetPump.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 65,
+ "unpaired": 62,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -18,15 +18,20 @@
   {"artist": "822AC1F8", "artist_size": 224, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<1536,16>::GetFirstEvent", "score": 100.0, "size": 224, "status": "exact", "symbol": "?GetFirstEvent@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QBAHPAPBUEvent@2@PAH@Z"},
   {"artist": "822AE708", "artist_size": 160, "calls_unverified": 1, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<1536,16>::GetLength", "score": 100.0, "size": 160, "status": "exact", "symbol": "?GetLength@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QBAHXZ"},
   {"artist": "822AE7A8", "artist_size": 176, "calls_unverified": 1, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<1536,16>::GetEventPaddingSize", "score": 100.0, "size": 176, "status": "exact", "symbol": "?GetEventPaddingSize@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@IBAHH@Z"},
-  {"artist": "822C7030", "artist_size": 728, "first_diff": 8, "name": "CgsModule::VariableEventQueue<1536,16>::GetNextEvent", "score": 23.9, "size": 676, "status": "nonmatching", "symbol": "?GetNextEvent@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QBAHPBUEvent@2@PAPBU32@PAH@Z"},
+  {"artist": "822C7030", "artist_size": 728, "calls_unverified": 4, "data_unchecked": 21, "name": "CgsModule::VariableEventQueue<1536,16>::GetNextEvent", "score": 100.0, "size": 728, "status": "exact", "symbol": "?GetNextEvent@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QBAHPBUEvent@2@PAPBU32@PAH@Z"},
   {"artist": "822CA650", "artist_size": 884, "first_diff": 8, "name": "CgsModule::VariableEventQueue<1536,16>::OutputQueueContents", "score": 41.5, "size": 620, "status": "nonmatching", "symbol": "?OutputQueueContents@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QBAXXZ"},
-  {"artist": "822E5548", "artist_size": 652, "first_diff": 8, "name": "CgsModule::VariableEventQueue<1536,16>::AddEvent", "score": 46.3, "size": 712, "status": "nonmatching", "symbol": "?AddEvent@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QAA_NPBUEvent@2@HH@Z"},
+  {"artist": "822E5548", "artist_size": 652, "calls_unverified": 6, "data_unchecked": 18, "name": "CgsModule::VariableEventQueue<1536,16>::AddEvent", "score": 100.0, "size": 652, "status": "exact", "symbol": "?AddEvent@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QAA_NPBUEvent@2@HH@Z"},
   {"artist": "82765AD0", "artist_size": 188, "first_diff": 20, "name": "BrnAI::AIModule::GetAICar", "score": 91.3, "size": 180, "status": "nonmatching", "symbol": "?GetAICar@AIModule@BrnAI@@QBAPAUAICar@2@I@Z"},
+  {"artist": "82789FB8", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::RouteMapModuleIO::RaceRouteRequest,1>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@URaceRouteRequest@RouteMapModuleIO@BrnAI@@$00@CgsModule@@QAAXXZ"},
+  {"artist": "8278A028", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::RouteMapModuleIO::ExtrapolatedRouteRequest,12>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@UExtrapolatedRouteRequest@RouteMapModuleIO@BrnAI@@$0M@@CgsModule@@QAAXXZ"},
+  {"artist": "8278A098", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::RouteMapModuleIO::RouteResponse,16>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@URouteResponse@RouteMapModuleIO@BrnAI@@$0BA@@CgsModule@@QAAXXZ"},
+  {"artist": "8278A200", "artist_size": 212, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnAI::RouteMapModuleIO::InputBuffer>", "score": 100.0, "size": 212, "status": "exact", "symbol": "??$DestroyIOBuffer@UInputBuffer@RouteMapModuleIO@BrnAI@@@IOBufferStack@CgsModule@@QAA_NPAPAUInputBuffer@RouteMapModuleIO@BrnAI@@@Z"},
+  {"artist": "8278A2D8", "artist_size": 216, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnAI::RouteMapModuleIO::OutputBuffer>", "score": 100.0, "size": 216, "status": "exact", "symbol": "??$DestroyIOBuffer@UOutputBuffer@RouteMapModuleIO@BrnAI@@@IOBufferStack@CgsModule@@QAA_NPAPAUOutputBuffer@RouteMapModuleIO@BrnAI@@@Z"},
   {"artist": "8278A7A8", "artist_size": 452, "first_diff": 8, "name": "BrnAI::AIModule::ProcessRequestInterface", "score": 11.8, "size": 632, "status": "nonmatching", "symbol": "?ProcessRequestInterface@AIModule@BrnAI@@QAAXPBUInputBuffer@AIModuleIO@2@PAUOutputBuffer@42@G@Z"},
   {"artist": "8279A1E0", "artist_size": 820, "first_diff": 8, "name": "BrnAI::AIModule::PausedUpdate", "score": 36.5, "size": 472, "status": "nonmatching", "symbol": "?PausedUpdate@AIModule@BrnAI@@QAAXPAUIOBufferStack@CgsModule@@0PBUInputBuffer@AIModuleIO@2@PAUOutputBuffer@62@G@Z"},
   {"artist": "8279ABB0", "artist_size": 768, "first_diff": 8, "name": "BrnAI::AIModule::UpdateResetOnTrackManager", "score": 11.7, "size": 328, "status": "nonmatching", "symbol": "?UpdateResetOnTrackManager@AIModule@BrnAI@@QAAXPAUAIModuleResultInterface@AIModuleIO@2@M@Z"},
   {"artist": "8279B478", "artist_size": 1276, "first_diff": 16, "name": "BrnAI::AIModule::Update", "score": 36.1, "size": 1076, "status": "nonmatching", "symbol": "?Update@AIModule@BrnAI@@QAAXPAUIOBufferStack@CgsModule@@0PBUInputBuffer@AIModuleIO@2@PAUOutputBuffer@62@G@Z"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
+  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 12.5, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
  ]
 }

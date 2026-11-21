@@ -1,15 +1,17 @@
 {
  "blob": "9337ac985c87db32c05e40a789e56fa0ad51b281",
- "commit": "d37cf10d89379f577d642e0975a012ccd0d7bbc4",
+ "commit": "096a127878cf5e7dd47602df5e6b6a724e5dfe7f",
  "compiled": true,
- "measured": "2026-11-21T20:00:15Z",
+ "measured": "2026-11-21T20:15:03Z",
  "schema": 1,
  "source": "src/GameSource/Physics/VehicleManager/BrnVehicleManager_PerFrameLeaves.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 16,
+ "unpaired": 19,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
+  {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
   {"artist": "825BC278", "artist_size": 164, "data_unchecked": 4, "name": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateAirRamEvent>::GetEvent", "score": 100.0, "size": 164, "status": "exact", "symbol": "?GetEvent@?$BaseEventQueue@UCreateAirRamEvent@Vehicle@BrnPhysics@@@CgsModule@@QBAABUCreateAirRamEvent@Vehicle@BrnPhysics@@H@Z"},
   {"artist": "825C5520", "artist_size": 316, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleManager::ReadUpdatedBodyProperties", "score": 26.3, "size": 232, "status": "nonmatching", "symbol": "?ReadUpdatedBodyProperties@VehicleManager@Vehicle@BrnPhysics@@QAAXPBV?$EventQueue@UInChangeRigidBodyInertia@PhysicsSimulationIO@CgsPhysics@@$0MI@@CgsModule@@@Z"},
   {"artist": "825C83B0", "artist_size": 1504, "first_diff": 0, "name": "BrnPhysics::Vehicle::VehicleManager::BridgeSimpleTrafficWithCarContactsToSimulation", "score": 0.5, "size": 28, "status": "nonmatching", "symbol": "?BridgeSimpleTrafficWithCarContactsToSimulation@VehicleManager@Vehicle@BrnPhysics@@QAAXPAV?$EventQueue@UInAddPotentialContact@PhysicsSimulationIO@CgsPhysics@@$0EAA@@CgsModule@@PBUPotentialContactInterface@PhysicsModuleIO@3@@Z"},
@@ -17,6 +19,7 @@
   {"artist": "825EAC28", "artist_size": 196, "first_diff": 56, "name": "BrnPhysics::Vehicle::VehicleManager::ValidateTrafficContact", "score": 87.5, "size": 188, "status": "nonmatching", "symbol": "?ValidateTrafficContact@VehicleManager@Vehicle@BrnPhysics@@QAA_NPAUPotentialContact@SceneManagerIO@CgsSceneManager@@PBUTriangleCacheInterface@56@M@Z"},
   {"artist": "8261BAE0", "artist_size": 84, "calls_unverified": 1, "calls_wrong": [{"artist": "??$DestroyIOBuffer@VCollisionGenerator@CgsCollision@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVCollisionGener", "at": 40, "ours": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::CgsCollision::CollisionGenerator>"}], "first_diff": 40, "name": "BrnPhysics::Vehicle::VehicleManager::FreeAllocations", "score": 90.5, "size": 84, "status": "nonmatching", "symbol": "?FreeAllocations@VehicleManager@Vehicle@BrnPhysics@@QAAXPAUIOBufferStack@CgsModule@@@Z"},
   {"artist": "82629E18", "artist_size": 260, "data_unchecked": 2, "name": "BrnPhysics::Vehicle::VehicleManager::UpdateVehicleEffects", "score": 100.0, "size": 260, "status": "exact", "symbol": "?UpdateVehicleEffects@VehicleManager@Vehicle@BrnPhysics@@QAAXPBUVehicleEffectsInputInterface@23@@Z"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 12.5, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
  ]
 }
