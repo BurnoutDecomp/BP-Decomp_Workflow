@@ -29,7 +29,8 @@ BRANCH = {"reconcile": "dev", "build": "dev", "bytematch": "x360"}
 # Besides its named outputs, a byte-match publication may carry the records CI adopted from the
 # measuring server (tools/bytematch/remote.py), written or deleted, and their state.json: any
 # number of them, in the same commit as the summary built from them.
-RECORDS = {"bytematch": re.compile(r"progress/bytematch/objects/(?:src|vendor)(?:/[A-Za-z0-9_+.-]+)+\.(?:cpp|c)\.json")}
+RECORDS = {"bytematch": re.compile(
+    r"progress/bytematch/objects/(?:src|vendor)(?:/[A-Za-z0-9_+.-](?:[A-Za-z0-9_+. -]*[A-Za-z0-9_+.-])?)+\.(?:cpp|c)\.json")}
 EXTRA = {"bytematch": {"progress/bytematch/state.json"}}
 
 

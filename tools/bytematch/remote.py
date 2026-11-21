@@ -33,7 +33,8 @@ import ledger  # noqa: E402
 
 BUNDLE_SCHEMA = 1
 SHA = re.compile(r"[0-9a-f]{40}")
-SOURCE = re.compile(r"(?:src|vendor)/[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*\.(?:cpp|c)")
+# Folder names may hold spaces ("Network/Debug Components/"), never other separators or controls.
+SOURCE = re.compile(r"(?:src|vendor)(?:/[A-Za-z0-9_+.-](?:[A-Za-z0-9_+. -]*[A-Za-z0-9_+.-])?)+\.(?:cpp|c)")
 TOP_KEYS = {"schema", "source", "commit", "blob", "toolchain", "measured", "tool", "compiled",
             "unpaired", "functions", "errors"}
 ROW_KEYS = {"symbol", "name", "artist", "status", "score", "size", "artist_size", "first_diff",

@@ -4,6 +4,7 @@ import gzip
 import hashlib
 import json
 from pathlib import Path, PureWindowsPath
+import sys
 
 import pytest
 
@@ -143,10 +144,23 @@ def test_a_record_that_fails_a_check_is_refused(change):
         remote.check_record("src/Game/A.cpp", json.dumps(record(**change)), SHA)
 
 
-@pytest.mark.parametrize("source", ["../progress/status.json", "src/../x.cpp", "tools/a.cpp", "src/a.h", "/abs.cpp"])
+@pytest.mark.parametrize("source", ["../progress/status.json", "src/../x.cpp", "tools/a.cpp", "src/a.h", "/abs.cpp",
+                                    "src/ lead/a.cpp", "src/trail /a.cpp", "src/tab\there/a.cpp", "src/a\nb.cpp"])
 def test_only_native_source_paths_name_records(source):
     with pytest.raises(remote.BadRecord):
         remote.check_source(source)
+
+
+def test_every_committed_record_passes_the_checks_ci_applies():
+    """The checks must accept what the ledger already holds (folders with spaces included)."""
+    sys.path.insert(0, str(ledger.REPO / "tools" / "work"))
+    import publish_snapshot
+    for path in sorted(ledger.RECORDS.rglob("*.json")):
+        text = path.read_text(encoding="utf-8")
+        record = json.loads(text)
+        remote.check_record(record["source"], text, record["commit"])
+        repo_path = path.relative_to(ledger.REPO).as_posix()
+        assert publish_snapshot.is_record("bytematch", repo_path), repo_path
 
 
 def bundle(records, removed=(), sources=3):
