@@ -1,13 +1,13 @@
 {
- "blob": "ca9c2eaf5bf7f5b10020690a7668f24651334a70",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "593ce4f664660f670efa26ae44a6bb097fb06850",
+ "commit": "4f41bd62803de178d09d93dbb004f75db3dac2d0",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-21T13:00:27Z",
  "schema": 1,
  "source": "src/GameSource/GameState/ModeManager/Hud/BrnHUDMessageLogic.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 61,
+ "unpaired": 62,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F1DB8", "artist_size": 92, "first_diff": 44, "name": "operator++", "score": 95.7, "size": 92, "status": "nonmatching", "symbol": "??E@YA?AW4EActiveRaceCarIndex@@AAW40@H@Z"},
@@ -38,7 +38,7 @@
   {"artist": "8236F530", "artist_size": 184, "first_diff": 8, "name": "BrnGameState::HUDMessageLogic::Construct", "score": 20.3, "size": 132, "status": "nonmatching", "symbol": "?Construct@HUDMessageLogic@BrnGameState@@QAAXXZ"},
   {"artist": "823746C8", "artist_size": 884, "first_diff": 8, "name": "CgsModule::VariableEventQueue<256,16>::OutputQueueContents", "score": 25.9, "size": 508, "status": "nonmatching", "symbol": "?OutputQueueContents@?$VariableEventQueue@$0BAA@$0BA@@CgsModule@@QBAXXZ"},
   {"artist": "823800F8", "artist_size": 652, "first_diff": 8, "name": "CgsModule::VariableEventQueue<256,16>::AddEvent", "score": 19.7, "size": 524, "status": "nonmatching", "symbol": "?AddEvent@?$VariableEventQueue@$0BAA@$0BA@@CgsModule@@QAA_NPBUEvent@2@HH@Z"},
-  {"artist": "82389248", "artist_size": 112, "first_diff": 44, "name": "BrnGameState::HUDMessageLogic::PreWorldUpdate", "score": 92.9, "size": 112, "status": "nonmatching", "symbol": "?PreWorldUpdate@HUDMessageLogic@BrnGameState@@QAAXPAV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@@Z"},
+  {"artist": "82389248", "artist_size": 112, "calls_wrong": [{"artist": "??$Append@$0BAA@$0BA@@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@QAA_NABV?$VariableEventQueue@$0BAA@$0BA@@1@@Z", "at": 76, "ours": "CgsModule::VariableEventQueue<13312,16>::Append<256,16>"}], "data_unchecked": 2, "first_diff": 76, "name": "BrnGameState::HUDMessageLogic::PreWorldUpdate", "score": 96.4, "size": 112, "status": "nonmatching", "symbol": "?PreWorldUpdate@HUDMessageLogic@BrnGameState@@QAAXPAV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@@Z"},
   {"artist": "82394110", "artist_size": 328, "first_diff": 36, "name": "BrnGameState::HUDMessageLogic::GenerateLeaderMessages", "score": 76.2, "size": 312, "status": "nonmatching", "symbol": "?GenerateLeaderMessages@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@PAVScoringSystem@2@@Z"},
   {"artist": "82394258", "artist_size": 224, "first_diff": 28, "name": "BrnGameState::HUDMessageLogic::GenerateFinisherMessage", "score": 65.3, "size": 180, "status": "nonmatching", "symbol": "?GenerateFinisherMessage@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@@Z"},
   {"artist": "82394338", "artist_size": 220, "first_diff": 36, "name": "BrnGameState::HUDMessageLogic::GenerateRivalCheckpointMessage", "score": 86.2, "size": 216, "status": "nonmatching", "symbol": "?GenerateRivalCheckpointMessage@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@PAVScoringSystem@2@@Z"},
@@ -48,7 +48,7 @@
   {"artist": "82394920", "artist_size": 340, "first_diff": 8, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineStuntRunLeadingMessages", "score": 24.4, "size": 316, "status": "nonmatching", "symbol": "?GenerateOnlineStuntRunLeadingMessages@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@W4EActiveRaceCarIndex@@ABVTime@CgsSystem@@@Z"},
   {"artist": "82394A78", "artist_size": 272, "first_diff": 32, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineStuntRunEliminationMessages", "score": 87.6, "size": 276, "status": "nonmatching", "symbol": "?GenerateOnlineStuntRunEliminationMessages@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@W4EActiveRaceCarIndex@@@Z"},
   {"artist": "82394B88", "artist_size": 312, "first_diff": 4, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineStuntRunTimeMessages", "score": 38.3, "size": 252, "status": "nonmatching", "symbol": "?GenerateOnlineStuntRunTimeMessages@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@ABVTime@CgsSystem@@M@Z"},
-  {"artist": "82394CC0", "artist_size": 160, "first_diff": 88, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineStuntRunScoreMessages", "score": 95.0, "size": 160, "status": "nonmatching", "symbol": "?GenerateOnlineStuntRunScoreMessages@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@@Z"},
+  {"artist": "82394CC0", "artist_size": 160, "calls_unverified": 1, "data_unchecked": 2, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineStuntRunScoreMessages", "score": 100.0, "size": 160, "status": "exact", "symbol": "?GenerateOnlineStuntRunScoreMessages@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@@Z"},
   {"artist": "82394D60", "artist_size": 148, "first_diff": 4, "name": "BrnGameState::HUDMessageLogic::GenerateBurningHomeRunCheckpointMessage", "score": 34.4, "size": 224, "status": "nonmatching", "symbol": "?GenerateBurningHomeRunCheckpointMessage@HUDMessageLogic@BrnGameState@@AAAXPAVModeManager@2@PAVScoringSystem@2@@Z"},
   {"artist": "82394DF8", "artist_size": 372, "first_diff": 4, "name": "BrnGameState::HUDMessageLogic::GenerateStuntMessage", "score": 65.9, "size": 344, "status": "nonmatching", "symbol": "?GenerateStuntMessage@HUDMessageLogic@BrnGameState@@QAAXPAVScoringSystem@2@@Z"},
   {"artist": "82394F70", "artist_size": 680, "first_diff": 8, "name": "BrnGameState::HUDMessageLogic::GenerateOnlineTeamChangeMessages", "score": 30.5, "size": 316, "status": "nonmatching", "symbol": "?GenerateOnlineTeamChangeMessages@HUDMessageLogic@BrnGameState@@QAAXPBUVehicleOutputInterface@Vehicle@BrnPhysics@@W4EActiveRaceCarIndex@@@Z"},
@@ -60,6 +60,7 @@
   {"artist": "82395BA8", "artist_size": 128, "first_diff": 8, "name": "BrnGameState::HUDMessageLogic::GenerateCriticalDamageMessage", "score": 72.5, "size": 148, "status": "nonmatching", "symbol": "?GenerateCriticalDamageMessage@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@PAVScoringSystem@2@@Z"},
   {"artist": "82399C78", "artist_size": 244, "first_diff": 68, "name": "BrnGameState::HUDMessageLogic::GenerateRaceModeMessages", "score": 95.9, "size": 240, "status": "nonmatching", "symbol": "?GenerateRaceModeMessages@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@PAVScoringSystem@2@PBV?$EventQueue@URaceCarCrashEvent@Vehicle@BrnPhysics@@$07@CgsModule@@PBV?$EventQueue@UTakedownEvent@BrnGameState@@$07@8@W4EActiveRaceCarIndex@@M@Z"},
   {"artist": "82399D70", "artist_size": 96, "name": "BrnGameState::HUDMessageLogic::GenerateBurningHomeRunMessages", "score": 100.0, "size": 96, "status": "exact", "symbol": "?GenerateBurningHomeRunMessages@HUDMessageLogic@BrnGameState@@AAAXPAVModeManager@2@PAVScoringSystem@2@@Z"},
-  {"artist": "8239D998", "artist_size": 668, "first_diff": 16, "name": "BrnGameState::HUDMessageLogic::PostWorldUpdate", "score": 47.3, "size": 500, "status": "nonmatching", "symbol": "?PostWorldUpdate@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@W4EGameModeType@GameStateModuleIO@2@PAVModeManager@2@PAVScoringSystem@2@PBV?$EventQueue@URaceCarCrashEvent@Vehicle@BrnPhysics@@$07@CgsModule@@PBUVehicleOutputInterface@Vehicle@BrnPhysics@@PBV?$EventQueue@UTakedownEvent@BrnGameState@@$07@CgsModule@@MW4EActiveRaceCarIndex@@_N@Z"}
+  {"artist": "8239D998", "artist_size": 668, "first_diff": 16, "name": "BrnGameState::HUDMessageLogic::PostWorldUpdate", "score": 47.3, "size": 500, "status": "nonmatching", "symbol": "?PostWorldUpdate@HUDMessageLogic@BrnGameState@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@W4EGameModeType@GameStateModuleIO@2@PAVModeManager@2@PAVScoringSystem@2@PBV?$EventQueue@URaceCarCrashEvent@Vehicle@BrnPhysics@@$07@CgsModule@@PBUVehicleOutputInterface@Vehicle@BrnPhysics@@PBV?$EventQueue@UTakedownEvent@BrnGameState@@$07@CgsModule@@MW4EActiveRaceCarIndex@@_N@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

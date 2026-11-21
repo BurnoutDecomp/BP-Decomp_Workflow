@@ -1,13 +1,13 @@
 {
- "blob": "acbc9fde2853ae30d6eec6200aa835e1e518f805",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "d8fc7c6888f20e1b81f0eec3bdfcbc210e19a2d1",
+ "commit": "4f41bd62803de178d09d93dbb004f75db3dac2d0",
  "compiled": true,
- "measured": "2026-11-19T21:08:30Z",
+ "measured": "2026-11-21T13:00:27Z",
  "schema": 1,
  "source": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 285,
+ "unpaired": 286,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 40.0, "size": 4, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@XZ"},
@@ -27,7 +27,7 @@
   {"artist": "821F4518", "artist_size": 108, "first_diff": 48, "name": "BrnDirector::Camera::BehaviourFixedCam::SetParameters", "score": 92.6, "size": 108, "status": "nonmatching", "symbol": "?SetParameters@BehaviourFixedCam@Camera@BrnDirector@@QAAXPBVParameters@123@@Z"},
   {"artist": "821F55B8", "artist_size": 100, "first_diff": 48, "name": "BrnDirector::Camera::BehaviourRotateAboutVehicle::SetParameters", "score": 96.0, "size": 100, "status": "nonmatching", "symbol": "?SetParameters@BehaviourRotateAboutVehicle@Camera@BrnDirector@@QAAXPBVParameters@123@@Z"},
   {"artist": "821F61C8", "artist_size": 12, "data_unchecked": 1, "name": "BrnDirector::ArbStateTestbed::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@ArbStateTestbed@BrnDirector@@UBAPBDXZ"},
-  {"artist": "821F61D8", "artist_size": 96, "first_diff": 40, "name": "BrnDirector::ArbStateTestbed::Deactivate", "score": 91.7, "size": 96, "status": "nonmatching", "symbol": "?Deactivate@ArbStateTestbed@BrnDirector@@CAXPAX@Z"},
+  {"artist": "821F61D8", "artist_size": 96, "data_unchecked": 4, "name": "BrnDirector::ArbStateTestbed::Deactivate", "score": 100.0, "size": 96, "status": "exact", "symbol": "?Deactivate@ArbStateTestbed@BrnDirector@@CAXPAX@Z"},
   {"artist": "821FA138", "artist_size": 132, "first_diff": 48, "name": "BrnDirector::Camera::BehaviourGyroCam::Prepare", "score": 97.0, "size": 132, "status": "nonmatching", "symbol": "?Prepare@BehaviourGyroCam@Camera@BrnDirector@@UAA_NABUBehaviourSharedPrepareReleaseInfo@23@@Z"},
   {"artist": "821FA1E0", "artist_size": 12, "data_unchecked": 1, "name": "BrnDirector::Camera::BehaviourGyroCam::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@BehaviourGyroCam@Camera@BrnDirector@@UBAPBDXZ"},
   {"artist": "821FB488", "artist_size": 12, "data_unchecked": 1, "name": "BrnDirector::Camera::BehaviourRotateAboutVehicle::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@BehaviourRotateAboutVehicle@Camera@BrnDirector@@UBAPBDXZ"},
@@ -37,13 +37,14 @@
   {"artist": "82233A80", "artist_size": 288, "first_diff": 20, "name": "BrnDirector::Camera::Camera::operator=", "score": 63.0, "size": 296, "status": "nonmatching", "symbol": "??4Camera@0BrnDirector@@QAAAAU001@ABU001@@Z"},
   {"artist": "82244B20", "artist_size": 800, "first_diff": 8, "name": "BrnDirector::Camera::BehaviourGyroCam::Construct", "score": 2.5, "size": 176, "status": "nonmatching", "symbol": "?Construct@BehaviourGyroCam@Camera@BrnDirector@@UAAXXZ"},
   {"artist": "82259AC0", "artist_size": 320, "first_diff": 36, "name": "BrnDirector::ArbStateTestbed::Construct", "score": 21.2, "size": 548, "status": "nonmatching", "symbol": "?Construct@ArbStateTestbed@BrnDirector@@UAAXXZ"},
-  {"artist": "82263F08", "artist_size": 156, "first_diff": 44, "name": "BrnDirector::ArbStateTestbed::RegisterParameters", "score": 92.3, "size": 156, "status": "nonmatching", "symbol": "?RegisterParameters@ArbStateTestbed@BrnDirector@@AAAXXZ"},
-  {"artist": "82263FA8", "artist_size": 152, "first_diff": 60, "name": "BrnDirector::ArbStateTestbed::UnregisterParameters", "score": 94.7, "size": 152, "status": "nonmatching", "symbol": "?UnregisterParameters@ArbStateTestbed@BrnDirector@@AAAXXZ"},
+  {"artist": "82263F08", "artist_size": 156, "calls_wrong": [{"artist": "??$SerialiseBehaviourParameters@VDebugMenuSerialiser@Camera@BrnDirector@@@Camera@BrnDirector@@YAXPBDAAVParameters@Behav", "at": 144, "ours": "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::DebugMenuSerialiser>"}], "data_unchecked": 5, "first_diff": 144, "name": "BrnDirector::ArbStateTestbed::RegisterParameters", "score": 97.4, "size": 156, "status": "nonmatching", "symbol": "?RegisterParameters@ArbStateTestbed@BrnDirector@@AAAXXZ"},
+  {"artist": "82263FA8", "artist_size": 152, "calls_wrong": [{"artist": "??$SerialiseBehaviourParameters@VDebugMenuSerialiser@Camera@BrnDirector@@@Camera@BrnDirector@@YAXPBDAAVParameters@Behav", "at": 124, "ours": "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::DebugMenuSerialiser>"}], "data_unchecked": 4, "first_diff": 124, "name": "BrnDirector::ArbStateTestbed::UnregisterParameters", "score": 97.4, "size": 152, "status": "nonmatching", "symbol": "?UnregisterParameters@ArbStateTestbed@BrnDirector@@AAAXXZ"},
   {"artist": "82264040", "artist_size": 136, "first_diff": 48, "name": "BrnDirector::ArbStateTestbed::ActivateIceCam", "score": 88.2, "size": 136, "status": "nonmatching", "symbol": "?ActivateIceCam@ArbStateTestbed@BrnDirector@@CAXPAX@Z"},
   {"artist": "822640C8", "artist_size": 728, "calls_unverified": 2, "calls_wrong": [{"artist": "BrnDirector::Camera::BehaviourRig>::D", "at": 52, "ours": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRig>::DetachTweaker"}], "first_diff": 52, "name": "BrnDirector::ArbStateTestbed::Release", "score": 98.4, "size": 728, "status": "nonmatching", "symbol": "?Release@ArbStateTestbed@BrnDirector@@UAA_NAAUArbStateSharedInfo@2@@Z"},
   {"artist": "8226B638", "artist_size": 1784, "first_diff": 16, "name": "BrnDirector::ArbStateTestbed::Update", "score": 56.7, "size": 1632, "status": "nonmatching", "symbol": "?Update@ArbStateTestbed@BrnDirector@@UAAXAAUArbStateSharedInfo@2@@Z"},
   {"artist": "8226BD30", "artist_size": 136, "first_diff": 48, "name": "BrnDirector::ArbStateTestbed::GenericActivateCam", "score": 88.2, "size": 136, "status": "nonmatching", "symbol": "?GenericActivateCam@ArbStateTestbed@BrnDirector@@CAXPAX@Z"},
   {"artist": "8226BDB8", "artist_size": 500, "first_diff": 8, "name": "BrnDirector::ArbStateTestbed::RegisterIceAnimsWithDebugComponent", "score": 57.1, "size": 452, "status": "nonmatching", "symbol": "?RegisterIceAnimsWithDebugComponent@ArbStateTestbed@BrnDirector@@QAAXPBVshotgroup@Gen@Attrib@@ABVDirectorResourceManager@2@PBD@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"},
   {"artist": "82C08DF0", "artist_size": 192, "first_diff": 0, "name": "operator new", "score": 4.0, "size": 8, "status": "nonmatching", "symbol": "??2@YAPAXIPAX@Z"}
  ]
 }

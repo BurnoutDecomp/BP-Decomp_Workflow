@@ -1,24 +1,25 @@
 {
- "blob": "746934c897ff2d977bb2e863f07b7a6a53a29aac",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "db89d5a52c9f5852bf51db1b136858bdaa06d9c7",
+ "commit": "4f41bd62803de178d09d93dbb004f75db3dac2d0",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-21T13:00:27Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModule.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 21,
+ "unpaired": 22,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"},
   {"artist": "828AA098", "artist_size": 92, "first_diff": 0, "name": "CgsSceneManager::operator++", "score": 7.1, "size": 20, "status": "nonmatching", "symbol": "??ECgsSceneManager@@YA?AW4EPrepareStage@OverlapGenerationModule@0@AAW4120@H@Z"},
   {"artist": "828B56D8", "artist_size": 196, "first_diff": 44, "name": "CgsSceneManager::OverlapGenerationModule::ProcessForceNoPaddingQueue", "score": 76.8, "size": 200, "status": "nonmatching", "symbol": "?ProcessForceNoPaddingQueue@OverlapGenerationModule@CgsSceneManager@@AAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
   {"artist": "828C1D18", "artist_size": 204, "first_diff": 12, "name": "CgsSceneManager::OverlapGenerationModule::ProcessAddBodyQueue", "score": 47.4, "size": 184, "status": "nonmatching", "symbol": "?ProcessAddBodyQueue@OverlapGenerationModule@CgsSceneManager@@AAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
-  {"artist": "828C1DE8", "artist_size": 164, "first_diff": 12, "name": "CgsSceneManager::OverlapGenerationModule::ProcessUpdateBodyQueue", "score": 45.6, "size": 152, "status": "nonmatching", "symbol": "?ProcessUpdateBodyQueue@OverlapGenerationModule@CgsSceneManager@@AAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
+  {"artist": "828C1DE8", "artist_size": 164, "first_diff": 12, "name": "CgsSceneManager::OverlapGenerationModule::ProcessUpdateBodyQueue", "score": 43.0, "size": 152, "status": "nonmatching", "symbol": "?ProcessUpdateBodyQueue@OverlapGenerationModule@CgsSceneManager@@AAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
   {"artist": "828C1E90", "artist_size": 200, "first_diff": 8, "name": "CgsSceneManager::OverlapGenerationModule::ProcessRemoveBodyQueue", "score": 46.3, "size": 180, "status": "nonmatching", "symbol": "?ProcessRemoveBodyQueue@OverlapGenerationModule@CgsSceneManager@@AAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
-  {"artist": "828C1F58", "artist_size": 164, "first_diff": 36, "name": "CgsSceneManager::OverlapGenerationModule::OutputCollidingPairs", "score": 90.2, "size": 164, "status": "nonmatching", "symbol": "?OutputCollidingPairs@OverlapGenerationModule@CgsSceneManager@@AAAXPAUOutputBuffer@OverlapGenerationIO@2@@Z"},
+  {"artist": "828C1F58", "artist_size": 164, "calls_unverified": 1, "calls_wrong": [{"artist": "CgsSceneManager::OverlapGen", "at": 128, "ours": "CgsSceneManager::OverlapGenerationIO::OutputBuffer::GetOverlappingPairQueue"}, {"artist": "CgsSceneManager::OverlappingPair>::AddEvent", "at": 136, "ours": "CgsModule::BaseEventQueue<CgsSceneManager::OverlappingPair>::AddEvent"}], "data_unchecked": 2, "first_diff": 128, "name": "CgsSceneManager::OverlapGenerationModule::OutputCollidingPairs", "score": 92.7, "size": 164, "status": "nonmatching", "symbol": "?OutputCollidingPairs@OverlapGenerationModule@CgsSceneManager@@AAAXPAUOutputBuffer@OverlapGenerationIO@2@@Z"},
   {"artist": "828CB6B0", "artist_size": 232, "first_diff": 16, "name": "CgsSceneManager::OverlapGenerationModule::Prepare", "score": 57.4, "size": 228, "status": "nonmatching", "symbol": "?Prepare@OverlapGenerationModule@CgsSceneManager@@UAA_NPAEPAUStorage@BitTable@rw@@@Z"},
   {"artist": "828CB798", "artist_size": 220, "first_diff": 8, "name": "CgsSceneManager::OverlapGenerationModule::Release", "score": 59.5, "size": 224, "status": "nonmatching", "symbol": "?Release@OverlapGenerationModule@CgsSceneManager@@UAA_NXZ"},
-  {"artist": "828CB878", "artist_size": 156, "first_diff": 44, "name": "CgsSceneManager::OverlapGenerationModule::Update", "score": 97.4, "size": 156, "status": "nonmatching", "symbol": "?Update@OverlapGenerationModule@CgsSceneManager@@UAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
+  {"artist": "828CB878", "artist_size": 156, "data_unchecked": 2, "name": "CgsSceneManager::OverlapGenerationModule::Update", "score": 100.0, "size": 156, "status": "exact", "symbol": "?Update@OverlapGenerationModule@CgsSceneManager@@UAAXPBUInputBuffer@OverlapGenerationIO@2@@Z"},
   {"artist": "828D0460", "artist_size": 132, "first_diff": 4, "name": "CgsSceneManager::OverlapGenerationModule::Construct", "score": 26.7, "size": 108, "status": "nonmatching", "symbol": "?Construct@OverlapGenerationModule@CgsSceneManager@@UAAXXZ"}
  ]
 }
