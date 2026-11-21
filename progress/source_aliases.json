@@ -355,6 +355,62 @@
     }
   },
   "functions": {
+    "Attrib::CollectionHashMap::UpdateSearchLength": {
+      "symbol": "Attrib::CollectionHashMap::UpdateSearchLength",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": false,
+      "x360_address": "0x82806A28",
+      "byte_match": true,
+      "evidence": "The truncated TablePolicy routine repairs the probe run from the home and freed indices. The matching RemoveIndex caller passes both at 0x82808A4C."
+    },
+    "VecHashMap_Attrib_Class_TablePolicy_0_16::UpdateSearchLength": {
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::UpdateSearchLength",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": false,
+      "x360_address": "0x82806D60",
+      "byte_match": true,
+      "evidence": "The truncated TablePolicy routine repairs the probe run from the home and freed indices. The matching RemoveIndex caller passes both at 0x82808B64."
+    },
+    "Attrib::Class::TablePolicy,1,9": {
+      "symbol": "Attrib::CollectionHashMap::UpdateSearchLength",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": false,
+      "x360_address": "0x82806A28",
+      "byte_match": true,
+      "evidence": "CollectionHashMap::RemoveIndex calls this probe repair at 0x82808A4C and 0x82808A68 using the home and freed bucket indices."
+    },
+    "Attrib::Class::TablePolicy,0,16>::U": {
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::UpdateSearchLength",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": false,
+      "x360_address": "0x82806D60",
+      "byte_match": true,
+      "evidence": "The class registry RemoveIndex calls this probe repair at 0x82808B64 and 0x82808B80 using the home and freed bucket indices."
+    },
+    "Attrib::Class::TablePolicy,0,16>::Fi": {
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::FindIndex",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": true,
+      "x360_address": "0x828063C0",
+      "byte_match": true,
+      "evidence": "The class-table wrapper calls this bucket-index lookup at 0x828064E4 with the 64-bit class key."
+    },
+    "Attrib::Class::TablePolicy,": {
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::Find",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": true,
+      "x360_address": "0x828064D0",
+      "byte_match": true,
+      "evidence": "EditSpecifier::GetClass calls this class-table lookup at 0x82808298. It calls FindIndex, validates the bucket and returns the stored Class pointer."
+    },
+    "Attrib::Class::TablePolicy,0,16>": {
+      "symbol": "VecHashMap_Attrib_Class_TablePolicy_0_16::GetKeyAtIndex",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "const": true,
+      "x360_address": "0x82807430",
+      "byte_match": true,
+      "evidence": "The class-table function checks the bucket index and returns its 64-bit key. The ARTIST diagnostic at 0x820D999C gives the method name."
+    },
     "Attrib::Class::TablePolicy,1,96": {
       "symbol": "Attrib::CollectionHashMap::FindIndex",
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
