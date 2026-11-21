@@ -4,13 +4,16 @@ Names come from the packed export pack `progress/asmaudit_artist.json.gz` (one r
 function the IDA export of BURNOUT_X360_ARTIST.XEX knows). Extents come from the
 image's own `.pdata` (packed unwind records give each framed function's exact length)
 and, for frameless leaves that have no record, from the export's instruction count.
+The census also includes disjoint unwind extents absent from that export.
 Bytes come from the local image through `tools/re/x360rd.py`, a local input that never
 leaves the machine: only names, addresses and sizes reach the committed ledger.
 """
 from __future__ import annotations
 
+from bisect import bisect_right
 import ctypes
 import gzip
+from itertools import accumulate
 import json
 import os
 from pathlib import Path
@@ -22,10 +25,11 @@ PACK = REPO / "progress" / "asmaudit_artist.json.gz"
 UNIDENTIFIED = REPO / "progress" / "unidentified.json"
 SOURCE_ALIASES = REPO / "progress" / "source_aliases.json"
 
-# Image layout of BURNOUT_X360_ARTIST.XEX (the same constants the native branch's
-# tools/x360/count_matches.py validated against its strict-linked census).
+# Image layout of BURNOUT_X360_ARTIST.XEX. Packed unwind records also cover the
+# executable codec sections after the primary text segment.
 PDATA_START, PDATA_END = 0x821BB000, 0x821ED960
-TEXT_START, TEXT_END = 0x821F0000, 0x82C775D0
+TEXT_START, PRIMARY_TEXT_END = 0x821F0000, 0x82C775D0
+TEXT_END = 0x82CCFE7C
 
 
 def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END):
@@ -140,16 +144,16 @@ class Artist:
 
     def bytes(self, address: int, length: int) -> bytes:
         text = self._text
-        if text is not None and TEXT_START <= address and address + length <= TEXT_END:
+        if text is not None and TEXT_START <= address and address + length <= PRIMARY_TEXT_END:
             return text[address - TEXT_START:address - TEXT_START + length]
         return self.read(address, length)
 
     _text = None
 
     def preload(self):
-        """Read the whole .text once (about 13 s); every later read of code is a slice."""
+        """Cache the contiguous primary text segment. Read the codec segments on demand."""
         if self._text is None:
-            self._text = self.read(TEXT_START, TEXT_END - TEXT_START)
+            self._text = self.read(TEXT_START, PRIMARY_TEXT_END - TEXT_START)
         return self
 
     # -- extents ----------------------------------------------------------------------
@@ -158,6 +162,21 @@ class Artist:
         if self._extents is None:
             self._extents = packed_extents(self.read(PDATA_START, PDATA_END - PDATA_START))
         return self._extents
+
+    def include_unlisted_unwind_functions(self):
+        """Include disjoint function extents missing from the name export in the census."""
+        starts = sorted(self.names)
+        max_ends = list(accumulate((start + self.size(start)[0] for start in starts), max))
+        for address, length in self.extents.items():
+            if address in self.names:
+                continue
+            index = bisect_right(starts, address)
+            if index and max_ends[index - 1] > address:
+                continue
+            if index < len(starts) and starts[index] < address + length:
+                continue
+            self.names[address] = f"sub_{address:08X}"
+            self.unnamed.add(address)
 
     def size(self, address: int):
         """(byte length, source): the .pdata length, else the export's instruction count.

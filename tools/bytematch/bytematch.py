@@ -554,6 +554,7 @@ def universe(args):
 
     xdk = need_xdk(args)
     artist = Artist().preload()
+    artist.include_unlisted_unwind_functions()
     if args.providers:
         provided = {int(a, 16): v for a, v in json.loads(Path(args.providers).read_text(encoding="utf-8")).items()}
     else:

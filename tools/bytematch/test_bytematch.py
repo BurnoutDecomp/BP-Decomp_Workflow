@@ -220,6 +220,27 @@ def test_packed_extents_reads_pdata_lengths():
     assert packed_extents(pdata) == {0x821F0000: 20, 0x821F0014: 8}
 
 
+def test_unwind_extents_cover_video_code_past_primary_text():
+    entries = [(0x82C77600, 5), (0x82CCFE70, 3), (0x82CCFE7C, 1)]
+    pdata = b"".join(struct.pack(">II", a, 0x40000000 | n << 8) for a, n in entries)
+    assert packed_extents(pdata) == {0x82C77600: 20, 0x82CCFE70: 12}
+
+
+def test_catalogue_adds_only_disjoint_unlisted_unwind_functions():
+    base = 0x821F0000
+    art = FakeArtist([(base, "Named", [BLR] * 5), (base + 0x24, "Next", [BLR])])
+    art._extents = {base + 0x08: 4, base + 0x14: 4, base + 0x20: 8, base + 0x28: 4}
+
+    art.include_unlisted_unwind_functions()
+    art.include_unlisted_unwind_functions()
+
+    assert art.names == {base: "Named", base + 0x24: "Next",
+                         base + 0x14: "sub_821F0014", base + 0x28: "sub_821F0028"}
+    assert art.unnamed == {base + 0x14, base + 0x28}
+    assert art.name_at(base + 0x14) is None
+    assert art.size(base + 0x28) == (4, "pdata")
+
+
 def _universe():
     return {"meta": {"functions": 5},
             "functions": [["82100000", 40, "A::f", "game", "GameSource/World", "tuA"],
