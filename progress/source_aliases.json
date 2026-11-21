@@ -30,6 +30,13 @@
         "_matherr": "libcMT.lib:obj\\xbox\\matherr.obj"
       }
     },
+    "0x82815E58": {
+      "exported_name": "CgsContainers::BasePriorityQueue::Clear",
+      "evidence": "ARTIST StrStreamBase vtable at 0x82000D00 points to 0x82815E58 in its Reset slot. The native StrStreamBase::Reset matches all 12 bytes with no relocations. The original StrStream constructor calls the same address at 0x821F017C.",
+      "aliases": {
+        "CgsDev::StrStreamBase::Reset": "src/GameShared/GameClasses/Development/CgsStrStream.cpp"
+      }
+    },
     "0x8284CB38": {
       "exported_name": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct",
       "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST.",
