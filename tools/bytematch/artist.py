@@ -64,6 +64,11 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             row = functions.get(address)
             if row and row["name"] == proof["exported_name"]:
                 row["folded_names"] = tuple(proof["aliases"])
+        for address, proof in registry.get("identified_functions", {}).items():
+            row = functions.get(address)
+            exported = row["name"] if row is not None else None
+            if exported == proof["exported_name"]:
+                functions.setdefault(address, {"unlisted": True})["identity"] = (proof["symbol"], proof["size"])
     return functions
 
 
@@ -124,8 +129,15 @@ class Artist:
         self.folded_names = {}   # verified call targets sharing a linked body
         self.unnamed = set()
         self.ida_size = {}
+        self._extents = None
+        self._trimmed = {}
+        identities = {}
         for text, row in self.pack.items():
             address = int(text, 16)
+            if "identity" in row:
+                identities[address] = row["identity"]
+            if row.get("unlisted"):
+                continue
             self.names[address] = row["name"]
             if row.get("folded_names"):
                 self.folded_names[address] = {normal_name(name) for name in row["folded_names"]}
@@ -133,12 +145,19 @@ class Artist:
             # unnamed: the ledger's unidentified set when known, else an IDA placeholder name
             if (address in unidentified) if unidentified is not None else row["name"].startswith("sub_"):
                 self.unnamed.add(address)
+        # A name recovered for an export gap must already belong to a disjoint unwind
+        # extent. The evidence supplies an identity, and does not add code to the census.
+        unlisted = identities.keys() - self.names.keys()
+        if unlisted:
+            self.include_unlisted_unwind_functions(unlisted)
+        for address, (name, length) in identities.items():
+            if address in self.unnamed and self.size(address)[0] == length:
+                self.names[address] = name
+                self.unnamed.remove(address)
         self.by_name = {}
         for address, name in self.names.items():
             if address not in self.unnamed:
                 self.by_name.setdefault(normal_name(name), []).append(address)
-        self._extents = None
-        self._trimmed = {}
 
     # -- bytes ------------------------------------------------------------------------
     @property
@@ -170,11 +189,13 @@ class Artist:
             self._extents = packed_extents(self.read(PDATA_START, PDATA_END - PDATA_START))
         return self._extents
 
-    def include_unlisted_unwind_functions(self):
+    def include_unlisted_unwind_functions(self, addresses=None):
         """Include disjoint function extents missing from the name export in the census."""
         starts = sorted(self.names)
         max_ends = list(accumulate((start + self.size(start)[0] for start in starts), max))
-        for address, length in self.extents.items():
+        extents = self.extents
+        entries = extents.items() if addresses is None else ((address, extents[address]) for address in addresses if address in extents)
+        for address, length in entries:
             if address in self.names:
                 continue
             index = bisect_right(starts, address)

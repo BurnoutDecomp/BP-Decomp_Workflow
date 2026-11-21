@@ -16,7 +16,7 @@ sys.path.insert(0, str(HERE))
 
 import coff  # noqa: E402
 import ledger  # noqa: E402
-from artist import Artist, load_pack, packed_extents  # noqa: E402
+from artist import Artist, PDATA_START, load_pack, packed_extents  # noqa: E402
 from compare import compare  # noqa: E402
 
 BLR = 0x4E800020
@@ -262,6 +262,47 @@ def test_catalogue_adds_only_disjoint_unlisted_unwind_functions():
     assert art.unnamed == {base + 0x14, base + 0x28}
     assert art.name_at(base + 0x14) is None
     assert art.size(base + 0x28) == (4, "pdata")
+
+
+def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(tmp_path):
+    base = 0x821F1000
+    exported, unlisted = base, base + 0x20
+    named, overlap = base + 0x40, base + 0x44
+    wrong_size, wrong_export = base + 0x60, base + 0x80
+    pack = {
+        f"0x{exported:08X}": {"name": f"sub_{exported:08X}", "n": 3},
+        f"0x{named:08X}": {"name": "Named", "n": 3},
+        f"0x{wrong_export:08X}": {"name": f"sub_{wrong_export:08X}", "n": 3},
+    }
+    pack_path = tmp_path / "artist.json.gz"
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode("utf-8")))
+    aliases_path = tmp_path / "source_aliases.json"
+    claims = [
+        (exported, f"sub_{exported:08X}", "Exported", 12),
+        (unlisted, None, "Recovered", 8),
+        (named, "Named", "Wrong", 12),
+        (overlap, None, "Overlap", 4),
+        (wrong_size, None, "WrongSize", 4),
+        (wrong_export, "sub_821FFFFF", "WrongExport", 12),
+    ]
+    aliases_path.write_text(json.dumps({"identified_functions": {
+        f"0x{addr:08X}": {"exported_name": raw, "symbol": name, "size": size}
+        for addr, raw, name, size in claims
+    }}), encoding="utf-8")
+    pdata = b"".join(struct.pack(">II", addr, 0x40000000 | size // 4 << 8)
+                     for addr, size in ((unlisted, 8), (overlap, 4), (wrong_size, 12)))
+
+    def read(addr, size):
+        return pdata if addr == PDATA_START else struct.pack(">I", BLR) * (size // 4)
+
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path), read=read, unidentified={exported, wrong_export})
+    assert art.name_at(exported) == "Exported"
+    assert art.name_at(unlisted) == "Recovered"
+    assert art.by_name["Recovered"] == [unlisted]
+    assert art.name_at(named) == "Named"
+    assert overlap not in art.names
+    assert art.name_at(wrong_size) is None
+    assert art.name_at(wrong_export) is None
 
 
 def _universe():
