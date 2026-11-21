@@ -130,6 +130,14 @@
     }
   },
   "functions": {
+    "char>::Cl": {
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::Clear",
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "const": false,
+      "x360_address": "0x828EB2B8",
+      "byte_match": true,
+      "evidence": "ResourceModule::Construct at 0x82905718 calls this 80-byte method after binding the 16 embedded PendingFileResponse records and signed-byte free list. The native IndexedPool instantiation matches all 80 bytes. DecFIGS names the fixed-size pending response pool."
+    },
     "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::": {
       "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::GetResourceRequestInterface",
       "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_Prepare.cpp",
