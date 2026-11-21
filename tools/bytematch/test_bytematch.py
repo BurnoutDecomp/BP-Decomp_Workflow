@@ -182,6 +182,29 @@ def test_unnamed_callee_is_unverified_not_wrong():
     assert result.status == "exact" and result.calls_unverified == 1
 
 
+def test_folded_callee_identity_matches_only_its_attested_address(tmp_path):
+    caller, other_caller = 0x82100000, 0x82100010
+    folded, unrelated = 0x82200000, 0x82200010
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, folded), BLR]),
+                        (other_caller, "OtherCaller", [bl_to(other_caller, unrelated), BLR]),
+                        (folded, "Canonical", [BLR]), (unrelated, "Canonical", [BLR])])
+    pack_path = tmp_path / "artist.json.gz"
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": image.pack}).encode("utf-8")))
+    aliases_path = tmp_path / "source_aliases.json"
+    aliases_path.write_text(json.dumps({"folded_functions": {
+        "0x82200000": {"exported_name": "Canonical", "aliases": {"Alternate": "sdk.lib:leaf.obj"}},
+        "0x82200010": {"exported_name": "Different", "aliases": {"Alternate": "sdk.lib:leaf.obj"}},
+    }}), encoding="utf-8")
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path), read=image.read)
+    art._extents = {}
+    obj = coff.ObjectFile(make_object([("Caller", [BL, BLR], [(0, "Alternate", coff.REL_REL24)])]))
+    fn = obj.functions()[0]
+
+    assert compare(fn, obj, art, caller, 8).status == "exact"
+    assert compare(fn, obj, art, other_caller, 8).status == "nonmatching"
+    assert art.name_at(folded) == "Canonical"
+
+
 def test_register_difference_scores_below_100():
     address = 0x82100000
     art = FakeArtist([(address, "F", [0x7C691B78, 0x38600000, 0x38800000, BLR])])

@@ -172,7 +172,7 @@ def compare(fn: Function, obj: ObjectFile, artist: Artist, address: int, artist_
             name = artist.name_at(target)
             if name is None:
                 result.calls_unverified += 1
-            elif normal_name(name) == ours_name:
+            elif artist.matches_name(target, ours_name):
                 result.calls_checked += 1
             else:
                 result.calls_wrong.append({"at": reloc.offset, "ours": ours_name, "artist": name})

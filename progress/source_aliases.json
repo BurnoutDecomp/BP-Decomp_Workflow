@@ -1,6 +1,113 @@
 {
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
+  "folded_functions": {
+    "0x825011B0": {
+      "exported_name": "BrnGui::Video::GetResourcesToLoad",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 12 bytes at 0x825011B0 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x825011B0 in ARTIST.",
+      "aliases": {
+        "CWMVideoObjectEncoder::InitDownsample": "xmedia.lib:obj\\xbox\\multiresenc.obj"
+      }
+    },
+    "0x82661058": {
+      "exported_name": "BrnSound::Logic::Explosion::ExplosionEffect::GetController",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 8 bytes at 0x82661058 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82661058 in ARTIST.",
+      "aliases": {
+        "prvWMVAccessRegistry": "xmedia.lib:obj\\xbox\\deblock.obj"
+      }
+    },
+    "0x827E2F38": {
+      "exported_name": "BrnWorld::PVSDebugComponent::IsSimple",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 8 bytes at 0x827E2F38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x827E2F38 in ARTIST.",
+      "aliases": {
+        "GetDWORDKey": "xmedia.lib:obj\\xbox\\voenc.obj",
+        "XAudPixAudioBeginFrame": "xaudio.lib:obj\\xbox\\xaudpix.obj",
+        "XAudPixBeginEvent": "xaudio.lib:obj\\xbox\\xaudpix.obj",
+        "XAudPixCleanup": "xaudio.lib:obj\\xbox\\xaudpix.obj",
+        "XAudPixEndEvent": "xaudio.lib:obj\\xbox\\xaudpix.obj",
+        "XAudPixInit": "xaudio.lib:obj\\xbox\\xaudpix.obj",
+        "_isatty": "libcMT.lib:obj\\xbox\\isatty.obj",
+        "_matherr": "libcMT.lib:obj\\xbox\\matherr.obj"
+      }
+    },
+    "0x8284CB38": {
+      "exported_name": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST.",
+      "aliases": {
+        "CTwoPassInfoList::~CTwoPassInfoList": "xmedia.lib:obj\\xbox\\twopass.obj",
+        "CTwoPassStatsList::~CTwoPassStatsList": "xmedia.lib:obj\\xbox\\twopass.obj",
+        "CWMVMBMode::~CWMVMBMode": "xmedia.lib:obj\\xbox\\mode.obj",
+        "CWMVideoObjectEncoder::CodeFieldHeadFieldPicture": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::CodeVOPHeadFieldPicture": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::CodeVOPTypeFieldPicture": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::ConvDCTCoefToRLInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::Decide2MVBlockPatternTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::Decide4MVBlockPatternTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::DecideFieldPictureMVTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::DecideFramePictureMVTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::DecideInterlaceCBPCYTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::DecideInterlaceFrameMBModeTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::DecideInterlaceMBModeTable": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::EvaluateTransformPFrame_Scaleable": "xmedia.lib:obj\\xbox\\vopenc.obj",
+        "CWMVideoObjectEncoder::InitThreads": "xmedia.lib:obj\\xbox\\threadctr_wmv.obj",
+        "CWMVideoObjectEncoder::LoopFilterColIFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceenccorev2.obj",
+        "CWMVideoObjectEncoder::LoopFilterColPFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceenccorev2.obj",
+        "CWMVideoObjectEncoder::LoopFilterRowIFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceenccorev2.obj",
+        "CWMVideoObjectEncoder::LoopFilterRowPFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceenccorev2.obj",
+        "CWMVideoObjectEncoder::PreReconPFieldPicture": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::PreReconPFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::ReconstructPFrameInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::SendStreamIInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::SendStreamPFieldPicture": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::SendStreamPInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencpv2.obj",
+        "CWMVideoObjectEncoder::codeSkippedVOPHeadInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::codeVOPHeadInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::decideDCPredInterlaceV2": "xmedia.lib:obj\\xbox\\interlaceencv2.obj",
+        "CWMVideoObjectEncoder::dumpFrame": "xmedia.lib:obj\\xbox\\voenc.obj",
+        "FinishThreads": "xmedia.lib:obj\\xbox\\threaddirectcolorconv.obj",
+        "_initp_misc_winxfltr": "libcMT.lib:obj\\xbox\\winxfltr.obj"
+      }
+    },
+    "0x829646E0": {
+      "exported_name": "XAUDIO::XAUDIOPACKETCTX>::GetNextEntry",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 72 bytes at 0x829646E0 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x829646E0 in ARTIST.",
+      "aliases": {
+        "XAUDIO::CEmbeddedList<XAUDIO::CVoice>::GetNextEntry": "xaudio.lib:obj\\xbox\\engine.obj",
+        "XAUDIO::CEmbeddedList<XAUDIO::XAUDIOPACKETCTX>::GetNextEntry": "xaudio.lib:obj\\xbox\\packetqueue.obj"
+      }
+    },
+    "0x82964DB8": {
+      "exported_name": "XAudioEffectManager_Release",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 32 bytes at 0x82964DB8 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82964DB8 in ARTIST.",
+      "aliases": {
+        "XAudioFrameBuffer_Release": "xaudio.lib:obj\\xbox\\framebuffer.obj"
+      }
+    },
+    "0x82A61A18": {
+      "exported_name": "BrnPhysics::ContactSpy::ContactSpyInterface::Construct",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 12 bytes at 0x82A61A18 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82A61A18 in ARTIST.",
+      "aliases": {
+        "Huffman_WMV_construct": "xmedia.lib:obj\\xbox\\huffdec_wmv.obj",
+        "RL_ResetLibrary": "xmedia.lib:obj\\xbox\\reflibrary_wmv9.obj"
+      }
+    },
+    "0x82AB4850": {
+      "exported_name": "CClipResize_Init",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 68 bytes at 0x82AB4850 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AB4850 in ARTIST.",
+      "aliases": {
+        "CClipResize::Init": "xmedia.lib:obj\\xbox\\clipresize.obj"
+      }
+    },
+    "0x82AD5078": {
+      "exported_name": "STUB",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST.",
+      "aliases": {
+        "MassiveAdClient3::CLog::Log": "xmassiveadclient.lib:obj\\xbox\\massiveadobject.obj",
+        "MassiveAdClient3::CRequestObject::DumpByteArray": "xmassiveadclient.lib:obj\\xbox\\requestobject.obj",
+        "MassiveDNSCleanUp": "xmassiveadclient.lib:obj\\xbox\\x360massivednssecure.obj"
+      }
+    }
+  },
   "xdk_functions": {
     "__restgprlr": {
       "symbol": "__restgprlr_14",

@@ -60,6 +60,10 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             row = functions.get(address)
             if row and row["name"] == exported_name:
                 row["name"] = proof["symbol"]
+        for address, proof in registry.get("folded_functions", {}).items():
+            row = functions.get(address)
+            if row and row["name"] == proof["exported_name"]:
+                row["folded_names"] = tuple(proof["aliases"])
     return functions
 
 
@@ -117,11 +121,14 @@ class Artist:
         if unidentified is None and pack is None:
             unidentified = load_unidentified()
         self.names = {}          # address -> name
+        self.folded_names = {}   # verified call targets sharing a linked body
         self.unnamed = set()
         self.ida_size = {}
         for text, row in self.pack.items():
             address = int(text, 16)
             self.names[address] = row["name"]
+            if row.get("folded_names"):
+                self.folded_names[address] = {normal_name(name) for name in row["folded_names"]}
             self.ida_size[address] = 4 * int(row.get("n") or 0)
             # unnamed: the ledger's unidentified set when known, else an IDA placeholder name
             if (address in unidentified) if unidentified is not None else row["name"].startswith("sub_"):
@@ -204,3 +211,10 @@ class Artist:
     def name_at(self, address: int):
         name = self.names.get(address)
         return None if name is None or address in self.unnamed else name
+
+    def matches_name(self, address: int, name: str):
+        original = self.name_at(address)
+        if original is None:
+            return False
+        normalized = normal_name(name)
+        return normalized == normal_name(original) or normalized in self.folded_names.get(address, ())
