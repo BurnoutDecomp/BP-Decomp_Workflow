@@ -596,6 +596,9 @@ def universe(args):
         # Every named function keeps its ledger TU, so the X360 treemap groups it exactly
         # like the PC progress map does; SDK-provided bodies only change category and area.
         tu = None if address in artist.unnamed else tu_of.get(by_address.get(address, name))
+        recovered_tu = artist.identified_tus.get(address)
+        if tu is None and recovered_tu in tu_index:
+            tu = recovered_tu
         if address in provided:
             category, area = "sdk", "XDK/" + provided[address]["lib"]
         elif address in artist.unnamed:

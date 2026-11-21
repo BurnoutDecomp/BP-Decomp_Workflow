@@ -68,7 +68,9 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             row = functions.get(address)
             exported = row["name"] if row is not None else None
             if exported == proof["exported_name"]:
-                functions.setdefault(address, {"unlisted": True})["identity"] = (proof["symbol"], proof["size"])
+                functions.setdefault(address, {"unlisted": True})["identity"] = (
+                    proof["symbol"], proof["size"], proof.get("tu"),
+                )
     return functions
 
 
@@ -127,6 +129,7 @@ class Artist:
             unidentified = load_unidentified()
         self.names = {}          # address -> name
         self.folded_names = {}   # verified call targets sharing a linked body
+        self.identified_tus = {}  # optional ledger placement for recovered identities
         self.unnamed = set()
         self.ida_size = {}
         self._extents = None
@@ -150,10 +153,12 @@ class Artist:
         unlisted = identities.keys() - self.names.keys()
         if unlisted:
             self.include_unlisted_unwind_functions(unlisted)
-        for address, (name, length) in identities.items():
+        for address, (name, length, tu) in identities.items():
             if address in self.unnamed and self.size(address)[0] == length:
                 self.names[address] = name
                 self.unnamed.remove(address)
+                if tu is not None:
+                    self.identified_tus[address] = tu
         self.by_name = {}
         for address, name in self.names.items():
             if address not in self.unnamed:

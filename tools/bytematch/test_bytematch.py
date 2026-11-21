@@ -286,7 +286,7 @@ def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(t
         (wrong_export, "sub_821FFFFF", "WrongExport", 12),
     ]
     aliases_path.write_text(json.dumps({"identified_functions": {
-        f"0x{addr:08X}": {"exported_name": raw, "symbol": name, "size": size}
+        f"0x{addr:08X}": {"exported_name": raw, "symbol": name, "size": size, "tu": "vendor:lua"}
         for addr, raw, name, size in claims
     }}), encoding="utf-8")
     pdata = b"".join(struct.pack(">II", addr, 0x40000000 | size // 4 << 8)
@@ -299,6 +299,7 @@ def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(t
     assert art.name_at(exported) == "Exported"
     assert art.name_at(unlisted) == "Recovered"
     assert art.by_name["Recovered"] == [unlisted]
+    assert art.identified_tus == {exported: "vendor:lua", unlisted: "vendor:lua"}
     assert art.name_at(named) == "Named"
     assert overlap not in art.names
     assert art.name_at(wrong_size) is None
