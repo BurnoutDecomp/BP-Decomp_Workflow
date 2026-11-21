@@ -23,6 +23,7 @@ detailed rules — commands, flags, traps, the reasons behind them — live ther
 | chase a behaviour difference from the original game | `diagnose-parity-bug` |
 | write or run a harness case, or run the game at all | `bug-test` |
 | commit or push anything, in either repository | `land-change` |
+| write the `Co-Authored-By` trailer of any commit | `commit-trailer` |
 | build the exe or the game data, or face a compile/link failure in the full build | `build-and-link` |
 | create, mount or fold wave partfiles | `fold-partfiles` |
 | change or run an asset converter | `port-assets` |
@@ -118,11 +119,12 @@ Xbox One x64 export for Apt and every 64-bit width/offset, B4Extern, the X360 au
   file committed in b5-decomp.
 - **`progress/status.json`'s `reviewed` is the default, not a verdict.** Ask the tree:
   `python tools/re/hasbody.py <Class::Method> [--status]`.
-- **Commit trailer — name the model that ACTUALLY RAN the work.** Every commit ends with
-  `Co-Authored-By: Claude <model> <noreply@anthropic.com>`. **Current value:
-  `Claude Opus 5.5`** (set 2026-11-19; update this line whenever the session model changes).
-  This line is the authority: harness strings have been stale after a model switch, and the
-  user's most recent explicit instruction outranks it. Details: `land-change`.
+- **Commit trailer — the EXACT model that ran the work, from `work trailer`.** Every commit
+  ends with the line `work trailer` prints, which it reads from your tool's own session log:
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`,
+  `Co-Authored-By: Codex GPT-6.2 Sol <noreply@openai.com>`. Never write it from memory or as
+  a bare family name (`Codex GPT-6`, `Claude`): a model knows its family, not its exact
+  version. The user's most recent explicit instruction outranks it. Details: `commit-trailer`.
 - **Naming.** New owned C/C++ follows `references/CXX_NAMING_CONVENTIONS.md` (a local
   input): scope+type prefixes (`mpBoostStrategy`, `lfTimeStep`), `KI_`/`KU_`/`KF_`
   constants, `E_` upper-snake enums.

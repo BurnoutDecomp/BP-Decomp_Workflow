@@ -2154,6 +2154,7 @@ DELEGATED = {
     "hooks": ("githooks", "the committed git hooks in tools/githooks/: install | status | uninstall"),
     "mount": ("mount", "add exe-build mount lines; --commit builds a commit of ONLY them on origin/main"),
     "match": ("match", "byte matching vs ARTIST on the x360 tree: setup | measure | refresh | status | next | show | diff"),
+    "trailer": ("trailer", "the Co-Authored-By line for the exact model this session runs, read from its own log"),
 }
 
 

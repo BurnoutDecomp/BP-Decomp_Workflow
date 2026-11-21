@@ -224,7 +224,8 @@ def run(args):
         if not os.path.isfile(os.path.join(B5, *t.b5_path.split("/"))):
             raise MountError(f"{t} does not exist in this checkout")
     if not any("co-authored-by:" in m.lower() for m in args.message) and (args.commit or args.push):
-        print("note: no Co-Authored-By trailer given; add one with -m if a model did this work")
+        print("note: no Co-Authored-By trailer given; if a model did this work, add the line "
+              "`work trailer` prints with -m")
 
     if not args.no_worktree:
         apply_worktree(targets, args.after, args.dry_run)

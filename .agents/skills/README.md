@@ -36,6 +36,7 @@ user-invoked ones below.
 | [`diagnose-parity-bug`](diagnose-parity-bug/SKILL.md) | chasing a behaviour difference from the original game | agent |
 | [`bug-test`](bug-test/SKILL.md) | writing or running a harness case, or any run of the game | agent |
 | [`land-change`](land-change/SKILL.md) | any commit or push, in either repository | agent |
+| [`commit-trailer`](commit-trailer/SKILL.md) | writing the `Co-Authored-By` trailer of any commit: the exact model, from `work trailer` | agent |
 | [`build-and-link`](build-and-link/SKILL.md) | building the exe or game data; any compile or link failure in the full build | agent |
 | [`fold-partfiles`](fold-partfiles/SKILL.md) | creating, mounting or folding wave partfiles | agent |
 | [`port-assets`](port-assets/SKILL.md) | changing or running an asset converter | agent |

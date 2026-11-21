@@ -56,7 +56,8 @@ HYGIENE = (
     (re.compile(r"(?i)\b[a-z]:[\\/]+users[\\/]+[^\\/\s]+"), "user-profile path"),
     (re.compile(r"(?i)(?:^|[\s\"'(`])/(?:[a-z]/)?(?:users|home)/[^/\s]+/"), "user-profile path"),
 )
-EMAIL_OK = ("noreply@anthropic.com", "@users.noreply.github.com", "@example.com", "@example.org",
+EMAIL_OK = ("noreply@anthropic.com", "noreply@openai.com",   # the vendors' commit-trailer addresses
+            "@users.noreply.github.com", "@example.com", "@example.org",
             "git@github.com")   # the SSH remote user, not a person
 _DENYLIST = None
 

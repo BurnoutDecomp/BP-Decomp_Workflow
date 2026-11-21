@@ -7,7 +7,8 @@ description: >-
   (BP-Decomp_Workflow): never commit progress/status.json, the CI audit outputs or the b5-decomp
   pointer (a bot does); do commit, in the same sitting, the parent half of your change (mount
   lines in tools/build/build_game_exe.bat, porter fixes under tools/assets/, your tools/ edits)
-  on origin/main, checked with `git diff --stat`. Covers the Co-Authored-By trailer, shared
+  on origin/main, checked with `git diff --stat`. Covers the Co-Authored-By trailer (the line
+  `work trailer` prints; details in commit-trailer), shared
   checkouts (no `git add -A`, stash or --autostash), hash-object pitfalls, CRLF-safe .bat edits,
   retiring landed branches. Load before any git add, commit,
   push or rebase, or when CI goes red after a push ("ahead N", a single LNK2019).
@@ -62,7 +63,8 @@ it uncommitted for the maintainer unless the request says to commit it.
    `git log --oneline HEAD..origin/main`. Another contributor may have landed the same body or
    mount; read origin's `.bat` before you write mount lines.
 4. Write the commit message to a file with your file-writing tool (a unique name in your scratch
-   folder, never a heredoc), ending with the trailer (see "Commit trailer"). Commit with `-F`.
+   folder, never a heredoc), ending with the line `work trailer` prints, and check it with
+   `work trailer --check <msgfile>` (see "Commit trailer"). Commit with `-F`.
 5. Commit after every green gate, not at the end of a unit of work: a shared tree has been reset
    under a live wave and the uncommitted work vanished without an error (2026-08-29).
 
@@ -121,14 +123,13 @@ Build & Publish with one LNK2019: run `git status -sb` in the parent first.
 
 ## Commit trailer
 
-- Every commit ends with a `Co-Authored-By:` trailer naming the model that **actually ran** the
-  work. The commit author stays whatever identity the committing contributor's git is
-  configured with; only the trailer names the model.
-- Copy the trailer from AGENTS.md's commit-trailer line ("current value"). That line is the
-  authority, and the user's most recent explicit instruction outranks it. An agent that is not
-  Claude names its own model in the same trailer form.
-- Do not trust the harness to tell you which model you are: after a mid-session model switch,
-  both the default co-author string and the "you are powered by" line were stale (2026-08-27).
+- Every commit ends with the `Co-Authored-By:` line that `work trailer` prints for the model that
+  **actually ran** the work, read from your tool's own session log. Never write it from memory
+  or as a bare family name. How it reads the model, the label form, a session that switched
+  models and committing another agent's work: [`commit-trailer`](../commit-trailer/SKILL.md).
+  The user's most recent explicit instruction outranks it.
+- The commit author stays whatever identity the committing contributor's git is configured
+  with; only the trailer names the model.
 - Never rewrite pushed commits to correct a trailer: others have built on them, and a stale
   label is cheaper than rewritten shared history. An older trailer naming an earlier model is
   correct for its date (commits before 2026-08-27 stamped `Claude Fable 5` really were that
@@ -192,6 +193,7 @@ Build & Publish with one LNK2019: run `git status -sb` in the parent first.
 |---|---|
 | `git -C b5-decomp status -sb` / `git status -sb` | dirty paths, ahead/behind, before every commit |
 | `git commit -F <msgfile> -- <paths>` | commit only your paths, message from a file |
+| `work trailer` (`tools/work/trailer.py`), `work trailer --check <msgfile>` | the exact `Co-Authored-By:` line for this session's model, and the check that a message has it |
 | `git diff --stat origin/main <commit>`, `git show --stat <commit>` | the file count and line count you are about to push |
 | `tools/work/publish_snapshot.py` | the bot's publisher: `FILES` is the bot-owned list; its temp-index commit is the model for Route B |
 | `.github/workflows/reconcile-status.yml`, `.github/workflows/build-and-publish.yml` | what the bot commits, and when |
@@ -206,6 +208,7 @@ Build & Publish with one LNK2019: run `git status -sb` in the parent first.
 - [references/crlf-and-content.md](references/crlf-and-content.md): the CRLF-preserving edit,
   its check and repair; message files.
 - [references/retire-branches.md](references/retire-branches.md): proving a branch landed.
+- [`commit-trailer`](../commit-trailer/SKILL.md): the exact model in the `Co-Authored-By:` line.
 - [`build-and-link`](../build-and-link/SKILL.md) (what a mount is, the parent-staleness rule),
   [`fold-partfiles`](../fold-partfiles/SKILL.md), [`port-assets`](../port-assets/SKILL.md),
   [`campaign-lane`](../campaign-lane/SKILL.md), [`campaign-conductor`](../campaign-conductor/SKILL.md).
