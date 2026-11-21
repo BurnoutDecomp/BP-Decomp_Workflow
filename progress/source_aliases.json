@@ -8408,6 +8408,34 @@
       "file": "vendor/lua/src/ldblib.c",
       "tu": "vendor:lua",
       "evidence": "The direct call at 0x82BE0768 is anchored by the exact Lua routine db_getinfo at 0x82BE04E0. The Lua 5.1.1 object matches this full extent."
+    },
+    "0x8295A638": {
+      "exported_name": null,
+      "symbol": "D3D::CaptureFree",
+      "size": 60,
+      "file": "d3d9i.lib:obj\\xbox\\capture.obj",
+      "evidence": "The exact SDK caller ?Initialize@CCapture@D3D@@UAAXPAUD3DDevice@@KP6AXPBXK@ZP6APAXK@ZP6AXPAX@Z@Z references this function pointer at 0x8295A730. Its expected XDK symbol compares exact over 60 bytes with every referenced call and literal checked."
+    },
+    "0x82AC2AB0": {
+      "exported_name": "sub_82AC2AB0",
+      "symbol": "g_VertDownsampleFilter6",
+      "size": 216,
+      "file": "xmedia.lib:obj\\xbox\\multires.obj",
+      "evidence": "The exact SDK caller ?InitMultires@CWMVideoObjectEncoder@@IAAXXZ references this function pointer at 0x82A8C0B4. Its expected XDK symbol compares exact over 216 bytes with every referenced call and literal checked."
+    },
+    "0x82AB0C30": {
+      "exported_name": "sub_82AB0C30",
+      "symbol": "g_PixelMean",
+      "size": 112,
+      "file": "xmedia.lib:obj\\xbox\\interpolate.obj",
+      "evidence": "The exact SDK caller ?InitBlockInterpolation@CWMVideoObjectEncoder@@QAAXXZ references this function pointer at 0x82AB2584. Its expected XDK symbol compares exact over 112 bytes with every referenced call and literal checked."
+    },
+    "0x82AB1008": {
+      "exported_name": "sub_82AB1008",
+      "symbol": "g_CopyMBRow",
+      "size": 84,
+      "file": "xmedia.lib:obj\\xbox\\interpolate.obj",
+      "evidence": "The exact SDK caller ?InitBlockInterpolation@CWMVideoObjectEncoder@@QAAXXZ references this function pointer at 0x82AB2548. Its expected XDK symbol compares exact over 84 bytes with every referenced call and literal checked."
     }
   }
 }
