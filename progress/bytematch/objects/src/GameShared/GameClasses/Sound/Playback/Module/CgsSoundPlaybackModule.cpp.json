@@ -1,13 +1,13 @@
 {
- "blob": "714f1c0c0fdbb28ffc60f780b7dc2bf835f1e60c",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "da0622f16c30ebb1423634b49893583aeb1d7136",
+ "commit": "1eef16732bf433163a6e23e50cb169770265bf69",
  "compiled": true,
- "measured": "2026-11-19T20:44:25Z",
+ "measured": "2026-11-21T13:53:35Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Sound/Playback/Module/CgsSoundPlaybackModule.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 106,
+ "unpaired": 107,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "calls_unverified": 1, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "8227CBE8", "artist_size": 160, "first_diff": 4, "name": "CgsModule::VariableEventQueue<4096,16>::GetLength", "score": 23.2, "size": 116, "status": "nonmatching", "symbol": "?GetLength@?$VariableEventQueue@$0BAAA@$0BA@@CgsModule@@QBAHXZ"},
@@ -27,7 +27,7 @@
   {"artist": "823B0E30", "artist_size": 168, "first_diff": 4, "name": "CgsModule::VariableEventQueue<1024,16>::GetFirstWritePointer", "score": 24.7, "size": 124, "status": "nonmatching", "symbol": "?GetFirstWritePointer@?$VariableEventQueue@$0EAA@$0BA@@CgsModule@@QBAPBDXZ"},
   {"artist": "823B0ED8", "artist_size": 168, "first_diff": 4, "name": "CgsModule::VariableEventQueue<1024,16>::GetSizeInBytes", "score": 24.7, "size": 124, "status": "nonmatching", "symbol": "?GetSizeInBytes@?$VariableEventQueue@$0EAA@$0BA@@CgsModule@@QBAHXZ"},
   {"artist": "82680EF8", "artist_size": 88, "first_diff": 40, "name": "CgsSound::Playback::Environment::GetAllocator", "score": 95.5, "size": 88, "status": "nonmatching", "symbol": "?GetAllocator@Environment@Playback@CgsSound@@QAAPAUIResourceAllocator@rw@@XZ"},
-  {"artist": "82681C70", "artist_size": 92, "first_diff": 44, "name": "CgsSound::Playback::Module::operator++", "score": 95.7, "size": 92, "status": "nonmatching", "symbol": "??EModule@Playback@CgsSound@@YA?AW4EPrepareStage@0012@AAW430012@H@Z"},
+  {"artist": "82681C70", "artist_size": 92, "data_unchecked": 2, "name": "CgsSound::Playback::Module::operator++", "score": 100.0, "size": 92, "status": "exact", "symbol": "??EModule@Playback@CgsSound@@YA?AW4EPrepareStage@0012@AAW430012@H@Z"},
   {"artist": "82689CE0", "artist_size": 128, "first_diff": 44, "name": "CgsSound::Playback::Module::Module::FindStreamBuffer", "score": 93.8, "size": 128, "status": "nonmatching", "symbol": "?FindStreamBuffer@Module@1Playback@CgsSound@@AAAHPBUReadStream@CgsFileSystem@@@Z"},
   {"artist": "82694130", "artist_size": 88, "first_diff": 24, "name": "CgsSound::Playback::Module::Module::GetEnvironment", "score": 90.9, "size": 88, "status": "nonmatching", "symbol": "?GetEnvironment@Module@1Playback@CgsSound@@QAAPAUEnvironment@23@XZ"},
   {"artist": "82694188", "artist_size": 312, "first_diff": 12, "name": "CgsSound::Playback::Module::Module::DumpRegistries", "score": 44.8, "size": 224, "status": "nonmatching", "symbol": "?DumpRegistries@Module@1Playback@CgsSound@@QAAXXZ"},
@@ -43,10 +43,11 @@
   {"artist": "826C14E0", "artist_size": 460, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::ConnectVoice", "score": 28.9, "size": 344, "status": "nonmatching", "symbol": "?ConnectVoice@Module@1Playback@CgsSound@@QAAXPAU?$Handle@VVoice@Playback@CgsSound@@@23@II@Z"},
   {"artist": "826C7BE8", "artist_size": 556, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::AddRegistry", "score": 25.7, "size": 408, "status": "nonmatching", "symbol": "?AddRegistry@Module@1Playback@CgsSound@@QAAXAAURegistry@23@I@Z"},
   {"artist": "826D7D80", "artist_size": 256, "first_diff": 12, "name": "CgsSound::Playback::Module::Module::AttachVoice", "score": 72.4, "size": 252, "status": "nonmatching", "symbol": "?AttachVoice@Module@1Playback@CgsSound@@QAAXPAU?$Handle@VVoice@Playback@CgsSound@@@23@PAU?$Handle@UContent@Playback@CgsSound@@@23@I@Z"},
-  {"artist": "826E90C0", "artist_size": 1600, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::Prepare", "score": 65.5, "size": 1504, "status": "nonmatching", "symbol": "?Prepare@Module@1Playback@CgsSound@@UAA_NPAUIResourceAllocator@rw@@PAVLinearMalloc@CgsMemory@@@Z"},
+  {"artist": "826E90C0", "artist_size": 1600, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::Prepare", "score": 63.8, "size": 1508, "status": "nonmatching", "symbol": "?Prepare@Module@1Playback@CgsSound@@UAA_NPAUIResourceAllocator@rw@@PAVLinearMalloc@CgsMemory@@@Z"},
   {"artist": "826F9F88", "artist_size": 152, "first_diff": 12, "name": "CgsSound::Playback::Module::Module::DoServiceContentLoadRequest", "score": 22.4, "size": 240, "status": "nonmatching", "symbol": "?DoServiceContentLoadRequest@Module@1Playback@CgsSound@@UAA_NIW4EContentLoadMethod@23@PBDPAX@Z"},
   {"artist": "826FA020", "artist_size": 664, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::DoOpenStream", "score": 31.8, "size": 492, "status": "nonmatching", "symbol": "?DoOpenStream@Module@1Playback@CgsSound@@UAAPAUReadStream@CgsFileSystem@@AAUStreamSpec@IStreamProvider@23@@Z"},
   {"artist": "826FA2B8", "artist_size": 428, "first_diff": 8, "name": "CgsSound::Playback::Module::Module::DoCloseStream", "score": 29.3, "size": 336, "status": "nonmatching", "symbol": "?DoCloseStream@Module@1Playback@CgsSound@@UAAXPBUReadStream@CgsFileSystem@@@Z"},
-  {"artist": "827DFA98", "artist_size": 196, "first_diff": 164, "name": "CgsSound::Playback::Module::Module::Module", "score": 90.9, "size": 200, "status": "nonmatching", "symbol": "??0Module@0Playback@CgsSound@@QAA@XZ"}
+  {"artist": "827DFA98", "artist_size": 196, "first_diff": 164, "name": "CgsSound::Playback::Module::Module::Module", "score": 90.9, "size": 200, "status": "nonmatching", "symbol": "??0Module@0Playback@CgsSound@@QAA@XZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

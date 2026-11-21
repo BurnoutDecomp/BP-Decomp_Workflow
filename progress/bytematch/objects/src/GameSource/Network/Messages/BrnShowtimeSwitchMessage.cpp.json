@@ -1,19 +1,20 @@
 {
- "blob": "c8d37fe323a4763956cd08b3331755343dcf9d19",
- "commit": "795b3fb3683b1ef16bc0ded5947cb5d9c79eeca1",
+ "blob": "df61c1e1809e666506440543614dbaaf0646bc52",
+ "commit": "1eef16732bf433163a6e23e50cb169770265bf69",
  "compiled": true,
- "measured": "2026-11-19T21:08:30Z",
+ "measured": "2026-11-21T13:53:35Z",
  "schema": 1,
  "source": "src/GameSource/Network/Messages/BrnShowtimeSwitchMessage.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 1,
+ "unpaired": 2,
  "functions": [
   {"artist": "8257C3B0", "artist_size": 68, "name": "BrnNetwork::ShowtimeSwitchMessage::Construct", "score": 100.0, "size": 68, "status": "exact", "symbol": "?Construct@ShowtimeSwitchMessage@BrnNetwork@@QAAXXZ"},
   {"artist": "8257C3F8", "artist_size": 16, "calls_wrong": [{"artist": "CgsNetwork::TestConnectionMessage::GetPackedMessageSize", "at": 12, "ours": "CgsNetwork::ReliableMessage::GetPackedMessageSize"}], "first_diff": 12, "name": "BrnNetwork::ShowtimeSwitchMessage::GetPackedMessageSize", "score": 75.0, "size": 16, "status": "nonmatching", "symbol": "?GetPackedMessageSize@ShowtimeSwitchMessage@BrnNetwork@@UAAHXZ"},
   {"artist": "8257C408", "artist_size": 116, "first_diff": 4, "name": "BrnNetwork::ShowtimeSwitchMessage::PackOrUnpack", "score": 46.2, "size": 92, "status": "nonmatching", "symbol": "?PackOrUnpack@ShowtimeSwitchMessage@BrnNetwork@@UAAEXZ"},
   {"artist": "8257C480", "artist_size": 12, "data_unchecked": 1, "name": "BrnNetwork::ShowtimeSwitchMessage::GetName", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetName@ShowtimeSwitchMessage@BrnNetwork@@UBAPBDXZ"},
-  {"artist": "8257C490", "artist_size": 120, "first_diff": 48, "name": "BrnNetwork::ShowtimeSwitchMessage::PrepareForSend", "score": 93.3, "size": 120, "status": "nonmatching", "symbol": "?PrepareForSend@ShowtimeSwitchMessage@BrnNetwork@@QAAXGH_N@Z"},
-  {"artist": "8257F8E0", "artist_size": 64, "first_diff": 16, "name": "BrnNetwork::ShowtimeSwitchMessage::Retrieve", "score": 81.2, "size": 64, "status": "nonmatching", "symbol": "?Retrieve@ShowtimeSwitchMessage@BrnNetwork@@QAA_NPAHPA_N@Z"}
+  {"artist": "8257C490", "artist_size": 120, "calls_unverified": 1, "data_unchecked": 2, "name": "BrnNetwork::ShowtimeSwitchMessage::PrepareForSend", "score": 100.0, "size": 120, "status": "exact", "symbol": "?PrepareForSend@ShowtimeSwitchMessage@BrnNetwork@@QAAXGH_N@Z"},
+  {"artist": "8257F8E0", "artist_size": 64, "first_diff": 16, "name": "BrnNetwork::ShowtimeSwitchMessage::Retrieve", "score": 81.2, "size": 64, "status": "nonmatching", "symbol": "?Retrieve@ShowtimeSwitchMessage@BrnNetwork@@QAA_NPAHPA_N@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
