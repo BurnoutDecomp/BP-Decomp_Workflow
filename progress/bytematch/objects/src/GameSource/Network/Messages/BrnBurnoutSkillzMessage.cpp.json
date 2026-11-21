@@ -1,19 +1,22 @@
 {
  "blob": "eeb50a8261dc06b2aa367c05ba6f209dfec0e753",
- "commit": "1eef16732bf433163a6e23e50cb169770265bf69",
+ "commit": "af919777f8516ee10e5ba2c17b8b7ed1b497c603",
  "compiled": true,
- "measured": "2026-11-21T13:53:35Z",
+ "measured": "2026-11-21T16:28:15Z",
  "schema": 1,
  "source": "src/GameSource/Network/Messages/BrnBurnoutSkillzMessage.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
  "unpaired": 6,
  "functions": [
+  {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
+  {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
   {"artist": "8257C2A8", "artist_size": 72, "name": "BrnNetwork::BurnoutSkillzMessage::Construct", "score": 100.0, "size": 72, "status": "exact", "symbol": "?Construct@BurnoutSkillzMessage@BrnNetwork@@QAAXXZ"},
   {"artist": "8257C2F0", "artist_size": 64, "calls_wrong": [{"artist": "CgsNetwork::TestConnectionMessage::GetPackedMessageSize", "at": 40, "ours": "CgsNetwork::ReliableMessage::GetPackedMessageSize"}], "first_diff": 40, "name": "BrnNetwork::BurnoutSkillzMessage::GetPackedMessageSize", "score": 93.8, "size": 64, "status": "nonmatching", "symbol": "?GetPackedMessageSize@BurnoutSkillzMessage@BrnNetwork@@UAAHXZ"},
-  {"artist": "8257F338", "artist_size": 908, "first_diff": 8, "name": "BrnNetwork::BurnoutSkillzMessage::PackOrUnpack", "score": 11.0, "size": 332, "status": "nonmatching", "symbol": "?PackOrUnpack@BurnoutSkillzMessage@BrnNetwork@@UAAEXZ"},
+  {"artist": "8257F338", "artist_size": 908, "first_diff": 8, "name": "BrnNetwork::BurnoutSkillzMessage::PackOrUnpack", "score": 14.8, "size": 392, "status": "nonmatching", "symbol": "?PackOrUnpack@BurnoutSkillzMessage@BrnNetwork@@UAAEXZ"},
   {"artist": "8257F6C8", "artist_size": 184, "data_unchecked": 3, "name": "BrnNetwork::BurnoutSkillzMessage::PrepareForSend", "score": 100.0, "size": 184, "status": "exact", "symbol": "?PrepareForSend@BurnoutSkillzMessage@BrnNetwork@@QAAXGPBUBurnoutSkillzData@BrnGameState@@_N@Z"},
   {"artist": "8257F780", "artist_size": 184, "calls_unverified": 1, "data_unchecked": 3, "name": "BrnNetwork::BurnoutSkillzMessage::Retrieve", "score": 100.0, "size": 184, "status": "exact", "symbol": "?Retrieve@BurnoutSkillzMessage@BrnNetwork@@QAA_NPAUBurnoutSkillzData@BrnGameState@@PA_N@Z"},
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
   {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
