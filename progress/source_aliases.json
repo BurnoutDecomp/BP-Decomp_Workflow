@@ -825,6 +825,140 @@
       "file": "GameSource/Director/Utils/BrnAbstractPool.h",
       "x360_address": "0x827DE4A8",
       "evidence": "AbstractPool<250,8,rw::math::vpu::Vector4>::FreeObject: sole slot of its one-word free-interface vtable; body adds +0x10 (the embedded ObjectPool) and tail-calls ObjectPool<Vector4[250],8,int>::FreeObject (IDB callee name '_250__8_int___FreeObject')."
+    },
+    "??$Dispatch@VDevice@renderengine@@@MeshHelper@renderengine@@QBAXPAVDevice@1@@Z": {
+      "symbol": "renderengine::MeshHelper::Dispatch<renderengine::Device>",
+      "x360_address": "0x8227B530",
+      "byte_match": true,
+      "file": "SDKs/RenderEngineClub/MAIN/components/src/meshhelper.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 184 bytes."
+    },
+    "BrnGameState::GameStateModuleIO::OnlineGameR": {
+      "symbol": "BrnGameState::GameStateModuleIO::OnlineGameResults::operator=",
+      "x360_address": "0x82311C30",
+      "byte_match": true,
+      "file": "GameSource/GameState/BrnGameActions.cpp",
+      "const": false,
+      "evidence": "BrnGameActions names the copy assignment at this address. The aligned native calls at 0x82343F08, 0x8255F8C8 confirm the callee."
+    },
+    "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Even": {
+      "symbol": "BrnGameState::GameStateModuleIO::SpecificGameModeEventInterface::Event::GetLandmark",
+      "x360_address": "0x8240E7E0",
+      "byte_match": true,
+      "file": "GameSource/GameState/BrnGameStateSharedIO.cpp",
+      "const": true,
+      "evidence": "The event declaration and definition identify the const landmark accessor at this address. The aligned native calls at 0x8250749C, 0x824256A8 confirm the callee."
+    },
+    "??$Print@PBEPBE@CgsUnicode@@YAPAEPBEPAEHABQBE2@Z": {
+      "symbol": "CgsUnicode::Print<unsigned char const *,unsigned char const *>",
+      "x360_address": "0x824490E8",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Fonts/CgsUnicode.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 100 bytes."
+    },
+    "??$Print@PBEPBEPBE@CgsUnicode@@YAPAEPBEPAEHABQBE22@Z": {
+      "symbol": "CgsUnicode::Print<unsigned char const *,unsigned char const *,unsigned char const *>",
+      "x360_address": "0x82449150",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Fonts/CgsUnicode.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 124 bytes."
+    },
+    "BrnNetwork::BrnNetworkModule::GetGa": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetGameStateToNetworkInterface",
+      "x360_address": "0x82542CA8",
+      "byte_match": true,
+      "file": "GameSource/Network/BrnNetworkModule.cpp",
+      "const": false,
+      "evidence": "The return at 0x82542D3C forms the GameStateToNetworkInterface address at this+0xC7B90. The aligned native calls at 0x8255360C, 0x82562F94, 0x82549988 confirm the callee."
+    },
+    "BrnNetwork::NetworkImageManager::GetImageMes": {
+      "symbol": "BrnNetwork::NetworkImageManager::GetImageMessageDataEntry",
+      "x360_address": "0x8254A8B8",
+      "byte_match": true,
+      "file": "GameSource/Network/Managers/BrnNetworkImageManager.cpp",
+      "const": false,
+      "evidence": "The network image manager declaration identifies the image message lookup at this address. The aligned native calls at 0x8255DBA8, 0x825761CC confirm the callee."
+    },
+    "BrnNetwork::NetworkImageManager::GetMugshotDataEn": {
+      "symbol": "BrnNetwork::NetworkImageManager::GetMugshotDataEntry",
+      "x360_address": "0x8254A940",
+      "byte_match": true,
+      "file": "GameSource/Network/Managers/BrnNetworkImageManager.cpp",
+      "const": false,
+      "evidence": "The network image manager declaration identifies the mugshot lookup at this address. The aligned native calls at 0x8255DBB8, 0x8254AC34, 0x8254AE20 confirm the callee."
+    },
+    "BrnNetwork::ChallengeSuccessManager:": {
+      "symbol": "BrnNetwork::ChallengeSuccessManager::GetChallengeSuccessDataEntry",
+      "x360_address": "0x8254B350",
+      "byte_match": true,
+      "file": "GameSource/Network/Managers/BrnChallengeSuccessManager.cpp",
+      "const": false,
+      "evidence": "The challenge success manager definition identifies the data entry lookup at this address. The aligned native calls at 0x82556A70, 0x8256BF84 confirm the callee."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::PostSim": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetNetworkEventQueue",
+      "x360_address": "0x8254ED70",
+      "byte_match": true,
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "const": true,
+      "evidence": "ARTIST checks the read lock and returns this+0x11E44 at 0x8254EE08. DecFIGS declares the const accessor. The aligned native calls at 0x8256FEC0, 0x82565478, 0x8256BC0C confirm the callee."
+    },
+    "??$_Adjust_heap@PAGHG@std@@YAXPAGHHG@Z": {
+      "symbol": "std::_Adjust_heap<unsigned short *,int,unsigned short>",
+      "x360_address": "0x8271B778",
+      "byte_match": true,
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 204 bytes."
+    },
+    "??$_Median@PAG@std@@YAXPAG00@Z": {
+      "symbol": "std::_Median<unsigned short *>",
+      "x360_address": "0x8272C918",
+      "byte_match": true,
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 548 bytes."
+    },
+    "??$_Insertion_sort1@PAGG@std@@YAXPAG00@Z": {
+      "symbol": "std::_Insertion_sort1<unsigned short *,unsigned short>",
+      "x360_address": "0x8272CBA0",
+      "byte_match": true,
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 192 bytes."
+    },
+    "CgsNetwork::PlayersConnectionManager": {
+      "symbol": "CgsNetwork::PlayersConnectionManager::GetEntry",
+      "x360_address": "0x828749F8",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Network/Players/CgsPlayersConnectionManagerLookup.cpp",
+      "const": false,
+      "evidence": "The assertion at 0x82874A8C checks the lookup result used by the non-const overload. The aligned native calls at 0x82874AC4, 0x82874B28, 0x82884E64 confirm the callee."
+    },
+    "??$_Median@PA_K@std@@YAXPA_K00@Z": {
+      "symbol": "std::_Median<unsigned __int64 *>",
+      "x360_address": "0x82AD2218",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Graphics/Dispatch/CgsGraphicsDispatchList.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 416 bytes."
+    },
+    "??$_Make_heap@PA_KH_K@std@@YAXPA_K0PAH0@Z": {
+      "symbol": "std::_Make_heap<unsigned __int64 *,int,unsigned __int64>",
+      "x360_address": "0x82AD23B8",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Graphics/Dispatch/CgsGraphicsDispatchList.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 92 bytes."
+    },
+    "??$_Insertion_sort1@PA_K_K@std@@YAXPA_K00@Z": {
+      "symbol": "std::_Insertion_sort1<unsigned __int64 *,unsigned __int64>",
+      "x360_address": "0x82AD2418",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Graphics/Dispatch/CgsGraphicsDispatchList.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 180 bytes."
+    },
+    "??$_Sort_heap@PA_K@std@@YAXPA_K0@Z": {
+      "symbol": "std::_Sort_heap<unsigned __int64 *>",
+      "x360_address": "0x82AD26A8",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Graphics/Dispatch/CgsGraphicsDispatchList.cpp",
+      "evidence": "The complete ARTIST export name is identical to the XDK COFF symbol. The emitted instantiation in the listed source object compares exact over 92 bytes."
     }
   }
 }
