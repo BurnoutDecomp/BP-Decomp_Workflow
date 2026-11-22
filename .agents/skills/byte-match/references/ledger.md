@@ -108,6 +108,9 @@ previous summary, dropped on a regression) and `recent`.
   named 16-byte anchor and the uncatalogued stub must use the same image module. Both symbols
   and their ordinals must agree with ordinal code import objects for the same module in the
   specified XDK library.
+- An existing unnamed extent can declare `sdk_provider` in its `identified_functions` proof.
+  The original export and extent still have to agree, and the SDK verifier compares the named
+  archive member before counting it as SDK code.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines

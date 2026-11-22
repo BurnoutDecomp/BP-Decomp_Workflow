@@ -84,7 +84,7 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             exported = row["name"] if row is not None else None
             if exported == proof["exported_name"]:
                 functions.setdefault(address, {"unlisted": True})["identity"] = (
-                    proof["symbol"], proof["size"], proof.get("tu"),
+                    proof["symbol"], proof["size"], proof.get("tu"), proof.get("sdk_provider"),
                 )
         for kind in ("sdk_leaf", "native_leaf"):
             for address, proof in registry.get(f"{kind}_functions", {}).items():
@@ -190,12 +190,14 @@ class Artist:
         unlisted = identities.keys() - self.names.keys()
         if unlisted:
             self.include_unlisted_unwind_functions(unlisted)
-        for address, (name, length, tu) in identities.items():
+        for address, (name, length, tu, sdk_provider) in identities.items():
             if address in self.unnamed and self.size(address)[0] == length:
                 self.names[address] = name
                 self.unnamed.remove(address)
                 if tu is not None:
                     self.identified_tus[address] = tu
+                if sdk_provider is not None:
+                    self.sdk_leaves[address] = sdk_provider
         if leaves:
             self._include_leaves(leaves)
         if entry_groups:

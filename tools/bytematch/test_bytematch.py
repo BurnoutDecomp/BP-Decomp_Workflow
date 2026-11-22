@@ -309,10 +309,14 @@ def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(t
         (wrong_size, None, "WrongSize", 4),
         (wrong_export, "sub_821FFFFF", "WrongExport", 12),
     ]
-    aliases_path.write_text(json.dumps({"identified_functions": {
+    identities = {
         f"0x{addr:08X}": {"exported_name": raw, "symbol": name, "size": size, "tu": "vendor:lua"}
         for addr, raw, name, size in claims
-    }}), encoding="utf-8")
+    }
+    provider = {"lib": "sdk.lib", "member": "entry.obj", "archive_symbol": "Exported"}
+    for addr in (exported, wrong_size, wrong_export):
+        identities[f"0x{addr:08X}"]["sdk_provider"] = provider
+    aliases_path.write_text(json.dumps({"identified_functions": identities}), encoding="utf-8")
     pdata = b"".join(struct.pack(">II", addr, 0x40000000 | size // 4 << 8)
                      for addr, size in ((unlisted, 8), (overlap, 4), (wrong_size, 12)))
 
@@ -324,6 +328,7 @@ def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(t
     assert art.name_at(unlisted) == "Recovered"
     assert art.by_name["Recovered"] == [unlisted]
     assert art.identified_tus == {exported: "vendor:lua", unlisted: "vendor:lua"}
+    assert art.sdk_leaves == {exported: provider}
     assert art.name_at(named) == "Named"
     assert overlap not in art.names
     assert art.name_at(wrong_size) is None

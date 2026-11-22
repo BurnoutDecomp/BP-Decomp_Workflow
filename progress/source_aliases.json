@@ -5155,6 +5155,56 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x829BE848": {
+      "symbol": "wmvFree",
+      "size": 12,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\init_wmv.obj",
+      "archive_symbol": "wmvFree",
+      "caller": "0x82A66DD8",
+      "call_site": "0x82A66E00",
+      "evidence": "The archive-matched CClipResize_DestructCClipResize caller relocates this branch to wmvFree. The XDK body matches the disjoint 12-byte range and its call target."
+    },
+    "0x82C1FFC8": {
+      "symbol": "GetCurrentThreadId",
+      "size": 12,
+      "lib": "xapilib.lib",
+      "member": "obj\\xbox\\getcurrentthreadid.obj",
+      "archive_symbol": "GetCurrentThreadId",
+      "caller": "0x82947608",
+      "call_site": "0x82947680",
+      "evidence": "The archive-matched D3D::CBlocker::Check caller relocates this branch to GetCurrentThreadId. All 12 bytes match the XDK archive body."
+    },
+    "0x829915F8": {
+      "symbol": "SessionFrameEncoder::IsFieldPicture",
+      "size": 8,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\sesenc.obj",
+      "archive_symbol": "?IsFieldPicture@SessionFrameEncoder@@QAAJXZ",
+      "caller": "0x82A0CFA8",
+      "call_site": "0x82A0D06C",
+      "evidence": "The archive-matched SessionFrameEncoder::InsertFieldSliceStartCode relocates this branch to IsFieldPicture. Both instructions match the XDK archive."
+    },
+    "0x82C43E70": {
+      "symbol": "nemAgcGetMeanEnergy",
+      "size": 8,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\nemagc.obj",
+      "archive_symbol": "nemAgcGetMeanEnergy",
+      "caller": "0x82C41A68",
+      "call_site": "0x82C41A9C",
+      "evidence": "The archive-matched nemAgcVadMain caller identifies this branch. The load and return match the XDK archive exactly."
+    },
+    "0x82A04060": {
+      "symbol": "CQueue::~CQueue",
+      "size": 4,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\reflibrary.obj",
+      "archive_symbol": "??1CQueue@@QAA@XZ",
+      "caller": "0x82992000",
+      "call_site": "0x829920C0",
+      "evidence": "The archive-matched SessionFrameEncoder::ClosePreprocessingBuffer relocates this branch to the CQueue destructor. The standalone return matches the exact XDK symbol."
+    },
     "0x82C0B868": {
       "symbol": "atoi",
       "size": 12,
@@ -5771,6 +5821,23 @@
     }
   },
   "identified_functions": {
+    "0x82C3B030": {
+      "exported_name": "sub_82C3B030",
+      "symbol": "nciInitEncodeSase3200",
+      "size": 280,
+      "sdk_provider": {
+        "lib": "xhv.lib",
+        "member": "obj\\xbox\\ncisaseenc3200.obj",
+        "archive_symbol": "nciInitEncodeSase3200"
+      },
+      "evidence": "The archive-matched nciInitEncode caller identifies this body at 0x82C3B174. Both calls agree with the archive. The callocfunc through sinfunc relocations resolve to 0x832BB9D8 through 0x832BB9EC, matching the six named nciSet callback setters at 0x82C3B5AC through 0x82C3B5FC."
+    },
+    "0x82C3D650": {
+      "exported_name": "sub_82C3D650",
+      "symbol": "NellyInitEncodeSC3",
+      "size": 300,
+      "evidence": "The XDK nciInitEncodeSase3200 object identifies this call at ARTIST 0x82C3B110. The existing SDK range matches the NellyInitEncodeSC3 symbol in xhv.lib encsc.obj."
+    },
     "0x82C0FDD8": {
       "exported_name": "sub_82C0FDD8",
       "symbol": "strtoxl",
