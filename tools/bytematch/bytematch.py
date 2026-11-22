@@ -36,12 +36,31 @@ import sys
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import ledger  # noqa: E402
+from remote import content  # noqa: E402
 
 REPO = ledger.REPO
 DEFAULT_TREE = REPO / "b5-x360"
 CACHE = Path("build") / "x360" / "bytematch"
 INCLUDE_NOTE = re.compile(r"^Note: including file:\s*(.+?)\s*$")
 TOOL_VERSION = 1
+
+
+# Changed comparison inputs require a fresh measurement of the cached objects.
+MEASURE_INPUTS = ["tools/bytematch/artist.py", "tools/bytematch/bytematch.py", "tools/bytematch/coff.py",
+                  "tools/bytematch/compare.py", "tools/bytematch/ledger.py", "progress/asmaudit_artist.json.gz",
+                  "progress/unidentified.json", "progress/source_aliases.json"]
+
+
+def measure_fingerprint(repo: Path = REPO) -> str:
+    digest = hashlib.sha256()
+    for name in MEASURE_INPUTS:
+        path = repo / name
+        digest.update(name.encode() + b"\0" + (path.read_bytes().replace(b"\r\n", b"\n") if path.is_file() else b"-"))
+    return digest.hexdigest()[:16]
+
+
+def measurement_identity(record):
+    return hashlib.sha1(content(record).encode()).hexdigest()
 
 
 # ---------------------------------------------------------------------------- config
@@ -310,15 +329,26 @@ class BuildInputs:
         return state
 
 
-def load_deps(tree):
-    path = cache_dir(tree) / "deps.json"
+def load_deps(tree, *, recorded=False):
+    path = cache_dir(tree) / ("measurements.json" if recorded else "deps.json")
     return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
 
 
-def save_deps(tree, deps):
-    path = cache_dir(tree) / "deps.json"
+def save_deps(tree, deps, *, recorded=False):
+    path = cache_dir(tree) / ("measurements.json" if recorded else "deps.json")
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(deps, sort_keys=True), encoding="utf-8")
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(deps, sort_keys=True), encoding="utf-8")
+    tmp.replace(path)
+
+
+def object_stamp(entry):
+    path = Path(entry["object"])
+    try:
+        stat = path.stat()
+    except FileNotFoundError:
+        return None
+    return [str(path), stat.st_size, stat.st_mtime_ns]
 
 
 def require_landable(tree):
@@ -352,6 +382,8 @@ def measure(args):
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
     inputs = BuildInputs(tree_entries(tree))
     deps = load_deps(tree) if args.record else None
+    measurements = load_deps(tree, recorded=True) if args.record else None
+    measuring = measure_fingerprint() if args.record else None
     artist = Artist().preload() if len(sources) > 20 else Artist()
     stamp = ledger.now_iso()
     totals = defaultdict(int)
@@ -377,6 +409,11 @@ def measure(args):
         if args.record:
             ledger.write_record(record)
             deps[source] = inputs.state(source, index)
+            measurements[source] = {"inputs": deps[source], "measure": measuring,
+                                    "record": measurement_identity(record),
+                                    "object": object_stamp(entry) if entry["passed"] else None,
+                                    "builder": inputs.blobs.get("tools/build_x360.py"),
+                                    "toolchain": record["toolchain"]}
         if args.verbose or len(sources) <= 5:
             print(f"== {source}  {'compiled' if record['compiled'] else 'COMPILE FAILED'}")
             for row in record["functions"]:
@@ -388,6 +425,7 @@ def measure(args):
                 print("   " + err)
     if args.record:
         save_deps(tree, deps)
+        save_deps(tree, measurements, recorded=True)
     print("functions: " + ", ".join(f"{k} {v}" for k, v in sorted(totals.items())) +
           (f"; records written under {ledger.RECORDS.relative_to(REPO)}" if args.record else "; nothing recorded (no --record)"))
 
@@ -398,26 +436,41 @@ def refresh(args):
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
     inputs = BuildInputs(tree_entries(tree))
     index = load_index(tree)
-    deps = load_deps(tree)
+    deps = load_deps(tree, recorded=args.record)
     sources = native_sources(tree)
     records = {r["source"]: r for r in ledger.load_records()}
 
-    stale = []
+    to_compile, to_measure = [], []
+    measuring = measure_fingerprint() if args.record else None
+    builder = inputs.blobs.get("tools/build_x360.py")
     for source in sources:
         entry, record, known = index.get(source), records.get(source), deps.get(source)
-        if entry is None or record is None or known is None or known != inputs.state(source, index):
-            stale.append(source)
-        elif args.record and record.get("toolchain") != toolchain(entry["command"], tree, xdk):
-            stale.append(source)
-    print(f"{len(stale)} of {len(sources)} native sources need compiling and measuring at {head[:12]}")
-    if stale:
-        index = compile_sources(tree, xdk, stale, jobs=args.jobs)
-        ns = argparse.Namespace(**{**vars(args), "sources": stale, "all": False, "no_compile": True, "compile": False,
+        current = inputs.state(source, index)
+        if args.record:
+            stamp = object_stamp(entry) if entry and entry["passed"] else None
+            compile_ = not (known and stamp and known.get("object") == stamp and known.get("inputs") == current
+                            and known.get("builder") == builder
+                            and known.get("toolchain") == toolchain(entry["command"], tree, xdk))
+            measure_ = (compile_ or record is None or known.get("measure") != measuring
+                        or known.get("record") != measurement_identity(record))
+        else:
+            compile_ = entry is None or record is None or known != current
+            measure_ = compile_
+        if compile_:
+            to_compile.append(source)
+        if measure_:
+            to_measure.append(source)
+    print(f"{len(to_measure)} of {len(sources)} native sources need measuring at {head[:12]} "
+          f"({len(to_compile)} to compile)")
+    if to_compile:
+        index = compile_sources(tree, xdk, to_compile, jobs=args.jobs)
+    if to_measure:
+        ns = argparse.Namespace(**{**vars(args), "sources": to_measure, "all": False, "no_compile": True, "compile": False,
                                    "verbose": False})
         measure(ns)
         if not args.record:   # a recorded measure already stored them
             deps = load_deps(tree)
-            for source in stale:
+            for source in to_measure:
                 deps[source] = inputs.state(source, index)
             save_deps(tree, deps)
     if args.record:

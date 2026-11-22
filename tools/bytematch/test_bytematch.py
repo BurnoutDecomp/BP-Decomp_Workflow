@@ -10,6 +10,7 @@ import json
 import struct
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -18,6 +19,7 @@ sys.path.insert(0, str(HERE))
 
 import coff  # noqa: E402
 import ledger  # noqa: E402
+import bytematch  # noqa: E402
 from artist import Artist, PDATA_START, load_pack, packed_extents  # noqa: E402
 from bytematch import BuildInputs, includes_from_log  # noqa: E402
 from compare import compare  # noqa: E402
@@ -543,6 +545,56 @@ def test_summary_requires_measurement_of_current_extent():
     measured = ledger.build_summary(_universe(), [outdated, exact])
     assert measured["functions"][0][3:7] == ["exact", 100.0, 1, 0]
     assert measured["totals"]["all"]["matched_bytes"] == 104
+
+
+def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, tmp_path):
+    source, head = "src/a.cpp", "a" * 40
+    obj = tmp_path / "a.obj"
+    obj.write_bytes(b"cached object")
+    index = {source: {"object": str(obj), "passed": True, "command": ["cl"], "includes": []}}
+    record = _record(source, head, "same-blob", [])
+    trace = []
+
+    monkeypatch.setattr(bytematch, "need_tree", lambda _: tmp_path)
+    monkeypatch.setattr(bytematch, "need_xdk", lambda _: tmp_path)
+    monkeypatch.setattr(bytematch, "require_landable", lambda _: head)
+    monkeypatch.setattr(bytematch, "tree_entries", lambda _: {source: ("blob", "same-blob")})
+    monkeypatch.setattr(bytematch, "native_sources", lambda _: [source])
+    monkeypatch.setattr(bytematch, "load_index", lambda _: index)
+    monkeypatch.setattr(bytematch, "toolchain", lambda *_: record["toolchain"])
+    monkeypatch.setattr(bytematch, "measure", lambda args: trace.append(("measure", args.sources)))
+    monkeypatch.setattr(bytematch, "compile_sources", lambda _, __, sources, **kwargs: trace.append(("compile", sources)))
+    monkeypatch.setattr(ledger, "load_records", lambda: [record])
+    monkeypatch.setattr(ledger, "STATE", tmp_path / "state.json")
+
+    inputs = {source: "same-blob"}
+    bytematch.save_deps(tmp_path, {source: inputs})
+    # A current preview alone does not prove the on-disk record current.
+    bytematch.refresh(SimpleNamespace(record=True, jobs=1))
+    assert trace == [("compile", [source]), ("measure", [source])]
+
+    measurement = {"inputs": inputs, "measure": "before", "record": bytematch.measurement_identity(record),
+                   "object": bytematch.object_stamp(index[source]), "toolchain": record["toolchain"]}
+    bytematch.save_deps(tmp_path, {source: measurement}, recorded=True)
+    monkeypatch.setattr(bytematch, "measure_fingerprint", lambda: "after")
+    trace.clear()
+    bytematch.refresh(SimpleNamespace(record=True, jobs=1))
+    assert trace == [("measure", [source])]
+
+    bytematch.save_deps(tmp_path, {source: dict(measurement, measure="after")}, recorded=True)
+    trace.clear()
+    bytematch.refresh(SimpleNamespace(record=True, jobs=1))
+    assert trace == []
+
+    replacement = dict(record, functions=[{"artist": "82100000", "status": "exact"}])
+    monkeypatch.setattr(ledger, "load_records", lambda: [replacement])
+    bytematch.refresh(SimpleNamespace(record=True, jobs=1))
+    assert trace == [("measure", [source])]
+
+    obj.write_bytes(b"preview object of different size")
+    trace.clear()
+    bytematch.refresh(SimpleNamespace(record=True, jobs=1))
+    assert trace == [("compile", [source]), ("measure", [source])]
 
 
 def test_record_round_trip_and_path_check(tmp_path):

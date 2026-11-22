@@ -46,9 +46,11 @@ summary keeps the best copy measured against the current ARTIST length.
   recompiles exactly the objects whose inputs changed, and advances `state.json` once every record
   is current. The summary shows how many commits the head is past `verified_commit`.
 - A changed toolchain fingerprint (new flags in the branch's `build_x360.py`, another compiler)
-  re-measures every object. The server also re-measures every record when the measuring code
-  changes (`MEASURE_INPUTS` in `tools/bytematch/wine.py`: the comparison modules, the ARTIST name
-  pack, `progress/unidentified.json`, `progress/source_aliases.json`); a local refresh does not.
+  re-measures every object. The server and local `work match refresh --record` also re-measure
+  when the comparison modules or ARTIST name inputs change (`MEASURE_INPUTS` in
+  `tools/bytematch/bytematch.py`). An unchanged native object can be reused when its recorded
+  build inputs and cache stamp agree. Local preview builds do not certify committed records.
+  The first recorded refresh of an older local cache rebuilds objects that lack recorded stamps.
 
 ## The summary and CI
 

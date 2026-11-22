@@ -340,25 +340,6 @@ def symbol_names(path):
 
 
 # ------------------------------------------------------------------------------ refresh
-# What a measurement depends on besides the object: the comparison code and the ARTIST name pack.
-# When any of it changes, every record is measured again (objects stay cached).
-MEASURE_INPUTS = ["tools/bytematch/artist.py", "tools/bytematch/bytematch.py", "tools/bytematch/coff.py",
-                  "tools/bytematch/compare.py", "tools/bytematch/ledger.py", "progress/asmaudit_artist.json.gz",
-                  "progress/unidentified.json", "progress/source_aliases.json"]
-
-
-def measure_fingerprint(repo: Path = ledger.REPO) -> str:
-    digest = hashlib.sha256()
-    for name in MEASURE_INPUTS:
-        path = repo / name
-        digest.update(name.encode() + b"\0" + (path.read_bytes().replace(b"\r\n", b"\n") if path.is_file() else b"-"))
-    return digest.hexdigest()[:16]
-
-
-def identity(record):
-    return hashlib.sha1(content(record).encode()).hexdigest()
-
-
 def refresh(args):
     started = time.time()
     tree, xdk, cache, out = Path(args.tree), Path(args.xdk), Path(args.cache), Path(args.out)
@@ -385,7 +366,7 @@ def refresh(args):
                                                             else ledger.RECORDS)}
     image = Image(Path(args.image))
     generated_includes(tree, image)
-    measuring = measure_fingerprint()
+    measuring = bytematch.measure_fingerprint()
     compiler = Compiler(tree, xdk, objects, flags, includes, timeout=args.timeout)
     compiler.start()
     bytematch._CL_VERSION[compiler.xdk_dos] = compiler.version()
@@ -400,7 +381,7 @@ def refresh(args):
         compile_ = not (entry is not None and known is not None and known.get("inputs") == inputs
                         and compiler.fingerprint(entry["command"]) == current and entry["passed"])
         measure_ = (compile_ or args.all or record is None or record.get("toolchain") != current
-                    or identity(record) != known.get("record") or known.get("measure") != measuring)
+                    or bytematch.measurement_identity(record) != known.get("record") or known.get("measure") != measuring)
         if measure_ and not compile_ and not Path(entry["object"]).is_file():
             compile_ = True    # a seeded cache holds no objects: rebuild the one to re-measure
         if compile_:
@@ -452,7 +433,7 @@ def refresh(args):
             ledger.write_record(record, out / "records")
             written.append(source)
         deps[source] = {"inputs": dependencies.state(source, index),
-                        "record": identity(record), "measure": measuring}
+                        "record": bytematch.measurement_identity(record), "measure": measuring}
     compiler.stop()
     removed =[] if args.sources else sorted(s for s in records if s not in every_source)
     if not args.sources:
