@@ -76,10 +76,12 @@ def verify_leaf_providers(artist, lib_dir):
             continue
         members[proof["lib"]].add(proof["member"])
         entry = proof.get("archive_entry") is True
-        addresses[proof["lib"], proof["member"], proof["archive_symbol"], entry].append(address)
+        for symbol in [proof["archive_symbol"], *proof.get("archive_aliases", ())]:
+            addresses[proof["lib"], proof["member"], symbol, entry].append(address)
 
     found = {}
     group_locations = defaultdict(set)
+    verified_aliases = defaultdict(set)
     for lib, member, obj, fn, entry in library_functions(lib_dir, only_members=members):
         for address in addresses.get((lib, member, fn.symbol, entry), ()):
             size, _ = artist.size(address)
@@ -94,6 +96,12 @@ def verify_leaf_providers(artist, lib_dir):
                 continue
             if "fragments" in proof and not _verify_archive_fragments(artist, address, fn, obj, proof, result):
                 continue
+            if proof.get("archive_aliases"):
+                if result.calls_unverified or result.data_unchecked:
+                    continue
+                if fn.symbol != proof["archive_symbol"]:
+                    verified_aliases[address].add(fn.symbol)
+                    continue
             found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
             if group is not None:
                 group_locations[group].add((fn.section, fn.offset - (address - group)))
@@ -106,6 +114,9 @@ def verify_leaf_providers(artist, lib_dir):
     for address, locations in group_locations.items():
         if len(locations) != 1:
             raise ValueError(f"SDK entry group {address:08X} is not contiguous in its archive member")
+    for address, proof in artist.sdk_leaves.items():
+        if set(proof.get("archive_aliases", ())) != verified_aliases[address]:
+            raise ValueError(f"SDK archive alias comparison failed at {address:08X}")
     return found
 
 

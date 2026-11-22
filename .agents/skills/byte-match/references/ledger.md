@@ -103,6 +103,8 @@ previous summary, dropped on a regression) and `recent`.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
+  Use `archive_aliases` for additional symbols that fold onto the same SDK leaf. Every alias must
+  match the same extent with all its relocations verified by the archive comparison.
   When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition
   that extent. The export length must equal the complete partition, and each entry must compare
   exact at the corresponding offset in one archive section.

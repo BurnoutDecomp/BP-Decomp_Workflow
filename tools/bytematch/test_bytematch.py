@@ -381,6 +381,29 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_sdk_folded_alias_needs_an_independent_archive_match(monkeypatch, tmp_path):
+    import sdk
+
+    address = 0x821F1000
+    words = [0x38600007, BLR]
+    artist = FakeArtist([(address, "Canonical", words)])
+    artist.folded_names[address] = {"Alias"}
+    artist.sdk_leaves[address] = {"lib": "sdk.lib", "member": "leaf.obj", "archive_symbol": "Canonical",
+                                  "archive_aliases": ["Alias"]}
+
+    def set_alias(value):
+        obj = coff.ObjectFile(make_object([("Canonical", words, []), ("Alias", [value, BLR], [])]))
+        monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [
+            ("sdk.lib", "leaf.obj", obj, f, False) for f in obj.functions()
+        ])
+
+    set_alias(0x38600008)
+    with pytest.raises(ValueError, match="archive alias comparison failed"):
+        sdk.verify_leaf_providers(artist, tmp_path)
+    set_alias(words[0])
+    assert sdk.verify_leaf_providers(artist, tmp_path)[address]["symbol"] == "Canonical"
+
+
 def test_linker_import_requires_matching_archive_ordinals_and_image_module(tmp_path):
     import sdk
 

@@ -5239,9 +5239,10 @@
       "lib": "libcMT.lib",
       "member": "obj\\xbox\\atox.obj",
       "archive_symbol": "atoi",
+      "archive_aliases": ["atol"],
       "caller": "0x825469A8",
       "call_site": "0x82546A3C",
-      "evidence": "The exact native NetworkPlayerStats::SetStat caller relocates this branch to atoi. The 12-byte CRT wrapper matches, including the tail relocation from ARTIST 0x82C0B870 to strtol."
+      "evidence": "The exact native NetworkPlayerStats::SetStat caller relocates this branch to atoi. The 12-byte CRT wrapper matches, including the tail relocation from ARTIST 0x82C0B870 to strtol. The XDK atol body has the same bytes and relocation. D3D XBMHandleVersionCheck and XBMHandleLimitCaptureSize relocate their calls to atol at the same ARTIST address."
     },
     "0x82C100D0": {
       "symbol": "strtol",

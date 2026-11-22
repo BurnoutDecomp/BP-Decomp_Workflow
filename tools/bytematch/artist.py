@@ -311,6 +311,9 @@ class Artist:
         self.leaf_extents[address] = (size, kind)
         if kind == "sdk_leaf":
             self.sdk_leaves[address] = proof
+            if proof.get("archive_aliases"):
+                self.folded_names.setdefault(address, set()).update(
+                    normal_name(demangle(alias)) for alias in proof["archive_aliases"])
         if "tu" in proof:
             self.identified_tus[address] = proof["tu"]
         occupied[address] = size
