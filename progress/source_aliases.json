@@ -5186,6 +5186,18 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C71E48": {
+      "symbol": "`dynamic initializer for 'g_Schema''",
+      "size": 20,
+      "lib": "xonline.lib",
+      "member": "obj\\xbox\\xoncore.obj",
+      "archive_symbol": "??__Eg_Schema@@YAXXZ",
+      "crt_slot": "0x82CD3BB8",
+      "crt_data_targets": {
+        "?g_Schema@@3VCSchemaInMemory@@A": "0x83222C90"
+      },
+      "evidence": "The XDK archive registers this body in .CRT$XCU and the ARTIST CRT slot at 0x82CD3BB8 selects it. XLookupSchemaIndexFromOrdinal at 0x8297EA98 independently binds g_Schema to 0x83222C90."
+    },
     "0x8295F4A0": {
       "symbol": "XAUDIO::CObjectRefCount::GetRefCount",
       "size": 8,
@@ -6153,6 +6165,99 @@
     }
   },
   "identified_functions": {
+    "0x82C75918": {
+      "exported_name": "sub_82C75918",
+      "symbol": "XAUDIO::`dynamic atexit destructor for 'g_XAudioEngineLock''",
+      "size": 20,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\globals.obj",
+        "archive_symbol": "??__Fg_XAudioEngineLock@XAUDIO@@YAXXZ",
+        "archive_data_targets": {
+          "?g_XAudioEngineLock@XAUDIO@@3VCCriticalSection@1@A": "0x82F38700",
+          "??_7CCriticalSection@XAUDIO@@6B@": "0x82108FF0"
+        }
+      },
+      "evidence": "The registered g_XAudioEngineLock initializer loads this exact atexit callback at 0x82C71DBC and 0x82C71DC0. XAUDIO::CEngine::Process at 0x82C2E930 independently binds g_XAudioEngineLock to 0x82F38700. The matching XAUDIO::CCriticalSection::`scalar deleting destructor' at 0x8295F3D0 independently confirms the lock vtable at 0x82108FF0."
+    },
+    "0x82C71DA0": {
+      "exported_name": "sub_82C71DA0",
+      "symbol": "XAUDIO::`dynamic initializer for 'g_XAudioEngineLock''",
+      "size": 56,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\globals.obj",
+        "archive_symbol": "??__Eg_XAudioEngineLock@XAUDIO@@YAXXZ",
+        "crt_slot": "0x82CD3BAC",
+        "crt_data_targets": {
+          "?g_XAudioEngineLock@XAUDIO@@3VCCriticalSection@1@A": "0x82F38700",
+          "??__Fg_XAudioEngineLock@XAUDIO@@YAXXZ": "0x82C75918"
+        }
+      },
+      "evidence": "The XDK archive registers this body in .CRT$XCU and the ARTIST CRT slot at 0x82CD3BAC selects it. XAUDIO::CEngine::Process at 0x82C2E930 independently binds g_XAudioEngineLock to 0x82F38700. The atexit pointer at 0x82C71DC0 resolves to the matching callback at 0x82C75918."
+    },
+    "0x82C75930": {
+      "exported_name": "sub_82C75930",
+      "symbol": "XAUDIO::`dynamic atexit destructor for 'g_XAudioAPILock''",
+      "size": 20,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\globals.obj",
+        "archive_symbol": "??__Fg_XAudioAPILock@XAUDIO@@YAXXZ",
+        "archive_data_targets": {
+          "?g_XAudioAPILock@XAUDIO@@3VCCriticalSection@1@A": "0x82F38720",
+          "??_7CCriticalSection@XAUDIO@@6B@": "0x82108FF0"
+        }
+      },
+      "evidence": "The registered g_XAudioAPILock initializer loads this exact atexit callback at 0x82C71DF4 and 0x82C71DF8. XAudioCreateSourceVoice at 0x82C2D3DC independently binds g_XAudioAPILock to 0x82F38720. The matching XAUDIO::CCriticalSection::`scalar deleting destructor' at 0x8295F3D0 independently confirms the lock vtable at 0x82108FF0."
+    },
+    "0x82C71DD8": {
+      "exported_name": "sub_82C71DD8",
+      "symbol": "XAUDIO::`dynamic initializer for 'g_XAudioAPILock''",
+      "size": 56,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\globals.obj",
+        "archive_symbol": "??__Eg_XAudioAPILock@XAUDIO@@YAXXZ",
+        "crt_slot": "0x82CD3BB0",
+        "crt_data_targets": {
+          "?g_XAudioAPILock@XAUDIO@@3VCCriticalSection@1@A": "0x82F38720",
+          "??__Fg_XAudioAPILock@XAUDIO@@YAXXZ": "0x82C75930"
+        }
+      },
+      "evidence": "The XDK archive registers this body in .CRT$XCU and the ARTIST CRT slot at 0x82CD3BB0 selects it. XAudioCreateSourceVoice at 0x82C2D3DC independently binds g_XAudioAPILock to 0x82F38720. The atexit pointer at 0x82C71DF8 resolves to the matching callback at 0x82C75930."
+    },
+    "0x82C75948": {
+      "exported_name": "sub_82C75948",
+      "symbol": "`dynamic atexit destructor for 'g_csOverrideRestore''",
+      "size": 20,
+      "sdk_provider": {
+        "lib": "xmp.lib",
+        "member": "obj\\xbox\\xmp.obj",
+        "archive_symbol": "??__Fg_csOverrideRestore@@YAXXZ",
+        "archive_data_targets": {
+          "?g_csOverrideRestore@@3VCCriticalSection@@A": "0x82F38750",
+          "??_7CCriticalSection@@6B@": "0x8210BC20"
+        }
+      },
+      "evidence": "The registered g_csOverrideRestore initializer loads this exact atexit callback at 0x82C71E2C and 0x82C71E30. XMPOverrideBackgroundMusic at 0x8297DAB8 independently binds g_csOverrideRestore to 0x82F38750. The matching CCriticalSection::`scalar deleting destructor' at 0x8297D9F8 independently confirms the lock vtable at 0x8210BC20."
+    },
+    "0x82C71E10": {
+      "exported_name": "sub_82C71E10",
+      "symbol": "`dynamic initializer for 'g_csOverrideRestore''",
+      "size": 56,
+      "sdk_provider": {
+        "lib": "xmp.lib",
+        "member": "obj\\xbox\\xmp.obj",
+        "archive_symbol": "??__Eg_csOverrideRestore@@YAXXZ",
+        "crt_slot": "0x82CD3BB4",
+        "crt_data_targets": {
+          "?g_csOverrideRestore@@3VCCriticalSection@@A": "0x82F38750",
+          "??__Fg_csOverrideRestore@@YAXXZ": "0x82C75948"
+        }
+      },
+      "evidence": "The XDK archive registers this body in .CRT$XCU and the ARTIST CRT slot at 0x82CD3BB4 selects it. XMPOverrideBackgroundMusic at 0x8297DAB8 independently binds g_csOverrideRestore to 0x82F38750. The atexit pointer at 0x82C71E30 resolves to the matching callback at 0x82C75948."
+    },
     "0x82BCF398": {
       "exported_name": null,
       "symbol": "MassiveAdClient3::CRequestObject::ClearThirdPartyID",

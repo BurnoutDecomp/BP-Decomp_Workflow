@@ -171,13 +171,15 @@ def _verify_data_targets(artist, address, fn, obj, expected, result):
         if rel.type not in (REL_REFHI, REL_REFLO) or fn.target(obj, rel) not in expected:
             continue
         word = linked[rel.offset // 4]
+        opcode = word >> 26
         if rel.offset in addends or ours[rel.offset // 4] & 0xFFFF:
             return False
         if rel.type == REL_REFHI and word & 0xFC1F0000 == 0x3C000000:
             highs[rel.symbol] = word
-        elif rel.type == REL_REFLO and word >> 26 == 14 and rel.symbol in highs:
+        elif rel.type == REL_REFLO and (opcode == 14 or 32 <= opcode <= 55) and rel.symbol in highs:
             high = highs[rel.symbol]
-            if (high >> 21) & 31 == (word >> 16) & 31:
+            base = (word >> 16) & 31
+            if base and (high >> 21) & 31 == base:
                 checked.append((fn.target(obj, rel), refhi_lo_address(high, word)))
     return (len(checked) == result.data_unchecked and dict(checked) == expected
             and all(expected[name] == target for name, target in checked))

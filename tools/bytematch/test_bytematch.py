@@ -479,12 +479,13 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
-def test_sdk_address_taken_leaf_requires_matching_pointer_and_archive_data(monkeypatch, tmp_path):
+@pytest.mark.parametrize("low_word", [0x388C0000, 0x808C0000, 0x908C0000], ids=["addi", "lwz", "stw"])
+def test_sdk_address_taken_leaf_requires_matching_pointer_and_archive_data(monkeypatch, tmp_path, low_word):
     caller, leaf, constant, mutable = 0x821F1000, 0x821F2000, 0x832BB854, 0x83227400
     payload = struct.pack(">4I", 1, 2, 3, 4)
     data = {constant + offset: payload[offset:offset + 4] for offset in range(0, 16, 4)}
     image = FakeArtist([(caller, "Setup", [0x3D60821F, 0x386B2000, BLR]),
-                        (leaf, "VectorLeaf", [0x3D60832C, 0x386BB854, 0x3D808322, 0x388C7400, BLR])], data)
+                        (leaf, "VectorLeaf", [0x3D60832C, 0x386BB854, 0x3D808322, low_word | 0x7400, BLR])], data)
 
     def read(address, size):
         return b"" if address == PDATA_START else image.read(address, size)
@@ -497,7 +498,7 @@ def test_sdk_address_taken_leaf_requires_matching_pointer_and_archive_data(monke
     pack = {f"0x{caller:08X}": {"name": "Setup", "n": 3},
             f"0x{leaf:08X}": {"unlisted": True, "sdk_leaf": proof}}
     art = Artist(pack=pack, read=read)
-    obj = coff.ObjectFile(make_object([("VectorLeaf", [0x3D600000, 0x386B0000, 0x3D800000, 0x388C0000, BLR],
+    obj = coff.ObjectFile(make_object([("VectorLeaf", [0x3D600000, 0x386B0000, 0x3D800000, low_word, BLR],
                                        [(0, "VectorConstant", coff.REL_REFHI), (4, "VectorConstant", coff.REL_REFLO),
                                         (8, "MutableTable", coff.REL_REFHI), (12, "MutableTable", coff.REL_REFLO)])]))
     next(sym for sym in obj.symbols.values() if sym.name == "VectorConstant").section = 2
