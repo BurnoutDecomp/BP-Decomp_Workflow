@@ -9311,6 +9311,13 @@
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
       "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
       "evidence": "EditRecord::RevertReplace passes the EditSpecifier and the two output references at 0x8280DAD4. The callee looks up the attribute definition and returns the addressed data with its type and definition."
+    },
+    "0x828DAC68": {
+      "exported_name": null,
+      "symbol": "CgsResource::DebugPoolTextures::Reset",
+      "size": 196,
+      "file": "GameShared/GameClasses/System/Resource/CgsDebugPoolTextures.cpp",
+      "evidence": "ResetWindow tail-branches here at 0x828EE538. The corresponding native COFF relocation names DebugPoolTextures::Reset. The callee prepares a 612-by-512 debug window using the pool name, then stores the pool, callback, user data and both mode arguments."
     }
   },
   "native_leaf_functions": {
