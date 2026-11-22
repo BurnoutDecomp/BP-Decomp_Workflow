@@ -350,6 +350,48 @@
     }
   },
   "xdk_functions": {
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::CMassiveAdObjectSubscriber": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::XMassiveAdClientSubscriber",
+      "x360_address": "0x82BCE968",
+      "byte_match": true,
+      "evidence": "The XDK subscriber class owns the four matching impression and ID methods and is the parameter type in the matching CreateSlaveMAO bodies. The ARTIST constructor installs the subscriber table at 0x8218478C. The XDK constructor is a different extent."
+    },
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::SetImpression": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::SetImpression",
+      "x360_address": "0x82BCEB88",
+      "byte_match": true,
+      "evidence": "The matching 92-byte SDK body declares void SetImpression(MAD_Impression*) and clears and copies 32 bytes to the ARTIST subscriber at +0x14."
+    },
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::GetImpression": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::GetImpression",
+      "x360_address": "0x82BCEBE8",
+      "byte_match": true,
+      "evidence": "The matching 76-byte SDK body returns a MAD_Impression pointer and copies 32 bytes from ARTIST subscriber +0x14 to +0x34."
+    },
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::GetInvElementID": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::GetInvElementID",
+      "x360_address": "0x82BCEC38",
+      "byte_match": true,
+      "evidence": "The SDK declares the unsigned getter and supplies the same 28-byte body at this ARTIST address."
+    },
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::GetCrexID": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::GetCrexID",
+      "x360_address": "0x82BCEC58",
+      "byte_match": true,
+      "evidence": "The SDK declares the unsigned getter and supplies the same 24-byte body and tail call to CMassiveAdObject::GetCrexID."
+    },
+    "MassiveAdClient3::CMassiveAdObjectSubscriber::MediaDownloadComplete": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::MediaDownloadComplete",
+      "x360_address": "0x82BCEC70",
+      "byte_match": true,
+      "evidence": "The SDK subscriber archive has the same 332-byte instruction body. ARTIST dispatches this method through the callback slot at 0x82184790."
+    },
+    "MassiveAdClient3::CMassiveAdObjectModelDynamic::CreateSlaveM": {
+      "symbol": "MassiveAdClient3::CMassiveAdObjectModelDynamic::CreateSlaveMAO",
+      "x360_address": "0x82BDE850",
+      "byte_match": true,
+      "evidence": "The SDK declares CreateSlaveMAO with XMassiveAdClientSubscriber* for all four dynamic object classes. The ARTIST model initializer calls this entry at 0x82BDEF64. Its 268-byte body differs from the 264-byte XDK body."
+    },
     "__restgprlr": {
       "symbol": "__restgprlr_14",
       "x360_address": "0x82C08F00",
@@ -377,7 +419,7 @@
           }
         }
       },
-      "evidence": "The 252-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187BCC matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
+      "evidence": "The 252-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187BCC matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration uses the same subscriber type."
     },
     "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveM": {
       "symbol": "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveMAO",
@@ -397,7 +439,7 @@
           "??_7CMassiveAdObjectAudio@MassiveAdClient3@@6B@": "0x821871C4"
         }
       },
-      "evidence": "The 272-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C04 matches its archive string. The CMassiveAdObjectAudio vtable at 0x821871C4 has the archive's Initialize, Tick, Suspend, SubscriberAdd, GetNextAssetID and GetBestImpression in the same slots. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
+      "evidence": "The 272-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C04 matches its archive string. The CMassiveAdObjectAudio vtable at 0x821871C4 has the archive's Initialize, Tick, Suspend, SubscriberAdd, GetNextAssetID and GetBestImpression in the same slots. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration uses the same subscriber type."
     },
     "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveM": {
       "symbol": "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveMAO",
@@ -414,7 +456,7 @@
           }
         }
       },
-      "evidence": "The 256-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C3C matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
+      "evidence": "The 256-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C3C matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration uses the same subscriber type."
     }
   },
   "functions": {
@@ -10448,6 +10490,14 @@
     }
   },
   "native_leaf_functions": {
+    "0x82BAC980": {
+      "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::MediaDownload",
+      "size": 8,
+      "source": "src/SDKs/Packages/MassiveAd/MassiveAdClient3Subscriber_wS34_00.cpp",
+      "tu": "class:MassiveAdClient3::CMassiveAdObjectSubscriber",
+      "vtable_slots": ["0x8218478C"],
+      "evidence": "The ARTIST subscriber constructor installs the table at 0x8218478C. Its first slot corresponds to MediaDownload in the XDK subscriber vtable, and the native slot names the same callback. Both complete instructions match. The next catalogued function starts at 0x82BAC988."
+    },
     "0x82BDC4D0": {
       "symbol": "MassiveAdClient3::CRequestExitZone::GetRequestURL",
       "size": 12,
