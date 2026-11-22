@@ -29,6 +29,7 @@ SOURCE_ALIASES = REPO / "progress" / "source_aliases.json"
 # Image layout of BURNOUT_X360_ARTIST.XEX. Packed unwind records also cover the
 # executable codec sections after the primary text segment.
 PDATA_START, PDATA_END = 0x821BB000, 0x821ED960
+RDATA_START, RDATA_END = 0x82000600, 0x821BAE78
 TEXT_START, PRIMARY_TEXT_END = 0x821F0000, 0x82C775D0
 TEXT_END = 0x82CCFE7C
 
@@ -235,9 +236,7 @@ class Artist:
             self.unnamed.add(address)
 
     def _include_leaves(self, proofs):
-        """Recover leaf entries and omitted tails using control flow into image gaps."""
-        from compare import branch_target
-
+        """Recover leaf entries and omitted tails using references into image gaps."""
         occupied = self.extents | {address: self.size(address)[0] for address in self.names}
         candidates = []
         for address, (kind, proof) in proofs.items():
@@ -255,21 +254,14 @@ class Artist:
             if (start not in available or start < end or address % 4 or address + size <= start
                     or size % 4 or address + size > TEXT_END):
                 raise ValueError(f"Invalid or overlapping {label} extent at {address:08X}")
-            caller, site = int(proof["caller"], 16), int(proof["call_site"], 16)
-            if (site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4
-                    or (extending and caller != address)):
-                raise ValueError(f"{label} {address:08X} has a witness outside its caller")
-            if "table_entry" in proof:
-                entry = int(proof["table_entry"], 16)
-                if not extending or not self._switch_reaches_tail(caller, site, entry, start, address + size):
-                    raise ValueError(f"{label} {address:08X} has no matching switch table at {site:08X}")
+            if "vtable_slots" in proof:
+                slots = [int(slot, 16) for slot in proof["vtable_slots"]]
+                if (kind != "native_leaf" or extending or not slots or not all(
+                        slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
+                        and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
+                    raise ValueError(f"{label} {address:08X} has no matching vtable witness")
             else:
-                word, = struct.unpack(">I", self.bytes(site, 4))
-                opcode = word >> 26
-                target = branch_target(word, site, 0x03FFFFFC if opcode == 18 else 0x0000FFFC)
-                if (extending and (opcode not in (16, 18) or not start <= target < address + size)
-                        or not extending and (opcode != 18 or target != address)):
-                    raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
+                self._check_leaf_branch(proof, occupied, label, address, start, address + size)
             self.names[address] = proof["symbol"]
             self.leaf_extents[address] = (size, kind)
             if kind == "sdk_leaf":
@@ -277,6 +269,26 @@ class Artist:
             if "tu" in proof:
                 self.identified_tus[address] = proof["tu"]
             end = address + size
+
+    def _check_leaf_branch(self, proof, occupied, label, address, start, end):
+        from compare import branch_target
+
+        extending = start != address
+        caller, site = int(proof["caller"], 16), int(proof["call_site"], 16)
+        if (site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4
+                or (extending and caller != address)):
+            raise ValueError(f"{label} {address:08X} has a witness outside its caller")
+        if "table_entry" in proof:
+            entry = int(proof["table_entry"], 16)
+            if not extending or not self._switch_reaches_tail(caller, site, entry, start, end):
+                raise ValueError(f"{label} {address:08X} has no matching switch table at {site:08X}")
+        else:
+            word, = struct.unpack(">I", self.bytes(site, 4))
+            opcode = word >> 26
+            target = branch_target(word, site, 0x03FFFFFC if opcode == 18 else 0x0000FFFC)
+            if (extending and (opcode not in (16, 18) or not start <= target < end)
+                    or not extending and (opcode != 18 or target != address)):
+                raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
 
     def _switch_reaches_tail(self, caller, site, entry, tail, end):
         """Check an XDK absolute jump table and a case that reaches the omitted tail."""

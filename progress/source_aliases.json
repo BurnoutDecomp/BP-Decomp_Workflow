@@ -9426,6 +9426,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x826C4C20": {
+      "symbol": "CgsSound::Logic::State::Detach",
+      "size": 60,
+      "file": "GameShared/GameClasses/Sound/Logic/CgsState.cpp",
+      "tu": "GameShared/GameClasses/Sound/Logic/CgsState.cpp",
+      "native_symbol": "?Detach@State@Logic@CgsSound@@UAA_NXZ",
+      "vtable_slots": ["0x820AE20C", "0x820B2B30"],
+      "evidence": "ARTIST State destructor at 0x826ABCF4..0x826ABCFC installs table 0x820AE1F4. Its +0x18 slot and the corresponding PassbyState slot both point to 0x826C4C20. DecFIGS declares virtual bool Detach(), and the XDK State vtable relocates +0x18 to State::Detach. The native body compares exact for 60 bytes through the return at 0x826C4C58."
+    },
     "0x82805828": {
       "symbol": "Attrib::StringToKey",
       "size": 88,

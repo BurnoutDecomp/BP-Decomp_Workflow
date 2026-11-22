@@ -105,6 +105,9 @@ previous summary, dropped on a regression) and `recent`.
   `bctr` as `call_site` and supply the address of the `table_entry` whose case reaches the tail.
   The omitted range must fit a gap and the complete body must compare exact. Check the native
   jump table's relocations against the ARTIST case offsets before recording a switch extent.
+  A virtual leaf can use `vtable_slots` instead of a caller and branch. Establish the ARTIST table
+  owner and slot, check the pointer and native vtable relocation, and record that evidence with
+  the symbol. The catalogue requires each listed slot to contain the leaf address in `.rdata`.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,
