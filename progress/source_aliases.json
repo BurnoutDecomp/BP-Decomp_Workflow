@@ -354,6 +354,24 @@
       "x360_address": "0x82C0A5DC",
       "byte_match": true,
       "evidence": "ARTIST starts with lfd f14,-0x90(r12). All 76 bytes through blr match the __restfpr_14 entry in XDK 6534.4 libcMT.lib crtfpr.obj."
+    },
+    "MassiveAdClient3::CMassiveAdObjectTextureDynamic::CreateSlav": {
+      "symbol": "MassiveAdClient3::CMassiveAdObjectTextureDynamic::CreateSlaveMAO",
+      "x360_address": "0x82BDD910",
+      "byte_match": true,
+      "evidence": "The 252-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187BCC matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
+    },
+    "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveM": {
+      "symbol": "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveMAO",
+      "x360_address": "0x82BDDE20",
+      "byte_match": true,
+      "evidence": "The 272-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C04 matches its archive string. The CMassiveAdObjectAudio vtable at 0x821871C4 has the archive's Initialize, Tick, Suspend, SubscriberAdd, GetNextAssetID and GetBestImpression in the same slots. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
+    },
+    "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveM": {
+      "symbol": "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveMAO",
+      "x360_address": "0x82BDE340",
+      "byte_match": true,
+      "evidence": "The 256-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C3C matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
     }
   },
   "functions": {
