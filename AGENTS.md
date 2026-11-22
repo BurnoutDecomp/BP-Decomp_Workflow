@@ -85,6 +85,10 @@ with the XDK, function by function against ARTIST's own bytes, and keeps its own
 [`progress/bytematch/`](progress/bytematch/). It never changes `dev`'s target; load
 `byte-match` before working on it.
 
+On `x360`, recover the original types, layouts, signatures and helpers before adjusting code
+generation. Both source fidelity and exact bytes matter. Cite evidence for unusual constructs,
+and record unresolved differences instead of introducing a code-generation workaround.
+
 **The standard is 1:1 with the original, visually and behaviourally, and the method is
 decompilation.** Transcribe what the console's code does and 1:1 follows; never tune toward
 a screenshot or a feeling. "Not 1:1" needs the console's number, not intuition. Never launch

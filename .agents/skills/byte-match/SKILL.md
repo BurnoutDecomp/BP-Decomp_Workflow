@@ -106,8 +106,10 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
    class). Follow the branch's layout; never add a file under `src/pc/`.
 6. Iterate: `work match diff NAME --compile` recompiles that one source and prints our
    instructions beside ARTIST's (`~` changed, `-` only ours, `+` only ARTIST, with call targets
-   named on both sides). Change one thing per round; [references/reading-diffs.md](references/reading-diffs.md)
-   says which source changes move which differences.
+   named on both sides). Before adjusting code generation, check the original declaration,
+   type widths and signedness, layout, signatures and available helpers. Fix the owning type
+   or helper and check its consumers. [references/reading-diffs.md](references/reading-diffs.md)
+   describes how to investigate different instruction changes.
 7. Check the object: `work match measure <source> --compile` lists every function the object
    defines. No function that was `exact` may regress; a shared header edit can move other objects,
    which the measurement of your push catches.
@@ -128,16 +130,24 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
   `__emit`-style intrinsic, a code array), and never change `tools/bytematch/compare.py` to turn a
   mismatch exact. A comparator fix needs a failing unit test in `tools/bytematch/test_bytematch.py`
   first.
-- **Plausible source.** Match with code the original programmers could have written. When only
-  an odd construct matches (a pointless temporary, a reordered declaration kept for codegen),
-  keep it and say so in a `// FAKEMATCH: <what forces it>` comment, so the next agent knows it is
-  codegen pressure and not semantics.
+- **Source fidelity and byte matching are both required.** Recover the supported declaration,
+  semantics and abstraction before tuning the generated instructions. Use existing methods, types
+  and SDK APIs when the evidence supports them. For a shared type change, compile the full include
+  closure with the XDK, check affected offsets/size/alignment and compare all previously exact
+  functions in those objects.
+- **Justify unusual constructs.** A low-level cast, explicit alignment or padding, compiler
+  directive, temporary or control-flow shape needs a brief source comment or commit note naming
+  the ARTIST address or other declaration/SDK evidence and the requirement it satisfies. An
+  instruction difference alone cannot justify `volatile`, a duplicate helper or a type pun.
+  If a supported source form and an existing exact match conflict, record the evidence, attempted
+  source and remaining byte difference. Keep the verified baseline until a supported replacement
+  passes both checks. A `FAKEMATCH` comment records a conflict and grants no exception.
 - **Never invent.** Constants come from the image (`python tools/re/x360rd.py <addr> <n>`), cited
   by address, never tuned until the diff goes quiet. A literal-pool mismatch in the diff means the
   constant is wrong, not the scheduling.
-- **One authority.** A body that matches ARTIST is right even where `dev`'s PC body differs; a
-  semantic bug found while matching is reported for `dev` ([`diagnose-parity-bug`](../diagnose-parity-bug/SKILL.md)),
-  not fixed in passing on the other branch.
+- **One authority.** ARTIST decides native behavior and layout, with declaration evidence from
+  `console-evidence`. Report a semantic bug found while matching for `dev` using
+  [`diagnose-parity-bug`](../diagnose-parity-bug/SKILL.md).
 - **The ledger describes commits.** Records name a pushed `x360` commit; `--record` refuses
   anything else, the server measures nothing else, and nobody works around either.
 - **The server compiles every push, so its sandbox stays closed.** Never make `wine.py` import or

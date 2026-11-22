@@ -17,15 +17,15 @@ moves the difference. Confirm every change with another `diff --compile`.
 
 | What the diff shows | Usually caused by | Try |
 |---|---|---|
-| The same instructions with other register numbers | a different order in which values become live, or a temporary the original did not have (or lacked one it had) | reorder declarations and statements; introduce or remove a named temporary; reuse one variable instead of two |
-| The same instructions in another order | statement order, or independent loads and stores the scheduler placed differently | reorder the statements that produce those loads; split or join an expression |
+| The same instructions with other register numbers | a different order in which values become live, or a temporary the original did not have (or lacked one it had) | verify types, dataflow and helper boundaries before changing declarations or local lifetimes |
+| The same instructions in another order | statement order, or independent loads and stores the scheduler placed differently | verify the order of source operations and observable effects; record any remaining scheduling difference |
 | `bl __savegprlr_N` / `__restgprlr_N` with another N | `__savegprlr_N` saves rN to r31 and the link register: a different N means a different number of callee-saved registers, so a different number of values live across a call | find the value that lives across a call in one version and not the other |
 | `stwu r1,-X(r1)` with another X | a different frame: locals, spill slots, outgoing arguments | an extra or missing local, a struct passed by value, a larger array |
 | Branch polarity or block order differs | `if`/`else` order, an early return, the order of `&&`/`||` operands, `for` against `while` | mirror the console's block order; test the condition the way the first branch reads |
-| We call a function ARTIST inlined (or the reverse) | the callee's definition is or is not visible and inline where the original had it | move the definition into or out of the header; check the original's `inline`; `__forceinline` only with a `FAKEMATCH` note |
+| We call a function ARTIST inlined (or the reverse) | the callee's definition is or is not visible and inline where the original had it | check its owning declaration and definition visibility; use compiler directives only with independent source or SDK evidence |
 | `wrong calls` | a different overload or a different function with the same shape | call the function ARTIST calls; check the argument types that pick the overload |
 | `wrong constants` | a literal with the wrong value | read the value from the image at the address in the report (`python tools/re/x360rd.py <addr> 4`) |
-| Extra or missing sign/zero extensions (`extsh`, `extsb`, `clrlwi`, `rlwinm`) | an integer type of the wrong width or signedness | match the console's type: `u8`/`s16`/`u32`, a `bool` against an `int` |
+| Signed/unsigned comparisons or extra/missing extensions (`extsh`, `extsb`, `clrlwi`, `rlwinm`) | a placeholder or a type with the wrong width or signedness | check the owning field, enum, container or API and verify all its consumers; recover that type before adding any cast |
 | Our body is longer or shorter | dropped or invented behaviour: a missing check, an assert the console does not have, a call to a helper it does not make | read ARTIST's extra or missing block; never pad or trim to fit |
 
 ## When it will not move
@@ -42,3 +42,20 @@ moves the difference. Confirm every change with another `diff --compile`.
   branch's `build_x360.py` for every object ([`x360-toolchain`](../../x360-toolchain/SKILL.md)).
 - After several rounds without progress, stop and record what you learned in the function's
   source comment or a handoff, rather than drifting into code the original could not have had.
+
+## Open source-fidelity questions
+
+- **AttribSys bucket removal (`0x82808980`, `0x82808A98`).** Both exact versions use a
+  local `volatile` reference to reproduce the second sentinel load. The existing `Node::Key()`
+  helper expresses the logical operation and builds to 268 bytes in both functions, compared
+  with ARTIST's 276 bytes. The helper trial scored 95.6% in both. The second load alone is
+  insufficient evidence for volatile storage. Retain the exact baseline while investigating
+  the original accessor and the optimizer's load elimination.
+- **Folded I/O buffer initializers (`0x823AEB7C`, `0x827B6C54`).** The calls establish an
+  out-of-line initialization boundary in ARTIST. The reconstructed wrapper's `noinline`
+  directive still needs independent evidence for its source declaration or a replacement that
+  preserves those calls.
+- **Sound state detachment (`0x826C9C58`).** `StreamingState::Detach` shares the base operation
+  with `State::Detach`. ARTIST inlines the tail at `0x826C9CDC`, while this build emits a call
+  to the base method. DecFIGS puts the base method in `CgsState.cpp`. Recover the original
+  inlining context and the streaming busy checks before changing the method's visibility.
