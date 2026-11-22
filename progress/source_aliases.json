@@ -6243,6 +6243,13 @@
     }
   },
   "identified_functions": {
+    "0x82ACEA88": {
+      "exported_name": null,
+      "symbol": "huft_build",
+      "size": 1300,
+      "source": "vendor/zlib/src/inftrees.c",
+      "evidence": "The 1.1.4 XDK-compiled table constructors relocate their huft_build calls at the same sites as ARTIST: inflate_trees_bits at 0x82ACF024 and inflate_trees_dynamic at 0x82ACF124 and 0x82ACF170. The stock helper is 1304 bytes and differs from the 1300-byte ARTIST extent."
+    },
     "0x82C75918": {
       "exported_name": "sub_82C75918",
       "symbol": "XAUDIO::`dynamic atexit destructor for 'g_XAudioEngineLock''",
@@ -10490,6 +10497,14 @@
     }
   },
   "native_leaf_functions": {
+    "0x82ACD068": {
+      "symbol": "inflateInit_",
+      "size": 20,
+      "caller": "0x82ACC9E0",
+      "call_site": "0x82ACCA6C",
+      "source": "vendor/zlib/src/inflate.c",
+      "evidence": "Both ARTIST decompressor initialization paths pass a stream, the 1.1.3 marker at 0x82142708 and the 56-byte stream size. This wrapper supplies method 8 and window bits 15 to inflateInit3_. Upstream 1.1.4 uses inflateInit2_ instead."
+    },
     "0x82BAC980": {
       "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::MediaDownload",
       "size": 8,
