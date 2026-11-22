@@ -5059,6 +5059,13 @@
       "x360_address": "0x828B04D0",
       "byte_match": true,
       "evidence": "The call at 0x828C1FD8 in OutputCollidingPairs targets this write accessor. It checks the write-lock status bit and returns the queue at offset 4, agreeing with the native non-const accessor."
+    },
+    "CgsSceneManager::Over": {
+      "symbol": "CgsSceneManager::OverlapGenerationIO::OutputBuffer::GetOverlappingPairQueue",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x828B0428",
+      "byte_match": true,
+      "evidence": "BridgeOverlapGenerationToOverlapCulling calls this read accessor at 0x828BA5A4. The body tests the read-lock status bit and returns the queue at offset 4. The const overload emitted by the XDK compares exact with this identity."
     }
   },
   "sdk_leaf_functions": {
