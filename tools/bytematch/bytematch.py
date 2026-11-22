@@ -11,6 +11,7 @@ with the ARTIST body of the same name (see compare.py for what "exact" means).
   measure [SRC...|--all]    compare compiled objects with ARTIST; --record writes the ledger
   refresh [--record]        recompile and re-measure every object whose inputs changed
   status                    totals from the committed records
+  gaps                      audit mapped ARTIST bytes outside the function catalogue
   next                      functions worth working on next
   show NAME                 a function's ledger row and verdict details
   diff NAME                 our instructions beside ARTIST's, for one function
@@ -553,6 +554,41 @@ def status(args):
     print(ledger.render_markdown(s).split("## Closest to matching")[0].rstrip())
 
 
+def gaps(args):
+    from artist import TEXT_END, TEXT_START
+
+    if args.n < 0:
+        raise SystemExit("-n must be zero or greater")
+    sys.path.insert(0, str(REPO / "tools" / "re"))
+    import x360rd  # local ARTIST image reader
+
+    ranges = []
+    for start, end in x360rd.mapped_ranges():
+        start, end = max(start, TEXT_START), min(end, TEXT_END)
+        if start < end:
+            ranges.append((start, end))
+    if not ranges:
+        raise SystemExit("No readable mappings in the ARTIST text range")
+
+    mapped = sum(end - start for start, end in ranges)
+    outside, nonzero = 0, []
+    extents = ((int(address, 16), size) for address, size, *_ in ledger.load_universe()["functions"])
+    for start, end in ledger.uncovered_extents(extents, ranges):
+        data = x360rd.rd(start, end - start)
+        outside += len(data)
+        count = len(data) - data.count(0)
+        if count:
+            nonzero.append((start, end, count))
+    print(f"Mapped ARTIST text: {mapped:,} bytes across {len(ranges)} ranges")
+    print(f"Inside catalogued function ranges: {mapped - outside:,} bytes")
+    print(f"Outside catalogued function ranges: {outside:,} bytes")
+    print(f"Outside ranges contain {sum(count for _, _, count in nonzero):,} nonzero bytes in {len(nonzero):,} gaps")
+    if nonzero and args.n:
+        print("\nLargest gaps containing nonzero bytes (end address excluded)")
+        for start, end, count in sorted(nonzero, key=lambda gap: (gap[0] - gap[1], gap[0]))[:args.n]:
+            print(f"  {start:08X}..{end:08X}  {end - start:8,} bytes  {count:8,} nonzero")
+
+
 def find_rows(summary, query):
     q = query.lower().replace(" ", "")
     exact = [r for r in summary["functions"] if r[1].lower().replace(" ", "") == q or r[0].lower() == q.lstrip("0x")]
@@ -849,6 +885,9 @@ def main(argv=None):
     r.add_argument("--jobs", type=int, default=8)
     r.set_defaults(fn=refresh)
     sub.add_parser("status").set_defaults(fn=status)
+    g = sub.add_parser("gaps", help="audit the ARTIST text range against the function catalogue")
+    g.add_argument("-n", type=int, default=10, help="maximum number of nonzero gaps to list")
+    g.set_defaults(fn=gaps)
     n = sub.add_parser("next")
     n.add_argument("-n", type=int, default=15)
     n.add_argument("--area")

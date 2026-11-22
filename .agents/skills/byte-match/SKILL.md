@@ -178,6 +178,7 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
 | `work match measure SRC... [--compile] [--record]` | every function of those objects against ARTIST |
 | `work match refresh [--record]` | recompile and re-measure whatever changed; with `--record`, write the ledger |
 | `work match status` | the summary of the committed records, locally |
+| `work match gaps [-n N]` | audit bytes outside catalogued function ranges in the mapped ARTIST text span |
 | `tools/bytematch/` | the implementation: `coff.py`, `artist.py`, `compare.py`, `sdk.py`, `ledger.py`, `bytematch.py` |
 | `tools/bytematch/wine.py` | the server's measurer (in the `tools/bytematch/docker` image); `export-xdk` and `export-image` make its inputs |
 | `tools/bytematch/remote.py` | CI's side: ask the server to measure a commit, check and adopt its records |

@@ -467,11 +467,10 @@ def export_image(args):
     """ARTIST's mapped segments, read through x360rd: the bytes the measurer compares with."""
     sys.path.insert(0, str(ledger.REPO / "tools" / "re"))
     import x360rd  # noqa: E402  (local input: the ARTIST image)
-    x360rd._init()
     folder = Path(args.folder)
     folder.mkdir(parents=True, exist_ok=True)
     data, segments = bytearray(), []
-    for start, stop, _cum in x360rd._segs:
+    for start, stop in x360rd.mapped_ranges():
         segments.append(["%08X" % start, "%08X" % stop, len(data)])
         data += x360rd.rd(start, stop - start)
     (folder / "image.bin").write_bytes(bytes(data))

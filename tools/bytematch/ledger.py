@@ -175,15 +175,39 @@ def _add(bucket, status, size, score):
     bucket["fuzzy_bytes"] += size * (score or 0.0) / 100.0
 
 
-def _covered_bytes(rows):
-    """Count the union of the half-open address ranges in the function rows."""
-    covered = 0
-    covered_end = 0
-    for start, size in sorted((int(address, 16), size) for address, _, size, *_ in rows):
+def merged_extents(extents):
+    """Yield half-open ranges from (address, size) extents, merging overlaps."""
+    left = right = 0
+    for start, size in sorted((start, size) for start, size in extents if size > 0):
         end = start + size
-        covered += max(0, end - max(start, covered_end))
-        covered_end = max(covered_end, end)
-    return covered
+        if start > right:
+            if left < right:
+                yield left, right
+            left = start
+        right = max(right, end)
+    if left < right:
+        yield left, right
+
+
+def _covered_bytes(rows):
+    extents = ((int(address, 16), size) for address, _, size, *_ in rows)
+    return sum(end - start for start, end in merged_extents(extents))
+
+
+def uncovered_extents(extents, mapped_ranges):
+    """Yield the parts of each mapped range outside all catalogued functions."""
+    covered = tuple(merged_extents(extents))
+    for cursor, stop in mapped_ranges:
+        for start, end in covered:
+            if end <= cursor:
+                continue
+            if start >= stop:
+                break
+            if cursor < start:
+                yield cursor, start
+            cursor = min(end, stop)
+        if cursor < stop:
+            yield cursor, stop
 
 
 def build_summary(universe, records, *, head=None, head_blobs=None, state=None, behind=None,

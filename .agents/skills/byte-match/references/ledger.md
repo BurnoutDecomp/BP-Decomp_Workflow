@@ -87,6 +87,10 @@ previous summary, dropped on a regression) and `recent`.
 
 ## Maintenance
 
+- `work match gaps` audits the mapped ARTIST text span against the committed function catalogue.
+  It counts the bytes outside function extents and lists the largest gaps containing nonzero
+  bytes. These gaps may include data, padding and uncatalogued instructions. Use other evidence
+  to classify a range before adding it to the catalogue. The audit leaves the ledger unchanged.
 - An SDK leaf absent from both the export and `.pdata` can enter the catalogue through
   `sdk_leaf_functions` in `progress/source_aliases.json`. Record its complete archive symbol and
   extent together with an ARTIST branch whose caller's relocation identifies that symbol. The

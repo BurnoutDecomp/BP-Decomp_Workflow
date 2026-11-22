@@ -74,6 +74,12 @@ def _init():
         _segs.append((s, e, cum)); cum += (e - s)
     _base = ID1 + 0x2000
 
+def mapped_ranges():
+    """Return the half-open virtual address ranges available to this reader."""
+    _init()
+    return [(start, stop) for start, stop, _ in _segs]
+
+
 def rd(ea, n=4):
     _init()
     out = bytearray()

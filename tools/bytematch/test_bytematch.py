@@ -547,6 +547,13 @@ def test_summary_requires_measurement_of_current_extent():
     assert measured["totals"]["all"]["matched_bytes"] == 104
 
 
+def test_uncovered_extents_merge_overlaps_and_stay_inside_mapped_ranges():
+    extents = [(0x10, 16), (0x14, 4), (0x1C, 12), (0x2A, 0), (0x32, 4), (0x3A, 12)]
+    assert list(ledger.uncovered_extents(extents, [(0x12, 0x30), (0x34, 0x3F)])) == [
+        (0x28, 0x30), (0x36, 0x3A),
+    ]
+
+
 def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, tmp_path):
     source, head = "src/a.cpp", "a" * 40
     obj = tmp_path / "a.obj"
