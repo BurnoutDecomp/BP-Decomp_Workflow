@@ -5179,6 +5179,29 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C22160": {
+      "symbol": "D3DXShader::Dependency::Dependency",
+      "size": 48,
+      "lib": "xgraphics.lib",
+      "member": "obj\\xbox\\instr.obj",
+      "archive_symbol": "??0Dependency@D3DXShader@@QAA@PAVInstruction@1@@Z",
+      "caller": "0x82C74868",
+      "call_site": "0x82C74878",
+      "evidence": "The registered scheduler initializer branches here. Its archive branch names the Instruction-pointer Dependency constructor, and all 48 bytes of instr.obj's constructor match without relocations."
+    },
+    "0x82C74868": {
+      "symbol": "D3DXShader::`dynamic initializer for 'g_depNeverIssue''",
+      "size": 20,
+      "lib": "xgraphics.lib",
+      "member": "obj\\xbox\\scheduler.obj",
+      "archive_symbol": "??__Eg_depNeverIssue@D3DXShader@@YAXXZ",
+      "crt_slot": "0x82CD3D28",
+      "crt_data_targets": {
+        "?g_instrNeverIssue@D3DXShader@@3VInstruction@1@A": "0x832BB854",
+        "?g_depNeverIssue@D3DXShader@@3VDependency@1@A": "0x832BB880"
+      },
+      "evidence": "The archive registers this initializer in .CRT$XCU. The preceding g_instrNeverIssue initializer independently fixes 0x832BB854. The dependency object is 44 bytes later in the same 64-byte scheduler.obj .bss section. ARTIST loads both addresses before tail-branching to Dependency::Dependency."
+    },
     "0x82C0C910": {
       "symbol": "fwrite",
       "size": 268,
@@ -5874,6 +5897,21 @@
     }
   },
   "identified_functions": {
+    "0x82C74858": {
+      "exported_name": "sub_82C74858",
+      "symbol": "D3DXShader::`dynamic initializer for 'g_instrNeverIssue''",
+      "size": 16,
+      "sdk_provider": {
+        "lib": "xgraphics.lib",
+        "member": "obj\\xbox\\scheduler.obj",
+        "archive_symbol": "??__Eg_instrNeverIssue@D3DXShader@@YAXXZ",
+        "crt_slot": "0x82CD3D24",
+        "crt_data_targets": {
+          "?g_instrNeverIssue@D3DXShader@@3VInstruction@1@A": "0x832BB854"
+        }
+      },
+      "evidence": "The previously credited scheduler.obj initializer matches its ARTIST CRT registration, opcode argument 0x72 and tail branch to the verified Instruction constructor at 0x82C22100. It constructs the instruction at 0x832BB854."
+    },
     "0x82C3B030": {
       "exported_name": "sub_82C3B030",
       "symbol": "nciInitEncodeSase3200",

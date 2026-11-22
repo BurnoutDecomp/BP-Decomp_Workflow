@@ -262,6 +262,10 @@ class Artist:
             self.unnamed.add(address)
             self.leaf_extents[address] = (size, "crt_leaf")
 
+    def is_crt_initializer(self, address, slot):
+        return (slot % 4 == 0 and CRT_INITIALIZERS_START <= slot < CRT_INITIALIZERS_END
+                and struct.unpack(">I", self.bytes(slot, 4))[0] == address)
+
     def _crt_leaf_extents(self, occupied):
         from compare import branch_target
 
@@ -326,13 +330,12 @@ class Artist:
             known = occupied | {address: proof["size"] for _, address, _, proof in pending
                                 if "crt_slot" not in proof}
             crt_sizes = dict(self._crt_leaf_extents(known))
-            for start, address, kind, proof in pending:
+            for start, address, _, proof in pending:
                 if "crt_slot" not in proof:
                     continue
                 slot = int(proof["crt_slot"], 16)
-                if (kind != "native_leaf" or start != address or crt_sizes.get(address) != proof["size"]
-                        or slot % 4 or not CRT_INITIALIZERS_START <= slot < CRT_INITIALIZERS_END
-                        or struct.unpack(">I", self.bytes(slot, 4))[0] != address):
+                if (start != address or crt_sizes.get(address) != proof["size"]
+                        or not self.is_crt_initializer(address, slot)):
                     raise ValueError(f"CRT leaf {address:08X} has no matching registration and extent")
 
         while pending:

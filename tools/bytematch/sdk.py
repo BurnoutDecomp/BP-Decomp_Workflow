@@ -16,9 +16,10 @@ from collections import defaultdict
 from pathlib import Path
 import struct
 
-from coff import ObjectFile, CoffError, REL_REL14, REL_REL24, archive_members, be_words, ordinal_code_import
+from coff import (ObjectFile, CoffError, REL_ADDR32, REL_REFHI, REL_REFLO, REL_PAIR, REL_REL14, REL_REL24,
+                  archive_members, be_words, ordinal_code_import)
 from artist import Artist, demangle, normal_name
-from compare import branch_target, compare
+from compare import branch_target, compare, refhi_lo_address
 
 TINY = 12  # bytes: three instructions or fewer match too many unrelated bodies
 MTCTR_R11, BCTR = 0x7D6903A6, 0x4E800420
@@ -96,6 +97,8 @@ def verify_leaf_providers(artist, lib_dir):
                 continue
             if "fragments" in proof and not _verify_archive_fragments(artist, address, fn, obj, proof, result):
                 continue
+            if "crt_slot" in proof and not _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
+                continue
             if proof.get("archive_aliases"):
                 if result.calls_unverified or result.data_unchecked:
                     continue
@@ -118,6 +121,37 @@ def verify_leaf_providers(artist, lib_dir):
         if set(proof.get("archive_aliases", ())) != verified_aliases[address]:
             raise ValueError(f"SDK archive alias comparison failed at {address:08X}")
     return found
+
+
+def _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
+    """Require the archive's initializer registration and its linked data targets."""
+    if result.calls_unverified or not artist.is_crt_initializer(address, int(proof["crt_slot"], 16)):
+        return False
+    if not any(rel.type == REL_ADDR32 and fn.target(obj, rel) == fn.symbol
+               and struct.unpack_from(">I", section.data, rel.offset)[0] == 0
+               for section in obj.sections.values() if section.name == ".CRT$XCU" for rel in section.relocs):
+        return False
+
+    expected = {name: int(target, 16) for name, target in proof["crt_data_targets"].items()}
+    linked = be_words(artist.bytes(address, len(fn.code)))
+    ours = be_words(fn.code)
+    addends = {rel.offset for rel in fn.relocs if rel.type == REL_PAIR and rel.symbol}
+    highs = {}
+    checked = []
+    for rel in sorted(fn.relocs, key=lambda item: item.offset):
+        if rel.type not in (REL_REFHI, REL_REFLO) or fn.target(obj, rel) not in expected:
+            continue
+        word = linked[rel.offset // 4]
+        if rel.offset in addends or ours[rel.offset // 4] & 0xFFFF:
+            return False
+        if rel.type == REL_REFHI and word & 0xFC1F0000 == 0x3C000000:
+            highs[rel.symbol] = word
+        elif rel.type == REL_REFLO and word >> 26 == 14 and rel.symbol in highs:
+            high = highs[rel.symbol]
+            if (high >> 21) & 31 == (word >> 16) & 31:
+                checked.append((fn.target(obj, rel), refhi_lo_address(high, word)))
+    return (len(checked) == result.data_unchecked and dict(checked) == expected
+            and all(expected[name] == target for name, target in checked))
 
 
 def _verify_archive_fragments(artist, address, fn, obj, proof, result):

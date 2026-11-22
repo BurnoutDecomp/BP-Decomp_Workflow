@@ -110,6 +110,9 @@ previous summary, dropped on a regression) and `recent`.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
+  An SDK initializer can use a `crt_slot` witness. Its archive must register the matching
+  symbol in `.CRT$XCU`. Supply independently verified `crt_data_targets` for its global references.
+  The verifier checks those addresses and requires every call target to be identified.
   Use `archive_aliases` for additional symbols that fold onto the same SDK leaf. Every alias must
   match the same extent with all its relocations verified by the archive comparison.
   When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition

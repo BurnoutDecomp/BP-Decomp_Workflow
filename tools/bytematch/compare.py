@@ -82,6 +82,12 @@ def _field_masks(fn: Function, count: int):
     return masks, unknown
 
 
+def refhi_lo_address(high_word, low_word):
+    low = low_word & 0xFFFF
+    signed_low = low - 0x10000 if low & 0x8000 else low
+    return (((high_word & 0xFFFF) << 16) + signed_low) & 0xFFFFFFFF
+
+
 def symbol_name(obj: ObjectFile, index: int) -> str:
     sym = obj.symbols.get(index)
     return sym.name if sym else "?"
@@ -186,9 +192,7 @@ def compare(fn: Function, obj: ObjectFile, artist: Artist, address: int, artist_
             if not highs:
                 result.data_unchecked += 1
                 continue
-            hi = theirs[highs[-1]] & 0xFFFF
-            lo = theirs[i] & 0xFFFF
-            target = ((hi << 16) + (lo - 0x10000 if lo & 0x8000 else lo)) & 0xFFFFFFFF
+            target = refhi_lo_address(theirs[highs[-1]], theirs[i])
             want = bytes.fromhex(literal.group(1))
             try:
                 got = artist.bytes(target, len(want))

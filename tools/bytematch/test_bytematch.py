@@ -463,6 +463,31 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_sdk_initializer_requires_archive_registration_and_linked_data_target(monkeypatch, tmp_path):
+    address, slot = 0x821F1000, artist.CRT_INITIALIZERS_START
+    art = FakeArtist([(address, "Initialize", [0x3D60832C, 0x386BB854, BLR])],
+                     {slot: struct.pack(">I", address)})
+    obj = coff.ObjectFile(make_object([("Initialize", [0x3D600000, 0x386B0000, BLR],
+                                       [(0, "Global", coff.REL_REFHI), (4, "Global", coff.REL_REFLO)])]))
+    fn, = obj.functions()
+    initializer = next(sym.index for sym in obj.symbols.values() if sym.name == fn.symbol)
+    section = coff.Section(2, ".CRT$XCU", b"\0" * 4, 0, [coff.Reloc(0, initializer, coff.REL_ADDR32)])
+    obj.sections[2] = section
+    proof = {"lib": "sdk.lib", "member": "init.obj", "archive_symbol": fn.symbol,
+             "crt_slot": f"0x{slot:08X}", "crt_data_targets": {"Global": "0x832BB854"}}
+    art.sdk_leaves[address] = proof
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "init.obj", obj, fn, False)])
+
+    assert sdk.verify_leaf_providers(art, tmp_path)[address]["symbol"] == fn.symbol
+    proof["crt_data_targets"]["Global"] = "0x832BB880"
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+    proof["crt_data_targets"]["Global"] = "0x832BB854"
+    section.relocs.clear()
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+
 def test_sdk_folded_alias_needs_an_independent_archive_match(monkeypatch, tmp_path):
     import sdk
 
