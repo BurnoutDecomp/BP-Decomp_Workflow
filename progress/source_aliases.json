@@ -5179,6 +5179,33 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x829B97C0": {
+      "symbol": "IDCT_Intra_4x4",
+      "size": 1160,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\idctdec_wmv2_xenon.obj",
+      "archive_symbol": "IDCT_Intra_4x4",
+      "caller": "0x829BA4B0",
+      "call_site": "0x829BA524",
+      "archive_literals": {
+        "?v4f@?1??IDCT_Intra_4x4@@9@9": {"address": "0x8210CA10", "size": 16}
+      },
+      "evidence": "The exact intra dispatcher branches here through its IDCT_Intra_4x4 relocation. The complete VMX body and the 16-byte local vector agree with the XDK archive."
+    },
+    "0x829BA4B0": {
+      "symbol": "g_IDCTDec_WMV2_Intra",
+      "size": 124,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\idctdec_wmv2_xenon.obj",
+      "archive_symbol": "g_IDCTDec_WMV2_Intra",
+      "caller": "0x829BE280",
+      "refhi_site": "0x829BE280",
+      "reflo_site": "0x829BE29C",
+      "archive_literals": {
+        "?perm@?1??IDCT_Intra_1x1@@9@9": {"address": "0x8210C9E0", "size": 16}
+      },
+      "evidence": "The exact m_InitIDCT_Dec from init_wmv.obj loads this dispatcher address through matching REFHI and REFLO relocations. Both dispatcher branches and the inlined 1x1 case's permutation vector agree with the archive."
+    },
     "0x82C22160": {
       "symbol": "D3DXShader::Dependency::Dependency",
       "size": 48,
@@ -5897,6 +5924,48 @@
     }
   },
   "identified_functions": {
+    "0x829B9C48": {
+      "exported_name": "sub_829B9C48",
+      "symbol": "IDCT_Intra_8x8",
+      "size": 2148,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\idctdec_wmv2_xenon.obj",
+        "archive_symbol": "IDCT_Intra_8x8",
+        "archive_literals": {
+          "?v4f@?1??IDCT_Intra_8x8@@9@9": {"address": "0x8210CAB0", "size": 16}
+        }
+      },
+      "evidence": "The intra dispatcher at 0x829BA528 identifies the previously credited 2148-byte archive body. Both register-helper branches and the complete vector agree."
+    },
+    "0x829BA530": {
+      "exported_name": "sub_829BA530",
+      "symbol": "IDCT_Inter_4x4",
+      "size": 1120,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\idctdec_wmv2_xenon.obj",
+        "archive_symbol": "IDCT_Inter_4x4",
+        "archive_literals": {
+          "?v4f@?1??IDCT_Inter_4x4@@9@9": {"address": "0x8210CB90", "size": 16}
+        }
+      },
+      "evidence": "The exact g_IDCTDec_WMV2_Inter archive branch at 0x829BB294 identifies this previously credited body. The complete vector and register-helper branches agree."
+    },
+    "0x829BA990": {
+      "exported_name": "sub_829BA990",
+      "symbol": "IDCT_Inter_8x8",
+      "size": 2080,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\idctdec_wmv2_xenon.obj",
+        "archive_symbol": "IDCT_Inter_8x8",
+        "archive_literals": {
+          "?v4f@?1??IDCT_Inter_8x8@@9@9": {"address": "0x8210CC30", "size": 16}
+        }
+      },
+      "evidence": "The exact g_IDCTDec_WMV2_Inter archive branch at 0x829BB2A0 identifies this previously credited body. The complete vector and register-helper branches agree."
+    },
     "0x82C74858": {
       "exported_name": "sub_82C74858",
       "symbol": "D3DXShader::`dynamic initializer for 'g_instrNeverIssue''",

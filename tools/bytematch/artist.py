@@ -373,6 +373,8 @@ class Artist:
                     slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
                     and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
                 raise ValueError(f"{label} {address:08X} has no matching vtable witness")
+        elif "refhi_site" in proof:
+            self._check_leaf_address(occupied, start, address, proof)
         elif "crt_slot" not in proof:
             self._check_leaf_branch(proof, occupied, label, address, start, address + size)
         self.names[address] = proof["symbol"]
@@ -385,6 +387,20 @@ class Artist:
         if "tu" in proof:
             self.identified_tus[address] = proof["tu"]
         occupied[address] = size
+
+    def _check_leaf_address(self, occupied, start, address, proof):
+        from compare import refhi_lo_address
+
+        caller = int(proof["caller"], 16)
+        high_site, low_site = int(proof["refhi_site"], 16), int(proof["reflo_site"], 16)
+        if (start != address or high_site % 4 or low_site % 4
+                or not caller <= high_site < low_site <= caller + occupied[caller] - 4):
+            raise ValueError(f"Leaf {address:08X} has an address witness outside its caller extent")
+        high, = struct.unpack(">I", self.bytes(high_site, 4))
+        low, = struct.unpack(">I", self.bytes(low_site, 4))
+        if (high & 0xFC1F0000 != 0x3C000000 or low >> 26 != 14
+                or (high >> 21) & 31 != (low >> 16) & 31 or refhi_lo_address(high, low) != address):
+            raise ValueError(f"Leaf {address:08X} has no matching address witness")
 
     def _check_leaf_branch(self, proof, occupied, label, address, start, end):
         from compare import branch_target

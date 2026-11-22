@@ -99,6 +99,8 @@ def verify_leaf_providers(artist, lib_dir):
                 continue
             if "crt_slot" in proof and not _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
                 continue
+            if "archive_literals" in proof and not _verify_archive_literals(artist, address, fn, obj, proof, result):
+                continue
             if proof.get("archive_aliases"):
                 if result.calls_unverified or result.data_unchecked:
                     continue
@@ -132,7 +134,30 @@ def _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
                for section in obj.sections.values() if section.name == ".CRT$XCU" for rel in section.relocs):
         return False
 
-    expected = {name: int(target, 16) for name, target in proof["crt_data_targets"].items()}
+    targets = {name: int(target, 16) for name, target in proof["crt_data_targets"].items()}
+    return _verify_data_targets(artist, address, fn, obj, targets, result)
+
+
+def _verify_archive_literals(artist, address, fn, obj, proof, result):
+    literals = proof["archive_literals"]
+    targets = {name: int(row["address"], 16) for name, row in literals.items()}
+    if result.calls_unverified or not _verify_data_targets(artist, address, fn, obj, targets, result):
+        return False
+    for rel in fn.relocs:
+        if rel.type != REL_REFLO or fn.target(obj, rel) not in literals:
+            continue
+        symbol = obj.symbols[rel.symbol]
+        section = obj.sections.get(symbol.section)
+        size = literals[symbol.name]["size"]
+        start, end = symbol.value, symbol.value + size
+        if (section is None or not section.name.startswith(".rdata") or size <= 0 or end > len(section.data)
+                or any(start <= item.offset < end for item in section.relocs)
+                or artist.bytes(targets[symbol.name], size) != section.data[start:end]):
+            return False
+    return True
+
+
+def _verify_data_targets(artist, address, fn, obj, expected, result):
     linked = be_words(artist.bytes(address, len(fn.code)))
     ours = be_words(fn.code)
     addends = {rel.offset for rel in fn.relocs if rel.type == REL_PAIR and rel.symbol}

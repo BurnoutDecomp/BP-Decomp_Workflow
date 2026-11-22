@@ -463,6 +463,38 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_sdk_address_taken_leaf_requires_matching_pointer_and_archive_literal(monkeypatch, tmp_path):
+    caller, leaf, constant = 0x821F1000, 0x821F2000, 0x832BB854
+    payload = struct.pack(">4I", 1, 2, 3, 4)
+    data = {constant + offset: payload[offset:offset + 4] for offset in range(0, 16, 4)}
+    image = FakeArtist([(caller, "Setup", [0x3D60821F, 0x386B2000, BLR]),
+                        (leaf, "VectorLeaf", [0x3D60832C, 0x386BB854, BLR])], data)
+
+    def read(address, size):
+        return b"" if address == PDATA_START else image.read(address, size)
+
+    proof = {"symbol": "VectorLeaf", "size": 12, "lib": "sdk.lib", "member": "vector.obj",
+             "archive_symbol": "VectorLeaf", "caller": f"0x{caller:08X}",
+             "refhi_site": f"0x{caller:08X}", "reflo_site": f"0x{caller + 4:08X}",
+             "archive_literals": {"VectorConstant": {"address": f"0x{constant:08X}", "size": 16}}}
+    pack = {f"0x{caller:08X}": {"name": "Setup", "n": 3},
+            f"0x{leaf:08X}": {"unlisted": True, "sdk_leaf": proof}}
+    art = Artist(pack=pack, read=read)
+    obj = coff.ObjectFile(make_object([("VectorLeaf", [0x3D600000, 0x386B0000, BLR],
+                                       [(0, "VectorConstant", coff.REL_REFHI), (4, "VectorConstant", coff.REL_REFLO)])]))
+    next(sym for sym in obj.symbols.values() if sym.name == "VectorConstant").section = 2
+    obj.sections[2] = coff.Section(2, ".rdata", payload, 0)
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "vector.obj", obj, obj.functions()[0], False)])
+
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "VectorLeaf"
+    obj.sections[2].data = bytes(16)
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+    image.memory[caller + 4] = struct.pack(">I", 0x386B2004)
+    with pytest.raises(ValueError, match="no matching address witness"):
+        Artist(pack=pack, read=read)
+
+
 def test_sdk_initializer_requires_archive_registration_and_linked_data_target(monkeypatch, tmp_path):
     address, slot = 0x821F1000, artist.CRT_INITIALIZERS_START
     art = FakeArtist([(address, "Initialize", [0x3D60832C, 0x386BB854, BLR])],

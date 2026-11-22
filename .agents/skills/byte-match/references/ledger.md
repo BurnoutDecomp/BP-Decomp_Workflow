@@ -107,6 +107,10 @@ previous summary, dropped on a regression) and `recent`.
   comparison is required even when rebuilding with `--providers`. For a shared CRT assembly
   helper, set `archive_entry` when the witness calls a named entry within the archive section.
   Record only the instructions up to the next entry to keep the catalogue ranges disjoint.
+  For a function pointer loaded by a verified caller, give `refhi_site` and `reflo_site` for
+  the caller's matching archive relocations. For nonstandard literal symbols, `archive_literals`
+  records the linked address and byte width. The verifier checks the load target and compares the
+  full value against the archive's read-only section.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
