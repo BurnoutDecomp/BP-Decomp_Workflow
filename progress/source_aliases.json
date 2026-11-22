@@ -5139,6 +5139,69 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x8295EF50": {
+      "symbol": "XNetGetTitleXnAddr",
+      "size": 12,
+      "lib": "xnet.lib",
+      "member": "obj\\xbox\\xnetapi.obj",
+      "archive_symbol": "XNetGetTitleXnAddr",
+      "caller": "0x821FB140",
+      "call_site": "0x821FB174",
+      "evidence": "The exact native SendReadyMessage caller relocates this branch to XNetGetTitleXnAddr. The XDK wrapper matches the complete extent, including the tail branch to NetDll_XNetGetTitleXnAddr."
+    },
+    "0x82C08EB8": {
+      "symbol": "__savegprlr_16",
+      "size": 4,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crtgpr.obj",
+      "archive_symbol": "__savegprlr_16",
+      "archive_entry": true,
+      "caller": "0x823C79F0",
+      "call_site": "0x823C79F4",
+      "evidence": "The exact VariableEventQueue AddEvent object calls this CRT entry point. The instruction matches the archive entry and ends at the existing __savegprlr_17 extent."
+    },
+    "0x82C08EE8": {
+      "symbol": "__savegprlr_28",
+      "size": 4,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crtgpr.obj",
+      "archive_symbol": "__savegprlr_28",
+      "archive_entry": true,
+      "caller": "0x821F0000",
+      "call_site": "0x821F0004",
+      "evidence": "The exact vector constructor iterator object calls this CRT entry point. The instruction matches the archive entry and ends at the existing __savegprlr_29 extent."
+    },
+    "0x82C08F20": {
+      "symbol": "__restgprlr_22",
+      "size": 4,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crtgpr.obj",
+      "archive_symbol": "__restgprlr_22",
+      "archive_entry": true,
+      "caller": "0x822ABCF0",
+      "call_site": "0x822ABE7C",
+      "evidence": "The exact VariableEventQueue Clear object tail-branches to this CRT entry point. The instruction matches the archive entry and ends at the existing __restgprlr_23 extent."
+    },
+    "0x82C08FB0": {
+      "symbol": "operator delete",
+      "size": 4,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\delete.obj",
+      "archive_symbol": "??3@YAXPAX@Z",
+      "caller": "0x827E9F00",
+      "call_site": "0x827E9F2C",
+      "evidence": "The exact native IVideoRenderer scalar deleting destructor relocates the call to operator delete. The XDK wrapper matches the one-instruction tail branch to free."
+    },
+    "0x82C14450": {
+      "symbol": "strcoll",
+      "size": 8,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\strcoll.obj",
+      "archive_symbol": "strcoll",
+      "caller": "0x82BF6650",
+      "call_site": "0x82BF669C",
+      "evidence": "The exact Lua l_strcmp relocates this call to strcoll. The archive body matches the two-instruction wrapper ending in a tail branch to _strcoll_l."
+    },
     "0x829803A0": {
       "symbol": "CConformanceList::ReleaseConformanceInfo",
       "size": 92,

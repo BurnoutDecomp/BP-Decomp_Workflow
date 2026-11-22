@@ -71,13 +71,12 @@ def verify_leaf_providers(artist, lib_dir):
     addresses = defaultdict(list)
     for address, proof in artist.sdk_leaves.items():
         members[proof["lib"]].add(proof["member"])
-        addresses[proof["lib"], proof["member"], proof["archive_symbol"]].append(address)
+        entry = proof.get("archive_entry") is True
+        addresses[proof["lib"], proof["member"], proof["archive_symbol"], entry].append(address)
 
     found = {}
     for lib, member, obj, fn, entry in library_functions(lib_dir, only_members=members):
-        if entry:
-            continue
-        for address in addresses.get((lib, member, fn.symbol), ()):
+        for address in addresses.get((lib, member, fn.symbol, entry), ()):
             size, _ = artist.size(address)
             if (len(fn.code) == size and artist.matches_name(address, demangle(fn.symbol))
                     and compare(fn, obj, artist, address, size, fuzzy=False).status == "exact"):

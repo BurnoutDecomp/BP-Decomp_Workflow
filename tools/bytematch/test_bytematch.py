@@ -357,6 +357,13 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
         ("sdk.lib", "leaf.obj", obj, obj.functions()[0], False),
     ])
     assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+    monkeypatch.setattr(sdk, "library_functions", lambda _, **opts: [
+        ("sdk.lib", "leaf.obj", obj, obj.functions()[0], True),
+    ])
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+    art.sdk_leaves[leaf]["archive_entry"] = True
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
     image.memory[leaf] = struct.pack(">I", 0x38600008)
     with pytest.raises(ValueError, match="archive comparison failed"):
         sdk.verify_leaf_providers(art, tmp_path)

@@ -95,7 +95,9 @@ previous summary, dropped on a regression) and `recent`.
   `sdk_leaf_functions` in `progress/source_aliases.json`. Record its complete archive symbol and
   extent together with an ARTIST branch whose caller's relocation identifies that symbol. The
   catalogue checks that the extent fits a gap and that the branch reaches its start. An archive
-  comparison is required even when rebuilding with `--providers`.
+  comparison is required even when rebuilding with `--providers`. For a shared CRT assembly
+  helper, set `archive_entry` when the witness calls a named entry within the archive section.
+  Record only the instructions up to the next entry to keep the catalogue ranges disjoint.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines
