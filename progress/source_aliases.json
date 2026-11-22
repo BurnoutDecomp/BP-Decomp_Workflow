@@ -5066,6 +5066,41 @@
       "x360_address": "0x828B0428",
       "byte_match": true,
       "evidence": "BridgeOverlapGenerationToOverlapCulling calls this read accessor at 0x828BA5A4. The body tests the read-lock status bit and returns the queue at offset 4. The const overload emitted by the XDK compares exact with this identity."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,16>::C": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,16>::Construct",
+      "x360_address": "0x828C46F8",
+      "file": "GameShared/GameClasses/Module/CgsEventQueue.h",
+      "byte_match": true,
+      "evidence": "The clipped label preserves the event type and capacity. The native COFF relocation in CgsSceneManager::SceneManagerIO::InputBuffer_Query::Construct agrees with the call at 0x828C7C10, and the constructor compares exact."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent,34>::": {
+      "symbol": "CgsModule::EventQueue<BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent,34>::Construct",
+      "x360_address": "0x822E34B0",
+      "file": "GameShared/GameClasses/Module/CgsEventQueue.h",
+      "byte_match": true,
+      "evidence": "The clipped label preserves the event type and capacity. The native COFF relocation in BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostScene::Construct agrees with the call at 0x822EA6BC, and the constructor compares exact."
+    },
+    "CgsSceneManager::OverlapCullingIO::AddInternalCollisionVolume,256>::Co": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::OverlapCullingIO::AddInternalCollisionVolume,256>::Construct",
+      "x360_address": "0x828C4E20",
+      "file": "GameShared/GameClasses/Module/CgsEventQueue.h",
+      "byte_match": true,
+      "evidence": "The clipped label preserves the event type and capacity. The native COFF relocation in CgsSceneManager::OverlapCullingIO::InputBuffer::Construct agrees with the call at 0x828CB66C, and the constructor compares exact."
+    },
+    "BrnWorldIO::UpdateOutputBuffer::GetGameEventQue": {
+      "symbol": "BrnWorldIO::UpdateOutputBuffer::GetGameEventQueue",
+      "x360_address": "0x827A4B30",
+      "file": "GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST's label has the same qualified class and a clipped method name. The aligned caller WorldModule::BridgeWorldEntityInfoToOutput reaches this entry at 0x827ADD9C."
+    },
+    "RealmcCore::IRunnableTask::operator": {
+      "symbol": "RealmcCore::IRunnableTask::operator()",
+      "x360_address": "0x82C475D8",
+      "file": "SDKs/Realmc/RealmcCore.cpp",
+      "byte_match": true,
+      "evidence": "The thunks for CheckCardTask, SetActiveCardTask and SaveCheckTask call 0x82C475D8 at 0x82B52194, 0x82B5215C and 0x82B52204. Their aligned COFF relocations agree on IRunnableTask::operator()."
     }
   },
   "sdk_leaf_functions": {
