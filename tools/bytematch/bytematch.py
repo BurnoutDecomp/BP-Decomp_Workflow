@@ -164,21 +164,32 @@ def compile_sources(tree, xdk, sources, jobs=8, batch=150):
     out = cache_dir(tree) / "objects"
     index = load_index(tree)
     env = dict(os.environ, MSYS_NO_PATHCONV="1")
+    build_head = clean_build_head(tree)
+    report_path = out / "compile-results.json"
     for start in range(0, len(sources), batch):
         chunk = sources[start:start + batch]
         cmd = [sys.executable, "-B", str(tree / "tools" / "build_x360.py"), "--sdk", str(xdk), "--out", str(out),
                "--quiet", "--jobs", str(jobs), "--timeout", "300", "--compiler-arg", "/showIncludes"]
         for source in chunk:
             cmd += ["--source", source]
-        subprocess.run(cmd, cwd=tree, env=env, capture_output=True, text=True)
-        results = json.loads((out / "compile-results.json").read_text(encoding="utf-8"))
+        prior_report = report_path.stat().st_mtime_ns if report_path.is_file() else None
+        run = subprocess.run(cmd, cwd=tree, env=env, capture_output=True, text=True)
+        if not report_path.is_file() or report_path.stat().st_mtime_ns == prior_report:
+            raise SystemExit(f"The XDK build did not write a fresh compile report.\n{run.stderr or run.stdout}")
+        results = json.loads(report_path.read_text(encoding="utf-8"))
+        if results["state"] != "complete" or len(results["results"]) != len(set(chunk)):
+            raise SystemExit("The XDK build did not report a result for each requested source.")
+        built_at = build_head if build_head and clean_build_head(tree) == build_head else None
         for row in results["results"]:
             log = Path(row["log"])
             text = log.read_text(encoding="utf-8", errors="replace") if log.is_file() else ""
             errors = [l for l in text.splitlines() if ": error " in l or ": fatal error " in l][:5]
-            index[row["source"]] = {"object": row["object"], "passed": row["passed"], "log": row["log"],
-                                    "includes": includes_from_log(text, tree), "errors": errors,
-                                    "command": row["command"]}
+            entry = {"object": row["object"], "passed": row["passed"], "log": row["log"],
+                     "includes": includes_from_log(text, tree), "errors": errors, "command": row["command"]}
+            if built_at:
+                entry.update(build_commit=built_at, build_toolchain=toolchain(entry["command"], tree, xdk),
+                             build_object=object_stamp(entry) if entry["passed"] else None)
+            index[row["source"]] = entry
         save_index(tree, index)
         print(f"compiled {min(start + batch, len(sources))}/{len(sources)}", flush=True)
     return index
@@ -351,8 +362,44 @@ def object_stamp(entry):
     return [str(path), stat.st_size, stat.st_mtime_ns]
 
 
+def tracked_changes(tree):
+    return git(tree, "status", "--porcelain", "--untracked-files=no", "--ignore-submodules=none").strip()
+
+
+def clean_build_head(tree):
+    if tracked_changes(tree):
+        return None
+    return git(tree, "rev-parse", "HEAD").strip()
+
+
+def unverified_objects(tree, xdk, head, inputs, index, sources, *, allow_failed=False):
+    snapshots = {head: inputs}
+    builder_path = "tools/build_x360.py"
+    for source in sources:
+        entry = index.get(source, {})
+        commit = entry.get("build_commit")
+        if not commit or source not in inputs.blobs or (not entry["passed"] and not allow_failed):
+            yield source
+            continue
+        if entry["passed"]:
+            stamp = object_stamp(entry)
+            if stamp is None or stamp != entry.get("build_object"):
+                yield source
+                continue
+        if commit not in snapshots:
+            try:
+                snapshots[commit] = BuildInputs(tree_entries(tree, commit))
+            except SystemExit:
+                snapshots[commit] = None
+        build = snapshots[commit]
+        if (build is None or build.state(source, index) != inputs.state(source, index)
+                or build.blobs.get(builder_path) != inputs.blobs.get(builder_path)
+                or entry.get("build_toolchain") != toolchain(entry["command"], tree, xdk)):
+            yield source
+
+
 def require_landable(tree):
-    dirty = git(tree, "status", "--porcelain", "--untracked-files=no").strip()
+    dirty = tracked_changes(tree)
     if dirty:
         raise SystemExit("The native tree has uncommitted changes. Records describe commits:\n"
                          "commit (and push) first, or measure without --record.\n" + dirty[:800])
@@ -373,14 +420,28 @@ def measure(args):
     sources = native_sources(tree) if args.all else [s.replace("\\", "/") for s in args.sources]
     if not sources:
         raise SystemExit("name sources or --all")
-    if args.compile:
-        index = compile_sources(tree, xdk, sources, jobs=args.jobs)
-    elif not args.no_compile:
-        missing = [s for s in sources if s not in index]
-        if missing:
-            index = compile_sources(tree, xdk, missing, jobs=args.jobs)
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
-    inputs = BuildInputs(tree_entries(tree))
+    inputs = BuildInputs(tree_entries(tree, head))
+    if args.record:
+        untracked = [s for s in sources if s not in inputs.blobs]
+        if untracked:
+            raise SystemExit(f"Cannot record a source absent from {head[:12]}: {untracked[0]}")
+    if args.compile:
+        rebuild = sources
+    elif args.record and not args.no_compile:
+        rebuild = list(unverified_objects(tree, xdk, head, inputs, index, sources))
+    elif not args.no_compile:
+        rebuild = [s for s in sources if s not in index]
+    else:
+        rebuild = []
+    if rebuild:
+        index = compile_sources(tree, xdk, rebuild, jobs=args.jobs)
+    if args.record:
+        unverified = list(unverified_objects(tree, xdk, head, inputs, index, sources, allow_failed=True))
+        if unverified:
+            raise SystemExit(f"Cached native build not verified for this commit: {unverified[0]}. Run measure --compile --record.")
+        if clean_build_head(tree) != head:
+            raise SystemExit("The native checkout changed during measurement. Record again at a clean, pushed commit.")
     deps = load_deps(tree) if args.record else None
     measurements = load_deps(tree, recorded=True) if args.record else None
     measuring = measure_fingerprint() if args.record else None
@@ -407,13 +468,12 @@ def measure(args):
         for row in record["functions"]:
             totals[row["status"]] += 1
         if args.record:
+            if entry["passed"] and object_stamp(entry) != entry["build_object"]:
+                raise SystemExit(f"Native object changed during comparison: {source}")
             ledger.write_record(record)
             deps[source] = inputs.state(source, index)
-            measurements[source] = {"inputs": deps[source], "measure": measuring,
-                                    "record": measurement_identity(record),
-                                    "object": object_stamp(entry) if entry["passed"] else None,
-                                    "builder": inputs.blobs.get("tools/build_x360.py"),
-                                    "toolchain": record["toolchain"]}
+            measurements[source] = {"measure": measuring, "record": measurement_identity(record),
+                                    "object": entry["build_object"]}
         if args.verbose or len(sources) <= 5:
             print(f"== {source}  {'compiled' if record['compiled'] else 'COMPILE FAILED'}")
             for row in record["functions"]:
@@ -434,30 +494,26 @@ def refresh(args):
     """Recompile and re-measure what changed; with --record, prove every record current."""
     tree, xdk = need_tree(args), need_xdk(args)
     head = require_landable(tree) if args.record else git(tree, "rev-parse", "HEAD").strip()
-    inputs = BuildInputs(tree_entries(tree))
+    inputs = BuildInputs(tree_entries(tree, head))
     index = load_index(tree)
     deps = load_deps(tree, recorded=args.record)
     sources = native_sources(tree)
     records = {r["source"]: r for r in ledger.load_records()}
 
-    to_compile, to_measure = [], []
+    to_compile = list(unverified_objects(tree, xdk, head, inputs, index, sources)) if args.record else []
+    unverified = set(to_compile)
+    to_measure = []
     measuring = measure_fingerprint() if args.record else None
-    builder = inputs.blobs.get("tools/build_x360.py")
     for source in sources:
         entry, record, known = index.get(source), records.get(source), deps.get(source)
-        current = inputs.state(source, index)
         if args.record:
-            stamp = object_stamp(entry) if entry and entry["passed"] else None
-            compile_ = not (known and stamp and known.get("object") == stamp and known.get("inputs") == current
-                            and known.get("builder") == builder
-                            and known.get("toolchain") == toolchain(entry["command"], tree, xdk))
-            measure_ = (compile_ or record is None or known.get("measure") != measuring
+            measure_ = (source in unverified or record is None or known is None
+                        or known.get("object") != entry["build_object"] or known.get("measure") != measuring
                         or known.get("record") != measurement_identity(record))
         else:
-            compile_ = entry is None or record is None or known != current
-            measure_ = compile_
-        if compile_:
-            to_compile.append(source)
+            measure_ = entry is None or record is None or known != inputs.state(source, index)
+            if measure_:
+                to_compile.append(source)
         if measure_:
             to_measure.append(source)
     print(f"{len(to_measure)} of {len(sources)} native sources need measuring at {head[:12]} "
@@ -474,6 +530,8 @@ def refresh(args):
                 deps[source] = inputs.state(source, index)
             save_deps(tree, deps)
     if args.record:
+        if clean_build_head(tree) != head:
+            raise SystemExit("The native checkout changed during refresh. Verification state was not advanced.")
         gone = [s for s in records if s not in set(sources)]
         for source in gone:
             ledger.record_path(source).unlink()

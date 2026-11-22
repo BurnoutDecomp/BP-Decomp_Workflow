@@ -558,7 +558,8 @@ def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, t
     monkeypatch.setattr(bytematch, "need_tree", lambda _: tmp_path)
     monkeypatch.setattr(bytematch, "need_xdk", lambda _: tmp_path)
     monkeypatch.setattr(bytematch, "require_landable", lambda _: head)
-    monkeypatch.setattr(bytematch, "tree_entries", lambda _: {source: ("blob", "same-blob")})
+    monkeypatch.setattr(bytematch, "clean_build_head", lambda _: head)
+    monkeypatch.setattr(bytematch, "tree_entries", lambda *_: {source: ("blob", "same-blob")})
     monkeypatch.setattr(bytematch, "native_sources", lambda _: [source])
     monkeypatch.setattr(bytematch, "load_index", lambda _: index)
     monkeypatch.setattr(bytematch, "toolchain", lambda *_: record["toolchain"])
@@ -573,8 +574,9 @@ def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, t
     bytematch.refresh(SimpleNamespace(record=True, jobs=1))
     assert trace == [("compile", [source]), ("measure", [source])]
 
-    measurement = {"inputs": inputs, "measure": "before", "record": bytematch.measurement_identity(record),
-                   "object": bytematch.object_stamp(index[source]), "toolchain": record["toolchain"]}
+    stamp = bytematch.object_stamp(index[source])
+    index[source].update(build_commit=head, build_object=stamp, build_toolchain=record["toolchain"])
+    measurement = {"measure": "before", "record": bytematch.measurement_identity(record), "object": stamp}
     bytematch.save_deps(tmp_path, {source: measurement}, recorded=True)
     monkeypatch.setattr(bytematch, "measure_fingerprint", lambda: "after")
     trace.clear()
@@ -595,6 +597,41 @@ def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, t
     trace.clear()
     bytematch.refresh(SimpleNamespace(record=True, jobs=1))
     assert trace == [("compile", [source]), ("measure", [source])]
+
+
+def test_measure_cannot_record_an_object_from_changed_inputs(monkeypatch, tmp_path):
+    import artist
+
+    source, header = "src/a.cpp", "src/a.h"
+    previous, head = "b" * 40, "a" * 40
+    obj = tmp_path / "a.obj"
+    obj.write_bytes(b"cached object")
+    entry = {"object": str(obj), "passed": True, "command": ["cl"], "includes": [header],
+             "build_commit": previous, "build_toolchain": "xdk"}
+    entry["build_object"] = bytematch.object_stamp(entry)
+    monkeypatch.setattr(bytematch, "need_tree", lambda _: tmp_path)
+    monkeypatch.setattr(bytematch, "need_xdk", lambda _: tmp_path)
+    monkeypatch.setattr(bytematch, "require_landable", lambda _: head)
+    monkeypatch.setattr(bytematch, "load_index", lambda _: {source: entry})
+    monkeypatch.setattr(bytematch, "toolchain", lambda *_: "xdk")
+    monkeypatch.setattr(bytematch, "tree_entries", lambda _, commit="HEAD": {
+        source: ("blob", "unchanged-source"), header: ("blob", "older" if commit == previous else "newer"),
+    })
+    monkeypatch.setattr(artist, "Artist", lambda: object())
+    monkeypatch.setattr(bytematch, "measure_object", lambda *_: [])
+    written = []
+    monkeypatch.setattr(ledger, "write_record", written.append)
+    args = SimpleNamespace(record=True, all=False, sources=[source], compile=False, no_compile=True, jobs=1, verbose=False)
+    with pytest.raises(SystemExit, match="not verified for this commit"):
+        bytematch.measure(args)
+    assert written == []
+
+    monkeypatch.setattr(bytematch, "clean_build_head", lambda _: head)
+    monkeypatch.setattr(bytematch, "tree_entries", lambda *_: {
+        source: ("blob", "unchanged-source"), header: ("blob", "same-header"),
+    })
+    bytematch.measure(args)
+    assert len(written) == 1 and written[0]["commit"] == head
 
 
 def test_record_round_trip_and_path_check(tmp_path):

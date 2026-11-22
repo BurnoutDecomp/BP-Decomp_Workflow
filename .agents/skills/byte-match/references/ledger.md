@@ -50,7 +50,10 @@ summary keeps the best copy measured against the current ARTIST length.
   when the comparison modules or ARTIST name inputs change (`MEASURE_INPUTS` in
   `tools/bytematch/bytematch.py`). An unchanged native object can be reused when its recorded
   build inputs and cache stamp agree. Local preview builds do not certify committed records.
-  The first recorded refresh of an older local cache rebuilds objects that lack recorded stamps.
+  A local object records the commit of a clean XDK build. `measure --record` checks those source,
+  header, submodule and builder inputs at the commit being recorded, and rebuilds when it cannot
+  prove they agree. `--no-compile` reports that failure without writing a verdict. Cached builds
+  with no provenance, including older imported objects, still work for previews.
 
 ## The summary and CI
 
