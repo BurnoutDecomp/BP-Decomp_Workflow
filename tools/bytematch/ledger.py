@@ -173,6 +173,17 @@ def _add(bucket, status, size, score):
     bucket["fuzzy_bytes"] += size * (score or 0.0) / 100.0
 
 
+def _covered_bytes(rows):
+    """Count the union of the half-open address ranges in the function rows."""
+    covered = 0
+    covered_end = 0
+    for start, size in sorted((int(address, 16), size) for address, _, size, *_ in rows):
+        end = start + size
+        covered += max(0, end - max(start, covered_end))
+        covered_end = max(covered_end, end)
+    return covered
+
+
 def build_summary(universe, records, *, head=None, head_blobs=None, state=None, behind=None,
                   previous=None, generated_at=None):
     generated_at = generated_at or now_iso()
@@ -237,13 +248,13 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
 
     game = totals["game"]
     game["fuzzy_bytes"] = round(game["fuzzy_bytes"], 1)
-    # The whole image is the real denominator: every ARTIST function, whoever provides it.
-    # "matched" = byte-identical to ARTIST: exact from our source, or linked from the XDK.
+    # Function totals count entries. Code byte totals count each covered address once.
+    # "matched" = exact from our source, or provided by the XDK.
     totals["all"] = {
         "functions": game["functions"] + totals["sdk"]["functions"] + totals["unnamed"]["functions"],
-        "bytes": game["bytes"] + totals["sdk"]["bytes"] + totals["unnamed"]["bytes"],
+        "bytes": _covered_bytes(rows),
         "matched": game["exact"] + totals["sdk"]["functions"],
-        "matched_bytes": game["exact_bytes"] + totals["sdk"]["bytes"],
+        "matched_bytes": _covered_bytes(row for row in rows if row[3] in ("exact", "sdk")),
     }
     objects = {"sources": len(records), "compiled": sum(1 for r in records if r.get("compiled", True)),
                "stale": len(stale_sources), "unpaired": sum(unpaired.values())}
@@ -304,14 +315,14 @@ def render_markdown(summary) -> str:
         lines.append("- No full refresh recorded yet: records stand at the commits they name.")
     lines += [
         "",
-        f"**{whole['matched']:,} of the image's {whole['functions']:,} functions "
+        f"**{whole['matched']:,} of {whole['functions']:,} catalogued functions "
         f"({pct(whole['matched'], whole['functions'])}) byte-match ARTIST**, "
-        f"{pct(whole['matched_bytes'], whole['bytes'])} of its {whole['bytes']:,} bytes of code: "
-        f"{game['exact']:,} compiled from our source and {sdk['functions']:,} linked from the XDK's libraries.",
+        f"covering {pct(whole['matched_bytes'], whole['bytes'])} of {whole['bytes']:,} catalogued code bytes. "
+        f"{game['exact']:,} functions compile from our source and {sdk['functions']:,} come from the XDK.",
         "",
         "| Part of the image | Functions | Byte-match ARTIST | Code bytes | Code bytes matching | Fuzzy code match |",
         "|---|---:|---:|---:|---:|---:|",
-        f"| **Whole image** | {whole['functions']:,} | {whole['matched']:,} ({pct(whole['matched'], whole['functions'])}) | "
+        f"| **Catalogued code** | {whole['functions']:,} | {whole['matched']:,} ({pct(whole['matched'], whole['functions'])}) | "
         f"{whole['bytes']:,} | {pct(whole['matched_bytes'], whole['bytes'])} | |",
         f"| Our source (game and middleware) | {game['functions']:,} | {game['exact']:,} ({pct(game['exact'], game['functions'])}) | "
         f"{game['bytes']:,} | {pct(game['exact_bytes'], game['bytes'])} | {pct(game['fuzzy_bytes'], game['bytes'])} |",

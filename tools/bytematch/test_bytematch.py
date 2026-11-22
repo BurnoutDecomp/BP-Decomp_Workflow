@@ -502,6 +502,22 @@ def test_first_exact_survives_and_regressions_drop_out():
     assert "82100000" not in after["first_exact"] and not after["recent"]
 
 
+def test_summary_counts_overlapping_code_bytes_once():
+    universe = {"functions": [
+        ["82100000", 40, "A::f", "game", "World", "tuA"],
+        ["82100010", 80, "A::g", "game", "World", "tuA"],
+        ["82100020", 4, "B::h", "game", "World", "tuB"],
+        ["82100050", 64, "memcpy", "sdk", "XDK/libcMT.lib", None],
+        ["82100100", 12, "sub_82100100", "unnamed", "unnamed", None],
+    ]}
+    exact = [{"artist": address, "status": "exact", "score": 100.0}
+             for address in ("82100000", "82100010")]
+    summary = ledger.build_summary(universe, [_record("src/a.cpp", "c1", "blobA", exact)])
+    assert summary["totals"]["all"] == {
+        "functions": 5, "bytes": 156, "matched": 3, "matched_bytes": 144,
+    }
+
+
 def test_record_round_trip_and_path_check(tmp_path):
     record = _record("src/Game/X.cpp", "c1", "b1", [{"symbol": "s", "name": "X::f", "artist": "82100000", "status": "exact", "score": 100.0}])
     path = ledger.write_record(record, tmp_path)
