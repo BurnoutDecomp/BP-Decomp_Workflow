@@ -5179,6 +5179,30 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x8295F4A0": {
+      "symbol": "XAUDIO::CObjectRefCount::GetRefCount",
+      "size": 8,
+      "lib": "xact.lib",
+      "member": "obj\\xbox\\streamingwavebank.obj",
+      "archive_symbol": "?GetRefCount@CObjectRefCount@XAUDIO@@UAAKXZ",
+      "vtable_slots": ["0x821B5538"],
+      "evidence": "The archive CEngine destructor loads the vtable at 0x821B5528. Its deleting destructor, AddRef, Release and AbsoluteRelease slots agree. The final GetRefCount slot points here, and the complete XDK body matches."
+    },
+    "0x82C75B30": {
+      "symbol": "`operator new'::`6'::`dynamic atexit destructor for 'nomem''",
+      "size": 44,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\new.obj",
+      "archive_symbol": "??__Fnomem@?5???2@YAPAXI@Z@YAXXZ",
+      "caller": "0x82C08DF0",
+      "refhi_site": "0x82C08E68",
+      "reflo_site": "0x82C08E6C",
+      "archive_data_targets": {
+        "??_7exception@std@@6B@": "0x82188CEC",
+        "?nomem@?5???2@YAPAXI@Z@4Vbad_alloc@std@@B": "0x832BAD40"
+      },
+      "evidence": "The matching operator new registers the archive destructor and separately loads nomem at 0x82C08E5C. Both linked std::exception table slots agree with the archive, the deleting destructor at 0x82C08CB8 and what at 0x82C08CA0."
+    },
     "0x829F0268": {
       "symbol": "WMVideoDecUpdateDstLineYUY2",
       "size": 424,
@@ -6122,6 +6146,13 @@
     }
   },
   "identified_functions": {
+    "0x82BCF398": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CRequestObject::ClearThirdPartyID",
+      "size": 76,
+      "tu": "class:MassiveAdClient3::CRequestObject",
+      "evidence": "The matching XDK CRequestManager::Shutdown branch at 0x82BD0800 identifies the cleanup entry. The native body matches with the SDK-attested protected static m_szThirdPartyID at 0x8327F2C4 and the existing free hook at 0x82F91C18."
+    },
     "0x82A60C00": {
       "exported_name": "sub_82A60C00",
       "symbol": "MotionCompMixed_Common",

@@ -381,7 +381,7 @@ class Artist:
         label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
         if "vtable_slots" in proof:
             slots = [int(slot, 16) for slot in proof["vtable_slots"]]
-            if (kind != "native_leaf" or start != address or not slots or not all(
+            if (start != address or not slots or not all(
                     slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
                     and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
                 raise ValueError(f"{label} {address:08X} has no matching vtable witness")

@@ -720,11 +720,12 @@ def test_native_leaf_verdict_comes_from_its_object(tmp_path):
         assert row["status"] == expected
 
 
-def test_virtual_leaf_requires_a_matching_vtable_slot():
+@pytest.mark.parametrize("kind", ["native_leaf", "sdk_leaf"])
+def test_virtual_leaf_requires_a_matching_vtable_slot(kind):
     leaf, slot = 0x821F1000, 0x820AE20C
     address = f"0x{leaf:08X}"
     proof = {"symbol": "Sound::State::Detach", "size": 8, "vtable_slots": [f"0x{slot:08X}"]}
-    pack = {address: {"unlisted": True, "native_leaf": proof}}
+    pack = {address: {"unlisted": True, kind: proof}}
 
     def art_with_slot(pointer):
         def read(address, size):
@@ -733,7 +734,7 @@ def test_virtual_leaf_requires_a_matching_vtable_slot():
         return Artist(pack=pack, read=read)
 
     matching = art_with_slot(leaf)
-    assert matching.size(leaf) == (8, "native_leaf")
+    assert matching.size(leaf) == (8, kind)
     assert matching.by_name["Sound::State::Detach"] == [leaf]
     with pytest.raises(ValueError, match="no matching vtable witness"):
         art_with_slot(leaf + 4)

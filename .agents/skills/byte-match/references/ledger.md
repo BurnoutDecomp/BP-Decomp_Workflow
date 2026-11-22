@@ -117,6 +117,8 @@ previous summary, dropped on a regression) and `recent`.
   full value against the archive's read-only section.
   An independently witnessed mutable global address can use `archive_data_targets`. Record a
   separate matching reader that confirms the symbol's linked address.
+  A virtual SDK leaf can use `vtable_slots`. Confirm the table owner and surrounding slots
+  against the archive before using the pointer to identify a body.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
