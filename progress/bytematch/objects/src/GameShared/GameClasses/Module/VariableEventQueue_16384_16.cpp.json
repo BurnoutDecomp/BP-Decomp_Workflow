@@ -1,13 +1,13 @@
 {
- "blob": "7585810a8a2634760608590fcc9d1e5eb0a3ffe9",
- "commit": "7a256a98ba7a0530bbb6d2940b2b158997cabbfa",
+ "blob": "d72dc1b0ccd6d63660c72ec95882b3df8ad70081",
+ "commit": "882df69ce0322abf985fb5938ac00f4fa79e9ca1",
  "compiled": true,
- "measured": "2026-11-21T23:32:13Z",
+ "measured": "2026-11-22T00:08:34Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Module/VariableEventQueue_16384_16.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 32,
+ "unpaired": 23,
  "functions": [
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
@@ -34,7 +34,19 @@
   {"artist": "8266BE38", "artist_size": 412, "data_unchecked": 17, "name": "CgsModule::VariableEventQueue<16384,16>::Append<512,16>", "score": 100.0, "size": 412, "status": "exact", "symbol": "??$Append@$0CAA@$0BA@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABV?$VariableEventQueue@$0CAA@$0BA@@1@@Z"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
   {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 12.5, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"},
-  {"artist": "82827340", "artist_size": 220, "first_diff": 8, "name": "CgsModule::VariableEventQueue<16384,16>::AddStringEventSafe", "score": 44.9, "size": 208, "status": "nonmatching", "symbol": "?AddStringEventSafe@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NPBDH@Z"},
+  {"artist": "82827340", "artist_size": 220, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddStringEventSafe", "score": 100.0, "size": 220, "status": "exact", "symbol": "?AddStringEventSafe@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NPBDH@Z"},
+  {"artist": "82828418", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawText2D>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawText2D@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawText2D@Internal@CgsDev@@H@Z"},
+  {"artist": "82828588", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawBox2D>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawBox2D@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawBox2D@Internal@CgsDev@@H@Z"},
+  {"artist": "82828640", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawText>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawText@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawText@Internal@CgsDev@@H@Z"},
+  {"artist": "828286F8", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawLine>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawLine@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawLine@Internal@CgsDev@@H@Z"},
+  {"artist": "828287B0", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawQuad>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawQuad@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawQuad@Internal@CgsDev@@H@Z"},
+  {"artist": "82828868", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawAxis>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawAxis@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawAxis@Internal@CgsDev@@H@Z"},
+  {"artist": "82828920", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawSphere>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawSphere@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawSphere@Internal@CgsDev@@H@Z"},
+  {"artist": "828289D8", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawSolidSphere>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawSolidSphere@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawSolidSphere@Internal@CgsDev@@H@Z"},
+  {"artist": "82828A90", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawCircle>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawCircle@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawCircle@Internal@CgsDev@@H@Z"},
+  {"artist": "82828B48", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawBox>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawBox@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawBox@Internal@CgsDev@@H@Z"},
+  {"artist": "82828C00", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawSolidBox>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawSolidBox@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawSolidBox@Internal@CgsDev@@H@Z"},
+  {"artist": "82828CB8", "artist_size": 184, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawArrow>", "score": 100.0, "size": 184, "status": "exact", "symbol": "??$AddEventSafe@UCInEventDrawArrow@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABUCInEventDrawArrow@Internal@CgsDev@@H@Z"},
   {"artist": "828E9CC0", "artist_size": 164, "calls_unverified": 1, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<16384,16>::Destruct", "score": 100.0, "size": 164, "status": "exact", "symbol": "?Destruct@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAAXXZ"}
  ]
 }
