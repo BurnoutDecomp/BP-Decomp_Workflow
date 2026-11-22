@@ -87,7 +87,12 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
                 )
         for kind in ("sdk_leaf", "native_leaf"):
             for address, proof in registry.get(f"{kind}_functions", {}).items():
-                functions.setdefault(address, {"unlisted": True, kind: proof})
+                if "previous_size" in proof:
+                    row = functions.get(address)
+                    if kind == "native_leaf" and row and row.get("name") == proof["symbol"]:
+                        row[kind] = proof
+                else:
+                    functions.setdefault(address, {"unlisted": True, kind: proof})
     return functions
 
 
@@ -230,23 +235,35 @@ class Artist:
             self.unnamed.add(address)
 
     def _include_leaves(self, proofs):
-        """Admit attested extents only in image gaps with a witnessed call target."""
+        """Recover leaf entries and omitted tails using branches into image gaps."""
         from compare import branch_target
 
         occupied = self.extents | {address: self.size(address)[0] for address in self.names}
-        available = dict(disjoint_extents(occupied, ((a, p["size"]) for a, (_, p) in proofs.items())))
+        candidates = []
+        for address, (kind, proof) in proofs.items():
+            previous = proof.get("previous_size", 0)
+            if previous and self.size(address) != (previous, "ida"):
+                raise ValueError(f"Native leaf extent at {address:08X} no longer agrees with the export")
+            candidates.append((address + previous, address, kind, proof))
+        available = dict(disjoint_extents(occupied, ((start, address + p["size"] - start)
+                                                     for start, address, _, p in candidates)))
         end = TEXT_START
-        for address, (kind, proof) in sorted(proofs.items()):
+        for start, address, kind, proof in sorted(candidates):
             size = proof["size"]
+            extending = start != address
             label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
-            if (address not in available or address < end or address % 4 or size <= 0
+            if (start not in available or start < end or address % 4 or address + size <= start
                     or size % 4 or address + size > TEXT_END):
                 raise ValueError(f"Invalid or overlapping {label} extent at {address:08X}")
             caller, site = int(proof["caller"], 16), int(proof["call_site"], 16)
-            if site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4:
+            if (site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4
+                    or (extending and caller != address)):
                 raise ValueError(f"{label} {address:08X} has a witness outside its caller")
             word, = struct.unpack(">I", self.bytes(site, 4))
-            if word >> 26 != 18 or branch_target(word, site, 0x03FFFFFC) != address:
+            opcode = word >> 26
+            target = branch_target(word, site, 0x03FFFFFC if opcode == 18 else 0x0000FFFC)
+            if (extending and (opcode not in (16, 18) or not start <= target < address + size)
+                    or not extending and (opcode != 18 or target != address)):
                 raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
             self.names[address] = proof["symbol"]
             self.leaf_extents[address] = (size, kind)

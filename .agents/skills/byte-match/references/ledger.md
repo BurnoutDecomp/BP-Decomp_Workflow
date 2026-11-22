@@ -85,7 +85,9 @@ previous summary, dropped on a regression) and `recent`.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines
-  whether the native implementation matches outside its relocation fields.
+  whether the native implementation matches outside its relocation fields. For an exported leaf
+  with an omitted tail, include `previous_size` and give a branch inside the exported extent that
+  reaches the tail. The omitted range must fit a gap and the complete body must compare exact.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,

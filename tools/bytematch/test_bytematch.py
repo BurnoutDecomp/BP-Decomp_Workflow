@@ -393,6 +393,33 @@ def test_native_leaf_verdict_comes_from_its_object(tmp_path):
         assert row["status"] == expected
 
 
+def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path):
+    from bytematch import measure_object
+
+    leaf = 0x821F1020
+    body = [bl_to(leaf, leaf + 8) & ~1, 0x38600007, BLR]
+    image = FakeArtist([(leaf, "Leaf", body), (leaf + 12, "Next", [BLR])])
+    addr = f"0x{leaf:08X}"
+    pack = {**image.pack, addr: {**image.pack[addr], "n": 2}}
+    pack_path = tmp_path / "artist.json.gz"
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode()))
+    aliases = tmp_path / "source_aliases.json"
+    aliases.write_text(json.dumps({"native_leaf_functions": {addr: {
+        "symbol": "Leaf", "previous_size": 8, "size": 12, "caller": addr, "call_site": addr,
+    }}}), encoding="utf-8")
+    resolved = load_pack(pack_path, aliases_path=aliases)
+    art = Artist(pack=resolved, read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
+    assert art.size(leaf) == (12, "native_leaf")
+    obj_path = tmp_path / "leaf.obj"
+    obj_path.write_bytes(make_object([("Leaf", body, [])]))
+    row, = measure_object(obj_path, art)
+    assert row["status"] == "exact"
+
+    pdata = struct.pack(">II", leaf, 0x40000200)
+    with pytest.raises(ValueError, match="no longer agrees with the export"):
+        Artist(pack=resolved, read=lambda address, size: pdata if address == PDATA_START else image.bytes(address, size))
+
+
 def _universe():
     return {"meta": {"functions": 5},
             "functions": [["82100000", 40, "A::f", "game", "GameSource/World", "tuA"],
