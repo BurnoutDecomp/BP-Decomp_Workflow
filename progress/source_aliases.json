@@ -2,6 +2,13 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x82BDD2D0": {
+      "exported_name": "rw::audio::core::SndPlayer1::GetPpuTicksEvent",
+      "evidence": "The XDK CRequestDownloadBinary constructor matches at 0x82BDD280 and installs the table at 0x82187AD0. The deleting destructor and Parse slots agree. The getter slot at 0x82187AD8 points to this body, and the complete eight-byte XDK getter matches with no relocations.",
+      "aliases": {
+        "MassiveAdClient3::CRequestDownloadBinary::GetRequestURL": "xmassiveadclient.lib:obj\\xbox\\requestdownloadbinary.obj"
+      }
+    },
     "0x825011B0": {
       "exported_name": "BrnGui::Video::GetResourcesToLoad",
       "evidence": "Each listed XDK 6534.4 symbol matches all 12 bytes at 0x825011B0 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x825011B0 in ARTIST.",
@@ -10300,6 +10307,13 @@
     }
   },
   "native_leaf_functions": {
+    "0x82BDC4D0": {
+      "symbol": "MassiveAdClient3::CRequestExitZone::GetRequestURL",
+      "size": 12,
+      "tu": "class:MassiveAdClient3::CRequestExitZone",
+      "vtable_slots": ["0x82187858"],
+      "evidence": "The XDK constructor matches ARTIST at 0x82BDC488 and installs the vtable at 0x82187850. After the deleting destructor and Parse, slot 2 points here. The getter loads the SDK-attested m_szRequestURL pointer at 0x82F91D6C, which resolves to the matching endpoint string at 0x8218783C."
+    },
     "0x82BF4670": {
       "symbol": "removeentry",
       "size": 36,
