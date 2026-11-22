@@ -132,9 +132,11 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
   first.
 - **Source fidelity and byte matching are both required.** Recover the supported declaration,
   semantics and abstraction before tuning the generated instructions. Use existing methods, types
-  and SDK APIs when the evidence supports them. For a shared type change, compile the full include
-  closure with the XDK, check affected offsets/size/alignment and compare all previously exact
-  functions in those objects.
+  and SDK APIs when the evidence supports them: call the helper already on `x360` (or its `dev`
+  counterpart, carried over faithfully) rather than writing a second one, and call the XDK API
+  where ARTIST calls it. Code ARTIST links from the XDK is `sdk`: link it, never rewrite it. For a
+  shared type change, compile the full include closure with the XDK, check affected
+  offsets/size/alignment and compare all previously exact functions in those objects.
 - **Justify unusual constructs.** A low-level cast, explicit alignment or padding, compiler
   directive, temporary or control-flow shape needs a brief source comment or commit note naming
   the ARTIST address or other declaration/SDK evidence and the requirement it satisfies. An
@@ -142,6 +144,9 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
   If a supported source form and an existing exact match conflict, record the evidence, attempted
   source and remaining byte difference. Keep the verified baseline until a supported replacement
   passes both checks. A `FAKEMATCH` comment records a conflict and grants no exception.
+- **Verify natively, never at runtime.** The proof is an XDK compile plus the byte comparison
+  (`work match diff|measure`). Never launch the game, run a harness case or build the PC exe to
+  check native work.
 - **Never invent.** Constants come from the image (`python tools/re/x360rd.py <addr> <n>`), cited
   by address, never tuned until the diff goes quiet. A literal-pool mismatch in the diff means the
   constant is wrong, not the scheduling.
