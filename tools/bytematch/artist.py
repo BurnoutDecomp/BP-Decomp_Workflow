@@ -94,6 +94,10 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
                         row[kind] = proof
                 else:
                     functions.setdefault(address, {"unlisted": True, kind: proof})
+        for address, proof in registry.get("sdk_entry_groups", {}).items():
+            if not proof["entries"] or functions.get(address, {}).get("name") != proof["entries"][0]:
+                raise ValueError(f"SDK entry group {address} no longer agrees with the export")
+            functions[address]["sdk_entry_group"] = proof
     return functions
 
 
@@ -161,6 +165,7 @@ class Artist:
         self._trimmed = {}
         identities = {}
         leaves = {}
+        entry_groups = {}
         for text, row in self.pack.items():
             address = int(text, 16)
             if "identity" in row:
@@ -169,6 +174,8 @@ class Artist:
                 leaves[address] = ("sdk_leaf", row["sdk_leaf"])
             elif "native_leaf" in row:
                 leaves[address] = ("native_leaf", row["native_leaf"])
+            if "sdk_entry_group" in row:
+                entry_groups[address] = row["sdk_entry_group"]
             if row.get("unlisted"):
                 continue
             self.names[address] = row["name"]
@@ -191,6 +198,8 @@ class Artist:
                     self.identified_tus[address] = tu
         if leaves:
             self._include_leaves(leaves)
+        if entry_groups:
+            self._split_sdk_entry_groups(entry_groups)
         self.by_name = {}
         for address, name in self.names.items():
             if address not in self.unnamed:
@@ -289,6 +298,27 @@ class Artist:
             if (extending and (opcode not in (16, 18) or not start <= target < end)
                     or not extending and (opcode != 18 or target != address)):
                 raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
+
+    def _split_sdk_entry_groups(self, groups):
+        """Split a single exported extent into disjoint archive entry ranges."""
+        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
+        for address, proof in sorted(groups.items()):
+            names, size = proof["entries"], proof["entry_size"]
+            length = len(names) * size
+            if (len(names) < 2 or len(set(names)) != len(names) or size <= 0 or size % 4
+                    or self.names.get(address) != names[0] or self.size(address) != (length, "ida")):
+                raise ValueError(f"SDK entry group {address:08X} does not match its exported extent")
+            del occupied[address]
+            if next(disjoint_extents(occupied, [(address, length)]), None) is None:
+                raise ValueError(f"SDK entry group {address:08X} overlaps another function")
+            for index, name in enumerate(names):
+                start = address + index * size
+                self.names[start] = name
+                self.leaf_extents[start] = (size, "sdk_entry")
+                self.sdk_leaves[start] = {"symbol": name, "archive_symbol": name, "archive_entry": True,
+                                          "lib": proof["lib"], "member": proof["member"], "group": address}
+                self.unnamed.discard(start)
+                occupied[start] = size
 
     def _switch_reaches_tail(self, caller, site, entry, tail, end):
         """Check an XDK absolute jump table and a case that reaches the omitted tail."""

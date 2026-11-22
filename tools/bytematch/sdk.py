@@ -75,17 +75,26 @@ def verify_leaf_providers(artist, lib_dir):
         addresses[proof["lib"], proof["member"], proof["archive_symbol"], entry].append(address)
 
     found = {}
+    group_locations = defaultdict(set)
     for lib, member, obj, fn, entry in library_functions(lib_dir, only_members=members):
         for address in addresses.get((lib, member, fn.symbol, entry), ()):
             size, _ = artist.size(address)
+            group = artist.sdk_leaves[address].get("group")
+            if group is not None and fn.relocs:
+                continue
             if (len(fn.code) == size and artist.matches_name(address, demangle(fn.symbol))
                     and compare(fn, obj, artist, address, size, fuzzy=False).status == "exact"):
                 found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
+                if group is not None:
+                    group_locations[group].add((fn.section, fn.offset - (address - group)))
 
     missing = artist.sdk_leaves.keys() - found.keys()
     if missing:
         failed = ", ".join(f"{address:08X}" for address in sorted(missing))
         raise ValueError(f"SDK leaf archive comparison failed at {failed}")
+    for address, locations in group_locations.items():
+        if len(locations) != 1:
+            raise ValueError(f"SDK entry group {address:08X} is not contiguous in its archive member")
     return found
 
 

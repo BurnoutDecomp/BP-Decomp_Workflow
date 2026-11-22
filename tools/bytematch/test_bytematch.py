@@ -376,6 +376,42 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_sdk_entry_group_requires_disjoint_contiguous_archive_entries(monkeypatch, tmp_path):
+    from dataclasses import replace
+
+    import sdk
+
+    address = 0x821F1000
+    body = [0x38600007, BLR]
+    image = FakeArtist([(address, "Save0", body)])
+    entry_names = ["Save0", "Save1"]
+    image.pack[f"0x{address:08X}"]["sdk_entry_group"] = {
+        "lib": "sdk.lib", "member": "save.obj", "entry_size": 4, "entries": entry_names,
+    }
+
+    def read(at, size):
+        return b"" if at == PDATA_START else image.bytes(at, size)
+
+    art = Artist(pack=image.pack, read=read)
+    assert art.by_name == {"Save0": [address], "Save1": [address + 4]}
+    assert [art.size(at) for at in art.by_name["Save0"] + art.by_name["Save1"]] == [(4, "sdk_entry")] * 2
+
+    obj = coff.ObjectFile(make_object([(name, [word], []) for name, word in zip(entry_names, body)]))
+    first, second = obj.functions()
+    second = replace(second, section=first.section, offset=first.offset + 4)
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [
+        ("sdk.lib", "save.obj", obj, first, True), ("sdk.lib", "save.obj", obj, second, True),
+    ])
+    assert sorted(sdk.verify_leaf_providers(art, tmp_path)) == [address, address + 4]
+    second = replace(second, offset=first.offset + 8)
+    with pytest.raises(ValueError, match="not contiguous"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+    overlap = FakeArtist([(address + 4, "Overlap", [BLR])]).pack
+    with pytest.raises(ValueError, match="overlaps another function"):
+        Artist(pack=image.pack | overlap, read=read)
+
+
 def test_native_leaf_verdict_comes_from_its_object(tmp_path):
     from bytematch import measure_object
 

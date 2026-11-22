@@ -98,6 +98,9 @@ previous summary, dropped on a regression) and `recent`.
   comparison is required even when rebuilding with `--providers`. For a shared CRT assembly
   helper, set `archive_entry` when the witness calls a named entry within the archive section.
   Record only the instructions up to the next entry to keep the catalogue ranges disjoint.
+  When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition
+  that extent. The export length must equal the complete partition, and each entry must compare
+  exact at the corresponding offset in one archive section.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines

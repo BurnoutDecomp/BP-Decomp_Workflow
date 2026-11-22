@@ -5138,6 +5138,22 @@
       "evidence": "The aligned CgsSceneManager::OverlapCullingIO::InputBuffer::Construct call at 0x828CB678 has the matching native COFF relocation. The native specialisation compares exact over the full 112-byte extent."
     }
   },
+  "sdk_entry_groups": {
+    "0x82C0A590": {
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crtfpr.obj",
+      "entry_size": 4,
+      "entries": ["__savefpr_14", "__savefpr_15", "__savefpr_16", "__savefpr_17", "__savefpr_18", "__savefpr_19", "__savefpr_20", "__savefpr_21", "__savefpr_22", "__savefpr_23", "__savefpr_24"],
+      "evidence": "ARTIST exports the 44 bytes from __savefpr_14 as a single span. The XDK archive names each entry and all 44 bytes match. The native OnActivate relocation at ARTIST 0x827B2414 identifies __savefpr_24 within the span."
+    },
+    "0x82C0A5DC": {
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crtfpr.obj",
+      "entry_size": 4,
+      "entries": ["__restfpr_14", "__restfpr_15", "__restfpr_16", "__restfpr_17", "__restfpr_18", "__restfpr_19", "__restfpr_20", "__restfpr_21", "__restfpr_22", "__restfpr_23", "__restfpr_24"],
+      "evidence": "ARTIST exports the 44 bytes from __restfpr_14 as a single span. The XDK archive names each entry and all 44 bytes match. The native OnActivate relocation at ARTIST 0x827B3B20 identifies __restfpr_24 within the span."
+    }
+  },
   "sdk_leaf_functions": {
     "0x8295EF50": {
       "symbol": "XNetGetTitleXnAddr",
