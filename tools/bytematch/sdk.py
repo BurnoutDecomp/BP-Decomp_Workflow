@@ -184,8 +184,8 @@ def identify(artist: Artist, lib_dir, log=print):
     by_size = defaultdict(list)
     by_head = defaultdict(list)   # (size, first word) -> addresses: most library bodies start unrelocated
     for address in artist.names:
-        size, _ = artist.size(address)
-        if size:
+        size, origin = artist.size(address)
+        if size and origin != "crt_leaf":  # registration alone gives no archive provenance
             by_size[size].append(address)
             by_head[(size, artist.bytes(address, 4))].append(address)
     claims = defaultdict(dict)   # address -> {(lib, member, symbol): name evidence rank}

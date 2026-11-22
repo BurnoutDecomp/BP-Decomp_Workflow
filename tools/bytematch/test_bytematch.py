@@ -20,6 +20,7 @@ sys.path.insert(0, str(HERE))
 import artist  # noqa: E402
 import coff  # noqa: E402
 import ledger  # noqa: E402
+import sdk  # noqa: E402
 import bytematch  # noqa: E402
 from artist import Artist, PDATA_START, load_pack, packed_extents  # noqa: E402
 from bytematch import BuildInputs, includes_from_log  # noqa: E402
@@ -312,6 +313,39 @@ def test_catalogue_counts_only_disjoint_straight_line_crt_leaves(monkeypatch):
     assert art.leaf_extents == {base: (12, "crt_leaf"), base + 0x40: (4, "crt_leaf")}
     assert art.names[base + 0x10] == "Existing"
     assert not art.sdk_leaves
+
+
+def test_native_crt_identity_requires_its_registration_and_complete_body(monkeypatch):
+    leaf, slot = artist.TEXT_START, artist.CRT_INITIALIZERS_START
+    monkeypatch.setattr(artist, "CRT_INITIALIZERS_END", slot + 8)
+    monkeypatch.setattr(artist, "PRIMARY_TEXT_END", leaf + 16)
+    pointers = struct.pack(">II", leaf + 8, leaf)
+    code = struct.pack(">4I", 0x38600000, BLR, BLR, 0)
+
+    def read(address, size):
+        if address == PDATA_START:
+            return b""
+        base, data = (slot, pointers) if address >= slot else (leaf, code)
+        offset = address - base
+        return data[offset:offset + size]
+
+    proof = {"symbol": "InitializeValue", "size": 8, "crt_slot": f"0x{slot + 4:08X}"}
+    pack = {f"0x{leaf:08X}": {"unlisted": True, "native_leaf": proof}}
+    art = Artist(pack=pack, read=read)
+
+    assert art.by_name["InitializeValue"] == [leaf]
+    assert art.size(leaf) == (8, "crt_leaf")
+    obj = coff.ObjectFile(make_object([("InitializeValue", [0x38600000, BLR], [])]))
+    monkeypatch.setattr(sdk, "library_functions",
+                        lambda _: iter([("sdk.lib", "initializer.obj", obj, obj.functions()[0], False)]))
+    assert sdk.identify(art, None, log=lambda _: None) == {}
+    proof["size"] = 12
+    with pytest.raises(ValueError, match="no matching registration and extent"):
+        Artist(pack=pack, read=read)
+    proof["size"] = 8
+    proof["crt_slot"] = f"0x{slot:08X}"
+    with pytest.raises(ValueError, match="no matching registration and extent"):
+        Artist(pack=pack, read=read)
 
 
 def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(tmp_path):

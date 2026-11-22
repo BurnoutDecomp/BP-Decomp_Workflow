@@ -254,10 +254,16 @@ class Artist:
 
     def include_unlisted_crt_leaves(self):
         """Catalogue registered straight-line leaves whose entire extent is readable."""
+        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
+        for address, size in self._crt_leaf_extents(occupied):
+            self.names[address] = f"sub_{address:08X}"
+            self.unnamed.add(address)
+            self.leaf_extents[address] = (size, "crt_leaf")
+
+    def _crt_leaf_extents(self, occupied):
         table = self.bytes(CRT_INITIALIZERS_START, CRT_INITIALIZERS_END - CRT_INITIALIZERS_START)
         entries = {address for (address,) in struct.iter_unpack(">I", table)
                    if TEXT_START <= address < PRIMARY_TEXT_END and address % 4 == 0}
-        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
         starts = sorted(entries | {address for address in occupied if address < PRIMARY_TEXT_END}
                         | {PRIMARY_TEXT_END})
         occupied_end = TEXT_START
@@ -275,9 +281,7 @@ class Artist:
                 for word in words[:-1]
             ):
                 continue
-            self.names[address] = f"sub_{address:08X}"
-            self.unnamed.add(address)
-            self.leaf_extents[address] = (4 * len(words), "crt_leaf")
+            yield address, 4 * len(words)
 
     def _include_leaves(self, proofs):
         """Recover leaf entries and omitted tails using references into image gaps."""
@@ -304,10 +308,24 @@ class Artist:
                 raise ValueError(f"Invalid or overlapping {label} extent at {address:08X}")
             end = address + size
 
+        if any("crt_slot" in proof for _, _, _, proof in pending):
+            known = occupied | {address: proof["size"] for _, address, _, proof in pending
+                                if "crt_slot" not in proof}
+            crt_sizes = dict(self._crt_leaf_extents(known))
+            for start, address, kind, proof in pending:
+                if "crt_slot" not in proof:
+                    continue
+                slot = int(proof["crt_slot"], 16)
+                if (kind != "native_leaf" or start != address or crt_sizes.get(address) != proof["size"]
+                        or slot % 4 or not CRT_INITIALIZERS_START <= slot < CRT_INITIALIZERS_END
+                        or struct.unpack(">I", self.bytes(slot, 4))[0] != address):
+                    raise ValueError(f"CRT leaf {address:08X} has no matching registration and extent")
+
         while pending:
             deferred = []
             for start, address, kind, proof in pending:
-                if "vtable_slots" not in proof and int(proof["caller"], 16) not in occupied:
+                if ("crt_slot" not in proof and "vtable_slots" not in proof
+                        and int(proof["caller"], 16) not in occupied):
                     deferred.append((start, address, kind, proof))
                     continue
                 self._add_witnessed_leaf(occupied, start, address, kind, proof)
@@ -338,10 +356,10 @@ class Artist:
                     slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
                     and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
                 raise ValueError(f"{label} {address:08X} has no matching vtable witness")
-        else:
+        elif "crt_slot" not in proof:
             self._check_leaf_branch(proof, occupied, label, address, start, address + size)
         self.names[address] = proof["symbol"]
-        self.leaf_extents[address] = (size, kind)
+        self.leaf_extents[address] = (size, "crt_leaf" if "crt_slot" in proof else kind)
         if kind == "sdk_leaf":
             self.sdk_leaves[address] = proof
             if proof.get("archive_aliases"):

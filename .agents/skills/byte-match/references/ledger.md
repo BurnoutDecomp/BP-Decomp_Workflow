@@ -133,6 +133,10 @@ previous summary, dropped on a regression) and `recent`.
   A virtual leaf can use `vtable_slots` instead of a caller and branch. Establish the ARTIST table
   owner and slot, check the pointer and native vtable relocation, and record that evidence with
   the symbol. The catalogue requires each listed slot to contain the leaf address in `.rdata`.
+  A named CRT initializer uses `crt_slot` to bind a native leaf to its registration and exact
+  extent. Check that the compiled `.CRT$XCU` slot registers the same object symbol, then verify
+  its literals and data relocations against ARTIST. Record how independent readers confirm the
+  destinations before giving the initializer a name.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,
