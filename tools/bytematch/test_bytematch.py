@@ -448,6 +448,26 @@ def test_sdk_entry_group_requires_disjoint_contiguous_archive_entries(monkeypatc
         Artist(pack=image.pack | overlap, read=read)
 
 
+def test_sdk_leaf_chain_requires_a_witness_from_an_existing_extent():
+    caller, target, wrapper = 0x821F1000, 0x821F1010, 0x821F1020
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, wrapper), BLR]),
+                        (wrapper, "Wrapper", [bl_to(wrapper, target)]), (target, "Target", [BLR])])
+
+    def proof(symbol, site):
+        return {"unlisted": True, "sdk_leaf": {"symbol": symbol, "size": 4, "caller": f"{site:X}",
+                                               "call_site": f"{site:X}"}}
+
+    def read(address, size):
+        return b"" if address == PDATA_START else image.bytes(address, size)
+
+    first, second = f"0x{target:08X}", f"0x{wrapper:08X}"
+    pack = {**image.pack, first: proof("Target", wrapper), second: proof("Wrapper", caller)}
+    art = Artist(pack=pack, read=read)
+    assert art.name_at(target) == "Target" and art.name_at(wrapper) == "Wrapper"
+    with pytest.raises(ValueError, match="no independently witnessed caller extent"):
+        Artist(pack={**pack, second: proof("Wrapper", target)}, read=read)
+
+
 def test_native_leaf_verdict_comes_from_its_object(tmp_path):
     from bytematch import measure_object
 

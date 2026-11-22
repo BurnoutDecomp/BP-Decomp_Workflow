@@ -256,28 +256,45 @@ class Artist:
         available = dict(disjoint_extents(occupied, ((start, address + p["size"] - start)
                                                      for start, address, _, p in candidates)))
         end = TEXT_START
-        for start, address, kind, proof in sorted(candidates):
+        pending = sorted(candidates)
+        for start, address, kind, proof in pending:
             size = proof["size"]
-            extending = start != address
             label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
             if (start not in available or start < end or address % 4 or address + size <= start
                     or size % 4 or address + size > TEXT_END):
                 raise ValueError(f"Invalid or overlapping {label} extent at {address:08X}")
-            if "vtable_slots" in proof:
-                slots = [int(slot, 16) for slot in proof["vtable_slots"]]
-                if (kind != "native_leaf" or extending or not slots or not all(
-                        slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
-                        and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
-                    raise ValueError(f"{label} {address:08X} has no matching vtable witness")
-            else:
-                self._check_leaf_branch(proof, occupied, label, address, start, address + size)
-            self.names[address] = proof["symbol"]
-            self.leaf_extents[address] = (size, kind)
-            if kind == "sdk_leaf":
-                self.sdk_leaves[address] = proof
-            if "tu" in proof:
-                self.identified_tus[address] = proof["tu"]
             end = address + size
+
+        while pending:
+            deferred = []
+            for start, address, kind, proof in pending:
+                if "vtable_slots" not in proof and int(proof["caller"], 16) not in occupied:
+                    deferred.append((start, address, kind, proof))
+                    continue
+                self._add_witnessed_leaf(occupied, start, address, kind, proof)
+            if len(deferred) == len(pending):
+                address = deferred[0][1]
+                raise ValueError(f"Leaf {address:08X} has no independently witnessed caller extent")
+            pending = deferred
+
+    def _add_witnessed_leaf(self, occupied, start, address, kind, proof):
+        size = proof["size"]
+        label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
+        if "vtable_slots" in proof:
+            slots = [int(slot, 16) for slot in proof["vtable_slots"]]
+            if (kind != "native_leaf" or start != address or not slots or not all(
+                    slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
+                    and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
+                raise ValueError(f"{label} {address:08X} has no matching vtable witness")
+        else:
+            self._check_leaf_branch(proof, occupied, label, address, start, address + size)
+        self.names[address] = proof["symbol"]
+        self.leaf_extents[address] = (size, kind)
+        if kind == "sdk_leaf":
+            self.sdk_leaves[address] = proof
+        if "tu" in proof:
+            self.identified_tus[address] = proof["tu"]
+        occupied[address] = size
 
     def _check_leaf_branch(self, proof, occupied, label, address, start, end):
         from compare import branch_target

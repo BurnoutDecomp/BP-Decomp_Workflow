@@ -5155,6 +5155,26 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C0B868": {
+      "symbol": "atoi",
+      "size": 12,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\atox.obj",
+      "archive_symbol": "atoi",
+      "caller": "0x825469A8",
+      "call_site": "0x82546A3C",
+      "evidence": "The exact native NetworkPlayerStats::SetStat caller relocates this branch to atoi. The 12-byte CRT wrapper matches, including the tail relocation from ARTIST 0x82C0B870 to strtol."
+    },
+    "0x82C100D0": {
+      "symbol": "strtol",
+      "size": 32,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\strtol.obj",
+      "archive_symbol": "strtol",
+      "caller": "0x82C0B868",
+      "call_site": "0x82C0B870",
+      "evidence": "The archive-proven atoi wrapper identifies strtol. Its tail at 0x82C100EC calls strtoxl. The __initiallocalestructinfo relocation resolves to 0x82F94798, the same address that the verified strtoul wrapper from the same archive member uses at 0x82C10100."
+    },
     "0x82C76B0C": {
       "symbol": "TlsSetValue",
       "size": 16,
@@ -5751,6 +5771,12 @@
     }
   },
   "identified_functions": {
+    "0x82C0FDD8": {
+      "exported_name": "sub_82C0FDD8",
+      "symbol": "strtoxl",
+      "size": 756,
+      "evidence": "The existing strtoul SDK wrapper at 0x82C100F0 identifies strtoxl with its archive relocation at 0x82C1010C. The 756-byte body is already attributed to libcMT.lib strtol.obj and matches that member's strtoxl symbol."
+    },
     "0x82802940": {
       "exported_name": "sub_82802940",
       "symbol": "Attrib::StringToKey64",

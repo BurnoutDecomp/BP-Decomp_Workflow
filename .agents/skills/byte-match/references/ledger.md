@@ -100,6 +100,7 @@ previous summary, dropped on a regression) and `recent`.
   comparison is required even when rebuilding with `--providers`. For a shared CRT assembly
   helper, set `archive_entry` when the witness calls a named entry within the archive section.
   Record only the instructions up to the next entry to keep the catalogue ranges disjoint.
+  A newly attested wrapper can witness another leaf when its own caller is already established.
   When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition
   that extent. The export length must equal the complete partition, and each entry must compare
   exact at the corresponding offset in one archive section.
