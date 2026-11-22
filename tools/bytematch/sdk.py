@@ -16,9 +16,9 @@ from collections import defaultdict
 from pathlib import Path
 import struct
 
-from coff import ObjectFile, CoffError, archive_members, ordinal_code_import
+from coff import ObjectFile, CoffError, REL_REL14, REL_REL24, archive_members, be_words, ordinal_code_import
 from artist import Artist, demangle, normal_name
-from compare import compare
+from compare import branch_target, compare
 
 TINY = 12  # bytes: three instructions or fewer match too many unrelated bodies
 MTCTR_R11, BCTR = 0x7D6903A6, 0x4E800420
@@ -83,14 +83,20 @@ def verify_leaf_providers(artist, lib_dir):
     for lib, member, obj, fn, entry in library_functions(lib_dir, only_members=members):
         for address in addresses.get((lib, member, fn.symbol, entry), ()):
             size, _ = artist.size(address)
-            group = artist.sdk_leaves[address].get("group")
+            proof = artist.sdk_leaves[address]
+            group = proof.get("group")
             if group is not None and fn.relocs:
                 continue
-            if (len(fn.code) == size and artist.matches_name(address, demangle(fn.symbol))
-                    and compare(fn, obj, artist, address, size, fuzzy=False).status == "exact"):
-                found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
-                if group is not None:
-                    group_locations[group].add((fn.section, fn.offset - (address - group)))
+            if len(fn.code) != size or not artist.matches_name(address, demangle(fn.symbol)):
+                continue
+            result = compare(fn, obj, artist, address, size, fuzzy=False)
+            if result.status != "exact":
+                continue
+            if "fragments" in proof and not _verify_archive_fragments(artist, address, fn, obj, proof, result):
+                continue
+            found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
+            if group is not None:
+                group_locations[group].add((fn.section, fn.offset - (address - group)))
     found.update(_verify_linker_imports(artist, lib_dir, imports))
 
     missing = artist.sdk_leaves.keys() - found.keys()
@@ -101,6 +107,29 @@ def verify_leaf_providers(artist, lib_dir):
         if len(locations) != 1:
             raise ValueError(f"SDK entry group {address:08X} is not contiguous in its archive member")
     return found
+
+
+def _verify_archive_fragments(artist, address, fn, obj, proof, result):
+    """Check the offsets of archive labels and any branches to internal symbols."""
+    labels = {(sym.name, sym.value - fn.offset) for sym in obj.symbols.values() if sym.section == fn.section}
+    if any((part["archive_symbol"], int(part["address"], 16) - address) not in labels
+           for part in proof["fragments"]):
+        return False
+    words = be_words(artist.bytes(address, len(fn.code)))
+    local_calls = 0
+    for reloc in fn.relocs:
+        symbol = obj.symbols.get(reloc.symbol)
+        if (reloc.type not in (REL_REL24, REL_REL14) or symbol is None or symbol.section != fn.section
+                or not fn.offset <= symbol.value < fn.offset + len(fn.code)):
+            continue
+        site = address + reloc.offset
+        mask = 0x03FFFFFC if reloc.type == REL_REL24 else 0x0000FFFC
+        target = branch_target(words[reloc.offset // 4], site, mask)
+        if target != address + symbol.value - fn.offset:
+            return False
+        if artist.name_at(target) is None:
+            local_calls += 1
+    return result.calls_unverified == local_calls and result.data_unchecked == 0
 
 
 def _verify_linker_imports(artist, lib_dir, claims):

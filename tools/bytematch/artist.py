@@ -254,6 +254,10 @@ class Artist:
             previous = proof.get("previous_size", 0)
             if previous and self.size(address) != (previous, "ida"):
                 raise ValueError(f"Native leaf extent at {address:08X} no longer agrees with the export")
+            if "fragments" in proof:
+                if kind != "sdk_leaf":
+                    raise ValueError(f"Only SDK archive bodies can subsume fragments at {address:08X}")
+                self._remove_sdk_fragments(address, proof, occupied)
             candidates.append((address + previous, address, kind, proof))
         available = dict(disjoint_extents(occupied, ((start, address + p["size"] - start)
                                                      for start, address, _, p in candidates)))
@@ -278,6 +282,19 @@ class Artist:
                 address = deferred[0][1]
                 raise ValueError(f"Leaf {address:08X} has no independently witnessed caller extent")
             pending = deferred
+
+    def _remove_sdk_fragments(self, address, proof, occupied):
+        """Remove previously unnamed extents contained in a whole archive body."""
+        end = address + proof["size"]
+        for fragment in proof["fragments"]:
+            start = int(fragment["address"], 16)
+            size = fragment["size"]
+            if (not address < start < start + size <= end or occupied.get(start) != size
+                    or (start in self.names and start not in self.unnamed)):
+                raise ValueError(f"SDK fragment {start:08X} does not match an unnamed contained extent")
+            del occupied[start]
+            self.names.pop(start, None)
+            self.unnamed.discard(start)
 
     def _add_witnessed_leaf(self, occupied, start, address, kind, proof):
         size = proof["size"]

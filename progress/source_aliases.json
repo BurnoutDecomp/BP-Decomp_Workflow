@@ -5155,6 +5155,34 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C0C910": {
+      "symbol": "fwrite",
+      "size": 268,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fwrite.obj",
+      "archive_symbol": "fwrite",
+      "caller": "0x82BE5F90",
+      "call_site": "0x82BE6084",
+      "fragments": [
+        {"address": "0x82C0C9C4", "size": 88, "archive_symbol": "$LN8"},
+        {"address": "0x82C0C9E4", "size": 56, "archive_symbol": "$LN11"}
+      ],
+      "evidence": "The exact Lua g_write caller relocates this branch to fwrite. The two unnamed tail extents begin at internal labels at archive offsets 180 and 212. The complete 268-byte body matches, including the branch at offset 168 to $LN11 and every external call."
+    },
+    "0x82C0D0C8": {
+      "symbol": "ungetc",
+      "size": 236,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\ungetc.obj",
+      "archive_symbol": "ungetc",
+      "caller": "0x82BE5BF0",
+      "call_site": "0x82BE5C18",
+      "fragments": [
+        {"address": "0x82C0D15C", "size": 88, "archive_symbol": "$LN6"},
+        {"address": "0x82C0D17C", "size": 56, "archive_symbol": "$LN9"}
+      ],
+      "evidence": "The exact Lua test_eof caller relocates this branch to ungetc. The two unnamed tail extents begin at internal labels at archive offsets 148 and 180. The complete 236-byte body matches, including the branch at offset 132 to $LN9 and every external call."
+    },
     "0x829BE848": {
       "symbol": "wmvFree",
       "size": 12,

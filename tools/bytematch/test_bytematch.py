@@ -453,6 +453,43 @@ def test_sdk_entry_group_requires_disjoint_contiguous_archive_entries(monkeypatc
         Artist(pack=image.pack | overlap, read=read)
 
 
+def test_sdk_archive_body_requires_verified_fragment_offsets_and_internal_branches(monkeypatch, tmp_path):
+    import sdk
+
+    caller, address = 0x821F1000, 0x821F1020
+    fragment = address + 4
+    body = [bl_to(address, fragment), 0x38600007, BLR]
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, address), BLR]), (address, "Whole", body)])
+    fragment_key = f"0x{fragment:08X}"
+    pack = {**image.pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": {
+        "symbol": "Whole", "size": 12, "caller": f"{caller:X}", "call_site": f"{caller:X}",
+        "lib": "sdk.lib", "member": "whole.obj", "archive_symbol": "Whole",
+        "fragments": [{"address": fragment_key, "size": 8, "archive_symbol": "$LN1"}],
+    }}, fragment_key: {"name": f"sub_{fragment:08X}", "n": 2}}
+
+    def read(addr, size):
+        return b"" if addr == PDATA_START else image.bytes(addr, size)
+
+    art = Artist(pack=pack, read=read)
+    assert art.size(address) == (12, "sdk_leaf") and fragment not in art.names
+
+    obj = coff.ObjectFile(make_object([("Whole", [0x48000001, *body[1:]], [])]))
+    fn = obj.functions()[0]
+    label = max(obj.symbols) + 1
+    obj.symbols[label] = coff.Symbol(label, "$LN1", fn.offset + 4, fn.section, 0, 6)
+    fn.relocs.append(coff.Reloc(0, label, coff.REL_REL24))
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [
+        ("sdk.lib", "whole.obj", obj, fn, False),
+    ])
+    assert sdk.verify_leaf_providers(art, tmp_path)[address]["symbol"] == "Whole"
+
+    image.memory[address] = struct.pack(">I", bl_to(address, address + 8))
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+    with pytest.raises(ValueError, match="does not match an unnamed contained extent"):
+        Artist(pack=pack | {fragment_key: {"name": "Named", "n": 2}}, read=read)
+
+
 def test_sdk_leaf_chain_requires_a_witness_from_an_existing_extent():
     caller, target, wrapper = 0x821F1000, 0x821F1010, 0x821F1020
     image = FakeArtist([(caller, "Caller", [bl_to(caller, wrapper), BLR]),
