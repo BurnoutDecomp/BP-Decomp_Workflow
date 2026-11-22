@@ -9426,6 +9426,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x8268D7B8": {
+      "symbol": "CgsSound::Logic::StateManager::Prepare",
+      "size": 20,
+      "file": "GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+      "tu": "GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+      "native_symbol": "?Prepare@StateManager@Logic@CgsSound@@UAA_NXZ",
+      "vtable_slots": ["0x820B66F0"],
+      "evidence": "The ARTIST StateManager constructor installs table 0x820B66E4 at 0x826FAA2C. The table's +0x0C slot points to 0x8268D7B8, and the XDK StateManager vtable relocates the same slot to Prepare. DecFIGS declares virtual bool Prepare(). All 20 bytes through the return at 0x8268D7C8 compare exact with no relocations."
+    },
     "0x826C4C20": {
       "symbol": "CgsSound::Logic::State::Detach",
       "size": 60,
