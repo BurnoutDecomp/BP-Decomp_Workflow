@@ -805,6 +805,7 @@
       "symbol": "BrnDirector::Camera::BehaviourRenderMetrics::GetParameters",
       "file": "GameSource/Director/Camera/Behaviours/BrnBehaviourRenderMetrics.cpp",
       "x360_address": "0x821FB280",
+      "byte_match": true,
       "evidence": "Slot 9 of the BehaviourRenderMetrics vtable at 0x82007790 (slot 0 Construct 0x8222BE28, slot 7 GetName 0x821FB2F0, slot 8 SetParameters 0x821FB288); body lwz r3,0xB8(r3) returns the +0xB8 word SetParameters stores (mpParameters), matching DWARF's virtual GetParameters() const."
     },
     "BrnDirector::Camera::BehaviourRoadRun": {
@@ -823,7 +824,8 @@
       "symbol": "BrnDirector::Camera::BehaviourRotateAboutVehicle::GetParameters",
       "file": "GameSource/Director/Camera/Behaviours/BrnBehaviourRotateAboutVehicle.cpp",
       "x360_address": "0x821FB418",
-      "evidence": "Vtable slot 9 of the BehaviourRotateAboutVehicle table (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-18 virtual SetParameters quoting BrnBehaviourRotateAboutVehicle.cpp:299); body is lwz +0x374 (mpParameters); class shape lists the virtual GetParameters."
+      "byte_match": true,
+      "evidence": "Slot 9 of the BehaviourRotateAboutVehicle vtable at 0x8200A640 (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-18 virtual SetParameters quoting BrnBehaviourRotateAboutVehicle.cpp:299); body is lwz +0x374 (mpParameters); class shape lists the virtual GetParameters."
     },
     "BrnDirector::Camera::BehaviourSpirall": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
@@ -835,7 +837,8 @@
       "symbol": "BrnDirector::Camera::BehaviourSpirallingDeathcam::GetParameters",
       "file": "GameSource/Director/Camera/Behaviours/BehaviourSpirallingDeathcam.cpp",
       "x360_address": "0x821FB590",
-      "evidence": "Vtable slot 9 of the BehaviourSpirallingDeathcam table (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-19 virtual SetParameters quoting BrnBehaviourSpirallingDeathCam.cpp:254); body is lwz +0x2D0 (mpParameters)."
+      "byte_match": true,
+      "evidence": "Slot 9 of the BehaviourSpirallingDeathcam vtable at 0x8200A668 (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-19 virtual SetParameters quoting BrnBehaviourSpirallingDeathCam.cpp:254); body is lwz +0x2D0 (mpParameters)."
     },
     "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::BehaviourParameterNamingSerialiser>": {
       "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters",
@@ -908,6 +911,7 @@
       "symbol": "BrnSound::Vehicles::Environment::CrashStreamEffect::GetCreateParams",
       "file": "GameSource/Sound/Vehicles/Environment/BrnCrashStreamEffect.cpp",
       "x360_address": "0x82584D40",
+      "byte_match": true,
       "evidence": "Slot 0 (IStreamUser::GetCreateParams) of the IStreamUser sub-object vtables 0x820B204C (CrashStreamEffect ctor stores it at this+0x38), 0x820B1F40 (AmbienceEffect) and 0x820B20D0 (SpeedStreamEffect); 'addi r3,r3,4' returns mParams right after the interface vptr; identical-code fold named after CrashStreamEffect."
     },
     "BrnSound::Vehicles::Playe": {
@@ -1121,12 +1125,14 @@
       "symbol": "CgsSound::Playback::GenericRwacMasterVoice::GetProfileVoiceType",
       "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacMasterVoice.cpp",
       "x360_address": "0x827DF718",
+      "byte_match": true,
       "evidence": "Slot 4 (GetProfileVoiceType, after dtor/DoDispose/GetCpuTicks/DisplayVoiceCpu) of the GenericRwacMasterVoice vtable 0x820B5234 installed by FactoryNew<GenericRwacMasterVoice>; 'li r3,2' == E_VOICETYPE_GENERICRWACMASTER; widely folded return-2 body."
     },
     "CgsSound::Playback::GenericRwacSubmixVoice": {
       "symbol": "CgsSound::Playback::GenericRwacSubmixVoice::GetProfileVoiceType",
       "file": "GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacSubmixVoice.cpp",
       "x360_address": "0x826D7F68",
+      "byte_match": true,
       "evidence": "Slot 4 (GetProfileVoiceType) of the GenericRwacSubmixVoice vtable 0x820B5210 installed by FactoryNew<GenericRwacSubmixVoice>; 'li r3,3' == E_VOICETYPE_GENERICRWACSUBMIX; widely folded return-3 body."
     },
     "CgsSound::Playback::Ha": {
