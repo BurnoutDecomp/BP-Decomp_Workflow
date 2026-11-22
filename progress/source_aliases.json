@@ -335,9 +335,11 @@
     "0x822D8BA0": {
       "exported_name": "BrnWorld::WorldEntityIO::OutputBuffer_PrePhysics::Construct",
       "aliases": {
-        "CgsModule::IOBuffer::Construct": "src/GameShared/GameClasses/Module/CgsIOBuffer.cpp"
+        "CgsModule::IOBuffer::Construct": "src/GameShared/GameClasses/Module/CgsIOBuffer.h",
+        "BrnWorldIO::DispatchOutputBuffer::Construct": "src/GameSource/World/BrnWorldModuleIO_DispatchOutputBuffer.h",
+        "BrnWorld::PropEntityIO::OutputBuffer_PostScene::Construct": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.h"
       },
-      "evidence": "CgsModule::IOBuffer::Construct compares exact across 12 bytes and the aligned caller at 0x827B6C54 targets this address."
+      "evidence": "The native Construct wrappers compare exact across 12 bytes. The aligned typed CreateIOBuffer callers at 0x823AEB7C and 0x827B6C54 branch to this folded initializer."
     }
   },
   "xdk_functions": {
@@ -355,6 +357,14 @@
     }
   },
   "functions": {
+    "Attrib::Node::Node": {
+      "symbol": "Attrib::HashMap::Node::Node",
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribhashmap.cpp",
+      "const": false,
+      "x360_address": "0x82809430",
+      "byte_match": true,
+      "evidence": "HashMap::Add constructs the bucket in place at 0x82809674 with the key, type key, value, layout flag, node flags and base pointer. The existing nested Node owns the corresponding native constructor."
+    },
     "??$AddEventSafe@VCInEventDrawText2D@Internal@CgsDev@@@?$VariableEventQueue@$0EAAA@$0BA@@CgsModule@@QAA_NABVCInEventDraw": {
       "symbol": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawText2D>",
       "file": "GameShared/GameClasses/Module/VariableEventQueue_16384_16.cpp",
@@ -5560,6 +5570,20 @@
     }
   },
   "identified_functions": {
+    "0x82802940": {
+      "exported_name": "sub_82802940",
+      "symbol": "Attrib::StringToKey64",
+      "size": 1144,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribhash64.cpp",
+      "evidence": "The collection-key branch at 0x82805C84 and the tail branch at 0x82805874 pass text, length and the 64-bit lookup8 seed. The existing StringToKey64 owns this body; StringToKey is a forwarding API in the native tree."
+    },
+    "0x82809740": {
+      "exported_name": null,
+      "symbol": "Attrib::Collection::Collection",
+      "size": 1408,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribcollection.cpp",
+      "evidence": "CollectionExportPolicy::Initialize passes the newly allocated Collection, the CollectionLoadData reference and the Vault pointer at 0x8280A23C. The callee initializes the collection from that serialized layout."
+    },
     "0x8282B250": {
       "exported_name": "sub_8282B250",
       "symbol": "CgsDev::DebugRender::Draw2DText",
@@ -9266,6 +9290,17 @@
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
       "tu": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attriblivelink.cpp",
       "evidence": "EditRecord::RevertReplace passes the EditSpecifier and the two output references at 0x8280DAD4. The callee looks up the attribute definition and returns the addressed data with its type and definition."
+    }
+  },
+  "native_leaf_functions": {
+    "0x82805828": {
+      "symbol": "Attrib::StringToKey",
+      "size": 88,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribhash64.cpp",
+      "native_symbol": "?StringToKey@Attrib@@YA_KPBD@Z",
+      "caller": "0x821F0150",
+      "call_site": "0x821F0150",
+      "evidence": "Attrib::TypeDesc::NameToType is an exact native caller with a StringToKey relocation at 0x821F0150. The wrapper compares exact across the 88-byte gap ending at the next known function."
     }
   }
 }

@@ -82,6 +82,10 @@ previous summary, dropped on a regression) and `recent`.
   extent together with an ARTIST branch whose caller's relocation identifies that symbol. The
   catalogue checks that the extent fits a gap and that the branch reaches its start. An archive
   comparison is required even when rebuilding with `--providers`.
+- For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
+  an ARTIST branch with a matching native caller relocation, and the source of the compared
+  body. The catalogue records its size and name. The regular object comparison determines
+  whether the native implementation matches outside its relocation fields.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,

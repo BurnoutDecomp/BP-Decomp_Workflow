@@ -4,7 +4,7 @@ Names come from the packed export pack `progress/asmaudit_artist.json.gz` (one r
 function the IDA export of BURNOUT_X360_ARTIST.XEX knows). Extents come from the
 image's own `.pdata` (packed unwind records give each framed function's exact length)
 and, for frameless leaves that have no record, from the export's instruction count.
-The census also includes disjoint unwind extents and attested SDK leaves absent
+The census also includes disjoint unwind extents and attested leaf functions absent
 from that export.
 Bytes come from the local image through `tools/re/x360rd.py`, a local input that never
 leaves the machine: only names, addresses and sizes reach the committed ledger.
@@ -85,8 +85,9 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
                 functions.setdefault(address, {"unlisted": True})["identity"] = (
                     proof["symbol"], proof["size"], proof.get("tu"),
                 )
-        for address, proof in registry.get("sdk_leaf_functions", {}).items():
-            functions.setdefault(address, {"unlisted": True, "sdk_leaf": proof})
+        for kind in ("sdk_leaf", "native_leaf"):
+            for address, proof in registry.get(f"{kind}_functions", {}).items():
+                functions.setdefault(address, {"unlisted": True, kind: proof})
     return functions
 
 
@@ -149,16 +150,19 @@ class Artist:
         self.unnamed = set()
         self.ida_size = {}
         self.sdk_leaves = {}
+        self.leaf_extents = {}
         self._extents = None
         self._trimmed = {}
         identities = {}
-        sdk_leaves = {}
+        leaves = {}
         for text, row in self.pack.items():
             address = int(text, 16)
             if "identity" in row:
                 identities[address] = row["identity"]
             if "sdk_leaf" in row:
-                sdk_leaves[address] = row["sdk_leaf"]
+                leaves[address] = ("sdk_leaf", row["sdk_leaf"])
+            elif "native_leaf" in row:
+                leaves[address] = ("native_leaf", row["native_leaf"])
             if row.get("unlisted"):
                 continue
             self.names[address] = row["name"]
@@ -179,8 +183,8 @@ class Artist:
                 self.unnamed.remove(address)
                 if tu is not None:
                     self.identified_tus[address] = tu
-        if sdk_leaves:
-            self._include_sdk_leaves(sdk_leaves)
+        if leaves:
+            self._include_leaves(leaves)
         self.by_name = {}
         for address, name in self.names.items():
             if address not in self.unnamed:
@@ -225,38 +229,43 @@ class Artist:
             self.names[address] = f"sub_{address:08X}"
             self.unnamed.add(address)
 
-    def _include_sdk_leaves(self, proofs):
-        """Admit archive extents only in image gaps with a witnessed call target."""
+    def _include_leaves(self, proofs):
+        """Admit attested extents only in image gaps with a witnessed call target."""
         from compare import branch_target
 
         occupied = self.extents | {address: self.size(address)[0] for address in self.names}
-        available = dict(disjoint_extents(occupied, ((a, p["size"]) for a, p in proofs.items())))
+        available = dict(disjoint_extents(occupied, ((a, p["size"]) for a, (_, p) in proofs.items())))
         end = TEXT_START
-        for address, proof in sorted(proofs.items()):
+        for address, (kind, proof) in sorted(proofs.items()):
             size = proof["size"]
+            label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
             if (address not in available or address < end or address % 4 or size <= 0
                     or size % 4 or address + size > TEXT_END):
-                raise ValueError(f"Invalid or overlapping SDK leaf extent at {address:08X}")
+                raise ValueError(f"Invalid or overlapping {label} extent at {address:08X}")
             caller, site = int(proof["caller"], 16), int(proof["call_site"], 16)
             if site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4:
-                raise ValueError(f"SDK leaf {address:08X} has a witness outside its caller")
+                raise ValueError(f"{label} {address:08X} has a witness outside its caller")
             word, = struct.unpack(">I", self.bytes(site, 4))
             if word >> 26 != 18 or branch_target(word, site, 0x03FFFFFC) != address:
-                raise ValueError(f"SDK leaf {address:08X} has no matching branch at {site:08X}")
+                raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
             self.names[address] = proof["symbol"]
-            self.sdk_leaves[address] = proof
+            self.leaf_extents[address] = (size, kind)
+            if kind == "sdk_leaf":
+                self.sdk_leaves[address] = proof
+            if "tu" in proof:
+                self.identified_tus[address] = proof["tu"]
             end = address + size
 
     def size(self, address: int):
-        """(byte length, source) from .pdata, a verified SDK leaf, or the export.
+        """(byte length, source) from .pdata, an attested leaf, or the export.
 
         IDA counts the alignment padding after a frameless leaf (zero words) as part of it,
         so an IDA-derived length drops its trailing zero words; a .pdata length is exact.
         """
         if address in self.extents:
             return self.extents[address], "pdata"
-        if address in self.sdk_leaves:
-            return self.sdk_leaves[address]["size"], "sdk_leaf"
+        if address in self.leaf_extents:
+            return self.leaf_extents[address]
         size = self.ida_size.get(address) or 0
         if not size:
             return 0, "none"

@@ -367,6 +367,32 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_native_leaf_verdict_comes_from_its_object(tmp_path):
+    from bytematch import measure_object
+
+    caller, leaf = 0x821F1000, 0x821F1020
+    body = [0x38600007, BLR]
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, leaf), BLR]), (leaf, "Leaf", body)])
+    pack_path = tmp_path / "artist.json.gz"
+    pack = {key: row for key, row in image.pack.items() if int(key, 16) != leaf}
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode()))
+    aliases = tmp_path / "source_aliases.json"
+    aliases.write_text(json.dumps({"native_leaf_functions": {
+        f"0x{leaf:08X}": {"symbol": "Leaf", "size": 8, "caller": f"{caller:X}", "call_site": f"{caller:X}"},
+    }}), encoding="utf-8")
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases),
+                 read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
+    assert art.size(leaf) == (8, "native_leaf")
+    assert not art.sdk_leaves
+
+    obj_path = tmp_path / "leaf.obj"
+    for instruction, expected in ((body[0], "exact"), (0x38600008, "nonmatching")):
+        obj_path.write_bytes(make_object([("Leaf", [instruction, BLR], [])]))
+        row, = measure_object(obj_path, art)
+        assert row["artist"] == f"{leaf:08X}"
+        assert row["status"] == expected
+
+
 def _universe():
     return {"meta": {"functions": 5},
             "functions": [["82100000", 40, "A::f", "game", "GameSource/World", "tuA"],
