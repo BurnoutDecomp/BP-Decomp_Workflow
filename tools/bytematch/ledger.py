@@ -118,23 +118,25 @@ def load_state(path: Path = STATE):
 
 
 # ---------------------------------------------------------------------------- summary
-def best_verdicts(records):
-    """{ARTIST address: (row, source)}: an exact copy anywhere wins, then the best score.
+def best_verdicts(records, extents):
+    """{ARTIST address: (row, source, current_extent)} from the best measured copy.
 
-    Inline and template functions are emitted into every object that uses them; the
-    linker keeps one copy, so the best measured copy is the function's verdict.
+    Current extents take priority, then exact copies, then the best score.
     """
     best = {}
     for record in records:
         for row in record.get("functions", []):
             address = row.get("artist")
-            if not address or row.get("status") not in RANK:
+            status = row.get("status")
+            if address not in extents or status not in RANK:
                 continue
-            key = (RANK[row["status"]], row.get("score", 0.0))
+            size = extents[address]
+            current_extent = row.get("artist_size") == size and (status != "exact" or row.get("size") == size)
+            key = (current_extent, RANK[status], row.get("score", 0.0))
             current = best.get(address)
             if current is None or key > current[0] or (key == current[0] and record["source"] < current[2]):
                 best[address] = (key, row, record["source"])
-    return {address: (row, source) for address, (_, row, source) in best.items()}
+    return {address: (row, source, key[0]) for address, (key, row, source) in best.items()}
 
 
 def staleness(records, head_blobs):
@@ -188,7 +190,8 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
                   previous=None, generated_at=None):
     generated_at = generated_at or now_iso()
     state = state or {}
-    verdicts = best_verdicts(records)
+    extents = {address: size for address, size, *_ in universe["functions"]}
+    verdicts = best_verdicts(records, extents)
     stale = staleness(records, head_blobs)
     stale_sources = {s for s, v in stale.items() if v != "current"}
     first_exact = dict((previous or {}).get("first_exact", {}))
@@ -204,6 +207,7 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
     tu_index = {u: i for i, u in enumerate(tu_names)}
     for address, size, name, category, area, tu in universe["functions"]:
         verdict = verdicts.get(address)
+        stale_extent = False
         if category == "sdk":
             status, score, source = "sdk", 100.0, None
             totals["sdk"]["functions"] += 1
@@ -214,8 +218,12 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
             totals["unnamed"]["bytes"] += size
         else:
             if verdict:
-                row, source = verdict
-                status, score = row["status"], float(row.get("score", 0.0))
+                row, source, current_extent = verdict
+                stale_extent = not current_extent
+                if current_extent:
+                    status, score = row["status"], float(row.get("score", 0.0))
+                else:
+                    status, score = "nonmatching", 0.0
             else:
                 status, score, source = "missing", 0.0, None
             _add(totals["game"], status, size, score)
@@ -226,7 +234,7 @@ def build_summary(universe, records, *, head=None, head_blobs=None, state=None, 
                 first_exact.pop(address, None)
         rows.append([address, name, size, status, score,
                      source_index[source] if source is not None else -1,
-                     1 if source in stale_sources else 0, area_index[area or "unassigned"],
+                     int(stale_extent or source in stale_sources), area_index[area or "unassigned"],
                      tu_index[tu] if tu else -1])
 
     files = []

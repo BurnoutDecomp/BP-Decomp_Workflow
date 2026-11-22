@@ -466,9 +466,13 @@ def _record(source, commit, blob, functions):
 
 def test_summary_counts_and_best_copy_wins():
     records = [
-        _record("src/a.cpp", "c1", "blobA", [{"symbol": "?f@A@@", "name": "A::f", "artist": "82100000", "status": "exact", "score": 100.0},
-                                             {"symbol": "?g@A@@", "name": "A::g", "artist": "82100040", "status": "nonmatching", "score": 50.0}]),
-        _record("src/b.cpp", "c1", "blobB", [{"symbol": "?g@A@@", "name": "A::g", "artist": "82100040", "status": "nonmatching", "score": 75.0}]),
+        _record("src/a.cpp", "c1", "blobA", [
+            {"artist": "82100000", "status": "exact", "score": 100.0, "size": 40, "artist_size": 40},
+            {"artist": "82100040", "status": "nonmatching", "score": 50.0, "size": 72, "artist_size": 80},
+        ]),
+        _record("src/b.cpp", "c1", "blobB", [
+            {"artist": "82100040", "status": "nonmatching", "score": 75.0, "size": 76, "artist_size": 80},
+        ]),
     ]
     records[0]["unpaired"] = 1
     s = ledger.build_summary(_universe(), records, head="c2", head_blobs={"src/a.cpp": "blobA", "src/b.cpp": "CHANGED"},
@@ -493,11 +497,12 @@ def test_summary_counts_and_best_copy_wins():
 
 
 def test_first_exact_survives_and_regressions_drop_out():
-    exact = [_record("src/a.cpp", "c1", "blobA", [{"symbol": "s", "name": "A::f", "artist": "82100000", "status": "exact", "score": 100.0}])]
+    row = {"artist": "82100000", "status": "exact", "score": 100.0, "size": 40, "artist_size": 40}
+    exact = [_record("src/a.cpp", "c1", "blobA", [row])]
     first = ledger.build_summary(_universe(), exact, head="c1", generated_at="2026-11-18T00:00:00Z")
     again = ledger.build_summary(_universe(), exact, head="c2", previous=first, generated_at="2026-11-19T00:00:00Z")
     assert again["first_exact"]["82100000"] == ["c1", "2026-11-18T00:00:00Z"]
-    broken = [_record("src/a.cpp", "c3", "blobA", [{"symbol": "s", "name": "A::f", "artist": "82100000", "status": "nonmatching", "score": 90.0}])]
+    broken = [_record("src/a.cpp", "c3", "blobA", [dict(row, status="nonmatching", score=90.0)])]
     after = ledger.build_summary(_universe(), broken, head="c3", previous=again)
     assert "82100000" not in after["first_exact"] and not after["recent"]
 
@@ -510,12 +515,34 @@ def test_summary_counts_overlapping_code_bytes_once():
         ["82100050", 64, "memcpy", "sdk", "XDK/libcMT.lib", None],
         ["82100100", 12, "sub_82100100", "unnamed", "unnamed", None],
     ]}
-    exact = [{"artist": address, "status": "exact", "score": 100.0}
-             for address in ("82100000", "82100010")]
+    exact = [{"artist": address, "status": "exact", "score": 100.0, "size": size, "artist_size": size}
+             for address, size in (("82100000", 40), ("82100010", 80))]
     summary = ledger.build_summary(universe, [_record("src/a.cpp", "c1", "blobA", exact)])
     assert summary["totals"]["all"] == {
         "functions": 5, "bytes": 156, "matched": 3, "matched_bytes": 144,
     }
+
+
+def test_summary_requires_measurement_of_current_extent():
+    address = "82100000"
+    old = {"artist": address, "status": "exact", "score": 100.0, "size": 32, "artist_size": 32}
+    current = dict(old, status="nonmatching", score=80.0, artist_size=40)
+    outdated = _record("src/a.cpp", "c1", "blobA", [old])
+    first = ledger.build_summary(_universe(), [outdated])
+    row = first["functions"][0]
+    assert row[3:7] == ["nonmatching", 0.0, 0, 1]
+    assert first["totals"]["all"]["matched_bytes"] == 64  # the SDK body only
+    assert address not in first["first_exact"]
+
+    fresh = _record("src/b.cpp", "c2", "blobB", [current])
+    measured = ledger.build_summary(_universe(), [outdated, fresh])
+    assert measured["functions"][0][3:7] == ["nonmatching", 80.0, 1, 0]
+    assert measured["totals"]["all"]["matched_bytes"] == 64
+
+    exact = _record("src/b.cpp", "c2", "blobB", [dict(old, size=40, artist_size=40)])
+    measured = ledger.build_summary(_universe(), [outdated, exact])
+    assert measured["functions"][0][3:7] == ["exact", 100.0, 1, 0]
+    assert measured["totals"]["all"]["matched_bytes"] == 104
 
 
 def test_record_round_trip_and_path_check(tmp_path):

@@ -30,13 +30,16 @@ functions   one per function the object defines:
 ```
 
 A function that appears in several objects (an inline or a template) is measured in each; the
-summary keeps the best copy, since the linker keeps one.
+summary keeps the best copy measured against the current ARTIST length.
 
 ## Staleness
 
 - A record is **changed** in the summary when its source's blob at the branch head differs from
   the blob it recorded, and **deleted** when the source is gone. Its verdicts are still shown,
   flagged, until someone re-measures.
+- If the catalogue changes a function's length, a measurement of the old extent cannot establish
+  its verdict for the new one. When no current extent is measured, the summary keeps the source
+  association, flags the function as stale, and assigns zero matching bytes and zero fuzzy credit.
 - Headers are not visible to CI: a heavy native object includes around two thousand repository
   files. The work server's measurer and `work match refresh` both handle them: each keeps every
   object's include list (`/showIncludes`) and the blob of every input in its own object cache,
