@@ -1,0 +1,26 @@
+name: Publish committed byte-match ledger
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "progress/bytematch/**"
+      - "progress/source_aliases.json"
+      - "progress/asmaudit_artist.json.gz"
+      - "progress/unidentified.json"
+      - "tools/bytematch/**"
+      - "tools/work/publish_snapshot.py"
+      - ".github/workflows/bytematch.yml"
+      - ".github/workflows/bytematch-publish.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    uses: ./.github/workflows/bytematch.yml
+    with:
+      publish_only: true
+    secrets:
+      WORK_PUBLISH_TOKEN: ${{ secrets.WORK_PUBLISH_TOKEN }}

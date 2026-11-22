@@ -6,7 +6,8 @@ name: Byte-match summary
 # (tools/bytematch/wine.py) and this workflow adopts the records whose result changed
 # (tools/bytematch/remote.py). It then joins the records with the branch head, publishes
 # them with progress/bytematch.json + progress/BYTEMATCH.md in one commit, and refreshes
-# the dashboard. Contributors may still record locally (`work match refresh --record`).
+# the dashboard. The committed-ledger workflow calls this workflow with measurement
+# disabled so local records can publish while the work server is busy.
 # If the server cannot measure, the summary is published from the committed records,
 # and a record whose source changed since it was measured shows as stale.
 
@@ -16,8 +17,18 @@ on:
   push:
     branches: [main]
     paths:
-      - "progress/bytematch/**"
       - "tools/bytematch/**"
+      - "progress/source_aliases.json"
+      - "progress/asmaudit_artist.json.gz"
+      - "progress/unidentified.json"
+  workflow_call:
+    inputs:
+      publish_only:
+        type: boolean
+        required: true
+    secrets:
+      WORK_PUBLISH_TOKEN:
+        required: true
   workflow_dispatch:
     inputs:
       b5_sha:
@@ -25,9 +36,9 @@ on:
         required: false
 
 concurrency:
-  group: bytematch-summary
+  # Keep the latest pending run in each group. Both paths check out current main.
+  group: ${{ inputs.publish_only && 'bytematch-committed-ledger' || 'bytematch-summary' }}
   cancel-in-progress: false
-  queue: max
 
 permissions:
   contents: write
@@ -81,6 +92,7 @@ jobs:
           git -C b5-x360 fetch origin "${{ steps.target.outputs.sha }}"
 
       - name: Measure the commit on the work server
+        if: ${{ !inputs.publish_only }}
         id: measure
         continue-on-error: true    # without the server, the summary still publishes
         timeout-minutes: 300

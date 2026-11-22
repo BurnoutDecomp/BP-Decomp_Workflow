@@ -49,9 +49,11 @@ summary keeps the best copy, since the linker keeps one.
 
 ## The summary and CI
 
-`.github/workflows/bytematch.yml` runs on b5-decomp's `b5-x360-push` dispatch (every push to
-`x360`, from that branch's `notify-workflow.yml`), on any push to `main` touching
-`progress/bytematch/` or `tools/bytematch/`, and by hand. Runs queue; none is cancelled. A run:
+`.github/workflows/bytematch.yml` measures on b5-decomp's `b5-x360-push` dispatch (every push to
+`x360`, from that branch's `notify-workflow.yml`), when measurement inputs change on `main`,
+and by hand. `.github/workflows/bytematch-publish.yml` uses the same publisher for committed
+records, skipping step 2 and using its own concurrency group. Each group lets the current run
+finish and keeps the newest pending run. A run:
 
 1. tests the ledger and clones the native branch without file contents;
 2. asks the work server to measure the commit and waits for it
