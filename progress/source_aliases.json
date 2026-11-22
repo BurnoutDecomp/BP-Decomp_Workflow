@@ -5179,6 +5179,33 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C0E0B0": {
+      "symbol": "fread_s",
+      "size": 292,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fread.obj",
+      "archive_symbol": "fread_s",
+      "caller": "0x82C0E1D8",
+      "call_site": "0x82C0E1E8",
+      "fragments": [
+        {"address": "0x82C0E17C", "size": 88, "archive_symbol": "$LN10"},
+        {"address": "0x82C0E19C", "size": 56, "archive_symbol": "$LN13"}
+      ],
+      "evidence": "The XDK fread wrapper tail-calls fread_s. The archive's 204-byte primary unwind entry and 88-byte funclet cover this complete 292-byte body. The branch at 0x82C0E170 reaches the funclet's alternate entry $LN13. Both fragment offsets and all external calls agree."
+    },
+    "0x82C19310": {
+      "symbol": "terminate",
+      "size": 88,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\hooks.obj",
+      "archive_symbol": "?terminate@@YAXXZ",
+      "caller": "0x82C1BCF8",
+      "call_site": "0x82C1BD38",
+      "fragments": [
+        {"address": "0x82C1935C", "size": 12, "archive_symbol": "$LN19"}
+      ],
+      "evidence": "The archive's __FrameUnwindFilter call identifies terminate. Its unwind records cover a 76-byte primary body and the following 12-byte funclet. The complete archive body and both external calls agree."
+    },
     "0x829B97C0": {
       "symbol": "IDCT_Intra_4x4",
       "size": 1160,
@@ -9769,6 +9796,23 @@
     }
   },
   "native_leaf_functions": {
+    "0x8283FF90": {
+      "symbol": "CgsGeometric::ClipTriEdgeAgainstBox",
+      "size": 640,
+      "caller": "0x82840210",
+      "call_site": "0x82840684",
+      "source": "src/GameShared/GameClasses/Geometric/Intersection/CgsTriangleBox.cpp",
+      "tu": "GameShared/GameClasses/Geometric/Intersection/CgsTriangleBox.cpp",
+      "evidence": "ARTIST labels the calls at 0x82840684, 0x82840698 and 0x828406AC as ClipTriEdgeAgainstBox. They enter this leaf, whose final blr is at 0x8284020C. The existing XDK body is 752 bytes and differs from the first instruction."
+    },
+    "0x82BB4CA8": {
+      "symbol": "rw::collision::FindBestSeparatingDirectionTriBox",
+      "size": 1088,
+      "caller": "0x82BAA1A0",
+      "call_site": "0x82BAA1C0",
+      "source": "src/vendor/renderware/collision/SeparatingDirection.cpp",
+      "evidence": "ARTIST's FindBestSeparatingDirectionBoxTri wrapper swaps the GPInstance arguments and calls FindBestSeparatingDirectionTriBox at 0x82BAA1C0. The branch reaches this leaf, whose final blr is at 0x82BB50E4. The existing XDK body is 776 bytes and differs from the first instruction."
+    },
     "0x82C51590": {
       "symbol": "`dynamic initializer for 'BrnGui::BoostBarRenderer::KV4_OVERLAY_COLOUR''",
       "size": 48,

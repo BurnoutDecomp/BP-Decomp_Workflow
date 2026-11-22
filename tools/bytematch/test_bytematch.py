@@ -290,6 +290,22 @@ def test_catalogue_adds_only_disjoint_unlisted_unwind_functions():
     assert art.size(base + 0x28) == (4, "pdata")
 
 
+def test_exception_unwind_adds_only_disjoint_primary_bodies(monkeypatch):
+    base = artist.TEXT_START
+    pdata = struct.pack(">6I", base, 0xC0000200, base + 0x10, 0xC0000300, base + 0x20, 0xC0000400)
+    data = {PDATA_START + offset: pdata[offset:offset + 4] for offset in range(0, len(pdata), 4)}
+    monkeypatch.setattr(artist, "PDATA_END", PDATA_START + len(pdata))
+    art = FakeArtist([(base, "WholeArchiveBody", [BLR] * 4), (base + 0x28, "ExistingFragment", [BLR])], data)
+
+    art.include_unlisted_exception_functions()
+
+    assert art.size(base) == (16, "ida")
+    assert art.size(base + 0x10) == (12, "exception_pdata")
+    assert art.size(base + 0x20) == (0, "none")
+    assert art.unnamed == {base + 0x10}
+    assert not art.sdk_leaves
+
+
 def test_catalogue_counts_only_disjoint_straight_line_crt_leaves(monkeypatch):
     base = artist.TEXT_START
     table = artist.CRT_INITIALIZERS_START

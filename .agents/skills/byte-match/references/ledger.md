@@ -100,6 +100,10 @@ previous summary, dropped on a regression) and `recent`.
   the link register. Trailing zero words are excluded as padding. Registration
   establishes the extent. Credit still requires the initializer's identity and verification
   of its code and data targets against the supplying object.
+- The XDK's kind-3 unwind records describe a primary exception-handling body. The archive may
+  put that body and its funclets under a single COFF symbol. The census adds disjoint primary
+  bodies as `exception_pdata`. Established extents take precedence so an archive body that
+  already covers its funclets retains the full measured size.
 - An SDK leaf absent from both the export and `.pdata` can enter the catalogue through
   `sdk_leaf_functions` in `progress/source_aliases.json`. Record its complete archive symbol and
   extent together with an ARTIST branch whose caller's relocation identifies that symbol. The

@@ -42,14 +42,14 @@ CRT_LEAF_EXTENDED_OPS = {0x7C00040E, 0x7C00044E, 0x7C0000A6, 0x7C000164,
 BLR = 0x4E800020
 
 
-def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END):
+def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END, *, record_kind=1):
     """{function address: byte length} for the standard two-word PPC .pdata records."""
     entries = list(struct.iter_unpack(">II", pdata))
     sizes = {}
     for index, (address, flags) in enumerate(entries):
         length = ((flags >> 8) & 0x3FFFFF) * 4
         following = entries[index + 1][0] if index + 1 < len(entries) else end
-        if flags >> 30 == 1 and address % 4 == 0 and length:
+        if flags >> 30 == record_kind and address % 4 == 0 and length:
             if start <= address < address + length <= min(following, end):
                 sizes[address] = length
     return sizes
@@ -253,6 +253,15 @@ class Artist:
         for address, _ in disjoint_extents(occupied, entries):
             self.names[address] = f"sub_{address:08X}"
             self.unnamed.add(address)
+
+    def include_unlisted_exception_functions(self):
+        """Recover disjoint primary bodies from the XDK's kind-3 unwind records."""
+        pdata = self.bytes(PDATA_START, PDATA_END - PDATA_START)
+        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
+        for address, size in disjoint_extents(occupied, packed_extents(pdata, record_kind=3).items()):
+            self.names[address] = f"sub_{address:08X}"
+            self.unnamed.add(address)
+            self.leaf_extents[address] = (size, "exception_pdata")
 
     def include_unlisted_crt_leaves(self):
         """Catalogue registered leaves whose entire extent is readable."""
