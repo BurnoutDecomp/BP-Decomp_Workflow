@@ -5951,6 +5951,195 @@
     }
   },
   "identified_functions": {
+    "0x82BE44A0": {
+      "exported_name": null,
+      "symbol": "str_format",
+      "size": 984,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaopen_string registers the format callback at table slot 0x821881F4. The current XDK body is 996 bytes against 984 in ARTIST."
+    },
+    "0x82BE4DE0": {
+      "exported_name": "sub_82BE4DE0",
+      "symbol": "addintlen",
+      "size": 140,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from str_format at 0x82BE472C, str_format at 0x82BE4760. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE7488": {
+      "exported_name": "sub_82BE7488",
+      "symbol": "loader_Lua",
+      "size": 132,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaopen_package loads the loaders array at 0x821883C4. Slot 0x821883C8 has the matching XDK pointer relocation. The full body, calls and string literals agree."
+    },
+    "0x82BE7510": {
+      "exported_name": "sub_82BE7510",
+      "symbol": "findfile",
+      "size": 328,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from loader_Lua at 0x82BE74BC, loader_C at 0x82BE781C, loader_Croot at 0x82BE79A8. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE7658": {
+      "exported_name": "sub_82BE7658",
+      "symbol": "readable",
+      "size": 84,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from findfile at 0x82BE75F8. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE76B0": {
+      "exported_name": "sub_82BE76B0",
+      "symbol": "pushnexttemplate",
+      "size": 192,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from findfile at 0x82BE75AC. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE7770": {
+      "exported_name": "sub_82BE7770",
+      "symbol": "loaderror",
+      "size": 120,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from loader_Lua at 0x82BE74F4, loader_C at 0x82BE7868, loader_Croot at 0x82BE7A08. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE77E8": {
+      "exported_name": "sub_82BE77E8",
+      "symbol": "loader_C",
+      "size": 152,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaopen_package loads the loaders array at 0x821883C4. Slot 0x821883CC has the matching XDK pointer relocation. The full body, calls and string literals agree."
+    },
+    "0x82BE7880": {
+      "exported_name": "sub_82BE7880",
+      "symbol": "mkfuncname",
+      "size": 160,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from loader_C at 0x82BE7840, loader_Croot at 0x82BE79CC. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BE7920": {
+      "exported_name": "sub_82BE7920",
+      "symbol": "loader_Croot",
+      "size": 292,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaopen_package loads the loaders array at 0x821883C4. Slot 0x821883D0 has the matching XDK pointer relocation. The full body, calls and string literals agree."
+    },
+    "0x82BE7A48": {
+      "exported_name": "sub_82BE7A48",
+      "symbol": "loader_preload",
+      "size": 168,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaopen_package loads the loaders array at 0x821883C4. Slot 0x821883C4 has the matching XDK pointer relocation. The full body, calls and string literals agree."
+    },
+    "0x82BEE8D8": {
+      "exported_name": null,
+      "symbol": "luaL_unref",
+      "size": 180,
+      "tu": "vendor:lua",
+      "evidence": "The complete native reference-release body and its five calls to the named Lua stack and freelist operations agree with ARTIST."
+    },
+    "0x82BF3E48": {
+      "exported_name": "sub_82BF3E48",
+      "symbol": "singlestep",
+      "size": 532,
+      "tu": "vendor:lua",
+      "evidence": "The matching luaC_step and luaC_fullgc call this entry at 0x82BF3D80 and 0x82BF5724. The current XDK body is 568 bytes against 532 in ARTIST."
+    },
+    "0x82BF4060": {
+      "exported_name": "sub_82BF4060",
+      "symbol": "propagatemark",
+      "size": 640,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from singlestep at 0x82BF3ED0, propagateall at 0x82BF53AC. Both Lua builds match the whole body and all five relocated switch destinations."
+    },
+    "0x82BF42E0": {
+      "exported_name": "sub_82BF42E0",
+      "symbol": "traversetable",
+      "size": 908,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from propagatemark at 0x82BF4108. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF48B0": {
+      "exported_name": "sub_82BF48B0",
+      "symbol": "traverseproto",
+      "size": 632,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from propagatemark at 0x82BF4264. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF4B28": {
+      "exported_name": "sub_82BF4B28",
+      "symbol": "traverseclosure",
+      "size": 392,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from propagatemark at 0x82BF4178. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF4CB0": {
+      "exported_name": "sub_82BF4CB0",
+      "symbol": "traversestack",
+      "size": 356,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from propagatemark at 0x82BF421C. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF4E18": {
+      "exported_name": "sub_82BF4E18",
+      "symbol": "checkstacksizes",
+      "size": 240,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from traversestack at 0x82BF4E00. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF4F08": {
+      "exported_name": "sub_82BF4F08",
+      "symbol": "checkSizes",
+      "size": 244,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from singlestep at 0x82BF3FC8. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF51C0": {
+      "exported_name": "sub_82BF51C0",
+      "symbol": "atomic",
+      "size": 304,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST singlestep calls this entry in its propagation phase at 0x82BF3EE0. It remarks upvalues, processes the weak tables and clears them. The current XDK body is 316 bytes against 304 in ARTIST."
+    },
+    "0x82BF52F0": {
+      "exported_name": "sub_82BF52F0",
+      "symbol": "marktmu",
+      "size": 148,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from atomic at 0x82BF5270. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF5388": {
+      "exported_name": "sub_82BF5388",
+      "symbol": "propagateall",
+      "size": 60,
+      "tu": "vendor:lua",
+      "evidence": "The ARTIST atomic phase calls this entry at 0x82BF51E8, 0x82BF5234, 0x82BF5258 and 0x82BF5278. The current XDK body is 84 bytes against 60 in ARTIST."
+    },
+    "0x82BF53C8": {
+      "exported_name": null,
+      "symbol": "cleartable",
+      "size": 336,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from atomic at 0x82BF5284. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF5518": {
+      "exported_name": "sub_82BF5518",
+      "symbol": "iscleared",
+      "size": 192,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from cleartable at 0x82BF5444, cleartable at 0x82BF54C0, cleartable at 0x82BF54D4. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82BF55D8": {
+      "exported_name": "sub_82BF55D8",
+      "symbol": "remarkupvals",
+      "size": 192,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from atomic at 0x82BF51E0. The complete XDK body and its relocations agree in both Lua builds."
+    },
+    "0x82C07028": {
+      "exported_name": "sub_82C07028",
+      "symbol": "codecomp",
+      "size": 204,
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from luaK_posfix at 0x82C06F84, luaK_posfix at 0x82C06FA0, luaK_posfix at 0x82C06FBC. The complete XDK body and its relocations agree in both Lua builds."
+    },
     "0x82C00758": {
       "exported_name": "sub_82C00758",
       "symbol": "expr",
@@ -9824,6 +10013,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x82BF4670": {
+      "symbol": "removeentry",
+      "size": 36,
+      "caller": "0x82BF42E0",
+      "call_site": "0x82BF4598",
+      "source": "vendor/lua/src/lgc.c",
+      "tu": "vendor:lua",
+      "evidence": "ARTIST calls this entry from traversetable at 0x82BF4598, cleartable at 0x82BF54F0. The complete XDK body and its relocations agree in both Lua builds."
+    },
     "0x82C028F8": {
       "exported_name": "sub_82C028F8",
       "symbol": "getbinopr",
