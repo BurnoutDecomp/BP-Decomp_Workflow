@@ -1,13 +1,13 @@
 {
  "blob": "d5fa95349096ba9123aa8de6b1355484647be20c",
- "commit": "882df69ce0322abf985fb5938ac00f4fa79e9ca1",
+ "commit": "2d6c72a95e35b7199ec27c223e2982b6fe4d1cda",
  "compiled": true,
- "measured": "2026-11-22T00:08:34Z",
+ "measured": "2026-11-22T00:38:03Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Gui/Model/Resources/CgsGuiResourceModuleIO_OutputBuffer.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 13,
+ "unpaired": 16,
  "functions": [
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
@@ -21,7 +21,7 @@
   {"artist": "8237FA20", "artist_size": 652, "calls_unverified": 6, "data_unchecked": 18, "name": "CgsModule::VariableEventQueue<18432,16>::AddEvent", "score": 100.0, "size": 652, "status": "exact", "symbol": "?AddEvent@?$VariableEventQueue@$0EIAA@$0BA@@CgsModule@@QAA_NPBUEvent@2@HH@Z"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
   {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 12.5, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"},
-  {"artist": "828582A8", "artist_size": 96, "first_diff": 24, "name": "CgsGui::GuiResourceModuleIO::OutputBuffer::Construct", "score": 85.1, "size": 92, "status": "nonmatching", "symbol": "?Construct@OutputBuffer@GuiResourceModuleIO@CgsGui@@QAAXXZ"},
+  {"artist": "828582A8", "artist_size": 96, "calls_wrong": [{"artist": "CgsModule::VariableEventQueue<18432,16>::Construct", "at": 52, "ours": "CgsGui::GuiEventQueueBase<18432,16>::Construct"}, {"artist": "CgsModule::VariableEventQueue<18432,16>::Clear", "at": 68, "ours": "CgsGui::GuiEventQueueBase<18432,16>::Clear"}], "first_diff": 52, "name": "CgsGui::GuiResourceModuleIO::OutputBuffer::Construct", "score": 91.7, "size": 96, "status": "nonmatching", "symbol": "?Construct@OutputBuffer@GuiResourceModuleIO@CgsGui@@QAAXXZ"},
   {"artist": "8285AA98", "artist_size": 184, "first_diff": 4, "name": "CgsGui::GuiResourceModuleIO::OutputBuffer::AddLoadNotification", "score": 28.9, "size": 120, "status": "nonmatching", "symbol": "?AddLoadNotification@OutputBuffer@GuiResourceModuleIO@CgsGui@@QAA_NPBUEvent@CgsModule@@@Z"},
   {"artist": "8285AB50", "artist_size": 184, "first_diff": 4, "name": "CgsGui::GuiResourceModuleIO::OutputBuffer::AddUnloadNotification", "score": 28.9, "size": 120, "status": "nonmatching", "symbol": "?AddUnloadNotification@OutputBuffer@GuiResourceModuleIO@CgsGui@@QAA_NPBUEvent@CgsModule@@@Z"},
   {"artist": "8285AC08", "artist_size": 184, "first_diff": 4, "name": "CgsGui::GuiResourceModuleIO::OutputBuffer::AddUnloadRequestNotification", "score": 28.9, "size": 120, "status": "nonmatching", "symbol": "?AddUnloadRequestNotification@OutputBuffer@GuiResourceModuleIO@CgsGui@@QAA_NPBUEvent@CgsModule@@@Z"}
