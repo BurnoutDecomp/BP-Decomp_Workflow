@@ -5101,6 +5101,41 @@
       "file": "SDKs/Realmc/RealmcCore.cpp",
       "byte_match": true,
       "evidence": "The thunks for CheckCardTask, SetActiveCardTask and SaveCheckTask call 0x82C475D8 at 0x82B52194, 0x82B5215C and 0x82B52204. Their aligned COFF relocations agree on IRunnableTask::operator()."
+    },
+    "CgsSceneManager::VolumeIn": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::operator[]",
+      "file": "GameShared/GameClasses/Containers/CgsObjectPool.h",
+      "x360_address": "0x828B71E8",
+      "byte_match": true,
+      "evidence": "The aligned CgsSceneManager::EntityManager::GetVolumeInstanceIdByIndex call at 0x828B9E64 has the matching native COFF relocation. The callee bounds-checks the 5048-element pool and returns the indexed object of the type retained in the clipped label."
+    },
+    "CgsSceneManager::VolumeInstance": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::operator[]",
+      "file": "GameShared/GameClasses/Containers/CgsObjectPool.h",
+      "x360_address": "0x828B7348",
+      "byte_match": true,
+      "evidence": "The aligned CgsSceneManager::EntityManager::RemoveVolumeInstanceFromEntity call at 0x828BA1A0 has the matching native COFF relocation. The callee bounds-checks the 5048-element pool and returns the indexed object of the type retained in the clipped label."
+    },
+    "CgsSceneManager::SceneManag": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::operator[]",
+      "file": "GameShared/GameClasses/Containers/CgsObjectPool.h",
+      "x360_address": "0x828B6D70",
+      "byte_match": true,
+      "evidence": "The aligned CgsSceneManager::EntityManager::RemoveVolumeInstanceFromEntity call at 0x828BA1B0 has the matching native COFF relocation. The callee bounds-checks the 10000-element pool and returns the indexed object of the type retained in the clipped label."
+    },
+    "CgsDev::DebugUI::Window>::Remove": {
+      "symbol": "CgsDev::Internal::DebugLinkedList<CgsDev::DebugUI::Window>::Remove",
+      "file": "GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugCollections.h",
+      "x360_address": "0x82821090",
+      "byte_match": true,
+      "evidence": "The aligned CgsDev::DebugUI::DebugUI::RemoveWindow call at 0x8282FC40 has the matching native COFF relocation. The target checks lpItem using the CgsDebugCollections.h path and unlinks it from the window list."
+    },
+    "CgsSceneManager::OverlapCullingIO::RemoveInternalCollisionVolume,256>:": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::OverlapCullingIO::RemoveInternalCollisionVolume,256>::Construct",
+      "file": "GameShared/GameClasses/Module/CgsEventQueue.h",
+      "x360_address": "0x828C4E90",
+      "byte_match": true,
+      "evidence": "The aligned CgsSceneManager::OverlapCullingIO::InputBuffer::Construct call at 0x828CB678 has the matching native COFF relocation. The native specialisation compares exact over the full 112-byte extent."
     }
   },
   "sdk_leaf_functions": {
@@ -9381,6 +9416,13 @@
       "size": 172,
       "file": "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleEmitterManager.cpp",
       "evidence": "The aligned Update call at 0x82915740 passes the expired emitter. The native relocation names UnRegister(cParticleEmitter*). The target scans the used-list links at 0x204 and returns the emitter to the free list."
+    },
+    "0x828C4D40": {
+      "exported_name": null,
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::OverlappingPair,16384>::Construct",
+      "size": 112,
+      "file": "GameShared/GameClasses/Module/CgsEventQueue.h",
+      "evidence": "The aligned CgsSceneManager::OverlapCullingIO::InputBuffer::Construct call at 0x828CB660 has the matching native COFF relocation. The native specialisation compares exact over the full 112-byte extent."
     }
   },
   "native_leaf_functions": {
