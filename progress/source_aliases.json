@@ -6248,7 +6248,7 @@
       "symbol": "huft_build",
       "size": 1300,
       "source": "vendor/zlib/src/inftrees.c",
-      "evidence": "The 1.1.4 XDK-compiled table constructors relocate their huft_build calls at the same sites as ARTIST: inflate_trees_bits at 0x82ACF024 and inflate_trees_dynamic at 0x82ACF124 and 0x82ACF170. The stock helper is 1304 bytes and differs from the 1300-byte ARTIST extent."
+      "evidence": "The native table constructors relocate their huft_build calls at the same sites as ARTIST: inflate_trees_bits at 0x82ACF024 and inflate_trees_dynamic at 0x82ACF124 and 0x82ACF170. Recovering the tags at 0x82ACEE64, 0x82ACEE8C and 0x82ACEEB0 makes the complete 1300-byte native body match."
     },
     "0x82C75918": {
       "exported_name": "sub_82C75918",
