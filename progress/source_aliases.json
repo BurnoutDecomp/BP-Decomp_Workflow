@@ -5045,6 +5045,20 @@
       "x360_address": "0x82BCBE60",
       "byte_match": true,
       "evidence": "The definition's ARTIST annotation is at src/SDKs/EATech/eajobs/local_backend.cpp:727. The existing native body compares exact across the full 8-byte ARTIST extent."
+    },
+    "*,6>::Add": {
+      "symbol": "EA::Jobs::Detail::BucketListNode<EA::Jobs::Job*,6>::Add",
+      "file": "SDKs/EATech/eajobs/bucket_list_node.cpp",
+      "x360_address": "0x82BCAD18",
+      "byte_match": true,
+      "evidence": "Job::DependsOn passes the address of a Job* at the call at 0x82BCB2D4. The target at 0x82BCAD18 operates on a six-entry bucket with four-byte elements, agreeing with the native COFF specialization."
+    },
+    "CgsSceneManager::OverlapGen": {
+      "symbol": "CgsSceneManager::OverlapGenerationIO::OutputBuffer::GetOverlappingPairQueue",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x828B04D0",
+      "byte_match": true,
+      "evidence": "The call at 0x828C1FD8 in OutputCollidingPairs targets this write accessor. It checks the write-lock status bit and returns the queue at offset 4, agreeing with the native non-const accessor."
     }
   },
   "sdk_leaf_functions": {
