@@ -9353,6 +9353,13 @@
       "size": 196,
       "file": "GameShared/GameClasses/System/Resource/CgsDebugPoolTextures.cpp",
       "evidence": "ResetWindow tail-branches here at 0x828EE538. The corresponding native COFF relocation names DebugPoolTextures::Reset. The callee prepares a 612-by-512 debug window using the pool name, then stores the pool, callback, user data and both mode arguments."
+    },
+    "0x82534118": {
+      "exported_name": "sub_82534118",
+      "symbol": "ICE::ICETake::SetParameter",
+      "size": 456,
+      "file": "SDKs/Packages/ICE/ICEData.cpp",
+      "evidence": "NewEditBuffer passes the float parameter and two flags at 0x8253B568. The native relocation names the float/bool/bool overload, and the callee clamps the parameter and dispatches the per-channel overload."
     }
   },
   "native_leaf_functions": {
@@ -9630,6 +9637,15 @@
       "call_site": "0x823AAD68",
       "table_entry": "0x823AAD78",
       "evidence": "The selected switch case falls through into the omitted tail. The complete 196-byte COFF body compares exact, and all 5 local jump-table relocations resolve to the ARTIST case offsets."
+    },
+    "0x82908A50": {
+      "symbol": "cLionSerialiser::StringStore",
+      "size": 120,
+      "file": "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionSerialiser.cpp",
+      "native_symbol": "?StringStore@cLionSerialiser@@QAAPADPBD@Z",
+      "caller": "0x8290F640",
+      "call_site": "0x8290F710",
+      "evidence": "The descriptor serialiser calls the string append routine at 0x8290F710. The native relocation names StringStore and its COFF body matches all 120 bytes through the return at 0x82908AC4."
     }
   }
 }
