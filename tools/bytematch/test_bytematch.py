@@ -315,6 +315,28 @@ def test_catalogue_counts_only_disjoint_straight_line_crt_leaves(monkeypatch):
     assert not art.sdk_leaves
 
 
+def test_crt_catalogue_recovers_local_retry_and_known_tail_branches(monkeypatch):
+    base = artist.TEXT_START
+    table = artist.CRT_INITIALIZERS_START
+    monkeypatch.setattr(artist, "CRT_INITIALIZERS_END", table + 16)
+    monkeypatch.setattr(artist, "PRIMARY_TEXT_END", base + 0x34)
+    art = FakeArtist([(base + 0x30, "KnownTarget", [BLR])])
+    for index, offset in enumerate((0, 8, 0x18, 0x20)):
+        art.memory[table + index * 4] = struct.pack(">I", base + offset)
+    for offset, words in [
+        (0, [0x38600000, bl_to(base + 4, base + 0x30) & ~1]),
+        (8, [0x7D205828, 0x7D40592D, 0x4082FFF8, BLR]),
+        (0x18, [0x38600000, bl_to(base + 0x1C, base + 0x48) & ~1]),
+        (0x20, [0x7D205828, 0x4082000C, BLR, 0]),
+    ]:
+        for index, word in enumerate(words):
+            art.memory[base + offset + index * 4] = struct.pack(">I", word)
+
+    art.include_unlisted_crt_leaves()
+
+    assert art.leaf_extents == {base: (8, "crt_leaf"), base + 8: (16, "crt_leaf")}
+
+
 def test_native_crt_identity_requires_its_registration_and_complete_body(monkeypatch):
     leaf, slot = artist.TEXT_START, artist.CRT_INITIALIZERS_START
     monkeypatch.setattr(artist, "CRT_INITIALIZERS_END", slot + 8)

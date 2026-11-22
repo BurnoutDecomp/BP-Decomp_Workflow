@@ -34,9 +34,11 @@ TEXT_END = 0x82CCFE7C
 # _cinit loads these bounds at 0x829346BC and 0x829346C0, then calls each non-null entry.
 CRT_INITIALIZERS_START, CRT_INITIALIZERS_END = 0x82CD0010, 0x82CD3D34
 
-# Straight-line integer, floating-point and VMX operations seen in the registered leaves.
+# Integer, floating-point and VMX operations seen in the registered leaves.
 CRT_LEAF_OPCODES = {4, 5, 6, 14, 15, 24, 32, 36, 48, 52, 59, 62}
-CRT_LEAF_INDEXED_OPS = {0x7C00040E, 0x7C00044E}
+# Indexed loads, MSR and SPR access, and load-reserve/store-conditional.
+CRT_LEAF_EXTENDED_OPS = {0x7C00040E, 0x7C00044E, 0x7C0000A6, 0x7C000164,
+                         0x7C000028, 0x7C00012D, 0x7C0003A6}
 BLR = 0x4E800020
 
 
@@ -253,7 +255,7 @@ class Artist:
             self.unnamed.add(address)
 
     def include_unlisted_crt_leaves(self):
-        """Catalogue registered straight-line leaves whose entire extent is readable."""
+        """Catalogue registered leaves whose entire extent is readable."""
         occupied = self.extents | {address: self.size(address)[0] for address in self.names}
         for address, size in self._crt_leaf_extents(occupied):
             self.names[address] = f"sub_{address:08X}"
@@ -261,6 +263,8 @@ class Artist:
             self.leaf_extents[address] = (size, "crt_leaf")
 
     def _crt_leaf_extents(self, occupied):
+        from compare import branch_target
+
         table = self.bytes(CRT_INITIALIZERS_START, CRT_INITIALIZERS_END - CRT_INITIALIZERS_START)
         entries = {address for (address,) in struct.iter_unpack(">I", table)
                    if TEXT_START <= address < PRIMARY_TEXT_END and address % 4 == 0}
@@ -276,12 +280,22 @@ class Artist:
             words = [word for (word,) in struct.iter_unpack(">I", self.bytes(address, following - address))]
             while words and words[-1] == 0:
                 words.pop()
-            if not words or words[-1] != BLR or any(
-                word >> 26 not in CRT_LEAF_OPCODES and word & 0xFC0007FF not in CRT_LEAF_INDEXED_OPS
-                for word in words[:-1]
+            if not words:
+                continue
+            end = address + 4 * len(words)
+            last = words[-1]
+            if last != BLR and (last & 0xFC000003 != 0x48000000
+                               or not occupied.get(branch_target(last, end - 4, 0x03FFFFFC))):
+                continue
+            if any(
+                word >> 26 not in CRT_LEAF_OPCODES
+                and word & 0xFC0007FF not in CRT_LEAF_EXTENDED_OPS
+                and not (word & 0xFC000003 == 0x40000000
+                         and address <= branch_target(word, address + 4 * index, 0xFFFC) < end)
+                for index, word in enumerate(words[:-1])
             ):
                 continue
-            yield address, 4 * len(words)
+            yield address, end - address
 
     def _include_leaves(self, proofs):
         """Recover leaf entries and omitted tails using references into image gaps."""
