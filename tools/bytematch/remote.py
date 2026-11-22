@@ -128,17 +128,21 @@ def not_older(b5, old, new):
                           capture_output=True).returncode == 0
 
 
-def adopt(bundle, sha, root=ledger.RECORDS, state_path=ledger.STATE, b5=None):
+def adopt(bundle, sha, root=ledger.RECORDS, state_path=ledger.STATE, b5=None, *, expected_inputs=None):
     """Write the server's measurement into the ledger; returns (changed paths, deleted paths).
     A record or state measured at a later commit than this measurement is kept as it is."""
     _need(isinstance(bundle, dict) and bundle.get("schema") == BUNDLE_SCHEMA and bundle.get("sha") == sha,
           "bundle: wrong schema or commit")
+    result = bundle.get("result")
+    _need(isinstance(result, dict), "bundle: missing measurement result")
+    if expected_inputs is not None:
+        _need(result.get("comparison_inputs") == expected_inputs,
+              "The server bundle does not match this checkout's byte-match inputs. A fresh measurement is required.")
     records, removed = bundle.get("records"), bundle.get("removed")
     _need(isinstance(records, dict) and isinstance(removed, list), "bundle: no records or removals")
     checked = {source: check_record(source, text, sha) for source, text in records.items()}
     gone = [check_source(source) for source in removed]
     _need(not set(gone) & set(checked), "bundle: a source both measured and removed")
-    result = bundle.get("result") or {}
     state = check_state(bundle.get("state"), sha, result.get("sources"))
     def stored(path):
         return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else None
@@ -183,6 +187,7 @@ def measure(args):
     token = os.environ.get("WORK_TOKEN", "")
     if not token:
         raise SystemExit("WORK_TOKEN (an admin worker id) is required")
+    expected_inputs = ledger.measure_fingerprint()
     status = json.loads(call(args.server, "/admin/bytematch/measure", token, {"sha": sha}))
     print(f"queued {sha[:12]} on {args.server}: {status.get('state')}", flush=True)
     deadline, last, asked = time.time() + args.timeout, None, time.time()
@@ -209,7 +214,10 @@ def measure(args):
         raise SystemExit(f"measurement {status.get('state')}: {status.get('error') or status}")
     bundle = json.loads(gzip.decompress(call(args.server, f"/admin/bytematch/measure/{sha}/bundle", token,
                                              timeout=300)))
-    changed, deleted = adopt(bundle, sha, b5=args.b5)
+    try:
+        changed, deleted = adopt(bundle, sha, b5=args.b5, expected_inputs=expected_inputs)
+    except BadRecord as exc:
+        raise SystemExit(str(exc)) from None
     repo = ledger.REPO
     for target, paths in ((args.changes, changed), (args.deletions, deleted)):
         if target:

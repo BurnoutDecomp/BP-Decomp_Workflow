@@ -37,6 +37,7 @@ import sys
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import ledger  # noqa: E402
+from ledger import measure_fingerprint  # noqa: E402
 from remote import content  # noqa: E402
 
 REPO = ledger.REPO
@@ -44,20 +45,6 @@ DEFAULT_TREE = REPO / "b5-x360"
 CACHE = Path("build") / "x360" / "bytematch"
 INCLUDE_NOTE = re.compile(r"^Note: including file:\s*(.+?)\s*$")
 TOOL_VERSION = 1
-
-
-# Changed comparison inputs require a fresh measurement of the cached objects.
-MEASURE_INPUTS = ["tools/bytematch/artist.py", "tools/bytematch/bytematch.py", "tools/bytematch/coff.py",
-                  "tools/bytematch/compare.py", "tools/bytematch/ledger.py", "progress/asmaudit_artist.json.gz",
-                  "progress/unidentified.json", "progress/source_aliases.json"]
-
-
-def measure_fingerprint(repo: Path = REPO) -> str:
-    digest = hashlib.sha256()
-    for name in MEASURE_INPUTS:
-        path = repo / name
-        digest.update(name.encode() + b"\0" + (path.read_bytes().replace(b"\r\n", b"\n") if path.is_file() else b"-"))
-    return digest.hexdigest()[:16]
 
 
 def measurement_identity(record):

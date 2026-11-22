@@ -20,6 +20,7 @@ from __future__ import annotations
 from collections import Counter, defaultdict
 import datetime as _dt
 import gzip
+import hashlib
 import json
 from pathlib import Path
 
@@ -35,6 +36,20 @@ BRANCH = "x360"
 
 STATUSES = ("exact", "nonmatching", "missing", "sdk", "unnamed")
 RANK = {"exact": 3, "nonmatching": 2}
+
+
+# These inputs affect the comparison even when the native object is unchanged.
+MEASURE_INPUTS = ["tools/bytematch/artist.py", "tools/bytematch/bytematch.py", "tools/bytematch/coff.py",
+                  "tools/bytematch/compare.py", "tools/bytematch/ledger.py", "progress/asmaudit_artist.json.gz",
+                  "progress/unidentified.json", "progress/source_aliases.json"]
+
+
+def measure_fingerprint(repo: Path = REPO) -> str:
+    digest = hashlib.sha256()
+    for name in MEASURE_INPUTS:
+        path = repo / name
+        digest.update(name.encode() + b"\0" + (path.read_bytes().replace(b"\r\n", b"\n") if path.is_file() else b"-"))
+    return digest.hexdigest()[:16]
 
 
 def now_iso():

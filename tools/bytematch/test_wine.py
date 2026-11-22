@@ -224,6 +224,21 @@ def test_adopt_refuses_a_bundle_for_another_commit_and_writes_nothing(tmp_path):
     assert not root.exists() and not state.exists()
 
 
+def test_adopt_requires_current_comparison_inputs_even_at_the_same_native_commit(tmp_path):
+    root, state = tmp_path / "objects", tmp_path / "state.json"
+    measured = bundle([record()])
+    expected = "a" * 16
+    with pytest.raises(remote.BadRecord, match="fresh measurement is required"):
+        remote.adopt(measured, SHA, root, state, expected_inputs=expected)
+    measured["result"]["comparison_inputs"] = "b" * 16
+    with pytest.raises(remote.BadRecord, match="fresh measurement is required"):
+        remote.adopt(measured, SHA, root, state, expected_inputs=expected)
+    assert not root.exists() and not state.exists()
+    measured["result"]["comparison_inputs"] = expected
+    changed, _ = remote.adopt(measured, SHA, root, state, expected_inputs=expected)
+    assert changed == [ledger.record_path("src/Game/A.cpp", root), state]
+
+
 def test_the_bundle_wine_writes_is_the_one_remote_reads(tmp_path):
     """Same schema constant, gzip JSON, records as ledger text."""
     data = gzip.compress(json.dumps(bundle([record()]), sort_keys=True).encode(), mtime=0)

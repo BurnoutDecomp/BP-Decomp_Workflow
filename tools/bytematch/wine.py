@@ -366,7 +366,7 @@ def refresh(args):
                                                             else ledger.RECORDS)}
     image = Image(Path(args.image))
     generated_includes(tree, image)
-    measuring = bytematch.measure_fingerprint()
+    measuring = ledger.measure_fingerprint()
     compiler = Compiler(tree, xdk, objects, flags, includes, timeout=args.timeout)
     compiler.start()
     bytematch._CL_VERSION[compiler.xdk_dos] = compiler.version()
@@ -448,7 +448,8 @@ def refresh(args):
              "toolchain": current}
     (out / "state.json").write_text(json.dumps(state, indent=1, sort_keys=True) + "\n", encoding="utf-8",
                                     newline="\n")
-    result = {"schema": RESULT_SCHEMA, "head": head, "sources": len(sources), "compiled": len(to_compile),
+    result = {"schema": RESULT_SCHEMA, "head": head, "comparison_inputs": measuring,
+              "sources": len(sources), "compiled": len(to_compile),
               "measured": len(to_measure), "written": written, "unchanged": unchanged, "removed": removed,
               "compile_failed": failed, "toolchain": current, "seconds": {
                   "compile": round(compile_seconds, 1), "measure": round(measure_seconds, 1),

@@ -48,7 +48,7 @@ summary keeps the best copy measured against the current ARTIST length.
 - A changed toolchain fingerprint (new flags in the branch's `build_x360.py`, another compiler)
   re-measures every object. The server and local `work match refresh --record` also re-measure
   when the comparison modules or ARTIST name inputs change (`MEASURE_INPUTS` in
-  `tools/bytematch/bytematch.py`). An unchanged native object can be reused when its recorded
+  `tools/bytematch/ledger.py`). An unchanged native object can be reused when its recorded
   build inputs and cache stamp agree. Local preview builds do not certify committed records.
   A local object records the commit of a clean XDK build. `measure --record` checks those source,
   header, submodule and builder inputs at the commit being recorded, and rebuilds when it cannot
@@ -69,7 +69,9 @@ finish and keeps the newest pending run. A run:
    commit's status for admins at `/admin/bytematch/measure/<sha>`; a commit that stopped being the
    tip before its turn comes is `superseded`, not measured. `remote.py` checks every record field
    by field and writes the ones whose result changed, unless `main` holds one measured at a
-   later commit. A failed measurement does not stop the run;
+   later commit. It only adopts a bundle with the same comparison-input fingerprint as the
+   publishing checkout. When the server returns an older cached bundle, CI can still publish
+   the committed records. Local `work match refresh --record` can produce fresh records;
 3. resolves the `x360` tip again, builds the summary there with
    `python tools/bytematch/bytematch.py summary --b5 <clone> --head <tip>`, and publishes records,
    deletions, `state.json` and the summary in one commit through
