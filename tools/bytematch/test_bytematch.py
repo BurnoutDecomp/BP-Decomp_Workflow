@@ -376,6 +376,42 @@ def test_sdk_leaf_requires_a_disjoint_extent_and_archive_match(monkeypatch, tmp_
             Artist(pack={**pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": claim}}, read=read)
 
 
+def test_linker_import_requires_matching_archive_ordinals_and_image_module(tmp_path):
+    import sdk
+
+    caller, anchor, address = 0x821F1000, 0x821F1010, 0x821F1020
+    module_name = "kernel.exe"
+
+    def archive_import(symbol, ordinal, flags=0):
+        strings = f"{symbol}\0{module_name}\0".encode()
+        data = struct.pack("<HHHHIIHH", 0, 0xFFFF, 0, coff.MACHINE_PPCBE, 0, len(strings), ordinal, flags) + strings
+        header = f"{module_name + '/':<16}{0:<12}{0:<6}{0:<6}{0:<8}{len(data):<10}`\n".encode()
+        return header + data + b"\n" * (len(data) % 2)
+
+    library = tmp_path / "kernel.lib"
+
+    def image_with_module(module):
+        known = [0x38600001, 0x38800152, sdk.MTCTR_R11, sdk.BCTR]
+        stub = [0x38600000 | module, 0x38800155, sdk.MTCTR_R11, sdk.BCTR]
+        image = FakeArtist([(caller, "Caller", [bl_to(caller, address), BLR]), (anchor, "Known", known),
+                            (address, "Target", stub)])
+        pack = {**image.pack, f"0x{address:08X}": {"unlisted": True, "sdk_leaf": {
+            "symbol": "Target", "archive_symbol": "Target", "lib": library.name, "member": module_name,
+            "size": 16, "caller": f"{caller:X}", "call_site": f"{caller:X}", "import_anchor": f"{anchor:X}",
+        }}}
+        return Artist(pack=pack, read=lambda at, size: b"" if at == PDATA_START else image.bytes(at, size))
+
+    base = b"!<arch>\n" + archive_import("Known", 338)
+    library.write_bytes(base + archive_import("Target", 341))
+    assert sdk.verify_leaf_providers(image_with_module(1), tmp_path)[address]["ordinal"] == 341
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(image_with_module(2), tmp_path)
+    for bad_import in (archive_import("Target", 340), archive_import("Target", 341, flags=4)):
+        library.write_bytes(base + bad_import)
+        with pytest.raises(ValueError, match="archive comparison failed"):
+            sdk.verify_leaf_providers(image_with_module(1), tmp_path)
+
+
 def test_sdk_entry_group_requires_disjoint_contiguous_archive_entries(monkeypatch, tmp_path):
     from dataclasses import replace
 

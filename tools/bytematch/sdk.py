@@ -16,7 +16,7 @@ from collections import defaultdict
 from pathlib import Path
 import struct
 
-from coff import ObjectFile, CoffError, archive_members
+from coff import ObjectFile, CoffError, archive_members, ordinal_code_import
 from artist import Artist, demangle, normal_name
 from compare import compare
 
@@ -66,10 +66,14 @@ def library_functions(lib_dir, *, only_members=None):
 
 
 def verify_leaf_providers(artist, lib_dir):
-    """Compare every attested leaf against its recorded archive member."""
+    """Compare every attested leaf or linker import against its recorded library."""
     members = defaultdict(set)
     addresses = defaultdict(list)
+    imports = defaultdict(list)
     for address, proof in artist.sdk_leaves.items():
+        if "import_anchor" in proof:
+            imports[proof["lib"]].append((address, proof))
+            continue
         members[proof["lib"]].add(proof["member"])
         entry = proof.get("archive_entry") is True
         addresses[proof["lib"], proof["member"], proof["archive_symbol"], entry].append(address)
@@ -87,6 +91,7 @@ def verify_leaf_providers(artist, lib_dir):
                 found[address] = {"lib": lib, "member": member, "symbol": fn.symbol, "variants": 1}
                 if group is not None:
                     group_locations[group].add((fn.section, fn.offset - (address - group)))
+    found.update(_verify_linker_imports(artist, lib_dir, imports))
 
     missing = artist.sdk_leaves.keys() - found.keys()
     if missing:
@@ -95,6 +100,42 @@ def verify_leaf_providers(artist, lib_dir):
     for address, locations in group_locations.items():
         if len(locations) != 1:
             raise ValueError(f"SDK entry group {address:08X} is not contiguous in its archive member")
+    return found
+
+
+def _verify_linker_imports(artist, lib_dir, claims):
+    """Tie the image's module index to a known import in the same XDK library."""
+    found = {}
+    libraries = {path.name: path for path in Path(lib_dir).glob("*.lib")}
+    for lib, entries in claims.items():
+        if lib not in libraries:
+            continue
+        exports = defaultdict(set)
+        archive = libraries[lib].read_bytes()
+        for member, data in archive_members(archive, lib, include_imports=True):
+            decoded = ordinal_code_import(data)
+            if decoded is not None:
+                symbol, dll, ordinal = decoded
+                exports[member, symbol].add((dll, ordinal))
+
+        for address, proof in entries:
+            anchor = int(proof["import_anchor"], 16)
+            anchor_symbol = artist.name_at(anchor)
+            if (anchor == address or anchor_symbol is None or not artist.matches_name(address, proof["archive_symbol"])
+                    or artist.size(anchor)[0] != 16 or artist.size(address)[0] != 16):
+                continue
+            anchor_stub = import_stub(struct.unpack(">4I", artist.bytes(anchor, 16)))
+            stub = import_stub(struct.unpack(">4I", artist.bytes(address, 16)))
+            if anchor_stub is None or stub is None:
+                continue
+            ordinal, module = stub
+            if module < 0 or anchor_stub[1] != module:
+                continue
+            member, symbol = proof["member"], proof["archive_symbol"]
+            if any(o == ordinal and (dll, anchor_stub[0]) in exports[member, anchor_symbol]
+                   for dll, o in exports[member, symbol]):
+                found[address] = {"lib": "import stub", "member": f"module {module} ordinal {ordinal}",
+                                  "symbol": symbol, "ordinal": ordinal, "variants": 1}
     return found
 
 

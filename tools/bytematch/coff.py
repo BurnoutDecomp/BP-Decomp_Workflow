@@ -193,10 +193,10 @@ def read_object(path):
         return ObjectFile(fh.read(), str(path))
 
 
-def archive_members(data: bytes, name: str = "<archive>"):
+def archive_members(data: bytes, name: str = "<archive>", *, include_imports=False):
     """Yield (member name, bytes) for each COFF object in a `.lib` archive.
 
-    Skips the linker members and short import objects (Sig1 0, Sig2 0xFFFF).
+    Skips the linker members. Short import objects are optional.
     """
     if data[:8] != b"!<arch>\n":
         raise CoffError(f"{name}: not an archive")
@@ -222,9 +222,22 @@ def archive_members(data: bytes, name: str = "<archive>"):
                     end = cut
             member = longnames[start:end if end != -1 else None].decode("latin-1")
         member = member.rstrip("/")
-        if body[:4] == b"\0\0\xff\xff":
+        if not include_imports and body[:4] == b"\0\0\xff\xff":
             continue
         yield member, body
+
+
+def ordinal_code_import(data):
+    """Return (symbol, module, ordinal) for a PowerPC ordinal code import object."""
+    if len(data) < 20:
+        return None
+    sig1, sig2, version, machine, _, size, ordinal, flags = struct.unpack_from("<HHHHIIHH", data)
+    if (sig1, sig2, version, machine, flags) != (0, 0xFFFF, 0, MACHINE_PPCBE, 0) or size != len(data) - 20:
+        return None
+    names = data[20:].split(b"\0")
+    if len(names) != 3 or not names[0] or not names[1] or names[2]:
+        return None
+    return names[0].decode("latin-1"), names[1].decode("latin-1"), ordinal
 
 
 def be_words(code: bytes):

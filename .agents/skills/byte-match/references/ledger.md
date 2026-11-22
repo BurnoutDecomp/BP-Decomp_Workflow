@@ -101,6 +101,10 @@ previous summary, dropped on a regression) and `recent`.
   When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition
   that extent. The export length must equal the complete partition, and each entry must compare
   exact at the corresponding offset in one archive section.
+- A linker-generated ordinal import can use `import_anchor` in `sdk_leaf_functions`. The
+  named 16-byte anchor and the uncatalogued stub must use the same image module. Both symbols
+  and their ordinals must agree with ordinal code import objects for the same module in the
+  specified XDK library.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines

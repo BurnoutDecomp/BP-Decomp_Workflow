@@ -5155,6 +5155,17 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82C76B0C": {
+      "symbol": "TlsSetValue",
+      "size": 16,
+      "lib": "xboxkrnl.lib",
+      "member": "xboxkrnl.exe@6534.1+1861.0",
+      "archive_symbol": "TlsSetValue",
+      "import_anchor": "0x82C76AFC",
+      "caller": "0x82B42D28",
+      "call_site": "0x82B42D38",
+      "evidence": "The exact ThreadLocalStorage::SetValue caller relocates this branch to TlsSetValue. The ARTIST linker stub specifies module 1 and ordinal 341. TlsAlloc at 0x82C76AFC independently establishes module 1 through its ordinal 338 entry in the same XDK kernel import library."
+    },
     "0x8295EF50": {
       "symbol": "XNetGetTitleXnAddr",
       "size": 12,
