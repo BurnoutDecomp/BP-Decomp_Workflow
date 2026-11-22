@@ -736,23 +736,28 @@ def test_virtual_leaf_requires_a_matching_vtable_slot():
         art_with_slot(leaf)
 
 
-def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path):
+@pytest.mark.parametrize("exported_name", ["Leaf", "sub_821F1020"])
+def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path, exported_name):
     from bytematch import measure_object
 
     leaf = 0x821F1020
     body = [bl_to(leaf, leaf + 8) & ~1, 0x38600007, BLR]
     image = FakeArtist([(leaf, "Leaf", body), (leaf + 12, "Next", [BLR])])
     addr = f"0x{leaf:08X}"
-    pack = {**image.pack, addr: {**image.pack[addr], "n": 2}}
+    pack = {**image.pack, addr: {"name": exported_name, "n": 2}}
     pack_path = tmp_path / "artist.json.gz"
     pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode()))
     aliases = tmp_path / "source_aliases.json"
-    aliases.write_text(json.dumps({"native_leaf_functions": {addr: {
+    witness = {
         "symbol": "Leaf", "previous_size": 8, "size": 12, "caller": addr, "call_site": addr,
-    }}}), encoding="utf-8")
+    }
+    if exported_name != "Leaf":
+        witness["exported_name"] = exported_name
+    aliases.write_text(json.dumps({"native_leaf_functions": {addr: witness}}), encoding="utf-8")
     resolved = load_pack(pack_path, aliases_path=aliases)
     art = Artist(pack=resolved, read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
     assert art.size(leaf) == (12, "native_leaf")
+    assert art.name_at(leaf) == "Leaf"
     obj_path = tmp_path / "leaf.obj"
     obj_path.write_bytes(make_object([("Leaf", body, [])]))
     row, = measure_object(obj_path, art)
@@ -761,6 +766,17 @@ def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path):
     pdata = struct.pack(">II", leaf, 0x40000200)
     with pytest.raises(ValueError, match="no longer agrees with the export"):
         Artist(pack=resolved, read=lambda address, size: pdata if address == PDATA_START else image.bytes(address, size))
+
+
+def test_recovered_identity_filters_conflicting_cached_provider_names():
+    address, neighboring = 0x82C00758, 0x82C00790
+    art = FakeArtist([(address, "expr", [BLR]), (neighboring, "subexpr", [BLR])])
+    art.identified_addresses.add(address)
+    guesses = {address: {"symbol": "_aligned_malloc_base"}, neighboring: {"symbol": "Unreviewed"}}
+
+    assert sdk.matching_provider_names(art, guesses) == {neighboring: guesses[neighboring]}
+    guesses[address]["symbol"] = "expr"
+    assert sdk.matching_provider_names(art, guesses) == guesses
 
 
 def test_exported_native_leaf_can_recover_a_switch_tail():

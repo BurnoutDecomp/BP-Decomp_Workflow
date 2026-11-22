@@ -98,7 +98,8 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             for address, proof in registry.get(f"{kind}_functions", {}).items():
                 if "previous_size" in proof:
                     row = functions.get(address)
-                    if kind == "native_leaf" and row and row.get("name") == proof["symbol"]:
+                    exported = proof.get("exported_name", proof["symbol"])
+                    if kind == "native_leaf" and row and row.get("name") == exported:
                         row[kind] = proof
                 else:
                     functions.setdefault(address, {"unlisted": True, kind: proof})
@@ -165,6 +166,7 @@ class Artist:
         self.names = {}          # address -> name
         self.folded_names = {}   # verified call targets sharing a linked body
         self.identified_tus = {}  # optional ledger placement for recovered identities
+        self.identified_addresses = set()
         self.unnamed = set()
         self.ida_size = {}
         self.sdk_leaves = {}
@@ -202,6 +204,7 @@ class Artist:
             if address in self.unnamed and self.size(address)[0] == length:
                 self.names[address] = name
                 self.unnamed.remove(address)
+                self.identified_addresses.add(address)
                 if tu is not None:
                     self.identified_tus[address] = tu
                 if sdk_provider is not None:
@@ -387,6 +390,7 @@ class Artist:
         elif "crt_slot" not in proof:
             self._check_leaf_branch(proof, occupied, label, address, start, address + size)
         self.names[address] = proof["symbol"]
+        self.unnamed.discard(address)
         self.leaf_extents[address] = (size, "crt_leaf" if "crt_slot" in proof else kind)
         if kind == "sdk_leaf":
             self.sdk_leaves[address] = proof

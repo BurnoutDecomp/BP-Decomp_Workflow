@@ -142,6 +142,8 @@ previous summary, dropped on a regression) and `recent`.
   `bctr` as `call_site` and supply the address of the `table_entry` whose case reaches the tail.
   The omitted range must fit a gap and the complete body must compare exact. Check the native
   jump table's relocations against the ARTIST case offsets before recording a switch extent.
+  For an unnamed export, include its `exported_name` so the identity and tail stay tied to the
+  same prefix. Cached SDK guesses that conflict with a recovered identity are discarded.
   A virtual leaf can use `vtable_slots` instead of a caller and branch. Establish the ARTIST table
   owner and slot, check the pointer and native vtable relocation, and record that evidence with
   the symbol. The catalogue requires each listed slot to contain the leaf address in `.rdata`.

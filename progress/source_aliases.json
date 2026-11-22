@@ -5951,6 +5951,34 @@
     }
   },
   "identified_functions": {
+    "0x82C00758": {
+      "exported_name": "sub_82C00758",
+      "symbol": "expr",
+      "size": 52,
+      "tu": "vendor:lua",
+      "evidence": "The complete native expr wrapper matches and passes a zero precedence limit to subexpr at the branch at 0x82C00778. The previously cached libcMTd _aligned_malloc_base body branches to _aligned_offset_malloc_base instead."
+    },
+    "0x82C00790": {
+      "exported_name": "sub_82C00790",
+      "symbol": "subexpr",
+      "size": 336,
+      "tu": "vendor:lua",
+      "evidence": "The exact expr wrapper identifies this entry at 0x82C00778. Both recursive branches, the parser calls and both references to the complete 30-byte operator priority array at 0x82188894 agree with the existing XDK object."
+    },
+    "0x82C008E0": {
+      "exported_name": "sub_82C008E0",
+      "symbol": "simpleexp",
+      "size": 1076,
+      "tu": "vendor:lua",
+      "evidence": "The subexpr branch at 0x82C00804 identifies the primary expression dispatcher. The complete native body, all 164 relocated case pointers, every call target and the syntax error string at 0x82F93B34 agree."
+    },
+    "0x82C028A0": {
+      "exported_name": "sub_82C028A0",
+      "symbol": "getunopr",
+      "size": 84,
+      "tu": "vendor:lua",
+      "evidence": "The subexpr branch at 0x82C007B8 identifies Lua's unary operator classifier. The full 84-byte native body matches without relocations."
+    },
     "0x829B9C48": {
       "exported_name": "sub_829B9C48",
       "symbol": "IDCT_Intra_8x8",
@@ -9796,6 +9824,17 @@
     }
   },
   "native_leaf_functions": {
+    "0x82C028F8": {
+      "exported_name": "sub_82C028F8",
+      "symbol": "getbinopr",
+      "previous_size": 196,
+      "size": 1180,
+      "caller": "0x82C028F8",
+      "call_site": "0x82C02918",
+      "source": "vendor/lua/src/lparser.c",
+      "tu": "vendor:lua",
+      "evidence": "The subexpr branch at 0x82C00810 identifies the binary operator classifier. The bounds branch at 0x82C02918 reaches its default case beyond the clipped export. Both XDK objects match the complete body and every one of the 247 case addresses in the table at 0x82C02938. The zero word after the final blr is alignment."
+    },
     "0x8283FF90": {
       "symbol": "CgsGeometric::ClipTriEdgeAgainstBox",
       "size": 640,

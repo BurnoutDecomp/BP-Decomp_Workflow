@@ -238,6 +238,13 @@ def _verify_linker_imports(artist, lib_dir, claims):
     return found
 
 
+def matching_provider_names(artist, provided):
+    """Drop archive guesses contradicted by an independently recovered function name."""
+    return {address: proof for address, proof in provided.items()
+            if address not in artist.identified_addresses
+            or artist.matches_name(address, demangle(proof["symbol"]))}
+
+
 def identify(artist: Artist, lib_dir, log=print):
     """{ARTIST address: {"lib", "member", "symbol"}} for every SDK-provided function."""
     by_size = defaultdict(list)
@@ -302,4 +309,4 @@ def identify(artist: Artist, lib_dir, log=print):
         # Prefer the canonical export, then a confirmed folded name, then the release library.
         (lib, member, symbol), _ = min(providers.items(), key=lambda kv: (-kv[1], kv[0][0].endswith(("d.lib", "i.lib")), kv[0]))
         out[address] = {"lib": lib, "member": member, "symbol": symbol, "variants": len(providers)}
-    return out
+    return matching_provider_names(artist, out)

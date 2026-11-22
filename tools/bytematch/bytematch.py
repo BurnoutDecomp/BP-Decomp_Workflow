@@ -719,7 +719,8 @@ def universe(args):
     lib_dir = xdk / "lib" / "xbox"
     leaves = sdk.verify_leaf_providers(artist, lib_dir)
     if args.providers:
-        provided = {int(a, 16): v for a, v in json.loads(Path(args.providers).read_text(encoding="utf-8")).items()}
+        cached = {int(a, 16): v for a, v in json.loads(Path(args.providers).read_text(encoding="utf-8")).items()}
+        provided = sdk.matching_provider_names(artist, cached)
     else:
         provided = sdk.identify(artist, lib_dir, log=lambda line: print(line, flush=True))
     provided.update(leaves)
