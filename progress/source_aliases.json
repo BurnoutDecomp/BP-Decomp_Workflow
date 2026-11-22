@@ -5179,6 +5179,177 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x829F0268": {
+      "symbol": "WMVideoDecUpdateDstLineYUY2",
+      "size": 424,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\decolorconv_wmv.obj",
+      "archive_symbol": "WMVideoDecUpdateDstLineYUY2",
+      "caller": "0x829F0748",
+      "refhi_site": "0x829F07D0",
+      "reflo_site": "0x829F07E4",
+      "evidence": "The matching XDK WMVideoDecInitBMPInfo loads this entry at 0x829F07E4 through the archive function pointer relocation."
+    },
+    "0x829F8040": {
+      "symbol": "g_MVCostSADProgressive",
+      "size": 96,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?g_MVCostSADProgressive@@YAJPAVCWMVideoObjectEncoder@@JJ@Z",
+      "archive_literals": {
+        "g_MVSADCostBaseVal": {
+          "address": "0x8210EDE8",
+          "size": 32
+        }
+      },
+      "caller": "0x829F8230",
+      "refhi_site": "0x829F823C",
+      "reflo_site": "0x829F8248",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::SetupMVCostTables loads this entry at 0x829F8248 through the archive function pointer relocation. Both references resolve to the same verified 32-byte motion vector cost table."
+    },
+    "0x82A49CF8": {
+      "symbol": "compInt",
+      "size": 40,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\vopenc.obj",
+      "archive_symbol": "?compInt@@YAJPBX0@Z",
+      "caller": "0x82A4A2F0",
+      "refhi_site": "0x82A4A768",
+      "reflo_site": "0x82A4A770",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::worstSnrComp loads this entry at 0x82A4A770 through the archive function pointer relocation."
+    },
+    "0x82A61688": {
+      "symbol": "MotionCompMixedAndAddError_Xenon",
+      "size": 4,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\motioncomp_xenon.obj",
+      "archive_symbol": "MotionCompMixedAndAddError_Xenon",
+      "caller": "0x82A5F1C0",
+      "refhi_site": "0x82A5F1E0",
+      "reflo_site": "0x82A5F21C",
+      "evidence": "The matching XDK DecideVectorRoutines loads this entry at 0x82A5F21C through the archive function pointer relocation. The tail branch reaches the verified MotionCompMixed_Common body."
+    },
+    "0x82A9A8B8": {
+      "symbol": "g_inverseIntraBlockQuantizeInterlaceV2",
+      "size": 124,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interlaceencv2.obj",
+      "archive_symbol": "?g_inverseIntraBlockQuantizeInterlaceV2@@YAXPAF0KPAUDQuantEncParam@@@Z",
+      "caller": "0x82A9B060",
+      "refhi_site": "0x82A9B06C",
+      "reflo_site": "0x82A9B07C",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitInterlaceV2Functions loads this entry at 0x82A9B07C through the archive function pointer relocation."
+    },
+    "0x82AB0E20": {
+      "symbol": "g_FieldAddError8x8",
+      "size": 276,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate.obj",
+      "archive_symbol": "?g_FieldAddError8x8@@YAXPAFPAEJ@Z",
+      "caller": "0x82AB24E0",
+      "refhi_site": "0x82AB253C",
+      "reflo_site": "0x82AB2564",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation loads this entry at 0x82AB2564 through the archive function pointer relocation."
+    },
+    "0x82AB0F38": {
+      "symbol": "g_FieldBlockSub128",
+      "size": 52,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate.obj",
+      "archive_symbol": "?g_FieldBlockSub128@@YAXPAF0J@Z",
+      "caller": "0x82AB24E0",
+      "refhi_site": "0x82AB252C",
+      "reflo_site": "0x82AB254C",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation loads this entry at 0x82AB254C through the archive function pointer relocation."
+    },
+    "0x82AB0F70": {
+      "symbol": "g_FieldBlockSub128_8to16",
+      "size": 48,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate.obj",
+      "archive_symbol": "?g_FieldBlockSub128_8to16@@YAXPAEPAFJ@Z",
+      "caller": "0x82AB24E0",
+      "refhi_site": "0x82AB2534",
+      "reflo_site": "0x82AB2554",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation loads this entry at 0x82AB2554 through the archive function pointer relocation."
+    },
+    "0x82AB0FA0": {
+      "symbol": "g_FieldBlockAdd128",
+      "size": 52,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate.obj",
+      "archive_symbol": "?g_FieldBlockAdd128@@YAXPAF0J@Z",
+      "caller": "0x82AB24E0",
+      "refhi_site": "0x82AB2530",
+      "reflo_site": "0x82AB2550",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation loads this entry at 0x82AB2550 through the archive function pointer relocation."
+    },
+    "0x82AB0FD8": {
+      "symbol": "g_FieldBlockAdd128_8to16",
+      "size": 48,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate.obj",
+      "archive_symbol": "?g_FieldBlockAdd128_8to16@@YAXPAEPAFJ@Z",
+      "caller": "0x82AB24E0",
+      "refhi_site": "0x82AB2538",
+      "reflo_site": "0x82AB255C",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation loads this entry at 0x82AB255C through the archive function pointer relocation."
+    },
+    "0x82ACC648": {
+      "symbol": "g_EncInterpolateBlockBilinear_02_Xenon",
+      "size": 12,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate_emb_xenon.obj",
+      "archive_symbol": "g_EncInterpolateBlockBilinear_02_Xenon",
+      "caller": "0x82AC7298",
+      "refhi_site": "0x82AC72F4",
+      "reflo_site": "0x82AC737C",
+      "evidence": "The matching XDK CWMVideoObjectEncoder::InitBlockInterpolation_EMB loads this entry at 0x82AC737C through the archive function pointer relocation. The wrapper tail branch reaches the verified g_BilinearH0VertFilter2_EMB body."
+    },
+    "0x82C344B8": {
+      "symbol": "VoiceChatXAudioPacketCallback",
+      "size": 20,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\voicechat.obj",
+      "archive_symbol": "VoiceChatXAudioPacketCallback",
+      "caller": "0x82C34C70",
+      "refhi_site": "0x82C34D50",
+      "reflo_site": "0x82C34D60",
+      "evidence": "The matching XDK VoiceChatSetOutputVoice loads this entry at 0x82C34D60 through the archive function pointer relocation."
+    },
+    "0x82C34FA0": {
+      "symbol": "VoiceChatCreateWrapper",
+      "size": 20,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\voicechat.obj",
+      "archive_symbol": "VoiceChatCreateWrapper",
+      "caller": "0x82C34FB8",
+      "refhi_site": "0x82C34FB8",
+      "reflo_site": "0x82C34FBC",
+      "evidence": "The matching XDK VoiceChatGetCreationWrapper loads this entry at 0x82C34FBC through the archive function pointer relocation."
+    },
+    "0x82C35240": {
+      "symbol": "XHVEngineSilenceCompleteCallback",
+      "size": 16,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\engine.obj",
+      "archive_symbol": "XHVEngineSilenceCompleteCallback",
+      "caller": "0x82C35250",
+      "refhi_site": "0x82C354C0",
+      "reflo_site": "0x82C354D0",
+      "evidence": "The matching XDK XHVEnginepInitXAudio loads this entry at 0x82C354D0 through the archive function pointer relocation."
+    },
+    "0x82C9D670": {
+      "symbol": "g_InterpolateBlockBilinearDirect_02_Xenon",
+      "size": 32,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate_wmv9_xenon_emb.obj",
+      "archive_symbol": "g_InterpolateBlockBilinearDirect_02_Xenon",
+      "caller": "0x82A79B48",
+      "refhi_site": "0x82A79D98",
+      "reflo_site": "0x82A79DB8",
+      "evidence": "The matching XDK InitBlockInterpolation_EMB loads this entry at 0x82A79DB8 through the archive function pointer relocation."
+    },
     "0x82C0E0B0": {
       "symbol": "fread_s",
       "size": 292,
@@ -5951,6 +6122,66 @@
     }
   },
   "identified_functions": {
+    "0x82A60C00": {
+      "exported_name": "sub_82A60C00",
+      "symbol": "MotionCompMixed_Common",
+      "size": 2664,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\motioncomp_xenon.obj",
+        "archive_symbol": "MotionCompMixed_Common"
+      },
+      "evidence": "The MotionCompMixedAndAddError_Xenon wrapper names this already-credited body through its recorded tail branch."
+    },
+    "0x82A7B888": {
+      "exported_name": "sub_82A7B888",
+      "symbol": "SetDstDitherMap",
+      "size": 832,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\threaddirectcolorconv_wmv.obj",
+        "archive_symbol": "SetDstDitherMap",
+        "archive_literals": {
+          "g_magic4x4": {
+            "address": "0x82121798",
+            "size": 64
+          }
+        },
+        "archive_data_targets": {
+          "g_rgDitherMap": "0x83227400"
+        }
+      },
+      "evidence": "The matching XDK ConfigParam identifies this entry through its branch relocation at 0x82A7D6EC. The separate matching SetDstDitherMap copy reads g_rgDitherMap at 0x82A50E80. The 64-byte vector constant also matches."
+    },
+    "0x82AC2E88": {
+      "exported_name": null,
+      "symbol": "g_UpsampleFilterLine10_Horiz",
+      "size": 684,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\multires.obj",
+        "archive_symbol": "?g_UpsampleFilterLine10_Horiz@@YAXPAE0PAJJ@Z"
+      },
+      "evidence": "The matching XDK g_HorizUpsampleFilter10 identifies this entry through its branch relocation at 0x82AC3180."
+    },
+    "0x82ACA4F8": {
+      "exported_name": null,
+      "symbol": "g_BilinearH0VertFilter2_EMB",
+      "size": 1228,
+      "sdk_provider": {
+        "lib": "xmedia.lib",
+        "member": "obj\\xbox\\interpolate_emb_xenon.obj",
+        "archive_symbol": "g_BilinearH0VertFilter2_EMB"
+      },
+      "evidence": "The g_EncInterpolateBlockBilinear_02_Xenon wrapper names this already-credited body through its recorded tail branch."
+    },
+    "0x82C00FD0": {
+      "exported_name": "sub_82C00FD0",
+      "symbol": "recfield",
+      "size": 292,
+      "tu": "vendor:lua",
+      "evidence": "The exact Lua constructor names this record-field parser at 0x82C00EC0 and 0x82C00ED0. The complete XDK body, call targets and string literal at 0x82F93A78 agree in both Lua build paths."
+    },
     "0x82BE4878": {
       "exported_name": "sub_82BE4878",
       "symbol": "addquoted",

@@ -99,7 +99,8 @@ def verify_leaf_providers(artist, lib_dir):
                 continue
             if "crt_slot" in proof and not _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
                 continue
-            if "archive_literals" in proof and not _verify_archive_literals(artist, address, fn, obj, proof, result):
+            if ("archive_literals" in proof or "archive_data_targets" in proof) and not _verify_archive_data(
+                    artist, address, fn, obj, proof, result):
                 continue
             if proof.get("archive_aliases"):
                 if result.calls_unverified or result.data_unchecked:
@@ -138,9 +139,12 @@ def _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
     return _verify_data_targets(artist, address, fn, obj, targets, result)
 
 
-def _verify_archive_literals(artist, address, fn, obj, proof, result):
-    literals = proof["archive_literals"]
-    targets = {name: int(row["address"], 16) for name, row in literals.items()}
+def _verify_archive_data(artist, address, fn, obj, proof, result):
+    literals = proof.get("archive_literals", {})
+    targets = {name: int(target, 16) for name, target in proof.get("archive_data_targets", {}).items()}
+    if targets.keys() & literals.keys():
+        return False
+    targets.update({name: int(row["address"], 16) for name, row in literals.items()})
     if result.calls_unverified or not _verify_data_targets(artist, address, fn, obj, targets, result):
         return False
     for rel in fn.relocs:

@@ -115,6 +115,8 @@ previous summary, dropped on a regression) and `recent`.
   the caller's matching archive relocations. For nonstandard literal symbols, `archive_literals`
   records the linked address and byte width. The verifier checks the load target and compares the
   full value against the archive's read-only section.
+  An independently witnessed mutable global address can use `archive_data_targets`. Record a
+  separate matching reader that confirms the symbol's linked address.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
