@@ -366,19 +366,55 @@
       "symbol": "MassiveAdClient3::CMassiveAdObjectTextureDynamic::CreateSlaveMAO",
       "x360_address": "0x82BDD910",
       "byte_match": true,
-      "evidence": "The 252-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187BCC matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\massiveadobjectdynamic.obj",
+        "archive_symbol": "?CreateSlaveMAO@CMassiveAdObjectTextureDynamic@MassiveAdClient3@@QAAPAVCMassiveAdObject@2@PAVXMassiveAdClientSubscriber@2@@Z",
+        "archive_literals": {
+          "??_C@_0DI@DOLJAIIE@ALLOCATION?5Failed?5for?5CMassiveAd@": {
+            "address": "0x82187BCC",
+            "size": 56
+          }
+        }
+      },
+      "evidence": "The 252-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187BCC matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
     },
     "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveM": {
       "symbol": "MassiveAdClient3::CMassiveAdObjectAudioDynamic::CreateSlaveMAO",
       "x360_address": "0x82BDDE20",
       "byte_match": true,
-      "evidence": "The 272-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C04 matches its archive string. The CMassiveAdObjectAudio vtable at 0x821871C4 has the archive's Initialize, Tick, Suspend, SubscriberAdd, GetNextAssetID and GetBestImpression in the same slots. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\massiveadobjectdynamic.obj",
+        "archive_symbol": "?CreateSlaveMAO@CMassiveAdObjectAudioDynamic@MassiveAdClient3@@QAAPAVCMassiveAdObject@2@PAVXMassiveAdClientSubscriber@2@@Z",
+        "archive_literals": {
+          "??_C@_0DG@DKGPBIJO@ALLOCATION?5Failed?5for?5CMassiveAd@": {
+            "address": "0x82187C04",
+            "size": 54
+          }
+        },
+        "archive_data_targets": {
+          "??_7CMassiveAdObjectAudio@MassiveAdClient3@@6B@": "0x821871C4"
+        }
+      },
+      "evidence": "The 272-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C04 matches its archive string. The CMassiveAdObjectAudio vtable at 0x821871C4 has the archive's Initialize, Tick, Suspend, SubscriberAdd, GetNextAssetID and GetBestImpression in the same slots. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
     },
     "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveM": {
       "symbol": "MassiveAdClient3::CMassiveAdObjectVideoDynamic::CreateSlaveMAO",
       "x360_address": "0x82BDE340",
       "byte_match": true,
-      "evidence": "The 256-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C3C matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native CreateSlaveM surrogate takes CMassiveAdObjectSubscriber*; the alias corrects ARTIST identity without claiming use of the SDK body."
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\massiveadobjectdynamic.obj",
+        "archive_symbol": "?CreateSlaveMAO@CMassiveAdObjectVideoDynamic@MassiveAdClient3@@QAAPAVCMassiveAdObject@2@PAVXMassiveAdClientSubscriber@2@@Z",
+        "archive_literals": {
+          "??_C@_0DG@LKJMFBCF@ALLOCATION?5Failed?5for?5CMassiveAd@": {
+            "address": "0x82187C3C",
+            "size": 54
+          }
+        }
+      },
+      "evidence": "The 256-byte ARTIST extent and all direct call targets match XDK 6534.4 xmassiveadclient.lib (massiveadobjectdynamic.obj). The diagnostic at 0x82187C3C matches its archive string. The full SDK declaration takes XMassiveAdClientSubscriber*. The native declaration still models the subscriber as CMassiveAdObjectSubscriber."
     }
   },
   "functions": {

@@ -75,7 +75,8 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
     if aliases_path.is_file():
         with aliases_path.open(encoding="utf-8") as fh:
             registry = json.load(fh)
-        aliases = registry.get("functions", {}) | registry.get("xdk_functions", {})
+        xdk_aliases = registry.get("xdk_functions", {})
+        aliases = registry.get("functions", {}) | xdk_aliases
         for exported_name, proof in aliases.items():
             if proof.get("byte_match") is not True:
                 continue
@@ -83,6 +84,8 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             row = functions.get(address)
             if row and row["name"] == exported_name:
                 row["name"] = proof["symbol"]
+                if exported_name in xdk_aliases and "sdk_provider" in proof:
+                    row["sdk_provider"] = proof["sdk_provider"]
         for address, proof in registry.get("folded_functions", {}).items():
             row = functions.get(address)
             if row and row["name"] == proof["exported_name"]:
@@ -189,6 +192,8 @@ class Artist:
             if row.get("unlisted"):
                 continue
             self.names[address] = row["name"]
+            if "sdk_provider" in row:
+                self.sdk_leaves[address] = row["sdk_provider"]
             if row.get("folded_names"):
                 self.folded_names[address] = {normal_name(name) for name in row["folded_names"]}
             self.ida_size[address] = 4 * int(row.get("n") or 0)

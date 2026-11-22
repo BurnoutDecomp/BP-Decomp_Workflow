@@ -208,6 +208,33 @@ def test_unnamed_callee_is_unverified_not_wrong():
     assert result.status == "exact" and result.calls_unverified == 1
 
 
+def test_named_xdk_alias_requires_archive_proof_at_its_exported_address(monkeypatch, tmp_path):
+    address, unrelated = 0x821F1000, 0x821F1020
+    image = FakeArtist([(address, "Truncated", [0x38600001, BLR]), (unrelated, "Other", [BLR])])
+    pack_path = tmp_path / "artist.json.gz"
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": image.pack}).encode("utf-8")))
+    aliases_path = tmp_path / "source_aliases.json"
+    provider = {"lib": "sdk.lib", "member": "full.obj", "archive_symbol": "Full"}
+    aliases_path.write_text(json.dumps({"xdk_functions": {
+        "Truncated": {"x360_address": f"0x{address:08X}", "symbol": "Full", "byte_match": True,
+                      "sdk_provider": provider},
+        "WrongExport": {"x360_address": f"0x{unrelated:08X}", "symbol": "Unrelated", "byte_match": True,
+                        "sdk_provider": provider},
+    }}), encoding="utf-8")
+
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path), read=image.read)
+    art._extents = {}
+    assert art.name_at(unrelated) == "Other"
+    assert art.sdk_leaves == {address: provider}
+    obj = coff.ObjectFile(make_object([("Full", [0x38600001, BLR], [])]))
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "full.obj", obj, obj.functions()[0], False)])
+    assert sdk.verify_leaf_providers(art, tmp_path)[address]["symbol"] == "Full"
+
+    image.memory[address] = struct.pack(">I", 0x38600002)
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+
 def test_folded_callee_identity_matches_only_its_attested_address(tmp_path):
     caller, other_caller = 0x82100000, 0x82100010
     folded, unrelated = 0x82200000, 0x82200010

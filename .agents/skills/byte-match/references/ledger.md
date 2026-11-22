@@ -137,6 +137,9 @@ previous summary, dropped on a regression) and `recent`.
 - An existing unnamed extent can declare `sdk_provider` in its `identified_functions` proof.
   The original export and extent still have to agree, and the SDK verifier compares the named
   archive member before counting it as SDK code.
+- An opted-in `xdk_functions` alias can also declare `sdk_provider` for its existing named extent.
+  The verifier checks the original export and address, then compares the archive body and its
+  attested relocations even when the universe rebuild reuses a provider cache.
 - For a leaf supplied by the native tree, `native_leaf_functions` records a disjoint extent,
   an ARTIST branch with a matching native caller relocation, and the source of the compared
   body. The catalogue records its size and name. The regular object comparison determines
