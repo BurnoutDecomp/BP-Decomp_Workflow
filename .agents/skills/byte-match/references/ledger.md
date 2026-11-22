@@ -89,7 +89,10 @@ previous summary, dropped on a regression) and `recent`.
   body. The catalogue records its size and name. The regular object comparison determines
   whether the native implementation matches outside its relocation fields. For an exported leaf
   with an omitted tail, include `previous_size` and give a branch inside the exported extent that
-  reaches the tail. The omitted range must fit a gap and the complete body must compare exact.
+  reaches the tail. An XDK absolute switch table can also witness a tail. Use the dispatch's
+  `bctr` as `call_site` and supply the address of the `table_entry` whose case reaches the tail.
+  The omitted range must fit a gap and the complete body must compare exact. Check the native
+  jump table's relocations against the ARTIST case offsets before recording a switch extent.
 - Rebuild the universe when identity changes (new names, new TUs), when the export pack
   `progress/asmaudit_artist.json.gz` is repacked, or when the SDK identification should be
   redone: `work match universe` (needs the XDK's `lib/xbox` and the ARTIST image; tens of minutes,

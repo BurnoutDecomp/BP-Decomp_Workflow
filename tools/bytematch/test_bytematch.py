@@ -420,6 +420,36 @@ def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path):
         Artist(pack=resolved, read=lambda address, size: pdata if address == PDATA_START else image.bytes(address, size))
 
 
+def test_exported_native_leaf_can_recover_a_switch_tail():
+    leaf = 0x821FE000
+    table, tail = leaf + 32, leaf + 48
+    # Guarded two-entry table, with a signed low half in its address load.
+    body = [0x2B0A0001, 0x4D990020, 0x3D808220, 0x398CE020,
+            0x5540103A, 0x7C0C002E, 0x7C0903A6, 0x4E800420,
+            leaf + 40, leaf + 44, BLR, 0x38600007, BLR]
+    end = leaf + 4 * len(body)
+    addr = f"0x{leaf:08X}"
+    proof = {"symbol": "Leaf", "previous_size": tail - leaf, "size": end - leaf,
+             "caller": addr, "call_site": f"{leaf + 28:X}", "table_entry": f"{table + 4:X}"}
+
+    def recover(words, witness):
+        image = FakeArtist([(leaf, "Leaf", words), (end, "Next", [BLR])])
+        pack = {**image.pack, addr: {**image.pack[addr], "n": 12, "native_leaf": witness}}
+        return Artist(pack=pack, read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
+
+    art = recover(body, proof)
+    assert art.size(leaf) == (52, "native_leaf")
+    assert art.size(end) == (4, "ida")
+    for bad_entry in (table, table + 1, table + 8):
+        with pytest.raises(ValueError, match="no matching switch table"):
+            recover(body, {**proof, "table_entry": f"{bad_entry:X}"})
+    for index, replacement in ((1, BLR), (4, 0x5560103A), (9, end), (11, BLR)):
+        words = body.copy()
+        words[index] = replacement
+        with pytest.raises(ValueError, match="no matching switch table"):
+            recover(words, proof)
+
+
 def _universe():
     return {"meta": {"functions": 5},
             "functions": [["82100000", 40, "A::f", "game", "GameSource/World", "tuA"],

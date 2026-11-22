@@ -235,7 +235,7 @@ class Artist:
             self.unnamed.add(address)
 
     def _include_leaves(self, proofs):
-        """Recover leaf entries and omitted tails using branches into image gaps."""
+        """Recover leaf entries and omitted tails using control flow into image gaps."""
         from compare import branch_target
 
         occupied = self.extents | {address: self.size(address)[0] for address in self.names}
@@ -259,12 +259,17 @@ class Artist:
             if (site % 4 or not caller <= site <= caller + occupied.get(caller, 0) - 4
                     or (extending and caller != address)):
                 raise ValueError(f"{label} {address:08X} has a witness outside its caller")
-            word, = struct.unpack(">I", self.bytes(site, 4))
-            opcode = word >> 26
-            target = branch_target(word, site, 0x03FFFFFC if opcode == 18 else 0x0000FFFC)
-            if (extending and (opcode not in (16, 18) or not start <= target < address + size)
-                    or not extending and (opcode != 18 or target != address)):
-                raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
+            if "table_entry" in proof:
+                entry = int(proof["table_entry"], 16)
+                if not extending or not self._switch_reaches_tail(caller, site, entry, start, address + size):
+                    raise ValueError(f"{label} {address:08X} has no matching switch table at {site:08X}")
+            else:
+                word, = struct.unpack(">I", self.bytes(site, 4))
+                opcode = word >> 26
+                target = branch_target(word, site, 0x03FFFFFC if opcode == 18 else 0x0000FFFC)
+                if (extending and (opcode not in (16, 18) or not start <= target < address + size)
+                        or not extending and (opcode != 18 or target != address)):
+                    raise ValueError(f"{label} {address:08X} has no matching branch at {site:08X}")
             self.names[address] = proof["symbol"]
             self.leaf_extents[address] = (size, kind)
             if kind == "sdk_leaf":
@@ -272,6 +277,39 @@ class Artist:
             if "tu" in proof:
                 self.identified_tus[address] = proof["tu"]
             end = address + size
+
+    def _switch_reaches_tail(self, caller, site, entry, tail, end):
+        """Check an XDK absolute jump table and a case that reaches the omitted tail."""
+        dispatch = site - 28
+        if dispatch < caller:
+            return False
+        bounds, escape, high, low, shift, load, ctr, jump = struct.unpack(">8I", self.bytes(dispatch, 32))
+        index = (bounds >> 16) & 31
+        base = (high >> 21) & 31
+        offset = (shift >> 16) & 31
+        # cmplwi cr6; bgtlr cr6; lis; addi; slwi index,2; lwzx; mtctr; bctr.
+        if (bounds & 0xFFE00000 != 0x2B000000 or escape != 0x4D990020
+                or not base or base in (index, offset) or high & 0xFC1F0000 != 0x3C000000
+                or low & 0xFFFF0000 != (0x38000000 | base << 21 | base << 16)
+                or shift != (0x5400103A | index << 21 | offset << 16)
+                or load != (0x7C00002E | offset << 21 | base << 16 | offset << 11)
+                or ctr != (0x7C0903A6 | offset << 21) or jump != 0x4E800420):
+            return False
+        immediate = struct.unpack(">h", struct.pack(">H", low & 0xFFFF))[0]
+        table = (((high & 0xFFFF) << 16) + immediate) & 0xFFFFFFFF
+        table_end = table + 4 * ((bounds & 0xFFFF) + 1)
+        if table != site + 4 or entry % 4 or not table <= entry < table_end <= tail:
+            return False
+        cases = tuple(target for (target,) in struct.iter_unpack(">I", self.bytes(table, table_end - table)))
+        if any(target % 4 or not table_end <= target < end for target in cases):
+            return False
+        target = cases[(entry - table) // 4]
+        if target >= tail:
+            return True
+        # Immediate arithmetic and scalar load/store instructions fall through.
+        # Require this straight-line path instead of inferring edges for other opcodes.
+        return all(word >> 26 in (14, 15, 32, 38, 48, 52)
+                   for (word,) in struct.iter_unpack(">I", self.bytes(target, tail - target)))
 
     def size(self, address: int):
         """(byte length, source) from .pdata, an attested leaf, or the export.
