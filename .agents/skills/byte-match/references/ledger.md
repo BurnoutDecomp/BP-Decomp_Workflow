@@ -93,6 +93,12 @@ previous summary, dropped on a regression) and `recent`.
   It counts the bytes outside function extents and lists the largest gaps containing nonzero
   bytes. These gaps may include data, padding and uncatalogued instructions. Use other evidence
   to classify a range before adding it to the catalogue. The audit leaves the ledger unchanged.
+- `work match universe` counts unnamed straight-line initializer leaves registered in the ARTIST
+  CRT table at `0x82CD0010`–`0x82CD3D34`, read by `_cinit` at `0x829346BC` and `0x829346C0`.
+  A `crt_leaf` fits before the next known function or table entry, ends in `blr` and contains
+  only straight-line operations. Trailing zero words are excluded as padding. Registration
+  establishes the extent. Credit still requires the initializer's identity and verification
+  of its code and data targets against the supplying object.
 - An SDK leaf absent from both the export and `.pdata` can enter the catalogue through
   `sdk_leaf_functions` in `progress/source_aliases.json`. Record its complete archive symbol and
   extent together with an ARTIST branch whose caller's relocation identifies that symbol. The

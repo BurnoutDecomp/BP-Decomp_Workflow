@@ -730,6 +730,9 @@ def universe(args):
             saved.parent.mkdir(parents=True, exist_ok=True)
             saved.write_text(json.dumps({"%08X" % a: v for a, v in sorted(provided.items())}, indent=0), encoding="utf-8")
             print(f"SDK identification saved to {saved} (reuse with --providers)", flush=True)
+    # Table registration proves a function boundary. It does not identify the
+    # referenced globals or the object that supplied the initializer.
+    artist.include_unlisted_crt_leaves()
     identity = json.loads((REPO / "progress/identity.json").read_text(encoding="utf-8"))
     tu_index = json.loads((REPO / "progress/tu_index.json").read_text(encoding="utf-8"))
     homes = json.loads((REPO / "progress/class_homes.json").read_text(encoding="utf-8"))

@@ -3,9 +3,8 @@
 Names come from the packed export pack `progress/asmaudit_artist.json.gz` (one row per
 function the IDA export of BURNOUT_X360_ARTIST.XEX knows). Extents come from the
 image's own `.pdata` (packed unwind records give each framed function's exact length)
-and, for frameless leaves that have no record, from the export's instruction count.
-The census also includes disjoint unwind extents and attested leaf functions absent
-from that export.
+and, for frameless leaves, from the export's instruction count or other evidence such
+as the CRT initializer table.
 Bytes come from the local image through `tools/re/x360rd.py`, a local input that never
 leaves the machine: only names, addresses and sizes reach the committed ledger.
 """
@@ -32,6 +31,13 @@ PDATA_START, PDATA_END = 0x821BB000, 0x821ED960
 RDATA_START, RDATA_END = 0x82000600, 0x821BAE78
 TEXT_START, PRIMARY_TEXT_END = 0x821F0000, 0x82C775D0
 TEXT_END = 0x82CCFE7C
+# _cinit loads these bounds at 0x829346BC and 0x829346C0, then calls each non-null entry.
+CRT_INITIALIZERS_START, CRT_INITIALIZERS_END = 0x82CD0010, 0x82CD3D34
+
+# Straight-line integer, floating-point and VMX operations seen in the registered leaves.
+CRT_LEAF_OPCODES = {4, 5, 6, 14, 15, 24, 32, 36, 48, 52, 59, 62}
+CRT_LEAF_INDEXED_OPS = {0x7C00040E, 0x7C00044E}
+BLR = 0x4E800020
 
 
 def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END):
@@ -245,6 +251,33 @@ class Artist:
         for address, _ in disjoint_extents(occupied, entries):
             self.names[address] = f"sub_{address:08X}"
             self.unnamed.add(address)
+
+    def include_unlisted_crt_leaves(self):
+        """Catalogue registered straight-line leaves whose entire extent is readable."""
+        table = self.bytes(CRT_INITIALIZERS_START, CRT_INITIALIZERS_END - CRT_INITIALIZERS_START)
+        entries = {address for (address,) in struct.iter_unpack(">I", table)
+                   if TEXT_START <= address < PRIMARY_TEXT_END and address % 4 == 0}
+        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
+        starts = sorted(entries | {address for address in occupied if address < PRIMARY_TEXT_END}
+                        | {PRIMARY_TEXT_END})
+        occupied_end = TEXT_START
+        for address, following in zip(starts, starts[1:]):
+            if address in occupied:
+                occupied_end = max(occupied_end, address + occupied[address])
+                continue
+            if address < occupied_end:
+                continue
+            words = [word for (word,) in struct.iter_unpack(">I", self.bytes(address, following - address))]
+            while words and words[-1] == 0:
+                words.pop()
+            if not words or words[-1] != BLR or any(
+                word >> 26 not in CRT_LEAF_OPCODES and word & 0xFC0007FF not in CRT_LEAF_INDEXED_OPS
+                for word in words[:-1]
+            ):
+                continue
+            self.names[address] = f"sub_{address:08X}"
+            self.unnamed.add(address)
+            self.leaf_extents[address] = (4 * len(words), "crt_leaf")
 
     def _include_leaves(self, proofs):
         """Recover leaf entries and omitted tails using references into image gaps."""

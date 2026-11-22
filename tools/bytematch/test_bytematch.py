@@ -17,6 +17,7 @@ import pytest
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
+import artist  # noqa: E402
 import coff  # noqa: E402
 import ledger  # noqa: E402
 import bytematch  # noqa: E402
@@ -286,6 +287,31 @@ def test_catalogue_adds_only_disjoint_unlisted_unwind_functions():
     assert art.unnamed == {base + 0x14, base + 0x28}
     assert art.name_at(base + 0x14) is None
     assert art.size(base + 0x28) == (4, "pdata")
+
+
+def test_catalogue_counts_only_disjoint_straight_line_crt_leaves(monkeypatch):
+    base = artist.TEXT_START
+    table = artist.CRT_INITIALIZERS_START
+    entries = [base, base, 0, base + 0x14, base + 0x20, base + 0x30, base + 0x40, 0xFFFFFFFF]
+    monkeypatch.setattr(artist, "CRT_INITIALIZERS_END", table + 4 * len(entries))
+    monkeypatch.setattr(artist, "PRIMARY_TEXT_END", base + 0x48)
+    art = FakeArtist([(base + 0x10, "Existing", [BLR] * 4)])
+    art._extents = {base + 0x10: 16}
+    art.memory.update({table + i * 4: struct.pack(">I", entry) for i, entry in enumerate(entries)})
+    for offset, words in [
+        (0, [0x3D600001, 0xC00B0000, BLR, 0]),
+        (0x20, [0x3D600001, BL, BLR, 0]),
+        (0x30, [0x3D600001, BLR, 0x38600001, 0]),
+        (0x40, [BLR, 0]),
+    ]:
+        art.memory.update({base + offset + i * 4: struct.pack(">I", word) for i, word in enumerate(words)})
+
+    art.include_unlisted_crt_leaves()
+
+    assert art.unnamed == {base, base + 0x40}
+    assert art.leaf_extents == {base: (12, "crt_leaf"), base + 0x40: (4, "crt_leaf")}
+    assert art.names[base + 0x10] == "Existing"
+    assert not art.sdk_leaves
 
 
 def test_attested_identities_need_the_original_export_or_disjoint_unwind_entry(tmp_path):
