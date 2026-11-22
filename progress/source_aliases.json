@@ -5951,12 +5951,37 @@
     }
   },
   "identified_functions": {
+    "0x82BE4878": {
+      "exported_name": "sub_82BE4878",
+      "symbol": "addquoted",
+      "size": 904,
+      "tu": "vendor:lua",
+      "evidence": "The exact Lua 5.1 str_format branch at 0x82BE47C0 identifies this quoting helper. The full body, its string literal and every switch destination match."
+    },
+    "0x82BE4C00": {
+      "exported_name": "sub_82BE4C00",
+      "symbol": "scanformat",
+      "size": 480,
+      "tu": "vendor:lua",
+      "evidence": "The exact str_format branch at 0x82BE45CC reaches this scanner. The standalone Lua 5.1 object matches all 480 bytes and calls __pctype_func directly. The amalgamated build emits a 720-byte body with multibyte locale checks."
+    },
+    "0x82C0CB70": {
+      "exported_name": "sub_82C0CB70",
+      "symbol": "sprintf",
+      "size": 236,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\sprintf.obj",
+        "archive_symbol": "sprintf"
+      },
+      "evidence": "All five formatting calls in the exact Lua 5.1 str_format body branch here. The previously credited 236-byte libcMT sprintf body and all of its call relocations match."
+    },
     "0x82BE44A0": {
       "exported_name": null,
       "symbol": "str_format",
       "size": 984,
       "tu": "vendor:lua",
-      "evidence": "The matching luaopen_string registers the format callback at table slot 0x821881F4. The current XDK body is 996 bytes against 984 in ARTIST."
+      "evidence": "The matching luaopen_string registers the format callback at table slot 0x821881F4. Lua 5.1 matches the full 984-byte ARTIST body, including its jump table and formatting calls."
     },
     "0x82BE4DE0": {
       "exported_name": "sub_82BE4DE0",
@@ -6040,7 +6065,7 @@
       "symbol": "singlestep",
       "size": 532,
       "tu": "vendor:lua",
-      "evidence": "The matching luaC_step and luaC_fullgc call this entry at 0x82BF3D80 and 0x82BF5724. The current XDK body is 568 bytes against 532 in ARTIST."
+      "evidence": "The matching luaC_step and luaC_fullgc call this entry at 0x82BF3D80 and 0x82BF5724. Lua 5.1 matches all 532 bytes, including the collector state dispatch table."
     },
     "0x82BF4060": {
       "exported_name": "sub_82BF4060",
@@ -6096,7 +6121,7 @@
       "symbol": "atomic",
       "size": 304,
       "tu": "vendor:lua",
-      "evidence": "ARTIST singlestep calls this entry in its propagation phase at 0x82BF3EE0. It remarks upvalues, processes the weak tables and clears them. The current XDK body is 316 bytes against 304 in ARTIST."
+      "evidence": "ARTIST singlestep calls this entry at 0x82BF3EE0. Lua 5.1 matches all 304 bytes. ARTIST leaves the userdata size unchanged after the propagation call at 0x82BF5278, before the finalizer accounting added in Lua 5.1.1."
     },
     "0x82BF52F0": {
       "exported_name": "sub_82BF52F0",
@@ -6110,7 +6135,7 @@
       "symbol": "propagateall",
       "size": 60,
       "tu": "vendor:lua",
-      "evidence": "The ARTIST atomic phase calls this entry at 0x82BF51E8, 0x82BF5234, 0x82BF5258 and 0x82BF5278. The current XDK body is 84 bytes against 60 in ARTIST."
+      "evidence": "The ARTIST atomic phase calls this entry at 0x82BF51E8, 0x82BF5234, 0x82BF5258 and 0x82BF5278. The Lua 5.1 void propagation loop matches the full 60-byte ARTIST body."
     },
     "0x82BF53C8": {
       "exported_name": null,
