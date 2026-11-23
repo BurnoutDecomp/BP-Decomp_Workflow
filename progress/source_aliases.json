@@ -7472,6 +7472,14 @@
       "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEventQueue",
       "byte_match": true,
       "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "int,int>::FindEntry": {
+      "x360_address": "0x828DF3E0",
+      "symbol": "CgsContainers::LinearSOAHashTable<int,unsigned int>::FindEntry",
+      "byte_match": true,
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp",
+      "evidence": "RemapFilename at 0x828E94B4 calls the existing FindEntry on the patch map at +0x888. The ARTIST divide and key-index comparisons are unsigned. The XDK instance with that key type and the two counted searches reproduces all 164 bytes, without relocations."
     }
   },
   "sdk_entry_groups": {
@@ -10183,6 +10191,244 @@
       "caller": "0x82C1B1D0",
       "call_site": "0x82C1B348",
       "evidence": "The owning CRT tzset prefix has this exact branch relocation to the complete disjoint daylight accessor."
+    },
+    "0x82C0C0E8": {
+      "symbol": "fgets",
+      "exported_name": "fgets",
+      "previous_size": 588,
+      "size": 676,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fgets.obj",
+      "archive_symbol": "fgets",
+      "archive_data_targets": {
+        "__badioinfo": "0x82F94670",
+        "__pioinfo": "0x832BE300"
+      },
+      "caller": "0x82C0C0E8",
+      "call_site": "0x82C0C324",
+      "fragments": [
+        {
+          "address": "0x82C0C334",
+          "size": 88,
+          "archive_symbol": "$LN27"
+        },
+        {
+          "address": "0x82C0C354",
+          "size": 56,
+          "archive_symbol": "$LN30"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0DBE0": {
+      "symbol": "fputs",
+      "exported_name": "fputs",
+      "previous_size": 472,
+      "size": 560,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fputs.obj",
+      "archive_symbol": "fputs",
+      "archive_data_targets": {
+        "__badioinfo": "0x82F94670",
+        "__pioinfo": "0x832BE300"
+      },
+      "caller": "0x82C0DBE0",
+      "call_site": "0x82C0DD94",
+      "fragments": [
+        {
+          "address": "0x82C0DDB8",
+          "size": 88,
+          "archive_symbol": "$LN15"
+        },
+        {
+          "address": "0x82C0DDD8",
+          "size": 56,
+          "archive_symbol": "$LN18"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0D1C0": {
+      "symbol": "fgetc",
+      "exported_name": "fgetc",
+      "previous_size": 452,
+      "size": 540,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fgetc.obj",
+      "archive_symbol": "fgetc",
+      "archive_data_targets": {
+        "__badioinfo": "0x82F94670",
+        "__pioinfo": "0x832BE300"
+      },
+      "caller": "0x82C0D1C0",
+      "call_site": "0x82C0D374",
+      "fragments": [
+        {
+          "address": "0x82C0D384",
+          "size": 88,
+          "archive_symbol": "$LN17"
+        },
+        {
+          "address": "0x82C0D3A4",
+          "size": 56,
+          "archive_symbol": "$LN20"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0D3E8": {
+      "symbol": "getc",
+      "exported_name": "getc",
+      "previous_size": 452,
+      "size": 540,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fgetc.obj",
+      "archive_symbol": "getc",
+      "archive_data_targets": {
+        "__badioinfo": "0x82F94670",
+        "__pioinfo": "0x832BE300"
+      },
+      "caller": "0x82C0D3E8",
+      "call_site": "0x82C0D59C",
+      "fragments": [
+        {
+          "address": "0x82C0D5AC",
+          "size": 88,
+          "archive_symbol": "$LN17"
+        },
+        {
+          "address": "0x82C0D5CC",
+          "size": 56,
+          "archive_symbol": "$LN20"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C13BA8": {
+      "symbol": "setvbuf",
+      "exported_name": "setvbuf",
+      "previous_size": 352,
+      "size": 400,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\setvbuf.obj",
+      "archive_symbol": "setvbuf",
+      "archive_data_targets": {
+        "_cflush": "0x832BADC0"
+      },
+      "caller": "0x82C13BA8",
+      "call_site": "0x82C13CF8",
+      "fragments": [
+        {
+          "address": "0x82C13D08",
+          "size": 48,
+          "archive_symbol": "$LN34"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C13A48": {
+      "symbol": "clearerr_s",
+      "exported_name": "clearerr_s",
+      "previous_size": 244,
+      "size": 332,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\clearerr.obj",
+      "archive_symbol": "clearerr_s",
+      "archive_data_targets": {
+        "__badioinfo": "0x82F94670",
+        "__pioinfo": "0x832BE300"
+      },
+      "caller": "0x82C13A48",
+      "call_site": "0x82C13B2C",
+      "fragments": [
+        {
+          "address": "0x82C13B3C",
+          "size": 88,
+          "archive_symbol": "$LN8"
+        },
+        {
+          "address": "0x82C13B5C",
+          "size": 56,
+          "archive_symbol": "$LN11"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0B720": {
+      "symbol": "printf",
+      "exported_name": "printf",
+      "previous_size": 240,
+      "size": 288,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\printf.obj",
+      "archive_symbol": "printf",
+      "archive_data_targets": {},
+      "caller": "0x82C0B720",
+      "call_site": "0x82C0B800",
+      "fragments": [
+        {
+          "address": "0x82C0B810",
+          "size": 48,
+          "archive_symbol": "$LN17"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C11390": {
+      "symbol": "fseek",
+      "exported_name": "fseek",
+      "previous_size": 180,
+      "size": 268,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fseek.obj",
+      "archive_symbol": "fseek",
+      "archive_data_targets": {},
+      "caller": "0x82C11390",
+      "call_site": "0x82C11434",
+      "fragments": [
+        {
+          "address": "0x82C11444",
+          "size": 88,
+          "archive_symbol": "$LN9"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0FB98": {
+      "symbol": "ftell",
+      "exported_name": "ftell",
+      "previous_size": 164,
+      "size": 252,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\ftell.obj",
+      "archive_symbol": "ftell",
+      "archive_data_targets": {},
+      "caller": "0x82C0FB98",
+      "call_site": "0x82C0FC1C",
+      "fragments": [
+        {
+          "address": "0x82C0FC3C",
+          "size": 88,
+          "archive_symbol": "$LN6"
+        },
+        {
+          "address": "0x82C0FC5C",
+          "size": 56,
+          "archive_symbol": "$LN9"
+        }
+      ],
+      "evidence": "The complete installed CRT body has the same original named entry and exact primary and funclet unwind records. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82980FE8": {
+      "symbol": "XCAM::CStreamEngine::SetEncoderTargetFramerate",
+      "size": 8,
+      "lib": "xcam.lib",
+      "member": "obj\\xbox\\streamengine.obj",
+      "archive_symbol": "?SetEncoderTargetFramerate@CStreamEngine@XCAM@@UAAXW4_XCAMFRAMERATE@@@Z",
+      "vtable_slots": [
+        "0x8210BCA8"
+      ],
+      "evidence": "The exact same-member CStreamEngine destructor loads the owning IXCamStreamEngine vtable. The archive table’s SetEncoderTargetFramerate relocation occupies the same ARTIST slot, which names this complete disjoint leaf."
     }
   },
   "identified_functions": {
@@ -15230,6 +15476,97 @@
       "size": 116,
       "tu": "src/SDKs/EATech/include/Common/vp6/vp6_util.cpp",
       "evidence": "The X360 PDB vputil.c.obj names this second pass and its seven parameters. The unchanged XDK scalar implementation exactly matches the 116-byte ARTIST unwind extent at 0x82B59630, including both register helper targets. FilterBlock2dBil_8 calls it at 0x82B596F4."
+    },
+    "0x823FD428": {
+      "exported_name": "sub_823FD428",
+      "symbol": "BrnCoronaManager::BrnSubmissionInterface::AddCorona",
+      "size": 60,
+      "evidence": "The existing CoronaManager owner identifies this tail-call overload. The original scales the registered type to an entry in the named parameter table, keeps the original vector and float arguments, and branches to its typed AddCorona sibling."
+    },
+    "0x824F64B0": {
+      "exported_name": "sub_824F64B0",
+      "symbol": "BrnGui::GuiAudioTriggerEvent::Construct",
+      "size": 304,
+      "evidence": "The original GuiModule::Update calls the two-string state-change GuiAudioTriggerEvent constructor. The registered global gate, logging globals and complete 27-entry action-name table bind the original body to its source type."
+    },
+    "0x827539A0": {
+      "exported_name": null,
+      "symbol": "BrnTraffic::TrafficCarStreamer::Construct",
+      "size": 152,
+      "evidence": "The existing TrafficCarStreamer source and header pin this constructor, and the original invokes the typed base constructors with the same member offsets and shared null ResourcePtr target."
+    },
+    "0x82825148": {
+      "exported_name": null,
+      "symbol": "CgsDev::PerfMonCpu::ReportMonitors",
+      "size": 136,
+      "evidence": "The existing PerfMonCpu owner source pins this report callback. The original exact body iterates the same monitor table and count and uses the owner callback with the requested page."
+    },
+    "0x8290AC68": {
+      "exported_name": null,
+      "symbol": "cLionFX::ScalerRegister",
+      "size": 60,
+      "evidence": "The LionFX owner declaration cites this scaler registration body. The original call and allocator receiver are consistent with the singleton block allocator and the code attaches the typed scaler."
+    },
+    "0x82ACFAE8": {
+      "exported_name": "sub_82ACFAE8",
+      "symbol": "`anonymous namespace'::FindClosestColourRGB",
+      "size": 296,
+      "evidence": "The original fdxt calls its palette-index encoder at 0x82AD0C20. The branch ignoring the alpha channel calls this RGB helper. The ARTIST and XDK bodies both compare three channel distances, choose the lowest palette index and return its squared error."
+    },
+    "0x82ACFC10": {
+      "exported_name": "sub_82ACFC10",
+      "symbol": "`anonymous namespace'::FindClosestColourARGB",
+      "size": 364,
+      "evidence": "The original fdxt calls its palette-index encoder at 0x82AD0C20. The alpha-aware branch uses this helper, while the other branch uses the RGB helper. ARTIST and the XDK independently include the alpha-byte squared distance here and agree on the entire leaf."
+    },
+    "0x82C5F3F8": {
+      "exported_name": null,
+      "symbol": "BrnReplays::`anonymous namespace'::`dynamic initializer for 'gTrafficPhysicsCompression''",
+      "size": 136,
+      "evidence": "The original startup initializer constructs the same traffic-physics compression object at 0x82FFA5C0. The native initializer and its stable typed fields and arguments agree."
+    },
+    "0x82C62DB8": {
+      "exported_name": "sub_82C62DB8",
+      "symbol": "BrnSound::Logic::`dynamic initializer for 'gfSlipstreamConeCos''",
+      "size": 76,
+      "evidence": "The original startup initializer stores the same cosine result into the slipstream cone global at 0x830060C0. The native scalar result, constant operand and entire initializer agree."
+    },
+    "0x828B8198": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<135168,16>::GetNextEvent",
+      "size": 736,
+      "evidence": "The original body calls the typed VariableEventQueue<135168,16>::GetEventPaddingSize at 0x828AEBE0; the SpatialPartitionManager consumes that exact queue type. Full body bytes, both signed/unsigned stream overload destinations, and all 21 data relocations agree."
+    },
+    "0x821F0E50": {
+      "exported_name": "sub_821F0E50",
+      "symbol": "CgsDev::StrStreamBase::operator<<",
+      "size": 116,
+      "evidence": "CgsStrStream declares operator<<(s32); its known original decimal arm at 0x821F0EA0 loads the %d format from 0x82F3193C and calls StrStreamBase::AppendFormat. This is a typed call identity only."
+    },
+    "0x821F0EC8": {
+      "exported_name": "sub_821F0EC8",
+      "symbol": "CgsDev::StrStreamBase::operator<<",
+      "size": 116,
+      "evidence": "CgsStrStream declares operator<<(u32); its known original decimal arm at 0x821F0F18 loads the %u format from 0x82F31940 and calls StrStreamBase::AppendFormat. This is a typed call identity only."
+    },
+    "0x8252F848": {
+      "exported_name": "sub_8252F848",
+      "symbol": "ICE::ICETake::GetValueFloat",
+      "size": 164,
+      "evidence": "The original KeyAnimShakeController::Update calls this integer-channel, 16-bit-key GetValueFloat overload when collecting its six position and rotation channels. The full 4224-byte description table and every relocated string or nested token-table pointer agree."
+    },
+    "0x828D6B18": {
+      "exported_name": null,
+      "symbol": "CgsSystem::DateAndTime::GetMonth",
+      "size": 44,
+      "evidence": "The original LicenseComponent::SetProfilePointer uses this DateAndTime accessor for the completion month and subtracts one before indexing the month labels. Its typed caller window and the complete FileTimeToSystemTime, SYSTEMTIME.wMonth load and return agree."
+    },
+    "0x82B6B030": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::ReChannelGainWrite6x1",
+      "size": 108,
+      "tu": "vendor/renderware/src/rw/audio/core/MixKernels.cpp",
+      "evidence": "The X360 audio map names the six-to-one routine and its array/count signature. The dispatcher selects six inputs and one output before the direct call at 0x82B6B430. The XDK body agrees with the original 108-byte unwind extent, including all CopyWithGain, MixWithGain and register-helper targets."
     }
   },
   "native_leaf_functions": {
