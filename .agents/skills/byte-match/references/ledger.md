@@ -135,6 +135,10 @@ previous summary, dropped on a regression) and `recent`.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
+  An exception body can use `archive_unwind_records` to identify attached funclets. Record each
+  offset and unwind word from the primary body through the final funclet, together with an
+  independent call or address-load witness to the parent entry. The relocated archive records
+  and ARTIST's unwind records must agree before the unnamed child extents are consolidated.
   An SDK initializer can use a `crt_slot` witness. Its archive must register the matching
   symbol in `.CRT$XCU`. Supply independently verified `crt_data_targets` for its global references.
   The verifier checks those addresses and requires every call target to be identified.

@@ -31,6 +31,41 @@ BLR = 0x4E800020
 BL = 0x48000001          # bl with a zero displacement, as the compiler leaves it
 
 
+def test_native_demangler_memoizes_only_successful_dbghelp_answers(monkeypatch):
+    calls = []
+
+    def decode(symbol, buffer, size, flags):
+        calls.append(symbol)
+        assert size == 8192 and flags == 0x1000
+        if symbol == b"?retry@@" and calls.count(symbol) == 1:
+            return 0
+        buffer.value = b"Native::caf\xe9"
+        return len(buffer.value)
+
+    monkeypatch.setattr(artist, "_UNDNAME", None)
+    monkeypatch.setattr(artist, "_DBGHELP", None, raising=False)
+    monkeypatch.setattr(artist, "_DBGHELP_NAMES", {}, raising=False)
+    monkeypatch.setattr(artist.ctypes, "WinDLL", lambda _: SimpleNamespace(UnDecorateSymbolName=decode), raising=False)
+    assert artist.demangle("C_Function") == "C_Function"
+    assert artist.demangle("?native@@") == artist.demangle("?native@@") == "Native::caf\xe9"
+    assert artist.demangle("?retry@@") == "?retry@@"
+    assert artist.demangle("?retry@@") == artist.demangle("?retry@@") == "Native::caf\xe9"
+    assert calls == [b"?native@@", b"?retry@@", b"?retry@@"]
+
+    names = {b"?native@@": b"Wine::First"}
+
+    def overridden(symbol, buffer, size, flags):
+        buffer.value = names[symbol]
+        return len(buffer.value)
+
+    monkeypatch.setattr(artist, "_UNDNAME", overridden)
+    assert artist.demangle("?native@@") == "Wine::First"
+    names[b"?native@@"] = b"Wine::Second"
+    assert artist.demangle("?native@@") == "Wine::Second"
+    monkeypatch.setattr(artist, "_UNDNAME", False)
+    assert artist.demangle("?native@@") == "?native@@"
+
+
 def test_input_state_resolves_xdk_header_paths():
     source = "src/User.cpp"
     header = "src/Engine/Config.h"
@@ -921,6 +956,32 @@ def test_extended_sdk_leaf_checks_absolute_local_relocations(monkeypatch, tmp_pa
     art.memory[leaf + 4] = struct.pack(">I", leaf)
     with pytest.raises(ValueError, match="archive comparison failed"):
         sdk.verify_leaf_providers(art, tmp_path)
+
+
+def test_sdk_extended_body_checks_archive_unwind_relocations(monkeypatch, tmp_path):
+    leaf = 0x821F1000
+    words = [0x38600001, BLR, BLR]
+    art = FakeArtist([(leaf, "Leaf", words)])
+    art.sdk_leaves[leaf] = {
+        "symbol": "Leaf", "size": 12, "previous_size": 8, "lib": "sdk.lib",
+        "member": "member.obj", "archive_symbol": "Leaf",
+        "archive_unwind_records": [{"offset": 0, "flags": "0xC0000200"},
+                                   {"offset": 8, "flags": "0x40000100"}],
+    }
+    obj = coff.ObjectFile(make_object([("Leaf", words, [])]))
+    pdata = struct.pack(">IIII", 0, 0xC0000200, 8, 0x40000100)
+    obj.sections[2] = coff.Section(2, ".pdata", pdata, 0, [
+        coff.Reloc(0, 0, coff.REL_ADDR32NB), coff.Reloc(8, 0, coff.REL_ADDR32),
+    ])
+    fn, = obj.functions()
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "member.obj", obj, fn, False)])
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+
+    for corrupt in (struct.pack(">IIII", 0, 0xC0000200, 4, 0x40000100),
+                    struct.pack(">IIII", 0, 0xC0000200, 8, 0x40000104)):
+        obj.sections[2].data = corrupt
+        with pytest.raises(ValueError, match="archive comparison failed"):
+            sdk.verify_leaf_providers(art, tmp_path)
 
 
 @pytest.mark.parametrize(("kind", "exported_name"), [

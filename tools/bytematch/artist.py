@@ -135,6 +135,9 @@ def normal_name(name: str) -> str:
 
 
 _UNDNAME = None
+_DBGHELP = None
+_DBGHELP_NAMES = {}
+_DBGHELP_CACHE_LIMIT = 65536
 
 
 def demangle(symbol: str) -> str:
@@ -144,22 +147,32 @@ def demangle(symbol: str) -> str:
     branch's census pairs names with. Plain C names come back unchanged; off Windows the
     decorated name is returned as is.
     """
-    global _UNDNAME
+    global _UNDNAME, _DBGHELP
     if not symbol.startswith("?"):
         return symbol
     if _UNDNAME is None:
         try:
             fn = ctypes.WinDLL("dbghelp").UnDecorateSymbolName
             fn.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_uint, ctypes.c_uint]
-            _UNDNAME = fn
+            _UNDNAME = _DBGHELP = fn
+            _DBGHELP_NAMES.clear()
         except (AttributeError, OSError):
             _UNDNAME = False
     if not _UNDNAME:
         return symbol
+    # Only the native DbgHelp decoder has stable answers. Wine installs its own hook.
+    use_cache = _UNDNAME is _DBGHELP
+    if use_cache:
+        name = _DBGHELP_NAMES.get(symbol)
+        if name is not None:
+            return name
     buffer = ctypes.create_string_buffer(8192)
     if not _UNDNAME(symbol.encode("latin-1"), buffer, len(buffer), 0x1000):
         return symbol
-    return buffer.value.decode("latin-1")
+    name = buffer.value.decode("latin-1")
+    if use_cache and len(_DBGHELP_NAMES) < _DBGHELP_CACHE_LIMIT:
+        _DBGHELP_NAMES[symbol] = name
+    return name
 
 
 class Artist:
@@ -395,7 +408,17 @@ class Artist:
         size = proof["size"]
         label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
         table_slots = proof.get("function_table_slots", proof.get("vtable_slots"))
-        if table_slots is not None:
+        if "archive_unwind_records" in proof:
+            if (kind != "sdk_leaf" or start == address or not proof.get("fragments")
+                    or any(key in proof for key in ("function_table_slots", "vtable_slots", "data_table_slot",
+                                                    "crt_slot", "table_entry", "archive_switch_case"))
+                    or not self._matches_sdk_unwind_tail(address, start, address + size, proof)):
+                raise ValueError(f"{label} {address:08X} has no matching archive unwind tail")
+            if "refhi_site" in proof:
+                self._check_leaf_address(occupied, address, address, proof)
+            else:
+                self._check_leaf_branch(proof, occupied, label, address, address, address + size)
+        elif table_slots is not None:
             slots = [int(slot, 16) for slot in table_slots]
             if (start != address or not slots or not all(
                     slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
@@ -426,6 +449,39 @@ class Artist:
         if "tu" in proof:
             self.identified_tus[address] = proof["tu"]
         occupied[address] = size
+
+    def _matches_sdk_unwind_tail(self, address, tail, end, proof):
+        """Bind a primary exception body and its complete attached funclets to ARTIST."""
+        records = proof["archive_unwind_records"]
+        if len(records) < 2:
+            return False
+
+        described = []
+        cursor = address
+        for index, record in enumerate(records):
+            flags = int(record["flags"], 16)
+            record_start = address + record["offset"]
+            size = ((flags >> 8) & 0x3FFFFF) * 4
+            expected_kind = 3 if index == 0 else 1
+            if (record_start != cursor or flags >> 30 != expected_kind or not size
+                    or cursor + size > end or (index == 0 and cursor + size != tail)):
+                return False
+            described.append((record_start, flags))
+            cursor += size
+        if cursor != end:
+            return False
+
+        funclets = {(start, start + ((flags >> 8) & 0x3FFFFF) * 4) for start, flags in described[1:]}
+        fragments = {(int(fragment["address"], 16), int(fragment["address"], 16) + fragment["size"])
+                     for fragment in proof["fragments"]}
+        if not funclets <= fragments or any(
+                not any(funclet <= start < finish <= funclet_end for funclet, funclet_end in funclets)
+                for start, finish in fragments):
+            return False
+
+        linked = [record for record in struct.iter_unpack(">II", self.bytes(PDATA_START, PDATA_END - PDATA_START))
+                  if address <= record[0] < end]
+        return linked == described
 
     def _check_leaf_address(self, occupied, start, address, proof):
         from compare import refhi_lo_address

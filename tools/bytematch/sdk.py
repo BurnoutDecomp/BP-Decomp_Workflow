@@ -16,7 +16,7 @@ from collections import defaultdict
 from pathlib import Path
 import struct
 
-from coff import (ObjectFile, CoffError, REL_ADDR32, REL_REFHI, REL_REFLO, REL_PAIR, REL_REL14, REL_REL24,
+from coff import (ObjectFile, CoffError, REL_ADDR32, REL_ADDR32NB, REL_REFHI, REL_REFLO, REL_PAIR, REL_REL14, REL_REL24,
                   archive_members, be_words, ordinal_code_import)
 from artist import Artist, demangle, normal_name
 from compare import branch_target, compare, refhi_lo_address
@@ -106,15 +106,21 @@ def verify_leaf_providers(artist, lib_dir):
             result = compare(fn, obj, artist, address, size, fuzzy=False)
             if result.status != "exact":
                 continue
-            if "fragments" in proof and not _verify_archive_fragments(artist, address, fn, obj, proof, result):
+            fragments = bool(proof.get("fragments"))
+            if fragments and not _verify_archive_fragments(artist, address, fn, obj, proof, result):
+                continue
+            if "archive_unwind_records" in proof and not _verify_archive_unwind_records(fn, obj, proof):
                 continue
             if "crt_slot" in proof and not _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
                 continue
             archive_data = "archive_literals" in proof or "archive_data_targets" in proof
-            if archive_data and not _verify_archive_data(artist, address, fn, obj, proof, result):
+            if archive_data and not _verify_archive_data(
+                    artist, address, fn, obj, proof, result, local_branches_verified=fragments):
+                continue
+            if fragments and result.data_unchecked and not archive_data:
                 continue
             if proof.get("previous_size") and (
-                    result.calls_unverified or (result.data_unchecked and not archive_data)
+                    (result.calls_unverified and not fragments) or (result.data_unchecked and not archive_data)
                     or not _verify_extended_body_relocations(artist, address, fn, obj, proof)):
                 continue
             table = proof.get("data_table_slot")
@@ -163,13 +169,14 @@ def _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
     return _verify_data_targets(artist, address, fn, obj, targets, result)
 
 
-def _verify_archive_data(artist, address, fn, obj, proof, result):
+def _verify_archive_data(artist, address, fn, obj, proof, result, *, local_branches_verified=False):
     literals = proof.get("archive_literals", {})
     targets = {name: int(target, 16) for name, target in proof.get("archive_data_targets", {}).items()}
     if targets.keys() & literals.keys():
         return False
     targets.update({name: int(row["address"], 16) for name, row in literals.items()})
-    if result.calls_unverified or not _verify_data_targets(artist, address, fn, obj, targets, result):
+    if ((result.calls_unverified and not local_branches_verified)
+            or not _verify_data_targets(artist, address, fn, obj, targets, result)):
         return False
     for rel in fn.relocs:
         if rel.type != REL_REFLO or fn.target(obj, rel) not in literals:
@@ -332,7 +339,29 @@ def _verify_archive_fragments(artist, address, fn, obj, proof, result):
             return False
         if artist.name_at(target) is None:
             local_calls += 1
-    return result.calls_unverified == local_calls and result.data_unchecked == 0
+    return result.calls_unverified == local_calls
+
+
+def _verify_archive_unwind_records(fn, obj, proof):
+    """Check the object records that bind a function body to its exception funclets."""
+    expected = proof["archive_unwind_records"]
+    recorded = {}
+    for section in obj.sections.values():
+        if not section.name.startswith(".pdata"):
+            continue
+        for rel in section.relocs:
+            symbol = obj.symbols.get(rel.symbol)
+            if (rel.type not in (REL_ADDR32, REL_ADDR32NB) or symbol is None or symbol.section != fn.section
+                    or rel.offset % 8 or rel.offset + 8 > len(section.data)):
+                continue
+            addend, flags = struct.unpack_from(">II", section.data, rel.offset)
+            offset = symbol.value + addend - fn.offset
+            if 0 <= offset < len(fn.code):
+                if offset in recorded:
+                    return False
+                recorded[offset] = flags
+    return (len(recorded) == len(expected)
+            and recorded == {row["offset"]: int(row["flags"], 16) for row in expected})
 
 
 def _verify_linker_imports(artist, lib_dir, claims):

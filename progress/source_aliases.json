@@ -7049,6 +7049,366 @@
       "symbol": "std::_Sort_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>",
       "byte_match": true,
       "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::Gam": {
+      "x360_address": "0x825931D0",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::operator=",
+      "byte_match": true,
+      "evidence": "ARTIST ProcessAfterSimulation calls the typed GameStateToNetworkInterface member copy of the dirty-trick queue, mapping, flags and mode. Complete XDK body and all relocated fields agree."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::InGamePl": {
+      "x360_address": "0x823628C8",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusData::operator=",
+      "byte_match": true,
+      "evidence": "The recovered 312-byte network status record and original nested relationship copy bind the truncated assignment to InGamePlayerStatusData. Complete XDK body and all relocated fields agree."
+    },
+    "BrnTraffic::BrnTrafficIO::TrafficNetwor": {
+      "x360_address": "0x823C8FD8",
+      "symbol": "BrnTraffic::BrnTrafficIO::TrafficNetworkOutputInterface::operator=",
+      "byte_match": true,
+      "evidence": "The original body clears then appends the three typed traffic-network queues in TrafficNetworkOutputInterface member order. Complete XDK body and all relocated fields agree."
+    },
+    "CgsModule::BaseEventQu": {
+      "x360_address": "0x828AC770",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::GetEvent",
+      "byte_match": true,
+      "evidence": "The original BridgeInputSceneUpdateInterfaceToSubModules calls the typed add-volume event queue accessor. Its element stride and bounds assertions agree. Complete XDK body and all relocated fields agree."
+    },
+    "CgsModule::BaseEventQue": {
+      "x360_address": "0x828AD0D0",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTest>::GetEvent",
+      "byte_match": true,
+      "evidence": "The loop at 0x828C7050 indexes the typed triangle-line-test queue. The ARTIST accessor returns the original two-byte-stride event. Complete XDK body and all relocated fields agree."
+    },
+    "CgsModule::BaseEventQueue<": {
+      "x360_address": "0x825BB748",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult>::GetEvent",
+      "byte_match": true,
+      "evidence": "VehicleManager::ProcessAboveGroundLineTestsResults calls the nearest-line result queue accessor; the X360 stride and original checked queue operation agree. Complete XDK body and all relocated fields agree."
+    },
+    "short>::GetEvent": {
+      "x360_address": "0x82709A00",
+      "symbol": "CgsModule::BaseEventQueue<unsigned short>::GetEvent",
+      "byte_match": true,
+      "evidence": "The truncated export retains the unsigned-short element and GetEvent; its 16-bit indexing and the existing XDK specialization agree. Complete XDK body and all relocated fields agree."
+    },
+    "CgsModule::BaseEvent": {
+      "x360_address": "0x828ACCD8",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition>::GetEvent",
+      "byte_match": true,
+      "evidence": "TriangleCacheManager::ProcessUpdateCachedPositionEvents uses the typed update-cached-position queue. The original const accessor stride and assertion path agree. Complete XDK body and all relocated fields agree."
+    },
+    "CgsModule::BaseEventQueue": {
+      "x360_address": "0x828ACD80",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventRemoveFromCache>::GetEvent",
+      "byte_match": true,
+      "evidence": "TriangleCacheManager::ProcessRemoveFromCacheEvents uses the typed remove-from-cache queue. The original const accessor stride and assertion path agree. Complete XDK body and all relocated fields agree."
+    },
+    "char,50>::Construct": {
+      "x360_address": "0x82614A78",
+      "symbol": "CgsModule::EventQueue<char,50>::Construct",
+      "byte_match": true,
+      "evidence": "PhysicalTrafficManager::Construct passes its mUnusedPotentialTrafficQueue at 104624; the ARTIST and native bodies set a capacity of 50. Complete XDK body and all relocated fields agree."
+    },
+    "??$FileSystemFree@VCloseReadStreamResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAVCloseReadStreamRespo": {
+      "x360_address": "0x828EA5C0",
+      "symbol": "CgsResource::ResourceModule::FileSystemFree<CgsResource::Events::CloseReadStreamResponse>",
+      "byte_match": true,
+      "evidence": "The exact decorated prefix differs only at MSVC class/struct tags for the same CloseReadStreamResponse specialization; ProcessPendingFileSystemResponses selects this branch. Complete XDK body and all relocated fields agree."
+    },
+    "??$FileSystemFree@VCloseFileResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAVCloseFileResponse@Events@1": {
+      "x360_address": "0x828EA680",
+      "symbol": "CgsResource::ResourceModule::FileSystemFree<CgsResource::Events::CloseFileResponse>",
+      "byte_match": true,
+      "evidence": "The exact decorated prefix differs only at MSVC class/struct tags for the same CloseFileResponse specialization; ProcessPendingFileSystemResponses selects this branch. Complete XDK body and all relocated fields agree."
+    },
+    "CgsSceneManager::SceneManagerIO::OutSceneQueryResultsQueu": {
+      "x360_address": "0x828C4A08",
+      "symbol": "CgsSceneManager::SceneManagerIO::OutSceneQueryResultsQueue<32768>::AddLineTestFineResult",
+      "byte_match": true,
+      "evidence": "The scene manager selects the typed 32768-byte result queue operation; the line-test result event, length updates and full body agree. Complete XDK body and all relocated fields agree."
+    },
+    "BrnGameState::OnlineFlybyManager::GetLiveRevengeRela": {
+      "x360_address": "0x82357FD8",
+      "symbol": "BrnGameState::OnlineFlybyManager::GetLiveRevengeRelationship",
+      "byte_match": true,
+      "evidence": "CalculateRivalryRating calls the surviving OnlineFlybyManager::GetLiveRevengeRela export. Original player lookup and returned relationship at status offset 0x88 agree. Complete XDK body and all relocated fields agree."
+    },
+    "BrnDirector::Camera::BehaviourGyroCam::GetCollisio": {
+      "x360_address": "0x821FA1C0",
+      "symbol": "BrnDirector::Camera::BehaviourGyroCam::GetCollisionPolicy",
+      "byte_match": true,
+      "evidence": "The export retains BehaviourGyroCam::GetCollisio; the typed override and original collision policy path agree. Complete XDK body and all relocated fields agree."
+    },
+    "BrnDirector::Camera::BehaviourInterpolate::GetColl": {
+      "x360_address": "0x821F9EE8",
+      "symbol": "BrnDirector::Camera::BehaviourInterpolate::GetCollisionPolicy",
+      "byte_match": true,
+      "evidence": "The original conditional return of the embedded policy at this+0x20 agrees with the BehaviourInterpolate override. Complete XDK body and all relocated fields agree."
+    },
+    "BrnDirector::Camera::BehaviourRotateAboutVehicle::": {
+      "x360_address": "0x821FB410",
+      "symbol": "BrnDirector::Camera::BehaviourRotateAboutVehicle::GetCollisionPolicy",
+      "byte_match": true,
+      "evidence": "Slot 5 of the rotate-about-vehicle vtable selects this accessor, which returns this+0x50. Complete XDK body and all relocated fields agree."
+    },
+    "BrnDirector::Camera::BehaviourAftertouchCam::GetCo": {
+      "x360_address": "0x821FB588",
+      "symbol": "BrnDirector::Camera::BehaviourAftertouchCam::GetCollisionPolicy",
+      "byte_match": true,
+      "evidence": "The surviving AftertouchCam prefix and original collision-policy override agree with this+0x20, the shared ICF accessor. Complete XDK body and all relocated fields agree."
+    },
+    "BrnDirector::Camera::BehaviourFailsafe::GetCollisi": {
+      "x360_address": "0x821FABE0",
+      "symbol": "BrnDirector::Camera::BehaviourFailsafe::GetCollisionPolicy",
+      "byte_match": true,
+      "evidence": "The surviving Failsafe::GetCollisi prefix identifies this original collision-policy override. Complete XDK body and all relocated fields agree."
+    },
+    "BrnGameState::OfflineFlybyManager::Cal": {
+      "x360_address": "0x82364820",
+      "symbol": "BrnGameState::OfflineFlybyManager::CalculateFlybyRivals",
+      "byte_match": true,
+      "evidence": "Offline flyby vtable slot zero returns this+0x10. DecFIGS names the CalculateFlybyRivals override and the surviving export retains its prefix. Complete XDK body and all relocated fields agree."
+    },
+    "CgsResource::TextFileResourceType::GetDebugResourceCat": {
+      "x360_address": "0x826658F0",
+      "symbol": "CgsResource::TextFileResourceType::GetDebugResourceCategory",
+      "byte_match": true,
+      "evidence": "The original export retains the class and GetDebugResourceCat prefix; the resource-category accessor returns 5. Complete XDK body and all relocated fields agree."
+    },
+    "BrnSound::Logic::MusicStream::GetCre": {
+      "x360_address": "0x82687368",
+      "symbol": "BrnSound::Logic::MusicStream::GetCreateParams",
+      "byte_match": true,
+      "evidence": "The original method retains the MusicStream::GetCre prefix and returns this+12, the typed create parameters. Complete XDK body and all relocated fields agree."
+    },
+    "BrnSound::Logic::PresentationEffect:": {
+      "x360_address": "0x82687988",
+      "symbol": "BrnSound::Logic::PresentationEffect::GetCreateParams",
+      "byte_match": true,
+      "evidence": "The original PresentationEffect accessor returns this+0x224, the typed create parameters. Complete XDK body and all relocated fields agree."
+    },
+    "BrnSound::Logic::SpeechEffect::GetCr": {
+      "x360_address": "0x82687F78",
+      "symbol": "BrnSound::Logic::SpeechEffect::GetCreateParams",
+      "byte_match": true,
+      "evidence": "The surviving SpeechEffect::GetCr prefix and the corresponding typed create-parameter override agree. Complete XDK body and all relocated fields agree."
+    },
+    "BrnSound::Module::SoundLogicModule::GetResourceRegis": {
+      "x360_address": "0x826838C0",
+      "symbol": "BrnSound::Module::SoundLogicModule::GetResourceRegistrar",
+      "byte_match": true,
+      "evidence": "The surviving SoundLogicModule::GetResourceRegis export returns this+0x588, the embedded registrar. Complete XDK body and all relocated fields agree."
+    },
+    "BrnGameState::TakedownEvent>:": {
+      "x360_address": "0x822AC660",
+      "symbol": "CgsModule::BaseEventQueue<BrnGameState::TakedownEvent>::GetEvent",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x82571030 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "BrnPhysics::Vehicle::Imp": {
+      "x360_address": "0x8254D8B8",
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::ImpactEvent>::GetEvent",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x82570FC8 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent,34>": {
+      "x360_address": "0x822E3520",
+      "symbol": "CgsModule::EventQueue<BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent,34>::Construct",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x822EA6C4 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTest,256>": {
+      "x360_address": "0x828C48B8",
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTest,256>::Construct",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x828C7C50 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTestNeare": {
+      "x360_address": "0x828C4928",
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTestNearest,256>::Construct",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x828C7C60 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventTriangleCollisionSphereTest,25": {
+      "x360_address": "0x828C4998",
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionSphereTest,256>::Construct",
+      "byte_match": true,
+      "evidence": "The typed queue operation is fixed by the ARTIST caller at 0x828C7C70 and the original queue element/index layout. Complete XDK body and all relocated fields agree."
+    },
+    "??$CreateIOBuffer@VInputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@EventIn": {
+      "x360_address": "0x8285A0D8",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::EventInterpreterModuleIO::InputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x8285DED4."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Event": {
+      "x360_address": "0x8285A1C8",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::EventInterpreterModuleIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x8285DEE4."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Even": {
+      "x360_address": "0x8285A2E0",
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::EventInterpreterModuleIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x8285DF38."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@EventInterpreterModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@EventI": {
+      "x360_address": "0x828567A0",
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::EventInterpreterModuleIO::InputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x8285DF44."
+    },
+    "??$CreateIOBuffer@VDispatchThreadInputBuffer@BrnGame@@@IOBufferStack@CgsModule@@QAA_NPAPAVDispatchThreadInputBuffer@Brn": {
+      "x360_address": "0x823C75E0",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnGame::DispatchThreadInputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823CBD0C."
+    },
+    "??$CreateIOBuffer@VInputBuffer@CgsGuiModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@CgsGuiModuleIO@Cg": {
+      "x360_address": "0x823AC898",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::CgsGuiModuleIO::InputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCA88."
+    },
+    "??$CreateIOBuffer@VInputBuffer@ViewIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@ViewIO@CgsGui@@PBD@Z": {
+      "x360_address": "0x823AC970",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::ViewIO::InputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCAA0."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@CgsGuiModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@CgsGuiModuleIO@": {
+      "x360_address": "0x823ACA48",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::CgsGuiModuleIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCABC."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@ModelIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@ModelIO@CgsGui@@PBD@Z": {
+      "x360_address": "0x823ACB20",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsGui::ModelIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCAD4."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@DirectorIO@BrnDirector@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@DirectorIO@Brn": {
+      "x360_address": "0x823ACBF8",
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnDirector::DirectorIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCAEC."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@DirectorIO@BrnDirector@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@DirectorIO@Br": {
+      "x360_address": "0x823ACCC8",
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnDirector::DirectorIO::OutputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCB24."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@CgsGuiModuleIO@CgsGui@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@CgsGuiModuleIO@C": {
+      "x360_address": "0x823AD028",
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsGui::CgsGuiModuleIO::InputBuffer>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x823BCB6C."
+    },
+    "??$DestroyIOBuffer@VCollisionGenerator@CgsCollision@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVCollisionGener": {
+      "x360_address": "0x8259DE50",
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::CgsCollision::CollisionGenerator>",
+      "byte_match": true,
+      "evidence": "The ARTIST export identifies the same IOBufferStack specialization as the complete XDK symbol. Its surviving decoration differs only in the class/struct tag for the same named buffer type; branch at 0x8261BB08."
+    },
+    "BrnSound::Module::Io::LogicOutputBuffer::": {
+      "x360_address": "0x82695470",
+      "symbol": "BrnSound::Module::Io::LogicOutputBuffer::GetResourceRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF30 uses this typed interface. The read-lock test and returned member offset 0x814 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "BrnSound::Module::Io::RootOutputBuffer::GetReso": {
+      "x360_address": "0x826951D0",
+      "symbol": "BrnSound::Module::Io::RootOutputBuffer::GetResourceRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF3C uses this typed interface. The write-lock test and returned member offset 0x4 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "BrnSound::Module::Io::LogicOut": {
+      "x360_address": "0x82695518",
+      "symbol": "BrnSound::Module::Io::LogicOutputBuffer::GetAttribSysRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF4C uses this typed interface. The read-lock test and returned member offset 0x4 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "BrnSound::Module::Io::RootOutputBuff": {
+      "x360_address": "0x82695278",
+      "symbol": "BrnSound::Module::Io::RootOutputBuffer::GetAttribSysRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF58 uses this typed interface. The write-lock test and returned member offset 0x1014 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "BrnSound::Module::Io::LogicOutputBuffer::GetReplay": {
+      "x360_address": "0x82695320",
+      "symbol": "BrnSound::Module::Io::LogicOutputBuffer::GetReplayRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF68 uses this typed interface. The read-lock test and returned member offset 0x1824 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "BrnSound::Module::Io::RootOutputBuffer::GetReplayRequest": {
+      "x360_address": "0x82694A90",
+      "symbol": "BrnSound::Module::Io::RootOutputBuffer::GetReplayRequestInterface",
+      "byte_match": true,
+      "evidence": "ARTIST BridgeLogicToRoot branch at 0x826EBF74 uses this typed interface. The write-lock test and returned member offset 0x1824 agree with the existing LogicOutputBuffer and RootOutputBuffer declarations."
+    },
+    "CgsResource::BinaryFileResource>::Update": {
+      "x360_address": "0x826DCCA8",
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::BinaryFileResource>::Update",
+      "byte_match": true,
+      "evidence": "The surviving ARTIST export names the resource specialization and Update. The typed existing playback caller and its XDK branch at 0x826E9AC4 confirm the complete owner."
+    },
+    "CgsResource::AlignedBinaryFileResource>::Update": {
+      "x360_address": "0x826DD670",
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::AlignedBinaryFileResource>::Update",
+      "byte_match": true,
+      "evidence": "The surviving ARTIST export names the resource specialization and Update. The typed existing playback caller and its XDK branch at 0x826E9AA4 confirm the complete owner."
+    },
+    "BrnWorld::WorldEntityIO::OutputBuffer_PostPhysics::Get": {
+      "x360_address": "0x822BA8B8",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PostPhysics::GetStatusInterface",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "BrnWorld::WorldEntityIO::OutputBuffer_PostPhysi": {
+      "x360_address": "0x822BA810",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PostPhysics::GetResourceRequestInterface",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "BrnSound::Module::Io::RootPreUpdateOutputBuffer::Ge": {
+      "x360_address": "0x823B8BB8",
+      "symbol": "BrnSound::Module::Io::RootPreUpdateOutputBuffer::GetPreUpdateOutput",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "BrnPhysics::PhysicsModuleIO::OutputBuffer::Ge": {
+      "x360_address": "0x8279F598",
+      "symbol": "BrnPhysics::PhysicsModuleIO::OutputBuffer::GetVehicleOutputInterface",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "BrnSound::Logic::ResourceRegistrar": {
+      "x360_address": "0x8268EAE0",
+      "symbol": "Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Append",
+      "byte_match": true,
+      "evidence": "The original resource-removal candidate caller passes its typed Array of 124 RequestedResource node pointers. The ARTIST body loads count at this+496, then appends one slot and increments that count."
+    },
+    "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatu": {
+      "x360_address": "0x823BB080",
+      "symbol": "BrnReplays::ReplayIO::OutputBuffer_PreSim::GetStatusInterface",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "CgsInput::InputIO::Outpu": {
+      "x360_address": "0x823B1188",
+      "symbol": "CgsInput::InputIO::OutputBuffer::GetPadDisconnectedQueue",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEv": {
+      "x360_address": "0x823BBDA8",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEventQueue",
+      "byte_match": true,
+      "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
     }
   },
   "sdk_entry_groups": {
@@ -8670,6 +9030,263 @@
       "caller": "0x829F7AC0",
       "call_site": "0x829F7C08",
       "evidence": "An ARTIST conditional branch reaches the remaining return and alternate case instructions. The complete SDK extent and every relocated jump-table word agree."
+    },
+    "0x82937430": {
+      "symbol": "RtlFreeHeap",
+      "size": 744,
+      "lib": "xapilibi.lib",
+      "member": "obj\\xbox\\rtlheap.obj",
+      "archive_symbol": "RtlFreeHeap",
+      "caller": "0x82934C10",
+      "call_site": "0x82934C34",
+      "fragments": [
+        {
+          "address": "0x829376A8",
+          "size": 112,
+          "archive_symbol": "$LN29"
+        },
+        {
+          "address": "0x829376D0",
+          "size": 72,
+          "archive_symbol": "$LN32"
+        }
+      ],
+      "evidence": "The exact installed LocalFree branch relocation identifies this body. Its primary and attached funclet unwind records match the installed SDK, and the overlapping unnamed alternate entries are local archive labels within the same body."
+    },
+    "0x82936B40": {
+      "symbol": "RtlAllocateHeap",
+      "size": 2276,
+      "lib": "xapilibi.lib",
+      "member": "obj\\xbox\\rtlheap.obj",
+      "archive_symbol": "RtlAllocateHeap",
+      "caller": "0x82936B40",
+      "call_site": "0x829373A0",
+      "fragments": [
+        {
+          "address": "0x829373B4",
+          "size": 112,
+          "archive_symbol": "$LN95"
+        },
+        {
+          "address": "0x829373DC",
+          "size": 72,
+          "archive_symbol": "$LN98"
+        }
+      ],
+      "evidence": "The exact installed LocalAlloc branch relocation identifies this body. Its primary and attached funclet unwind records match the installed SDK, and the overlapping unnamed alternate entries are local archive labels within the same body. A relocated direct branch from the original IDA span reaches the archived internal tail.",
+      "previous_size": 2164,
+      "exported_name": "RtlAllocateHeap"
+    },
+    "0x82937720": {
+      "symbol": "RtlReAllocateHeap",
+      "size": 2148,
+      "lib": "xapilibi.lib",
+      "member": "obj\\xbox\\rtlheap.obj",
+      "archive_symbol": "RtlReAllocateHeap",
+      "caller": "0x82937720",
+      "call_site": "0x82937ED8",
+      "fragments": [
+        {
+          "address": "0x82937EEC",
+          "size": 100,
+          "archive_symbol": "$LN85"
+        },
+        {
+          "address": "0x82937F0C",
+          "size": 68,
+          "archive_symbol": "$LN88"
+        },
+        {
+          "address": "0x82937F50",
+          "size": 40,
+          "archive_symbol": "$LN133"
+        },
+        {
+          "address": "0x82937F78",
+          "size": 12,
+          "archive_symbol": "$LN135"
+        }
+      ],
+      "evidence": "The exact installed realloc branch relocation identifies this body. Its primary and attached funclet unwind records match the installed SDK, and the overlapping unnamed alternate entries are local archive labels within the same body. A relocated direct branch from the original IDA span reaches the archived internal tail.",
+      "previous_size": 1996,
+      "exported_name": "RtlReAllocateHeap"
+    },
+    "0x82C1C3A8": {
+      "previous_size": 288,
+      "exported_name": "__BuildCatchObject",
+      "symbol": "__BuildCatchObject",
+      "size": 300,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "__BuildCatchObject",
+      "fragments": [
+        {
+          "address": "0x82C1C4C8",
+          "size": 12,
+          "archive_symbol": "$LN31"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0004804"
+        },
+        {
+          "offset": 288,
+          "flags": "0x40000300"
+        }
+      ],
+      "evidence": "The independent archived caller relocates a branch or function pointer to the named body. The complete body, kind-3 primary and attached kind-1 unwind records agree exactly. The previously unnamed following entry is the primary body’s archive-owned exception funclet.",
+      "caller": "0x82C1C4D8",
+      "call_site": "0x82C1C560"
+    },
+    "0x82C1BF98": {
+      "previous_size": 136,
+      "exported_name": "__DestructExceptionObject",
+      "symbol": "__DestructExceptionObject",
+      "size": 172,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "__DestructExceptionObject",
+      "fragments": [
+        {
+          "address": "0x82C1C020",
+          "size": 36,
+          "archive_symbol": "$LN8"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0002205"
+        },
+        {
+          "offset": 136,
+          "flags": "0x40000902"
+        }
+      ],
+      "evidence": "The independent archived caller relocates a branch or function pointer to the named body. The complete body, kind-3 primary and attached kind-1 unwind records agree exactly. The previously unnamed following entry is the primary body’s archive-owned exception funclet.",
+      "caller": "0x82C1C048",
+      "call_site": "0x82C1C0F8"
+    },
+    "0x82C10EF0": {
+      "previous_size": 120,
+      "exported_name": "_CallSETranslator",
+      "symbol": "_CallSETranslator",
+      "size": 192,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\trnsctrl.obj",
+      "archive_symbol": "_CallSETranslator",
+      "fragments": [
+        {
+          "address": "0x82C10F68",
+          "size": 72,
+          "archive_symbol": "$LN5"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0001E04"
+        },
+        {
+          "offset": 120,
+          "flags": "0x40001205"
+        }
+      ],
+      "evidence": "The independent archived caller relocates a branch or function pointer to the named body. The complete body, kind-3 primary and attached kind-1 unwind records agree exactly. The previously unnamed following entry is the primary body’s archive-owned exception funclet.",
+      "caller": "0x82C1C620",
+      "call_site": "0x82C1C6B0"
+    },
+    "0x82C20D60": {
+      "previous_size": 92,
+      "exported_name": "XapiThreadStartup",
+      "symbol": "XapiThreadStartup",
+      "size": 128,
+      "lib": "xapilib.lib",
+      "member": "obj\\xbox\\xapithreadstartup.obj",
+      "archive_symbol": "XapiThreadStartup",
+      "fragments": [
+        {
+          "address": "0x82C20DBC",
+          "size": 36,
+          "archive_symbol": "$LN5"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0001704"
+        },
+        {
+          "offset": 92,
+          "flags": "0x40000903"
+        }
+      ],
+      "evidence": "The independent archived caller relocates a branch or function pointer to the named body. The complete body, kind-3 primary and attached kind-1 unwind records agree exactly. The previously unnamed following entry is the primary body’s archive-owned exception funclet.",
+      "caller": "0x82C20670",
+      "refhi_site": "0x82C206A0",
+      "reflo_site": "0x82C206AC"
+    },
+    "0x82959CE8": {
+      "previous_size": 1080,
+      "exported_name": "D3D::CCapture::HandleType3Opcode",
+      "symbol": "D3D::CCapture::HandleType3Opcode",
+      "size": 1116,
+      "lib": "d3d9i.lib",
+      "member": "obj\\xbox\\capture.obj",
+      "archive_symbol": "?HandleType3Opcode@CCapture@D3D@@MAAHKPAKKH@Z",
+      "caller": "0x8295B8F8",
+      "call_site": "0x8295B930",
+      "fragments": [
+        {
+          "address": "0x8295A120",
+          "size": 12,
+          "archive_symbol": "$LN86"
+        },
+        {
+          "address": "0x8295A12C",
+          "size": 12,
+          "archive_symbol": "$LN88"
+        },
+        {
+          "address": "0x8295A138",
+          "size": 12,
+          "archive_symbol": "$LN90"
+        }
+      ],
+      "archive_literals": {
+        "?g_PacketCount@@3QBKB": {
+          "address": "0x82103040",
+          "size": 32
+        },
+        "?g_PacketStartOffset@@3QBKB": {
+          "address": "0x82103020",
+          "size": 32
+        }
+      },
+      "archive_data_targets": {
+        "?WorkerDpc@D3D@@YAXK@Z": "0x82955478"
+      },
+      "evidence": "The credited full capture handler's verified branch identifies the release archive member. Primary unwind and all three 12-byte funclet records agree with the relocated d3d9i COFF records. Both packet arrays and the WorkerDpc address match.",
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0010E04"
+        },
+        {
+          "offset": 1080,
+          "flags": "0x40000300"
+        },
+        {
+          "offset": 1092,
+          "flags": "0x40000300"
+        },
+        {
+          "offset": 1104,
+          "flags": "0x40000300"
+        }
+      ]
     }
   },
   "identified_functions": {
@@ -13286,6 +13903,82 @@
       "size": 268,
       "tu": "class:rw::audio::core::Limiter1",
       "evidence": "The verified Limiter1 descriptor getter returns 0x82F8D150. The named descriptor selects this complete .pdata body at its Process slot 0x82F8D160. The X360 audio symbols attest the typed callback."
+    },
+    "0x82935668": {
+      "exported_name": null,
+      "symbol": "RtlpInsertFreeBlock",
+      "size": 336,
+      "sdk_provider": {
+        "lib": "xapilibi.lib",
+        "member": "obj\\xbox\\rtlheap.obj",
+        "archive_symbol": "RtlpInsertFreeBlock"
+      },
+      "evidence": "Already counted from the exact same archive member. The independently checked RtlFreeHeap branch relocation at 0x8293762C names this complete body, and its unwind record matches."
+    },
+    "0x82934C68": {
+      "exported_name": "sub_82934C68",
+      "symbol": "NtAllocateVirtualMemoryWrapper",
+      "size": 80,
+      "sdk_provider": {
+        "lib": "xapilibi.lib",
+        "member": "obj\\xbox\\rtlheap.obj",
+        "archive_symbol": "NtAllocateVirtualMemoryWrapper"
+      },
+      "evidence": "Already counted from the exact same archive member. The independently checked RtlAllocateHeap branch relocation at 0x829372D8 names this complete body, and its unwind record matches."
+    },
+    "0x8254EB78": {
+      "exported_name": "sub_8254EB78",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetVehicleOutputInterface",
+      "size": 164,
+      "evidence": "The typed PostSimulationInputBuffer vehicle-output getter uses the ARTIST read-lock guard and returns its vehicle output member at this+0x10. The matched ProcessInputQueue call feeds the ImpactEvent queue from that member. The verified native call relocation at 0x82570FA8 supplies the qualified name."
+    },
+    "0x8254E980": {
+      "exported_name": "sub_8254E980",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetTakedownEventInputQueue",
+      "size": 168,
+      "evidence": "The typed PostSimulationInputBuffer takedown-queue getter uses the ARTIST read-lock guard and returns its member at this+0xD398. The matched ProcessInputQueue call feeds the typed takedown event loop. The verified native call relocation at 0x82571010 supplies the qualified name."
+    },
+    "0x822BA960": {
+      "exported_name": "sub_822BA960",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PostPhysics::GetSceneInputInterface",
+      "size": 164,
+      "evidence": "The write-lock guard returns this+0x1020, the PostPhysics scene input member. The original UpdateCollisionValidation uses this mutable getter in both branches. The verified native call relocation at 0x823080B4 supplies the qualified name."
+    },
+    "0x828C47D8": {
+      "exported_name": null,
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventVolumeTestDeepest,256>::Construct",
+      "size": 112,
+      "evidence": "The original InputBuffer_Query::Construct at 0x828C7C30 constructs the inline deepest-volume-test queue. Its complete typed XDK template body and both relocated data references were checked. The verified native call relocation at 0x828C7C30 supplies the qualified name."
+    },
+    "0x8284F238": {
+      "exported_name": "sub_8284F238",
+      "symbol": "CgsGui::CgsGuiModuleIO::InputBuffer::GetGuiEvents",
+      "size": 164,
+      "evidence": "The original pre-update bridge uses the write-lock getter for the inbound GUI event queue; the guard and return of this+4 agree with CgsGuiModuleIO::InputBuffer. The verified native call relocation at 0x823EE544 supplies the qualified name."
+    },
+    "0x8279F4F0": {
+      "exported_name": null,
+      "symbol": "BrnPhysics::PhysicsModuleIO::OutputBuffer::GetVehicleManagerOutputInterface",
+      "size": 168,
+      "evidence": "The post-physics crash bridge uses the original read-lock getter at 0x827AB8E4. The member displacement this+41952 and lock bit distinguish this const manager-output accessor. The verified native call relocation at 0x827AB8E4 supplies the qualified name."
+    },
+    "0x82614D90": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnPhysics::ContactGenList>",
+      "size": 212,
+      "evidence": "The original VehicleManager::FreeAllocations passes its ContactGenList owner slot at 0x8261BB18. The specialized XDK DestroyIOBuffer body and its checked relocation fields agree. The verified native call relocation at 0x8261BB18 supplies the qualified name."
+    },
+    "0x8268ED30": {
+      "exported_name": "sub_8268ED30",
+      "symbol": "Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Contains",
+      "size": 128,
+      "evidence": "The original ResourceRegistrar caller passes its removal-candidate Array and the RequestedResource node. The body reads the typed 124-pointer array count at this+496 and performs the Contains comparison. The verified native call relocation at 0x82695894 supplies the qualified name."
+    },
+    "0x823CBC48": {
+      "exported_name": "sub_823CBC48",
+      "symbol": "BrnGame::BrnGameModule::IsEventInGuiQueue",
+      "size": 152,
+      "evidence": "The original ConstructUpdateSet supplies the event ID and its network GuiEventQueueSmall at 0x823DCC90. The original loop tests event IDs on that queue; DecFIGS declares the matching IsEventInGuiQueue overload. The verified native call relocation at 0x823DCC90 supplies the qualified name."
     }
   },
   "native_leaf_functions": {
