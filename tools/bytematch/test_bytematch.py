@@ -665,6 +665,54 @@ def test_sdk_entry_group_requires_disjoint_contiguous_archive_entries(monkeypatc
         Artist(pack=image.pack | overlap, read=read)
 
 
+def test_sdk_archive_split_checks_independent_members_and_padding(monkeypatch, tmp_path):
+    import sdk
+
+    caller, address = 0x821F1000, 0x821F1020
+    second = address + 8
+    image = FakeArtist([(caller, "Caller", [bl_to(caller, second), BLR]),
+                        (address, "Setup", [BLR, 0, 0x38600007, BLR])])
+    key = f"0x{address:08X}"
+    image.pack[key]["sdk_archive_split"] = {
+        "exported_name": "Setup", "previous_size": 16,
+        "parts": [
+            {"offset": 0, "size": 4, "symbol": "Setup", "archive_symbol": "Setup",
+             "lib": "sdk.lib", "member": "setup.obj"},
+            {"offset": 8, "size": 8, "symbol": "Work", "archive_symbol": "Work",
+             "lib": "sdk.lib", "member": "work.obj", "caller": f"{caller:X}", "call_site": f"{caller:X}"},
+        ],
+    }
+
+    def read(at, size):
+        return b"" if at == PDATA_START else image.bytes(at, size)
+
+    art = Artist(pack=image.pack, read=read)
+    assert art.size(address) == (4, "sdk_split")
+    assert art.size(second) == (8, "sdk_split")
+    assert art.name_at(address + 4) is None
+    setup = coff.ObjectFile(make_object([("Setup", [BLR], [])]))
+    work = coff.ObjectFile(make_object([("Work", [0x38600007, BLR], [])]))
+    first, next_body = setup.functions()[0], work.functions()[0]
+    members = [("sdk.lib", "setup.obj", setup, first, False), ("sdk.lib", "work.obj", work, next_body, False)]
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: members)
+    assert sorted(sdk.verify_leaf_providers(art, tmp_path)) == [address, second]
+    members.pop()
+    members.append(("sdk.lib", "setup.obj", work, next_body, False))
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+    image.memory[caller] = struct.pack(">I", bl_to(caller, address))
+    with pytest.raises(ValueError, match="no matching branch"):
+        Artist(pack=image.pack, read=read)
+    image.memory[caller] = struct.pack(">I", bl_to(caller, second))
+    image.memory[address + 4] = struct.pack(">I", BLR)
+    with pytest.raises(ValueError, match="invalid function or gap"):
+        Artist(pack=image.pack, read=read)
+    overlap = FakeArtist([(second, "Existing", [BLR])]).pack
+    with pytest.raises(ValueError, match="overlaps another function"):
+        Artist(pack=image.pack | overlap, read=read)
+
+
 def test_sdk_archive_body_requires_verified_fragment_offsets_and_internal_branches(monkeypatch, tmp_path):
     import sdk
 

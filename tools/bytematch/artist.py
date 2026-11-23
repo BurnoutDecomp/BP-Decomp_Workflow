@@ -110,6 +110,10 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
             if not proof["entries"] or functions.get(address, {}).get("name") != proof["entries"][0]:
                 raise ValueError(f"SDK entry group {address} no longer agrees with the export")
             functions[address]["sdk_entry_group"] = proof
+        for address, proof in registry.get("sdk_archive_splits", {}).items():
+            if functions.get(address, {}).get("name") != proof["exported_name"]:
+                raise ValueError(f"SDK archive split {address} no longer agrees with the export")
+            functions[address]["sdk_archive_split"] = proof
     return functions
 
 
@@ -179,6 +183,7 @@ class Artist:
         identities = {}
         leaves = {}
         entry_groups = {}
+        archive_splits = {}
         for text, row in self.pack.items():
             address = int(text, 16)
             if "identity" in row:
@@ -189,6 +194,8 @@ class Artist:
                 leaves[address] = ("native_leaf", row["native_leaf"])
             if "sdk_entry_group" in row:
                 entry_groups[address] = row["sdk_entry_group"]
+            if "sdk_archive_split" in row:
+                archive_splits[address] = row["sdk_archive_split"]
             if row.get("unlisted"):
                 continue
             self.names[address] = row["name"]
@@ -218,6 +225,8 @@ class Artist:
             self._include_leaves(leaves)
         if entry_groups:
             self._split_sdk_entry_groups(entry_groups)
+        if archive_splits:
+            self._split_sdk_archive_extents(archive_splits)
         self.by_name = {}
         for address, name in self.names.items():
             if address not in self.unnamed:
@@ -462,6 +471,38 @@ class Artist:
                                           "lib": proof["lib"], "member": proof["member"], "group": address}
                 self.unnamed.discard(start)
                 occupied[start] = size
+
+    def _split_sdk_archive_extents(self, splits):
+        """Separate a merged IDA span into independently witnessed archive functions."""
+        occupied = self.extents | {address: self.size(address)[0] for address in self.names}
+        for address, proof in sorted(splits.items()):
+            parts, length = proof["parts"], proof["previous_size"]
+            if (len(parts) < 2 or parts[0]["offset"] != 0 or parts[0]["symbol"] != proof["exported_name"]
+                    or self.names.get(address) != proof["exported_name"] or self.size(address) != (length, "ida")):
+                raise ValueError(f"SDK archive split {address:08X} does not match its exported extent")
+            del occupied[address]
+            if next(disjoint_extents(occupied, [(address, length)]), None) is None:
+                raise ValueError(f"SDK archive split {address:08X} overlaps another function")
+            previous_end = address
+            for part in parts:
+                offset, size = part["offset"], part["size"]
+                start = address + offset
+                end = start + size
+                if (offset % 4 or size <= 0 or size % 4 or start < previous_end or end > address + length
+                        or (start > previous_end and self.bytes(previous_end, start - previous_end)
+                            != bytes(start - previous_end))):
+                    raise ValueError(f"SDK archive split {address:08X} contains an invalid function or gap")
+                if start != address:
+                    self._check_leaf_branch(part, occupied, "SDK archive split", start, start, end)
+                self.names[start] = part["symbol"]
+                self.unnamed.discard(start)
+                self.leaf_extents[start] = (size, "sdk_split")
+                # Every split part must resolve all masked calls and data.
+                self.sdk_leaves[start] = {"archive_data_targets": {}, **part}
+                occupied[start] = size
+                previous_end = end
+            if previous_end != address + length:
+                raise ValueError(f"SDK archive split {address:08X} does not cover the end of the export")
 
     def _switch_reaches_tail(self, caller, site, entry, tail, end):
         """Check an XDK absolute jump table and a case that reaches the omitted tail."""

@@ -130,6 +130,11 @@ previous summary, dropped on a regression) and `recent`.
   When one export spans several adjoining SDK archive entries, `sdk_entry_groups` can partition
   that extent. The export length must equal the complete partition, and each entry must compare
   exact at the corresponding offset in one archive section.
+- Use `sdk_archive_splits` when an IDA export merges independent SDK archive bodies. Record
+  the exported name and old byte length, then each body's offset, size and archive definition.
+  Supply a verified direct caller for each interior start. The parts must cover the old span
+  through its final byte and avoid other known extents. Zero alignment bytes between parts
+  are excluded. Each archive body must match with all calls and relocated data verified.
 - A linker-generated ordinal import can use `import_anchor` in `sdk_leaf_functions`. The
   named 16-byte anchor and the uncatalogued stub must use the same image module. Both symbols
   and their ordinals must agree with ordinal code import objects for the same module in the
