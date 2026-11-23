@@ -1,13 +1,13 @@
 {
- "blob": "3716095ded5cb18efaa56b461a8c9f7d3ba22418",
- "commit": "71648b6b903066a637402371e7288a8454373f3f",
+ "blob": "e48fbf8104cae40bb09f65772e97c6b25def76dd",
+ "commit": "c3bf6ab6ad9d0ce95a4bb9df57c3692fcc9c64d3",
  "compiled": true,
- "measured": "2026-11-23T17:51:06Z",
+ "measured": "2026-11-23T21:59:48Z",
  "schema": 1,
  "source": "src/GameSource/GameState/RoadRules/BrnRoadRulesManager_wR_03.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 13,
+ "unpaired": 14,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -15,10 +15,11 @@
   {"artist": "8230ECD0", "artist_size": 116, "first_diff": 56, "name": "BrnStreetData::StreetData::GetRoad", "score": 96.6, "size": 116, "status": "nonmatching", "symbol": "?GetRoad@StreetData@BrnStreetData@@QBAPBVRoad@2@H@Z"},
   {"artist": "8234E5E0", "artist_size": 16, "name": "BrnGameState::RoadRulesManager::SetActiveRoadRule", "score": 100.0, "size": 16, "status": "exact", "symbol": "?SetActiveRoadRule@RoadRulesManager@BrnGameState@@QAAXPAV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@W4EActiveRoadRule@2@@Z"},
   {"artist": "8234E5F0", "artist_size": 244, "first_diff": 16, "name": "BrnGameState::RoadRulesManager::OnRoadRulesDataRequest", "score": 68.9, "size": 232, "status": "nonmatching", "symbol": "?OnRoadRulesDataRequest@RoadRulesManager@BrnGameState@@QAAX_KPAV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@@Z"},
-  {"artist": "82352810", "artist_size": 308, "first_diff": 240, "name": "BrnGameState::RoadRulesManager::SetRoadRulesMode", "score": 89.6, "size": 308, "status": "nonmatching", "symbol": "?SetRoadRulesMode@RoadRulesManager@BrnGameState@@QAAXPAUOutputBuffer@GameStateModuleIO@2@_N@Z"},
+  {"artist": "82352810", "artist_size": 308, "calls_wrong": [{"artist": "BrnGameState::GameStateModuleIO::Ou", "at": 268, "ours": "BrnGameState::GameStateModuleIO::OutputBuffer::GetGameActionQueue"}], "data_unchecked": 3, "first_diff": 268, "name": "BrnGameState::RoadRulesManager::SetRoadRulesMode", "score": 90.9, "size": 308, "status": "nonmatching", "symbol": "?SetRoadRulesMode@RoadRulesManager@BrnGameState@@QAAXPAUOutputBuffer@GameStateModuleIO@2@_N@Z"},
   {"artist": "82352A20", "artist_size": 828, "first_diff": 8, "name": "BrnGameState::RoadRulesManager::OnRoadLimit", "score": 62.6, "size": 796, "status": "nonmatching", "symbol": "?OnRoadLimit@RoadRulesManager@BrnGameState@@QAAX_K_NPAUOutputBuffer@GameStateModuleIO@2@1@Z"},
-  {"artist": "82352D60", "artist_size": 204, "first_diff": 44, "name": "BrnGameState::RoadRulesManager::OnShowtimeStart", "score": 94.1, "size": 204, "status": "nonmatching", "symbol": "?OnShowtimeStart@RoadRulesManager@BrnGameState@@AAAXPAUOutputBuffer@GameStateModuleIO@2@@Z"},
+  {"artist": "82352D60", "artist_size": 204, "calls_wrong": [{"artist": "BrnGameState::GameStateModuleIO::Ou", "at": 68, "ours": "BrnGameState::GameStateModuleIO::OutputBuffer::GetGameActionQueue"}], "data_unchecked": 5, "first_diff": 68, "name": "BrnGameState::RoadRulesManager::OnShowtimeStart", "score": 98.0, "size": 204, "status": "nonmatching", "symbol": "?OnShowtimeStart@RoadRulesManager@BrnGameState@@AAAXPAUOutputBuffer@GameStateModuleIO@2@@Z"},
   {"artist": "82352E30", "artist_size": 96, "data_unchecked": 2, "name": "BrnGameState::RoadRulesManager::QuitAnyActiveRules", "score": 100.0, "size": 96, "status": "exact", "symbol": "?QuitAnyActiveRules@RoadRulesManager@BrnGameState@@QAAXPAUOutputBuffer@GameStateModuleIO@2@@Z"},
-  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"}
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

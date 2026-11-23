@@ -1,21 +1,23 @@
 {
- "blob": "adc141a713cf63ec6a0005d9f382db4d9e63ac51",
- "commit": "71648b6b903066a637402371e7288a8454373f3f",
+ "blob": "f1a148e58fe766857b29a1e5a9b839fcf484103b",
+ "commit": "c3bf6ab6ad9d0ce95a4bb9df57c3692fcc9c64d3",
  "compiled": true,
- "measured": "2026-11-23T17:51:06Z",
+ "measured": "2026-11-23T21:59:48Z",
  "schema": 1,
  "source": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 119,
+ "unpaired": 124,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
+  {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
   {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 40.0, "size": 4, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@XZ"},
   {"artist": "821F0DB0", "artist_size": 36, "first_diff": 0, "name": "rw::math::vpu::Vector2::Vector2", "score": 20.0, "size": 4, "status": "nonmatching", "symbol": "??0Vector2@vpu@math@rw@@QAA@XZ"},
   {"artist": "821F0DD8", "artist_size": 40, "first_diff": 0, "name": "rw::math::vpu::Vector3::Vector3", "score": 73.7, "size": 36, "status": "nonmatching", "symbol": "??0Vector3@vpu@math@rw@@QAA@MMM@Z"},
   {"artist": "821F0E00", "artist_size": 32, "name": "rw::math::vpu::Vector4::Vector4", "score": 100.0, "size": 32, "status": "exact", "symbol": "??0Vector4@vpu@math@rw@@QAA@MMMM@Z"},
   {"artist": "821F15B8", "artist_size": 520, "first_diff": 8, "name": "BrnDirector::HookNameStringWrapper::Set", "score": 40.8, "size": 244, "status": "nonmatching", "symbol": "?Set@HookNameStringWrapper@BrnDirector@@QAAXPBD@Z"},
-  {"artist": "821F4648", "artist_size": 128, "first_diff": 36, "name": "BrnTraffic::GetVehicleSpecies", "score": 96.9, "size": 128, "status": "nonmatching", "symbol": "?GetVehicleSpecies@BrnTraffic@@YA?AW4Species@Vehicle@1@I@Z"},
+  {"artist": "821F4648", "artist_size": 128, "data_unchecked": 2, "name": "BrnTraffic::GetVehicleSpecies", "score": 100.0, "size": 128, "status": "exact", "symbol": "?GetVehicleSpecies@BrnTraffic@@YA?AW4Species@Vehicle@1@I@Z"},
   {"artist": "82218DA8", "artist_size": 292, "first_diff": 36, "name": "BrnDirector::Camera::CameraEffects::operator=", "score": 75.6, "size": 364, "status": "nonmatching", "symbol": "??4CameraEffects@Camera@BrnDirector@@QAAAAU012@ABU012@@Z"},
   {"artist": "82233A80", "artist_size": 288, "first_diff": 20, "name": "BrnDirector::Camera::Camera::operator=", "score": 63.0, "size": 296, "status": "nonmatching", "symbol": "??4Camera@0BrnDirector@@QAAAAU001@ABU001@@Z"},
   {"artist": "823C51D0", "artist_size": 328, "first_diff": 0, "name": "CgsGraphics::Camera::Camera", "score": 2.4, "size": 4, "status": "nonmatching", "symbol": "??0Camera@CgsGraphics@@QAA@XZ"},
@@ -26,6 +28,8 @@
   {"artist": "8271D678", "artist_size": 564, "first_diff": 8, "name": "BrnTraffic::TrafficCarStreamer::GetWheelGraphicsSpec", "score": 16.4, "size": 316, "status": "nonmatching", "symbol": "?GetWheelGraphicsSpec@TrafficCarStreamer@BrnTraffic@@QBAPBUGraphicsSpec@BrnWheel@@I@Z"},
   {"artist": "82727BB0", "artist_size": 2128, "first_diff": 16, "name": "BrnTraffic::TrafficEntityModule::SubmitCoronasForVehicle", "score": 18.1, "size": 1756, "status": "nonmatching", "symbol": "?SubmitCoronasForVehicle@TrafficEntityModule@BrnTraffic@@QAAXPAVBrnSubmissionInterface@BrnCoronaManager@@IVVector3@vpu@math@rw@@1AAVVector4@678@2@Z"},
   {"artist": "82728B08", "artist_size": 11640, "first_diff": 24, "name": "BrnTraffic::TrafficEntityModule::RenderTrafficCar", "score": 5.5, "size": 4296, "status": "nonmatching", "symbol": "?RenderTrafficCar@TrafficEntityModule@BrnTraffic@@QAAXPAVDispatchFrame@CgsGraphics@@IVVector3@vpu@math@rw@@VVector4@678@2PAVBrnBlobbyShadowBuffer@BrnBlobbyShadowManager@@HHHPAUShadowMap@BrnWorld@@W4State@Model@4@22PAH@Z"},
-  {"artist": "8273B280", "artist_size": 744, "first_diff": 8, "name": "BrnTraffic::TrafficEntityModule::GenerateDispatchLists", "score": 30.8, "size": 864, "status": "nonmatching", "symbol": "?GenerateDispatchLists@TrafficEntityModule@BrnTraffic@@QAAXPBVInputBuffer_Dispatch@BrnTrafficIO@2@ABV?$Array@UVehicleRenderInfo@BrnTraffic@@$0EA@@@VVector4@vpu@math@rw@@2VVector3@789@3HHHABUCamera@Camera@BrnDirector@@@Z"}
+  {"artist": "8273B280", "artist_size": 744, "first_diff": 8, "name": "BrnTraffic::TrafficEntityModule::GenerateDispatchLists", "score": 38.4, "size": 776, "status": "nonmatching", "symbol": "?GenerateDispatchLists@TrafficEntityModule@BrnTraffic@@QAAXPBVInputBuffer_Dispatch@BrnTrafficIO@2@ABV?$Array@UVehicleRenderInfo@BrnTraffic@@$0EA@@CgsContainers@@VVector4@vpu@math@rw@@2VVector3@89rw@@3HHHABUCamera@Camera@BrnDirector@@@Z"},
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
