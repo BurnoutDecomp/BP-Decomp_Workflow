@@ -9,12 +9,21 @@ repository for every commit pushed to `dev`.
 | Workflow | Trigger | What it does | Commits to `main` |
 |---|---|---|---|
 | `reconcile-status.yml` | every b5-decomp push to `dev` (the dispatch above); hourly repair (`17 * * * *`); manual, with an optional `b5_sha` that must be the full 40-character SHA | audits that exact b5 commit from the packed console cache (`tools/re/funcaudit.py`, `tools/re/stubaudit.py`), reconciles the work server's ledger, exports the durable ledger | `progress/status.json`, `class_homes.json`, `funcaudit.json`, `stubs.json`, `source_status.json` and the `b5-decomp` gitlink, through `tools/work/publish_snapshot.py`, only while that commit is still the canonical `dev` tip |
-| `build-and-publish.yml` | daily `0 4 * * *` UTC; manual | builds the exe on `windows-2022` from `main` (prebuilt FFmpeg, the XAudio2 redistributable, SDL3 from `vendor/SDL`), uploads the exe bundle to the work server, which merges the game assets and serves the download; runs the instruction-shape audit and the compiled-file inventory | `progress/asmaudit.json`, `progress/linked_files.json`, when `tools/build/build_audit_gate.py` sees new source since the last audited build, or on a manual run |
+| `build-and-publish.yml` | daily `0 4 * * *` UTC, built only when `tools/build/website_build_gate.py` finds an exe input changed since the website's latest build; manual (always builds) | builds the exe on `windows-2022` from `main` (prebuilt FFmpeg, the XAudio2 redistributable, SDL3 from `vendor/SDL`), uploads the exe bundle to the work server, which merges the game assets and serves the download; runs the instruction-shape audit and the compiled-file inventory | `progress/asmaudit.json`, `progress/linked_files.json`, when `tools/build/build_audit_gate.py` sees new source since the last audited build, or on a manual run |
 | `build-candidate.yml` | manual, `b5_commit` = an exact 40-hex b5-decomp commit, plus optional regression-fixture switches | builds and checks that b5 commit on hosted `windows-2022` through `ci/check-candidate-build.ps1`; no publish, no server, no game data | nothing (artifacts kept one day) |
 | `audit-backfill.yml` | manual | re-runs the evidence audits over older b5 commits, sharded | nothing (artifacts only) |
 
 There is deliberately no per-push build: `main` receives frequent automated ledger commits, and a
 build per push would keep restarting.
+
+The scheduled run starts with a small Linux `gate` job. It reads the commit of the website's
+latest build from the work server (`/api/builds`), fetches that commit, and diffs the exe inputs
+against `main`'s head: the `b5-decomp` pointer, `tools/build/`, `ci/` and the workflow file. If
+none changed, the Windows build is skipped, so a quiet `dev` no longer republishes the same exe
+every day (website builds 178–181 were all b5 `d21192332d58`). A gate that cannot decide (server
+down, commit not fetchable) builds anyway. What lives outside this repository is not seen: the
+runner's MSVC, the prebuilt FFmpeg release, the XAudio2 package, and the Drive assets the server
+merges in on each upload. After changing any of those, run the workflow by hand.
 
 ## What CI actually builds
 
