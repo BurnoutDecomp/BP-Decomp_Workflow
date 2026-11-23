@@ -2,6 +2,13 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x82BA7AD8": {
+      "exported_name": "rw::audio::core::XasEnc::`scalar deleting destructor'",
+      "aliases": {
+        "rw::audio::core::XasEnc::`vector deleting destructor'": "vendor/renderware/src/rw/audio/core/XasEnc.cpp"
+      },
+      "evidence": "The same-class COFF weak external selects the verified scalar deleting body."
+    },
     "0x82C31440": {
       "exported_name": "XAUDIO::CBatchAllocator::Release`adjustor{4}' ",
       "aliases": {
@@ -922,6 +929,14 @@
     }
   },
   "functions": {
+    "rw::audio::core::XasEnc::`vector deleting destructor'": {
+      "symbol": "rw::audio::core::XasEnc::`scalar deleting destructor'",
+      "file": "vendor/renderware/src/rw/audio/core/XasEnc.cpp",
+      "const": false,
+      "x360_address": "0x82BA7AD8",
+      "byte_match": true,
+      "evidence": "The sixth XasEnc vtable slot at 0x8217F650 selects this 68-byte body. Both preceding codec entry slots and the shared base slots agree with the XDK vtable. Its vector deleting symbol is a weak external for the emitted scalar body."
+    },
     "rw::audio::core::CMpegBase::`vector deleting destructor'": {
       "symbol": "rw::audio::core::CMpegBase::`scalar deleting destructor'",
       "file": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp",
@@ -7130,6 +7145,53 @@
     }
   },
   "identified_functions": {
+    "0x82C2A468": {
+      "exported_name": null,
+      "symbol": "XGRAPHICS::Resource::`scalar deleting destructor'",
+      "size": 88,
+      "sdk_provider": {
+        "lib": "xgraphics.lib",
+        "member": "obj\\xbox\\vreginfo.obj",
+        "archive_symbol": "??_GResource@XGRAPHICS@@UAAPAXI@Z"
+      },
+      "evidence": "The exact same-member XGRAPHICS::Resource::Resource constructor installs ??_7Resource@XGRAPHICS@@6B@ at 0x82C2986C. Its slot 0x821B1818 points to this full body. The same-class COFF weak external redirects the vector deleting destructor to the scalar definition."
+    },
+    "0x82C2A8B8": {
+      "exported_name": null,
+      "symbol": "XGRAPHICS::LoopIndexedConstSet::`scalar deleting destructor'",
+      "size": 88,
+      "sdk_provider": {
+        "lib": "xgraphics.lib",
+        "member": "obj\\xbox\\vreginfo.obj",
+        "archive_symbol": "??_GLoopIndexedConstSet@XGRAPHICS@@UAAPAXI@Z"
+      },
+      "evidence": "The exact same-member XGRAPHICS::LoopIndexedConstSet::LoopIndexedConstSet constructor installs ??_7LoopIndexedConstSet@XGRAPHICS@@6B@ at 0x82C2A6F8. Its slot 0x821B1988 points to this full body. The same-class COFF weak external redirects the vector deleting destructor to the scalar definition."
+    },
+    "0x82BD3C00": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CPortIndexPair::`scalar deleting destructor'",
+      "size": 88,
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\requestlocateservice.obj",
+        "archive_symbol": "??_GCPortIndexPair@MassiveAdClient3@@UAAPAXI@Z",
+        "archive_data_targets": {
+          "??_7CPortIndexPair@MassiveAdClient3@@6B@": "0x82185A5C"
+        }
+      },
+      "evidence": "The exact same-member CRequestLocateService::Parse has paired relocations at 0x82BD3FB4 and 0x82BD3FC0 to the CPortIndexPair vtable at 0x82185A5C and its literal at 0x82185A60. The table slot points to the complete body and the same-class COFF weak external selects the scalar definition. The body installs this very table at 0x82BD3C1C."
+    },
+    "0x82941070": {
+      "exported_name": null,
+      "symbol": "D3DVolumeTexture_UnlockBox",
+      "size": 92,
+      "sdk_provider": {
+        "lib": "d3d9d.lib",
+        "member": "obj\\xbox\\texture.obj",
+        "archive_symbol": "D3DVolumeTexture_UnlockBox"
+      },
+      "evidence": "The type-4 volume-texture arm of renderengine::Texture::Unlock passes the texture and mip level to this address at 0x82B62CF4. The four other dispatch arms independently match their named D3D unlock functions in the same archive member. D3DVolumeTexture_LockBox and D3DLineTexture_GetLevelDesc bound the full linked extent."
+    },
     "0x82963370": {
       "exported_name": null,
       "symbol": "XAUDIO::CRouterEffect::Release",
