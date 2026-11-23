@@ -367,7 +367,7 @@ class Artist:
         while pending:
             deferred = []
             for start, address, kind, proof in pending:
-                if ("crt_slot" not in proof and "vtable_slots" not in proof
+                if ("crt_slot" not in proof and not {"vtable_slots", "function_table_slots"} & proof.keys()
                         and int(proof["caller"], 16) not in occupied):
                     deferred.append((start, address, kind, proof))
                     continue
@@ -393,12 +393,14 @@ class Artist:
     def _add_witnessed_leaf(self, occupied, start, address, kind, proof):
         size = proof["size"]
         label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
-        if "vtable_slots" in proof:
-            slots = [int(slot, 16) for slot in proof["vtable_slots"]]
+        table_slots = proof.get("function_table_slots", proof.get("vtable_slots"))
+        if table_slots is not None:
+            slots = [int(slot, 16) for slot in table_slots]
             if (start != address or not slots or not all(
                     slot % 4 == 0 and RDATA_START <= slot <= RDATA_END - 4
                     and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
-                raise ValueError(f"{label} {address:08X} has no matching vtable witness")
+                table_kind = "function table" if "function_table_slots" in proof else "vtable"
+                raise ValueError(f"{label} {address:08X} has no matching {table_kind} witness")
         elif "refhi_site" in proof:
             self._check_leaf_address(occupied, start, address, proof)
         elif "crt_slot" not in proof:

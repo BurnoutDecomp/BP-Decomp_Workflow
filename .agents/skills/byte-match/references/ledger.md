@@ -119,6 +119,8 @@ previous summary, dropped on a regression) and `recent`.
   separate matching reader that confirms the symbol's linked address.
   A virtual SDK leaf can use `vtable_slots`. Confirm the table owner and surrounding slots
   against the archive before using the pointer to identify a body.
+  For a named SDK dispatch table, use `function_table_slots`. Check the relocations at those
+  offsets in the owning archive and confirm the table placement with existing exact entries.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.
