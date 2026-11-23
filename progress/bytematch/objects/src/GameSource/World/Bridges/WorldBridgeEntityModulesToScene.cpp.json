@@ -1,19 +1,20 @@
 {
- "blob": "aaf514d15516f593f8fbfa4e06050cba25177087",
- "commit": "c9c3529cc33d56e64e184f15cf058b3e5d9e8a6e",
+ "blob": "190e7d56cd083f7790284ba9230ae586758d04cb",
+ "commit": "15b321543d9f85b72a37fc7c08f2034eb8ebfc0d",
  "compiled": true,
- "measured": "2026-11-23T14:08:39Z",
+ "measured": "2026-11-23T21:05:57Z",
  "schema": 1,
  "source": "src/GameSource/World/Bridges/WorldBridgeEntityModulesToScene.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 4,
+ "unpaired": 5,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
-  {"artist": "827AB300", "artist_size": 136, "first_diff": 44, "name": "WorldModule::BridgeTrafficModuleToSceneModule_Prepare", "score": 91.2, "size": 136, "status": "nonmatching", "symbol": "?BridgeTrafficModuleToSceneModule_Prepare@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_Prepare@BrnTrafficIO@BrnTraffic@@@Z"},
+  {"artist": "827AB300", "artist_size": 136, "calls_wrong": [{"artist": "BrnTraffic::BrnTrafficIO::OutputB", "at": 104, "ours": "BrnTraffic::BrnTrafficIO::OutputBuffer_Prepare::GetSceneInputInterface"}], "data_unchecked": 3, "first_diff": 104, "name": "WorldModule::BridgeTrafficModuleToSceneModule_Prepare", "score": 97.1, "size": 136, "status": "nonmatching", "symbol": "?BridgeTrafficModuleToSceneModule_Prepare@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_Prepare@BrnTrafficIO@BrnTraffic@@@Z"},
   {"artist": "827AB388", "artist_size": 136, "first_diff": 44, "name": "WorldModule::BridgePropModuleToSceneModule_Prepare", "score": 91.2, "size": 136, "status": "nonmatching", "symbol": "?BridgePropModuleToSceneModule_Prepare@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_Prepare@PropEntityIO@BrnWorld@@@Z"},
   {"artist": "827AB410", "artist_size": 128, "first_diff": 36, "name": "WorldModule::BridgePropModuleToPhysicsModule_Prepare", "score": 87.5, "size": 128, "status": "nonmatching", "symbol": "?BridgePropModuleToPhysicsModule_Prepare@WorldModule@@YAXPAXPAVInputBuffer@PhysicsModuleIO@BrnPhysics@@PBVOutputBuffer_Prepare@PropEntityIO@BrnWorld@@@Z"},
   {"artist": "827AB490", "artist_size": 372, "first_diff": 12, "name": "WorldModule::BridgeEntityModulesToSceneModule_PreScene", "score": 65.9, "size": 344, "status": "nonmatching", "symbol": "?BridgeEntityModulesToSceneModule_PreScene@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_PreScene@TriggerEntityModuleIO@BrnWorld@@PBV5BrnTrafficIO@BrnTraffic@@PBU5RaceCarEntityModuleIO@7@PBV5PropEntityIO@7@PBU5WorldEntityIO@7@@Z"},
-  {"artist": "827AB608", "artist_size": 304, "first_diff": 12, "name": "WorldModule::BridgeEntityModulesToScene_PostPhysics", "score": 65.3, "size": 284, "status": "nonmatching", "symbol": "?BridgeEntityModulesToScene_PostPhysics@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@PBU5RaceCarEntityModuleIO@BrnWorld@@PBV5PropEntityIO@9@PBU5WorldEntityIO@9@@Z"}
+  {"artist": "827AB608", "artist_size": 304, "first_diff": 12, "name": "WorldModule::BridgeEntityModulesToScene_PostPhysics", "score": 65.3, "size": 284, "status": "nonmatching", "symbol": "?BridgeEntityModulesToScene_PostPhysics@WorldModule@@YAXPAXPAUInputBuffer_Update@SceneManagerIO@CgsSceneManager@@PBVOutputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@PBU5RaceCarEntityModuleIO@BrnWorld@@PBV5PropEntityIO@9@PBU5WorldEntityIO@9@@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }

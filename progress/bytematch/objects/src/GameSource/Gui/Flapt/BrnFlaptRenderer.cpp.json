@@ -1,13 +1,13 @@
 {
- "blob": "6b4a3a53dbf0e4ff9c93155354da193af53ef7f1",
- "commit": "c9c3529cc33d56e64e184f15cf058b3e5d9e8a6e",
+ "blob": "46251d549f04cf75a0bdff65d91c6f39305dc12c",
+ "commit": "15b321543d9f85b72a37fc7c08f2034eb8ebfc0d",
  "compiled": true,
- "measured": "2026-11-23T14:08:39Z",
+ "measured": "2026-11-23T21:05:57Z",
  "schema": 1,
  "source": "src/GameSource/Gui/Flapt/BrnFlaptRenderer.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 27,
+ "unpaired": 28,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0E00", "artist_size": 32, "first_diff": 0, "name": "rw::math::vpu::Vector4::Vector4", "score": 22.2, "size": 4, "status": "nonmatching", "symbol": "??0Vector4@vpu@math@rw@@QAA@XZ"},
@@ -18,7 +18,8 @@
   {"artist": "82470698", "artist_size": 124, "first_diff": 20, "name": "BrnFlapt::FlaptRenderer::StartRenderingFrame", "score": 51.7, "size": 108, "status": "nonmatching", "symbol": "?StartRenderingFrame@FlaptRenderer@BrnFlapt@@QAAXXZ"},
   {"artist": "82470718", "artist_size": 88, "name": "BrnFlapt::FlaptRenderer::SetShader", "score": 100.0, "size": 88, "status": "exact", "symbol": "?SetShader@FlaptRenderer@BrnFlapt@@QAAXH@Z"},
   {"artist": "82470770", "artist_size": 668, "first_diff": 8, "name": "BrnFlapt::FlaptRenderer::RenderMesh", "score": 37.6, "size": 652, "status": "nonmatching", "symbol": "?RenderMesh@FlaptRenderer@BrnFlapt@@QAAXPBUMesh@2@PBUFlaptFile@2@@Z"},
-  {"artist": "82470A10", "artist_size": 248, "first_diff": 44, "name": "BrnFlapt::FlaptRenderer::RenderTextField", "score": 93.5, "size": 248, "status": "nonmatching", "symbol": "?RenderTextField@FlaptRenderer@BrnFlapt@@QAAXPBUTextObject@CgsGraphics@@@Z"},
-  {"artist": "82472270", "artist_size": 524, "first_diff": 8, "name": "BrnFlapt::FlaptRenderer::Construct", "score": 31.5, "size": 364, "status": "nonmatching", "symbol": "?Construct@FlaptRenderer@BrnFlapt@@QAAXPAUImRendererSet@CgsGui@@PAX1PBX@Z"}
+  {"artist": "82470A10", "artist_size": 248, "calls_wrong": [{"artist": "CgsGraphics::Im2dTransform,33>::Pee", "at": 152, "ours": "CgsContainers::Stack<CgsGraphics::Im2dTransform,33>::Peek"}], "data_unchecked": 4, "first_diff": 152, "name": "BrnFlapt::FlaptRenderer::RenderTextField", "score": 98.4, "size": 248, "status": "nonmatching", "symbol": "?RenderTextField@FlaptRenderer@BrnFlapt@@QAAXPBUTextObject@CgsGraphics@@@Z"},
+  {"artist": "82472270", "artist_size": 524, "first_diff": 8, "name": "BrnFlapt::FlaptRenderer::Construct", "score": 31.5, "size": 364, "status": "nonmatching", "symbol": "?Construct@FlaptRenderer@BrnFlapt@@QAAXPAUImRendererSet@CgsGui@@PAX1PBX@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
