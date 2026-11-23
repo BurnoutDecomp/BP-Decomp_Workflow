@@ -2,6 +2,20 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x82963C80": {
+      "exported_name": "XAUDIO::CXenonRenderer::GetContext`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CXenonRenderer::GetContext": "xaudio.lib:obj\\xbox\\xenonrenderer.obj"
+      },
+      "evidence": "The XDK four-byte this-adjustor matches both instructions at 0x82963C80 and branches to the verified same-class body at 0x829686F0."
+    },
+    "0x82969270": {
+      "exported_name": "XAUDIO::CPCMSourceEffect::GetInfo`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CPCMSourceEffect::GetInfo": "xaudio.lib:obj\\xbox\\pcmsourceeffect.obj"
+      },
+      "evidence": "The XDK four-byte this-adjustor matches both instructions at 0x82969270 and branches to the verified same-class body at 0x829646C0."
+    },
     "0x82BDD2D0": {
       "exported_name": "rw::audio::core::SndPlayer1::GetPpuTicksEvent",
       "evidence": "The XDK CRequestDownloadBinary constructor matches at 0x82BDD280 and installs the table at 0x82187AD0. The deleting destructor and Parse slots agree. The getter slot at 0x82187AD8 points to this body, and the complete eight-byte XDK getter matches with no relocations.",
@@ -5264,6 +5278,29 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x829686F0": {
+      "symbol": "XAUDIO::CXenonRenderer::GetContext",
+      "size": 16,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\xenonrenderer.obj",
+      "archive_symbol": "?GetContext@CXenonRenderer@XAUDIO@@UAAJPAPAX@Z",
+      "caller": "0x82963C80",
+      "call_site": "0x82963C84",
+      "evidence": "The exact XDK GetContext this-adjustor branches here at 0x82963C84. The full 16-byte body matches and has no relocations."
+    },
+    "0x829646C0": {
+      "symbol": "XAUDIO::CPCMSourceEffect::GetInfo",
+      "size": 28,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\pcmsourceeffect.obj",
+      "archive_symbol": "?GetInfo@CPCMSourceEffect@XAUDIO@@UAAJPAUXAUDIOFXINFO@@@Z",
+      "caller": "0x82969270",
+      "call_site": "0x82969274",
+      "evidence": "The exact XDK GetInfo this-adjustor branches here at 0x82969274. The same-class Stop reads the same halfword at 0x82109F10 from its load at 0x8296B870. The archive sourcestream.obj definition supplies its 0x000a value.",
+      "archive_data_targets": {
+        "?m_VolumeFadeFrameCount@CSourceStream@XAUDIO@@1GB": "0x82109F10"
+      }
+    },
     "0x82C71E48": {
       "symbol": "`dynamic initializer for 'g_Schema''",
       "size": 20,
@@ -10497,6 +10534,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x82BC6DC0": {
+      "symbol": "rw::physics::PairSet::ClearAll",
+      "size": 160,
+      "caller": "0x82BC7038",
+      "call_site": "0x82BC705C",
+      "source": "vendor/renderware/src/rw/physics/PairSet.cpp",
+      "tu": "class:rw::physics::PairSet",
+      "evidence": "Initialize tail-branches here at 0x82BC705C after setting the link array, bucket array and their counts. The leaf resets both arrays with the all-ones sentinel, agreeing with the DecFIGS ClearAll method. It ends at the return at 0x82BC6E5C. The source still differs."
+    },
     "0x82B69F58": {
       "symbol": "rw::audio::core::Iir2::ClearBuffer",
       "size": 28,
