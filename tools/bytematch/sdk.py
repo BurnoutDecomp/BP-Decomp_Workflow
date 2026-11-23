@@ -102,6 +102,9 @@ def verify_leaf_providers(artist, lib_dir):
             if ("archive_literals" in proof or "archive_data_targets" in proof) and not _verify_archive_data(
                     artist, address, fn, obj, proof, result):
                 continue
+            if "data_table_slot" in proof and not _verify_data_table_slot(
+                    artist, fn, obj, proof["data_table_slot"]):
+                continue
             if proof.get("archive_aliases"):
                 if result.calls_unverified or result.data_unchecked:
                     continue
@@ -162,27 +165,63 @@ def _verify_archive_data(artist, address, fn, obj, proof, result):
 
 
 def _verify_data_targets(artist, address, fn, obj, expected, result):
+    checked = _linked_data_targets(artist, address, fn, obj, expected.keys())
+    return (checked is not None and len(checked) == result.data_unchecked
+            and {name: address for _, name, address in checked} == expected
+            and all(expected[name] == address for _, name, address in checked))
+
+
+def _linked_data_targets(artist, address, fn, obj, symbols):
+    """Decode the linked address at each zero-addend reference to these symbols."""
     linked = be_words(artist.bytes(address, len(fn.code)))
     ours = be_words(fn.code)
     addends = {rel.offset for rel in fn.relocs if rel.type == REL_PAIR and rel.symbol}
     highs = {}
     checked = []
     for rel in sorted(fn.relocs, key=lambda item: item.offset):
-        if rel.type not in (REL_REFHI, REL_REFLO) or fn.target(obj, rel) not in expected:
+        if rel.type not in (REL_REFHI, REL_REFLO):
+            continue
+        name = fn.target(obj, rel)
+        if name not in symbols:
             continue
         word = linked[rel.offset // 4]
         opcode = word >> 26
         if rel.offset in addends or ours[rel.offset // 4] & 0xFFFF:
-            return False
+            return None
         if rel.type == REL_REFHI and word & 0xFC1F0000 == 0x3C000000:
             highs[rel.symbol] = word
         elif rel.type == REL_REFLO and (opcode == 14 or 32 <= opcode <= 55) and rel.symbol in highs:
             high = highs[rel.symbol]
             base = (word >> 16) & 31
             if base and (high >> 21) & 31 == base:
-                checked.append((fn.target(obj, rel), refhi_lo_address(high, word)))
-    return (len(checked) == result.data_unchecked and dict(checked) == expected
-            and all(expected[name] == target for name, target in checked))
+                checked.append((rel.offset, name, refhi_lo_address(high, word)))
+    return checked
+
+
+def _verify_data_table_slot(artist, fn, obj, proof):
+    """Bind an initialized data table to the image through a same-member code relocation."""
+    symbols = {symbol.name: symbol for symbol in obj.symbols.values() if symbol.section > 0}
+    table, anchor = symbols.get(proof["symbol"]), symbols.get(proof["anchor_symbol"])
+    if table is None or anchor is None or table.section != anchor.section:
+        return False
+    section = obj.sections[table.section]
+    offset = table.value + proof["offset"]
+    if (not section.name.startswith(".data") or offset + 4 > len(section.data)
+            or section.data[offset:offset + 4] != bytes(4)
+            or not any(rel.type == REL_ADDR32 and rel.offset == offset and fn.target(obj, rel) == fn.symbol
+                       for rel in section.relocs)):
+        return False
+    caller = next((body for body in obj.functions() if body.symbol == proof["anchor_caller_symbol"]), None)
+    caller_va = int(proof["anchor_caller"], 16)
+    caller_size = artist.size(caller_va)[0]
+    if (caller is None or len(caller.code) != caller_size
+            or not artist.matches_name(caller_va, demangle(caller.symbol))
+            or compare(caller, obj, artist, caller_va, caller_size, fuzzy=False).status != "exact"):
+        return False
+    expected = int(proof["address"], 16) + anchor.value - table.value
+    site = int(proof["anchor_reflo_site"], 16) - caller_va
+    checked = _linked_data_targets(artist, caller_va, caller, obj, {anchor.name})
+    return checked is not None and (site, anchor.name, expected) in checked
 
 
 def _verify_archive_fragments(artist, address, fn, obj, proof, result):

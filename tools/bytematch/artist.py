@@ -367,7 +367,7 @@ class Artist:
         while pending:
             deferred = []
             for start, address, kind, proof in pending:
-                if ("crt_slot" not in proof and not {"vtable_slots", "function_table_slots"} & proof.keys()
+                if (not {"crt_slot", "vtable_slots", "function_table_slots", "data_table_slot"} & proof.keys()
                         and int(proof["caller"], 16) not in occupied):
                     deferred.append((start, address, kind, proof))
                     continue
@@ -401,6 +401,13 @@ class Artist:
                     and struct.unpack(">I", self.bytes(slot, 4))[0] == address for slot in slots)):
                 table_kind = "function table" if "function_table_slots" in proof else "vtable"
                 raise ValueError(f"{label} {address:08X} has no matching {table_kind} witness")
+        elif "data_table_slot" in proof:
+            table = proof["data_table_slot"]
+            offset = table["offset"]
+            slot = int(table["address"], 16) + offset
+            if (kind != "sdk_leaf" or start != address or offset < 0 or offset % 4 or slot % 4
+                    or self.bytes(slot, 4) != struct.pack(">I", address)):
+                raise ValueError(f"{label} {address:08X} has no matching data table witness")
         elif "refhi_site" in proof:
             self._check_leaf_address(occupied, start, address, proof)
         elif "crt_slot" not in proof:

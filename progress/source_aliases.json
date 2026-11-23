@@ -2,6 +2,27 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x82B94FB0": {
+      "exported_name": "rw::audio::core::CMpegBase::`scalar deleting destructor'",
+      "aliases": {
+        "rw::audio::core::CMpegBase::`vector deleting destructor'": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp"
+      },
+      "evidence": "The native vtable's vector deleting symbol is a COFF weak external whose fallback is the exact scalar deleting body."
+    },
+    "0x82B95020": {
+      "exported_name": "rw::audio::core::CMpegLayer3Base::`scalar deleting destructor'",
+      "aliases": {
+        "rw::audio::core::CMpegLayer3Base::`vector deleting destructor'": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp"
+      },
+      "evidence": "The native vtable's vector deleting symbol is a COFF weak external whose fallback is the exact scalar deleting body."
+    },
+    "0x82B95348": {
+      "exported_name": "rw::audio::core::EALayer3Core::`scalar deleting destructor'",
+      "aliases": {
+        "rw::audio::core::EALayer3Core::`vector deleting destructor'": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp"
+      },
+      "evidence": "The native vtable's vector deleting symbol is a COFF weak external whose fallback is the exact scalar deleting body."
+    },
     "0x82C2B080": {
       "exported_name": "XGRAPHICS::IRZeroary::`vector deleting destructor'",
       "aliases": {
@@ -894,6 +915,30 @@
     }
   },
   "functions": {
+    "rw::audio::core::CMpegBase::`vector deleting destructor'": {
+      "symbol": "rw::audio::core::CMpegBase::`scalar deleting destructor'",
+      "file": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp",
+      "const": false,
+      "x360_address": "0x82B94FB0",
+      "byte_match": true,
+      "evidence": "The first pointer of the ARTIST CMpegBase vtable at 0x8215A8E8 points here. The XDK emits the same deleting thunk from the virtual destructor. Its full body, call targets and vtable references match."
+    },
+    "rw::audio::core::CMpegLayer3Base::`vector deleting destructor'": {
+      "symbol": "rw::audio::core::CMpegLayer3Base::`scalar deleting destructor'",
+      "file": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp",
+      "const": false,
+      "x360_address": "0x82B95020",
+      "byte_match": true,
+      "evidence": "The first pointer of the ARTIST CMpegLayer3Base vtable at 0x8215A944 points here. The XDK emits the same deleting thunk from the virtual destructor. Its full body, call targets and vtable references match."
+    },
+    "rw::audio::core::EALayer3Core::`vector deleting destructor'": {
+      "symbol": "rw::audio::core::EALayer3Core::`scalar deleting destructor'",
+      "file": "vendor/renderware/src/rw/audio/core/EaLayer3Dec.cpp",
+      "const": false,
+      "x360_address": "0x82B95348",
+      "byte_match": true,
+      "evidence": "The first pointer of the ARTIST EALayer3Core vtable at 0x8215A96C points here. The XDK emits the same deleting thunk from the virtual destructor. Its full body, call targets and vtable references match."
+    },
     "Attrib::Node::Node": {
       "symbol": "Attrib::HashMap::Node::Node",
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribhashmap.cpp",
@@ -5698,6 +5743,26 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x82CCB000": {
+      "symbol": "g_ComputeMBSAD16Ds3_C",
+      "size": 172,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\progme_emb.obj",
+      "archive_symbol": "?g_ComputeMBSAD16Ds3_C@@YAGPBGJ0JJKJJJ@Z",
+      "archive_data_targets": {
+        "g_fDsMBSadCnt": "0x8322CC04"
+      },
+      "data_table_slot": {
+        "symbol": "g_ComputeMBSADDsTable",
+        "address": "0x82F705B8",
+        "offset": 12,
+        "anchor_symbol": "g_rgiDiagSearchIdx",
+        "anchor_caller": "0x82CCC350",
+        "anchor_caller_symbol": "?EMBFindDownsampledProgressive1MV@CWMVideoObjectEncoder@@AAAXPAEPAG11PAUtCMVPred@@PAVCWMVMBModeEnc@@JJJJJJJJPAJ441KKK@Z",
+        "anchor_reflo_site": "0x82CCC404"
+      },
+      "evidence": "The exact same-member EMBFindDownsampledProgressive1MV archive body binds the writable data section through g_rgiDiagSearchIdx. The preceding four-entry g_ComputeMBSADDsTable contains three already identified exact sibling addresses and this exact fourth body. Its counter address is independently confirmed by exact g_ComputeMBSAD16Ds1_C."
+    },
     "0x82976A88": {
       "symbol": "XAUDIO::SRC::Native::Process<float,4>",
       "size": 308,
@@ -11409,6 +11474,14 @@
     }
   },
   "native_leaf_functions": {
+    "0x82B6BE18": {
+      "symbol": "rw::audio::core::System::Alloc",
+      "size": 48,
+      "caller": "0x82B8BFF0",
+      "call_site": "0x82B8C028",
+      "source": "vendor/renderware/src/rw/audio/core/System.cpp",
+      "evidence": "AllocateSynth at 0x82B8C028 and AllocateHybrid at 0x82B8C238 call the same allocator. The body selects the supplied allocator or System::mpAllocator and tail-calls its aligned Alloc slot. The RenderWare MAP corroborates the owner and arguments. The next function is System::Free at 0x82B6BE48."
+    },
     "0x82B67F38": {
       "symbol": "rw::audio::core::DelayLine::SetDelay",
       "size": 32,

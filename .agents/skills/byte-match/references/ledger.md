@@ -121,6 +121,9 @@ previous summary, dropped on a regression) and `recent`.
   against the archive before using the pointer to identify a body.
   For a named SDK dispatch table, use `function_table_slots`. Check the relocations at those
   offsets in the owning archive and confirm the table placement with existing exact entries.
+  For a writable dispatch table, use `data_table_slot`. Supply the archive table and byte offset
+  plus an exact function in the same archive member with a relocation to a symbol in the same
+  data section. The verifier checks the table slot and the anchor's linked address.
   A newly attested wrapper can witness another leaf when its own caller is already established.
   If an SDK body wholly contains unnamed compiler fragments, list their address, prior size and
   archive label in `fragments`. The verifier checks their label offsets and each internal branch.

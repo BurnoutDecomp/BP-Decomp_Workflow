@@ -825,6 +825,38 @@ def test_table_leaf_requires_a_matching_function_pointer(kind, slot_field, table
         art_with_slot(leaf)
 
 
+def test_writable_table_leaf_requires_a_same_member_relocation_anchor(monkeypatch, tmp_path):
+    leaf, caller, table = 0x821F1000, 0x821F1010, 0x82F705B8
+    image = FakeArtist([(leaf, "Leaf", [BLR]), (caller, "Caller", [0x3D6082F7, 0x396B05C0, BLR])],
+                       {table + 4: struct.pack(">I", leaf)})
+    pack = dict(image.pack)
+    proof = {
+        "symbol": "Leaf", "size": 4, "lib": "sdk.lib", "member": "member.obj", "archive_symbol": "Leaf",
+        "data_table_slot": {"symbol": "Table", "address": f"0x{table:X}", "offset": 4, "anchor_symbol": "Data",
+                            "anchor_caller": f"0x{caller:X}", "anchor_caller_symbol": "Caller",
+                            "anchor_reflo_site": f"0x{caller + 4:X}"},
+    }
+    pack[f"0x{leaf:08X}"] = {"unlisted": True, "sdk_leaf": proof}
+    art = Artist(pack=pack, read=lambda at, size: b"" if at == PDATA_START else image.bytes(at, size))
+    obj = coff.ObjectFile(make_object([
+        ("Leaf", [BLR], []),
+        ("Caller", [0x3D600000, 0x396B0000, BLR], [(0, "Data", coff.REL_REFHI), (4, "Data", coff.REL_REFLO)]),
+    ]))
+    obj.symbols[2] = coff.Symbol(2, "Data", 8, 3, 0, coff.CLASS_STATIC)
+    obj.symbols[3] = coff.Symbol(3, "Table", 0, 3, 0, coff.CLASS_STATIC)
+    obj.sections[3] = coff.Section(3, ".data", bytes(12), 0, [coff.Reloc(4, 0, coff.REL_ADDR32)])
+    fn = next(fn for fn in obj.functions() if fn.symbol == "Leaf")
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "member.obj", obj, fn, False)])
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+    image.memory[caller + 4] = struct.pack(">I", 0x396B05C4)
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+    image.memory[caller + 4] = struct.pack(">I", 0x396B05C0)
+    obj.sections[3].relocs[0].symbol = 1
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+
 @pytest.mark.parametrize("exported_name", ["Leaf", "sub_821F1020"])
 def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path, exported_name):
     from bytematch import measure_object
