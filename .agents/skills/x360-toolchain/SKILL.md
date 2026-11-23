@@ -71,11 +71,16 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
 - The flags live in `build_x360.py` on the branch (`FLAGS`: `/O2 /Oi /Ob2 /GR- /GS- /EHs-c- /Gy
   /FAcs` and the platform defines) and apply to every object. `/Gy` is what puts each function in
   its own COMDAT section, so objects can be compared function by function. Changing a flag
-  changes every record's toolchain fingerprint: a maintainer decision, after which the work
-  server re-measures every object on the next push (a full `work match refresh --record` does
-  it locally). The server reads `FLAGS` and `INCLUDES` without running the script and measures
+  changes every record's toolchain fingerprint: a maintainer decision, after which
+  `work match refresh --record` re-measures every object (a manual server cross-check run does it
+  remotely). The server reads `FLAGS` and `INCLUDES` without running the script and measures
   nothing while a flag falls outside its compile-only allow-list (`SAFE_FLAG` in
   `tools/bytematch/wine.py`), so a new kind of flag is added there first.
+- `PATH_FLAGS` in the same script adds flags for one library folder that ARTIST compiled with
+  its own settings (today `vendor/dirtysdk/`: `/GF-`, no string pooling; the evidence is in the
+  comment above the table). They follow `FLAGS` on the command line, the server applies the same
+  table, and each such source carries its own toolchain fingerprint. An entry needs ARTIST
+  evidence that the whole folder was built that way, and the maintainer's agreement.
 - Running the branch tool directly (`--source` and `--out` are relative to the native tree,
   whatever the current folder): `python -B b5-x360/tools/build_x360.py --sdk <XDK> --source src/...cpp --out build/x360/probe`.
   In Git Bash set `MSYS_NO_PATHCONV=1`, or an argument such as `/showIncludes` is rewritten into a path.

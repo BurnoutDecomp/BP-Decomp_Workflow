@@ -9,8 +9,9 @@ commits them (.github/workflows/bytematch.yml). A record says what Windows would
 flags fingerprint, and names decoded by the XDK's VC8 runtime (msvcr80.dll), which decodes every
 name the native tree defines exactly as Windows' dbghelp does.
 
-Nothing from the native tree runs. Its tools/build_x360.py is parsed, never imported: FLAGS and
-INCLUDES are read with ast.literal_eval, every flag must be one a compile-only build uses (no
+Nothing from the native tree runs. Its tools/build_x360.py is parsed, never imported: FLAGS,
+INCLUDES and the optional per-folder PATH_FLAGS (extra flags for a library ARTIST compiled with
+its own settings) are read with ast.literal_eval, every flag must be one a compile-only build uses (no
 alternate compiler passes, response files or output paths) and every include folder must lie
 inside the tree. Only the XDK's compiler runs, over source text, and a compile error keeps its
 text only when it points into the tree.
@@ -63,7 +64,7 @@ XDK_FILES = ["bin/win32/" + name for name in (
 XDK_DIRS = ["include/xbox"]
 
 SAFE_FLAG = re.compile(
-    r"/(?:nologo|c|X|TP|TC|Gy|GF|Gm-|GR-?|GS-?|Oi-?|Oy-?|O[12dstx]|Ob[012]|EHs-c-|EHsc|EHa|FAc?s?"
+    r"/(?:nologo|c|X|TP|TC|Gy|GF-?|Gm-|GR-?|GS-?|Oi-?|Oy-?|O[12dstx]|Ob[012]|EHs-c-|EHsc|EHa|FAc?s?"
     r"|W[0-4]|WX-?|w[de]\d{4}|Zc:\w+-?|J|fp:(?:precise|fast|strict)|D\w+(?:=[\w.]*)?|U\w+"
     r"|FI\w[\w./-]*)")
 SAFE_DIR = re.compile(r"[\w.-]+(?:/[\w.-]+)*")
@@ -107,6 +108,32 @@ def build_config(tree: Path):
         raise SystemExit(f"{script}: refusing {bad}: the server compiles only with plain compile-only "
                          "flags and include folders inside the tree (see SAFE_FLAG in tools/bytematch/wine.py)")
     return flags, includes
+
+
+def build_path_flags(tree: Path):
+    """PATH_FLAGS of the tree's tools/build_x360.py: {source folder prefix: [extra flags]}.
+
+    Optional (an older tree has none). Read with ast.literal_eval like FLAGS, and held to the same
+    compile-only allow-list; build_x360.py puts a matching source's extra flags right after FLAGS.
+    """
+    script = tree / "tools" / "build_x360.py"
+    try:
+        table = {}
+        for node in ast.parse(script.read_text(encoding="utf-8")).body:
+            if (isinstance(node, ast.Assign) and len(node.targets) == 1
+                    and isinstance(node.targets[0], ast.Name) and node.targets[0].id == "PATH_FLAGS"):
+                table = ast.literal_eval(node.value)
+    except (OSError, SyntaxError, ValueError, RecursionError) as exc:
+        raise SystemExit(f"cannot read PATH_FLAGS from {script} without running it: {exc}")
+    if not isinstance(table, dict) or not all(
+            isinstance(k, str) and isinstance(v, list) and all(isinstance(f, str) for f in v) for k, v in table.items()):
+        raise SystemExit(f"{script}: PATH_FLAGS is not a {{folder prefix: [flags]}} table")
+    bad = [k for k in table if not k.endswith("/") or not SAFE_DIR.fullmatch(k[:-1]) or ".." in k.split("/")]
+    bad += [f for v in table.values() for f in v if not SAFE_FLAG.fullmatch(f) or ".." in f]
+    if bad:
+        raise SystemExit(f"{script}: refusing {bad}: PATH_FLAGS takes folder prefixes inside the tree and the "
+                         "compile-only flags of SAFE_FLAG in tools/bytematch/wine.py")
+    return table
 
 
 def read_listing(path: Path):
@@ -207,13 +234,16 @@ def generated_includes(tree: Path, image: "Image"):
 class Compiler:
     """The XDK's cl.exe under Wine with the native tree's own flags, one process per source."""
 
-    def __init__(self, tree: Path, xdk: Path, objects: Path, flags, includes, timeout=300):
+    def __init__(self, tree: Path, xdk: Path, objects: Path, flags, includes, timeout=300, path_flags=None):
         self.tree, self.xdk, self.objects, self.timeout = tree, xdk, objects, timeout
         self.compiler = xdk / "bin/win32/cl.exe"
         folders = [tree / name for name in includes if (tree / name).is_dir()]
         folders.append(xdk / "include/xbox")
         # The same arguments tools/build_x360.py passes, in the same order, as Wine paths.
-        self.flags = list(flags) + ["/I" + dos(f) for f in folders] + ["/showIncludes"]
+        self.base_flags = list(flags)
+        self.tail_flags = ["/I" + dos(f) for f in folders] + ["/showIncludes"]
+        self.flags = self.base_flags + self.tail_flags
+        self.path_flags = dict(path_flags or {})
         self.env = dict(os.environ, INCLUDE=dos(xdk / "include/xbox"), LIB="")
         for name in ("CL", "_CL_", "LINK", "_LINK_"):
             self.env.pop(name, None)
@@ -227,6 +257,16 @@ class Compiler:
         quiet = {"stdin": subprocess.DEVNULL, "stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
         subprocess.run(["wineserver", "--persistent"], env=self.env, check=False, **quiet)
         subprocess.run(["wine", "wineboot"], env=self.env, check=False, timeout=600, **quiet)
+
+    def flags_for(self, source: str):
+        """The flags one source compiles with: FLAGS, the extra PATH_FLAGS of every matching
+        folder prefix (in table order, as tools/build_x360.py applies them), then the includes."""
+        extra = [f for prefix, flags in self.path_flags.items() if source.startswith(prefix) for f in flags]
+        return self.base_flags + extra + self.tail_flags
+
+    def current(self, source: str):
+        """The toolchain fingerprint a source's record must carry to be current."""
+        return self.fingerprint([str(self.compiler)] + self.flags_for(source) + ["source"])
 
     def stop(self):
         subprocess.run(["wineserver", "--kill"], env=self.env, check=False, stdin=subprocess.DEVNULL,
@@ -265,8 +305,8 @@ class Compiler:
         obj, listing, log = (self.objects / (key + ext) for ext in (".obj", ".asm", ".log"))
         for stale in (obj, listing):
             stale.unlink(missing_ok=True)
-        command = [dos(self.compiler)] + self.flags + ["/Fo" + dos(obj), "/Fa" + dos(listing),
-                                                       source.replace("/", "\\")]
+        command = [dos(self.compiler)] + self.flags_for(source) + ["/Fo" + dos(obj), "/Fa" + dos(listing),
+                                                                   source.replace("/", "\\")]
         started = time.time()
         stdout, stderr = log.with_suffix(".out"), log.with_suffix(".err")
         try:
@@ -367,9 +407,12 @@ def refresh(args):
     image = Image(Path(args.image))
     generated_includes(tree, image)
     measuring = ledger.measure_fingerprint()
-    compiler = Compiler(tree, xdk, objects, flags, includes, timeout=args.timeout)
+    compiler = Compiler(tree, xdk, objects, flags, includes, timeout=args.timeout,
+                        path_flags=build_path_flags(tree))
     compiler.start()
     bytematch._CL_VERSION[compiler.xdk_dos] = compiler.version()
+    # The tree-wide fingerprint (state.json, result.json); a source under a PATH_FLAGS folder
+    # carries its own (compiler.current), like the Windows records do.
     current = compiler.fingerprint([str(compiler.compiler)] + compiler.flags + ["source"])
 
     to_compile, to_measure = [], []
@@ -378,9 +421,10 @@ def refresh(args):
         inputs = dependencies.state(source, index) if entry else None
         # Compile when an input or the flags changed; a failed compile is retried every run (it
         # is rare). Measure what was compiled, and any record that is not the one last measured.
+        source_current = compiler.current(source)
         compile_ = not (entry is not None and known is not None and known.get("inputs") == inputs
-                        and compiler.fingerprint(entry["command"]) == current and entry["passed"])
-        measure_ = (compile_ or args.all or record is None or record.get("toolchain") != current
+                        and compiler.fingerprint(entry["command"]) == source_current and entry["passed"])
+        measure_ = (compile_ or args.all or record is None or record.get("toolchain") != source_current
                     or bytematch.measurement_identity(record) != known.get("record") or known.get("measure") != measuring)
         if measure_ and not compile_ and not Path(entry["object"]).is_file():
             compile_ = True    # a seeded cache holds no objects: rebuild the one to re-measure

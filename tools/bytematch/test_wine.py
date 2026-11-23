@@ -44,6 +44,49 @@ def test_an_include_folder_outside_the_tree_is_refused(tmp_path, folder):
         wine.build_config(tree_with(tmp_path, ["/nologo"], ["src", folder]))
 
 
+def tree_with_path_flags(tmp_path, table):
+    tree = tree_with(tmp_path, ["/nologo", "/c", "/O2"])
+    script = tree / "tools" / "build_x360.py"
+    script.write_text("PATH_FLAGS = %r\n" % (table,) + script.read_text(encoding="utf-8"), encoding="utf-8")
+    return tree
+
+
+def test_path_flags_are_read_without_running_the_script(tmp_path):
+    assert wine.build_path_flags(tree_with_path_flags(tmp_path, {"vendor/dirtysdk/": ["/GF-"]})) == {
+        "vendor/dirtysdk/": ["/GF-"]}
+
+
+def test_a_tree_without_path_flags_compiles_every_source_with_flags(tmp_path):
+    assert wine.build_path_flags(tree_with(tmp_path, ["/nologo"])) == {}
+
+
+@pytest.mark.parametrize("table", [{"vendor/dirtysdk/": ["/B1evil.dll"]}, {"../outside/": ["/GF-"]},
+                                   {"vendor/dirtysdk": ["/GF-"]}, {"/etc/": ["/GF-"]}, {"vendor/": "/GF-"}])
+def test_a_path_flag_outside_the_compile_only_set_is_refused(tmp_path, table):
+    with pytest.raises(SystemExit, match="refusing|not a"):
+        wine.build_path_flags(tree_with_path_flags(tmp_path, table))
+
+
+def test_a_path_flag_source_keeps_the_windows_fingerprint(tmp_path):
+    """build_x360.py puts a folder's extra flags right after FLAGS; the server must too."""
+    import bytematch
+    flags = ["/nologo", "/c", "/O2"]
+    # The Compiler adds only include folders that exist; this test tree has none, so the
+    # Windows command carries just the XDK's.
+    windows = ([r"D:\XDK\bin\win32\cl.exe"] + flags + ["/GF-", r"/ID:\XDK\include\xbox",
+                                                         "/showIncludes", r"/FoD:\o.obj", r"/FaD:\o.asm",
+                                                         r"vendor\dirtysdk\src\a.cpp"])
+    bytematch._CL_VERSION[r"D:\XDK"] = "14.00.6502"
+    compiler = wine.Compiler(Path("/work/tree"), Path("/work/xdk"), tmp_path, flags, ["src"],
+                             path_flags={"vendor/dirtysdk/": ["/GF-"]})
+    bytematch._CL_VERSION[compiler.xdk_dos] = "14.00.6502"
+    assert compiler.flags_for("src/a.cpp") == compiler.flags
+    assert compiler.flags_for("vendor/dirtysdk/src/a.cpp")[3] == "/GF-"
+    expected = bytematch.toolchain(windows, PureWindowsPath(r"D:\b5-x360"), r"D:\XDK")
+    assert compiler.current("vendor/dirtysdk/src/a.cpp") == expected
+    assert compiler.current("src/a.cpp") != expected
+
+
 def test_native_sources_follow_the_windows_selection():
     entries = {p: ("blob", "0" * 40) for p in (
         "src/a.cpp", "src/b.c", "src/pc/c.cpp", "src/Game/PC/d.cpp", "vendor/zlib/e.c", "tools/f.cpp", "src/g.h")}

@@ -8,7 +8,7 @@ Everything here is produced and read by `tools/bytematch/` (`ledger.py` is the C
 | Path | Who writes it | What it is |
 |---|---|---|
 | `progress/bytematch/universe.json.gz` | a maintainer: `work match universe` | Every ARTIST function: `[address, size, name, category, area, tu]`. Sizes come from the image's `.pdata` (packed unwind records) and, for frameless leaves without one, the export's instruction count minus the trailing zero words (alignment padding, which IDA counts into the function). `category` is `sdk` for bodies the XDK provides (a library function, a CRT save/restore entry point confirmed by name, or a XEX import stub), `unnamed` for functions the ledger has not named, `game` otherwise. `meta.providers` maps each SDK body to its `lib:member` (`import stub`, `module N` for a stub). |
-| `progress/bytematch/objects/<source>.json` | the work server's measurement, committed by CI; or `work match measure ... --record`, `work match refresh --record` | One record per native source, one function per line. |
+| `progress/bytematch/objects/<source>.json` | `work match refresh --record` (or `work match measure ... --record`) by a contributor; or the optional server cross-check, committed by CI | One record per native source, one function per line. |
 | `progress/bytematch/state.json` | the same | `verified_commit`: every record was current at this `x360` commit. |
 | `progress/bytematch.json`, `progress/BYTEMATCH.md` | CI only | The summary: universe x records x the branch head. |
 
@@ -57,26 +57,29 @@ summary keeps the best copy measured against the current ARTIST length.
 
 ## The summary and CI
 
-`.github/workflows/bytematch.yml` measures on b5-decomp's `b5-x360-push` dispatch (every push to
-`x360`, from that branch's `notify-workflow.yml`), when measurement inputs change on `main`,
-and by hand. `.github/workflows/bytematch-publish.yml` uses the same publisher for committed
-records, skipping step 2 and using its own concurrency group. Each group lets the current run
-finish and keeps the newest pending run. A run:
+`.github/workflows/bytematch.yml` runs on b5-decomp's `b5-x360-push` dispatch (every push to
+`x360`, from that branch's `notify-workflow.yml`), nightly, and by hand.
+`.github/workflows/bytematch-publish.yml` calls it with `publish_only` whenever records or ledger
+inputs reach `main`. A push of either kind publishes at once from the committed records; the work
+server measures only on the nightly schedule or a manual run with `measure: true` (an independent
+cross-check of the contributors' records). Measuring and publishing runs use separate concurrency
+groups; each lets the current run finish and keeps the newest pending run. A run:
 
 1. tests the ledger and clones the native branch without file contents;
-2. asks the work server to measure the commit and waits for it
+2. (server cross-check runs only) asks the work server to measure the commit and waits for it
    (`python tools/bytematch/remote.py measure --sha <sha> --b5 <clone>`). The server keeps the
    commit's status for admins at `/admin/bytematch/measure/<sha>`; a commit that stopped being the
    tip before its turn comes is `superseded`, not measured. `remote.py` checks every record field
    by field and writes the ones whose result changed, unless `main` holds one measured at a
    later commit. It only adopts a bundle with the same comparison-input fingerprint as the
-   publishing checkout. When the server returns an older cached bundle, CI can still publish
-   the committed records. Local `work match refresh --record` can produce fresh records;
+   publishing checkout, so a push of byte-match inputs to `main` during a measurement makes that
+   run publish the committed records instead;
 3. resolves the `x360` tip again, builds the summary there with
    `python tools/bytematch/bytematch.py summary --b5 <clone> --head <tip>`, and publishes records,
    deletions, `state.json` and the summary in one commit through
    `tools/work/publish_snapshot.py --kind bytematch --files-from ... --delete-from ...` (only while
-   that commit is still the tip);
+   that commit is still the tip). Records whose source changed since they were measured show as
+   stale until someone records them;
 4. asks the work server to sync. The server keeps one history point per distinct summary.
 
 The server side (the root runner, its container, the XDK subset and ARTIST bytes it mounts, the
@@ -190,5 +193,5 @@ previous summary, dropped on a regression) and `recent`.
   records), run `work match refresh --record` again at the new head, and commit what it writes,
   which is often nothing.
 - To start the ledger over (a new branch base, a new toolchain), delete `progress/bytematch/objects/`
-  and `state.json` in one commit; the next push's server measurement records every source
-  (`work match refresh --record` on a clean pushed head does it locally).
+  and `state.json` in one commit, then run `work match refresh --record` on a clean pushed head,
+  which records every source (a manual server cross-check run does the same remotely).

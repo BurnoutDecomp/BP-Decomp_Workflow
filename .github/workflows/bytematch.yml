@@ -1,26 +1,24 @@
 name: Byte-match summary
 
-# The native Xbox 360 tree is b5-decomp's `x360` branch. Compiling it needs the XDK,
-# which no hosted runner may carry, so the work server measures each native push: it
-# compiles what changed with the XDK under Wine in a sandboxed container
-# (tools/bytematch/wine.py) and this workflow adopts the records whose result changed
-# (tools/bytematch/remote.py). It then joins the records with the branch head, publishes
-# them with progress/bytematch.json + progress/BYTEMATCH.md in one commit, and refreshes
-# the dashboard. The committed-ledger workflow calls this workflow with measurement
-# disabled so local records can publish while the work server is busy.
-# If the server cannot measure, the summary is published from the committed records,
-# and a record whose source changed since it was measured shows as stale.
+# The native Xbox 360 tree is b5-decomp's `x360` branch. Compiling it needs the XDK, which no
+# hosted runner may carry. Contributors measure locally: after pushing x360 they run
+# `work match refresh --record` with the XDK and push the records to main (the default path).
+# This workflow joins the committed records with the x360 head, publishes
+# progress/bytematch.json + progress/BYTEMATCH.md in one commit and refreshes the dashboard:
+#   - every x360 push (repository_dispatch b5-x360-push) publishes at the new head at once,
+#     marking each record whose source changed since it was measured as stale;
+#   - the committed-ledger workflow (bytematch-publish.yml) calls it with publish_only when
+#     records or ledger inputs reach main.
+# The work server's XDK-under-Wine measurement (tools/bytematch/wine.py, adopted by
+# tools/bytematch/remote.py) is optional: it runs only on a manual run (workflow_dispatch,
+# measure: true) or on the nightly schedule, as an independent cross-check of the
+# contributors' records. If the server cannot measure, the summary still publishes.
 
 on:
   repository_dispatch:
     types: [b5-x360-push]
-  push:
-    branches: [main]
-    paths:
-      - "tools/bytematch/**"
-      - "progress/source_aliases.json"
-      - "progress/asmaudit_artist.json.gz"
-      - "progress/unidentified.json"
+  schedule:
+    - cron: "17 3 * * *"   # nightly server cross-check of the x360 tip
   workflow_call:
     inputs:
       publish_only:
@@ -34,10 +32,16 @@ on:
       b5_sha:
         description: "Full 40-character x360 commit (default: the current x360 tip)"
         required: false
+      measure:
+        description: "Measure on the work server (XDK under Wine) before publishing"
+        type: boolean
+        required: false
+        default: true
 
 concurrency:
-  # Keep the latest pending run in each group. Both paths check out current main.
-  group: ${{ inputs.publish_only && 'bytematch-committed-ledger' || 'bytematch-summary' }}
+  # Keep the latest pending run in each group. Publishing runs never wait behind a server
+  # measurement; both kinds check out current main.
+  group: ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.measure && !inputs.publish_only)) && 'bytematch-measure' || 'bytematch-committed-ledger' }}
   cancel-in-progress: false
 
 permissions:
@@ -91,8 +95,10 @@ jobs:
           git clone --filter=blob:none --no-checkout --branch "$B5_BRANCH" "$B5_REPO" b5-x360
           git -C b5-x360 fetch origin "${{ steps.target.outputs.sha }}"
 
+      # Server measurement is opt-in: a manual run (measure: true) or the nightly schedule.
+      # x360 pushes and committed-ledger runs publish the contributors' records directly.
       - name: Measure the commit on the work server
-        if: ${{ !inputs.publish_only }}
+        if: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.measure && !inputs.publish_only) }}
         id: measure
         continue-on-error: true    # without the server, the summary still publishes
         timeout-minutes: 300
