@@ -18,8 +18,11 @@ name: Build & Publish Game
 
 on:
   # No per-push trigger: main gets frequent automated ledger commits, and a build
-  # per push would keep restarting. Build once daily (which also re-pulls the
-  # Drive assets server-side) and on demand via "Run workflow" / `gh workflow run`.
+  # per push would keep restarting. Check once daily, and build only when the gate
+  # job below finds new exe inputs (new b5-decomp dev commits, or a parent build
+  # change) since the build the website serves. Manual runs ("Run workflow" /
+  # `gh workflow run`) always build -- that is also how to make the server re-pull
+  # the Drive assets on a day dev did not move.
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
@@ -33,7 +36,33 @@ permissions:
   contents: write
 
 jobs:
+  # The schedule used to rebuild and republish the same exe whenever dev was quiet
+  # (website builds 178-181 all compiled b5-decomp d21192332d58). This cheap Linux
+  # job diffs the exe inputs -- the b5-decomp pointer, tools/build/, ci/ and this
+  # file -- between the head and the commit of the website's latest build, and the
+  # Windows job runs only when they differ. Manual runs always build.
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      build: ${{ steps.gate.outputs.build }}
+    steps:
+      - name: Checkout (repo only)
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Anything new since the website's latest build?
+        id: gate
+        env:
+          WORK_SERVER: ${{ vars.WORK_SERVER || 'https://decomp.adriwin.fr/' }}
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+        run: python3 tools/build/website_build_gate.py --server "$WORK_SERVER" $FORCE
+
   build:
+    needs: gate
+    # A gate job that broke builds anyway: it must never hold back new work.
+    if: ${{ !cancelled() && (needs.gate.result != 'success' || needs.gate.outputs.build == 'true') }}
     # PINNED, do not put back to windows-latest. On 2026-08-24 `windows-latest`
     # resolved to image `windows-2025-vs2026` -> Visual Studio 18 / MSVC 14.51.36231,
     # a compiler GENERATION newer than the 17.14 / MSVC 14.44 this tree is developed
@@ -58,7 +87,7 @@ jobs:
       # which on a quiet day is the bot's own previous audit commit -- so the bot used to
       # commit every day even when nobody pushed anything. Only commit when someone other
       # than the bot changed the source since the last audited build, or the b5-decomp
-      # pointer moved. The build and upload still run daily; manual runs always commit.
+      # pointer moved. Manual runs always commit.
       - name: Check for new source since the last audited build
         id: gate
         shell: bash
