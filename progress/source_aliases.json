@@ -7658,6 +7658,27 @@
       "x360_address": "0x82C46240",
       "byte_match": true,
       "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/SDKs/Realmc/RealmcCore.cpp equals this 100-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 1 named call target agree."
+    },
+    "BrnPhysics::Vehicle::PhysicalTrafficManager::GetTrafficInterest_0": {
+      "symbol": "BrnPhysics::Vehicle::PhysicalTrafficManager::GetTrafficVehicle",
+      "file": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager.cpp",
+      "x360_address": "0x825B4880",
+      "byte_match": true,
+      "evidence": "IDA's de-duplicated name hides the non-const GetTrafficVehicle accessor: the non-const RecycleTrafficVehicle calls it at 0x8262DA6C on a non-const vehicle pointer (DWARF BrnPhysicalTrafficManager.cpp:3429), and the body is the h:740/741 index asserts followed by the 64-byte element address from this+0x194B4. The native method equals the 128-byte body word for word outside its relocation fields."
+    },
+    "BrnPhysics::Vehicle::PhysicalTrafficManager::": {
+      "symbol": "BrnPhysics::Vehicle::PhysicalTrafficManager::GetTrafficVehicle",
+      "file": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager.cpp",
+      "x360_address": "0x825B4800",
+      "byte_match": true,
+      "evidence": "The truncated export is the const GetTrafficVehicle accessor called by the const IsTrafficVehicleSimple (DWARF BrnPhysicalTrafficManager.h:281); its index asserts carry header lines 729/730. The native const method equals the 128-byte body word for word outside its relocation fields."
+    },
+    "BrnPhysics::Vehicle::Physical": {
+      "symbol": "BrnPhysics::Vehicle::PhysicalTrafficVehicle::GetArticulatedVehicleType",
+      "file": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager.cpp",
+      "x360_address": "0x825B3358",
+      "byte_match": true,
+      "evidence": "The truncated export asserts on the string at 0x82090190 naming meArticulatedVehicleType (BrnPhysicalTrafficVehicle.h:506) and returns the word at +0x24. The native const accessor equals the 96-byte body word for word outside its relocation fields."
     }
   },
   "sdk_entry_groups": {
