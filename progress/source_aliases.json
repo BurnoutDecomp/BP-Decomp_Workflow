@@ -1205,9 +1205,10 @@
     "0x82C1F250": {
       "exported_name": "_ValidateWrite",
       "aliases": {
-        "_ValidateRead": "libcMT.lib:obj\\xbox\\validate.obj"
+        "_ValidateRead": "libcMT.lib:obj\\xbox\\validate.obj",
+        "_ValidateExecute": "libcMT.lib:obj\\xbox\\validate.obj"
       },
-      "evidence": "The complete installed _ValidateRead and _ValidateWrite bodies are byte identical and relocation free. The same CRT FindHandler body relocates its call to _ValidateRead, and ARTIST links it to the exported _ValidateWrite entry."
+      "evidence": "The three installed _ValidateRead, _ValidateWrite, and _ValidateExecute bodies are identical and contain no relocations. The owning FindHandler and __BuildCatchObjectHelper relocations both link to the _ValidateWrite export."
     },
     "0x82980A88": {
       "exported_name": "XCAM::CXCamVideo::`vector deleting destructor'`adjustor{4}' ",
@@ -1222,6 +1223,13 @@
         "XCAM::CStreamEngine::`vector deleting destructor'": "xcam.lib:obj\\xbox\\streamengine.obj"
       },
       "evidence": "The normalized archive spelling omits the THIS-adjustor suffix. The archive thunk, its secondary vtable slot, and the linked tail establish the alias at this extent."
+    },
+    "0x828821F8": {
+      "exported_name": "CgsNetwork::TestConnectionMessage::GetPackedMessageSize",
+      "aliases": {
+        "CgsNetwork::ReliableMessage::GetPackedMessageSize": "src/GameShared/GameClasses/Network/Packeting/Messages/CgsMessageWithPlayerIDs.cpp"
+      },
+      "evidence": "The three overrides share CgsNetworkUnity.cpp in DecFIGS. With the same compilation scope, XDK emits both 20-byte derived bodies as three identical zero stores and the same Message::GetPackedMessageSize tail as ARTIST. The ReadyMessage base delegate at 0x827DE0F8 and the related ReliableMessage subclasses call that entry."
     }
   },
   "xdk_functions": {
@@ -1786,6 +1794,12 @@
         "archive_symbol": "??_ECStreamEngine@XCAM@@W7AAPAXI@Z"
       },
       "evidence": "Exact two-word CObjectRefCount adjustor. The same archive destructor binds its linked vtable, and the sole tail relocation targets the credited same-class deleting destructor."
+    },
+    "sub_82C1B1D0": {
+      "symbol": "_tzset_nolock",
+      "x360_address": "0x82C1B1D0",
+      "byte_match": true,
+      "evidence": "The named CRT __tzset archive branches to this complete same-member body. The code and unwind records agree."
     }
   },
   "functions": {
@@ -9828,6 +9842,347 @@
       "caller": "0x82C16A70",
       "call_site": "0x82C16B34",
       "evidence": "The named getstream prefix independently relocates its direct call to this full disjoint _unlock_file2 body. All 36 bytes and its relocated tail target agree."
+    },
+    "0x82C1C118": {
+      "symbol": "__BuildCatchObjectHelper",
+      "size": 648,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "__BuildCatchObjectHelper",
+      "fragments": [
+        {
+          "address": "0x82C1C394",
+          "size": 12,
+          "archive_symbol": "$LN48"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 636,
+      "exported_name": "__BuildCatchObjectHelper",
+      "caller": "0x82C1C3A8",
+      "call_site": "0x82C1C3F0",
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0009F04"
+        },
+        {
+          "offset": 636,
+          "flags": "0x40000300"
+        }
+      ],
+      "archive_data_targets": {}
+    },
+    "0x82C1A4B0": {
+      "symbol": "_rmtmp",
+      "size": 404,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\rmtmp.obj",
+      "archive_symbol": "_rmtmp",
+      "fragments": [
+        {
+          "address": "0x82C1A590",
+          "size": 36,
+          "archive_symbol": "$LN34"
+        },
+        {
+          "address": "0x82C1A5B4",
+          "size": 144,
+          "archive_symbol": "$LN19"
+        },
+        {
+          "address": "0x82C1A5E0",
+          "size": 100,
+          "archive_symbol": "$LN22"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 224,
+      "exported_name": "_rmtmp",
+      "caller": "0x82C1A4B0",
+      "call_site": "0x82C1A564",
+      "archive_data_targets": {
+        "__piob": "0x832BE408",
+        "_nstream": "0x832BE40C"
+      }
+    },
+    "0x82C12D88": {
+      "symbol": "raise",
+      "size": 772,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\winsig.obj",
+      "archive_symbol": "raise",
+      "fragments": [
+        {
+          "address": "0x82C1302C",
+          "size": 96,
+          "archive_symbol": "$LN35"
+        },
+        {
+          "address": "0x82C1304C",
+          "size": 64,
+          "archive_symbol": "$LN38"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 676,
+      "exported_name": "raise",
+      "caller": "0x82C12D88",
+      "call_site": "0x82C12FB4",
+      "archive_data_targets": {
+        "_Num_FPE": "0x82F9494C",
+        "_First_FPE_Indx": "0x82F94948",
+        "_XcptActTabCount": "0x82F94954",
+        "ctrlc_action": "0x832BADC4"
+      }
+    },
+    "0x82C0E458": {
+      "symbol": "doexit",
+      "size": 352,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\crt0dat.obj",
+      "archive_symbol": "doexit",
+      "fragments": [
+        {
+          "address": "0x82C0E558",
+          "size": 96,
+          "archive_symbol": "$LN14"
+        },
+        {
+          "address": "0x82C0E578",
+          "size": 64,
+          "archive_symbol": "$LN17"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "caller": "0x82C0E5B8",
+      "call_site": "0x82C0E5C0",
+      "archive_data_targets": {
+        "__xp_a": "0x82CD3D48",
+        "_exitflag": "0x832BAD60",
+        "__onexitend": "0x832BE410",
+        "__onexitbegin": "0x832BE414",
+        "__xt_a": "0x82CD3D58",
+        "_C_Exit_Done": "0x832BAD68",
+        "__xt_z": "0x82CD3D5C",
+        "__xp_z": "0x82CD3D54",
+        "_C_Termination_Done": "0x832BAD64"
+      }
+    },
+    "0x82C09018": {
+      "symbol": "_onexit",
+      "size": 260,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\onexit.obj",
+      "archive_symbol": "_onexit",
+      "fragments": [
+        {
+          "address": "0x82C090FC",
+          "size": 32,
+          "archive_symbol": "$LN27"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 228,
+      "exported_name": "_onexit",
+      "caller": "0x82C09018",
+      "call_site": "0x82C090EC",
+      "archive_data_targets": {
+        "__onexitend": "0x832BE410",
+        "__onexitbegin": "0x832BE414"
+      }
+    },
+    "0x82C19168": {
+      "symbol": "_mtinitlocknum",
+      "size": 316,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\mlock.obj",
+      "archive_symbol": "_mtinitlocknum",
+      "fragments": [
+        {
+          "address": "0x82C1925C",
+          "size": 72,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C19278",
+          "size": 44,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 244,
+      "exported_name": "_mtinitlocknum",
+      "caller": "0x82C19168",
+      "call_site": "0x82C1924C",
+      "archive_data_targets": {
+        "_locktable": "0x82F947B0"
+      }
+    },
+    "0x82C1CE58": {
+      "symbol": "__lock_fhandle",
+      "size": 244,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\osfinfo.obj",
+      "archive_symbol": "__lock_fhandle",
+      "fragments": [
+        {
+          "address": "0x82C1CF18",
+          "size": 52,
+          "archive_symbol": "$LN20"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 192,
+      "exported_name": "__lock_fhandle",
+      "caller": "0x82C1CE58",
+      "call_site": "0x82C1CEE4",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300"
+      }
+    },
+    "0x82C19608": {
+      "symbol": "__crtInitCritSecAndSpinCount",
+      "size": 176,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\initcrit.obj",
+      "archive_symbol": "__crtInitCritSecAndSpinCount",
+      "fragments": [
+        {
+          "address": "0x82C19694",
+          "size": 36,
+          "archive_symbol": "$LN19"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 140,
+      "exported_name": "__crtInitCritSecAndSpinCount",
+      "caller": "0x82C1CF80",
+      "call_site": "0x82C1D040",
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0002305"
+        },
+        {
+          "offset": 140,
+          "flags": "0x40000900"
+        }
+      ],
+      "archive_data_targets": {
+        "__crtInitCritSecNoSpinCount": "0x82C195D8",
+        "__pfnInitCritSecAndSpinCount": "0x832BAF9C"
+      }
+    },
+    "0x82C19370": {
+      "symbol": "_inconsistency",
+      "size": 80,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\hooks.obj",
+      "archive_symbol": "?_inconsistency@@YAXXZ",
+      "fragments": [
+        {
+          "address": "0x82C193B4",
+          "size": 12,
+          "archive_symbol": "$LN19"
+        }
+      ],
+      "evidence": "The installed matching CRT body has an independently checked caller, exact attached unwind records, and no overlapping independently owned code in its recovered extent. All addresses and alternate entries agree.",
+      "previous_size": 68,
+      "exported_name": "_inconsistency",
+      "caller": "0x82C1BD78",
+      "call_site": "0x82C1BE28",
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0001105"
+        },
+        {
+          "offset": 68,
+          "flags": "0x40000300"
+        }
+      ],
+      "archive_data_targets": {
+        "?__pInconsistency@@3P6AXXZA": "0x832BAF98"
+      }
+    },
+    "0x82C1B1D0": {
+      "symbol": "_tzset_nolock",
+      "size": 452,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\tzset.obj",
+      "archive_symbol": "_tzset_nolock",
+      "archive_data_targets": {
+        "tzinfo": "0x832BAFA8",
+        "dststart": "0x82F94B68"
+      },
+      "previous_size": 416,
+      "exported_name": "_tzset_nolock",
+      "caller": "0x82C1B1D0",
+      "call_site": "0x82C1B364",
+      "fragments": [
+        {
+          "address": "0x82C1B370",
+          "size": 36,
+          "archive_symbol": "$LN13"
+        }
+      ],
+      "evidence": "The complete same-member CRT body and both unwind records agree. A checked branch in the original IDA prefix reaches the archived local fragment. All linked globals and external calls agree."
+    },
+    "0x82C1B898": {
+      "symbol": "__tzset",
+      "size": 152,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\tzset.obj",
+      "archive_symbol": "__tzset",
+      "archive_data_targets": {
+        "?first_time@?1??__tzset@@9@9": "0x832BB05C"
+      },
+      "previous_size": 116,
+      "exported_name": "__tzset",
+      "caller": "0x82C1B898",
+      "call_site": "0x82C1B8F0",
+      "fragments": [
+        {
+          "address": "0x82C1B90C",
+          "size": 36,
+          "archive_symbol": "$LN10"
+        }
+      ],
+      "evidence": "The complete same-member CRT body and both unwind records agree. A checked branch in the original IDA prefix reaches the archived local fragment. All linked globals and external calls agree."
+    },
+    "0x82C1B938": {
+      "symbol": "_isindst",
+      "size": 128,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\tzset.obj",
+      "archive_symbol": "_isindst",
+      "archive_data_targets": {},
+      "previous_size": 92,
+      "exported_name": "_isindst",
+      "caller": "0x82C1B938",
+      "call_site": "0x82C1B974",
+      "fragments": [
+        {
+          "address": "0x82C1B994",
+          "size": 36,
+          "archive_symbol": "$LN8"
+        }
+      ],
+      "evidence": "The complete same-member CRT body and both unwind records agree. A checked branch in the original IDA prefix reaches the archived local fragment. All linked globals and external calls agree."
+    },
+    "0x82C1BAF0": {
+      "symbol": "__daylight",
+      "size": 12,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\timeset.obj",
+      "archive_symbol": "__daylight",
+      "archive_data_targets": {
+        "_daylight": "0x82F94B84"
+      },
+      "caller": "0x82C1B1D0",
+      "call_site": "0x82C1B348",
+      "evidence": "The owning CRT tzset prefix has this exact branch relocation to the complete disjoint daylight accessor."
     }
   },
   "identified_functions": {
@@ -14634,6 +14989,247 @@
       "symbol": "CgsNetwork::Message::PackOrUnpack",
       "size": 500,
       "evidence": "Uses the Message lifecycle and signed full-range low/high words, and calls CgsIDConvertToString in both packing directions. The assertion at CgsMessage.cpp:1214 names Message::PackOrUnpack. The DecFIGS CgsID pointer overload and typed ActiveFburn challenge-ID caller agree."
+    },
+    "0x82C14798": {
+      "exported_name": null,
+      "symbol": "_msize",
+      "size": 112,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\msize.obj",
+        "archive_symbol": "_msize"
+      },
+      "evidence": "The exact installed _onexit branch identifies the complete already credited _msize body. Archive bytes and unwind records agree."
+    },
+    "0x82C1B620": {
+      "exported_name": "sub_82C1B620",
+      "symbol": "_isindst_nolock",
+      "size": 624,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\tzset.obj",
+        "archive_symbol": "_isindst_nolock",
+        "archive_data_targets": {
+          "dststart": "0x82F94B68",
+          "tzinfo": "0x832BAFA8"
+        }
+      },
+      "evidence": "The complete previously credited archive body and its owning same-member call agree under this recovered identity."
+    },
+    "0x82C1B398": {
+      "exported_name": "sub_82C1B398",
+      "symbol": "cvtdate",
+      "size": 648,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\tzset.obj",
+        "archive_symbol": "cvtdate",
+        "archive_data_targets": {
+          "_days": "0x82F94B34",
+          "_lpdays": "0x82F94B00",
+          "dststart": "0x82F94B68"
+        }
+      },
+      "evidence": "The complete previously credited archive body and its owning same-member call agree under this recovered identity."
+    },
+    "0x8222E478": {
+      "exported_name": "sub_8222E478",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourDebugOrbitPlayer>::Release",
+      "size": 88,
+      "evidence": "ARTIST 0x8226B5F4 in BrnDirector::Arbitrator::Update binds the typed native receiver. 12 unrelocated setup instructions and 1 result instructions around the call agree, as does the whole callee."
+    },
+    "0x823F5208": {
+      "exported_name": "sub_823F5208",
+      "symbol": "operator++",
+      "size": 92,
+      "evidence": "ARTIST 0x823FBD64 in BrnRendererModule::Release binds the typed native receiver. 5 unrelocated setup instructions and 2 result instructions around the call agree, as does the whole callee."
+    },
+    "0x8250B9E0": {
+      "exported_name": "sub_8250B9E0",
+      "symbol": "BrnGui::GuiEventRoadRuleEnter::Construct",
+      "size": 92,
+      "evidence": "The existing GuiEventRoadRuleUpcomingRoads owner source records the original action constructor. The console body and all typed calls agree."
+    },
+    "0x8254DAC8": {
+      "exported_name": "sub_8254DAC8",
+      "symbol": "CgsModule::BaseEventQueue<BrnTraffic::BrnTrafficIO::ActivateHullEvent>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 0x8255EE30 in BrnNetwork::TrafficManager::UpdateHullSync binds the typed native receiver. 2 unrelocated setup instructions and 7 result instructions around the call agree, as does the whole callee."
+    },
+    "0x8259D258": {
+      "exported_name": "sub_8259D258",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddPotentialContact>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 0x825A13BC in BrnPhysics::PhysicsModule::ValidateSimulationContacts binds the typed native receiver. 6 unrelocated setup instructions and 11 result instructions around the call agree, as does the whole callee."
+    },
+    "0x825BB9F0": {
+      "exported_name": "sub_825BB9F0",
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::ValidateRaceCarEvent>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x825DB118 in BrnPhysics::Deformation::DeformationManager::ProcessValidateDeformationModelEvents binds the typed native receiver. 4 unrelocated setup instructions and 5 result instructions around the call agree, as does the whole callee."
+    },
+    "0x825BBE90": {
+      "exported_name": "sub_825BBE90",
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::RemoveTrafficEvent>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x8262D174 in BrnPhysics::Vehicle::PhysicalTrafficManager::ProcessRemoveEvents binds the typed native receiver. 9 unrelocated setup instructions and 12 result instructions around the call agree, as does the whole callee."
+    },
+    "0x82663580": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsResource::ResourceIO::InputBuffer>",
+      "size": 212,
+      "evidence": "The complete XDK and ARTIST bodies agree. The original typed child calls independently attest the specialization through CgsResource::ResourceIO::InputBuffer::Destruct at 0x828EC940."
+    },
+    "0x82675CD0": {
+      "exported_name": "sub_82675CD0",
+      "symbol": "BrnWorld::EnvironmentSettings::ConsumeFieldValue",
+      "size": 120,
+      "evidence": "The EnvironmentSettings owner labels the original two-float overload, and the console consumes the exact %f;%f format with the two destination fields."
+    },
+    "0x82675EE8": {
+      "exported_name": "sub_82675EE8",
+      "symbol": "BrnWorld::EnvironmentSettings::ConsumeFieldValue",
+      "size": 112,
+      "evidence": "The EnvironmentSettings owner labels the original string overload. The console consumes the raw %s format in the same typed call sequence."
+    },
+    "0x826A7070": {
+      "exported_name": "sub_826A7070",
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::Content>::operator=",
+      "size": 104,
+      "evidence": "ARTIST 0x826AD558 in CgsSound::Playback::Factory::CreateContent binds the typed native receiver. 6 unrelocated setup instructions and 7 result instructions around the call agree, as does the whole callee."
+    },
+    "0x826EB1D0": {
+      "exported_name": null,
+      "symbol": "BrnResource::GameDataIO::RequestInterface<4096>::UnloadBundle",
+      "size": 108,
+      "evidence": "ARTIST 0x827006B0 in BrnSound::Logic::ResourceRegistrar::QueuedResource::Release binds the typed native receiver. 8 unrelocated setup instructions and 2 result instructions around the call agree, as does the whole callee."
+    },
+    "0x82769950": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<BrnAI::RouteMapModuleIO::ExtrapolatedRouteRequest>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x82794060 in BrnAI::RouteMapModule::Update binds the typed native receiver. 6 unrelocated setup instructions and 1 result instructions around the call agree, as does the whole callee."
+    },
+    "0x827B4FE0": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::AddCrashingTrafficEvent>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x827D0FE0 in BrnWorld::CrashModule::HandleNewCrashingTraffic binds the typed native receiver. 7 unrelocated setup instructions and 5 result instructions around the call agree, as does the whole callee."
+    },
+    "0x827B8CF0": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::PropEntityIO::InputBuffer_PostScene>",
+      "size": 208,
+      "evidence": "The complete XDK and ARTIST bodies agree. The original typed child calls independently attest the specialization through BrnWorld::PropEntityIO::InputBuffer_PostScene::Construct at 0x822EFC40."
+    },
+    "0x828019E8": {
+      "exported_name": null,
+      "symbol": "CgsGraphics::TextRenderer::RenderString",
+      "size": 80,
+      "evidence": "The existing TextRenderer source records the real Buffered3D renderer and TextObject argument ABI at this original address. The complete ARTIST body and relocations agree."
+    },
+    "0x8280DE08": {
+      "exported_name": null,
+      "symbol": "Attrib::Instance::operator=",
+      "size": 80,
+      "evidence": "The owner source explicitly records this address for Attrib::Instance::operator=. The console and XDK agree on the whole copy-assignment and its typed calls."
+    },
+    "0x82814600": {
+      "exported_name": "sub_82814600",
+      "symbol": "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitive",
+      "size": 116,
+      "evidence": "The existing PrimitivePairListBuilder source records this overloaded leaf in the original capsule dispatch. Every instruction and direct call of the emitted capsule overload agrees."
+    },
+    "0x82852CF8": {
+      "exported_name": null,
+      "symbol": "CgsGui::ModelModule::AddGuiEventObserver",
+      "size": 88,
+      "evidence": "The ModelModule owner source records the original event-observer registration, including the RegisterForEvent result being discarded. The ARTIST body, typed calls and both assertion strings agree."
+    },
+    "0x8285A758": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<4096,16>::Append<18432,16>",
+      "size": 412,
+      "evidence": "The complete XDK and ARTIST bodies agree. The original typed child calls independently attest the specialization through CgsModule::VariableEventQueue<18432,16>::GetFirstWritePointer at 0x823609C8, CgsModule::VariableEventQueue<4096,16>::OutputQueueContents at 0x8228EAC0, CgsModule::VariableEventQueue<18432,16>::OutputQueueContents at 0x82374A40."
+    },
+    "0x8287EC48": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::NetworkTextureDXTCompress::Release",
+      "size": 116,
+      "evidence": "ARTIST 0x8258E0DC in BrnNetwork::BrnNetworkManager::Release binds the typed native receiver. 7 unrelocated setup instructions and 7 result instructions around the call agree, as does the whole callee."
+    },
+    "0x8289DED0": {
+      "exported_name": "sub_8289DED0",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateDriveDynamics>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 0x8289FDB0 in CgsPhysics::PhysicsSimulationModule::ProcessUpdateDriveDynamicsQueue binds the typed native receiver. 2 unrelocated setup instructions and 12 result instructions around the call agree, as does the whole callee."
+    },
+    "0x828A6848": {
+      "exported_name": null,
+      "symbol": "CgsModule::EventQueue<CgsPhysics::PhysicsSimulationIO::OutUpdateRigidBody,200>::Construct",
+      "size": 112,
+      "evidence": "ARTIST 0x828A7308 in CgsPhysics::PhysicsSimulationIO::OutputBuffer::Construct binds the typed native receiver. 8 unrelocated setup instructions and 2 result instructions around the call agree, as does the whole callee."
+    },
+    "0x828C55E0": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::SpatialPartitionIO::OutputBuffer>",
+      "size": 216,
+      "evidence": "The complete XDK and ARTIST bodies agree. The original typed child calls independently attest the specialization through CgsSceneManager::SpatialPartitionIO::OutputBuffer::Destruct at 0x828BB088."
+    },
+    "0x828CC868": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsSceneManager::OverlapGenerationIO::InputBuffer>",
+      "size": 212,
+      "evidence": "The complete XDK and ARTIST bodies agree. The original typed child calls independently attest the specialization through CgsSceneManager::OverlapGenerationIO::InputBuffer::Construct at 0x828CB918."
+    },
+    "0x82AD85D8": {
+      "exported_name": "Burnout_X360_Artist_0040_0",
+      "symbol": "EAStringC::operator==",
+      "size": 116,
+      "evidence": "ARTIST 0x82ADC1F0 in EAStringC::Equal agrees with the typed COFF call in its otherwise exact XDK body. The complete original callee and its relocations agree."
+    },
+    "0x82B42628": {
+      "exported_name": null,
+      "symbol": "EA::Thread::GetThreadTime",
+      "size": 36,
+      "evidence": "The EAThread owner declaration and body identify the biased millisecond clock. The console has the same GetTickCount call and unsigned +10000 calculation."
+    },
+    "0x82B51A08": {
+      "exported_name": "sub_82B51A08",
+      "symbol": "RealmcIface::LoadEntryInfo::LoadEntryInfo",
+      "size": 112,
+      "evidence": "ARTIST 0x82855AE0 in CgsGui::SaveLoadSystem::BootupStart binds the typed native receiver. 12 unrelocated setup instructions and 0 result instructions around the call agree, as does the whole callee."
+    },
+    "0x82B590E0": {
+      "exported_name": null,
+      "symbol": "DeleteQuantizerTables",
+      "size": 132,
+      "evidence": "ARTIST 0x82B59230 in VP6_DeleteQuantizer agrees with the typed COFF call in its otherwise exact XDK body. The complete original callee and its relocations agree."
+    },
+    "0x82B59168": {
+      "exported_name": "sub_82B59168",
+      "symbol": "AllocateQuantizerTables",
+      "size": 168,
+      "evidence": "ARTIST 0x82B5929C in VP6_CreateQuantizer agrees with the typed COFF call in its otherwise exact XDK body. The complete original callee and its relocations agree."
+    },
+    "0x82B72060": {
+      "exported_name": null,
+      "symbol": "Snd9::AemsStandardSamplePlayer::Pause",
+      "size": 120,
+      "evidence": "The AemsStandardSamplePlayer owner source pins this Pause address. The console and native bodies agree on the entire pause/resume dispatch and direct call targets."
+    },
+    "0x828800F0": {
+      "exported_name": "sub_828800F0",
+      "symbol": "CgsNetwork::SmartBitStream::GetQuantisedInt",
+      "size": 112,
+      "evidence": "ARTIST Message::PackOrUnpack(int32_t*,int32_t,int32_t) 0x82881440 supplies its SmartBitStream at this+8 and two signed bounds. The return-value overload declared in DecFIGS uses the same BitStream::GetBits and IntQuantiser::UnPack calls. The complete 112 native bytes and both calls agree."
+    },
+    "0x82B59630": {
+      "exported_name": null,
+      "symbol": "FilterBlock2dBil_SecondPass_8",
+      "size": 116,
+      "tu": "src/SDKs/EATech/include/Common/vp6/vp6_util.cpp",
+      "evidence": "The X360 PDB vputil.c.obj names this second pass and its seven parameters. The unchanged XDK scalar implementation exactly matches the 116-byte ARTIST unwind extent at 0x82B59630, including both register helper targets. FilterBlock2dBil_8 calls it at 0x82B596F4."
     }
   },
   "native_leaf_functions": {
