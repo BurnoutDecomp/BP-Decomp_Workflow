@@ -570,7 +570,12 @@
         "CgsNetwork::ServerInterfacePlayerInfo::Suspend": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfacePlayerInfo.cpp",
         "CgsNetwork::ServerInterfaceServerInfo::Resume": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceServerInfo.cpp",
         "CgsNetwork::ServerInterfaceServerInfo::Suspend": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceServerInfo.cpp",
-        "CgsSystem::FrameRateManager::Destruct": "src/GameShared/GameClasses/System/Timer/CgsFrameRate.cpp"
+        "CgsSystem::FrameRateManager::Destruct": "src/GameShared/GameClasses/System/Timer/CgsFrameRate.cpp",
+        "CgsGraphics::PerformanceTracker::Startup": "src/GameShared/GameClasses/Graphics/CgsPerformanceTracker.cpp",
+        "CgsGraphics::PerformanceTracker::Shutdown": "src/GameShared/GameClasses/Graphics/CgsPerformanceTracker.cpp",
+        "CgsGraphics::PerformanceTracker::BeginFrame": "src/GameShared/GameClasses/Graphics/CgsPerformanceTracker.cpp",
+        "CgsGraphics::PerformanceTracker::EndFrame": "src/GameShared/GameClasses/Graphics/CgsPerformanceTracker.cpp",
+        "ShaderConstantTable::EndFrame": "src/GameShared/GameClasses/Graphics/CgsShaderConstants.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -594,7 +599,12 @@
         "CgsNetwork::ServerInterfacePlayerInfo::Suspend": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82582D60 lands here.",
         "CgsNetwork::ServerInterfaceServerInfo::Resume": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82582E0C lands here.",
         "CgsNetwork::ServerInterfaceServerInfo::Suspend": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82582D78 lands here.",
-        "CgsSystem::FrameRateManager::Destruct": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x823BC894 lands here."
+        "CgsSystem::FrameRateManager::Destruct": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x823BC894 lands here.",
+        "CgsGraphics::PerformanceTracker::Startup": "The compiled static is a lone blr with no relocations, and the aligned native branch at 0x8240A7A0 (BrnRendererModule::Construct) lands here. The DecFIGS PS3 Construct calls the same position through stub 0x12250, which names ._ZN11CgsGraphics18PerformanceTracker7StartupEv, a lone blr at 0xAAF2A8.",
+        "CgsGraphics::PerformanceTracker::Shutdown": "The compiled static is a lone blr with no relocations, and the aligned native branch at 0x82408AE4 (BrnRendererModule::Destruct) lands here. The DecFIGS PS3 Destruct calls the same position through stub 0x10820, which names ._ZN11CgsGraphics18PerformanceTracker8ShutdownEv, a lone blr at 0xAAF2AC.",
+        "CgsGraphics::PerformanceTracker::BeginFrame": "The compiled static is a lone blr with no relocations, and the native branch at 0x823FC2A4 (BrnRendererModule::StartOfFrame) lands here. The DecFIGS PS3 StartOfFrame calls the same position through stub 0x11720, which names ._ZN11CgsGraphics18PerformanceTracker10BeginFrameEv, a lone blr at 0xAAF2CC.",
+        "CgsGraphics::PerformanceTracker::EndFrame": "The compiled static is a lone blr with no relocations, and the native branch at 0x823FC6B0 (BrnRendererModule::SwapBuffers) lands here. The DecFIGS PS3 SwapBuffers calls the same position through stub 0x11E50, which names ._ZN11CgsGraphics18PerformanceTracker8EndFrameEv, a lone blr at 0xAAF2D0.",
+        "ShaderConstantTable::EndFrame": "The compiled method is a lone blr with no relocations, and the native branch at 0x823FC6AC (BrnRendererModule::SwapBuffers, r3 = &mShaderConstantTable) lands here. The DecFIGS PS3 SwapBuffers calls the same position through stub 0x10D00, which names ._ZN19ShaderConstantTable8EndFrameEv, a lone blr at 0xAB022C."
       }
     },
     "0x829646E0": {
@@ -7480,6 +7490,174 @@
       "size": 164,
       "tu": "src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp",
       "evidence": "RemapFilename at 0x828E94B4 calls the existing FindEntry on the patch map at +0x888. The ARTIST divide and key-index comparisons are unsigned. The XDK instance with that key type and the two counted searches reproduces all 164 bytes, without relocations."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,10>::C": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,10>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/EventQueue_InEventLineTestFastDoubleSided_10.cpp",
+      "x360_address": "0x8222DAE8",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,10>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/EventQueue_InEventLineTestFastDoubleSided_10.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "BrnPhysics::Veh": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::PhysicalTrafficState>::GetEvent",
+      "file": "GameSource/Effects/BrnEffectsGlassManager.cpp",
+      "x360_address": "0x8227BE58",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<BrnPhysics::Vehicle::PhysicalTrafficState>::GetEvent. The native body compiled from src/GameSource/Effects/BrnEffectsGlassManager.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
+    },
+    "CgsSceneManager::EntityId>::operator[": {
+      "symbol": "CgsContainers::RingBuffer<CgsSceneManager::EntityId>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/RingBuffer_EntityId.cpp",
+      "x360_address": "0x822AD4E8",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsContainers::RingBuffer<CgsSceneManager::EntityId>::operator[]. The native body compiled from src/GameShared/GameClasses/SceneManager/RingBuffer_EntityId.cpp equals this 136-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform,102": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform,1024>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x822E1D10",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform,1024>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventAddVolumeInstanceForCaching,64": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstanceForCaching,64>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x822E23A0",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstanceForCaching,64>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition,2": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition,298>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/CacheManager/EventQueue_InEventUpdateCachedPosition_298_Construct.cpp",
+      "x360_address": "0x822E2560",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition,298>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/CacheManager/EventQueue_InEventUpdateCachedPosition_298_Construct.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsSceneManager::TriangleCacheManagerIO::InEventRemoveFromCache,298>::": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventRemoveFromCache,298>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/CacheManager/EventQueue_InEventRemoveFromCache_298_Construct.cpp",
+      "x360_address": "0x822E25D0",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventRemoveFromCache,298>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/CacheManager/EventQueue_InEventRemoveFromCache_298_Construct.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>::": {
+      "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>::Construct",
+      "file": "GameShared/GameClasses/SceneManager/EventQueue_OutEventLineTestNearestResult_2000.cpp",
+      "x360_address": "0x822E2A30",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,2000>::Construct. The native body compiled from src/GameShared/GameClasses/SceneManager/EventQueue_OutEventLineTestNearestResult_2000.cpp equals this 112-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "BrnNetwork::RoadRulesD": {
+      "symbol": "CgsModule::BaseEventQueue<BrnNetwork::RoadRulesDownloadEvent>::GetEvent",
+      "file": "GameSource/GameState/StreetData/BrnGameStateStreetManager_wB_07.cpp",
+      "x360_address": "0x82318840",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<BrnNetwork::RoadRulesDownloadEvent>::GetEvent. The native body compiled from src/GameSource/GameState/StreetData/BrnGameStateStreetManager_wB_07.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
+    },
+    "CgsInput::InputIO::PlayJ": {
+      "symbol": "CgsModule::BaseEventQueue<CgsInput::InputIO::PlayJoltEffectEvent>::GetEvent",
+      "file": "GameShared/GameClasses/System/Input/EventQueue_PlayJoltEffectEvent_4.cpp",
+      "x360_address": "0x8235CF50",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<CgsInput::InputIO::PlayJoltEffectEvent>::GetEvent. The native body compiled from src/GameShared/GameClasses/System/Input/EventQueue_PlayJoltEffectEvent_4.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::InG": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusInterface::operator=",
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "x360_address": "0x8236B020",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name BrnNetwork::BrnNetworkModuleIO::InGamePlayerStatusInterface::operator=. The native body compiled from src/GameSource/Network/BrnNetworkModuleIO.cpp equals this 128-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "BrnAI::RouteMapMod": {
+      "symbol": "CgsModule::BaseEventQueue<BrnAI::RouteMapModuleIO::RouteResponse>::GetEvent",
+      "file": "GameSource/Game/GameBridgeWorldToGui.cpp",
+      "x360_address": "0x823AC158",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<BrnAI::RouteMapModuleIO::RouteResponse>::GetEvent. The native body compiled from src/GameSource/Game/GameBridgeWorldToGui.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>:": {
+      "symbol": "FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Push",
+      "file": "GameShared/GameClasses/Containers/CgsFifoQueueNetworkOutRecvRoadRulesPBEvent14.cpp",
+      "x360_address": "0x8254DFB8",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Push. The native body compiled from src/GameShared/GameClasses/Containers/CgsFifoQueueNetworkOutRecvRoadRulesPBEvent14.cpp equals this 120-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size."
+    },
+    "CgsSound::TestBed::Allocator::`vector deleting destructor'": {
+      "symbol": "CgsSound::TestBed::Allocator::`scalar deleting destructor'",
+      "file": "GameShared/GameClasses/Sound/CgsTestBedAllocator.cpp",
+      "x360_address": "0x82682690",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/GameShared/GameClasses/Sound/CgsTestBedAllocator.cpp equals this 108-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 2 named call targets agree."
+    },
+    "BrnAI::ResetOnTra": {
+      "symbol": "CgsContainers::RingBuffer<BrnAI::ResetOnTrackDebugComponent::ResetEntry>::operator[]",
+      "file": "GameSource/World/AI/ResetOnTrack/BrnResetOnTrackDebugComponent.cpp",
+      "x360_address": "0x82769CD0",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsContainers::RingBuffer<BrnAI::ResetOnTrackDebugComponent::ResetEntry>::operator[]. The native body compiled from src/GameSource/World/AI/ResetOnTrack/BrnResetOnTrackDebugComponent.cpp equals this 144-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "BrnAI::ResetOnTrac": {
+      "symbol": "CgsContainers::RingBuffer<BrnAI::ResetOnTrackManager::RecentResetEntry>::operator[]",
+      "file": "GameSource/World/AI/ResetOnTrack/BrnResetOnTrackManager.cpp",
+      "x360_address": "0x8276A1B0",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsContainers::RingBuffer<BrnAI::ResetOnTrackManager::RecentResetEntry>::operator[]. The native body compiled from src/GameSource/World/AI/ResetOnTrack/BrnResetOnTrackManager.cpp equals this 136-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent>:": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent>::Append",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BaseEventQueue_CreateRivalInTrafficSystemEvent_Append.cpp",
+      "x360_address": "0x827A7AB8",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<BrnWorld::RaceCarEntityModuleIO::CreateRivalInTrafficSystemEvent>::Append. The native body compiled from src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BaseEventQueue_CreateRivalInTrafficSystemEvent_Append.cpp equals this 236-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 12 named call targets agree."
+    },
+    "*,13>::Init": {
+      "symbol": "CgsContainers::HashTable<unsigned int,unsigned char const *,13>::Init",
+      "file": "GameShared/GameClasses/Containers/CgsHashTableUtf8Ptr13.cpp",
+      "x360_address": "0x828623B8",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsContainers::HashTable<unsigned int,unsigned char const *,13>::Init. The native body compiled from src/GameShared/GameClasses/Containers/CgsHashTableUtf8Ptr13.cpp equals this 76-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 3 named call targets agree."
+    },
+    "CgsInput::InputIO:": {
+      "symbol": "CgsModule::BaseEventQueue<CgsInput::InputIO::PlayJoltEffectEvent>::GetEvent",
+      "file": "GameShared/GameClasses/Input/CgsInputModule.cpp",
+      "x360_address": "0x828DFEB0",
+      "byte_match": true,
+      "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<CgsInput::InputIO::PlayJoltEffectEvent>::GetEvent. The native body compiled from src/GameShared/GameClasses/Input/CgsInputModule.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
+    },
+    "AptError::`vector deleting destructor'": {
+      "symbol": "AptError::`scalar deleting destructor'",
+      "file": "SDKs/EATech/include/Apt/AptError.cpp",
+      "x360_address": "0x82AF5550",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/SDKs/EATech/include/Apt/AptError.cpp equals this 80-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 2 named call targets agree."
+    },
+    "rw::audio::core::HELPER_CMpegBase::`vector deleting destructor'": {
+      "symbol": "rw::audio::core::HELPER_CMpegBase::`scalar deleting destructor'",
+      "file": "vendor/renderware/src/rw/audio/core/HELPER_CMpegBase.cpp",
+      "x360_address": "0x82B92100",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from vendor/renderware/src/rw/audio/core/HELPER_CMpegBase.cpp equals this 100-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 2 named call targets agree."
+    },
+    "RealmcCore::Message::`vector deleting destructor'": {
+      "symbol": "RealmcCore::Message::`scalar deleting destructor'",
+      "file": "SDKs/Realmc/RealmcCore.cpp",
+      "x360_address": "0x82C45718",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/SDKs/Realmc/RealmcCore.cpp equals this 96-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size."
+    },
+    "RealmcCore::Response::`vector deleting destructor'": {
+      "symbol": "RealmcCore::Response::`scalar deleting destructor'",
+      "file": "SDKs/Realmc/RealmcCore.cpp",
+      "x360_address": "0x82C458F0",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/SDKs/Realmc/RealmcCore.cpp equals this 96-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size."
+    },
+    "RealmcCore::MessageFilter::`vector deleting destructor'": {
+      "symbol": "RealmcCore::MessageFilter::`scalar deleting destructor'",
+      "file": "SDKs/Realmc/RealmcCore.cpp",
+      "x360_address": "0x82C46240",
+      "byte_match": true,
+      "evidence": "The same-class vector deleting symbol is a COFF weak external for the emitted scalar deleting body. The native body compiled from src/SDKs/Realmc/RealmcCore.cpp equals this 100-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 1 named call target agree."
     }
   },
   "sdk_entry_groups": {
@@ -15567,6 +15745,257 @@
       "size": 108,
       "tu": "vendor/renderware/src/rw/audio/core/MixKernels.cpp",
       "evidence": "The X360 audio map names the six-to-one routine and its array/count signature. The dispatcher selects six inputs and one output before the direct call at 0x82B6B430. The XDK body agrees with the original 108-byte unwind extent, including all CopyWithGain, MixWithGain and register-helper targets."
+    },
+    "0x823F5EA0": {
+      "exported_name": "sub_823F5EA0",
+      "symbol": "`anonymous namespace'::PrepareRadixSortJob",
+      "size": 208,
+      "evidence": "The native `anonymous namespace'::PrepareRadixSortJob compiled from src/GameSource/Graphics/BrnRendererModule.cpp equals this 208-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 12 named call targets agree. BrnRendererModule::SortDispatchLists branches here at 0x823F5FA8, and its native counterpart references `anonymous namespace'::PrepareRadixSortJob."
+    },
+    "0x8254E030": {
+      "exported_name": "sub_8254E030",
+      "symbol": "FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop",
+      "size": 120,
+      "evidence": "The native FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop compiled from src/GameShared/GameClasses/Containers/CgsFifoQueueNetworkOutRecvRoadRulesPBEvent14.cpp equals this 120-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. BrnNetwork::NetworkRoadRulesManager::ProcessBeforeSimulation branches here at 0x82563EF0, and its native counterpart references FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop."
+    },
+    "0x825BBD40": {
+      "exported_name": "sub_825BBD40",
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::GetEvent",
+      "size": 164,
+      "evidence": "The native CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::GetEvent compiled from src/GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager_Create.cpp equals this 164-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 11 named call targets agree. BrnPhysics::Vehicle::PhysicalTrafficManager::ProcessCreateArticulatedTrafficEvents branches here at 0x82648A3C, and its native counterpart references CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::GetEvent."
+    },
+    "0x826A7A08": {
+      "exported_name": "sub_826A7A08",
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::AemsFactory>::operator=",
+      "size": 116,
+      "evidence": "The native CgsSound::Playback::Handle<CgsSound::Playback::AemsFactory>::operator= compiled from src/GameShared/GameClasses/Sound/Playback/Module/CgsSoundPlaybackModule.cpp equals this 116-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. CgsSound::Playback::Module::Module::Prepare branches here at 0x826E937C, and its native counterpart references CgsSound::Playback::Handle<CgsSound::Playback::AemsFactory>::operator=."
+    },
+    "0x826A81C0": {
+      "exported_name": "sub_826A81C0",
+      "symbol": "CgsSound::Utils::PathLine<3>::Update",
+      "size": 88,
+      "tu": "class:CgsSound::Utils::PathLine<3>",
+      "evidence": "The native CgsSound::Utils::PathLine<3>::Update compiled from src/GameShared/GameClasses/Sound/CgsSoundUtils.cpp equals this 88-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. BrnSound::Vehicles::Wheels::WheelControl::UpdateWheelsInAirRPM branches here at 0x826D0644, and its native counterpart references CgsSound::Utils::PathLine<3>::Update."
+    },
+    "0x82767978": {
+      "exported_name": null,
+      "symbol": "BrnAI::AStarNodePool::FindNode",
+      "size": 200,
+      "tu": "class:BrnAI::AStarNodePool",
+      "evidence": "The native BrnAI::AStarNodePool::FindNode compiled from src/GameSource/World/AI/Route/BrnAStar.cpp equals this 200-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 7 named call targets agree. BrnAI::AStar::Compute branches here at 0x82774F5C, and its native counterpart references BrnAI::AStarNodePool::FindNode."
+    },
+    "0x827A59B8": {
+      "exported_name": "sub_827A59B8",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::Append",
+      "size": 236,
+      "evidence": "The native CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::Append compiled from src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp equals this 236-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 12 named call targets agree. CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Append branches here at 0x827A9364, and its native counterpart references CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::Append."
+    },
+    "0x827A6AA0": {
+      "exported_name": "sub_827A6AA0",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition>::Append",
+      "size": 220,
+      "evidence": "The native CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition>::Append compiled from src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp equals this 220-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 12 named call targets agree. CgsSceneManager::SceneManagerIO::InSceneUpdateInterface::Append branches here at 0x827A94F4, and its native counterpart references CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventUpdateCachedPosition>::Append."
+    },
+    "0x827E11F0": {
+      "exported_name": null,
+      "symbol": "BrnNetwork::NetworkAggressiveDrivingManager::NetworkAggressiveDrivingManager",
+      "size": 140,
+      "evidence": "The native BrnNetwork::NetworkAggressiveDrivingManager::NetworkAggressiveDrivingManager compiled from src/GameSource/Network/Managers/BrnNetworkAggressiveDrivingManager.cpp equals this 140-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 5 named call targets agree. BrnNetwork::BrnNetworkManager::BrnNetworkManager branches here at 0x827E5618, and its native counterpart references BrnNetwork::NetworkAggressiveDrivingManager::NetworkAggressiveDrivingManager."
+    },
+    "0x82828D70": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawTriangle>",
+      "size": 184,
+      "evidence": "The native CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawTriangle> compiled from src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebugRender.cpp equals this 184-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 6 named call targets agree. CgsDev::DebugRender::DrawTriangle branches here at 0x8282C294, and its native counterpart references CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawTriangle>."
+    },
+    "0x8285DE10": {
+      "exported_name": null,
+      "symbol": "CgsGui::GuiModule::BridgeFromViewToOutput",
+      "size": 132,
+      "tu": "class:CgsGui::GuiModule",
+      "evidence": "The native CgsGui::GuiModule::BridgeFromViewToOutput compiled from src/GameShared/GameClasses/Gui/CgsGuiModuleBridges.cpp equals this 132-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. CgsGui::GuiModule::Update branches here at 0x82860548, and its native counterpart references CgsGui::GuiModule::BridgeFromViewToOutput."
+    },
+    "0x82874B50": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::PlayersConnectionManager::ConnectionStatusMessageDeliveredCallback",
+      "size": 100,
+      "tu": "class:CgsNetwork::PlayersConnectionManager",
+      "evidence": "The native CgsNetwork::PlayersConnectionManager::ConnectionStatusMessageDeliveredCallback compiled from src/GameShared/GameClasses/Network/Players/CgsPlayersConnectionManager_wN2_02.cpp equals this 100-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. CgsNetwork::PlayersConnectionManager::RegisterMessageTypes loads this address at 0x82884F50, and its native counterpart references CgsNetwork::PlayersConnectionManager::ConnectionStatusMessageDeliveredCallback."
+    },
+    "0x82889E98": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::ServerInterfacePingRegions::Release",
+      "size": 116,
+      "tu": "class:CgsNetwork::ServerInterfacePingRegions",
+      "evidence": "The native CgsNetwork::ServerInterfacePingRegions::Release compiled from src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfacePingRegions.cpp equals this 116-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. BrnNetwork::BrnServerInterfaceBase::Release branches here at 0x825899EC, and its native counterpart references CgsNetwork::ServerInterfacePingRegions::Release."
+    },
+    "0x828DF738": {
+      "exported_name": null,
+      "symbol": "FifoQueue<CgsResource::RunningLoad,4>::Push",
+      "size": 140,
+      "evidence": "The native FifoQueue<CgsResource::RunningLoad,4>::Push compiled from src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp equals this 140-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. CgsResource::BundleLoaderModule::CheckForLoads branches here at 0x828FBF04, and its native counterpart references FifoQueue<CgsResource::RunningLoad,4>::Push."
+    },
+    "0x828E0008": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsInput::InputIO::PadMapping>::GetEvent",
+      "size": 164,
+      "evidence": "The native CgsModule::BaseEventQueue<CgsInput::InputIO::PadMapping>::GetEvent compiled from src/GameShared/GameClasses/Input/CgsInputModule.cpp equals this 164-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 11 named call targets agree. CgsInput::InputModule::ProcessMappingQueue branches here at 0x828E7104, and its native counterpart references CgsModule::BaseEventQueue<CgsInput::InputIO::PadMapping>::GetEvent."
+    },
+    "0x82AD9048": {
+      "exported_name": "sub_82AD9048",
+      "symbol": "AptUpdateRecordFrame",
+      "size": 144,
+      "evidence": "The native AptUpdateRecordFrame compiled from src/SDKs/EATech/Apt/AptUpdate.cpp equals this 144-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. AptUpdate branches here at 0x82B0DBFC, and its native counterpart references AptUpdateRecordFrame."
+    },
+    "0x82AD9FC0": {
+      "exported_name": null,
+      "symbol": "AptNativeHash::Unset__Proto__",
+      "size": 76,
+      "tu": "class:AptNativeHash",
+      "evidence": "The native AptNativeHash::Unset__Proto__ compiled from src/SDKs/EATech/include/Apt/AptNativeHash.cpp equals this 76-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. AptNativeHash::DestroyGCPointers branches here at 0x82AEB470, and its native counterpart references AptNativeHash::Unset__Proto__."
+    },
+    "0x82AE84A0": {
+      "exported_name": null,
+      "symbol": "EAStringC::operator+=",
+      "size": 124,
+      "tu": "class:EAStringC",
+      "evidence": "The native EAStringC::operator+= compiled from src/SDKs/EATech/include/Apt/AptString/EAString.cpp equals this 124-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 5 named call targets agree. AptActionInterpreter::cbCallMethod_escape branches here at 0x82AF9BAC, and its native counterpart references EAStringC::operator+=."
+    },
+    "0x82AE8520": {
+      "exported_name": "sub_82AE8520",
+      "symbol": "EAStringC::operator+=",
+      "size": 172,
+      "tu": "class:EAStringC",
+      "evidence": "The native EAStringC::operator+= compiled from src/SDKs/EATech/include/Apt/AptString/EAString.cpp equals this 172-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 7 named call targets agree. AptArray::toString branches here at 0x82AED0F4, and its native counterpart references EAStringC::operator+=."
+    },
+    "0x82AE8DD8": {
+      "exported_name": null,
+      "symbol": "EAStringC::EndWithRemoveIgnoreCase",
+      "size": 148,
+      "tu": "class:EAStringC",
+      "evidence": "The native EAStringC::EndWithRemoveIgnoreCase compiled from src/SDKs/EATech/include/Apt/AptString/EAString.cpp equals this 148-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 6 named call targets agree. AptActionInterpreter::_FunctionAptActionGetUrl branches here at 0x82B09364, and its native counterpart references EAStringC::EndWithRemoveIgnoreCase."
+    },
+    "0x82B16590": {
+      "exported_name": "sub_82B16590",
+      "symbol": "`anonymous namespace'::DecodeAddress",
+      "size": 92,
+      "evidence": "The native `anonymous namespace'::DecodeAddress compiled from vendor/dirtysdk/src/x360/protomangle_lifecycle_x360.cpp equals this 92-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. ProtoMangleComplete branches here at 0x82B1746C, and its native counterpart references `anonymous namespace'::DecodeAddress."
+    },
+    "0x82B1B388": {
+      "exported_name": "sub_82B1B388",
+      "symbol": "_LobbyApiConnectCallback",
+      "size": 132,
+      "evidence": "The native _LobbyApiConnectCallback compiled from vendor/dirtysdk/src/x360/lobbyapi.cpp equals this 132-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. LobbyApiConnect loads this address at 0x82B1B660, and its native counterpart references _LobbyApiConnectCallback."
+    },
+    "0x82B1F968": {
+      "exported_name": "sub_82B1F968",
+      "symbol": "_LobbySettingSaveCallback",
+      "size": 132,
+      "evidence": "The native _LobbySettingSaveCallback compiled from vendor/dirtysdk/src/x360/lobbysetting.cpp equals this 132-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. LobbySettingSave loads this address at 0x82B1FBD4, and its native counterpart references _LobbySettingSaveCallback."
+    },
+    "0x82B1F9F0": {
+      "exported_name": "sub_82B1F9F0",
+      "symbol": "_LobbySettingLoadCallback",
+      "size": 132,
+      "evidence": "The native _LobbySettingLoadCallback compiled from vendor/dirtysdk/src/x360/lobbysetting.cpp equals this 132-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 4 named call targets agree. LobbySettingLoad loads this address at 0x82B1FB48, and its native counterpart references _LobbySettingLoadCallback."
+    },
+    "0x82B243C8": {
+      "exported_name": "sub_82B243C8",
+      "symbol": "ProtoHttpClose",
+      "size": 116,
+      "evidence": "The native ProtoHttpClose compiled from vendor/dirtysdk/src/x360/protohttp.cpp equals this 116-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. ProtoHttpUpdate branches here at 0x82B25564, and its native counterpart references ProtoHttpClose."
+    },
+    "0x82B26288": {
+      "exported_name": "sub_82B26288",
+      "symbol": "RankFlushList",
+      "size": 168,
+      "evidence": "The native RankFlushList compiled from vendor/dirtysdk/src/x360/lobbyrank.cpp equals this 168-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. LobbyRankCancelCB branches here at 0x82B275B4, and its native counterpart references RankFlushList."
+    },
+    "0x82B27DF8": {
+      "exported_name": null,
+      "symbol": "HLBApiRegisterBuddyChangeCallback",
+      "size": 84,
+      "evidence": "The native HLBApiRegisterBuddyChangeCallback compiled from vendor/dirtysdk/src/x360/hlbudapi.cpp equals this 84-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. CgsNetwork::BuddyManagerBase::Update branches here at 0x8288B61C, and its native counterpart references HLBApiRegisterBuddyChangeCallback."
+    },
+    "0x82B28A28": {
+      "exported_name": "sub_82B28A28",
+      "symbol": "VoipIncomingVoice",
+      "size": 108,
+      "evidence": "The native VoipIncomingVoice compiled from vendor/dirtysdk/src/x360/voip_x360.cpp equals this 108-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 2 named call targets agree. VoipStartup loads this address at 0x82B29830, and its native counterpart references VoipIncomingVoice."
+    },
+    "0x82B29918": {
+      "exported_name": "sub_82B29918",
+      "symbol": "`anonymous namespace'::CounterTick",
+      "size": 76,
+      "evidence": "The native `anonymous namespace'::CounterTick compiled from vendor/dirtysdk/src/x360/dirtylib_x360.cpp equals this 76-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. NetLibCreate loads this address at 0x82B29D20, and its native counterpart references `anonymous namespace'::CounterTick."
+    },
+    "0x82B2CE58": {
+      "exported_name": "sub_82B2CE58",
+      "symbol": "SocketLookupLspFree",
+      "size": 88,
+      "evidence": "The native SocketLookupLspFree compiled from vendor/dirtysdk/src/x360/dirtynet_lookup_x360.cpp equals this 88-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 2 named call targets agree. SocketLookup branches here at 0x82B2CF84, and its native counterpart references SocketLookupLspFree."
+    },
+    "0x82B3A538": {
+      "exported_name": "sub_82B3A538",
+      "symbol": "`anonymous namespace'::VoipConnectionSocketCallback",
+      "size": 104,
+      "evidence": "The native `anonymous namespace'::VoipConnectionSocketCallback compiled from vendor/dirtysdk/src/x360/voip_x360.cpp equals this 104-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. VoipConnectionStart loads this address at 0x82B3A6E8, and its native counterpart references `anonymous namespace'::VoipConnectionSocketCallback."
+    },
+    "0x82B3D4D8": {
+      "exported_name": "sub_82B3D4D8",
+      "symbol": "CommSRPSocketCallback",
+      "size": 88,
+      "evidence": "The native CommSRPSocketCallback compiled from vendor/dirtysdk/src/x360/commsrp_native_x360.cpp equals this 88-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 2 named call targets agree. CommSRPConnect loads this address at 0x82B3DD18, and its native counterpart references CommSRPSocketCallback."
+    },
+    "0x82B3D530": {
+      "exported_name": "sub_82B3D530",
+      "symbol": "CommSRPQueue",
+      "size": 200,
+      "evidence": "The native CommSRPQueue compiled from vendor/dirtysdk/src/x360/commsrp_native_x360.cpp equals this 200-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. CommSRPSend branches here at 0x82B3D94C, and its native counterpart references CommSRPQueue."
+    },
+    "0x82B3EA58": {
+      "exported_name": "sub_82B3EA58",
+      "symbol": "CommUDPFlush",
+      "size": 228,
+      "evidence": "The native CommUDPFlush compiled from vendor/dirtysdk/src/x360/commudp_native_x360.cpp equals this 228-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. CommUDPDestroy branches here at 0x82B3F66C, and its native counterpart references CommUDPFlush."
+    },
+    "0x82B581B8": {
+      "exported_name": "sub_82B581B8",
+      "symbol": "VP6_DecodeFrameToYUV",
+      "size": 244,
+      "evidence": "The native VP6_DecodeFrameToYUV compiled from src/SDKs/EATech/include/Common/vp6/vp6_startdecoder.cpp equals this 244-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 8 named call targets agree. XenonDecodeJob branches here at 0x82B58348, and its native counterpart references VP6_DecodeFrameToYUV."
+    },
+    "0x82B93BB0": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::EaXmaDec::DeallocateResources",
+      "size": 196,
+      "tu": "class:rw::audio::core::EaXmaDec",
+      "evidence": "The native rw::audio::core::EaXmaDec::DeallocateResources compiled from vendor/renderware/src/rw/audio/core/EaXmaDec.cpp equals this 196-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 7 named call targets agree. rw::audio::core::System::Release branches here at 0x82B6FA90, and its native counterpart references rw::audio::core::EaXmaDec::DeallocateResources."
+    },
+    "0x82BC9EC8": {
+      "exported_name": null,
+      "symbol": "EA::Jobs::LocalBackend::JobThread::Start",
+      "size": 152,
+      "tu": "class:EA::Jobs::LocalBackend::JobThread",
+      "evidence": "The native EA::Jobs::LocalBackend::JobThread::Start compiled from src/SDKs/EATech/eajobs/job_thread.cpp equals this 152-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 2 named call targets agree. EA::Jobs::LocalBackend::LocalBackend::AddThread branches here at 0x82BCA724, and its native counterpart references EA::Jobs::LocalBackend::JobThread::Start."
+    },
+    "0x82BE6450": {
+      "exported_name": "sub_82BE6450",
+      "symbol": "io_pclose",
+      "size": 104,
+      "evidence": "The native io_pclose compiled from vendor/lua/etc/all.c equals this 104-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 2 named call targets agree. luaopen_io loads this address at 0x82BE63D4, and its native counterpart references io_pclose."
+    },
+    "0x82BE64B8": {
+      "exported_name": "sub_82BE64B8",
+      "symbol": "io_fclose",
+      "size": 120,
+      "evidence": "The native io_fclose compiled from vendor/lua/etc/all.c equals this 120-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. luaopen_io loads this address at 0x82BE6414, and its native counterpart references io_fclose."
+    },
+    "0x82BF3040": {
+      "exported_name": "sub_82BF3040",
+      "symbol": "resume",
+      "size": 244,
+      "evidence": "The native resume compiled from vendor/lua/etc/all.c equals this 244-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. lua_resume loads this address at 0x82BF2FC8, and its native counterpart references resume."
     }
   },
   "native_leaf_functions": {
