@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import gzip
 import json
+import runpy
 import struct
 import sys
 from pathlib import Path
@@ -47,6 +48,23 @@ def test_input_state_resolves_xdk_header_paths():
 
     updated = {**entries, header: ("blob", "new-header"), submodule: ("commit", "new-gitlink")}
     assert BuildInputs(updated).state(source, index) == {**before, header: "new-header", submodule: "new-gitlink"}
+
+
+@pytest.mark.parametrize(("base", "stride"), [(None, 1), (2, 4)])
+def test_image_reader_keeps_segment_precedence_across_slices(tmp_path, monkeypatch, base, stride):
+    flat = tmp_path / "image.bin"
+    flat.write_bytes(bytes(range(32)))
+    monkeypatch.setenv("BRN_IMAGE_BIN", str(flat))
+    rd = runpy.run_path(str(HERE.parent / "re" / "x360rd.py"))["rd"]
+    data = flat.read_bytes()
+    rd.__globals__.update(_m=data, _base=base, _segs=[(4, 6, 0), (2, 7, 2)])
+
+    assert rd(2, 5) == bytes(data[(base or 0) + stride * i] for i in (2, 3, 0, 1, 6))
+    with pytest.raises(KeyError, match="EA 00000007 not mapped"):
+        rd(2, 6)
+    rd.__globals__["_m"] = data[:(base or 0) + stride * 6]
+    with pytest.raises(IndexError):
+        rd(2, 5)
 
 
 def make_object(functions, extra_symbols=()):
@@ -857,8 +875,58 @@ def test_writable_table_leaf_requires_a_same_member_relocation_anchor(monkeypatc
         sdk.verify_leaf_providers(art, tmp_path)
 
 
-@pytest.mark.parametrize("exported_name", ["Leaf", "sub_821F1020"])
-def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path, exported_name):
+def test_writable_table_leaf_can_use_anchored_slots_in_another_member(monkeypatch, tmp_path):
+    leaf, first, second = 0x821F1000, 0x821F1010, 0x821F1020
+    table = 0x82F705B8
+    image = FakeArtist([(leaf, "Leaf", [BLR]), (first, "First", [BLR]), (second, "Second", [BLR])],
+                       {table: struct.pack(">I", first), table + 4: struct.pack(">I", leaf),
+                        table + 8: struct.pack(">I", second), table + 12: struct.pack(">I", 7)})
+    proof = {
+        "symbol": "Leaf", "size": 4, "lib": "sdk.lib", "member": "leaf.obj", "archive_symbol": "Leaf",
+        "data_table_slot": {"symbol": "Table", "address": f"0x{table:X}", "offset": 4, "size": 16,
+                            "table_member": "table.obj", "anchor_offsets": [0, 8]},
+    }
+    pack = dict(image.pack)
+    pack[f"0x{leaf:08X}"] = {"unlisted": True, "sdk_leaf": proof}
+    art = Artist(pack=pack, read=lambda at, size: b"" if at == PDATA_START else image.bytes(at, size))
+    body = coff.ObjectFile(make_object([("Leaf", [BLR], [])]))
+    data = coff.ObjectFile(make_object([
+        ("Table", [0, 0, 0, 7],
+         [(0, "First", coff.REL_ADDR32), (4, "Leaf", coff.REL_ADDR32), (8, "Second", coff.REL_ADDR32)]),
+    ]))
+    data.sections[1].name = ".data"
+    fn, = body.functions()
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "leaf.obj", body, fn, False)])
+    monkeypatch.setattr(sdk, "library_objects", lambda *_, **__: [("sdk.lib", "table.obj", data)], raising=False)
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+
+    for offset, wrong in ((0, second), (4, first), (12, 8)):
+        original = image.memory[table + offset]
+        image.memory[table + offset] = struct.pack(">I", wrong)
+        with pytest.raises(ValueError):
+            sdk.verify_leaf_providers(art, tmp_path)
+        image.memory[table + offset] = original
+
+
+def test_extended_sdk_leaf_checks_absolute_local_relocations(monkeypatch, tmp_path):
+    leaf = 0x821F1000
+    art = FakeArtist([(leaf, "Leaf", [0x38600001, leaf + 8, BLR])])
+    art.sdk_leaves[leaf] = {"symbol": "Leaf", "size": 12, "previous_size": 8, "lib": "sdk.lib",
+                            "member": "member.obj", "archive_symbol": "Leaf"}
+    obj = coff.ObjectFile(make_object([("Leaf", [0x38600001, 0, BLR], [(4, "Case", coff.REL_ADDR32)])]))
+    obj.symbols[1] = coff.Symbol(1, "Case", 8, 1, 0, coff.CLASS_STATIC)
+    fn, = obj.functions()
+    monkeypatch.setattr(sdk, "library_functions", lambda *_, **__: [("sdk.lib", "member.obj", obj, fn, False)])
+    assert sdk.verify_leaf_providers(art, tmp_path)[leaf]["symbol"] == "Leaf"
+    art.memory[leaf + 4] = struct.pack(">I", leaf)
+    with pytest.raises(ValueError, match="archive comparison failed"):
+        sdk.verify_leaf_providers(art, tmp_path)
+
+
+@pytest.mark.parametrize(("kind", "exported_name"), [
+    ("native_leaf", "Leaf"), ("native_leaf", "sub_821F1020"), ("sdk_leaf", "Leaf"),
+])
+def test_exported_leaf_can_recover_a_witnessed_tail(tmp_path, kind, exported_name):
     from bytematch import measure_object
 
     leaf = 0x821F1020
@@ -874,10 +942,10 @@ def test_exported_native_leaf_can_recover_a_witnessed_tail(tmp_path, exported_na
     }
     if exported_name != "Leaf":
         witness["exported_name"] = exported_name
-    aliases.write_text(json.dumps({"native_leaf_functions": {addr: witness}}), encoding="utf-8")
+    aliases.write_text(json.dumps({f"{kind}_functions": {addr: witness}}), encoding="utf-8")
     resolved = load_pack(pack_path, aliases_path=aliases)
     art = Artist(pack=resolved, read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
-    assert art.size(leaf) == (12, "native_leaf")
+    assert art.size(leaf) == (12, kind)
     assert art.name_at(leaf) == "Leaf"
     obj_path = tmp_path / "leaf.obj"
     obj_path.write_bytes(make_object([("Leaf", body, [])]))

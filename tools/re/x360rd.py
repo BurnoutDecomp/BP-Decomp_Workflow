@@ -83,15 +83,25 @@ def mapped_ranges():
 def rd(ea, n=4):
     _init()
     out = bytearray()
-    for k in range(n):
-        a = ea + k
-        for s, e, cum in _segs:
-            if s <= a < e:
-                idx = cum + (a - s)
-                out.append(_m[idx] if _base is None else _m[_base + idx * 4])
+    stride, base = (1, 0) if _base is None else (4, _base)
+    end = ea + n
+    while ea < end:
+        stop = end
+        for start, limit, cumulative in _segs:
+            if start <= ea < limit:
+                count = min(stop, limit) - ea
+                offset = base + (cumulative + ea - start) * stride
+                block = _m[offset:offset + count * stride:stride]
+                if len(block) != count:
+                    raise IndexError("mmap index out of range")
+                out.extend(block)
+                ea += count
                 break
+            if ea < start < stop:
+                # An earlier segment keeps precedence if it overlaps this span.
+                stop = start
         else:
-            raise KeyError("EA %08X not mapped" % a)
+            raise KeyError("EA %08X not mapped" % ea)
     return bytes(out)
 
 def u32(ea):  return struct.unpack('>I', rd(ea, 4))[0]

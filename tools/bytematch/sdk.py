@@ -42,7 +42,7 @@ def import_stub(words):
     return None
 
 
-def library_functions(lib_dir, *, only_members=None):
+def library_objects(lib_dir, *, only_members=None):
     for lib in sorted(Path(lib_dir).glob("*.lib")):
         if only_members is not None and lib.name not in only_members:
             continue
@@ -58,17 +58,23 @@ def library_functions(lib_dir, *, only_members=None):
                 obj = ObjectFile(body, f"{lib.name}:{member}")
             except (CoffError, IndexError, ValueError):
                 continue  # LTCG intermediate code, import objects, non-PPC members
-            for fn in obj.functions():
-                if fn.code:
-                    yield lib.name, member, obj, fn, False
-            for fn in obj.entry_points():
-                if fn.code:
-                    yield lib.name, member, obj, fn, True
+            yield lib.name, member, obj
+
+
+def library_functions(lib_dir, *, only_members=None):
+    for lib, member, obj in library_objects(lib_dir, only_members=only_members):
+        for fn in obj.functions():
+            if fn.code:
+                yield lib, member, obj, fn, False
+        for fn in obj.entry_points():
+            if fn.code:
+                yield lib, member, obj, fn, True
 
 
 def verify_leaf_providers(artist, lib_dir):
     """Compare every attested leaf or linker import against its recorded library."""
     members = defaultdict(set)
+    table_members = defaultdict(set)
     addresses = defaultdict(list)
     imports = defaultdict(list)
     for address, proof in artist.sdk_leaves.items():
@@ -76,10 +82,15 @@ def verify_leaf_providers(artist, lib_dir):
             imports[proof["lib"]].append((address, proof))
             continue
         members[proof["lib"]].add(proof["member"])
+        table = proof.get("data_table_slot", {})
+        if "anchor_offsets" in table:
+            table_members[proof["lib"]].add(table["table_member"])
         entry = proof.get("archive_entry") is True
         for symbol in [proof["archive_symbol"], *proof.get("archive_aliases", ())]:
             addresses[proof["lib"], proof["member"], symbol, entry].append(address)
 
+    tables = {(lib, member): obj for lib, member, obj in
+              library_objects(lib_dir, only_members=table_members)} if table_members else {}
     found = {}
     group_locations = defaultdict(set)
     verified_aliases = defaultdict(set)
@@ -99,11 +110,21 @@ def verify_leaf_providers(artist, lib_dir):
                 continue
             if "crt_slot" in proof and not _verify_crt_archive_leaf(artist, address, fn, obj, proof, result):
                 continue
-            if ("archive_literals" in proof or "archive_data_targets" in proof) and not _verify_archive_data(
-                    artist, address, fn, obj, proof, result):
+            archive_data = "archive_literals" in proof or "archive_data_targets" in proof
+            if archive_data and not _verify_archive_data(artist, address, fn, obj, proof, result):
                 continue
-            if "data_table_slot" in proof and not _verify_data_table_slot(
-                    artist, fn, obj, proof["data_table_slot"]):
+            if proof.get("previous_size") and (
+                    result.calls_unverified or (result.data_unchecked and not archive_data)
+                    or not _verify_extended_body_relocations(artist, address, fn, obj, proof)):
+                continue
+            table = proof.get("data_table_slot")
+            if table is not None and "anchor_offsets" in table:
+                table_obj = tables.get((lib, table["table_member"]))
+                if (table_obj is None or result.calls_unverified
+                        or (result.data_unchecked and not archive_data)
+                        or not _verify_anchored_data_table(artist, address, fn.symbol, table_obj, table)):
+                    continue
+            elif table is not None and not _verify_data_table_slot(artist, fn, obj, table):
                 continue
             if proof.get("archive_aliases"):
                 if result.calls_unverified or result.data_unchecked:
@@ -222,6 +243,73 @@ def _verify_data_table_slot(artist, fn, obj, proof):
     site = int(proof["anchor_reflo_site"], 16) - caller_va
     checked = _linked_data_targets(artist, caller_va, caller, obj, {anchor.name})
     return checked is not None and (site, anchor.name, expected) in checked
+
+
+def _verify_anchored_data_table(artist, address, symbol, obj, proof):
+    """Identify a writable table by its initialized bytes and other named function slots."""
+    table = next((s for s in obj.symbols.values() if s.name == proof["symbol"] and s.section > 0), None)
+    if table is None:
+        return False
+    section = obj.sections[table.section]
+    start, size = table.value, proof["size"]
+    end = min((s.value for s in obj.symbols.values() if s.section == table.section and s.value > start),
+              default=len(section.data))
+    if not section.name.startswith(".data") or size <= 0 or size % 4 or start + size != end:
+        return False
+
+    try:
+        linked = bytearray(artist.bytes(int(proof["address"], 16), size))
+    except KeyError:
+        return False
+    if len(linked) != size:
+        return False
+    slots = {}
+    for reloc in section.relocs:
+        offset = reloc.offset - start
+        if not 0 <= offset < size:
+            continue
+        target = obj.symbols.get(reloc.symbol)
+        if (reloc.type != REL_ADDR32 or offset % 4 or offset in slots or target is None
+                or section.data[reloc.offset:reloc.offset + 4] != bytes(4)):
+            return False
+        slots[offset] = (target.name, struct.unpack_from(">I", linked, offset)[0])
+        linked[offset:offset + 4] = bytes(4)
+    if linked != section.data[start:end] or slots.get(proof["offset"]) != (symbol, address):
+        return False
+
+    anchors = set()
+    for offset in proof["anchor_offsets"]:
+        target, linked_address = slots.get(offset, ("", address))
+        anchor_size, origin = artist.size(linked_address)
+        if (linked_address == address or not anchor_size or origin == "sdk_leaf"
+                or not artist.matches_name(linked_address, demangle(target))):
+            return False
+        anchors.add(linked_address)
+    return len(anchors) >= 2
+
+
+def _verify_extended_body_relocations(artist, address, fn, obj, proof):
+    """Bind a recovered body's absolute switch slots and local address loads."""
+    targets = proof.get("archive_data_targets", {})
+    for rel in fn.relocs:
+        if rel.type not in (REL_ADDR32, REL_REFLO):
+            continue
+        symbol = obj.symbols.get(rel.symbol)
+        if symbol is None:
+            return False
+        if rel.type == REL_REFLO and symbol.section != fn.section:
+            continue
+        displacement = symbol.value - fn.offset
+        if symbol.section != fn.section or not 0 <= displacement < len(fn.code):
+            return False
+        target = address + displacement
+        if rel.type == REL_REFLO:
+            if int(targets.get(symbol.name, "0"), 16) != target:
+                return False
+        elif (fn.code[rel.offset:rel.offset + 4] != bytes(4)
+              or artist.bytes(address + rel.offset, 4) != struct.pack(">I", target)):
+            return False
+    return True
 
 
 def _verify_archive_fragments(artist, address, fn, obj, proof, result):

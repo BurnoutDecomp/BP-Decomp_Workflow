@@ -8478,6 +8478,198 @@
       "caller": "0x82B95EB8",
       "call_site": "0x82B95F04",
       "evidence": "The full raw ARTIST thunk encodes module 1 and ordinal 561. The same installed import archive member contains XMAIsInputBuffer1Valid and independently anchors module 1 via ObCreateSymbolicLink at 0x82C7613C. rw::audio::core::EaXmaDec::Service branches to this disjoint thunk."
+    },
+    "0x82C255C8": {
+      "symbol": "XGRAPHICS::CompileGetYUVConstantsC21",
+      "size": 20,
+      "lib": "xgraphics.lib",
+      "member": "obj\\xbox\\compilertossm.obj",
+      "archive_symbol": "?CompileGetYUVConstantsC21@XGRAPHICS@@YA?AW4_SSM_COMPILEWITH_RESULT@1@PAUCompAState@1@HPAMP6AXPAXPBDZZ2@Z",
+      "data_table_slot": {
+        "symbol": "CompileGetQueries",
+        "address": "0x82F97E28",
+        "offset": 116,
+        "size": 176,
+        "table_member": "obj\\xbox\\compilewithqueries.obj",
+        "anchor_offsets": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28,
+          32,
+          36,
+          44,
+          48,
+          52,
+          56,
+          60,
+          64,
+          72,
+          80,
+          92,
+          96,
+          100,
+          104,
+          108,
+          120,
+          124,
+          132,
+          140,
+          152,
+          156,
+          160,
+          164,
+          168,
+          172
+        ]
+      },
+      "evidence": "The linked CompileGetQueries table agrees with the XDK table member. Existing named slots and all initialized bytes outside the relocations locate it at 0x82F97E28. Slot 0x82F97E9C selects the exact body from compilertossm.obj, including its float literal."
+    },
+    "0x82C7620C": {
+      "symbol": "NtQueryDirectoryFile",
+      "size": 16,
+      "lib": "xboxkrnl.lib",
+      "member": "xboxkrnl.exe@6534.1+1861.0",
+      "archive_symbol": "NtQueryDirectoryFile",
+      "import_anchor": "0x82C7621C",
+      "data_table_slot": {
+        "symbol": "_defaultFileIoHooks",
+        "address": "0x82F36CE0",
+        "offset": 24,
+        "anchor_symbol": "_fileIoHooks",
+        "anchor_caller": "0x8292CFE0",
+        "anchor_caller_symbol": "RtlFindNextFile",
+        "anchor_reflo_site": "0x8292D010",
+        "table_lib": "xapilibi.lib",
+        "table_member": "obj\\xbox\\fileiohooks.obj",
+        "anchor_member": "obj\\xbox\\rtlfile.obj"
+      },
+      "evidence": "The complete ARTIST thunk encodes xboxkrnl module 1 ordinal 228, with the module independently verified by NtReadFileScatter in the same XDK import archive member. The exact RtlFindNextFile loads _fileIoHooks and invokes its slot +24. The archive’s initialized _defaultFileIoHooks identifies that slot as NtQueryDirectoryFile and all remaining pointer relocations agree with ARTIST."
+    },
+    "0x829D5EF8": {
+      "previous_size": 2040,
+      "exported_name": "g_InterpolateBlockBilinear_Xenon",
+      "symbol": "g_InterpolateBlockBilinear_Xenon",
+      "size": 2064,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\interpolate_wmv9_xenon.obj",
+      "archive_symbol": "g_InterpolateBlockBilinear_Xenon",
+      "archive_data_targets": {
+        "$LN95": "0x829D5F38",
+        "$LN96": "0x829D65CC"
+      },
+      "caller": "0x829D5EF8",
+      "call_site": "0x829D65C8",
+      "table_entry": "0x829D65D8",
+      "evidence": "The ARTIST absolute switch table selects a case that falls through into the omitted tail. Every table slot binds its owning COFF label, and the archive body, tail, and data references agree.",
+      "archive_switch_case": {
+        "target": "0x829D66B8",
+        "fallthrough_words": [
+          "3961FF80",
+          "39200008",
+          "39400004",
+          "3900FFF0",
+          "100058C3",
+          "3929FFFF",
+          "118B40C3",
+          "11606944",
+          "100C0040",
+          "396B0010",
+          "2B090000",
+          "10005840",
+          "10005040",
+          "10004B44"
+        ]
+      }
+    },
+    "0x82A975E8": {
+      "previous_size": 276,
+      "exported_name": "CWMVideoObjectEncoder::DecideCODFlagAndNewPCBPCYTable",
+      "symbol": "CWMVideoObjectEncoder::DecideCODFlagAndNewPCBPCYTable",
+      "size": 284,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\threadctr_wmv.obj",
+      "archive_symbol": "?DecideCODFlagAndNewPCBPCYTable@CWMVideoObjectEncoder@@AAAXJJ@Z",
+      "archive_data_targets": {
+        "$LN24": "0x82A97664",
+        "?NEWgTablePCBPCY_Code_V9_1@@3PAJA": "0x82F651B0",
+        "?NEWgTablePCBPCY_Size_V9_1@@3PAEA": "0x82F652B0",
+        "?NEWgTablePCBPCY_Code_V9_2@@3PAJA": "0x82F652F0",
+        "?NEWgTablePCBPCY_Size_V9_2@@3PAEA": "0x82F653F0",
+        "?NEWgTablePCBPCY_Code_V9_3@@3PAJA": "0x82F65430",
+        "?NEWgTablePCBPCY_Size_V9_3@@3PAEA": "0x82F65530",
+        "?NEWgTablePCBPCY_Code_V9_4@@3PAJA": "0x82F65570",
+        "?NEWgTablePCBPCY_Size_V9_4@@3PAEA": "0x82F65670"
+      },
+      "caller": "0x82A975E8",
+      "call_site": "0x82A97660",
+      "table_entry": "0x82A97670",
+      "evidence": "The ARTIST absolute switch table selects a case that falls through into the omitted tail. Every table slot binds its owning COFF label, and the archive body, tail, and data references agree.",
+      "archive_switch_case": {
+        "target": "0x82A976E0",
+        "fallthrough_words": [
+          "3D6082F6",
+          "3D4082F6",
+          "396B5570",
+          "394A5670",
+          "91635140",
+          "39600003",
+          "91435144"
+        ]
+      }
+    },
+    "0x829F7320": {
+      "previous_size": 164,
+      "exported_name": "CWMVideoObjectEncoder::SetProfileVariables_V9",
+      "symbol": "CWMVideoObjectEncoder::SetProfileVariables_V9",
+      "size": 176,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?SetProfileVariables_V9@CWMVideoObjectEncoder@@AAAXXZ",
+      "archive_data_targets": {
+        "$LN9": "0x829F734C"
+      },
+      "caller": "0x829F7320",
+      "call_site": "0x829F7348",
+      "table_entry": "0x829F7354",
+      "evidence": "The ARTIST absolute switch table selects a case that falls through into the omitted tail. Every table slot binds its owning COFF label, and the archive body, tail, and data references agree.",
+      "archive_switch_case": {
+        "target": "0x829F7394",
+        "fallthrough_words": [
+          "91630628",
+          "81430B08",
+          "2F0A0000",
+          "4D9A0020",
+          "91630648",
+          "9163064C",
+          "91630630",
+          "9163062C",
+          "91630644",
+          "91630978",
+          "9163097C",
+          "91230628"
+        ]
+      }
+    },
+    "0x829F7AC0": {
+      "previous_size": 464,
+      "exported_name": "CWMVideoObjectEncoder::FracCode",
+      "symbol": "CWMVideoObjectEncoder::FracCode",
+      "size": 508,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\voenc.obj",
+      "archive_symbol": "?FracCode@CWMVideoObjectEncoder@@QAAXPAJ0JJ@Z",
+      "archive_data_targets": {
+        "$LN31": "0x829F7AE4",
+        "$LN32": "0x829F7C48"
+      },
+      "caller": "0x829F7AC0",
+      "call_site": "0x829F7C08",
+      "evidence": "An ARTIST conditional branch reaches the remaining return and alternate case instructions. The complete SDK extent and every relocated jump-table word agree."
     }
   },
   "identified_functions": {
@@ -13087,6 +13279,13 @@
         "archive_symbol": "??$Process@E$05@LinearVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z"
       },
       "evidence": "The already credited exact CResampler::Process loads XAudioSRCTable at 0x8296E534. The actual same-member table relocation at 0x8210B62C names this body. All 120 pointer slots and the immutable bytes outside those relocations agree with the archive. The complete code body and all its relocated references are verified."
+    },
+    "0x82B9E3A0": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::Limiter1::Process",
+      "size": 268,
+      "tu": "class:rw::audio::core::Limiter1",
+      "evidence": "The verified Limiter1 descriptor getter returns 0x82F8D150. The named descriptor selects this complete .pdata body at its Process slot 0x82F8D160. The X360 audio symbols attest the typed callback."
     }
   },
   "native_leaf_functions": {
@@ -13682,6 +13881,16 @@
       "caller": "0x8290F640",
       "call_site": "0x8290F710",
       "evidence": "The descriptor serialiser calls the string append routine at 0x8290F710. The native relocation names StringStore and its COFF body matches all 120 bytes through the return at 0x82908AC4."
+    },
+    "0x82B863F8": {
+      "symbol": "rw::audio::core::HELPER_CMpegBase::OpenLayer",
+      "size": 52,
+      "vtable_slots": [
+        "0x8215A8A8"
+      ],
+      "source": "vendor/renderware/src/rw/audio/core/HELPER_CMpegBase.cpp",
+      "tu": "class:rw::audio::core::HELPER_CMpegBase",
+      "evidence": "HELPER_CMpegBase::Open dispatches through slot 4. The ARTIST vtable at 0x8215A898 and the XDK vtable emitted for the existing C++ both resolve that slot to OpenLayer. Its complete 52-byte body ends in blr and fits the disjoint gap after GetHeader."
     }
   },
   "sdk_archive_splits": {

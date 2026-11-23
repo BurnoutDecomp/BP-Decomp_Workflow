@@ -102,7 +102,7 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
                 if "previous_size" in proof:
                     row = functions.get(address)
                     exported = proof.get("exported_name", proof["symbol"])
-                    if kind == "native_leaf" and row and row.get("name") == exported:
+                    if row and row.get("name") == exported and (kind == "native_leaf" or proof["symbol"] == exported):
                         row[kind] = proof
                 else:
                     functions.setdefault(address, {"unlisted": True, kind: proof})
@@ -334,7 +334,8 @@ class Artist:
         for address, (kind, proof) in proofs.items():
             previous = proof.get("previous_size", 0)
             if previous and self.size(address) != (previous, "ida"):
-                raise ValueError(f"Native leaf extent at {address:08X} no longer agrees with the export")
+                label = "SDK leaf" if kind == "sdk_leaf" else "native leaf"
+                raise ValueError(f"{label} extent at {address:08X} no longer agrees with the export")
             if "fragments" in proof:
                 if kind != "sdk_leaf":
                     raise ValueError(f"Only SDK archive bodies can subsume fragments at {address:08X}")
@@ -450,7 +451,14 @@ class Artist:
             raise ValueError(f"{label} {address:08X} has a witness outside its caller")
         if "table_entry" in proof:
             entry = int(proof["table_entry"], 16)
-            if not extending or not self._switch_reaches_tail(caller, site, entry, start, end):
+            if not extending:
+                raise ValueError(f"{label} {address:08X} has no matching switch table at {site:08X}")
+            if "archive_switch_case" in proof:
+                reaches_tail = (label == "SDK leaf" and self._archive_switch_reaches_tail(
+                    caller, site, entry, start, end, proof["archive_switch_case"]))
+            else:
+                reaches_tail = self._switch_reaches_tail(caller, site, entry, start, end)
+            if not reaches_tail:
                 raise ValueError(f"{label} {address:08X} has no matching switch table at {site:08X}")
         else:
             word, = struct.unpack(">I", self.bytes(site, 4))
@@ -513,38 +521,68 @@ class Artist:
             if previous_end != address + length:
                 raise ValueError(f"SDK archive split {address:08X} does not cover the end of the export")
 
-    def _switch_reaches_tail(self, caller, site, entry, tail, end):
-        """Check an XDK absolute jump table and a case that reaches the omitted tail."""
+    def _switch_case_target(self, caller, site, entry, tail, end, *, allow_local_escape=False):
+        """Resolve an inline XDK absolute jump-table entry within its parent body."""
+        from compare import branch_target
+
         dispatch = site - 28
         if dispatch < caller:
-            return False
+            return None
         bounds, escape, high, low, shift, load, ctr, jump = struct.unpack(">8I", self.bytes(dispatch, 32))
         index = (bounds >> 16) & 31
         base = (high >> 21) & 31
         offset = (shift >> 16) & 31
         # cmplwi cr6; bgtlr cr6; lis; addi; slwi index,2; lwzx; mtctr; bctr.
-        if (bounds & 0xFFE00000 != 0x2B000000 or escape != 0x4D990020
+        local_escape = allow_local_escape and escape & 0xFFFF0000 == 0x41990000
+        if (bounds & 0xFFE00000 != 0x2B000000 or not (escape == 0x4D990020 or local_escape)
                 or not base or base in (index, offset) or high & 0xFC1F0000 != 0x3C000000
                 or low & 0xFFFF0000 != (0x38000000 | base << 21 | base << 16)
                 or shift != (0x5400103A | index << 21 | offset << 16)
                 or load != (0x7C00002E | offset << 21 | base << 16 | offset << 11)
                 or ctr != (0x7C0903A6 | offset << 21) or jump != 0x4E800420):
-            return False
+            return None
         immediate = struct.unpack(">h", struct.pack(">H", low & 0xFFFF))[0]
         table = (((high & 0xFFFF) << 16) + immediate) & 0xFFFFFFFF
         table_end = table + 4 * ((bounds & 0xFFFF) + 1)
         if table != site + 4 or entry % 4 or not table <= entry < table_end <= tail:
-            return False
+            return None
+        if local_escape and not table_end <= branch_target(escape, dispatch + 4, 0xFFFC) < end:
+            return None
         cases = tuple(target for (target,) in struct.iter_unpack(">I", self.bytes(table, table_end - table)))
         if any(target % 4 or not table_end <= target < end for target in cases):
+            return None
+        return cases[(entry - table) // 4]
+
+    def _switch_reaches_tail(self, caller, site, entry, tail, end):
+        """Check an XDK absolute jump table and a case that reaches the omitted tail."""
+        target = self._switch_case_target(caller, site, entry, tail, end)
+        if target is None:
             return False
-        target = cases[(entry - table) // 4]
         if target >= tail:
             return True
         # Immediate arithmetic and scalar load/store instructions fall through.
         # Require this straight-line path instead of inferring edges for other opcodes.
         return all(word >> 26 in (14, 15, 32, 38, 48, 52)
                    for (word,) in struct.iter_unpack(">I", self.bytes(target, tail - target)))
+
+    def _archive_switch_reaches_tail(self, caller, site, entry, tail, end, case):
+        """Check a bounded SDK case path whose archive relocations are verified separately."""
+        if site - 28 < caller:
+            return False
+        bounds, = struct.unpack(">I", self.bytes(site - 28, 4))
+        if bounds & 0xFFFF != 3:
+            return False
+        target = self._switch_case_target(caller, site, entry, tail, end, allow_local_escape=True)
+        expected = tuple(int(word, 16) for word in case["fallthrough_words"])
+        if (target is None or target != int(case["target"], 16) or not 0 < len(expected) <= 14
+                or tail - target != 4 * len(expected)):
+            return False
+        words = tuple(word for (word,) in struct.iter_unpack(">I", self.bytes(target, tail - target)))
+        # These paths contain arithmetic, memory and VMX instructions. The profile
+        # case has one conditional return with a non-return path into the tail.
+        conditional_return = 0x4D9A0020
+        return (words == expected and words.count(conditional_return) <= 1
+                and all(word >> 26 in (4, 10, 11, 14, 15, 32, 36) or word == conditional_return for word in words))
 
     def size(self, address: int):
         """(byte length, source) from .pdata, an attested leaf, or the export.
