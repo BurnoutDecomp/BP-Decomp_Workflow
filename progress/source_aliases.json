@@ -3636,7 +3636,7 @@
       "evidence": "The complete ARTIST export and the XDK COFF symbol have identical decorated names."
     },
     "__int64,512>::Find": {
-      "symbol": "Set<unsigned __int64,512>::Find",
+      "symbol": "CgsContainers::Set<unsigned __int64,512>::Find",
       "file": "GameShared/GameClasses/Containers/CgsSetCgsID512.cpp",
       "x360_address": "0x82318220",
       "byte_match": true,
@@ -4182,35 +4182,35 @@
       "evidence": "The aligned native caller at 0x828C1F58 reaches this clipped symbol at 0x828C1FE0. The COFF target agrees with the exported type and method fragment."
     },
     "CgsResource::RunningLoad,4>::Pop": {
-      "symbol": "FifoQueue<CgsResource::RunningLoad,4>::Pop",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::RunningLoad,4>::Pop",
       "file": "GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
       "x360_address": "0x828DF7C8",
       "byte_match": true,
       "evidence": "The export's type and method fragment agrees with the complete symbol and the compiled body compares exact."
     },
     "CgsResource::Events::CreatePoolRequest,128>::Push": {
-      "symbol": "FifoQueue<CgsResource::Events::CreatePoolRequest,128>::Push",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::Events::CreatePoolRequest,128>::Push",
       "file": "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp",
       "x360_address": "0x828DFB28",
       "byte_match": true,
       "evidence": "The export's type and method fragment agrees with the complete symbol and the compiled body compares exact."
     },
     "CgsResource::Events::CreatePoolRequest,128>::Pop": {
-      "symbol": "FifoQueue<CgsResource::Events::CreatePoolRequest,128>::Pop",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::Events::CreatePoolRequest,128>::Pop",
       "file": "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp",
       "x360_address": "0x828DFBB8",
       "byte_match": true,
       "evidence": "The export's type and method fragment agrees with the complete symbol and the compiled body compares exact."
     },
     "CgsResource::Events::AllocateResourceListRequest,4>::Push": {
-      "symbol": "FifoQueue<CgsResource::Events::AllocateResourceListRequest,4>::Push",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::Events::AllocateResourceListRequest,4>::Push",
       "file": "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp",
       "x360_address": "0x828DFC48",
       "byte_match": true,
       "evidence": "The export's type and method fragment agrees with the complete symbol and the compiled body compares exact."
     },
     "CgsResource::Events::AllocateResourceListRequest,4>::Pop": {
-      "symbol": "FifoQueue<CgsResource::Events::AllocateResourceListRequest,4>::Pop",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::Events::AllocateResourceListRequest,4>::Pop",
       "file": "GameShared/GameClasses/System/Resource/CgsResourcePoolModule.cpp",
       "x360_address": "0x828DFCC0",
       "byte_match": true,
@@ -6657,7 +6657,7 @@
     },
     "__int64,80>::Append": {
       "x360_address": "0x82318FC0",
-      "symbol": "Array<unsigned __int64,80>::Append",
+      "symbol": "CgsContainers::Array<unsigned __int64,80>::Append",
       "byte_match": true,
       "evidence": "The ARTIST body appends an 8-byte ID to the 80-slot array with count at +0x280. DWARF declares maBillboardsCollected as Array<CgsID,80>, with unsigned 64-bit CgsID. See ARTIST call 0x82334FF4."
     },
@@ -6669,19 +6669,19 @@
     },
     "__int64,80>::Contains": {
       "x360_address": "0x82325470",
-      "symbol": "Array<unsigned __int64,80>::Contains",
+      "symbol": "CgsContainers::Array<unsigned __int64,80>::Contains",
       "byte_match": true,
       "evidence": "ARTIST searches the array with count at +0x280. DWARF declares maBillboardsCollected as Array<CgsID,80>, with unsigned 64-bit CgsID. See ARTIST call 0x82334FB0."
     },
     "__int64,80>::IsFull": {
       "x360_address": "0x823254F0",
-      "symbol": "Array<unsigned __int64,80>::IsFull",
+      "symbol": "CgsContainers::Array<unsigned __int64,80>::IsFull",
       "byte_match": true,
       "evidence": "ARTIST compares the +0x280 count with 80, and the XDK call uses the DWARF Array<CgsID,80> member. See ARTIST call 0x82334FDC."
     },
     "__int64,2000>::Contains": {
       "x360_address": "0x82367938",
-      "symbol": "Array<unsigned __int64,2000>::Contains",
+      "symbol": "CgsContainers::Array<unsigned __int64,2000>::Contains",
       "byte_match": true,
       "evidence": "ARTIST searches the array with count at +0x3E80. Profile DWARF declares the field as Array<CgsID,2000>, with unsigned 64-bit CgsID. See ARTIST call 0x82371354."
     },
@@ -7461,7 +7461,7 @@
     },
     "BrnSound::Logic::ResourceRegistrar": {
       "x360_address": "0x8268EAE0",
-      "symbol": "Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Append",
+      "symbol": "CgsContainers::Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Append",
       "byte_match": true,
       "evidence": "The original resource-removal candidate caller passes its typed Array of 124 RequestedResource node pointers. The ARTIST body loads count at this+496, then appends one slot and increments that count."
     },
@@ -7576,7 +7576,7 @@
       "evidence": "The export truncates the specialization name CgsModule::BaseEventQueue<BrnAI::RouteMapModuleIO::RouteResponse>::GetEvent. The native body compiled from src/GameSource/Game/GameBridgeWorldToGui.cpp equals this 164-byte function word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unmatched ARTIST bodies of that size. 11 named call targets agree."
     },
     "BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>:": {
-      "symbol": "FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Push",
+      "symbol": "CgsContainers::FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Push",
       "file": "GameShared/GameClasses/Containers/CgsFifoQueueNetworkOutRecvRoadRulesPBEvent14.cpp",
       "x360_address": "0x8254DFB8",
       "byte_match": true,
@@ -7679,6 +7679,41 @@
       "x360_address": "0x825B3358",
       "byte_match": true,
       "evidence": "The truncated export asserts on the string at 0x82090190 naming meArticulatedVehicleType (BrnPhysicalTrafficVehicle.h:506) and returns the word at +0x24. The native const accessor equals the 96-byte body word for word outside its relocation fields."
+    },
+    "BrnDirector::Camera::BehaviourInterpolate::GetCameraAForSe": {
+      "symbol": "BrnDirector::Camera::BehaviourInterpolate::GetCameraAForSetup",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp",
+      "x360_address": "0x821F3D18",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnDirector::Camera::BehaviourInterpolate::GetCameraAForSetup; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp, equals this 88-byte function word for word outside its relocation fields. 3 named call targets agree."
+    },
+    "BrnDirector::Camera::BehaviourInterpolate::GetCameraBForSe": {
+      "symbol": "BrnDirector::Camera::BehaviourInterpolate::GetCameraBForSetup",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp",
+      "x360_address": "0x821F3D70",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnDirector::Camera::BehaviourInterpolate::GetCameraBForSetup; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp, equals this 88-byte function word for word outside its relocation fields. 3 named call targets agree."
+    },
+    "BrnGameState::BaseOnlineModeScoring::GetCu": {
+      "symbol": "BrnGameState::BaseOnlineModeScoring::GetCurrentPlayerTeam",
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnBaseOnlineModeScoring.cpp",
+      "x360_address": "0x82314638",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnGameState::BaseOnlineModeScoring::GetCurrentPlayerTeam; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/GameState/ModeManager/Scoring/BrnBaseOnlineModeScoring.cpp, equals this 120-byte function word for word outside its relocation fields. 8 named call targets agree."
+    },
+    "BrnReplays::DirectorBridgeSerialiser::GetCentreOfMassTransf": {
+      "symbol": "BrnReplays::DirectorBridgeSerialiser::GetCentreOfMassTransform",
+      "file": "GameSource/Game/GameBridgeWorldToX.cpp",
+      "x360_address": "0x823A87E0",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnReplays::DirectorBridgeSerialiser::GetCentreOfMassTransform; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Game/GameBridgeWorldToX.cpp, equals this 108-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "rw::audio::core::HighPassButterworth::GetPlugInDescR": {
+      "symbol": "rw::audio::core::HighPassButterworth::GetPlugInDescRunTime",
+      "file": "vendor/renderware/src/rw/audio/core/plugins/HighPassButterworth.cpp",
+      "x360_address": "0x82B976D0",
+      "byte_match": true,
+      "evidence": "The export truncates the name rw::audio::core::HighPassButterworth::GetPlugInDescRunTime; it is the only compiled native function whose name extends it, and that body, compiled from vendor/renderware/src/rw/audio/core/plugins/HighPassButterworth.cpp, equals this 12-byte function word for word outside its relocation fields."
     }
   },
   "sdk_entry_groups": {
@@ -15311,7 +15346,7 @@
     },
     "0x8268ED30": {
       "exported_name": "sub_8268ED30",
-      "symbol": "Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Contains",
+      "symbol": "CgsContainers::Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::Contains",
       "size": 128,
       "evidence": "The original ResourceRegistrar caller passes its removal-candidate Array and the RequestedResource node. The body reads the typed 124-pointer array count at this+496 and performs the Contains comparison. The verified native call relocation at 0x82695894 supplies the qualified name."
     },
@@ -15775,7 +15810,7 @@
     },
     "0x8254E030": {
       "exported_name": "sub_8254E030",
-      "symbol": "FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop",
+      "symbol": "CgsContainers::FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop",
       "size": 120,
       "evidence": "The native FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop compiled from src/GameShared/GameClasses/Containers/CgsFifoQueueNetworkOutRecvRoadRulesPBEvent14.cpp equals this 120-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. BrnNetwork::NetworkRoadRulesManager::ProcessBeforeSimulation branches here at 0x82563EF0, and its native counterpart references FifoQueue<BrnNetwork::BrnNetworkModuleIO::NetworkOutRecvRoadRulesPBEvent,14>::Pop."
     },
@@ -15852,7 +15887,7 @@
     },
     "0x828DF738": {
       "exported_name": null,
-      "symbol": "FifoQueue<CgsResource::RunningLoad,4>::Push",
+      "symbol": "CgsContainers::FifoQueue<CgsResource::RunningLoad,4>::Push",
       "size": 140,
       "evidence": "The native FifoQueue<CgsResource::RunningLoad,4>::Push compiled from src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp equals this 140-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 1 named call target agree. CgsResource::BundleLoaderModule::CheckForLoads branches here at 0x828FBF04, and its native counterpart references FifoQueue<CgsResource::RunningLoad,4>::Push."
     },
