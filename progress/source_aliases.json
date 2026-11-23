@@ -2,6 +2,13 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x82C31440": {
+      "exported_name": "XAUDIO::CBatchAllocator::Release`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CBatchAllocator::Release": "xaudio.lib:obj\\xbox\\batchallocator.obj"
+      },
+      "evidence": "This exact same-class W3 adjustor has one branch relocation at 0x82C31444 to the verified main Release body at 0x82C31370."
+    },
     "0x82B94FB0": {
       "exported_name": "rw::audio::core::CMpegBase::`scalar deleting destructor'",
       "aliases": {
@@ -5743,6 +5750,56 @@
     }
   },
   "sdk_leaf_functions": {
+    "0x829B4F18": {
+      "symbol": "ResetCoefBuffer8x4",
+      "size": 36,
+      "lib": "xmedia.lib",
+      "member": "obj\\xbox\\vopdec9_wmv9_emb.obj",
+      "archive_symbol": "ResetCoefBuffer8x4",
+      "evidence": "The exact same-member ComputeLoopFilterFlags_WMVA_EMB_2Pass_EMB relocation at 0x829B74D8 binds LEFTPREDFLAGS_1D. The matching SDK g_ResetCoefBuffer slot at 0x82F3E3B4 names this body.",
+      "data_table_slot": {
+        "symbol": "g_ResetCoefBuffer",
+        "address": "0x82F3E3B0",
+        "offset": 4,
+        "anchor_symbol": "LEFTPREDFLAGS_1D",
+        "anchor_caller": "0x829B7420",
+        "anchor_caller_symbol": "ComputeLoopFilterFlags_WMVA_EMB_2Pass_EMB",
+        "anchor_reflo_site": "0x829B74D8"
+      }
+    },
+    "0x82969268": {
+      "symbol": "XAUDIO::CXMASourceEffect::GetPacketContext",
+      "size": 8,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\xmasourceeffect.obj",
+      "archive_symbol": "?GetPacketContext@CXMASourceEffect@XAUDIO@@WBA@AAJPAPAX@Z",
+      "evidence": "The exact same-member XAUDIO::CXMASourceEffect::~CXMASourceEffect relocation at 0x82968448 binds ??_7CXMASourceEffect@XAUDIO@@6BCSourceStream@1@@. The matching SDK ??_7CXMASourceEffect@XAUDIO@@6BCSourceStream@1@@ slot at 0x82109F98 names this body.",
+      "function_table_slots": [
+        "0x82109F98"
+      ]
+    },
+    "0x82963C88": {
+      "symbol": "XAUDIO::CRouterEffect::Release",
+      "size": 8,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\routereffect.obj",
+      "archive_symbol": "?Release@CRouterEffect@XAUDIO@@W3AAKXZ",
+      "evidence": "The exact same-member XAUDIO::CRouterEffect::`scalar deleting destructor' relocation at 0x82963CA0 binds ??_7CRouterEffect@XAUDIO@@6BCEffect@1@@. The matching SDK ??_7CRouterEffect@XAUDIO@@6BCEffect@1@@ slot at 0x821090CC names this body.",
+      "function_table_slots": [
+        "0x821090CC"
+      ]
+    },
+    "0x8296B5A8": {
+      "symbol": "XAUDIO::CPCMSourceEffect::FlushPackets",
+      "size": 8,
+      "lib": "xaudio.lib",
+      "member": "obj\\xbox\\pcmsourceeffect.obj",
+      "archive_symbol": "?FlushPackets@CPCMSourceEffect@XAUDIO@@WBA@AAJXZ",
+      "evidence": "The exact same-member XAUDIO::CPCMSourceEffect::CPCMSourceEffect relocation at 0x8296BA48 binds ??_7CPCMSourceEffect@XAUDIO@@6BCSourceStream@1@@. The matching SDK ??_7CPCMSourceEffect@XAUDIO@@6BCSourceStream@1@@ slot at 0x8210A090 names this body.",
+      "function_table_slots": [
+        "0x8210A090"
+      ]
+    },
     "0x82CCB000": {
       "symbol": "g_ComputeMBSAD16Ds3_C",
       "size": 172,
@@ -7073,6 +7130,46 @@
     }
   },
   "identified_functions": {
+    "0x82963370": {
+      "exported_name": null,
+      "symbol": "XAUDIO::CRouterEffect::Release",
+      "size": 72,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\routereffect.obj",
+        "archive_symbol": "?Release@CRouterEffect@XAUDIO@@UAAKXZ"
+      },
+      "evidence": "The exact same-member code at 0x82963C90 loads ??_7CRouterEffect@XAUDIO@@6BIXAudioRouterEffect@@@ at 0x82963C9C, binding the archive slot at 0x821090E4 to this full body."
+    },
+    "0x82C31370": {
+      "exported_name": null,
+      "symbol": "XAUDIO::CBatchAllocator::Release",
+      "size": 72,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\batchallocator.obj",
+        "archive_symbol": "?Release@CBatchAllocator@XAUDIO@@UAAKXZ"
+      },
+      "evidence": "The exact same-member code at 0x82C312E0 loads ??_7CBatchAllocator@XAUDIO@@6BIXAudioBatchAllocator@@@ at 0x82C312FC, binding the archive slot at 0x821B5698 to this full body. The exact same-member code at 0x82C31570 loads ??_7CDynamicBatchAllocator@XAUDIO@@6BIXAudioBatchAllocator@@@ at 0x82C315B4, binding the archive slot at 0x821B56C4 to this full body. The exact same-member code at 0x82C31620 loads ??_7CStaticBatchAllocator@XAUDIO@@6BIXAudioBatchAllocator@@@ at 0x82C3167C, binding the archive slot at 0x821B56F0 to this full body."
+    },
+    "0x82C2C0D0": {
+      "exported_name": null,
+      "symbol": "XGRAPHICS::IRKill::NewInst",
+      "size": 80,
+      "sdk_provider": {
+        "lib": "xgraphics.lib",
+        "member": "obj\\xbox\\irinst.obj",
+        "archive_symbol": "?NewInst@IRKill@XGRAPHICS@@SAPAVIRInst@2@W4Op@R400Tables@@PAVCompiler@2@@Z"
+      },
+      "evidence": "The exact same-member code at 0x82C2A9C0 loads ?inst_ctors@XGRAPHICS@@3QBUinst_ctor_st@1@B at 0x82C2A9D4, binding the archive slot at 0x821B1EE0 to this full body."
+    },
+    "0x82B6EC08": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::TimerManager::Defragment",
+      "size": 72,
+      "tu": "class:rw::audio::core::TimerManager",
+      "evidence": "System::ExecuteCommands calls here at 0x82B6F8A0. The body calls Collection::Defragment at 0x82B6EC28. The native unwind and RenderWare PDB give the same length, and the MAP names the void TimerManager member."
+    },
     "0x82B3BF88": {
       "exported_name": "sub_82B3BF88",
       "symbol": "CommTCPSetAddrInfo",
