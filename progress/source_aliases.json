@@ -1180,6 +1180,27 @@
         "XAUDIO::SRC::Linear::Process<SHORTLE,6>": "xaudio.lib:obj\\xbox\\src.obj"
       },
       "evidence": "The verbatim ARTIST export equals the installed decorated archive symbol and its already credited complete body has been verified."
+    },
+    "0x8296FC60": {
+      "exported_name": "??$ProcessBlock@E$05@LinearVector@SRC@XAUDIO@@SAXPIBEHPIAMHPAUXAUDIOSRCHDR@2@@Z",
+      "aliases": {
+        "XAUDIO::SRC::LinearVector::ProcessBlock<unsigned char,6>": "xaudio.lib:obj\\xbox\\src.obj"
+      },
+      "evidence": "Verbatim ARTIST decorated export and exact same-member definition agree. The alias verifies the dispatch-table body call."
+    },
+    "0x82974A10": {
+      "exported_name": "??$Process@E$05@Linear@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z",
+      "aliases": {
+        "XAUDIO::SRC::Linear::Process<unsigned char,6>": "xaudio.lib:obj\\xbox\\src.obj"
+      },
+      "evidence": "Verbatim ARTIST decorated export and exact same-member definition agree. The alias verifies the dispatch-table body call."
+    },
+    "0x82978508": {
+      "exported_name": "??$Process@M$00@Double@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z",
+      "aliases": {
+        "XAUDIO::SRC::Double::Process<float,1>": "xaudio.lib:obj\\xbox\\src.obj"
+      },
+      "evidence": "Verbatim ARTIST decorated export and exact same-member definition agree. The alias verifies the dispatch-table body call."
     }
   },
   "xdk_functions": {
@@ -6692,6 +6713,342 @@
       "symbol": "BrnWorldIO::UpdateInputBuffer::GetCrashNetworkInterface",
       "byte_match": true,
       "evidence": "ARTIST tests the read-lock bit and returns this+0x49AC0, the recovered interface member. The DWARF declaration and XDK caller relocation agree. See ARTIST call 0x827ADF24."
+    },
+    "??$Serialise@VParameters@BehaviourGameplayBumper@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPB": {
+      "x360_address": "0x82214C70",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourGameplayBumper::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGameplayBumper@Camera@BrnDirector@@QAAXAA": {
+      "x360_address": "0x82202B50",
+      "symbol": "BrnDirector::Camera::BehaviourGameplayBumper::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82214CB0 matches the complete COFF symbol."
+    },
+    "??$Serialise@VBehaviourParameterNamingSerialiser@Camera@BrnDirector@@@BehaviourParameterBank@Camera@BrnDirector@@QAAXAA": {
+      "x360_address": "0x8222EFE0",
+      "symbol": "BrnDirector::Camera::BehaviourParameterBank::Serialise<BrnDirector::Camera::BehaviourParameterNamingSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$SerialiseBehaviourParameters@VBehaviourParameterNamingSerialiser@Camera@BrnDirector@@@Camera@BrnDirector@@YAXPBDAAVP": {
+      "x360_address": "0x822144A8",
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::BehaviourParameterNamingSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8222F014 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourGameplayBumper@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAA": {
+      "x360_address": "0x822308B8",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourGameplayBumper::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGameplayBumper@Camera@BrnDirector@@QAAXAAVDe": {
+      "x360_address": "0x82214A08",
+      "symbol": "BrnDirector::Camera::BehaviourGameplayBumper::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x822308DC matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourFixedCam@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParam": {
+      "x360_address": "0x82230928",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourFixedCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourFixedCam@Camera@BrnDirector@@QAAXAAVDebugMen": {
+      "x360_address": "0x82214BF0",
+      "symbol": "BrnDirector::Camera::BehaviourFixedCam::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8223094C matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@PositionLag@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParam": {
+      "x360_address": "0x82231158",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::Utils::PositionLag::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@PositionLag@Utils@Camera@BrnDirector@@QAAXAAVDebugMen": {
+      "x360_address": "0x82215608",
+      "symbol": "BrnDirector::Camera::Utils::PositionLag::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8223117C matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourGameplayExternal@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAX": {
+      "x360_address": "0x8224CFE0",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourGameplayExternal::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGameplayExternal@Camera@BrnDirector@@QAAX": {
+      "x360_address": "0x822312E8",
+      "symbol": "BrnDirector::Camera::BehaviourGameplayExternal::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D020 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourBystanderCam@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDA": {
+      "x360_address": "0x8224D040",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourBystanderCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourBystanderCam@Camera@BrnDirector@@QAAXAAVT": {
+      "x360_address": "0x82231B90",
+      "symbol": "BrnDirector::Camera::BehaviourBystanderCam::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D080 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourHeliCam@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVPar": {
+      "x360_address": "0x8224D0A0",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourHeliCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourHeliCam@Camera@BrnDirector@@QAAXAAVTextFi": {
+      "x360_address": "0x82231D30",
+      "symbol": "BrnDirector::Camera::BehaviourHeliCam::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D0E0 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourGyroCam@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVPar": {
+      "x360_address": "0x8224D100",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourGyroCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGyroCam@Camera@BrnDirector@@QAAXAAVTextFi": {
+      "x360_address": "0x82231F10",
+      "symbol": "BrnDirector::Camera::BehaviourGyroCam::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D140 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourAftertouchCam@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBD": {
+      "x360_address": "0x8224D160",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourAftertouchCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourAftertouchCam@Camera@BrnDirector@@QAAXAAV": {
+      "x360_address": "0x822321B0",
+      "symbol": "BrnDirector::Camera::BehaviourAftertouchCam::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D1A0 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourAftertouchCrash@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXP": {
+      "x360_address": "0x8224D1C0",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourAftertouchCrash::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourAftertouchCrash@Camera@BrnDirector@@QAAXA": {
+      "x360_address": "0x82232330",
+      "symbol": "BrnDirector::Camera::BehaviourAftertouchCrash::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D200 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourFailsafe@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVPa": {
+      "x360_address": "0x8224D220",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourFailsafe::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourFailsafe@Camera@BrnDirector@@QAAXAAVTextF": {
+      "x360_address": "0x822324B0",
+      "symbol": "BrnDirector::Camera::BehaviourFailsafe::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x8224D260 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourGameplayExternal@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBD": {
+      "x360_address": "0x82253300",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourGameplayExternal::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGameplayExternal@Camera@BrnDirector@@QAAXAAV": {
+      "x360_address": "0x8224BBB0",
+      "symbol": "BrnDirector::Camera::BehaviourGameplayExternal::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82253324 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourBystanderCam@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVP": {
+      "x360_address": "0x82253370",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourBystanderCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourBystanderCam@Camera@BrnDirector@@QAAXAAVDebu": {
+      "x360_address": "0x8224BF40",
+      "symbol": "BrnDirector::Camera::BehaviourBystanderCam::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82253394 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourHeliCam@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParame": {
+      "x360_address": "0x822533E0",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourHeliCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourHeliCam@Camera@BrnDirector@@QAAXAAVDebugMenu": {
+      "x360_address": "0x8224C110",
+      "symbol": "BrnDirector::Camera::BehaviourHeliCam::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82253404 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourGyroCam@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParame": {
+      "x360_address": "0x82253450",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourGyroCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourGyroCam@Camera@BrnDirector@@QAAXAAVDebugMenu": {
+      "x360_address": "0x8224C240",
+      "symbol": "BrnDirector::Camera::BehaviourGyroCam::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82253474 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourAftertouchCam@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAV": {
+      "x360_address": "0x822534C0",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourAftertouchCam::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourAftertouchCam@Camera@BrnDirector@@QAAXAAVDeb": {
+      "x360_address": "0x8224C530",
+      "symbol": "BrnDirector::Camera::BehaviourAftertouchCam::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x822534E4 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourAftertouchCrash@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDA": {
+      "x360_address": "0x82253530",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourAftertouchCrash::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourAftertouchCrash@Camera@BrnDirector@@QAAXAAVD": {
+      "x360_address": "0x8224C748",
+      "symbol": "BrnDirector::Camera::BehaviourAftertouchCrash::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82253554 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourFailsafe@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParam": {
+      "x360_address": "0x822535A0",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourFailsafe::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourFailsafe@Camera@BrnDirector@@QAAXAAVDebugMen": {
+      "x360_address": "0x8224C960",
+      "symbol": "BrnDirector::Camera::BehaviourFailsafe::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x822535C4 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourLooseAttachment@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXP": {
+      "x360_address": "0x82254410",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourLooseAttachment::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourLooseAttachment@Camera@BrnDirector@@QAAXA": {
+      "x360_address": "0x8224D2F0",
+      "symbol": "BrnDirector::Camera::BehaviourLooseAttachment::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82254450 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourRig@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParameters": {
+      "x360_address": "0x82259490",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourRig::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourRig@Camera@BrnDirector@@QAAXAAVDebugMenuSeri": {
+      "x360_address": "0x822540F8",
+      "symbol": "BrnDirector::Camera::BehaviourRig::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x822594B4 matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourLooseAttachment@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDA": {
+      "x360_address": "0x82259598",
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::BehaviourLooseAttachment::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@BehaviourLooseAttachment@Camera@BrnDirector@@QAAXAAVD": {
+      "x360_address": "0x82254248",
+      "symbol": "BrnDirector::Camera::BehaviourLooseAttachment::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x822595BC matches the complete COFF symbol."
+    },
+    "??$Serialise@VParameters@BehaviourRig@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVParamet": {
+      "x360_address": "0x822598F8",
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::BehaviourRig::Parameters>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@BehaviourRig@Camera@BrnDirector@@QAAXAAVTextFileRe": {
+      "x360_address": "0x822549F0",
+      "symbol": "BrnDirector::Camera::BehaviourRig::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82259938 matches the complete COFF symbol."
+    },
+    "??$Serialise@VTestbedSetupSerialiser@Camera@BrnDirector@@@BehaviourParameterBank@Camera@BrnDirector@@QAAXAAVTestbedSetu": {
+      "x360_address": "0x82275D10",
+      "symbol": "BrnDirector::Camera::BehaviourParameterBank::Serialise<BrnDirector::Camera::TestbedSetupSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$SerialiseBehaviourParameters@VTestbedSetupSerialiser@Camera@BrnDirector@@@Camera@BrnDirector@@YAXPBDAAVParameters@Be": {
+      "x360_address": "0x82275828",
+      "symbol": "BrnDirector::Camera::SerialiseBehaviourParameters<BrnDirector::Camera::TestbedSetupSerialiser>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x82275D44 matches the complete COFF symbol."
+    },
+    "??$_Sort@PAUSortResult@TrafficStateManager@Traffic@Logic@BrnSound@@HP6A_NABU12345@0@Z@std@@YAXPAUSortResult@TrafficStat": {
+      "x360_address": "0x82700270",
+      "symbol": "std::_Sort<BrnSound::Logic::Traffic::TrafficStateManager::SortResult *,int,bool (__cdecl*)(BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &,BrnSound::Logic::Traffic::TrafficStateManager::SortResult const &)>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$_Sort@PAPAUOutputCollision@Collision@Logic@BrnSound@@HP6A_NPBU1234@0@Z@std@@YAXPAPAUOutputCollision@Collision@Logic@": {
+      "x360_address": "0x82700390",
+      "symbol": "std::_Sort<BrnSound::Logic::Collision::OutputCollision * *,int,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$_Sort@PAUFindResult@?$SelectionHistory@$0CAA@GG$0BAAAA@@Utils@CgsSound@@HP6A_NABU1234@0@Z@std@@YAXPAUFindResult@?$Se": {
+      "x360_address": "0x827004B0",
+      "symbol": "std::_Sort<CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult *,int,bool (__cdecl*)(CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &,CgsSound::Utils::SelectionHistory<512,unsigned short,unsigned short,65536>::FindResult const &)>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$_Median@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@@std@@YAXPAUModelInstanceInfo@ModelInstanceCollecto": {
+      "x360_address": "0x827F9040",
+      "symbol": "std::_Median<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$_Med3@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@@std@@YAXPAUModelInstanceInfo@ModelInstanceCollector@": {
+      "x360_address": "0x827EFF78",
+      "symbol": "std::_Med3<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x827F9098 matches the complete COFF symbol."
+    },
+    "??$_Make_heap@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@HU123@@std@@YAXPAUModelInstanceInfo@ModelInstanc": {
+      "x360_address": "0x827F90F0",
+      "symbol": "std::_Make_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
+    },
+    "??$_Adjust_heap@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@HU123@@std@@YAXPAUModelInstanceInfo@ModelInsta": {
+      "x360_address": "0x827F00D0",
+      "symbol": "std::_Adjust_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. The branch at 0x827F9150 matches the complete COFF symbol."
+    },
+    "??$_Sort_heap@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@@std@@YAXPAUModelInstanceInfo@ModelInstanceColle": {
+      "x360_address": "0x827FF2C0",
+      "symbol": "std::_Sort_heap<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>",
+      "byte_match": true,
+      "evidence": "The ARTIST export is the decorated prefix of this XDK template specialization. Its full body and relocated targets agree."
     }
   },
   "sdk_entry_groups": {
@@ -8088,6 +8445,39 @@
       "caller": "0x82C93A90",
       "call_site": "0x82C93AF8",
       "evidence": "g_InterpolateBlockBicubic_10_Xenon (xmedia.lib:obj\\xbox\\interpolate_wmv9_xenon_emb.obj) has a matching branch relocation to this archive symbol."
+    },
+    "0x82C75E4C": {
+      "symbol": "XamTerminateTitle",
+      "size": 16,
+      "lib": "xapilib.lib",
+      "member": "xam.xex@6534.1+1861.0",
+      "archive_symbol": "XamTerminateTitle",
+      "import_anchor": "0x82C75E3C",
+      "caller": "0x8292B480",
+      "call_site": "0x8292B4C8",
+      "evidence": "The full raw ARTIST thunk encodes module 0 and ordinal 425. The same installed import archive member contains XamTerminateTitle and independently anchors module 0 via XGetAVPack at 0x82C75E3C. mainCRTStartup branches to this disjoint thunk."
+    },
+    "0x82C765CC": {
+      "symbol": "DmWalkLoadedModules",
+      "size": 16,
+      "lib": "xbdm.lib",
+      "member": "xbdm.xex@6534.1+1861.0",
+      "archive_symbol": "DmWalkLoadedModules",
+      "import_anchor": "0x82C765BC",
+      "caller": "0x828173D8",
+      "call_site": "0x82817498",
+      "evidence": "The full raw ARTIST thunk encodes module 2 and ordinal 51. The same installed import archive member contains DmWalkLoadedModules and independently anchors module 2 via DmCloseLoadedModules at 0x82C765BC. CgsDev::StackUnpickX360::ComputeAdjustedStack branches to this disjoint thunk."
+    },
+    "0x82C76BCC": {
+      "symbol": "XMAIsInputBuffer1Valid",
+      "size": 16,
+      "lib": "xboxkrnl.lib",
+      "member": "xboxkrnl.exe@6534.1+1861.0",
+      "archive_symbol": "XMAIsInputBuffer1Valid",
+      "import_anchor": "0x82C7613C",
+      "caller": "0x82B95EB8",
+      "call_site": "0x82B95F04",
+      "evidence": "The full raw ARTIST thunk encodes module 1 and ordinal 561. The same installed import archive member contains XMAIsInputBuffer1Valid and independently anchors module 1 via ObCreateSymbolicLink at 0x82C7613C. rw::audio::core::EaXmaDec::Service branches to this disjoint thunk."
     }
   },
   "identified_functions": {
@@ -12653,6 +13043,50 @@
         }
       },
       "evidence": "The verbatim named XAUDIO::SRC::LinearVector::Process<SHORTLE,6> body has an exact same-member branch relocation at 0x8297BF0C to this complete disjoint .pdata span. The target body, its relocations, and its archive identity agree."
+    },
+    "0x826E0708": {
+      "exported_name": null,
+      "symbol": "std::_Insertion_sort<BrnSound::Logic::Collision::OutputCollision * *,bool (__cdecl*)(BrnSound::Logic::Collision::OutputCollision const *,BrnSound::Logic::Collision::OutputCollision const *)>",
+      "size": 232,
+      "evidence": "The existing OutputCollision sort specialization supplies a checked XDK relocation at ARTIST 0x8270045C. The complete disjoint .pdata body matches with all relocations resolved."
+    },
+    "0x826911A0": {
+      "exported_name": null,
+      "symbol": "std::_Rotate<BrnSound::Logic::Collision::OutputCollision * *,int,BrnSound::Logic::Collision::OutputCollision *>",
+      "size": 236,
+      "evidence": "The existing OutputCollision sort specialization supplies a checked XDK relocation at ARTIST 0x826E07D4. The complete disjoint .pdata body matches with all relocations resolved."
+    },
+    "0x8297D088": {
+      "exported_name": null,
+      "symbol": "XAUDIO::SRC::DoubleVector::Process<float,1>",
+      "size": 620,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\src.obj",
+        "archive_symbol": "??$Process@M$00@DoubleVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z",
+        "archive_literals": {
+          "?volDeltaOffsetB@?8???$Process@M$00@DoubleVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@3@@Z@4U__vector4@@B": {
+            "address": "0x8210BB50",
+            "size": 16
+          },
+          "?volDeltaOffsetA@?8???$Process@M$00@DoubleVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@3@@Z@4U__vector4@@B": {
+            "address": "0x8210BB40",
+            "size": 16
+          }
+        }
+      },
+      "evidence": "The already credited exact CResampler::Process loads XAudioSRCTable at 0x8296E534. The actual same-member table relocation at 0x8210B6C0 names this body. All 120 pointer slots and the immutable bytes outside those relocations agree with the archive. The complete code body and all its relocated references are verified."
+    },
+    "0x8297BAF8": {
+      "exported_name": null,
+      "symbol": "XAUDIO::SRC::LinearVector::Process<unsigned char,6>",
+      "size": 220,
+      "sdk_provider": {
+        "lib": "xaudio.lib",
+        "member": "obj\\xbox\\src.obj",
+        "archive_symbol": "??$Process@E$05@LinearVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z"
+      },
+      "evidence": "The already credited exact CResampler::Process loads XAudioSRCTable at 0x8296E534. The actual same-member table relocation at 0x8210B62C names this body. All 120 pointer slots and the immutable bytes outside those relocations agree with the archive. The complete code body and all its relocated references are verified."
     }
   },
   "native_leaf_functions": {
