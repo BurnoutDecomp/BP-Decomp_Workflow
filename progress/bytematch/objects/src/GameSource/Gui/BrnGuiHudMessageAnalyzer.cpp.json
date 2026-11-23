@@ -1,16 +1,20 @@
 {
  "blob": "c5d60ce6d2469b8f3ceca8ab93cfa36907b6fd86",
- "commit": "71648b6b903066a637402371e7288a8454373f3f",
+ "commit": "ec3e4707844b5addc4dd23921765e0a5a59ca8ad",
  "compiled": true,
- "measured": "2026-11-23T17:51:06Z",
+ "measured": "2026-11-23T19:57:58Z",
  "schema": 1,
  "source": "src/GameSource/Gui/BrnGuiHudMessageAnalyzer.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 35,
+ "unpaired": 41,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
+  {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
+  {"artist": "822ABE80", "artist_size": 240, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<32768,16>::GetFirstEvent", "score": 100.0, "size": 240, "status": "exact", "symbol": "?GetFirstEvent@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QBAHPAPBUEvent@2@PAH@Z"},
+  {"artist": "822AE520", "artist_size": 176, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<32768,16>::GetEventPaddingSize", "score": 100.0, "size": 176, "status": "exact", "symbol": "?GetEventPaddingSize@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@IBAHH@Z"},
+  {"artist": "822C6C30", "artist_size": 736, "data_unchecked": 21, "name": "CgsModule::VariableEventQueue<32768,16>::GetNextEvent", "score": 100.0, "size": 736, "status": "exact", "symbol": "?GetNextEvent@?$VariableEventQueue@$0IAAA@$0BA@@CgsModule@@QBAHPBUEvent@2@PAPBU32@PAH@Z"},
   {"artist": "824ECE10", "artist_size": 256, "first_diff": 12, "name": "BrnGui::HudMessageAnalyzer::GetOnlineName", "score": 59.5, "size": 228, "status": "nonmatching", "symbol": "?GetOnlineName@HudMessageAnalyzer@BrnGui@@ABAPBDW4EActiveRaceCarIndex@@PA_N@Z"},
   {"artist": "824F2E48", "artist_size": 356, "first_diff": 8, "name": "BrnGui::HudMessageAnalyzer::HandleImpact", "score": 25.4, "size": 148, "status": "nonmatching", "symbol": "?HandleImpact@HudMessageAnalyzer@BrnGui@@ABAXPBUGuiImpactEvent@2@@Z"},
   {"artist": "824F32A0", "artist_size": 168, "data_unchecked": 3, "name": "BrnGui::HudMessageAnalyzer::HandleNewRoadRulesHighScore", "score": 100.0, "size": 168, "status": "exact", "symbol": "?HandleNewRoadRulesHighScore@HudMessageAnalyzer@BrnGui@@AAAXPBUGuiEventRoadRuleNewHighScore@2@@Z"},
@@ -59,8 +63,9 @@
   {"artist": "8251FF38", "artist_size": 316, "first_diff": 12, "name": "BrnGui::HudMessageAnalyzer::HandleOnlineStuntRunMessage", "score": 55.7, "size": 316, "status": "nonmatching", "symbol": "?HandleOnlineStuntRunMessage@HudMessageAnalyzer@BrnGui@@QAAXPBUGuiOnlineStuntRunMessageEvent@2@@Z"},
   {"artist": "82520488", "artist_size": 476, "first_diff": 4, "name": "BrnGui::HudMessageAnalyzer::TriggerDeveloperChallengeMessageDEBUG", "score": 25.0, "size": 228, "status": "nonmatching", "symbol": "?TriggerDeveloperChallengeMessageDEBUG@HudMessageAnalyzer@BrnGui@@AAAXXZ"},
   {"artist": "82525E10", "artist_size": 228, "data_unchecked": 5, "name": "BrnGui::HudMessageAnalyzer::HandleOnlineTeamChangeMessage", "score": 100.0, "size": 228, "status": "exact", "symbol": "?HandleOnlineTeamChangeMessage@HudMessageAnalyzer@BrnGui@@AAAXPBUGuiOnlineTeamChangeEvent@2@@Z"},
-  {"artist": "82525FC0", "artist_size": 6616, "first_diff": 8, "name": "BrnGui::HudMessageAnalyzer::Update", "score": 16.1, "size": 1080, "status": "nonmatching", "symbol": "?Update@HudMessageAnalyzer@BrnGui@@QAAXPBV?$GuiEventQueueBase@$0IAAA@$0BA@@CgsGui@@PAV?$GuiEventQueueBase@$0BAAAA@$0BA@@4@@Z"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"},
+  {"artist": "82525FC0", "artist_size": 6616, "first_diff": 8, "name": "BrnGui::HudMessageAnalyzer::Update", "score": 16.2, "size": 1084, "status": "nonmatching", "symbol": "?Update@HudMessageAnalyzer@BrnGui@@QAAXPBV?$GuiEventQueueBase@$0IAAA@$0BA@@CgsGui@@PAV?$GuiEventQueueBase@$0BAAAA@$0BA@@4@@Z"},
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 15.6, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"},
   {"artist": "82C56040", "artist_size": 100, "data_unchecked": 4, "name": "`dynamic initializer for 'BrnGui::HudMessageAnalyzer::KA_STUNT_INFO_MESSAGES''", "score": 100.0, "size": 100, "status": "exact", "symbol": "??__E?KA_STUNT_INFO_MESSAGES@HudMessageAnalyzer@BrnGui@@0QB_KB@@YAXXZ"}
  ]
 }
