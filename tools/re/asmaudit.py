@@ -53,8 +53,8 @@ MODES.
   --tu FILE           only the functions identity files under that source file (audit spelling)
   --meta k=v          stamp the JSON header (exe_commit, b5_commit, toolchain ...)
 
-CI. The exe only exists after a build, so this runs in build-and-publish.yml (daily / on
-demand), not per commit; the result is committed as progress/asmaudit.json and the work server
+CI. The exe only exists after a build, so this runs in build-and-publish.yml (daily when an
+exe input changed, or on demand), not per commit; the result is committed as progress/asmaudit.json and the work server
 imports it as the "instruction accuracy" tier of the evidence layer. Windows only for the map
 demangler (dbghelp); a pure-Python fallback covers the plain `?name@scope@@` shapes elsewhere.
 Needs `pip install capstone pefile`.
