@@ -1201,6 +1201,27 @@
         "XAUDIO::SRC::Double::Process<float,1>": "xaudio.lib:obj\\xbox\\src.obj"
       },
       "evidence": "Verbatim ARTIST decorated export and exact same-member definition agree. The alias verifies the dispatch-table body call."
+    },
+    "0x82C1F250": {
+      "exported_name": "_ValidateWrite",
+      "aliases": {
+        "_ValidateRead": "libcMT.lib:obj\\xbox\\validate.obj"
+      },
+      "evidence": "The complete installed _ValidateRead and _ValidateWrite bodies are byte identical and relocation free. The same CRT FindHandler body relocates its call to _ValidateRead, and ARTIST links it to the exported _ValidateWrite entry."
+    },
+    "0x82980A88": {
+      "exported_name": "XCAM::CXCamVideo::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XCAM::CXCamVideo::`vector deleting destructor'": "xcam.lib:obj\\xbox\\xcamapi.obj"
+      },
+      "evidence": "The normalized archive spelling omits the THIS-adjustor suffix. The archive thunk, its secondary vtable slot, and the linked tail establish the alias at this extent."
+    },
+    "0x82981288": {
+      "exported_name": "XCAM::CStreamEngine::`vector deleting destructor'`adjustor{8}' ",
+      "aliases": {
+        "XCAM::CStreamEngine::`vector deleting destructor'": "xcam.lib:obj\\xbox\\streamengine.obj"
+      },
+      "evidence": "The normalized archive spelling omits the THIS-adjustor suffix. The archive thunk, its secondary vtable slot, and the linked tail establish the alias at this extent."
     }
   },
   "xdk_functions": {
@@ -1737,6 +1758,34 @@
         "archive_symbol": "??$Process@USHORTLE@@$05@LinearVector@SRC@XAUDIO@@SAXPAUXAUDIOSRCHDR@2@@Z"
       },
       "evidence": "The ARTIST export equals the decorated XDK symbol. Its complete body matches, including the verified direct branch to XAUDIO::SRC::LinearVector::ProcessBlock<SHORTLE,6> at 0x82970D58."
+    },
+    "sub_82C12A88": {
+      "x360_address": "0x82C12A88",
+      "symbol": "flsall",
+      "byte_match": true,
+      "evidence": "The already exact _fflush_nolock archive relocates its direct call to flsall. The full body and owned archive unwind records agree."
+    },
+    "XCAM::CXCamVideo::`vector deleting destructor'`adjustor{4}' ": {
+      "x360_address": "0x82980A88",
+      "symbol": "XCAM::CXCamVideo::`vector deleting destructor'`adjustor{4}' ",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "xcam.lib",
+        "member": "obj\\xbox\\xcamapi.obj",
+        "archive_symbol": "??_ECXCamVideo@XCAM@@W3AAPAXI@Z"
+      },
+      "evidence": "Exact two-word CObjectRefCount adjustor. The same archive destructor binds its linked vtable, and the sole tail relocation targets the credited same-class deleting destructor."
+    },
+    "XCAM::CStreamEngine::`vector deleting destructor'`adjustor{8}' ": {
+      "x360_address": "0x82981288",
+      "symbol": "XCAM::CStreamEngine::`vector deleting destructor'`adjustor{8}' ",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "xcam.lib",
+        "member": "obj\\xbox\\streamengine.obj",
+        "archive_symbol": "??_ECStreamEngine@XCAM@@W7AAPAXI@Z"
+      },
+      "evidence": "Exact two-word CObjectRefCount adjustor. The same archive destructor binds its linked vtable, and the sole tail relocation targets the credited same-class deleting destructor."
     }
   },
   "functions": {
@@ -9287,6 +9336,498 @@
           "flags": "0x40000300"
         }
       ]
+    },
+    "0x82C0ADC0": {
+      "previous_size": 196,
+      "exported_name": "fclose",
+      "symbol": "fclose",
+      "size": 284,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fclose.obj",
+      "archive_symbol": "fclose",
+      "fragments": [
+        {
+          "address": "0x82C0AE84",
+          "size": 88,
+          "archive_symbol": "$LN8"
+        },
+        {
+          "address": "0x82C0AEA4",
+          "size": 56,
+          "archive_symbol": "$LN11"
+        }
+      ],
+      "evidence": "The independently witnessed CRT caller and installed archive identify this complete body. The raw kind-3 primary and attached kind-1 unwind records match the archive. The absorbed unnamed extents begin at the owning archive’s internal labels. The original named prefix also has a branch into the recovered tail.",
+      "caller": "0x82C0ADC0",
+      "call_site": "0x82C0AE64"
+    },
+    "0x82C1BD78": {
+      "previous_size": 372,
+      "exported_name": "__FrameUnwindToState",
+      "symbol": "__FrameUnwindToState",
+      "size": 468,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "__FrameUnwindToState",
+      "fragments": [
+        {
+          "address": "0x82C1BEEC",
+          "size": 60,
+          "archive_symbol": "$LN20"
+        },
+        {
+          "address": "0x82C1BF28",
+          "size": 36,
+          "archive_symbol": "$LN24"
+        }
+      ],
+      "evidence": "The independently witnessed CRT caller and installed archive identify this complete body. The raw kind-3 primary and attached kind-1 unwind records match the archive. The absorbed unnamed extents begin at the owning archive’s internal labels. The original named prefix also has a branch into the recovered tail.",
+      "caller": "0x82C1BD78",
+      "call_site": "0x82C1BEB8"
+    },
+    "0x82C1CA50": {
+      "previous_size": 520,
+      "exported_name": "__InternalCxxFrameHandler",
+      "symbol": "__InternalCxxFrameHandler",
+      "size": 532,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\frame.obj",
+      "archive_symbol": "__InternalCxxFrameHandler",
+      "fragments": [
+        {
+          "address": "0x82C1CC58",
+          "size": 12,
+          "archive_symbol": "$LN30"
+        }
+      ],
+      "evidence": "The independently witnessed CRT caller and installed archive identify this complete body. The raw kind-3 primary and attached kind-1 unwind records match the archive. The absorbed unnamed extents begin at the owning archive’s internal labels.",
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0008204"
+        },
+        {
+          "offset": 520,
+          "flags": "0x40000300"
+        }
+      ],
+      "caller": "0x82C10E38",
+      "call_site": "0x82C10E6C"
+    },
+    "0x82C117D0": {
+      "symbol": "_close",
+      "exported_name": "_close",
+      "previous_size": 284,
+      "size": 372,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\close.obj",
+      "archive_symbol": "_close",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "_nhandle": "0x832BE2F0"
+      },
+      "caller": "0x82C117D0",
+      "call_site": "0x82C118DC",
+      "fragments": [
+        {
+          "address": "0x82C118EC",
+          "size": 88,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C1190C",
+          "size": 56,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C1D528": {
+      "symbol": "_commit",
+      "exported_name": "_commit",
+      "previous_size": 300,
+      "size": 388,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\commit.obj",
+      "archive_symbol": "_commit",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "_nhandle": "0x832BE2F0"
+      },
+      "caller": "0x82C1D528",
+      "call_site": "0x82C1D644",
+      "fragments": [
+        {
+          "address": "0x82C1D654",
+          "size": 88,
+          "archive_symbol": "$LN14"
+        },
+        {
+          "address": "0x82C1D674",
+          "size": 56,
+          "archive_symbol": "$LN17"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C1AFC0": {
+      "symbol": "_lseek",
+      "exported_name": "_lseek",
+      "previous_size": 312,
+      "size": 400,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\lseek.obj",
+      "archive_symbol": "_lseek",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "_nhandle": "0x832BE2F0"
+      },
+      "caller": "0x82C1AFC0",
+      "call_site": "0x82C1B0E8",
+      "fragments": [
+        {
+          "address": "0x82C1B0F8",
+          "size": 88,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C1B118",
+          "size": 56,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C11F80": {
+      "symbol": "_read",
+      "exported_name": "_read",
+      "previous_size": 360,
+      "size": 448,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\read.obj",
+      "archive_symbol": "_read",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "_nhandle": "0x832BE2F0"
+      },
+      "caller": "0x82C11F80",
+      "call_site": "0x82C120D8",
+      "fragments": [
+        {
+          "address": "0x82C120E8",
+          "size": 88,
+          "archive_symbol": "$LN13"
+        },
+        {
+          "address": "0x82C12108",
+          "size": 56,
+          "archive_symbol": "$LN16"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C1CF80": {
+      "symbol": "_alloc_osfhnd",
+      "exported_name": "_alloc_osfhnd",
+      "previous_size": 528,
+      "size": 628,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\osfinfo.obj",
+      "archive_symbol": "_alloc_osfhnd",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "_nhandle": "0x832BE2F0"
+      },
+      "caller": "0x82C1CF80",
+      "call_site": "0x82C1D068",
+      "fragments": [
+        {
+          "address": "0x82C1D190",
+          "size": 36,
+          "archive_symbol": "$LN58"
+        },
+        {
+          "address": "0x82C1D1B4",
+          "size": 64,
+          "archive_symbol": "$LN60"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0B228": {
+      "symbol": "fprintf",
+      "exported_name": "fprintf",
+      "previous_size": 512,
+      "size": 560,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fprintf.obj",
+      "archive_symbol": "fprintf",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "__badioinfo": "0x82F94670"
+      },
+      "caller": "0x82C0B228",
+      "call_site": "0x82C0B418",
+      "fragments": [
+        {
+          "address": "0x82C0B428",
+          "size": 48,
+          "archive_symbol": "$LN29"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C0AEE8": {
+      "symbol": "vfscanf",
+      "exported_name": "vfscanf",
+      "previous_size": 468,
+      "size": 556,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fscanf.obj",
+      "archive_symbol": "vfscanf",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300",
+        "__badioinfo": "0x82F94670"
+      },
+      "caller": "0x82C0AEE8",
+      "call_site": "0x82C0B0AC",
+      "fragments": [
+        {
+          "address": "0x82C0B0BC",
+          "size": 88,
+          "archive_symbol": "$LN16"
+        },
+        {
+          "address": "0x82C0B0DC",
+          "size": 56,
+          "archive_symbol": "$LN19"
+        }
+      ],
+      "evidence": "The installed CRT body, existing name, independent archived call, and all owned unwind records agree. A direct branch in the original IDA prefix enters the missing tail. Every local branch and shared CRT data address is checked."
+    },
+    "0x82C1D2C0": {
+      "symbol": "_lseeki64",
+      "size": 404,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\lseeki64.obj",
+      "archive_symbol": "_lseeki64",
+      "archive_data_targets": {
+        "_nhandle": "0x832BE2F0",
+        "__pioinfo": "0x832BE300"
+      },
+      "previous_size": 316,
+      "exported_name": "_lseeki64",
+      "caller": "0x82C1D2C0",
+      "call_site": "0x82C1D3EC",
+      "fragments": [
+        {
+          "address": "0x82C1D3FC",
+          "size": 88,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C1D41C",
+          "size": 56,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C1AC00": {
+      "symbol": "_sopen_helper",
+      "size": 424,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\open.obj",
+      "archive_symbol": "_sopen_helper",
+      "archive_data_targets": {
+        "__pioinfo": "0x832BE300"
+      },
+      "previous_size": 264,
+      "exported_name": "_sopen_helper",
+      "caller": "0x82C1AC00",
+      "call_site": "0x82C1ACD4",
+      "fragments": [
+        {
+          "address": "0x82C1AD08",
+          "size": 160,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C1AD28",
+          "size": 128,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C0AB68": {
+      "symbol": "_fsopen",
+      "size": 400,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fopen.obj",
+      "archive_symbol": "_fsopen",
+      "archive_data_targets": {
+        "$LN17": "0x82C0AC94"
+      },
+      "previous_size": 312,
+      "exported_name": "_fsopen",
+      "caller": "0x82C0AB68",
+      "call_site": "0x82C0AC88",
+      "fragments": [
+        {
+          "address": "0x82C0ACA0",
+          "size": 88,
+          "archive_symbol": "$LN10"
+        },
+        {
+          "address": "0x82C0ACC0",
+          "size": 56,
+          "archive_symbol": "$LN13"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C12398": {
+      "symbol": "_write",
+      "size": 400,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\write.obj",
+      "archive_symbol": "_write",
+      "archive_data_targets": {
+        "_nhandle": "0x832BE2F0",
+        "__pioinfo": "0x832BE300"
+      },
+      "previous_size": 312,
+      "exported_name": "_write",
+      "caller": "0x82C12398",
+      "call_site": "0x82C124C0",
+      "fragments": [
+        {
+          "address": "0x82C124D0",
+          "size": 88,
+          "archive_symbol": "$LN12"
+        },
+        {
+          "address": "0x82C124F0",
+          "size": 56,
+          "archive_symbol": "$LN15"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C12A88": {
+      "symbol": "flsall",
+      "size": 480,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fflush.obj",
+      "archive_symbol": "flsall",
+      "archive_data_targets": {
+        "__piob": "0x832BE408",
+        "_nstream": "0x832BE40C"
+      },
+      "previous_size": 296,
+      "exported_name": "flsall",
+      "caller": "0x82C12A88",
+      "call_site": "0x82C12B74",
+      "fragments": [
+        {
+          "address": "0x82C12BB0",
+          "size": 36,
+          "archive_symbol": "$LN41"
+        },
+        {
+          "address": "0x82C12BD4",
+          "size": 148,
+          "archive_symbol": "$LN25"
+        },
+        {
+          "address": "0x82C12C00",
+          "size": 104,
+          "archive_symbol": "$LN28"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C12C70": {
+      "symbol": "fflush",
+      "size": 244,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\fflush.obj",
+      "archive_symbol": "fflush",
+      "archive_data_targets": {},
+      "previous_size": 156,
+      "exported_name": "fflush",
+      "caller": "0x82C12C70",
+      "call_site": "0x82C12CE4",
+      "fragments": [
+        {
+          "address": "0x82C12D0C",
+          "size": 88,
+          "archive_symbol": "$LN8"
+        },
+        {
+          "address": "0x82C12D2C",
+          "size": 56,
+          "archive_symbol": "$LN11"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C1ADD0": {
+      "symbol": "_fcloseall",
+      "size": 228,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\closeall.obj",
+      "archive_symbol": "_fcloseall",
+      "archive_data_targets": {
+        "_nstream": "0x832BE40C",
+        "__piob": "0x832BE408"
+      },
+      "previous_size": 192,
+      "exported_name": "_fcloseall",
+      "caller": "0x82C1ADD0",
+      "call_site": "0x82C1AE80",
+      "fragments": [
+        {
+          "address": "0x82C1AE90",
+          "size": 36,
+          "archive_symbol": "$LN25"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C16A70": {
+      "symbol": "_getstream",
+      "size": 444,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\stream.obj",
+      "archive_symbol": "_getstream",
+      "archive_data_targets": {
+        "__piob": "0x832BE408",
+        "_nstream": "0x832BE40C"
+      },
+      "previous_size": 408,
+      "exported_name": "_getstream",
+      "caller": "0x82C16A70",
+      "call_site": "0x82C16BF8",
+      "fragments": [
+        {
+          "address": "0x82C16C08",
+          "size": 36,
+          "archive_symbol": "$LN31"
+        }
+      ],
+      "evidence": "The named or independently recovered CRT owner matches its complete installed archive body. An actual branch in the old prefix enters the omitted tail, and every included unwind record and fragment position agrees."
+    },
+    "0x82C0F6A0": {
+      "symbol": "_unlock_file2",
+      "size": 36,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\_file.obj",
+      "archive_symbol": "_unlock_file2",
+      "caller": "0x82C16A70",
+      "call_site": "0x82C16B34",
+      "evidence": "The named getstream prefix independently relocates its direct call to this full disjoint _unlock_file2 body. All 36 bytes and its relocated tail target agree."
     }
   },
   "identified_functions": {
@@ -13979,6 +14520,120 @@
       "symbol": "BrnGame::BrnGameModule::IsEventInGuiQueue",
       "size": 152,
       "evidence": "The original ConstructUpdateSet supplies the event ID and its network GuiEventQueueSmall at 0x823DCC90. The original loop tests event IDs on that queue; DecFIGS declares the matching IsEventInGuiQueue overload. The verified native call relocation at 0x823DCC90 supplies the qualified name."
+    },
+    "0x82C10D70": {
+      "exported_name": null,
+      "symbol": "__FrameUnwindToEmptyState",
+      "size": 196,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\trnsctrl.obj",
+        "archive_symbol": "?__FrameUnwindToEmptyState@@YAXPAKPAU_xDISPATCHER_CONTEXT@@PBU_s_FuncInfo@@@Z"
+      },
+      "evidence": "The owning CRT archive __InternalCxxFrameHandler body relocates the ARTIST call at 0x82C1CB20 to this complete .pdata extent. Both the body and archive unwind record agree."
+    },
+    "0x82C1C4D8": {
+      "exported_name": "sub_82C1C4D8",
+      "symbol": "CatchIt",
+      "size": 324,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\frame.obj",
+        "archive_symbol": "?CatchIt@@YAXPAUEHExceptionRecord@@PAKPAU_CONTEXT@@PAU_xDISPATCHER_CONTEXT@@PBU_s_FuncInfo@@PBU_s_HandlerType@@PBU_s_CatchableType@@PBU_s_TryBlockMapEntry@@H1E@Z"
+      },
+      "evidence": "The owning CRT archive FindHandler body relocates the ARTIST call at 0x82C1C9DC to this complete .pdata extent. Both the body and archive unwind record agree."
+    },
+    "0x82C1C620": {
+      "exported_name": "sub_82C1C620",
+      "symbol": "FindHandlerForForeignException",
+      "size": 364,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\frame.obj",
+        "archive_symbol": "?FindHandlerForForeignException@@YAXPAUEHExceptionRecord@@PAKPAU_CONTEXT@@PAU_xDISPATCHER_CONTEXT@@PBU_s_FuncInfo@@HH1@Z"
+      },
+      "evidence": "The owning CRT archive FindHandler body relocates the ARTIST call at 0x82C1CA38 to this complete .pdata extent. Both the body and archive unwind record agree."
+    },
+    "0x82C1C790": {
+      "exported_name": "sub_82C1C790",
+      "symbol": "FindHandler",
+      "size": 692,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\frame.obj",
+        "archive_symbol": "?FindHandler@@YAXPAUEHExceptionRecord@@PAKPAU_CONTEXT@@PAU_xDISPATCHER_CONTEXT@@PBU_s_FuncInfo@@EH1@Z"
+      },
+      "evidence": "The owning CRT archive __InternalCxxFrameHandler body relocates the ARTIST call at 0x82C1CC48 to this complete .pdata extent. Both the body and archive unwind record agree."
+    },
+    "0x82C1A6E0": {
+      "exported_name": "sub_82C1A6E0",
+      "symbol": "_tsopen_nolock",
+      "size": 1300,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\open.obj",
+        "archive_symbol": "_tsopen_nolock",
+        "archive_data_targets": {
+          "_umaskval": "0x832BAD5C",
+          "__pioinfo": "0x832BE300"
+        }
+      },
+      "evidence": "The existing exact SDK provider has this complete independent .pdata extent. The owning CRT body supplies the linked branch or function identity. Each data target is verified."
+    },
+    "0x82C12140": {
+      "exported_name": null,
+      "symbol": "_write_nolock",
+      "size": 592,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\write.obj",
+        "archive_symbol": "_write_nolock",
+        "archive_data_targets": {
+          "__pioinfo": "0x832BE300"
+        }
+      },
+      "evidence": "The existing exact SDK provider has this complete independent .pdata extent. The owning CRT body supplies the linked branch or function identity. Each data target is verified."
+    },
+    "0x82C12A08": {
+      "exported_name": null,
+      "symbol": "_fflush_nolock",
+      "size": 120,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\fflush.obj",
+        "archive_symbol": "_fflush_nolock"
+      },
+      "evidence": "The existing exact SDK provider has this complete independent .pdata extent. The owning CRT body supplies the linked branch or function identity. Each data target is verified."
+    },
+    "0x82881370": {
+      "exported_name": "sub_82881370",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 288,
+      "evidence": "ARTIST 0x82582154 reaches this signed 32-bit field overload with the full signed bounds. Other bounded signed callers agree. The routine switches the Message lifecycle at this+4, passes its bitstream at this+8, and embedded assert text names Message::PackOrUnpack at CgsMessage.cpp:674. DecFIGS CgsMessage.h declares the matching int32_t pointer, min and max overload."
+    },
+    "0x82881BF0": {
+      "exported_name": "sub_82881BF0",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 16,
+      "evidence": "The original BurningHomeRunSwitchRunner passes its runner ID pointer at 0x8257C260. Four instructions set signed bounds to [-1, INT_MAX] and tail-branch to the signed Message overload at 0x82881370. DecFIGS CgsMessage.cpp:1113 declares the Message member taking a NetworkPlayerID pointer. This is separate from BrnNetworkManager::PackOrUnpack at 0x82582128, which uses INT_MIN."
+    },
+    "0x82881078": {
+      "exported_name": "sub_82881078",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 288,
+      "evidence": "A typed read/write of the unsigned byte through the input pointer, the paired [0,1] Bool wrapper, and the embedded CgsMessage.cpp:556 diagnostic identify the uint8_t overload declared in DecFIGS at line 538."
+    },
+    "0x8288DDA0": {
+      "exported_name": "sub_8288DDA0",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 136,
+      "evidence": "The typed TeamSelect flags and member lifecycle determine a bool pointer. The original normalizes a byte and calls the uint8_t overload with range [0,1]. DecFIGS CgsMessage.cpp:457 names the bool overload."
+    },
+    "0x82881C00": {
+      "exported_name": "sub_82881C00",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 500,
+      "evidence": "Uses the Message lifecycle and signed full-range low/high words, and calls CgsIDConvertToString in both packing directions. The assertion at CgsMessage.cpp:1214 names Message::PackOrUnpack. The DecFIGS CgsID pointer overload and typed ActiveFburn challenge-ID caller agree."
     }
   },
   "native_leaf_functions": {
