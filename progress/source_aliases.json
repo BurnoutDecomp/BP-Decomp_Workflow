@@ -6773,6 +6773,24 @@
     }
   },
   "identified_functions": {
+    "0x82B3BF88": {
+      "exported_name": "sub_82B3BF88",
+      "symbol": "CommTCPSetAddrInfo",
+      "size": 228,
+      "evidence": "The exclusive TCP event body calls here at 0x82B3C0C4 and 0x82B3C128. The 228-byte XDK object agrees with the ARTIST unwind extent and both SocketInfo calls. Its relocation binds the exact 41-byte diagnostic literal at 0x82F84F58."
+    },
+    "0x82B3C070": {
+      "exported_name": "sub_82B3C070",
+      "symbol": "CommTCPEventExclusive",
+      "size": 1032,
+      "evidence": "CommTCPEvent calls here at 0x82B3C4B0 while holding the TCP critical section. The routine accepts sockets and registers CommTCPEvent at 0x82B3C0FC..0x82B3C11C. ARTIST unwind gives 1032 bytes."
+    },
+    "0x82B3C478": {
+      "exported_name": "sub_82B3C478",
+      "symbol": "CommTCPEvent",
+      "size": 96,
+      "evidence": "CommTCPSend calls here at 0x82B3C7FC and the exclusive event body passes this callback to SocketCallback at 0x82B3C11C. The XDK object matches the 96-byte unwind extent and the NetCritTry, NetTick, CommTCPEventExclusive, and NetCritLeave calls."
+    },
     "0x82C2B360": {
       "exported_name": null,
       "symbol": "XGRAPHICS::IRLoadConst::`scalar deleting destructor'",
