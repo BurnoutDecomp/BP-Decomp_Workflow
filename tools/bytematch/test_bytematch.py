@@ -739,6 +739,8 @@ def test_native_leaf_verdict_comes_from_its_object(tmp_path):
                  read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
     assert art.size(leaf) == (8, "native_leaf")
     assert not art.sdk_leaves
+    assert not sdk.matching_provider_names(art, {leaf: {"symbol": "Unrelated"}})
+    assert sdk.matching_provider_names(art, {leaf: {"symbol": "Leaf"}}) == {leaf: {"symbol": "Leaf"}}
 
     obj_path = tmp_path / "leaf.obj"
     for instruction, expected in ((body[0], "exact"), (0x38600008, "nonmatching")):

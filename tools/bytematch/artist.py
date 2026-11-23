@@ -397,6 +397,8 @@ class Artist:
         self.names[address] = proof["symbol"]
         self.unnamed.discard(address)
         self.leaf_extents[address] = (size, "crt_leaf" if "crt_slot" in proof else kind)
+        if kind == "native_leaf":
+            self.identified_addresses.add(address)
         if kind == "sdk_leaf":
             self.sdk_leaves[address] = proof
             if proof.get("archive_aliases"):

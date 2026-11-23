@@ -10497,6 +10497,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x82B69F58": {
+      "symbol": "rw::audio::core::Iir2::ClearBuffer",
+      "size": 28,
+      "caller": "0x82B9E1F8",
+      "call_site": "0x82B9E360",
+      "source": "vendor/renderware/src/rw/audio/core/Iir2.cpp",
+      "tu": "class:rw::audio::core::Iir2",
+      "evidence": "HighShelfIir2 and LowShelfIir2 call this leaf at 0x82B9E360 and 0x82B9E888 on each 16-byte filter history. The Xbox 360 audio PDB names Iir2::ClearBuffer and places its two histories at offsets 0 and 8. The XDK member body matches all 28 bytes including the zero constant. The following word is padding."
+    },
     "0x82ACD068": {
       "symbol": "inflateInit_",
       "size": 20,
