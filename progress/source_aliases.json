@@ -2,6 +2,83 @@
   "version": 1,
   "description": "Explicitly reviewed source and XDK identities for truncated or renamed ARTIST symbols. Identities require an exact address; no prefix or leaf inference.",
   "folded_functions": {
+    "0x829629D0": {
+      "exported_name": "XAUDIO::CReverbEffect::Release`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CReverbEffect::Release": "xaudio.lib:obj\\xbox\\reverbeffect.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x829629D0 and its only relocation branches to XAUDIO::CReverbEffect::Release at 0x82962988."
+    },
+    "0x82963080": {
+      "exported_name": "XAUDIO::CXenonRenderer::`vector deleting destructor'",
+      "aliases": {
+        "XAUDIO::CXenonRenderer::`scalar deleting destructor'": "xaudio.lib:obj\\xbox\\xenonrenderer.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor at 0x82962F78 branches to this complete 48-byte body. Its ??_E weak external resolves to the exact ??_G implementation, whose only relocation calls the verified CXenonRenderer destructor at 0x82962EC0."
+    },
+    "0x82962F78": {
+      "exported_name": "XAUDIO::CXenonRenderer::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CXenonRenderer::`vector deleting destructor'": "xaudio.lib:obj\\xbox\\xenonrenderer.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82962F78 and its only relocation branches to XAUDIO::CXenonRenderer::`vector deleting destructor' at 0x82963080. The COFF weak external for the vector deleting destructor has the same-class scalar deleting destructor as its library-search fallback."
+    },
+    "0x82963060": {
+      "exported_name": "XAUDIO::CXenonRenderer::Release`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CXenonRenderer::Release": "xaudio.lib:obj\\xbox\\xenonrenderer.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82963060 and its only relocation branches to XAUDIO::CXenonRenderer::Release at 0x82962F80."
+    },
+    "0x82969298": {
+      "exported_name": "XAUDIO::CXMASourceEffect::Release`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CXMASourceEffect::Release": "xaudio.lib:obj\\xbox\\xmasourceeffect.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82969298 and its only relocation branches to XAUDIO::CXMASourceEffect::Release at 0x829686A8."
+    },
+    "0x8296AFA8": {
+      "exported_name": "XAUDIO::CPCMSourceEffect::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CPCMSourceEffect::`vector deleting destructor'": "xaudio.lib:obj\\xbox\\pcmsourceeffect.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x8296AFA8 and its only relocation branches to XAUDIO::CPCMSourceEffect::`vector deleting destructor' at 0x8296B1F0. The COFF weak external for the vector deleting destructor has the same-class scalar deleting destructor as its library-search fallback."
+    },
+    "0x8296B5E0": {
+      "exported_name": "XAUDIO::CXMASourceEffect::SetParam`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CXMASourceEffect::SetParam": "xaudio.lib:obj\\xbox\\xmasourceeffect.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x8296B5E0 and its only relocation branches to XAUDIO::CXMASourceEffect::SetParam at 0x82968920."
+    },
+    "0x8296B5F8": {
+      "exported_name": "XAUDIO::CPCMSourceEffect::Release`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CPCMSourceEffect::Release": "xaudio.lib:obj\\xbox\\pcmsourceeffect.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x8296B5F8 and its only relocation branches to XAUDIO::CPCMSourceEffect::Release at 0x8296AFB8."
+    },
+    "0x82C31350": {
+      "exported_name": "XAUDIO::CBatchAllocator::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CBatchAllocator::`vector deleting destructor'": "xaudio.lib:obj\\xbox\\batchallocator.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82C31350 and its only relocation branches to XAUDIO::CBatchAllocator::`vector deleting destructor' at 0x82C31448. The COFF weak external for the vector deleting destructor has the same-class scalar deleting destructor as its library-search fallback."
+    },
+    "0x82C313C8": {
+      "exported_name": "XAUDIO::CDynamicBatchAllocator::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CDynamicBatchAllocator::`vector deleting destructor'": "xaudio.lib:obj\\xbox\\batchallocator.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82C313C8 and its only relocation branches to XAUDIO::CDynamicBatchAllocator::`vector deleting destructor' at 0x82C314A8. The COFF weak external for the vector deleting destructor has the same-class scalar deleting destructor as its library-search fallback."
+    },
+    "0x82C313D0": {
+      "exported_name": "XAUDIO::CStaticBatchAllocator::`vector deleting destructor'`adjustor{4}' ",
+      "aliases": {
+        "XAUDIO::CStaticBatchAllocator::`vector deleting destructor'": "xaudio.lib:obj\\xbox\\batchallocator.obj"
+      },
+      "evidence": "The same-class XDK W3 adjustor matches both instructions at 0x82C313D0 and its only relocation branches to XAUDIO::CStaticBatchAllocator::`vector deleting destructor' at 0x82C31520. The COFF weak external for the vector deleting destructor has the same-class scalar deleting destructor as its library-search fallback."
+    },
     "0x82963C80": {
       "exported_name": "XAUDIO::CXenonRenderer::GetContext`adjustor{4}' ",
       "aliases": {
@@ -10534,6 +10611,15 @@
     }
   },
   "native_leaf_functions": {
+    "0x82B67F38": {
+      "symbol": "rw::audio::core::DelayLine::SetDelay",
+      "size": 32,
+      "caller": "0x82BA2A08",
+      "call_site": "0x82BA2AE4",
+      "source": "vendor/renderware/src/rw/audio/core/DelayLine.cpp",
+      "tu": "class:rw::audio::core::DelayLine",
+      "evidence": "Delay::Process names SetDelay at 0x82BA2AE4 and 0x82BA2B24. Both calls enter this 32-byte leaf, which saves the old delay and marks the crossfade. The Xbox 360 audio MAP names the same owner and signed sample argument. The native member matches the complete extent."
+    },
     "0x82BC6DC0": {
       "symbol": "rw::physics::PairSet::ClearAll",
       "size": 160,
