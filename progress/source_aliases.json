@@ -2430,7 +2430,9 @@
       "symbol": "BrnNetwork::TrafficManager::GetTrafficSyncDataEntry",
       "file": "GameSource/Network/Managers/BrnNetworkTrafficManager.cpp",
       "x360_address": "0x82545A38",
-      "evidence": "The ARTIST name is cut at 'Entr'; the body asserts 'lPlayerID != CgsNetwork::K_INVALID_PLAYER_ID' (BrnNetworkTrafficManager.cpp:659), walks the 7 TrafficSyncData slots of stride 4448 from this+67760 comparing the player id, streams 'No entry for this player: ' (:669) and returns the slot; sole caller TrafficManager::RemovePlayer. The tree body is the same loop/asserts."
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "DecFIGS declares a signed NetworkPlayerID argument and a TrafficSyncData pointer return. ARTIST RemovePlayer branches to this body at 0x82550ECC. The XDK body agrees with the 364-byte extent, the signed streamed diagnostic and its linked data."
     },
     "BrnNetwork::TrafficManager::RetrieveBufferedMessag": {
       "symbol": "BrnNetwork::TrafficManager::RetrieveBufferedMessage",
