@@ -10231,18 +10231,18 @@
       "evidence": "The export truncates the name BrnAI::AIModuleIO::InputBuffer::GetRaceCarAIInterface; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_InputBuffer_Accessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
     },
     "BrnAI::AIModuleIO::Outpu": {
-      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetRouteResponseQueueForWrite",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetRouteMapResponseQueue",
       "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer_Accessors.cpp",
       "x360_address": "0x8276DB18",
       "byte_match": true,
-      "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetRouteResponseQueueForWrite. Of the 20 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer_Accessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "evidence": "The original write-lock assertion is at BrnAIModuleIO.h:430 and the accessor returns the route response queue at +0x1014. DecFIGS names the mutable GetRouteMapResponseQueue overload. The typed XDK body and all its relocations agree with ARTIST."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputIn": {
-      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterfaceForRead",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterface",
       "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
       "x360_address": "0x8279CCA0",
       "byte_match": true,
-      "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterfaceForRead. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "evidence": "The original read-lock assertion is at BrnAIModuleIO.h:465 and the accessor returns the AICarOutputInterface member at +0x16A60. DecFIGS names the const overload GetAICarOutputInterface. The typed XDK body and all its relocations agree with ARTIST."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterfac": {
       "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterface",
@@ -10252,18 +10252,18 @@
       "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterface. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultIn": {
-      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultInterfaceForWrite",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultInterface",
       "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
       "x360_address": "0x8276DD10",
       "byte_match": true,
-      "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultInterfaceForWrite. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "evidence": "The original write-lock assertion is at BrnAIModuleIO.h:472 and the accessor returns the AIModuleResultInterface member at +0x17F50. DecFIGS names the mutable overload GetAIModuleResultInterface. The typed XDK body and all its relocations agree with ARTIST."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetGameE": {
-      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueueForRead",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueue",
       "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
       "x360_address": "0x8279C658",
       "byte_match": true,
-      "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueueForRead. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "evidence": "The original read-lock assertion is at BrnAIModuleIO.h:232 and the accessor returns the GameEventQueue member at +0x1AF30. DecFIGS names the const overload GetGameEventQueue. The typed XDK body and all its relocations agree with ARTIST."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQu": {
       "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueue",
@@ -10273,11 +10273,11 @@
       "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueue. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetVehi": {
-      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetVehicleInterface",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetVehicleDriverInterface",
       "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
       "x360_address": "0x8279CA00",
       "byte_match": true,
-      "evidence": "The export truncates the name BrnAI::AIModuleIO::OutputBuffer::GetVehicleInterface. Of the 3 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp, equals this 168-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "evidence": "The original read-lock assertion is at BrnAIModuleIO.h:409 and the accessor returns the VehicleDriverInputInterface at +0x15120. The call from WorldBridgeAIModule at 0x827AAAF0 uses the const accessor. The typed XDK body and all its relocations agree."
     },
     "BrnAI::AIModuleIO::OutputBuffer::GetVehicleDri": {
       "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetVehicleDriverInterface",
@@ -16598,6 +16598,20 @@
       "x360_address": "0x822B9BD0",
       "byte_match": true,
       "evidence": "IDA kept only `BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetProp`. The FireAssert arguments at 0x822B9C60 cite BrnPropEntityModuleIO.h:742 for the OutputBuffer_PostPhysics::GetPropInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnDirector::DirectorIO::InputBuffer::GetCont": {
+      "symbol": "BrnDirector::DirectorIO::InputBuffer::GetContacts",
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp",
+      "x360_address": "0x82207580",
+      "byte_match": true,
+      "evidence": "The return at 0x82207618 addresses InputBuffer::mContacts at +0x6AB8. The original assertion cites BrnDirectorModuleIO.h:848. DecFIGS names the const getter GetContacts and the return type ContactSpyInterface*. The typed XDK body and all its relocations agree with ARTIST."
+    },
+    "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleRe": {
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultInterface",
+      "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8279CD48",
+      "byte_match": true,
+      "evidence": "The original read-lock assertion is at BrnAIModuleIO.h:479 and the accessor returns the AIModuleResultInterface member at +0x17F50. The two branches from the original const WorldBridgePropModule caller at 0x827AD56C and 0x827AD580 reach this extent. The typed XDK body and all its relocations agree with ARTIST."
     }
   },
   "sdk_entry_groups": {
@@ -25247,6 +25261,13 @@
       "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreScene::GetVehicleInputInterface",
       "size": 164,
       "evidence": "The ARTIST branch at 0x827AAE24 has the const getter relocation in the XDK caller. The original assertion cites BrnRaceCarEntityModuleIO.h line 282 and the return is this+0x10."
+    },
+    "0x8279CB50": {
+      "exported_name": "sub_8279CB50",
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetRouteMapResponseQueue",
+      "size": 164,
+      "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
+      "evidence": "The branch at 0x827AD4FC in BridgeAIModuleToOutput reads the AI route response queue. The body asserts at BrnAIModuleIO.h:437 and returns +0x1014. DecFIGS declares the const GetRouteMapResponseQueue overload. The typed XDK body and all its relocations agree."
     }
   },
   "native_leaf_functions": {
