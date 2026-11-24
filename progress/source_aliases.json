@@ -25487,6 +25487,13 @@
       "size": 276,
       "file": "GameSource/Sound/Vehicles/Engines/BrnSweetenersEffect.cpp",
       "evidence": "DecFIGS BrnSweetenersEffect.h declares SelectSampleIndex. The exact native body has the original bounds assertion and inline draw, with the same four calls from UpdateCarStart and UpdateParams as ARTIST."
+    },
+    "0x8290A438": {
+      "exported_name": "sub_8290A438",
+      "symbol": "cParticleRandomSeed::Build",
+      "size": 216,
+      "file": "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleRandomSeed.cpp",
+      "evidence": "DecFIGS ParticleRandomSeed.h:87 declares Build(s32,s32). Two original calls in cParticleEmitter::Generate correspond to native calls of that overload. The XDK body, both RandomInt diagnostics and the shared build monitor match ARTIST."
     }
   },
   "native_leaf_functions": {
