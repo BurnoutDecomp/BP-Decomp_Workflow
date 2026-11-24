@@ -241,7 +241,7 @@ class Compiler:
         folders.append(xdk / "include/xbox")
         # The same arguments tools/build_x360.py passes, in the same order, as Wine paths.
         self.base_flags = list(flags)
-        self.tail_flags = ["/I" + dos(f) for f in folders] + ["/showIncludes"]
+        self.tail_flags = ["/I" + dos(f) for f in folders] + ["/showIncludes", ledger.MATCH_ASSERT_LOCATIONS_FLAG]
         self.flags = self.base_flags + self.tail_flags
         self.path_flags = dict(path_flags or {})
         self.env = dict(os.environ, INCLUDE=dos(xdk / "include/xbox"), LIB="")

@@ -158,7 +158,8 @@ def compile_sources(tree, xdk, sources, jobs=8, batch=150):
     for start in range(0, len(sources), batch):
         chunk = sources[start:start + batch]
         cmd = [sys.executable, "-B", str(tree / "tools" / "build_x360.py"), "--sdk", str(xdk), "--out", str(out),
-               "--quiet", "--jobs", str(jobs), "--timeout", "300", "--compiler-arg", "/showIncludes"]
+               "--quiet", "--jobs", str(jobs), "--timeout", "300", "--compiler-arg", "/showIncludes",
+               "--compiler-arg", ledger.MATCH_ASSERT_LOCATIONS_FLAG]
         for source in chunk:
             cmd += ["--source", source]
         prior_report = report_path.stat().st_mtime_ns if report_path.is_file() else None
@@ -185,9 +186,11 @@ def compile_sources(tree, xdk, sources, jobs=8, batch=150):
 
 
 def import_sweep(tree, results_path):
-    """Adopt a finished `tools/build_x360.py --all --compiler-arg /showIncludes` sweep."""
+    """Adopt a finished native sweep with matching assertion locations and /showIncludes."""
     index = load_index(tree)
     results = json.loads(Path(results_path).read_text(encoding="utf-8"))
+    if any(ledger.MATCH_ASSERT_LOCATIONS_FLAG not in row["command"] for row in results["results"]):
+        raise SystemExit(f"Import requires --compiler-arg={ledger.MATCH_ASSERT_LOCATIONS_FLAG}.")
     for row in results["results"]:
         log = Path(row["log"])
         text = log.read_text(encoding="utf-8", errors="replace") if log.is_file() else ""
@@ -392,7 +395,9 @@ def unverified_objects(tree, xdk, head, inputs, index, sources, *, allow_failed=
     for source in sources:
         entry = index.get(source, {})
         commit = entry.get("build_commit")
-        if not commit or source not in inputs.blobs or (not entry["passed"] and not allow_failed):
+        if (not commit or source not in inputs.blobs
+                or ledger.MATCH_ASSERT_LOCATIONS_FLAG not in entry.get("command", ())
+                or (not entry["passed"] and not allow_failed)):
             yield source
             continue
         if entry["passed"]:
@@ -445,7 +450,7 @@ def measure(args):
     elif args.record and not args.no_compile:
         rebuild = list(unverified_objects(tree, xdk, head, inputs, index, sources))
     elif not args.no_compile:
-        rebuild = [s for s in sources if s not in index]
+        rebuild = [s for s in sources if ledger.MATCH_ASSERT_LOCATIONS_FLAG not in index.get(s, {}).get("command", ())]
     else:
         rebuild = []
     if rebuild:
@@ -528,7 +533,8 @@ def refresh(args):
                         or known.get("object") != entry["build_object"] or known.get("measure") != measuring
                         or known.get("record") != measurement_identity(record))
         else:
-            measure_ = entry is None or record is None or known != inputs.state(source, index)
+            measure_ = (entry is None or record is None or known != inputs.state(source, index)
+                        or ledger.MATCH_ASSERT_LOCATIONS_FLAG not in entry.get("command", ()))
             if measure_:
                 to_compile.append(source)
         if measure_:
@@ -691,7 +697,9 @@ def diff(args):
                 break
     if source is None:
         raise SystemExit(f"{name}: no record says which source defines it; pass --source src/...cpp")
-    index = compile_sources(tree, xdk, [source], jobs=1) if args.compile or source not in load_index(tree) else load_index(tree)
+    index = load_index(tree)
+    if args.compile or ledger.MATCH_ASSERT_LOCATIONS_FLAG not in index.get(source, {}).get("command", ()):
+        index = compile_sources(tree, xdk, [source], jobs=1)
     entry = index[source]
     if not entry["passed"]:
         raise SystemExit("compile failed:\n" + "\n".join(entry.get("errors", [])))
@@ -888,7 +896,7 @@ def main(argv=None):
     c.add_argument("sources", nargs="*")
     c.add_argument("--all", action="store_true")
     c.add_argument("--import-sweep", metavar="COMPILE_RESULTS_JSON",
-                   help="adopt a finished build_x360.py sweep run with --compiler-arg /showIncludes")
+                   help="adopt a finished native sweep built with /showIncludes and matching assertion locations")
     c.add_argument("--jobs", type=int, default=8)
     c.set_defaults(fn=compile_cmd)
     m = sub.add_parser("measure")

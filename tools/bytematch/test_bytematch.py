@@ -1213,7 +1213,8 @@ def test_record_refresh_remeasures_after_comparison_inputs_change(monkeypatch, t
     assert trace == [("compile", [source]), ("measure", [source])]
 
     stamp = bytematch.object_stamp(index[source])
-    index[source].update(build_commit=head, build_object=stamp, build_toolchain=record["toolchain"])
+    index[source].update(build_commit=head, build_object=stamp, build_toolchain=record["toolchain"],
+                         command=["cl", ledger.MATCH_ASSERT_LOCATIONS_FLAG])
     measurement = {"measure": "before", "record": bytematch.measurement_identity(record), "object": stamp}
     bytematch.save_deps(tmp_path, {source: measurement}, recorded=True)
     monkeypatch.setattr(bytematch, "measure_fingerprint", lambda: "after")
@@ -1244,7 +1245,8 @@ def test_measure_cannot_record_an_object_from_changed_inputs(monkeypatch, tmp_pa
     previous, head = "b" * 40, "a" * 40
     obj = tmp_path / "a.obj"
     obj.write_bytes(b"cached object")
-    entry = {"object": str(obj), "passed": True, "command": ["cl"], "includes": [header],
+    entry = {"object": str(obj), "passed": True, "command": ["cl", ledger.MATCH_ASSERT_LOCATIONS_FLAG],
+             "includes": [header],
              "build_commit": previous, "build_toolchain": "xdk"}
     entry["build_object"] = bytematch.object_stamp(entry)
     monkeypatch.setattr(bytematch, "need_tree", lambda _: tmp_path)
@@ -1268,6 +1270,12 @@ def test_measure_cannot_record_an_object_from_changed_inputs(monkeypatch, tmp_pa
     monkeypatch.setattr(bytematch, "tree_entries", lambda *_: {
         source: ("blob", "unchanged-source"), header: ("blob", "same-header"),
     })
+    command = entry["command"]
+    entry["command"] = ["cl"]
+    with pytest.raises(SystemExit, match="not verified for this commit"):
+        bytematch.measure(args)
+    assert written == []
+    entry["command"] = command
     bytematch.measure(args)
     assert len(written) == 1 and written[0]["commit"] == head
 

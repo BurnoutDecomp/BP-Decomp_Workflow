@@ -149,6 +149,19 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
 - **Verify natively, never at runtime.** The proof is an XDK compile plus the byte comparison
   (`work match diff|measure`). Never launch the game, run a harness case or build the PC exe to
   check native work.
+- **Keep recorded assertion locations behind the matching option.** Use
+  `CGS_ASSERT_AT(condition, message, file, line)` or `CGS_ASSERT_STREAM_AT(...)`. For an
+  existing message-wrapper expansion use `CGS_ASSERT_MESSAGE_AT` or
+  `CGS_ASSERT_STREAM_MESSAGE_AT` to preserve its code generation. Pass
+  `CGS_ASSERT_LOCATION(file, line)` to a manual `FireAssert` sequence, or use
+  `CGS_JOB_ASSERT_LOG` for worker assertions that call `PrintStringed`.
+  Define each repeated historical path once in its source file and keep its original spelling,
+  including slashes and case. Record the original line at each assertion site. Keep ordinary
+  assertions on `CGS_ASSERT` or `CGS_ASSERT_STREAM`, and keep `#line` out of assertion
+  locations. `work match` and Wine enable `CGS_MATCH_ASSERT_LOCATIONS=1`. Normal builds
+  use the compiler's `__FILE__` and `__LINE__`. When sharing call sites with the PC tree,
+  carry the header macros with them and leave the flag disabled. Check linked filename
+  strings as well as the instruction comparison when migrating locations.
 - **Never invent.** Constants come from the image (`python tools/re/x360rd.py <addr> <n>`), cited
   by address, never tuned until the diff goes quiet. A literal-pool mismatch in the diff means the
   constant is wrong, not the scheduling.

@@ -69,9 +69,8 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
   (per source: object, pass/fail, include list) and `deps.json` (the inputs a recorded
   measurement depended on). `work match measure` and `refresh` compile what they need themselves.
 - The flags live in `build_x360.py` on the branch (`FLAGS`: `/O2 /Oi /Ob2 /GR- /GS- /EHs-c- /Gy
-  /FAc` and the platform defines) and apply to every object. `/FAc` keeps the machine-code
-  listing available when an assertion uses a historical filename. `/FAcs` tries to reopen that
-  filename to interleave source text and fails if the checkout has no such path. `/Gy` puts each function in
+  /FAc` and the platform defines) and apply to every object. Use `/FAc` for machine-code
+  listings. `/Gy` puts each function in
   its own COMDAT section, so objects can be compared function by function. Changing a flag
   changes every record's toolchain fingerprint: a maintainer decision, after which
   `work match refresh --record` re-measures every object (a manual server cross-check run does it
@@ -86,6 +85,11 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
 - Running the branch tool directly (`--source` and `--out` are relative to the native tree,
   whatever the current folder): `python -B b5-x360/tools/build_x360.py --sdk <XDK> --source src/...cpp --out build/x360/probe`.
   In Git Bash set `MSYS_NO_PATHCONV=1`, or an argument such as `/showIncludes` is rewritten into a path.
+- Direct native builds use live source locations. To reproduce the byte-match configuration,
+  add `--compiler-arg=/DCGS_MATCH_ASSERT_LOCATIONS=1`. Include that argument in a sweep to
+  be imported into the matching cache. The XDK 14.00.6502 preprocessor ignores `/pathmap`,
+  `-ffile-prefix-map`, and `-fmacro-prefix-map` with D9002. `/FC` gives the checkout's full
+  path. Preserve recorded locations with the assertion macros from the `byte-match` skill.
 - A full sweep (`--all`) compiles every tracked `src/` and `vendor/` source outside `pc/`
   folders. Run it in the background; it takes a while.
 

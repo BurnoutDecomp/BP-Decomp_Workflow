@@ -35,6 +35,7 @@ SUMMARY = REPO / "progress" / "bytematch.json"
 REPORT = REPO / "progress" / "BYTEMATCH.md"
 SCHEMA = 1
 BRANCH = "x360"
+MATCH_ASSERT_LOCATIONS_FLAG = "/DCGS_MATCH_ASSERT_LOCATIONS=1"
 
 STATUSES = ("exact", "nonmatching", "missing", "sdk", "unnamed")
 RANK = {"exact": 3, "nonmatching": 2}
