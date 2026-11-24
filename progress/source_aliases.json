@@ -16656,6 +16656,34 @@
       "x360_address": "0x82488B40",
       "byte_match": true,
       "evidence": "The original truncated name specifies CreateMatchOptions, capacity 75 and Append. Its XDK specialization matches the extent, element stride and original CgsArray diagnostic references."
+    },
+    "??$Shuffle@VGridPositionAndScoreData@BrnGameState@@V?$Array@VGridPositionAndScoreData@BrnGameState@@$07@CgsContainers@@": {
+      "symbol": "CgsAlgorithms::Shuffle<BrnGameState::GridPositionAndScoreData,CgsContainers::Array<BrnGameState::GridPositionAndScoreData,8> >",
+      "file": "GameSource/GameState/ModeManager/BrnModeManager.cpp",
+      "x360_address": "0x82325AA0",
+      "byte_match": true,
+      "evidence": "The XDK range specialization agrees with the preserved ARTIST mangled name. DecFIGS CgsShuffle.h:107 records the void range signature. The native body matches with its integer draw inlined, 18 verified call relocations and six original diagnostic references."
+    },
+    "??$Shuffle@GV?$Stack@G$0BJA@@CgsContainers@@@CgsAlgorithms@@YAXAAV?$Stack@G$0BJA@@CgsContainers@@HHAAVRandom@CgsNumeric": {
+      "symbol": "CgsAlgorithms::Shuffle<unsigned short,CgsContainers::Stack<unsigned short,400> >",
+      "file": "GameShared/GameClasses/Algorithms/CgsAlgorithms_Inst.cpp",
+      "x360_address": "0x8271B110",
+      "byte_match": true,
+      "evidence": "The XDK range specialization agrees with the preserved ARTIST mangled name. DecFIGS CgsShuffle.h:107 records the void range signature. The native body matches with its integer draw inlined, 18 verified call relocations and six original diagnostic references."
+    },
+    "??$Shuffle@EV?$Stack@E$0MH@@CgsContainers@@@CgsAlgorithms@@YAXAAV?$Stack@E$0MH@@CgsContainers@@HHAAVRandom@CgsNumeric@@": {
+      "symbol": "CgsAlgorithms::Shuffle<unsigned char,CgsContainers::Stack<unsigned char,199> >",
+      "file": "GameShared/GameClasses/Algorithms/CgsAlgorithms_Inst.cpp",
+      "x360_address": "0x8271B298",
+      "byte_match": true,
+      "evidence": "The XDK range specialization agrees with the preserved ARTIST mangled name. DecFIGS CgsShuffle.h:107 records the void range signature. The native body matches with its integer draw inlined, 18 verified call relocations and six original diagnostic references."
+    },
+    "??$Shuffle@GV?$Stack@G$00@CgsContainers@@@CgsAlgorithms@@YAXAAV?$Stack@G$00@CgsContainers@@HHAAVRandom@CgsNumeric@@@Z": {
+      "symbol": "CgsAlgorithms::Shuffle<unsigned short,CgsContainers::Stack<unsigned short,1> >",
+      "file": "GameShared/GameClasses/Algorithms/CgsAlgorithms_Inst.cpp",
+      "x360_address": "0x8271B420",
+      "byte_match": true,
+      "evidence": "The XDK range specialization agrees with the preserved ARTIST mangled name. DecFIGS CgsShuffle.h:107 records the void range signature. The native body matches with its integer draw inlined, 18 verified call relocations and six original diagnostic references."
     }
   },
   "sdk_entry_groups": {
@@ -25452,6 +25480,13 @@
       "size": 204,
       "file": "GameShared/GameClasses/Containers/CgsArrayStaticPassbyRecord5.cpp",
       "evidence": "The native call relocation at ARTIST 0x8269AFA8 in BrnSound::Vehicles::Environment::StaticPassbyControl::PassbyHistory::Update identifies this Array specialization. The XDK compares exact and its assertions reference the same strings and streamed-message data."
+    },
+    "0x82685608": {
+      "exported_name": null,
+      "symbol": "BrnSound::Vehicles::Engines::SweetenersEffect::SelectSampleIndex",
+      "size": 276,
+      "file": "GameSource/Sound/Vehicles/Engines/BrnSweetenersEffect.cpp",
+      "evidence": "DecFIGS BrnSweetenersEffect.h declares SelectSampleIndex. The exact native body has the original bounds assertion and inline draw, with the same four calls from UpdateCarStart and UpdateParams as ARTIST."
     }
   },
   "native_leaf_functions": {
