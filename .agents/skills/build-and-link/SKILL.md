@@ -156,9 +156,9 @@ meanwhile check origin's `.bat` for the missing TUs' mount lines.
 
 ## CI in one paragraph
 
-`.github/workflows/build-and-publish.yml` checks daily at 04:00 UTC and builds only when an exe
-input changed since the website's latest build (`tools/build/website_build_gate.py`: the
-`b5-decomp` pointer, `tools/build/`, `ci/`, the workflow); a manual run always builds. It builds
+`.github/workflows/build-and-publish.yml` checks daily at 04:00 UTC and builds when the `b5-decomp`
+pointer differs from the website's latest build or when the site has no build yet. Use a manual
+run to publish parent-only build changes or refresh the bundled assets. It builds
 on a GitHub-hosted runner **pinned to `windows-2022`**, from `main`'s committed `b5-decomp` pointer and
 `main`'s `.bat`, not from anyone's working tree; it uploads the bundle to the work server and
 commits the instruction-shape audit. `windows-latest` once rolled to a newer Visual Studio

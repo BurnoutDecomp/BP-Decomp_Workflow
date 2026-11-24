@@ -1,21 +1,13 @@
-"""Decide whether a scheduled Build & Publish run has anything new to put on the website.
+"""Publish on the daily schedule when b5-decomp differs from the latest website build.
 
-The daily schedule used to recompile and republish the same exe whenever b5-decomp's dev
-was quiet: the website served four identical builds (178-181, 2026-11-20..23) of the one
-b5-decomp commit d21192332d58. A build can change the download only when something that goes
-into the exe changed since the build the website serves:
-  * the b5-decomp pointer on main (new dev commits reach main as the reconcile bot's bump),
-  * the parent's exe build inputs: tools/build/, ci/ and the workflow itself.
+The work server's /api/builds records the parent commit as latest.commit_sha.
+Read its b5-decomp gitlink and compare it with the gitlink the workflow will
+check out. The reconcile bot carries dev advances to main through that gitlink.
+Manual runs (--force) can publish parent-only build changes or refresh assets.
 
-The published build is the work server's latest (`/api/builds`); its `commit_sha` is the
-workflow commit that build ran on. That commit is fetched at depth 1 and diffed against the
-head on exactly those paths, so neither ancestry nor the compare API's file caps matter: the
-same inputs make the same exe. What lives outside the repository (the runner
-image's MSVC, the prebuilt FFmpeg release, the XAudio2 package, the Drive assets the server
-merges in) is not seen here; a manual run (--force) always builds.
-
-Prints the reason and writes build=true|false to $GITHUB_OUTPUT when it is set. Any
-unexpected error answers build=true, so a broken gate never holds back new work.
+Prints the decision and writes build=true|false to $GITHUB_OUTPUT when it is set.
+An unavailable website or unreadable Git revision fails the gate so the schedule
+can try again without publishing a duplicate in the meantime.
 """
 from __future__ import annotations
 
@@ -23,12 +15,11 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
-# Everything in this repository that the exe build reads. b5-decomp is the gitlink.
-EXE_INPUTS = ("b5-decomp", "tools/build", "ci", ".github/workflows/build-and-publish.yml")
 
 
 def published_commit(server: str) -> str:
@@ -36,43 +27,44 @@ def published_commit(server: str) -> str:
     request = urllib.request.Request(server.rstrip("/") + "/api/builds",
                                      headers={"User-Agent": "website-build-gate"})
     with urllib.request.urlopen(request, timeout=30) as response:
-        latest = json.load(response).get("latest") or {}
-    return latest.get("commit_sha") or ""
+        latest = json.load(response)["latest"]
+    if latest is None:
+        return ""
+    sha = latest["commit_sha"]
+    if not isinstance(sha, str) or not re.fullmatch(r"[0-9a-fA-F]{40}", sha):
+        raise ValueError("latest website build has no valid parent commit SHA")
+    return sha.lower()
 
 
 def git(root: Path, *args: str) -> str:
     return subprocess.check_output(["git", "-C", str(root), *args], text=True).strip()
 
 
-def changed_inputs(root: Path, published: str, head: str) -> list[str]:
-    """The exe inputs whose content differs between the published commit and the head."""
-    have = subprocess.run(["git", "-C", str(root), "cat-file", "-e", published + "^{commit}"],
+def b5_pointer(root: Path, rev: str) -> str:
+    """Read a parent revision's b5-decomp gitlink, fetching its tree if needed."""
+    have = subprocess.run(["git", "-C", str(root), "cat-file", "-e", rev + "^{commit}"],
                           capture_output=True).returncode == 0
     if not have:
-        # The CI checkout is shallow: bring in just the published commit's tree. Never
-        # pass --depth to a full clone, which would make a developer's checkout shallow.
+        # CI only checks out one revision. Keep full development clones full.
         depth = ["--depth", "1"] if git(root, "rev-parse", "--is-shallow-repository") == "true" else []
         subprocess.run(["git", "-C", str(root), "fetch", "--quiet", "--no-tags", *depth,
-                        "origin", published], check=True)
-    return git(root, "diff", "--name-only", published, head, "--", *EXE_INPUTS).splitlines()
+                        "origin", rev], check=True)
+    fields = git(root, "ls-tree", rev, "--", "b5-decomp").split()
+    if len(fields) != 4 or fields[:2] != ["160000", "commit"]:
+        raise ValueError(f"parent commit {rev[:12]} has no b5-decomp gitlink")
+    return fields[2]
 
 
-def b5_pointer(root: Path, rev: str) -> str:
-    out = git(root, "ls-tree", rev, "b5-decomp")
-    return out.split()[2] if out else ""
-
-
-def decide(published: str, head: str, changed) -> tuple[bool, str]:
-    if not published:
-        return True, "the website has no published build to compare with"
+def decide(published: str, head: str, pointer) -> tuple[bool, str]:
     if published == head:
         return False, f"the website already serves a build of this commit {head[:12]}"
-    paths = changed(published, head)
-    if not paths:
-        return False, (f"no exe input changed since the website's build of {published[:12]}"
-                       " (b5-decomp, tools/build, ci, the workflow)")
-    shown = ", ".join(paths[:5]) + (f" and {len(paths) - 5} more" if len(paths) > 5 else "")
-    return True, f"exe inputs changed since the website's build of {published[:12]}: {shown}"
+    current_b5 = pointer(head)
+    if not published:
+        return True, f"the website has no published build; b5-decomp is {current_b5[:12]}"
+    published_b5 = pointer(published)
+    if published_b5 == current_b5:
+        return False, f"the website already serves b5-decomp {current_b5[:12]}"
+    return True, f"b5-decomp changed {published_b5[:12]} -> {current_b5[:12]}"
 
 
 def main() -> None:
@@ -87,22 +79,11 @@ def main() -> None:
     if args.force:
         build, reason = True, "manual run: always builds"
     else:
-        try:
-            if not args.server:
-                raise ValueError("no work server given (--server / $WORK_SERVER)")
-            head = args.head or git(args.root, "rev-parse", "HEAD")
-            published = published_commit(args.server)
-            build, reason = decide(published, head,
-                                   lambda base, tip: changed_inputs(args.root, base, tip))
-        except Exception as exc:  # never let the gate hold back a real change
-            build, reason = True, f"gate failed ({exc}); building to be safe"
-        else:
-            if published and published != head:
-                try:
-                    print(f"b5-decomp: website build {b5_pointer(args.root, published)[:12]},"
-                          f" head {b5_pointer(args.root, head)[:12]}")
-                except (OSError, subprocess.CalledProcessError):
-                    pass
+        if not args.server:
+            parser.error("no work server given (--server / $WORK_SERVER)")
+        head = args.head or git(args.root, "rev-parse", "HEAD")
+        build, reason = decide(published_commit(args.server), head,
+                               lambda rev: b5_pointer(args.root, rev))
     line = ("BUILD: " if build else "SKIP: ") + reason
     print(line)
     output = os.environ.get("GITHUB_OUTPUT")

@@ -18,11 +18,9 @@ name: Build & Publish Game
 
 on:
   # No per-push trigger: main gets frequent automated ledger commits, and a build
-  # per push would keep restarting. Check once daily, and build only when the gate
-  # job below finds new exe inputs (new b5-decomp dev commits, or a parent build
-  # change) since the build the website serves. Manual runs ("Run workflow" /
-  # `gh workflow run`) always build -- that is also how to make the server re-pull
-  # the Drive assets on a day dev did not move.
+  # per push would keep restarting. Check once daily for a b5-decomp revision
+  # different from the one the website serves. Use a manual run ("Run workflow" /
+  # `gh workflow run`) for parent-only build changes or to refresh Drive assets.
   schedule:
     - cron: "0 4 * * *"
   workflow_dispatch:
@@ -36,11 +34,9 @@ permissions:
   contents: write
 
 jobs:
-  # The schedule used to rebuild and republish the same exe whenever dev was quiet
-  # (website builds 178-181 all compiled b5-decomp d21192332d58). This cheap Linux
-  # job diffs the exe inputs -- the b5-decomp pointer, tools/build/, ci/ and this
-  # file -- between the head and the commit of the website's latest build, and the
-  # Windows job runs only when they differ. Manual runs always build.
+  # Compare the b5-decomp gitlinks in the scheduled checkout and the parent commit
+  # recorded by the website. This keeps parent-only changes, including changes to
+  # the gate itself, from publishing another build of the same dev revision.
   gate:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -61,8 +57,8 @@ jobs:
 
   build:
     needs: gate
-    # A gate job that broke builds anyway: it must never hold back new work.
-    if: ${{ !cancelled() && (needs.gate.result != 'success' || needs.gate.outputs.build == 'true') }}
+    # Require a successful decision before a scheduled build can publish.
+    if: needs.gate.outputs.build == 'true'
     # PINNED, do not put back to windows-latest. On 2026-08-24 `windows-latest`
     # resolved to image `windows-2025-vs2026` -> Visual Studio 18 / MSVC 14.51.36231,
     # a compiler GENERATION newer than the 17.14 / MSVC 14.44 this tree is developed
