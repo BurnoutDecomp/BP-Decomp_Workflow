@@ -2208,6 +2208,14 @@
       "x360_address": "0x821FF238",
       "evidence": "SceneManagerModuleIO.h pins the two-word sphere-result payload from this exact TakePackage address; generic PostBox checks WAITING, copies payload and sets GOT_PACKAGE."
     },
+    "BrnDirector::PostBox<cla": {
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult>::GetPackage",
+      "file": "GameSource/Director/Utils/BrnPostBox.h",
+      "x360_address": "0x821FBFA0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The ARTIST branch from VisibilityCollisionPolicy::ProcessSceneQueryResults at 0x822246EC agrees with the XDK call relocation for the volume-test post box. DecFIGS BrnPostBox.h declares the same const reference return. The 88-byte body returns the package at +4 and matches both diagnostic strings."
+    },
     "BrnDirector::Camera::B": {
       "symbol": "BrnDirector::BehaviourCollection<TBehaviour,TParameters,N>::GetCamera",
       "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.h",
@@ -15183,6 +15191,14 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA kept only `??$SortAndCreateRunList@$0EA@@?$ContactSpyQueue@VTrafficContact@ContactSpy@BrnPhysics@@$0BJA@@ContactSpy@BrnPhysics@@QA` of the name BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::TrafficContact,400>::SortAndCreateRunList<64>. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::TrafficContact,400>::SortAndCreateRunList<64> (BrnPhysics::PhysicsModule::ProcessContactSpies at 0x825B040C)."
+    },
+    "??$SortAndCreateRunList@$0DC@@?$ContactSpyQueue@VPhysicalCarPartContact@ContactSpy@BrnPhysics@@$0JG@@ContactSpy@BrnPhys": {
+      "symbol": "BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::PhysicalCarPartContact,150>::SortAndCreateRunList<50>",
+      "file": "GameSource/Physics/ContactSpies/ContactSpyQueue_PhysicalCarPartContact_150_SortAndCreateRunList_50.cpp",
+      "x360_address": "0x825AF8F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The XDK relocation in ProcessContactSpies matches the ARTIST branch at 0x825B0420. The truncated export is a prefix of the native decorated name, and DecFIGS BrnContactSpyQueue.h corroborates the 150-entry queue and ContactSpyRunList<50> pointer argument."
     },
     "??$SortAndCreateRunList@$0GE@@?$ContactSpyQueue@VPropContact@ContactSpy@BrnPhysics@@$0GE@@ContactSpy@BrnPhysics@@QAAXPA": {
       "symbol": "BrnPhysics::ContactSpy::ContactSpyQueue<BrnPhysics::ContactSpy::PropContact,100>::SortAndCreateRunList<100>",
