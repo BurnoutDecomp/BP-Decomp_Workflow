@@ -577,7 +577,8 @@
         "CgsGraphics::PerformanceTracker::EndFrame": "src/GameShared/GameClasses/Graphics/CgsPerformanceTracker.cpp",
         "ShaderConstantTable::EndFrame": "src/GameShared/GameClasses/Graphics/CgsShaderConstants.cpp",
         "CgsDev::DebugComponent::Construct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
-        "CgsDev::DebugComponent::Destruct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp"
+        "CgsDev::DebugComponent::Destruct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+        "CgsDev::DebugComponent::Update": "The base Update is empty (CgsDebugComponent.cpp:326; PS3 CgsResource::DebugComponent::Update 0xCE3A84 calls the base through sub_CB0BAC), so the compiled method matches all 4 bytes, and CgsResource::DebugComponent::Update's base call at 0x828FF00C lands here."
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -15307,6 +15308,869 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA kept only `CgsDev::DebugUI::VariableMetadata>::Free` of the name CgsDev::Internal::DebugStaticPool<CgsDev::DebugUI::VariableMetadata>::Free. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call CgsDev::Internal::DebugStaticPool<CgsDev::DebugUI::VariableMetadata>::Free (CgsDev::DebugUI::VariableManager::RemoveMetadata at 0x8282EEF4)."
+    },
+    "BrnResource::ChallengeListEntry::GetChall": {
+      "symbol": "BrnResource::ChallengeListEntry::GetChallengeStyle",
+      "file": "GameSource/Gui/Flow/HUD/Components/BrnChallengeSelector.cpp",
+      "x360_address": "0x823542A0",
+      "byte_match": false,
+      "evidence": "IDA truncated 0x823542A0's name at 41 characters to 'BrnResource::ChallengeListEntry::GetChall'. truncated3.json lists it ambiguous between GetChallengeID and GetChallengeStyle; the body is GetChallengeStyle (asserts the type byte < 0x29, maps types 10/11 to styles 3/..., default 1, returns an int in r3), and ChallengeSelector::Hide 0x82436FF0 stores its r3 as a 32-bit word after loading the id itself with ld 0xC0. Our header-inline GetChallengeStyle (SharedClasses/DataLists/ChallengeListEntry.h) is emitted out of line in the BrnChallengeSelector.cpp object. 14 ARTIST callers (gui lane). Our copy is not yet byte-exact (validate_aliases: nonmatching); the alias still names the callee for its 14 callers (ChallengeSelector::Hide 0x82436F78 is otherwise exact).",
+      "name_evidence": true
+    },
+    "BrnWorld::Cr": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::RaceCarCrashCompleteEvent>::GetEvent",
+      "file": "GameSource/World/CrashModule/SharedIO/BaseEventQueue_RaceCarCrashCompleteEvent_GetEvent.cpp",
+      "x360_address": "0x822ACCE0",
+      "byte_match": true,
+      "evidence": "IDA truncated the export name to `BrnWorld::Cr`. Body (164 B) is BaseEventQueue<T>::GetEvent(int): asserts mpEvents != NULL / index < miLength / index >= 0 at CgsBaseEventQueue.h:272/274/275 (li r5 0x110/0x112/0x113), returns mpEvents + i*16, i.e. a 16-byte event. Its two ARTIST callers both walk the crash-complete queue: BrnWorld::PropEntityModule::PostSceneUpdate 0x822C47CC (r3 = lpInput+8 = InputBuffer_PostScene::GetCrashEventQueue(), an EventQueue<CrashIO::RaceCarCrashCompleteEvent,10>) and BrnWorld::RaceCarEntityModule::ProcessRaceCarCrashCompleteEvents. Our instance in the named source compares exact against 0x822ACCE0 (msgs/world-cmpaddr.py, x360 tree world @ a51e0b0d6+). The truncated-name resolver left it ambiguous among BrnWorld::Crash* names; the caller set and body pin it. Effect: PropEntityModule::PostSceneUpdate 0x822C4718 (244 B) becomes exact (its only difference is this call)."
+    },
+    "BrnWorld::CrashIO::RemoveSlammedTrafficEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::RemoveSlammedTrafficEvent>::AddEvent",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "x360_address": "0x8271A430",
+      "byte_match": false,
+      "evidence": "Front-truncated export name (312 B). It is BaseEventQueue<T>::AddEvent(const T&): asserts mpEvents (CgsBaseEventQueue.h, streamed full-queue message via the StrStream vtable 0x82000D00), copies one 2-byte event to mpEvents[miLength]. Its only caller TrafficEntityModule::GenerateSlamRecoveryEvents 0x82720938 passes &TrafficInputInterface::mRemoveSlammedTrafficEventQueue (r20+0xA10) and a stack RemoveSlammedTrafficEvent{u16} (sth r31,0x50(r1)), i.e. the inlined TrafficInputInterface::RemoveSlammedTraffic (DWARF BrnCrashModuleTrafficIOInterfaces.h:165). Our object calls exactly this instance; its body is not exact yet (the streamed full-queue assert lives in the shared CgsBaseEventQueue.h). Evidence-only name: with it and sub_82704B18 named, GenerateSlamRecoveryEvents 0x827207E0 (380 B) is exact.",
+      "name_evidence": true
+    },
+    "EA::Allocator::GeneralAllocator::FindAndSetNewTopChu": {
+      "symbol": "EA::Allocator::GeneralAllocator::FindAndSetNewTopChunk",
+      "file": "vendor/PPMalloc/source/EAGeneralAllocator.cpp",
+      "x360_address": "0x82B4D878",
+      "byte_match": false,
+      "evidence": "IDA truncated the name (truncated3.json carries ?FindAndSetNewTopChunk@GeneralAllocator@Allocator@EA@@IAAPAUChunk@123@XZ). GeneralAllocator::TrimCore 0x82B4F0A0 is word-identical to ours except its call at 0x82B4F17C, which the comparator flags only because ARTIST's callee name is truncated; the alias makes TrimCore exact.",
+      "name_evidence": true
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BCI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BCI@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<296>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823CECE0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BCJ@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BCJ@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<297>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823CED98",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventSetBlackBars@BrnGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventSetBlackBars@BrnGui@@PAVInputBuffer@CgsG": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<BrnGui::GuiEventSetBlackBars>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823CEE50",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0GH@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0GH@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<103>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823CF860",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BAP@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BAP@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<271>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823CFE20",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BBI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BBI@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<280>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0270",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0FP@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0FP@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<95>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0498",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0HP@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0HP@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<127>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0550",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BBN@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BBN@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<285>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0608",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0GN@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0GN@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<109>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0B10",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0CDL@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0CDL@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<571>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D0BC8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0FF@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0FF@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<85>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D1748",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0FD@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0FD@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<83>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D18B8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BCD@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BCD@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<291>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D1FE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0KE@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0KE@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<164>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D2B68",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BDI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BDI@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<312>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D31E0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0BDL@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0BDL@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<315>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D34C0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0IG@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0IG@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<134>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D4600",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0II@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0II@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<136>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D46B8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0IJ@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0IJ@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<137>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D4770",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0IB@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0IB@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<129>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D52F0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0ID@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0ID@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<131>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D53A8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0GI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0GI@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<104>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D5FE0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0CED@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0CED@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<579>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6098",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0CEI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0CEI@@1@PAVInputBuffer@CgsGuiModuleIO@1": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<584>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6150",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0JJ@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0JJ@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<153>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6378",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0JH@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0JH@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<151>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D67C8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0JI@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0JI@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<152>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6880",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventRoadRuleUpdateTargetScores@BrnGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventRoadRuleUpdateTargetScores": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<BrnGui::GuiEventRoadRuleUpdateTargetScores>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6B60",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventRoadRuleEnd@BrnGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventRoadRuleEnd@BrnGui@@PAVInputBuffer@CgsGui": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<BrnGui::GuiEventRoadRuleEnd>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D6CD0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@V?$GuiEvent@$0EK@@CgsGui@@@GuiModule@CgsGui@@QAAXAAV?$GuiEvent@$0EK@@1@PAVInputBuffer@CgsGuiModuleIO@1@@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEvent<74>>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823D7908",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventControllerInputPressed@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventControllerInputPressed@1@PAVIn": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventControllerInputPressed>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DA8A8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventActiveUserIndex@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventActiveUserIndex@1@PAVInputBuffer@CgsG": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventActiveUserIndex>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DA960",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventControllerAxis@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventControllerAxis@1@PAVInputBuffer@CgsGui": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventControllerAxis>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DAAD0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventControllerInputDown@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventControllerInputDown@1@PAVInputBuf": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventControllerInputDown>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DAB88",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventControllerInputReleased@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventControllerInputReleased@1@PAV": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventControllerInputReleased>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DAC40",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiControllerDisconnected@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiControllerDisconnected@1@PAVInputBuffer@": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiControllerDisconnected>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DACF8",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddGuiEvent@VGuiEventSetLanguage@CgsGui@@@GuiModule@CgsGui@@QAAXAAVGuiEventSetLanguage@1@PAVInputBuffer@CgsGuiModule": {
+      "symbol": "CgsGui::GuiModule::AddGuiEvent<CgsGui::GuiEventSetLanguage>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModule_AddGuiEvent_Inst.cpp",
+      "x360_address": "0x823DADB0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiChallengeSelectedEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiChallengeSelectedEvent@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiChallengeSelectedEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436778",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiAudioEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiAudioEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiAudioEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824367D8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRequestTraining@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRequestTraining@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestTraining>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436840",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiAudioTriggerEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiAudioTriggerEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiAudioTriggerEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436890",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventSoundTrigger@CgsGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventSoundTrigger@1@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<CgsGui::GuiEventSoundTrigger>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824368F0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRoadRuleFail@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRoadRuleFail@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleFail>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436950",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventOnlineInviteEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventOnlineInviteEvent@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineInviteEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824369C0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputInternalState@VGuiEventPerformOnlineMainMenuOption@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventPerformOnlin": {
+      "symbol": "CgsGui::StateInterface::OutputInternalState<BrnGui::GuiEventPerformOnlineMainMenuOption>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputInternalState_Inst.cpp",
+      "x360_address": "0x82436A30",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputInternalState@VGuiEventPerformOnlinePauseOption@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventPerformOnlinePa": {
+      "symbol": "CgsGui::StateInterface::OutputInternalState<BrnGui::GuiEventPerformOnlinePauseOption>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputInternalState_Inst.cpp",
+      "x360_address": "0x82436A80",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkGameParams@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkGameParams@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkGameParams>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436AD0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventOnlineShowProfile@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventOnlineShowProfile@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventOnlineShowProfile>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436B30",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRoadRuleModeRequest@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRoadRuleModeRequest@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleModeRequest>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436B90",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventTickerCustomMessage@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventTickerCustomMessage@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerCustomMessage>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436C40",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkSelectedPlayerOption@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkSelectedPl": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSelectedPlayerOption>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436CA0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventNetworkPlayerImage@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkPlayerImage@BrnGui": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventNetworkPlayerImage>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x82436CF0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkOutputPlayerTexture@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkOutputPlaye": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkOutputPlayerTexture>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436D40",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRequestCompressedCamPic@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRequestCompressedCamP": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestCompressedCamPic>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436D90",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventTickerClearMessages@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventTickerClearMessages@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventTickerClearMessages>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82436DF0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventRenderMainMap@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRenderMainMap@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventRenderMainMap>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_RenderMainMap_Inst.cpp",
+      "x360_address": "0x82465E50",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventShowHideBoostBar@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventShowHideBoostBar@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventShowHideBoostBar>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x82476B60",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiMuteDac@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiMuteDac@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiMuteDac>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82476BB0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventSetPlayer0ControllerPort@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventSetPlayer0Controller": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventSetPlayer0ControllerPort>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82476D88",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventShowHideSatNav@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventShowHideSatNav@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventShowHideSatNav>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x82476DD8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputInternalState@VGuiEventShowHideSatNav@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventShowHideSatNav@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputInternalState<BrnGui::GuiEventShowHideSatNav>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputInternalState_Inst.cpp",
+      "x360_address": "0x82476E38",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiOverlayWaitFinishRequest@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiOverlayWaitFinishRequest@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiOverlayWaitFinishRequest>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82476E98",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRoadRuleDataRequest@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRoadRuleDataRequest@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRoadRuleDataRequest>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82476EE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventTrophyCarUnlock@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventTrophyCarUnlock@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventTrophyCarUnlock>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82476F38",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioSettings@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioSettings@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioSettings>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493728",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventControllerSettings@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventControllerSettings@BrnGui@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventControllerSettings>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493778",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiAutosaveRequestEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiAutosaveRequestEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiAutosaveRequestEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824937E0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiRequestCarControlChangeEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiRequestCarControlChangeEve": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiRequestCarControlChangeEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493830",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkSplashEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkSplashEvent@BrnGui@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkSplashEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493880",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRunFsm@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRunFsm@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRunFsm>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824938D0",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventActivateCrashNav@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventActivateCrashNav@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCrashNav>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493938",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventShowHideHud@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventShowHideHud@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventShowHideHud>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493988",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiImageGalleryRequestCollectedDataEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiImageGalleryReque": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestCollectedDataEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824939D8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiSaveLoadImageExportRequested@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiSaveLoadImageExportRequest": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiSaveLoadImageExportRequested>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493A28",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkSuspension@CgsGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkSuspension@1@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<CgsGui::GuiEventNetworkSuspension>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493A88",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiImageGalleryRequestEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiImageGalleryRequestEvent@BrnGu": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiImageGalleryRequestEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493AD8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventActivateCarSelect@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventActivateCarSelect@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventActivateCarSelect>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493B48",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiChangeCarEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiChangeCarEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiChangeCarEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493B98",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkCustomMatchSearch@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkCustomMatchSe": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchSearch>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493BE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkCustomMatchJoin@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkCustomMatchJoin": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCustomMatchJoin>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493C48",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputInternalState@VGuiEventShowHideHud@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventShowHideHud@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputInternalState<BrnGui::GuiEventShowHideHud>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputInternalState_Inst.cpp",
+      "x360_address": "0x82493C98",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventVoipSettings@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventVoipSettings@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventVoipSettings>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493CE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventScoreboardRequestGamercardEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventScoreboardReq": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestGamercardEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493D38",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventSetInspectedEventIcon@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventSetInspectedEventIcon@": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventSetInspectedEventIcon>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x82493D98",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputInternalState@VGuiEventSetInspectedEventIcon@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventSetInspectedEventI": {
+      "symbol": "CgsGui::StateInterface::OutputInternalState<BrnGui::GuiEventSetInspectedEventIcon>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputInternalState_Inst.cpp",
+      "x360_address": "0x82493DE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkNewsAndTOS@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkNewsAndTOS@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkNewsAndTOS>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493E38",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventRequestSpecificPreSetRaces@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventRequestSpecificPre": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventRequestSpecificPreSetRaces>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493E88",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkCreateGame@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkCreateGame@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkCreateGame>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493ED8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiNetworkCustomRouteCreated@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiNetworkCustomRouteCreated@Brn": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiNetworkCustomRouteCreated>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493F38",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventScoreboardRequestEvScoreTarget@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventScoreboardRequ": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestEvScoreTarget>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493F88",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventScoreboardRequestIndexEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventScoreboardRequest": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestIndexEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82493FF8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventScoreboardRequestVariationEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventScoreboardReq": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestVariationEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82494048",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventScoreboardRequestTableEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventScoreboardRequest": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventScoreboardRequestTableEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82494098",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiTelemetryEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiTelemetryEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiTelemetryEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824940E8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkQuickMatch@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkQuickMatch@BrnGui@@@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkQuickMatch>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82494158",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiOverlayShowingNotification@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiOverlayShowingNotification@B": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiOverlayShowingNotification>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824B2938",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioGenericSequence@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioGenericSequence@Brn": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioGenericSequence>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2DA8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventPostEventFreeCarSequenceStart@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventPostEventFreeCa": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventFreeCarSequenceStart>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2DF8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventPostEventRankUpSequenceStart@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventPostEventRankUpS": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventPostEventRankUpSequenceStart>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2E48",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventNetworkConnect@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventNetworkConnect@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventNetworkConnect>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2E98",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventSetHoveredEventIcon@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventSetHoveredEventIcon@BrnG": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventSetHoveredEventIcon>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x824C2EE8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventChallengedEventDataRequest@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventChallengedEventDat": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventChallengedEventDataRequest>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2F50",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputViewState@VGuiEventFilterEventIcons@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventFilterEventIcons@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputViewState<BrnGui::GuiEventFilterEventIcons>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputViewState_Inst.cpp",
+      "x360_address": "0x824C2FA0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventCustomeEventCreate@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventCustomeEventCreate@BrnGui@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventCustomeEventCreate>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C2FF0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioTraxPreview@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioTraxPreview@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxPreview>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C3050",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioTraxUpdate@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioTraxUpdate@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxUpdate>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C30A0",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioTraxLastPlayedIndexes@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioTraxLastPlaye": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioTraxLastPlayedIndexes>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C3110",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEventAudioVoiceOver@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEventAudioVoiceOver@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEventAudioVoiceOver>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C3178",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiEvent100PerCentComplete@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiEvent100PerCentComplete@BrnGui@": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiEvent100PerCentComplete>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C31C8",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiReplaySetModeEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiReplaySetModeEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiReplaySetModeEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C3218",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$OutputGuiEvent@VGuiReplayDeleteReelEvent@BrnGui@@@StateInterface@CgsGui@@QAAXAAVGuiReplayDeleteReelEvent@BrnGui@@@Z": {
+      "symbol": "CgsGui::StateInterface::OutputGuiEvent<BrnGui::GuiReplayDeleteReelEvent>",
+      "file": "GameShared/GameClasses/Gui/Model/State/CgsGuiStateInterface_OutputGuiEvent_Inst.cpp",
+      "x360_address": "0x824C3268",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddOutputGuiEvent@V?$GuiEvent@$0DF@@CgsGui@@@BrnNetworkModule@BrnNetwork@@QAAXAAV?$GuiEvent@$0DF@@CgsGui@@@Z": {
+      "symbol": "BrnNetwork::BrnNetworkModule::AddOutputGuiEvent<CgsGui::GuiEvent<53>>",
+      "file": "GameSource/Network/BrnNetworkModule_AddOutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82565A38",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$AddOutputGuiEvent@V?$GuiEvent@$0CO@@CgsGui@@@BrnNetworkModule@BrnNetwork@@QAAXAAV?$GuiEvent@$0CO@@CgsGui@@@Z": {
+      "symbol": "BrnNetwork::BrnNetworkModule::AddOutputGuiEvent<CgsGui::GuiEvent<46>>",
+      "file": "GameSource/Network/BrnNetworkModule_AddOutputGuiEvent_Inst.cpp",
+      "x360_address": "0x82565F40",
+      "byte_match": true,
+      "evidence": "ARTIST export has original MSVC decorated name or prefix. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@PhysicsSimulationIO@CgsPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@Physics": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsPhysics::PhysicsSimulationIO::InputBuffer>",
+      "file": "GameSource/Physics/BrnPhysicsModule.cpp",
+      "x360_address": "0x8259DA18",
+      "byte_match": true,
+      "evidence": "ARTIST export has identical MSVC template and signature after class/struct tag normalization. The current XDK object matches the complete body, every direct branch destination and every linked data reference."
+    },
+    "CgsResource::BundleLoa": {
+      "symbol": "CgsResource::BundleLoaderIO::OutputBuffer::GetLoadBundleResponseQueue",
+      "file": "src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_OutputBuffer.cpp",
+      "const": false,
+      "x360_address": "0x828E2330",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated export name. The body asserts the write-lock bit (bit 3 of the flags byte, streamed message, line 0x92 = CgsBundleLoaderModuleIO.h:146, the DWARF line of the non-const GetLoadBundleResponseQueue) and returns this+0x1014, the LoadBundleResponse queue; PostLoadFinishedEvent 0x828EC3C8 calls it on lpOutput and passes the result to BaseEventQueue<LoadBundleResponse>::AddEvent."
+    },
+    "CgsResource::Events::LoadBundleResponse>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<CgsResource::Events::LoadBundleResponse>::AddEvent",
+      "file": "src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
+      "const": false,
+      "x360_address": "0x828EA098",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated export name of the BaseEventQueue<LoadBundleResponse> instantiation: asserts \"mpEvents != NULL\" at CgsBaseEventQueue.h:312 and the full-queue streamed assert like every BaseEventQueue<T>::AddEvent; called by BundleLoaderModule::PostLoadFinishedEvent 0x828EC3C8 and CheckForLoads 0x828FB758 with a LoadBundleResponse."
+    },
+    "CgsSound::Playback::GenericRwacFactory::SetupConf": {
+      "symbol": "CgsSound::Playback::GenericRwacFactory::SetupConfig",
+      "file": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacFactory.cpp",
+      "const": false,
+      "x360_address": "0x826D8C98",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name. DWARF CgsGenericRwacVoice.cpp:80 initialises lpVoiceConfig from GenericRwacFactory::SetupConfig(const VoiceSpec&, Voice&, GenericRwacVoice&) (PS3 DecFIGS ._ZN8CgsSound8Playback18GenericRwacFactory11SetupConfigERKNS0_9VoiceSpecERNS0_5VoiceERNS0_16GenericRwacVoiceE at 0x8A5A08); ARTIST GenericRwacVoice::CreateVoiceInstance calls 0x826D8C98 at 0x826D9B68 with (factory, spec, voice, this) and reads the config's plug-in counts (+0x1C4/+0x1C8) from its result. Name only: the 3552-byte body is not matched. It is the only call difference left in CreateVoiceInstance besides sub_82693F50."
     }
   },
   "sdk_entry_groups": {
@@ -23849,6 +24713,45 @@
       "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetGameActionQueue",
       "size": 164,
       "evidence": "The native BrnGameState::GameStateModuleIO::OutputBuffer::GetGameActionQueue compiled from src/GameSource/GameState/BrnGameStateModuleIO.cpp equals this 164-byte body word for word outside its relocation fields. Its asserts name BrnGameStateModuleIO.h line 265, as the native body's do. The const twin of the non-const GetGameActionQueue (BrnGameStateModuleIO.h:265)."
+    },
+    "0x827B78F8": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics>",
+      "size": 212,
+      "evidence": "Export hole (no JSON; ppcdis gives the body, 212 B). It allocates 0x19F00 bytes from the stack (IOBufferStack::Alloc 0x8286EDE8) and calls BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::Construct 0x82761680 on the result, the shape of every IOBufferStack::CreateIOBuffer<T> (cf. 0x827B7748 = CreateIOBuffer<WorldEntityIO::OutputBuffer_PostPhysics>, Construct 0x822EDFF0). Caller WorldModule::UpdateForBootUpVideo 0x827CFE68 passes the \"TrafficPostPhysics\" name (0x820CD104) for its IOHelper<BrnTrafficIO::InputBuffer_PostPhysics> lTrafficInput_PostPhysics. Our instance in BrnWorldModule.cpp compares exact against 0x827B78F8 (msgs/world-cmpaddr.py)."
+    },
+    "0x82704B18": {
+      "exported_name": null,
+      "symbol": "BrnTraffic::Vehicle::IsSympatheticallyCrashing",
+      "size": 208,
+      "evidence": "Export hole (208 B, universe row sub_82704B18 'unnamed'). Body: IsAlive() assert BrnTrafficVehicle.h:1202, then `miPhysicalReason (+0x39) == 3` (E_PHYSICALREASON_SYMPATHETIC_CRASHING) -> IsPhysical() h:1205 + mSympCrashTarget.IsValid() h:1206 asserts, return true; else false: the sibling of IsExtremeSwerving 0x82704BE8 (reason 4) and IsNormalPhysical (reason 5), whose asserts sit on the neighbouring header lines. Callers name it by use: TrafficEntityModule::GenerateSlamRecoveryEvents 0x827208F8 (`vehicle.IsCrashing() || vehicle.IsSympatheticallyCrashing()`, IsCrashing 0x82704A70 called just before) and GenerateDriverInputs. Our body compares exact against 0x82704B18 (msgs/world-cmpaddr.py)."
+    },
+    "0x828E38D0": {
+      "exported_name": null,
+      "symbol": "CgsResource::DebugComponent::UpdatePoolMenuItems",
+      "size": 100,
+      "evidence": "An export hole with a 100-byte unwind extent. CgsResource::DebugComponent::Update calls it at 0x828FF014 right after the base Update, as PS3 DecFIGS CgsResource::DebugComponent::Update calls UpdatePoolMenuItems (0xCC56A8); the body makes the same calls as that PS3 function (GenerateStringList, then PoolModule::GetPoolIndex over the four pool ids at this+0x4E0C)."
+    },
+    "0x828EC3C8": {
+      "exported_name": null,
+      "symbol": "CgsResource::BundleLoaderModule::PostLoadFinishedEvent",
+      "size": 140,
+      "file": "GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
+      "evidence": "UpdateStream's STREAMSTAGE_LOADDONE arm calls this body at 0x82906E20 with (this, lpOutput, &mLoadRequest at this+0x4D8, mbFailed ? 1 : 0), as DWARF BundleLoaderModule::PostLoadFinishedEvent(OutputBuffer*, const LoadBundleRequest*, LoadBundleResponse::EResult) does (DecFIGS CgsSystemUnity CU, local lResponse cpp:705). The body asserts lpOutput (\"lpOutput\" at 0x8201BC74, CgsBundleLoaderModule.cpp:728 = DecFIGS + 25 like the rest of this file), fills a LoadBundleResponse through the inlined Construct (user and id, the out-of-line BundleLoaderEvent::SetFileName 0x822770F8, pool id, live-update flag false, result) and adds it through OutputBuffer::GetLoadBundleResponseQueue 0x828E2330 and BaseEventQueue<LoadBundleResponse>::AddEvent 0x828EA098. Size 0x828EC3C8..0x828EC454."
+    },
+    "0x826817D0": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::RwacCommandQueue::PostCommand",
+      "size": 180,
+      "file": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacVoice.cpp",
+      "evidence": "DWARF CgsGenericRwacFactory.h:653 declares the private one-word overload void RwacCommandQueue::PostCommand(uintptr_t). The 180-byte body stores the word at mauCommandQueue[mu32Write] (+0x4004 write cursor), advances the cursor with the 0xFFF wrap (4096 words, DWARF SKU32_COMMAND_COUNT h:661) and streams the assert 'Out of command buffer. SKU32_COMMAND_COUNT' (0x820AB0F8) on CgsGenericRwacFactory.h:730 when the ring fills (PS3 inlines the same line 730 into GenericRwacVoice::Update). Its callers are the two-argument PostCommand 0x82693F50 and every GenericRwacVoice::Update<T> instance (0x826D8280/0x826D8294 for the Submix one), i.e. the post of a record's word count and words. The header-inline body in CgsGenericRwacCommands.h (x360 physnd batch) compares exact against the whole ARTIST extent (scratch/BYTEMATCH_1123/msgs/physnd_cmp.py). Overload of the next entry: the two share a qualified name. Reverified on native XDK against x360 116995950 with 33 dependent objects and physical call, data, and literal verification. The one-word overload is private as in DWARF."
+    },
+    "0x82693F50": {
+      "exported_name": "sub_82693F50",
+      "symbol": "CgsSound::Playback::RwacCommandQueue::PostCommand",
+      "size": 120,
+      "file": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacVoice.cpp",
+      "evidence": "DWARF CgsGenericRwacFactory.h:640 declares void RwacCommandQueue::PostCommand(uint32_t, const uintptr_t*); the template operator<< <T>(const T& lCommand) (h:672) posts a record through it. The 120-byte body asserts 'lpuFirstCommand' (0x820AE5D0) on CgsGenericRwacFactory.h:690, posts the count through PostCommand(uintptr_t) 0x826817D0 and then each word. Callers pass (queue = factory+0x14, word count, &record): GenericRwacVoice::CreateVoiceInstance 0x826D9C44 (6 words, RwacCommandVoiceCreateInstance, DWARF operator<< <RwacCommandVoiceCreateInstance>), ~GenericRwacVoice 0x826C1E78 (2 words, RwacCommandVoiceRelease, DWARF local lCommand cpp:59), GenericRwacPlayerVoice::DoUpdate 0x826D9B14/0x826D9B24 (4 + 2 words), GenericRwacContentSlot::DoStop/DoUpdatePlaying. The header-inline body compares exact against the whole ARTIST extent. With it CreateVoiceInstance (276 B), GenericRwacPlayerVoice::DoUpdate (200 B), GenericRwacContentSlot::DoUpdatePlaying (264 B) have no difference left but this call name. Reverified on native XDK against x360 116995950 with 33 dependent objects and physical call, data, and literal verification. The one-word overload is private as in DWARF."
     }
   },
   "native_leaf_functions": {
@@ -23898,7 +24801,7 @@
     "0x82BAC980": {
       "symbol": "MassiveAdClient3::XMassiveAdClientSubscriber::MediaDownload",
       "size": 8,
-      "source": "src/SDKs/Packages/MassiveAd/MassiveAdClient3Subscriber_wS34_00.cpp",
+      "source": "src/SDKs/Packages/MassiveAd/MassiveAdClient3Subscriber.cpp",
       "tu": "class:MassiveAdClient3::CMassiveAdObjectSubscriber",
       "vtable_slots": ["0x8218478C"],
       "evidence": "The ARTIST subscriber constructor installs the table at 0x8218478C. Its first slot corresponds to MediaDownload in the XDK subscriber vtable, and the native slot names the same callback. Both complete instructions match. The next catalogued function starts at 0x82BAC988."
