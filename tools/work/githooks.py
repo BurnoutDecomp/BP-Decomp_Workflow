@@ -27,11 +27,13 @@ import glob
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HOOKS_PATH = "tools/githooks"
 SUBMODULE = "b5-decomp"
 DENYLIST_KEY = "bp.publicDenylist"
+BYTE_MATCH_HOOKS = os.environ.get("BP_BYTE_MATCH_HOOKS") == "1"
 
 
 def git(*args):
@@ -95,6 +97,9 @@ def submodule_hooks():
     any worktree, or this checkout's when the main one has no hooks."""
     common = common_dir()
     main = os.path.dirname(common) if common and os.path.basename(common) == ".git" else ROOT
+    if BYTE_MATCH_HOOKS and os.path.isfile(os.path.join(ROOT, HOOKS_PATH, "pre-push")):
+        # A preview branch in a linked worktree can carry hooks absent from main.
+        return slashed(os.path.join(ROOT, HOOKS_PATH))
     for base in (main, ROOT):
         if os.path.isfile(os.path.join(base, HOOKS_PATH, "pre-commit")):
             return slashed(os.path.join(base, HOOKS_PATH))
@@ -123,6 +128,19 @@ def submodule_repos():
     own = os.path.join(ROOT, SUBMODULE, ".git")
     if os.path.isdir(own) and not any(same_path(own, gd) for _, gd, _ in repos):
         repos.append((f"{SUBMODULE} (its own clone)", own, None))  # cloned in place of the submodule
+    if not BYTE_MATCH_HOOKS:
+        return repos
+    sys.path.insert(0, str(Path(ROOT) / "tools" / "bytematch"))
+    from bytematch import find_tree
+
+    tree = find_tree()
+    if (tree / "tools" / "build_x360.py").is_file():
+        result = subprocess.run(["git", "-C", str(tree), "rev-parse", "--path-format=absolute",
+                                 "--show-toplevel", "--git-common-dir"], capture_output=True, text=True)
+        if result.returncode == 0:
+            top, native_git = result.stdout.splitlines()
+            if same_path(top, tree) and not any(same_path(native_git, gd) for _, gd, _ in repos):
+                repos.append(("native x360 checkout", native_git, None))
     return repos
 
 

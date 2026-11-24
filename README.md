@@ -251,6 +251,9 @@ skills; this is the short version for people.
 Then ask your agent to byte-match (it loads the `byte-match` skill), or see
 [`progress/bytematch/`](progress/bytematch/) for the current state.
 
+The [optional byte-match hooks](tools/hooks/README.md) add cached regression checks,
+ledger reminders, and recovery notes for Codex and Claude Code.
+
 ## Tool Inventory
 
 The authoritative inventory of repo tools is [`tools/README.md`](tools/README.md).

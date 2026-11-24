@@ -1,0 +1,54 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "^(Bash|apply_patch)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -B \"$(git rev-parse --show-toplevel)/tools/hooks/session.py\" codex",
+            "commandWindows": "python -B (Join-Path (git rev-parse --show-toplevel) 'tools/hooks/session.py') codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -B \"$(git rev-parse --show-toplevel)/tools/hooks/session.py\" codex",
+            "commandWindows": "python -B (Join-Path (git rev-parse --show-toplevel) 'tools/hooks/session.py') codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "^(compact|resume)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -B \"$(git rev-parse --show-toplevel)/tools/hooks/session.py\" codex",
+            "commandWindows": "python -B (Join-Path (git rev-parse --show-toplevel) 'tools/hooks/session.py') codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -B \"$(git rev-parse --show-toplevel)/tools/hooks/session.py\" codex",
+            "commandWindows": "python -B (Join-Path (git rev-parse --show-toplevel) 'tools/hooks/session.py') codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
