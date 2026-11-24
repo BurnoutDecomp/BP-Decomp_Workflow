@@ -1,19 +1,23 @@
 {
- "blob": "92e3124afe14f197ef02c588dd57609a16010358",
- "commit": "c80f0d35eb210ad99b1dd0de189f390a5af29b43",
+ "blob": "c6b0ca8081dda485c10238533b141487cd511e81",
+ "commit": "557277341245fab0539c40a10c6e96ae9de02ed3",
  "compiled": true,
- "measured": "2026-11-23T22:46:38Z",
+ "measured": "2026-11-24T06:48:20Z",
  "schema": 1,
  "source": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO_InputBuffer_PostPhysics.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 6,
+ "unpaired": 9,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
-  {"artist": "827A06C0", "artist_size": 184, "first_diff": 4, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetActiveRaceCarOutputInterface", "score": 24.0, "size": 116, "status": "nonmatching", "symbol": "?SetActiveRaceCarOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@@Z"},
-  {"artist": "827A0778", "artist_size": 180, "first_diff": 4, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetContactSpyInterface", "score": 27.0, "size": 116, "status": "nonmatching", "symbol": "?SetContactSpyInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUContactSpyInterface@ContactSpy@BrnPhysics@@@Z"},
-  {"artist": "827A9F50", "artist_size": 176, "first_diff": 4, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleOutputInterface", "score": 22.2, "size": 112, "status": "nonmatching", "symbol": "?SetVehicleOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUVehicleOutputInterface@Vehicle@BrnPhysics@@@Z"},
-  {"artist": "827AA000", "artist_size": 180, "first_diff": 4, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleManagerOutputInterface", "score": 24.3, "size": 116, "status": "nonmatching", "symbol": "?SetVehicleManagerOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUVehicleManagerOutputInterface@Vehicle@BrnPhysics@@@Z"},
-  {"artist": "827AA0B8", "artist_size": 180, "first_diff": 4, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetDeformationOutputInterfaceForEntityModules", "score": 24.3, "size": 116, "status": "nonmatching", "symbol": "?SetDeformationOutputInterfaceForEntityModules@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUDeformationOutputInterfaceForEntityModules@Deformation@BrnPhysics@@@Z"}
+  {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
+  {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
+  {"artist": "827A06C0", "artist_size": 184, "first_diff": 160, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetActiveRaceCarOutputInterface", "score": 94.5, "size": 180, "status": "nonmatching", "symbol": "?SetActiveRaceCarOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@@Z"},
+  {"artist": "827A0778", "artist_size": 180, "data_unchecked": 7, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetContactSpyInterface", "score": 100.0, "size": 180, "status": "exact", "symbol": "?SetContactSpyInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUContactSpyInterface@ContactSpy@BrnPhysics@@@Z"},
+  {"artist": "827A9F50", "artist_size": 176, "calls_wrong": [{"artist": "BrnPhysics::Vehicle::VehicleOutputInterface::operat", "at": 164, "ours": "BrnPhysics::Vehicle::VehicleOutputInterface::operator="}], "data_unchecked": 7, "first_diff": 164, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleOutputInterface", "score": 95.5, "size": 176, "status": "nonmatching", "symbol": "?SetVehicleOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUVehicleOutputInterface@Vehicle@BrnPhysics@@@Z"},
+  {"artist": "827AA000", "artist_size": 180, "calls_wrong": [{"artist": "BrnPhysics::Vehicle::VehicleManagerOutputInt", "at": 168, "ours": "BrnPhysics::Vehicle::VehicleManagerOutputInterface::operator="}], "data_unchecked": 7, "first_diff": 168, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetVehicleManagerOutputInterface", "score": 95.6, "size": 180, "status": "nonmatching", "symbol": "?SetVehicleManagerOutputInterface@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUVehicleManagerOutputInterface@Vehicle@BrnPhysics@@@Z"},
+  {"artist": "827AA0B8", "artist_size": 180, "calls_wrong": [{"artist": "BrnPhysics::Deformation::De", "at": 168, "ours": "BrnPhysics::Deformation::DeformationOutputInterfaceForEntityModules::operator="}], "data_unchecked": 7, "first_diff": 168, "name": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::SetDeformationOutputInterfaceForEntityModules", "score": 95.6, "size": 180, "status": "nonmatching", "symbol": "?SetDeformationOutputInterfaceForEntityModules@InputBuffer_PostPhysics@BrnTrafficIO@BrnTraffic@@QAAXPBUDeformationOutputInterfaceForEntityModules@Deformation@BrnPhysics@@@Z"},
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 15.6, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
  ]
 }

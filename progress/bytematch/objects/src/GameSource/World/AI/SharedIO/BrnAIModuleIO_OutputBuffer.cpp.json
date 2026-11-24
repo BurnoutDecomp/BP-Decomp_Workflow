@@ -1,13 +1,13 @@
 {
- "blob": "aa8b7571650527bbce870239c1be3ce8ec755f1d",
- "commit": "c80f0d35eb210ad99b1dd0de189f390a5af29b43",
+ "blob": "611697a0069e7dd5c03ae98f0081aea6cb8e067f",
+ "commit": "557277341245fab0539c40a10c6e96ae9de02ed3",
  "compiled": true,
- "measured": "2026-11-23T22:46:38Z",
+ "measured": "2026-11-24T07:05:20Z",
  "schema": 1,
  "source": "src/GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 34,
+ "unpaired": 29,
  "functions": [
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
@@ -17,10 +17,17 @@
   {"artist": "822C6F78", "artist_size": 184, "data_unchecked": 3, "name": "CgsModule::VariableEventQueue<1536,16>::Construct", "score": 100.0, "size": 184, "status": "exact", "symbol": "?Construct@?$VariableEventQueue@$0GAA@$0BA@@CgsModule@@QAAXXZ"},
   {"artist": "822E28E0", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::AIModuleIO::ResetOnTrackResult,128>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@UResetOnTrackResult@AIModuleIO@BrnAI@@$0IA@@CgsModule@@QAAXXZ"},
   {"artist": "822E2950", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::AIModuleIO::PlaceOnTrackRequest,128>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@UPlaceOnTrackRequest@AIModuleIO@BrnAI@@$0IA@@CgsModule@@QAAXXZ"},
-  {"artist": "8276DBC0", "artist_size": 168, "first_diff": 4, "name": "BrnAI::AIModuleIO::OutputBuffer::GetAIRaceCarInterface", "score": 27.3, "size": 96, "status": "nonmatching", "symbol": "?GetAIRaceCarInterface@OutputBuffer@AIModuleIO@BrnAI@@QAAPAUAIRaceCarInterface@23@XZ"},
+  {"artist": "8276D680", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueue", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetGameEventQueue@OutputBuffer@AIModuleIO@BrnAI@@QAAPAEXZ"},
+  {"artist": "8276D9C8", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetVehicleDriverInterface", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetVehicleDriverInterface@OutputBuffer@AIModuleIO@BrnAI@@QAAPAVVehicleDriverInputInterface@Vehicle@BrnPhysics@@XZ"},
+  {"artist": "8276DBC0", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetAIRaceCarInterface", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetAIRaceCarInterface@OutputBuffer@AIModuleIO@BrnAI@@QAAPAUAIRaceCarInterface@23@XZ"},
+  {"artist": "8276DC68", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterface", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetAICarOutputInterface@OutputBuffer@AIModuleIO@BrnAI@@QAAPAUAICarOutputInterface@23@XZ"},
+  {"artist": "8276DD10", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetAIModuleResultInterfaceForWrite", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetAIModuleResultInterfaceForWrite@OutputBuffer@AIModuleIO@BrnAI@@QAAPAEXZ"},
   {"artist": "8278A098", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<BrnAI::RouteMapModuleIO::RouteResponse,16>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@URouteResponse@RouteMapModuleIO@BrnAI@@$0BA@@CgsModule@@QAAXXZ"},
   {"artist": "8278ACB8", "artist_size": 252, "first_diff": 4, "name": "BrnAI::AIModuleIO::OutputBuffer::Construct", "score": 37.7, "size": 172, "status": "nonmatching", "symbol": "?Construct@OutputBuffer@AIModuleIO@BrnAI@@QAAXXZ"},
+  {"artist": "8279C658", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetGameEventQueueForRead", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetGameEventQueueForRead@OutputBuffer@AIModuleIO@BrnAI@@QAAPAEXZ"},
+  {"artist": "8279CA00", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetVehicleInterface", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetVehicleInterface@OutputBuffer@AIModuleIO@BrnAI@@QAAPAEXZ"},
+  {"artist": "8279CCA0", "artist_size": 168, "data_unchecked": 7, "name": "BrnAI::AIModuleIO::OutputBuffer::GetAICarOutputInterfaceForRead", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetAICarOutputInterfaceForRead@OutputBuffer@AIModuleIO@BrnAI@@QAAPAEXZ"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
+  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 15.6, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
  ]
 }

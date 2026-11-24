@@ -1,18 +1,20 @@
 {
  "blob": "4dde668f256c86f3cf6c5ecb9315a157d9754413",
- "commit": "c3bf6ab6ad9d0ce95a4bb9df57c3692fcc9c64d3",
+ "commit": "557277341245fab0539c40a10c6e96ae9de02ed3",
  "compiled": true,
- "measured": "2026-11-23T21:59:48Z",
+ "measured": "2026-11-24T06:48:20Z",
  "schema": 1,
  "source": "src/GameSource/Physics/VehicleManager/BrnVehicleManager_ValidateRaceCarWorldContact.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags d23a3407ba6b",
- "unpaired": 26,
+ "unpaired": 27,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 33.3, "size": 8, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@U__vector4@@@Z"},
   {"artist": "821F0DD8", "artist_size": 40, "first_diff": 0, "name": "rw::math::vpu::Vector3::Vector3", "score": 18.2, "size": 4, "status": "nonmatching", "symbol": "??0Vector3@vpu@math@rw@@QAA@XZ"},
-  {"artist": "82277810", "artist_size": 108, "first_diff": 48, "name": "CgsSceneManager::SceneManagerIO::TriangleCacheInterface::GetCache", "score": 92.6, "size": 108, "status": "nonmatching", "symbol": "?GetCache@TriangleCacheInterface@SceneManagerIO@CgsSceneManager@@QBAPBUTriangle4@CgsGeometric@@H@Z"},
-  {"artist": "825C6088", "artist_size": 3952, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleManager::ValidateRaceCarWorldContact", "score": 11.8, "size": 2348, "status": "nonmatching", "symbol": "?ValidateRaceCarWorldContact@VehicleManager@Vehicle@BrnPhysics@@QAA_NPAUPotentialContact@SceneManagerIO@CgsSceneManager@@PBUTriangleCacheInterface@56@M@Z"}
+  {"artist": "82277810", "artist_size": 108, "calls_wrong": [{"artist": "CgsSceneManager::TriangleCacheManager::GetTrianglesForCachedObjec", "at": 80, "ours": "CgsSceneManager::TriangleCacheManager::GetTrianglesForCachedObject"}], "data_unchecked": 2, "first_diff": 80, "name": "CgsSceneManager::SceneManagerIO::TriangleCacheInterface::GetCache", "score": 96.3, "size": 108, "status": "nonmatching", "symbol": "?GetCache@TriangleCacheInterface@SceneManagerIO@CgsSceneManager@@QBAPBUTriangle4@CgsGeometric@@H@Z"},
+  {"artist": "82277880", "artist_size": 124, "data_unchecked": 2, "name": "CgsSceneManager::SceneManagerIO::TriangleCacheInterface::GetNumCachedTriangleBatches", "score": 100.0, "size": 124, "status": "exact", "symbol": "?GetNumCachedTriangleBatches@TriangleCacheInterface@SceneManagerIO@CgsSceneManager@@QBAHH@Z"},
+  {"artist": "825C6088", "artist_size": 3952, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleManager::ValidateRaceCarWorldContact", "score": 11.9, "size": 2348, "status": "nonmatching", "symbol": "?ValidateRaceCarWorldContact@VehicleManager@Vehicle@BrnPhysics@@QAA_NPAUPotentialContact@SceneManagerIO@CgsSceneManager@@PBUTriangleCacheInterface@56@M@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
