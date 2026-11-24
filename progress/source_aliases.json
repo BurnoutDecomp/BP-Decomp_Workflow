@@ -16171,6 +16171,27 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA truncated the name. DWARF CgsGenericRwacVoice.cpp:80 initialises lpVoiceConfig from GenericRwacFactory::SetupConfig(const VoiceSpec&, Voice&, GenericRwacVoice&) (PS3 DecFIGS ._ZN8CgsSound8Playback18GenericRwacFactory11SetupConfigERKNS0_9VoiceSpecERNS0_5VoiceERNS0_16GenericRwacVoiceE at 0x8A5A08); ARTIST GenericRwacVoice::CreateVoiceInstance calls 0x826D8C98 at 0x826D9B68 with (factory, spec, voice, this) and reads the config's plug-in counts (+0x1C4/+0x1C8) from its result. Name only: the 3552-byte body is not matched. It is the only call difference left in CreateVoiceInstance besides sub_82693F50."
+    },
+    "??$CreateIOBuffer@VOutputBuffer_PostPhysics@WorldEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_Po": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::WorldEntityIO::OutputBuffer_PostPhysics>",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827B7748",
+      "byte_match": true,
+      "evidence": "The export truncates the decorated name ??$CreateIOBuffer@VOutputBuffer_PostPhysics@WorldEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer_PostPhysics@WorldEntityIO@BrnWorld@@PBD@Z; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/World/BrnWorldModule.cpp, equals this 212-byte function word for word outside its relocation fields. 9 named call targets agree. All direct calls, diagnostic strings and linked data references agree."
+    },
+    "RendererIO::InputBuffer>": {
+      "symbol": "CgsModule::IOHelper<RendererIO::InputBuffer>::IOHelper<RendererIO::InputBuffer>",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823C1820",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsModule::IOHelper<RendererIO::InputBuffer>::IOHelper<RendererIO::InputBuffer> (`RendererIO::InputBuffer>`). Of the 5 compiled native functions whose names contain it, only that one, compiled from src/GameSource/Game/BrnGameModule.cpp, equals this 104-byte function word for word outside its relocation fields. 4 named call targets agree. All direct calls, diagnostic strings and linked data references agree."
+    },
+    "RendererIO::OutputBuffer>": {
+      "symbol": "CgsModule::IOHelper<RendererIO::OutputBuffer>::IOHelper<RendererIO::OutputBuffer>",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823C1888",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsModule::IOHelper<RendererIO::OutputBuffer>::IOHelper<RendererIO::OutputBuffer> (`RendererIO::OutputBuffer>`). Of the 5 compiled native functions whose names contain it, only that one, compiled from src/GameSource/Game/BrnGameModule.cpp, equals this 104-byte function word for word outside its relocation fields. 4 named call targets agree. All direct calls, diagnostic strings and linked data references agree."
     }
   },
   "sdk_entry_groups": {
@@ -24752,6 +24773,13 @@
       "size": 120,
       "file": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacVoice.cpp",
       "evidence": "DWARF CgsGenericRwacFactory.h:640 declares void RwacCommandQueue::PostCommand(uint32_t, const uintptr_t*); the template operator<< <T>(const T& lCommand) (h:672) posts a record through it. The 120-byte body asserts 'lpuFirstCommand' (0x820AE5D0) on CgsGenericRwacFactory.h:690, posts the count through PostCommand(uintptr_t) 0x826817D0 and then each word. Callers pass (queue = factory+0x14, word count, &record): GenericRwacVoice::CreateVoiceInstance 0x826D9C44 (6 words, RwacCommandVoiceCreateInstance, DWARF operator<< <RwacCommandVoiceCreateInstance>), ~GenericRwacVoice 0x826C1E78 (2 words, RwacCommandVoiceRelease, DWARF local lCommand cpp:59), GenericRwacPlayerVoice::DoUpdate 0x826D9B14/0x826D9B24 (4 + 2 words), GenericRwacContentSlot::DoStop/DoUpdatePlaying. The header-inline body compares exact against the whole ARTIST extent. With it CreateVoiceInstance (276 B), GenericRwacPlayerVoice::DoUpdate (200 B), GenericRwacContentSlot::DoUpdatePlaying (264 B) have no difference left but this call name. Reverified on native XDK against x360 116995950 with 33 dependent objects and physical call, data, and literal verification. The one-word overload is private as in DWARF."
+    },
+    "0x8231DD88": {
+      "exported_name": "sub_8231DD88",
+      "symbol": "BrnGameState::ScoringSystem::GetCarData",
+      "size": 176,
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_Lookup.cpp",
+      "evidence": "The branch at 0x823642C0 in OnlineFlybyManager::CalculateDisconnectRating calls this body with ScoringSystem in r3 and the rating NetworkPlayerID in r4. The body checks -1 at 0x8231DD9C, asserts lNetworkPlayerID != CgsNetwork::K_INVALID_PLAYER_ID at string 0x820243E0, then scans the stored NetworkPlayerID at CarData +0x148 over the attested 0x158 stride. DecFIGS BrnScoringSystem.h:890 and :893 name the mutable and const overloads. The XDK caller has the mutable NetworkPlayerID overload relocation."
     }
   },
   "native_leaf_functions": {
