@@ -74,7 +74,8 @@ def test_a_path_flag_source_keeps_the_windows_fingerprint(tmp_path):
     # The Compiler adds only include folders that exist; this test tree has none, so the
     # Windows command carries just the XDK's.
     windows = ([r"D:\XDK\bin\win32\cl.exe"] + flags + ["/GF-", r"/ID:\XDK\include\xbox",
-                                                         "/showIncludes", r"/FoD:\o.obj", r"/FaD:\o.asm",
+                                                         "/showIncludes", "/DCGS_MATCH_ASSERT_LOCATIONS=1",
+                                                         r"/FoD:\o.obj", r"/FaD:\o.asm",
                                                          r"vendor\dirtysdk\src\a.cpp"])
     bytematch._CL_VERSION[r"D:\XDK"] = "14.00.6502"
     compiler = wine.Compiler(Path("/work/tree"), Path("/work/xdk"), tmp_path, flags, ["src"],
