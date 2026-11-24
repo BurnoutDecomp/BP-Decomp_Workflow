@@ -2415,7 +2415,8 @@
       "symbol": "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::GetControllerToGameStateInterface",
       "file": "GameSource/GameState/BrnGameStateModuleIO.cpp",
       "x360_address": "0x82362820",
-      "evidence": "The export mis-owns it: the body is the PreWorldInputBuffer read-lock accessor shape (status-byte read bit, 'Not locked for reading' at gamestate/BrnGameStateModuleIO.h:143, return this+0x2BE8 == the DWARF member mControllerToGameStateInterface after the 0x2438-byte NetworkToGameStateInterface at +0x7B0), and all four callers pass their PreWorldInputBuffer and assert 'lpPreWorldInputBuffer->GetControllerToGameStateInterface()' / 'lpInput->GetControllerToGameStateInterface()'."
+      "byte_match": true,
+      "evidence": "The export mis-owns it: the body is the PreWorldInputBuffer read-lock accessor shape (status-byte read bit, 'Not locked for reading' at gamestate/BrnGameStateModuleIO.h:143, return this+0x2BE8 == the DWARF member mControllerToGameStateInterface after the 0x2438-byte NetworkToGameStateInterface at +0x7B0), and all four callers pass their PreWorldInputBuffer and assert 'lpPreWorldInputBuffer->GetControllerToGameStateInterface()' / 'lpInput->GetControllerToGameStateInterface()'. The XDK body, direct calls and linked data now agree with this extent."
     },
     "BrnNetwork::TrafficManager::GetTrafficSyncDataEntr": {
       "symbol": "BrnNetwork::TrafficManager::GetTrafficSyncDataEntry",
@@ -16296,6 +16297,307 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PreScene::GetV`. At 0x827AACD8 in WorldModule::BridgeCrashModuleToPhysicsModule, the ARTIST branch targets 0x827A2488 and the native call relocation names ?GetVehicleInputInterface@OutputBuffer_PreScene@CrashIO@BrnWorld@@QBAPBUVehicleInputInterface@Vehicle@BrnPhysics@@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "CgsResource::ResourceIO::InputBuffer::GetR": {
+      "symbol": "CgsResource::ResourceIO::InputBuffer::GetResourceQueue",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModuleIO_InputBuffer_GetResourceQueue.cpp",
+      "x360_address": "0x82663B38",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::ResourceIO::InputBuffer::GetR`. The FireAssert arguments at 0x82663BC8 cite CgsResourceModuleIO.h:81 for the InputBuffer::GetResourceQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsResource::PoolIO::InputBuffer::GetPoolInputQueu": {
+      "symbol": "CgsResource::PoolIO::InputBuffer::GetPoolInputQueue",
+      "file": "GameShared/GameClasses/System/Resource/CgsPoolModuleIO_InputBuffer.cpp",
+      "x360_address": "0x828E1A00",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::PoolIO::InputBuffer::GetPoolInputQueu`. The FireAssert arguments at 0x828E1A90 cite CgsPoolModuleIO.h:234 for the InputBuffer::GetPoolInputQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnResource::GameDataIO::InputBuffer::GetReque": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::GetRequestInterface",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B1788",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnResource::GameDataIO::InputBuffer::GetReque`. The FireAssert arguments at 0x823B1818 cite BrnGameDataModuleIO.h:218 for the InputBuffer::GetRequestInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::OutputBuffer_PreScene::GetRaceCarO": {
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PreScene::GetRaceCarOutputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_OutputBuffer_PreScene.cpp",
+      "x360_address": "0x827BB720",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PreScene::GetRaceCarO`. The FireAssert arguments at 0x827BB7B0 cite BrnCrashModuleIO.h:137 for the OutputBuffer_PreScene::GetRaceCarOutputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEventQue": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEventQueue",
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "x360_address": "0x8254EEC0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGuiEventQue`. The FireAssert arguments at 0x8254EF50 cite BrnNetworkModuleIO.h:767 for the OutputBuffer::GetGuiEventQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnDirector::DirectorIO::InputBuffer::GetVehicleI": {
+      "symbol": "BrnDirector::DirectorIO::InputBuffer::GetVehicleInputInterface",
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp",
+      "x360_address": "0x823B2890",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnDirector::DirectorIO::InputBuffer::GetVehicleI`. The FireAssert arguments at 0x823B2920 cite BrnDirectorModuleIO.h:609 for the InputBuffer::GetVehicleInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetVeh": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetVehicleInputInterface",
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "x360_address": "0x8254EF68",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetVeh`. The FireAssert arguments at 0x8254EFF8 cite BrnNetworkModuleIO.h:841 for the OutputBuffer::GetVehicleInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnAI::AIModuleIO::OutputBuffer::GetAIRes": {
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAIResourceRequestInterface",
+      "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8279CAA8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnAI::AIModuleIO::OutputBuffer::GetAIRes`. The FireAssert arguments at 0x8279CB38 cite BrnAIModuleIO.h:423 for the OutputBuffer::GetAIResourceRequestInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerRequest": {
+      "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerRequestInterface",
+      "file": "GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "x360_address": "0x8231D608",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerRequest`. The FireAssert arguments at 0x8231D698 cite BrnGameStateModuleIO.h:275 for the OutputBuffer::GetTimerRequestInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetRes": {
+      "symbol": "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetResourceEventQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284E5D0",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::EventInterpreterModuleIO::OutputBuffer::GetRes`. The FireAssert arguments at 0x8284E660 cite CgsEventInterpreterModuleIO.h:178 for the OutputBuffer::GetResourceEventQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsResource::PoolIO::OutputBuffer::GetPoolR": {
+      "symbol": "CgsResource::PoolIO::OutputBuffer::GetPoolResourceRequestQueue",
+      "file": "GameShared/GameClasses/System/Resource/CgsPoolModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x828E1CA0",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::PoolIO::OutputBuffer::GetPoolR`. The FireAssert arguments at 0x828E1D30 cite CgsPoolModuleIO.h:265 for the OutputBuffer::GetPoolResourceRequestQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::CgsGuiModuleIO::OutputBuffer::GetGu": {
+      "symbol": "CgsGui::CgsGuiModuleIO::OutputBuffer::GetGuiResourceRequestQueue",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284F388",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::CgsGuiModuleIO::OutputBuffer::GetGu`. The FireAssert arguments at 0x8284F418 cite CgsGuiModuleIO.cpp:214 for the OutputBuffer::GetGuiResourceRequestQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnAI::AIModuleIO::InputBuffer::GetTrafficAI": {
+      "symbol": "BrnAI::AIModuleIO::InputBuffer::GetTrafficAIInterface",
+      "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_InputBuffer_Accessors.cpp",
+      "x360_address": "0x8276D7D0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnAI::AIModuleIO::InputBuffer::GetTrafficAI`. The FireAssert arguments at 0x8276D860 cite BrnAIModuleIO.h:373 for the InputBuffer::GetTrafficAIInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsMemory::MemoryIO::OutputBuffer::GetMemoryRespon": {
+      "symbol": "CgsMemory::MemoryIO::OutputBuffer::GetMemoryResponseQueue",
+      "file": "GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp",
+      "x360_address": "0x828E10E8",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsMemory::MemoryIO::OutputBuffer::GetMemoryRespon`. The FireAssert arguments at 0x828E1178 cite CgsMemoryModuleIO.h:785 for the OutputBuffer::GetMemoryResponseQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetVi": {
+      "symbol": "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetViewEventQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284E720",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::EventInterpreterModuleIO::OutputBuffer::GetVi`. The FireAssert arguments at 0x8284E7B0 cite CgsEventInterpreterModuleIO.h:210 for the OutputBuffer::GetViewEventQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetViewEven": {
+      "symbol": "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetViewEventQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284E7C8",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::EventInterpreterModuleIO::OutputBuffer::GetViewEven`. The FireAssert arguments at 0x8284E858 cite CgsEventInterpreterModuleIO.h:226 for the OutputBuffer::GetViewEventQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnGameState::GameStateModuleIO::OutputBuffer::GetFram": {
+      "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetFrameRateTypeRequestInterface",
+      "file": "GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "x360_address": "0x8231D6B0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnGameState::GameStateModuleIO::OutputBuffer::GetFram`. The FireAssert arguments at 0x8231D740 cite BrnGameStateModuleIO.h:278 for the OutputBuffer::GetFrameRateTypeRequestInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsMemory::MemoryIO::InputBuffer::GetMemoryReques": {
+      "symbol": "CgsMemory::MemoryIO::InputBuffer::GetMemoryRequestQueue",
+      "file": "GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp",
+      "x360_address": "0x82869248",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsMemory::MemoryIO::InputBuffer::GetMemoryReques`. The FireAssert arguments at 0x828692D8 cite CgsMemoryModuleIO.h:753 for the InputBuffer::GetMemoryRequestQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnAI::AIModuleIO::InputBuffer::Get": {
+      "symbol": "BrnAI::AIModuleIO::InputBuffer::GetGameActionQueue",
+      "file": "GameSource/World/AI/SharedIO/BrnAIModuleIO_InputBuffer_Accessors.cpp",
+      "x360_address": "0x8279C4F8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnAI::AIModuleIO::InputBuffer::Get`. The FireAssert arguments at 0x8279C588 cite BrnAIModuleIO.h:149 for the InputBuffer::GetGameActionQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsResource::ResourceIO::OutputBuffer::GetFi": {
+      "symbol": "CgsResource::ResourceIO::OutputBuffer::GetFileSystemStatusInterface",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp",
+      "x360_address": "0x828E1238",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::ResourceIO::OutputBuffer::GetFi`. The FireAssert arguments at 0x828E12C8 cite CgsResourceModuleIO.h:111 for the OutputBuffer::GetFileSystemStatusInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsMemory::MemoryIO::OutputBuffer::GetMemoryResponseQueu": {
+      "symbol": "CgsMemory::MemoryIO::OutputBuffer::GetMemoryResponseQueue",
+      "file": "GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp",
+      "x360_address": "0x828692F0",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsMemory::MemoryIO::OutputBuffer::GetMemoryResponseQueu`. The FireAssert arguments at 0x82869380 cite CgsMemoryModuleIO.h:786 for the OutputBuffer::GetMemoryResponseQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnDirector::DirectorIO::InputBuffer::GetVehi": {
+      "symbol": "BrnDirector::DirectorIO::InputBuffer::GetVehicleInfoArray",
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp",
+      "x360_address": "0x82206EF0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnDirector::DirectorIO::InputBuffer::GetVehi`. The FireAssert arguments at 0x82206F80 cite BrnDirectorModuleIO.h:649 for the InputBuffer::GetVehicleInfoArray() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnResource::GameDataIO::OutputBuffer::GetLive": {
+      "symbol": "BrnResource::GameDataIO::OutputBuffer::GetLiveUpdateStatus",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B1638",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnResource::GameDataIO::OutputBuffer::GetLive`. The FireAssert arguments at 0x823B16C8 cite BrnGameDataModuleIO.h:174 for the OutputBuffer::GetLiveUpdateStatus() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::ModelIO::OutputBuffer::GetGui": {
+      "symbol": "CgsGui::ModelIO::OutputBuffer::GetGuiResourceRequestQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsModelModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284F940",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::ModelIO::OutputBuffer::GetGui`. The FireAssert arguments at 0x8284F9D0 cite CgsModelModuleIO.cpp:235 for the OutputBuffer::GetGuiResourceRequestQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsResource::PoolIO::OutputBuffer::GetPoolOutputQu": {
+      "symbol": "CgsResource::PoolIO::OutputBuffer::GetPoolOutputQueue",
+      "file": "GameShared/GameClasses/System/Resource/CgsPoolModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x828E1BF8",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::PoolIO::OutputBuffer::GetPoolOutputQu`. The FireAssert arguments at 0x828E1C88 cite CgsPoolModuleIO.h:264 for the OutputBuffer::GetPoolOutputQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::InputBuffer_PreScene::GetNetw": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PreScene::GetNetworkInputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB330",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::InputBuffer_PreScene::GetNetw`. The FireAssert arguments at 0x827BB3C0 cite BrnCrashModuleIO.h:78 for the InputBuffer_PreScene::GetNetworkInputInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnEffects::EffectsIO::InputBuffer::GetAud": {
+      "symbol": "BrnEffects::EffectsIO::InputBuffer::GetAudioEffectsMessageQueue",
+      "file": "GameSource/Effects/SharedIO/BrnEffectsModuleIO_InputBuffer_Accessors.cpp",
+      "x360_address": "0x8227DDD8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnEffects::EffectsIO::InputBuffer::GetAud`. The FireAssert arguments at 0x8227DE68 cite EffectsModuleIO.h:156 for the InputBuffer::GetAudioEffectsMessageQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::OutputBuffer_PreScene::GetTrafficO": {
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PreScene::GetTrafficOutputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_OutputBuffer_PreScene.cpp",
+      "x360_address": "0x827BB5D0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PreScene::GetTrafficO`. The FireAssert arguments at 0x827BB660 cite BrnCrashModuleIO.h:131 for the OutputBuffer_PreScene::GetTrafficOutputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOutEvent": {
+      "symbol": "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOutEventQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284E528",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOutEvent`. The FireAssert arguments at 0x8284E5B8 cite CgsEventInterpreterModuleIO.h:162 for the OutputBuffer::GetOutEventQueue() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetCrash": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetCrashNetworkInputInterface",
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "x360_address": "0x825881F8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetCrash`. The FireAssert arguments at 0x82588288 cite BrnNetworkModuleIO.h:862 for the OutputBuffer::GetCrashNetworkInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnSound::Module::Io::LogicOutputBuffer::GetRes": {
+      "symbol": "BrnSound::Module::Io::LogicOutputBuffer::GetResourceRequestInterface",
+      "file": "GameSource/Sound/Module/LogicModule/BrnSoundLogicModuleIo.cpp",
+      "x360_address": "0x826955C0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnSound::Module::Io::LogicOutputBuffer::GetRes`. The FireAssert arguments at 0x82695650 cite BrnSoundLogicModuleIo.h:128 for the LogicOutputBuffer::GetResourceRequestInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnDirector::DirectorIO::InputBuffer::GetTimerStatusInter": {
+      "symbol": "BrnDirector::DirectorIO::InputBuffer::GetTimerStatusInterface",
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModuleIOInputBuffer.cpp",
+      "x360_address": "0x82206CF8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnDirector::DirectorIO::InputBuffer::GetTimerStatusInter`. The FireAssert arguments at 0x82206D88 cite BrnDirectorModuleIO.h:601 for the InputBuffer::GetTimerStatusInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOu": {
+      "symbol": "CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOutEventQueue",
+      "file": "GameShared/GameClasses/Gui/Model/CgsEventInterpreterModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284E480",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::EventInterpreterModuleIO::OutputBuffer::GetOu`. The FireAssert arguments at 0x8284E510 cite CgsEventInterpreterModuleIO.h:146 for the OutputBuffer::GetOutEventQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetP": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetPlayerVehicleControls",
+      "file": "GameSource/Network/BrnNetworkModuleIO.cpp",
+      "x360_address": "0x823BB978",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetP`. The FireAssert arguments at 0x823BBA08 cite BrnNetworkModuleIO.h:624 for the PostSimulationInputBuffer::GetPlayerVehicleControls() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::InputBuffer_PreScene::GetTimerStatusIn": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PreScene::GetTimerStatusInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB288",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::InputBuffer_PreScene::GetTimerStatusIn`. The FireAssert arguments at 0x827BB318 cite BrnCrashModuleIO.h:75 for the InputBuffer_PreScene::GetTimerStatusInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsResource::PoolIO::OutputBuffer::GetPoolOu": {
+      "symbol": "CgsResource::PoolIO::OutputBuffer::GetPoolOutputQueue",
+      "file": "GameShared/GameClasses/System/Resource/CgsPoolModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x828E1AA8",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsResource::PoolIO::OutputBuffer::GetPoolOu`. The FireAssert arguments at 0x828E1B38 cite CgsPoolModuleIO.h:262 for the OutputBuffer::GetPoolOutputQueue() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "CgsGui::GuiResourceModuleIO::OutputBuffer::GetLoadNot": {
+      "symbol": "CgsGui::GuiResourceModuleIO::OutputBuffer::GetLoadNotifications",
+      "file": "GameShared/GameClasses/Gui/Model/Resources/CgsGuiResourceModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x8284DFF8",
+      "byte_match": true,
+      "evidence": "IDA kept only `CgsGui::GuiResourceModuleIO::OutputBuffer::GetLoadNot`. The FireAssert arguments at 0x8284E088 cite CgsGuiResourceModuleIO.h:397 for the OutputBuffer::GetLoadNotifications() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnResource::GameDataIO::OutputBuffer::GetAllocato": {
+      "symbol": "BrnResource::GameDataIO::OutputBuffer::GetAllocatorList",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B18D8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnResource::GameDataIO::OutputBuffer::GetAllocato`. The FireAssert arguments at 0x823B1968 cite BrnGameDataModuleIO.h:258 for the OutputBuffer::GetAllocatorList() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::OutputBuffer_PreScene::GetVehicle": {
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PreScene::GetVehicleInputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_OutputBuffer_PreScene.cpp",
+      "x360_address": "0x827BB678",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PreScene::GetVehicle`. The FireAssert arguments at 0x827BB708 cite BrnCrashModuleIO.h:134 for the OutputBuffer_PreScene::GetVehicleInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetRep": {
+      "symbol": "BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetReplayRequestInterface",
+      "file": "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_OutputBuffer_PostPhysics.cpp",
+      "x360_address": "0x822B9FC0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetRep`. The FireAssert arguments at 0x822BA050 cite BrnPropEntityModuleIO.h:748 for the OutputBuffer_PostPhysics::GetReplayRequestInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerR": {
+      "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerRequestInterface",
+      "file": "GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "x360_address": "0x823B98E8",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnGameState::GameStateModuleIO::OutputBuffer::GetTimerR`. The FireAssert arguments at 0x823B9978 cite BrnGameStateModuleIO.h:274 for the OutputBuffer::GetTimerRequestInterface() const lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::CrashIO::OutputBuffer_PostPhysics::GetNetwo": {
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PostPhysics::GetNetworkOutputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_OutputBuffer_PostPhysics.cpp",
+      "x360_address": "0x827BB9C0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PostPhysics::GetNetwo`. The FireAssert arguments at 0x827BBA50 cite BrnCrashModuleIO.h:208 for the OutputBuffer_PostPhysics::GetNetworkOutputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
+    },
+    "BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetProp": {
+      "symbol": "BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetPropInputInterface",
+      "file": "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_OutputBuffer_PostPhysics.cpp",
+      "x360_address": "0x822B9BD0",
+      "byte_match": true,
+      "evidence": "IDA kept only `BrnWorld::PropEntityIO::OutputBuffer_PostPhysics::GetProp`. The FireAssert arguments at 0x822B9C60 cite BrnPropEntityModuleIO.h:742 for the OutputBuffer_PostPhysics::GetPropInputInterface() lock check. The XDK body, direct calls and linked data agree with this extent."
     }
   },
   "sdk_entry_groups": {
