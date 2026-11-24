@@ -16737,6 +16737,22 @@
       "x360_address": "0x8271B420",
       "byte_match": true,
       "evidence": "The XDK range specialization agrees with the preserved ARTIST mangled name. DecFIGS CgsShuffle.h:107 records the void range signature. The native body matches with its integer draw inlined, 18 verified call relocations and six original diagnostic references."
+    },
+    "BrnGameState::Cras": {
+      "symbol": "CgsContainers::Array<BrnGameState::CrashModeScoring::RecentCrash,64>::GetItem",
+      "file": "GameSource/GameState/ModeManager/Scoring/Array_RecentCrash_64.cpp",
+      "const": true,
+      "x360_address": "0x8231AEB8",
+      "byte_match": true,
+      "evidence": "Both const GetRecentCrash calls at 0x8232BF54 and 0x8232BF84 select this checked Array accessor. The XDK const GetItem(u32) symbol and all 264 code bytes agree, including CgsArray.h assertions 538 and 539 and recent-crash stride 8. The mutable overload targets 0x8231ADB0 and has different assertion lines."
+    },
+    "BrnGameState::CrashModeScoring::GetRecentCra": {
+      "symbol": "BrnGameState::CrashModeScoring::GetRecentCrash",
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnCrashModeScoring.cpp",
+      "const": true,
+      "x360_address": "0x8232BEF8",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnCrashModeScoring.h:226 declares the const method and const RecentCrash result. The XDK reproduces the 152-byte body and both const Array::GetItem call sites at 0x8232BF54 and 0x8232BF84 with their ARTIST targets."
     }
   },
   "sdk_entry_groups": {
