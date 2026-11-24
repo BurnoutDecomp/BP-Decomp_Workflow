@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import argparse
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 import difflib
 import hashlib
 import json
@@ -286,6 +287,31 @@ def measure_object(path, artist):
     return rows
 
 
+_WORKER_ARTIST = None
+_PARALLEL_MEASURE_MIN = 1536
+
+
+def _init_measure_worker(artist):
+    global _WORKER_ARTIST
+    _WORKER_ARTIST = artist
+
+
+def _compare_in_worker(path):
+    return measure_object(path, _WORKER_ARTIST)
+
+
+def measure_objects(paths, artist, jobs):
+    """Compare in source order using one loaded ARTIST catalogue snapshot."""
+    workers = min(jobs, os.cpu_count() or 1, 61)  # ProcessPoolExecutor's Windows limit
+    # Windows worker startup and snapshot serialization dominate small batches.
+    if workers < 2 or len(paths) < _PARALLEL_MEASURE_MIN:
+        for path in paths:
+            yield measure_object(path, artist)
+        return
+    with ProcessPoolExecutor(max_workers=workers, initializer=_init_measure_worker, initargs=(artist,)) as pool:
+        yield from pool.map(_compare_in_worker, paths, chunksize=16)
+
+
 def tree_entries(tree, commit="HEAD"):
     """{path: (type, object id)} for every file and submodule link at a commit."""
     entries = {}
@@ -434,6 +460,8 @@ def measure(args):
     measurements = load_deps(tree, recorded=True) if args.record else None
     measuring = measure_fingerprint() if args.record else None
     artist = Artist().preload() if len(sources) > 20 else Artist()
+    objects = [index[source]["object"] for source in sources if source in index and index[source]["passed"]]
+    compared = measure_objects(objects, artist, args.jobs)
     stamp = ledger.now_iso()
     totals = defaultdict(int)
     for source in sources:
@@ -445,7 +473,7 @@ def measure(args):
                   "toolchain": toolchain(entry["command"], tree, xdk), "measured": stamp, "tool": TOOL_VERSION,
                   "compiled": bool(entry["passed"]), "functions": []}
         if entry["passed"]:
-            rows = measure_object(entry["object"], artist)
+            rows = next(compared)
             # Functions with no ARTIST counterpart (mostly header inlines every object repeats)
             # are counted, not listed: they are neither done nor left.
             record["functions"] = [r for r in rows if r["status"] != "unpaired"]
@@ -471,6 +499,7 @@ def measure(args):
                 print(f"   ({record['unpaired']} functions with no ARTIST counterpart by name)")
             for err in record.get("errors", []):
                 print("   " + err)
+    compared.close()
     if args.record:
         save_deps(tree, deps)
         save_deps(tree, measurements, recorded=True)
@@ -868,12 +897,12 @@ def main(argv=None):
     m.add_argument("--record", action="store_true", help="write progress/bytematch/objects/ records (clean, pushed HEAD only)")
     m.add_argument("--compile", action="store_true", help="recompile first even if an object is cached")
     m.add_argument("--no-compile", action="store_true")
-    m.add_argument("--jobs", type=int, default=8)
+    m.add_argument("--jobs", type=int, default=8, help="parallel jobs for compilation and full comparisons")
     m.add_argument("-v", "--verbose", action="store_true")
     m.set_defaults(fn=measure)
     r = sub.add_parser("refresh")
     r.add_argument("--record", action="store_true")
-    r.add_argument("--jobs", type=int, default=8)
+    r.add_argument("--jobs", type=int, default=8, help="parallel jobs for compilation and full comparisons")
     r.set_defaults(fn=refresh)
     sub.add_parser("status").set_defaults(fn=status)
     g = sub.add_parser("gaps", help="audit the ARTIST text range against the function catalogue")

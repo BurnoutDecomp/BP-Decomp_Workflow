@@ -1293,11 +1293,15 @@ def test_remeasuring_an_unchanged_object_keeps_its_record(tmp_path):
     row = {"symbol": "s", "name": "X::f", "artist": "82100000", "status": "nonmatching", "score": 90.0}
     first = dict(_record("src/Game/X.cpp", "c1", "b1", [row]), measured="2026-11-19T20:00:00Z")
     path = ledger.write_record(first, tmp_path)
-    ledger.write_record(dict(first, measured="2026-11-19T21:00:00Z"), tmp_path)
-    assert json.loads(path.read_text(encoding="utf-8"))["measured"] == "2026-11-19T20:00:00Z"
-    ledger.write_record(dict(first, measured="2026-11-19T22:00:00Z", functions=[dict(row, status="exact", score=100.0)]), tmp_path)
+    ledger.write_record(dict(first, commit="c2", measured="2026-11-19T21:00:00Z"), tmp_path)
+    assert json.loads(path.read_text(encoding="utf-8")) == first
+    changed_blob = dict(first, commit="c3", blob="b2", measured="2026-11-19T22:00:00Z")
+    ledger.write_record(changed_blob, tmp_path)
+    assert json.loads(path.read_text(encoding="utf-8")) == changed_blob
+    ledger.write_record(dict(changed_blob, measured="2026-11-19T23:00:00Z",
+                             functions=[dict(row, status="exact", score=100.0)]), tmp_path)
     after = json.loads(path.read_text(encoding="utf-8"))
-    assert after["measured"] == "2026-11-19T22:00:00Z" and after["functions"][0]["status"] == "exact"
+    assert after["measured"] == "2026-11-19T23:00:00Z" and after["functions"][0]["status"] == "exact"
 
 
 def test_universe_round_trip(tmp_path):

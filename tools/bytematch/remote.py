@@ -50,7 +50,7 @@ class BadRecord(ValueError):
 
 def content(record):
     """What a record says, without when and at which commit it was measured."""
-    return json.dumps({k: v for k, v in record.items() if k not in ("measured", "commit")}, sort_keys=True)
+    return json.dumps(ledger.measurement_payload(record), sort_keys=True)
 
 
 def _need(ok, what):

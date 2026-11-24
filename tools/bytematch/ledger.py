@@ -78,14 +78,18 @@ def dump_record(record: dict) -> str:
     return "\n".join(lines) + "\n"
 
 
+def measurement_payload(record: dict) -> dict:
+    """Comparison evidence with the commit and measurement time omitted."""
+    return {k: v for k, v in record.items() if k not in ("commit", "measured")}
+
+
 def _same_measurement(old_text: str, record: dict) -> bool:
-    """True when the stored record says what the new one says, measured at another time."""
+    """True when the stored record agrees with the new comparison, including its source blob."""
     try:
         old = json.loads(old_text)
     except ValueError:
         return False
-    return ({k: v for k, v in old.items() if k != "measured"} ==
-            {k: v for k, v in json.loads(json.dumps(record)).items() if k != "measured"})
+    return measurement_payload(old) == measurement_payload(json.loads(json.dumps(record)))
 
 
 def write_record(record: dict, root: Path = RECORDS) -> Path:
@@ -93,12 +97,11 @@ def write_record(record: dict, root: Path = RECORDS) -> Path:
     re-measure touches only the records whose content changed."""
     path = record_path(record["source"], root)
     path.parent.mkdir(parents=True, exist_ok=True)
-    text = dump_record(record)
     if path.exists():
         old = path.read_text(encoding="utf-8")
-        if old == text or _same_measurement(old, record):
+        if _same_measurement(old, record):
             return path
-    _write_atomic(path, text)
+    _write_atomic(path, dump_record(record))
     return path
 
 
