@@ -78,7 +78,12 @@ def load_pack(path=PACK, *, aliases_path=SOURCE_ALIASES):
         xdk_aliases = registry.get("xdk_functions", {})
         aliases = registry.get("functions", {}) | xdk_aliases
         for exported_name, proof in aliases.items():
-            if proof.get("byte_match") is not True:
+            # A `functions` alias may also stand on name evidence alone (an assert text, a call
+            # from a named caller, a vtable slot), as identified_functions do for unnamed bodies:
+            # the export is then compared under its full name and reads as nonmatching until the
+            # body matches. XDK aliases always need the byte proof.
+            named = exported_name not in xdk_aliases and proof.get("name_evidence") is True
+            if proof.get("byte_match") is not True and not named:
                 continue
             address = f"0x{int(proof['x360_address'], 16):08X}"
             row = functions.get(address)

@@ -162,6 +162,12 @@ previous summary, dropped on a regression) and `recent`.
 - An existing unnamed extent can declare `sdk_provider` in its `identified_functions` proof.
   The original export and extent still have to agree, and the SDK verifier compares the named
   archive member before counting it as SDK code.
+- A `functions` alias renames an export IDA truncated. With `"byte_match": true` its evidence is the
+  compiled body equal to ARTIST's. With `"name_evidence": true` (and `"byte_match": false`) the
+  name stands on other proof at that exact address, as an `identified_functions` entry does for an
+  unnamed body: the assert texts or lines that name it, a named caller's call that lands there, a
+  vtable slot. The export is then compared under its full name and reads as nonmatching until the
+  body matches, and its callers' calls to it can verify. Never for `xdk_functions`.
 - An opted-in `xdk_functions` alias can also declare `sdk_provider` for its existing named extent.
   The verifier checks the original export and address, then compares the archive body and its
   attested relocations even when the universe rebuild reuses a provider cache.

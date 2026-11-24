@@ -252,6 +252,30 @@ def test_native_alias_requires_opt_in_and_the_exported_name_and_address(tmp_path
     assert art.name_at(0x82200014) == "__restgprlr"
 
 
+def test_name_evidence_alias_renames_a_truncated_export_without_a_byte_proof(tmp_path):
+    pack_path = tmp_path / "artist.json.gz"
+    aliases_path = tmp_path / "source_aliases.json"
+    pack = {
+        "0x82200000": {"name": "Pool<Vector4,8>::AllocateObj", "n": 1},
+        "0x82200004": {"name": "Pool<Vector4,8>::Releas", "n": 1},
+        "0x82200008": {"name": "__savegprlr", "n": 1},
+    }
+    pack_path.write_bytes(gzip.compress(json.dumps({"functions": pack}).encode("utf-8")))
+    aliases_path.write_text(json.dumps({"functions": {
+        "Pool<Vector4,8>::AllocateObj": {"x360_address": "0x82200000", "symbol": "Pool<Vector4,8>::AllocateObject",
+                                         "byte_match": False, "name_evidence": True},
+        "Pool<Vector4,8>::Releas": {"x360_address": "0x82200004", "symbol": "Pool<Vector4,8>::Release"},
+    }, "xdk_functions": {
+        "__savegprlr": {"x360_address": "0x82200008", "symbol": "__savegprlr_14", "name_evidence": True},
+    }}), encoding="utf-8")
+
+    art = Artist(pack=load_pack(pack_path, aliases_path=aliases_path))
+
+    assert art.name_at(0x82200000) == "Pool<Vector4,8>::AllocateObject"
+    assert art.name_at(0x82200004) == "Pool<Vector4,8>::Releas"
+    assert art.name_at(0x82200008) == "__savegprlr"
+
+
 def test_unnamed_callee_is_unverified_not_wrong():
     caller, callee = 0x82100000, 0x82200000
     art = FakeArtist([(caller, "Caller", [0x7C0802A6, bl_to(caller + 4, callee), BLR]),
