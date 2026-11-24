@@ -6,7 +6,7 @@ description: >-
   Studio 2008/2010 has no cl.exe, link.exe, include/ or lib/), point [x360].xdk in
   build.config.toml at it, create the b5-decomp `x360` worktree `b5-x360/` and its vendor
   submodules, pass `work match setup`, compile with `work match compile` (the branch's
-  build_x360.py owns the flags), read objects and /FAcs listings, triage compile failures
+  build_x360.py owns the flags), read objects and /FAc listings, triage compile failures
   (C++03 only: no nullptr, static_assert, enum class, range-for or C++11 auto; 32-bit big-endian
   types; generated includes; src/pc excluded), prepare the linker (link.exe exits 0xC0000142
   until prepare_x360_linker.py fixes its manifest), and keep `x360` in step with dev. Load before
@@ -65,11 +65,13 @@ compile gate of `work submit` ([`reconstruct-tu`](../reconstruct-tu/SKILL.md)).
 
 - `work match compile SRC...` (or `--all`) runs the branch's `b5-x360/tools/build_x360.py` with
   `/showIncludes`, and records the objects in `b5-x360/build/x360/bytematch/`: `objects/<stem>-<hash>.obj`,
-  `.asm` (the `/FAcs` listing: our assembly with machine code) and `.log`, plus `index.json`
+  `.asm` (the `/FAc` assembly listing with machine code) and `.log`, plus `index.json`
   (per source: object, pass/fail, include list) and `deps.json` (the inputs a recorded
   measurement depended on). `work match measure` and `refresh` compile what they need themselves.
 - The flags live in `build_x360.py` on the branch (`FLAGS`: `/O2 /Oi /Ob2 /GR- /GS- /EHs-c- /Gy
-  /FAcs` and the platform defines) and apply to every object. `/Gy` is what puts each function in
+  /FAc` and the platform defines) and apply to every object. `/FAc` keeps the machine-code
+  listing available when an assertion uses a historical filename. `/FAcs` tries to reopen that
+  filename to interleave source text and fails if the checkout has no such path. `/Gy` puts each function in
   its own COMDAT section, so objects can be compared function by function. Changing a flag
   changes every record's toolchain fingerprint: a maintainer decision, after which
   `work match refresh --record` re-measures every object (a manual server cross-check run does it

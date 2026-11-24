@@ -16614,6 +16614,48 @@
       "x360_address": "0x8279CD48",
       "byte_match": true,
       "evidence": "The original read-lock assertion is at BrnAIModuleIO.h:479 and the accessor returns the AIModuleResultInterface member at +0x17F50. The two branches from the original const WorldBridgePropModule caller at 0x827AD56C and 0x827AD580 reach this extent. The typed XDK body and all its relocations agree with ARTIST."
+    },
+    "??$BubbleSort@UNearestCarInfo@AllVehicleData@BrnDirector@@V?$Array@UNearestCarInfo@AllVehicleData@BrnDirector@@$07@CgsC": {
+      "symbol": "CgsAlgorithms::BubbleSort<BrnDirector::AllVehicleData::NearestCarInfo,CgsContainers::Array<BrnDirector::AllVehicleData::NearestCarInfo,8> >",
+      "file": "GameShared/GameClasses/Algorithms/CgsAlgorithms_Inst.cpp",
+      "x360_address": "0x82213F80",
+      "byte_match": true,
+      "evidence": "The full native specialization continues the preserved MSVC symbol prefix. DecFIGS CgsBubbleSort.h:91 specifies the container template argument, and the native wrapper at the ARTIST call site 0x8222D978 uses that specialization."
+    },
+    "??$BubbleSort@VGridPositionAndScoreData@BrnGameState@@V?$Array@VGridPositionAndScoreData@BrnGameState@@$07@CgsContainer": {
+      "symbol": "CgsAlgorithms::BubbleSort<BrnGameState::GridPositionAndScoreData,CgsContainers::Array<BrnGameState::GridPositionAndScoreData,8> >",
+      "file": "GameSource/GameState/ModeManager/BrnModeManager.cpp",
+      "x360_address": "0x82325910",
+      "byte_match": true,
+      "evidence": "The XDK specialization matches the preserved ARTIST mangled prefix, both comparison diagnostics, and all six calls to the verified array accessor at 0x8231B270."
+    },
+    "BrnGameState::GridPositionAnd": {
+      "symbol": "CgsContainers::Array<BrnGameState::GridPositionAndScoreData,8>::GetItem",
+      "file": "GameSource/GameState/ModeManager/BrnModeManager.cpp",
+      "x360_address": "0x8231B270",
+      "byte_match": true,
+      "evidence": "Six aligned call sites (first 0x82325990) in the grid sort name this native non-const GetItem specialization. Its XDK body, stride and nine linked references match the original extent."
+    },
+    "*,8>::GetI": {
+      "symbol": "CgsContainers::Array<BrnGameState::GameModeState *,8>::GetItem",
+      "file": "GameShared/GameClasses/Containers/CgsArrayGameModeStatePtr8.cpp",
+      "x360_address": "0x8231B168",
+      "byte_match": true,
+      "evidence": "The aligned native call sites in GameModeState array consumers name this non-const specialization. Its XDK body and the original CgsArray diagnostic references match the extent."
+    },
+    "BrnGui::CreateMatchOptions,75>::GetItem": {
+      "symbol": "CgsContainers::Array<BrnGui::CreateMatchOptions,75>::GetItem",
+      "file": "GameSource/Gui/Flow/Screen/States/Array_CreateMatchOption_75.cpp",
+      "x360_address": "0x82488DC8",
+      "byte_match": true,
+      "evidence": "Five aligned native call sites name this specialization. The XDK body, element stride and original non-const array diagnostics match the ARTIST extent."
+    },
+    "BrnGui::CreateMatchOptions,75>::Append": {
+      "symbol": "CgsContainers::Array<BrnGui::CreateMatchOptions,75>::Append",
+      "file": "GameSource/Gui/Flow/Screen/States/Array_CreateMatchOption_75.cpp",
+      "x360_address": "0x82488B40",
+      "byte_match": true,
+      "evidence": "The original truncated name specifies CreateMatchOptions, capacity 75 and Append. Its XDK specialization matches the extent, element stride and original CgsArray diagnostic references."
     }
   },
   "sdk_entry_groups": {
@@ -25382,6 +25424,34 @@
       "size": 80,
       "file": "SDKs/EATech/include/snd/CMpegBase.cpp",
       "evidence": "Native ??_7CMpegBase@Snd@@6B@ links ?Close@CMpegBase@Snd@@UAAHXZ at offset 0xC. The matching ARTIST vtable at 0x82156438 is bound by 4 existing method slots. Its entry at 0x82156444 points to this extent. The current XDK body, calls and linked data agree."
+    },
+    "0x822B0818": {
+      "exported_name": "sub_822B0818",
+      "symbol": "CgsContainers::Array<BrnWorld::NearMissData<4,7>::VehicleTimePair,4>::GetItem",
+      "size": 264,
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+      "evidence": "The native call relocation at ARTIST 0x822E47F0 in BrnWorld::NearMissData<4,7>::AddContacted identifies this Array specialization. The XDK compares exact and its assertions reference the same strings and streamed-message data."
+    },
+    "0x822B0920": {
+      "exported_name": "sub_822B0920",
+      "symbol": "CgsContainers::Array<BrnWorld::NearMissData<4,7>::VehicleTimePair,4>::GetItem",
+      "size": 264,
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/NearMisses/Array_VehicleTimePair_4.cpp",
+      "evidence": "The native call relocation at ARTIST 0x822E4B28 in BrnWorld::NearMissData<4,7>::IsRecentNearMiss identifies this Array specialization. The XDK compares exact and its assertions reference the same strings and streamed-message data."
+    },
+    "0x82360210": {
+      "exported_name": "sub_82360210",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::TrophyUnlockAction,12>::GetItem",
+      "size": 264,
+      "file": "GameSource/GameState/Progression/BrnProgressionManager.cpp",
+      "evidence": "The native call relocation at ARTIST 0x8238930C in BrnProgression::ProgressionManager::SendTrophyUnlockUpdate identifies this Array specialization. The XDK compares exact and its assertions reference the same strings and streamed-message data."
+    },
+    "0x8268F588": {
+      "exported_name": "sub_8268F588",
+      "symbol": "CgsContainers::Array<BrnSound::Vehicles::Environment::StaticPassbyControl::PassbyRecord,5>::Erase",
+      "size": 204,
+      "file": "GameShared/GameClasses/Containers/CgsArrayStaticPassbyRecord5.cpp",
+      "evidence": "The native call relocation at ARTIST 0x8269AFA8 in BrnSound::Vehicles::Environment::StaticPassbyControl::PassbyHistory::Update identifies this Array specialization. The XDK compares exact and its assertions reference the same strings and streamed-message data."
     }
   },
   "native_leaf_functions": {
