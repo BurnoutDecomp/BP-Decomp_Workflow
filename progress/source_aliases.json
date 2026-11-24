@@ -16192,6 +16192,110 @@
       "x360_address": "0x823C1888",
       "byte_match": true,
       "evidence": "IDA kept only part of the name CgsModule::IOHelper<RendererIO::OutputBuffer>::IOHelper<RendererIO::OutputBuffer> (`RendererIO::OutputBuffer>`). Of the 5 compiled native functions whose names contain it, only that one, compiled from src/GameSource/Game/BrnGameModule.cpp, equals this 104-byte function word for word outside its relocation fields. 4 named call targets agree. All direct calls, diagnostic strings and linked data references agree."
+    },
+    "BrnTraffic::TrafficData>::GetMemor": {
+      "symbol": "CgsResource::ResourcePtr<BrnTraffic::TrafficData>::GetMemoryResource",
+      "file": "GameSource/Director/Utils/BrnDirectorWorldMap.cpp",
+      "x360_address": "0x82211D00",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnTraffic::TrafficData>::GetMemor`. At 0x8221916C in BrnDirector::WorldMap::GetTrafficData, the ARTIST branch targets 0x82211D00 and the native call relocation names ?GetMemoryResource@?$ResourcePtr@UTrafficData@BrnTraffic@@@CgsResource@@QBAPBUTrafficData@BrnTraffic@@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "BrnTrigger::TriggerData>::operator": {
+      "symbol": "CgsResource::ResourcePtr<BrnTrigger::TriggerData>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnTriggerData.cpp",
+      "x360_address": "0x82211DA0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnTrigger::TriggerData>::operator`. At 0x8248E71C in BrnGui::WorldDataController::GetTotalNumberOfLandmarks, the ARTIST branch targets 0x82211DA0 and the native call relocation names ??C?$ResourcePtr@UTriggerData@BrnTrigger@@@CgsResource@@QBAPBUTriggerData@BrnTrigger@@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestNearestRe": {
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,40>::AddPostBox",
+      "file": "GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "x360_address": "0x8222D288",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `CgsSceneManager::SceneManagerIO::OutEventLineTestNearestRe`. At 0x822330E4 in BrnDirector::SceneQueryInterface::LineTestNearest, the ARTIST branch targets 0x8222D288 and the native call relocation names ?AddPostBox@?$PostOffice@UOutEventLineTestNearestResult@SceneManagerIO@CgsSceneManager@@$0CI@@BrnDirector@@QAAGAAV?$PostBox@UOutEventLineTestNearestResult@SceneManagerIO@CgsSceneManager@@@2@@Z. The aligned caller body and the original export identify the callee."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::RCEntit": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::GetBoostOutputInfoN",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823101C0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnWorld::RaceCarEntityModuleIO::RCEntit`. At 0x82334670 in BrnGameState::ChallengeManager::UpdateBurnouts, the ARTIST branch targets 0x823101C0 and the native call relocation names ?GetBoostOutputInfoN@RCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@QBAPBUBoostOutputInfo@23@W4EActiveRaceCarIndex@@@Z. The aligned caller body and the original export identify the callee."
+    },
+    "BrnProgression::ProgressionData": {
+      "symbol": "CgsResource::ResourcePtr<BrnProgression::ProgressionData>::operator->",
+      "file": "GameSource/GameState/Progression/BrnProgressionManager.cpp",
+      "x360_address": "0x82325790",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnProgression::ProgressionData`. At 0x8242885C in BrnGui::WorldDataController::GetProgressionData, the ARTIST branch targets 0x82325790 and the native call relocation names ??C?$ResourcePtr@UProgressionData@BrnProgression@@@CgsResource@@QBAPBUProgressionData@BrnProgression@@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "??$CreateIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repla": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnReplays::ReplayIO::InputBuffer_PreSim>",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823AFB78",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `??$CreateIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repla`. At 0x823DD2E4 in BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim, the ARTIST branch targets 0x823AFB78 and the native call relocation names ??$CreateIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@ReplayIO@BrnReplays@@PBD@Z. The aligned caller body and the original export identify the callee."
+    },
+    "??$DestroyIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repl": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnReplays::ReplayIO::InputBuffer_PreSim>",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823AFC48",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `??$DestroyIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@Repl`. At 0x823DD3D4 in BrnGame::BrnGameModule::DoUpdate_ReplaysPreSim, the ARTIST branch targets 0x823AFC48 and the native call relocation names ??$DestroyIOBuffer@VInputBuffer_PreSim@ReplayIO@BrnReplays@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreSim@ReplayIO@BrnReplays@@@Z. The aligned caller body and the original export identify the callee."
+    },
+    "CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu": {
+      "symbol": "CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueue",
+      "file": "GameShared/GameClasses/Gui/CgsGuiModuleIO_OutputBuffer.cpp",
+      "x360_address": "0x823B4130",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `CgsGui::CgsGuiModuleIO::OutputBuffer::GetOutEventQueu`. At 0x823C0AA4 in BrnGame::BrnGameModule::BridgeGuiToSound, the ARTIST branch targets 0x823B4130 and the native call relocation names ?GetOutEventQueue@OutputBuffer@CgsGuiModuleIO@CgsGui@@QBAPBV?$GuiEventQueueBase@$0EIAA@$0BA@@3@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "BrnFlapt::FlaptFile>::operator->": {
+      "symbol": "CgsResource::ResourcePtr<BrnFlapt::FlaptFile>::operator->",
+      "file": "GameSource/Gui/Flapt/BrnFlaptFileInstance.cpp",
+      "x360_address": "0x8246E2F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnFlapt::FlaptFile>::operator->`. At 0x824724C8 in BrnFlapt::FlaptFileInstance::Render, the ARTIST branch targets 0x8246E2F8 and the native call relocation names ??C?$ResourcePtr@UFlaptFile@BrnFlapt@@@CgsResource@@QAAPAUFlaptFile@BrnFlapt@@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "CgsResource::ResourceIO::OutputBuffer:": {
+      "symbol": "CgsResource::ResourceIO::OutputBuffer::GetFileSystemStatusInterface",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModuleIO.cpp",
+      "x360_address": "0x82663BE0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `CgsResource::ResourceIO::OutputBuffer:`. At 0x82666440 in BrnResource::GameDataModule::UpdateResourceModule, the ARTIST branch targets 0x82663BE0 and the native call relocation names ?GetFileSystemStatusInterface@OutputBuffer@ResourceIO@CgsResource@@QBAPBUFileSystemStatusInterface@23@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "BrnWorld::RaceCarEn": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreScene::GetActiveRaceCarOutputInterface",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO_PreSceneAccessors.cpp",
+      "x360_address": "0x8279D500",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnWorld::RaceCarEn`. At 0x827A50C8 in WorldModule::BridgeEntityModulesToCrashModule_PreScene, the ARTIST branch targets 0x8279D500 and the native call relocation names ?GetActiveRaceCarOutputInterface@OutputBuffer_PreScene@RaceCarEntityModuleIO@BrnWorld@@QBAPBURCEntityActiveRaceCarOutputInterface@23@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "BrnTraffic::BrnTrafficIO::O": {
+      "symbol": "BrnTraffic::BrnTrafficIO::OutputBuffer_PostScene::GetTrafficToRaceCarInterface_PostScene",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.cpp",
+      "x360_address": "0x827A00B0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnTraffic::BrnTrafficIO::O`. At 0x827A5258 in WorldModule::BridgeTrafficToRaceCar_PrePhysics, the ARTIST branch targets 0x827A00B0 and the native call relocation names ?GetTrafficToRaceCarInterface_PostScene@OutputBuffer_PostScene@BrnTrafficIO@BrnTraffic@@QBAPBUTrafficToRaceCarInterface_PostScene@123@XZ. The aligned caller body and the original export identify the callee."
+    },
+    "BrnWorld::CrashIO::OutputBuffer_PreScene::GetV": {
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PreScene::GetVehicleInputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_OutputBuffer_PreScene.cpp",
+      "x360_address": "0x827A2488",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnWorld::CrashIO::OutputBuffer_PreScene::GetV`. At 0x827AACD8 in WorldModule::BridgeCrashModuleToPhysicsModule, the ARTIST branch targets 0x827A2488 and the native call relocation names ?GetVehicleInputInterface@OutputBuffer_PreScene@CrashIO@BrnWorld@@QBAPBUVehicleInputInterface@Vehicle@BrnPhysics@@XZ. The aligned caller body and the original export identify the callee."
     }
   },
   "sdk_entry_groups": {
@@ -24780,6 +24884,55 @@
       "size": 176,
       "file": "GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_Lookup.cpp",
       "evidence": "The branch at 0x823642C0 in OnlineFlybyManager::CalculateDisconnectRating calls this body with ScoringSystem in r3 and the rating NetworkPlayerID in r4. The body checks -1 at 0x8231DD9C, asserts lNetworkPlayerID != CgsNetwork::K_INVALID_PLAYER_ID at string 0x820243E0, then scans the stored NetworkPlayerID at CarData +0x148 over the attested 0x158 stride. DecFIGS BrnScoringSystem.h:890 and :893 name the mutable and const overloads. The XDK caller has the mutable NetworkPlayerID overload relocation."
+    },
+    "0x822B9738": {
+      "exported_name": "sub_822B9738",
+      "symbol": "BrnWorld::PropEntityIO::OutputBuffer_PreScene::GetSceneInputInterface",
+      "size": 164,
+      "file": "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_OutputBuffer_PreScene.cpp",
+      "evidence": "The ARTIST branch at 0x822C487C in BrnWorld::PropEntityModule::LeaveReplay targets this extent and the native relocation names ?GetSceneInputInterface@OutputBuffer_PreScene@PropEntityIO@BrnWorld@@QAAPAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@XZ. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x8272CD20": {
+      "exported_name": null,
+      "symbol": "std::_Make_heap<BrnTraffic::VehicleRenderInfo *,int,BrnTraffic::VehicleRenderInfo,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>",
+      "size": 124,
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp",
+      "evidence": "The ARTIST branch at 0x8274C4F0 in std::_Sort<BrnTraffic::VehicleRenderInfo *,int,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)> targets this extent and the native relocation names ??$_Make_heap@PAUVehicleRenderInfo@BrnTraffic@@HU12@P6A_NABU12@0@Z@std@@YAXPAUVehicleRenderInfo@BrnTraffic@@0P6A_NABU12@1@ZPAH0@Z. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x82740138": {
+      "exported_name": null,
+      "symbol": "std::_Insertion_sort<BrnTraffic::VehicleRenderInfo *,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)>",
+      "size": 232,
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp",
+      "evidence": "The ARTIST branch at 0x8274C4B8 in std::_Sort<BrnTraffic::VehicleRenderInfo *,int,bool (__cdecl*)(BrnTraffic::VehicleRenderInfo const &,BrnTraffic::VehicleRenderInfo const &)> targets this extent and the native relocation names ??$_Insertion_sort@PAUVehicleRenderInfo@BrnTraffic@@P6A_NABU12@0@Z@std@@YAXPAUVehicleRenderInfo@BrnTraffic@@0P6A_NABU12@1@Z@Z. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x827A2B30": {
+      "exported_name": "sub_827A2B30",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetPropInstancesNeededForZoneQueue",
+      "size": 164,
+      "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_PreScene.cpp",
+      "evidence": "The ARTIST branch at 0x827AAD10 in WorldModule::BridgeWorldModuleToPropModule_PreScene targets this extent and the native relocation names ?GetPropInstancesNeededForZoneQueue@OutputBuffer_PreScene@WorldEntityIO@BrnWorld@@QBAPBV?$EventQueue@UPropInstancesNeededForZoneEvent@PropEntityIO@BrnWorld@@$0BO@@CgsModule@@XZ. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x827B4138": {
+      "exported_name": null,
+      "symbol": "BrnGraphics::EnvironmentMap::Destruct",
+      "size": 76,
+      "file": "GameSource/World/EnvironmentMap/BrnEnvironmentMap.cpp",
+      "evidence": "The ARTIST branch at 0x827BD1D8 in BrnWorld::WorldModule::Destruct targets this extent and the native relocation names ?Destruct@EnvironmentMap@BrnGraphics@@QAAXXZ. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x82BCFEC0": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CRequestObject::SetStatus",
+      "size": 172,
+      "file": "SDKs/Packages/MassiveAd/MassiveAdClient3Request.cpp",
+      "evidence": "The ARTIST branch at 0x82BD1A1C in MassiveAdClient3::CNetworkManager::Send targets this extent and the native relocation names ?SetStatus@CRequestObject@MassiveAdClient3@@QAAXH@Z. The XDK body agrees with the instructions, calls and linked data at the target."
+    },
+    "0x82BD7B68": {
+      "exported_name": null,
+      "symbol": "SHA1ProcessMessageBlock",
+      "size": 616,
+      "file": "SDKs/Packages/MassiveAd/MassiveAdClient3Crypto.cpp",
+      "evidence": "The ARTIST branch at 0x82BD7E38 in SHA1PadMessage targets this extent and the native relocation names ?SHA1ProcessMessageBlock@@YAXPAUSHA1Context@@@Z. The XDK body agrees with the instructions, calls and linked data at the target."
     }
   },
   "native_leaf_functions": {
