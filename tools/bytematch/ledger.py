@@ -22,7 +22,9 @@ import datetime as _dt
 import gzip
 import hashlib
 import json
+import os
 from pathlib import Path
+import time
 
 REPO = Path(__file__).resolve().parents[2]
 LEDGER = REPO / "progress" / "bytematch"
@@ -96,8 +98,25 @@ def write_record(record: dict, root: Path = RECORDS) -> Path:
         old = path.read_text(encoding="utf-8")
         if old == text or _same_measurement(old, record):
             return path
-    path.write_text(text, encoding="utf-8", newline="\n")
+    _write_atomic(path, text)
     return path
+
+
+def _write_atomic(path: Path, text: str, attempts: int = 40) -> None:
+    """Write through a temporary file and rename it over the record, so a reader never sees half a
+    record. On Windows the rename fails while another process (a lane's regression check reading
+    the records) holds the file open, so it is retried for a few seconds before giving up."""
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8", newline="\n")
+    for attempt in range(attempts):
+        try:
+            os.replace(tmp, path)
+            return
+        except OSError:
+            if attempt == attempts - 1:
+                tmp.unlink(missing_ok=True)
+                raise
+            time.sleep(min(0.05 * (attempt + 1), 0.5))
 
 
 def load_records(root: Path = RECORDS):
