@@ -581,6 +581,10 @@ def apply_source_aliases(idx, aliases, identity=None):
             continue
         if identity is not None and proof.get("x360_address") not in identity.get(canonical, {}).get("x360_addrs", []):
             continue
+        # A byte-match alias proved on the x360 tree may name no PC body file; without one the
+        # rename cannot be tied to a definition here, so it is left to the byte-match ledger.
+        if "file" not in proof:
+            continue
         definitions = [d for d in idx.by_exact.get(proof["symbol"], [])
                        if d.file == proof["file"] and ("const" not in proof or d.is_const == proof["const"])]
         if definitions:
