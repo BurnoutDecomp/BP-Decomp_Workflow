@@ -1,17 +1,13 @@
 ---
 name: byte-match
 description: >-
-  Byte-match ARTIST functions on the native Xbox 360 tree (b5-decomp branch `x360`, worktree
-  `b5-x360/`): pick one with `work match next`, read the console's assembly, write C++ the XDK
-  compiler turns into ARTIST's exact bytes, iterate with `work match diff NAME --compile`, check
-  the object with `work match measure`, then push the source on `x360`, record it locally with
-  `work match refresh --record` and push the records to main, where CI publishes the dashboard
-  (progress/bytematch/). Covers the verdicts (exact, nonmatching, missing, sdk, unnamed, unpaired)
-  and what "exact" proves, reading a diff (registers, scheduling, frame, callee, constant, size),
-  stale records, the optional server cross-check (wine.py), the CI summary and dashboard. Load it before any byte-matching
-  work: "match this function",
-  "make X match", "byte-match progress", or touching progress/bytematch/. Not for the PC tree on
-  dev (reconstruct-tu) or setting up the XDK and the worktree (x360-toolchain).
+  Byte-match ARTIST functions on b5-decomp's native Xbox 360 branch `x360` (worktree
+  `b5-x360/`). Read ARTIST assembly, find the existing native or SDK abstraction, and verify
+  the C++ with `work match diff` and `work match measure`. Covers verdicts, instruction
+  differences, stale records, `work match refresh --record`, ledger publication and the
+  optional server cross-check. Load before matching a function or working with byte-match
+  progress under `progress/bytematch/`. Use reconstruct-tu for the PC branch and
+  x360-toolchain for SDK and native worktree setup.
 ---
 
 # Byte matching
@@ -90,6 +86,39 @@ to the wrong global matches if the instruction is the same), and a call to an AR
 with no name is counted as unverified, not wrong. Read the `calls_unverified` and
 `data_unchecked` counts in the record before calling a function finished.
 
+## Find the existing abstraction before editing
+
+Do this lookup before writing or rewriting a function body, adding a helper, or tuning code
+generation. Reuse the results across a batch that uses the same abstraction. Repeat the lookup
+when the evidence points to a different owner, operation or call target.
+
+1. **Identify the operation in ARTIST.** Read the assembly, its callers and the relevant
+   callee or inlined block. Use `work match show "<qualified name or ARTIST address>"` to locate
+   a measured definition. For renamed or truncated symbols, check `progress/source_aliases.json`.
+   Use DecFIGS DWARF to recover the declaration, overload, field types and source ownership where
+   ARTIST corroborates them.
+2. **Search the native checkout.** Use `rg` in `b5-x360/src` and `b5-x360/vendor` for the
+   qualified name, short member or helper name, and owning type. Read the owning declaration,
+   inline headers, definition and nearby callers. For an unnamed or inlined operation, look for
+   the same data flow and side effects in related methods and templates. A missing ledger row
+   leaves that source search open.
+3. **Check the original provider.** If the operation belongs to the SDK, check the XDK headers
+   and the ledger's SDK providers (`meta.providers` in `progress/bytematch/universe.json.gz`).
+   Use the original API or library symbol when ARTIST does. When a game implementation is missing
+   on `x360`, search the corresponding declaration and definition on `dev`. Carry it over only
+   after checking ARTIST's semantics, layout and call boundaries. Leave PC-only code in its own tree.
+4. **Choose where the change belongs.** Call the existing method or use the owned type when the
+   evidence supports it, including an inline accessor or template. Confirm overload, widths,
+   side effects, and whether ARTIST calls or inlines it. Fix the owning abstraction if its
+   declaration or behavior is wrong. Before adding a helper or reconstructing an operation
+   locally, identify the existing candidates you checked and the evidence that supports the
+   new boundary or local operation.
+
+In a handoff or unresolved mismatch, keep the function and ARTIST address, the declaration or
+helper checked, the evidence for the attempted source, the latest native comparison, and the
+next check. Put verified findings that apply across batches in the relevant shared skill
+reference so another session can reuse them.
+
 ## The loop
 
 1. `work match setup`: XDK, tree, ARTIST image and universe must all say `ok`. Anything
@@ -103,9 +132,10 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
 4. Read the console. The assembly is authoritative: `.ida-exports/BURNOUT_X360_ARTIST.XEX/0x<addr>.json`
    (a local input), or `python tools/re/ppcdis.py <addr>` when the export has a hole. Pseudocode
    is a hint; signatures and calling conventions come from the asm ([`console-evidence`](../console-evidence/SKILL.md)).
-5. Find the source. A measured function's record names its file. A missing one goes where its
-   ledger TU lives on the branch (`work match show` prints the TU; search `b5-x360/src` for the
-   class). Follow the branch's layout; never add a file under `src/pc/`.
+5. Find the source and [look up the existing abstraction](#find-the-existing-abstraction-before-editing).
+   A measured function's record names its file. For a missing function, use its ledger ownership
+   and search `b5-x360/src` for the class and its definitions. Keep the implementation in the
+   native owner's files outside `src/pc/`.
 6. Iterate: `work match diff NAME --compile` recompiles that one source and prints our
    instructions beside ARTIST's (`~` changed, `-` only ours, `+` only ARTIST, with call targets
    named on both sides). Before adjusting code generation, check the original declaration,
@@ -133,12 +163,9 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
   mismatch exact. A comparator fix needs a failing unit test in `tools/bytematch/test_bytematch.py`
   first.
 - **Source fidelity and byte matching are both required.** Recover the supported declaration,
-  semantics and abstraction before tuning the generated instructions. Use existing methods, types
-  and SDK APIs when the evidence supports them: call the helper already on `x360` (or its `dev`
-  counterpart, carried over faithfully) rather than writing a second one, and call the XDK API
-  where ARTIST calls it. Code ARTIST links from the XDK is `sdk`: link it, never rewrite it. For a
-  shared type change, compile the full include closure with the XDK, check affected
-  offsets/size/alignment and compare all previously exact functions in those objects.
+  semantics and abstraction before tuning the generated instructions. For a shared type change,
+  compile the full include closure with the XDK, check affected offsets, size and alignment, and
+  compare all previously exact functions in those objects.
 - **Justify unusual constructs.** A low-level cast, explicit alignment or padding, compiler
   directive, temporary or control-flow shape needs a brief source comment or commit note naming
   the ARTIST address or other declaration/SDK evidence and the requirement it satisfies. An
