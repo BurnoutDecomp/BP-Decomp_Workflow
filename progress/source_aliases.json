@@ -8657,12 +8657,12 @@
       "evidence": "The original truncated export, typed owning declaration, lock bit and returned-member displacement agree."
     },
     "int,int>::FindEntry": {
+      "symbol": "CgsContainers::LinearSOAHashTable<int,int>::FindEntry",
       "x360_address": "0x828DF3E0",
-      "symbol": "CgsContainers::LinearSOAHashTable<int,unsigned int>::FindEntry",
       "byte_match": true,
       "size": 164,
-      "tu": "src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp",
-      "evidence": "RemapFilename at 0x828E94B4 calls the existing FindEntry on the patch map at +0x888. The ARTIST divide and key-index comparisons are unsigned. The XDK instance with that key type and the two counted searches reproduces all 164 bytes, without relocations."
+      "tu": "src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.cpp",
+      "evidence": "The unaliased ARTIST export preserves the int,int template suffix. Both PatchManager calls use the same map at offset 0x888. ARTIST divides and probes using unsigned bits, so recovering the two signed template parameters retains unsigned hashing and comparisons. The native signed provider matches the complete body."
     },
     "CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,10>::C": {
       "symbol": "CgsModule::EventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFastDoubleSided,10>::Construct",
@@ -19040,6 +19040,45 @@
       "x360_address": "0x826AAD48",
       "byte_match": true,
       "evidence": "ARTIST UpdateResourceModuleLoading at 826C6E40 calls 826AAD48 with its AlignedBinaryFileResource pointer at 826C6F74. DecFIGS CgsResourcePtr.h:538 declares the non-const specialization. The typed XDK relocation, native 160-byte body and relative line-544 diagnostic agree with the original."
+    },
+    "BrnSound::Logic::ResourceR": {
+      "symbol": "CgsContainers::Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource>*,124>::FindFirstInstanceOf",
+      "file": "GameSource/Sound/Array_RequestedResourceNode_124.cpp",
+      "x360_address": "0x8268EC98",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST Contains branches at 0x8268ED80 to the typed 124-entry array search. The callee reads the count at +0x1F0, compares 32-bit resource-node pointers and returns the first unsigned index or 0xFFFFFFFF. DecFIGS CgsArray.h:470 and the native QBAI relocation establish the original return type."
+    },
+    "int,int>::AddEntry": {
+      "symbol": "CgsContainers::LinearSOAHashTable<int,int>::AddEntry",
+      "x360_address": "0x828DF260",
+      "byte_match": true,
+      "size": 384,
+      "tu": "src/GameShared/GameClasses/Containers/CgsLinearSOAHashTable.cpp",
+      "evidence": "The unaliased ARTIST export preserves the int,int template suffix. Both PatchManager calls use the same map at offset 0x888. ARTIST divides and probes using unsigned bits, so recovering the two signed template parameters retains unsigned hashing and comparisons. The native signed provider matches the complete body."
+    },
+    "CgsSceneManager::SceneManagerEntity,10000,int>::IsObjectAllocated": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::IsObjectAllocated",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828B6ED8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST EntityManager::RemoveEntity at 828CD718 and GetFirstEntityVolumeInstance at 828C5E0C pass the leading typed SceneManagerEntity pool and a u16 slot. The target tests the pool occupancy bitmap after its index checks. The typed native call points to the same original ObjectPool method."
+    },
+    "CgsSceneManager::EntityManager::GetFirstEntityVolumeInsta": {
+      "symbol": "CgsSceneManager::EntityManager::GetFirstEntityVolumeInstance",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828C5DC0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CD9C0 and 828CFB94 pass u16 entity index and s32* out-index to the const EntityManager getter. The target loads the first volume slot from the const entity record, writes the index when present and calls the const volume getter. DecFIGS CgsEntityManager.h:189 confirms the signature; the complete native body matches."
+    },
+    "__cde": {
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *> *,10>::GetItem",
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "x360_address": "0x821FEF00",
+      "byte_match": true,
+      "evidence": "ARTIST PostOffice<OutEventLineTestFineResult const*,10>::Clear has two original branches to this 264-byte extent, at 0x8221CCF8 and 0x8221CD14. The native relocations on both select ?GetItem@?$Array@PAV?$PostBox@PBUOutEventLineTestFineResult@SceneManagerIO@CgsSceneManager@@@BrnDirector@@$09@CgsContainers@@QAAAAPAV?$PostBox@PBUOutEventLineTestFineResult@SceneManagerIO@CgsSceneManager@@@BrnDirector@@I@Z. The legacy export gives the generic label __cde."
     }
   },
   "sdk_entry_groups": {
@@ -30086,6 +30125,77 @@
       "size": 160,
       "tu": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsContentLoader.cpp",
       "evidence": "ARTIST UpdateResourceModuleLoading at 826C6A98 calls 826A7710 with its BinaryFileResource pointer at 826C6BCC. The callee reads the cached main-memory pointer and asserts with CgsResourcePtr.h:544 when null. DecFIGS CgsResourcePtr.h:538 declares the non-const specialization. The typed XDK relocation, native body and relative diagnostic string agree. The original .pdata extent is 160 bytes."
+    },
+    "0x82AE02B8": {
+      "exported_name": null,
+      "symbol": "AptNativeHash::Lookup",
+      "size": 192,
+      "tu": "src/SDKs/EATech/include/Apt/AptNativeHash.cpp",
+      "evidence": "ARTIST's AptValueWithHash::Lookup at 0x82AE19C0 adjusts the receiver by eight bytes to its embedded AptNativeHash and tail-calls this body. AptScriptFunctionBase::ExistsInLocalScope calls the same target at 0x82AE196C. The body updates the EAString cached hash, probes the native hash table through HashFindKey (0x82ADA188), and resolves the prototype slots and string pool entries. The matching SDK implementation corroborates the typed owner and behavior."
+    },
+    "0x82AF03C8": {
+      "exported_name": "Burnout_X360_Artist_0003",
+      "symbol": "AptFrameStack::AptFrameStack",
+      "size": 108,
+      "tu": "src/SDKs/EATech/include/Apt/AptFrameStack.cpp",
+      "evidence": "AptScriptFunctionBase::CreateFrameStack at 0x82AF1298 passes its creator scope and prior hash reserve to this overload. Its other branch at 0x82AF12B0 calls the default-capacity AptFrameStack constructor. The reserved constructor passes its third argument intact to AptValueWithHash, installs the AptFrameStack vtable at 0x82145A50 and retains the enclosing frame. The SDK frame-stack declaration corroborates the typed overload. Native COFF matches all 108 bytes with the verified base constructor and vtable relocations."
+    },
+    "0x8289D8C8": {
+      "evidence": "The exact CgsPhysics::PhysicsSimulationModule::ProcessRemoveAllRigidBodiesQueue at 0x8289F1D8 branches to this extent at 0x8289F224. Its native relocation selects ?GetEvent@?$BaseEventQueue@UInRemoveAllRigidBodies@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QBAABUInRemoveAllRigidBodies@PhysicsSimulationIO@CgsPhysics@@H@Z. Complete native code and all target relocations are verified.",
+      "exported_name": "sub_8289D8C8",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveAllRigidBodies>::GetEvent",
+      "size": 160,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp"
+    },
+    "0x8289D620": {
+      "evidence": "The exact CgsPhysics::PhysicsSimulationModule::ProcessUpdateRigidBodyQueue at 0x828A3A08 branches to this extent at 0x828A3A5C. Its native relocation selects ?GetEvent@?$BaseEventQueue@VInUpdateRigidBody@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QBAABVInUpdateRigidBody@PhysicsSimulationIO@CgsPhysics@@H@Z. Complete native code and all target relocations are verified.",
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateRigidBody>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp"
+    },
+    "0x8289D778": {
+      "evidence": "The exact CgsPhysics::PhysicsSimulationModule::ProcessSetRigidBodySpyQueue at 0x828A49A8 branches to this extent at 0x828A49F0. Its native relocation selects ?GetEvent@?$BaseEventQueue@UInSetRigidBodySpy@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QBAABUInSetRigidBodySpy@PhysicsSimulationIO@CgsPhysics@@H@Z. Complete native code and all target relocations are verified.",
+      "exported_name": "sub_8289D778",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InSetRigidBodySpy>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp"
+    },
+    "0x825BC728": {
+      "evidence": "The exact BrnPhysics::Props::PropManager::ProcessRemovePartInstanceEvents at 0x82627818 branches to this extent at 0x8262785C. Its native relocation selects ?GetEvent@?$BaseEventQueue@VRemovePhysicalPartEvent@Props@BrnPhysics@@@CgsModule@@QBAABVRemovePhysicalPartEvent@Props@BrnPhysics@@H@Z. Complete native code and all target relocations are verified.",
+      "exported_name": "sub_825BC728",
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::RemovePhysicalPartEvent>::GetEvent",
+      "size": 164,
+      "tu": "src/GameSource/Physics/PropManager/BrnPropManager.cpp"
+    },
+    "0x827B5088": {
+      "evidence": "The exact BrnWorld::CrashModule::HandleRecoveredSlammedTraffic at 0x827BF3F0 branches to this extent at 0x827BF464. Its native relocation selects ?GetEvent@?$BaseEventQueue@VRemoveSlammedTrafficEvent@CrashIO@BrnWorld@@@CgsModule@@QBAABVRemoveSlammedTrafficEvent@CrashIO@BrnWorld@@H@Z. Complete native code and all target relocations are verified.",
+      "exported_name": "sub_827B5088",
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::RemoveSlammedTrafficEvent>::GetEvent",
+      "size": 164,
+      "tu": "src/GameSource/World/CrashModule/BrnCrashModule_TrafficCrashes.cpp"
+    },
+    "0x8221CC98": {
+      "evidence": "The exact BrnDirector::SceneQueryInterface::Clear at 0x8221CD38 branches to this extent at 0x8221CD58. Its native relocation selects ?Clear@?$PostOffice@PBUOutEventLineTestFineResult@SceneManagerIO@CgsSceneManager@@$09@BrnDirector@@QAAXXZ. Complete native code and all target relocations are verified.",
+      "exported_name": "sub_8221CC98",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *,10>::Clear",
+      "size": 156,
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp"
+    },
+    "0x82794BE8": {
+      "evidence": "ARTIST branch 0x82794C08 targets the typed IOBufferStack::CreateIOBuffer<BrnAI::RouteMapModuleIO::OutputBuffer> at 0x82791960. The 104-byte constructor matches its full native template decoration and literal assertions.",
+      "exported_name": "sub_82794BE8",
+      "symbol": "CgsModule::IOHelper<BrnAI::RouteMapModuleIO::OutputBuffer>::IOHelper<BrnAI::RouteMapModuleIO::OutputBuffer>",
+      "size": 104,
+      "tu": "src/GameSource/World/AI/BrnAIModule_ResetPump.cpp"
+    },
+    "0x82B439D0": {
+      "exported_name": "sub_82B439D0",
+      "symbol": "EA::Thread::Semaphore::Semaphore",
+      "native_symbol": "??0Semaphore@Thread@EA@@QAA@H@Z",
+      "size": 92,
+      "tu": "src/SDKs/EATech/eathread/eathread_semaphore.cpp",
+      "evidence": "The EAThread SDK and DecFIGS declare Semaphore(int). ARTIST CgsFileSystem::AsyncOp::AsyncOp passes its initial count at 0x828DE310. The overload constructs the default intra-process parameters with that count and calls Semaphore::Init at 0x82B42988. The typed native overload matches all 92 bytes and the Init branch."
     }
   },
   "native_leaf_functions": {

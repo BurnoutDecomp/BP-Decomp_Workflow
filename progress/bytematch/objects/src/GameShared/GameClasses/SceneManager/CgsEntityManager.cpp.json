@@ -1,13 +1,13 @@
 {
- "blob": "7137b9e0a0ef06c684d98699862ccbd4ef035241",
- "commit": "ac8aec69b5748f4a7a1cbe6dffd161653280a022",
+ "blob": "6ad3d0e86b1b563a013a4651ca8c47110f89fbf0",
+ "commit": "61db7219d203b43ac6709c751236c3999e32870d",
  "compiled": true,
- "measured": "2026-11-25T15:30:52Z",
+ "measured": "2026-11-25T15:54:14Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 91,
+ "unpaired": 89,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -19,6 +19,7 @@
   {"artist": "828B6A28", "artist_size": 476, "data_unchecked": 13, "name": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::FreeObject", "score": 100.0, "size": 476, "status": "exact", "symbol": "?FreeObject@?$ObjectPool@USceneManagerEntity@CgsSceneManager@@$0CHBA@H@CgsContainers@@QAAXH@Z"},
   {"artist": "828B6C08", "artist_size": 356, "data_unchecked": 11, "name": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::operator[]", "score": 100.0, "size": 356, "status": "exact", "symbol": "??A?$ObjectPool@USceneManagerEntity@CgsSceneManager@@$0CHBA@H@CgsContainers@@QBAABUSceneManagerEntity@CgsSceneManager@@H@Z"},
   {"artist": "828B6D70", "artist_size": 356, "data_unchecked": 11, "name": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::operator[]", "score": 100.0, "size": 356, "status": "exact", "symbol": "??A?$ObjectPool@USceneManagerEntity@CgsSceneManager@@$0CHBA@H@CgsContainers@@QAAAAUSceneManagerEntity@CgsSceneManager@@H@Z"},
+  {"artist": "828B6ED8", "artist_size": 292, "first_diff": 244, "name": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::IsObjectAllocated", "score": 91.9, "size": 300, "status": "nonmatching", "symbol": "?IsObjectAllocated@?$ObjectPool@USceneManagerEntity@CgsSceneManager@@$0CHBA@H@CgsContainers@@QBA_NH@Z"},
   {"artist": "828B71E8", "artist_size": 348, "data_unchecked": 11, "name": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::operator[]", "score": 100.0, "size": 348, "status": "exact", "symbol": "??A?$ObjectPool@UVolumeInstance@CgsSceneManager@@$0BDLI@H@CgsContainers@@QBAABUVolumeInstance@CgsSceneManager@@H@Z"},
   {"artist": "828B7348", "artist_size": 348, "data_unchecked": 11, "name": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::operator[]", "score": 100.0, "size": 348, "status": "exact", "symbol": "??A?$ObjectPool@UVolumeInstance@CgsSceneManager@@$0BDLI@H@CgsContainers@@QAAAAUVolumeInstance@CgsSceneManager@@H@Z"},
   {"artist": "828B74A8", "artist_size": 296, "first_diff": 240, "name": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::IsObjectAllocated", "score": 83.2, "size": 300, "status": "nonmatching", "symbol": "?IsObjectAllocated@?$ObjectPool@UVolumeInstance@CgsSceneManager@@$0BDLI@H@CgsContainers@@QBA_NH@Z"},
@@ -31,6 +32,7 @@
   {"artist": "828BA180", "artist_size": 252, "data_unchecked": 3, "name": "CgsSceneManager::EntityManager::RemoveVolumeInstanceFromEntity", "score": 100.0, "size": 252, "status": "exact", "symbol": "?RemoveVolumeInstanceFromEntity@EntityManager@CgsSceneManager@@IAAXH@Z"},
   {"artist": "828C5958", "artist_size": 152, "name": "CgsContainers::IndexedHashTable<CgsSceneManager::EntityId,unsigned short,541>::GetInternal", "score": 100.0, "size": 152, "status": "exact", "symbol": "?GetInternal@?$IndexedHashTable@VEntityId@CgsSceneManager@@G$0CBN@@CgsContainers@@AAAPAV?$IndexedLinkedListNode@U?$IndexedHashTableElementData@VEntityId@CgsSceneManager@@G@CgsContainers@@G@2@VEntityId@CgsSceneManager@@PAPAV?$IndexedLinkedList@U?$IndexedHashTableElementData@VEntityId@CgsSceneManager@@G@CgsContainers@@G@2@@Z"},
   {"artist": "828C59F0", "artist_size": 168, "name": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeInstanceId,unsigned int,509>::GetInternal", "score": 100.0, "size": 168, "status": "exact", "symbol": "?GetInternal@?$IndexedHashTable@UVolumeInstanceId@CgsSceneManager@@I$0BPN@@CgsContainers@@AAAPAV?$IndexedLinkedListNode@U?$IndexedHashTableElementData@UVolumeInstanceId@CgsSceneManager@@I@CgsContainers@@G@2@UVolumeInstanceId@CgsSceneManager@@PAPAV?$IndexedLinkedList@U?$IndexedHashTableElementData@UVolumeInstanceId@CgsSceneManager@@I@CgsContainers@@G@2@@Z"},
+  {"artist": "828C5DC0", "artist_size": 164, "data_unchecked": 3, "name": "CgsSceneManager::EntityManager::GetFirstEntityVolumeInstance", "score": 100.0, "size": 164, "status": "exact", "symbol": "?GetFirstEntityVolumeInstance@EntityManager@CgsSceneManager@@QBAPBUVolumeInstance@2@GPAH@Z"},
   {"artist": "828C5FC8", "artist_size": 196, "name": "CgsSceneManager::EntityManager::Prepare", "score": 100.0, "size": 196, "status": "exact", "symbol": "?Prepare@EntityManager@CgsSceneManager@@QAA_NXZ"},
   {"artist": "828C6090", "artist_size": 560, "first_diff": 8, "name": "CgsSceneManager::EntityManager::AddEntity", "score": 20.6, "size": 216, "status": "nonmatching", "symbol": "?AddEntity@EntityManager@CgsSceneManager@@QAAGVEntityId@2@@Z"},
   {"artist": "828CBC58", "artist_size": 124, "data_unchecked": 2, "name": "CgsContainers::IndexedHashTable<CgsSceneManager::EntityId,unsigned short,541>::Get", "score": 100.0, "size": 124, "status": "exact", "symbol": "?Get@?$IndexedHashTable@VEntityId@CgsSceneManager@@G$0CBN@@CgsContainers@@QBAPBGVEntityId@CgsSceneManager@@@Z"},
@@ -39,7 +41,7 @@
   {"artist": "828CD4B8", "artist_size": 200, "data_unchecked": 7, "name": "CgsSceneManager::EntityManager::GetVolumeInstanceIndexByID", "score": 100.0, "size": 200, "status": "exact", "symbol": "?GetVolumeInstanceIndexByID@EntityManager@CgsSceneManager@@QBAHUVolumeInstanceId@2@@Z"},
   {"artist": "828CD580", "artist_size": 216, "first_diff": 8, "name": "CgsSceneManager::EntityManager::SetVolumeInstanceTransform", "score": 31.4, "size": 192, "status": "nonmatching", "symbol": "?SetVolumeInstanceTransform@EntityManager@CgsSceneManager@@QAA?AVVector3@vpu@math@rw@@UVolumeInstanceId@2@ABUMatrix44Affine@456@@Z"},
   {"artist": "828CD658", "artist_size": 156, "first_diff": 40, "name": "CgsSceneManager::EntityManager::SetVolumeForCollision", "score": 59.7, "size": 152, "status": "nonmatching", "symbol": "?SetVolumeForCollision@EntityManager@CgsSceneManager@@QAAXUVolumeInstanceId@2@_N@Z"},
-  {"artist": "828CD6F8", "artist_size": 148, "first_diff": 44, "name": "CgsSceneManager::EntityManager::RemoveEntity", "score": 88.0, "size": 152, "status": "nonmatching", "symbol": "?RemoveEntity@EntityManager@CgsSceneManager@@QAAXG@Z"},
+  {"artist": "828CD6F8", "artist_size": 148, "data_unchecked": 2, "name": "CgsSceneManager::EntityManager::RemoveEntity", "score": 100.0, "size": 148, "status": "exact", "symbol": "?RemoveEntity@EntityManager@CgsSceneManager@@QAAXG@Z"},
   {"artist": "828CD790", "artist_size": 524, "first_diff": 8, "name": "CgsSceneManager::EntityManager::AddVolumeInstance", "score": 45.6, "size": 668, "status": "nonmatching", "symbol": "?AddVolumeInstance@EntityManager@CgsSceneManager@@QAAHUVolumeInstanceId@2@UVolumeId@2@ABUMatrix44Affine@vpu@math@rw@@@Z"}
  ]
 }
