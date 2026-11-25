@@ -27819,9 +27819,10 @@
     },
     "0x82B243C8": {
       "exported_name": "sub_82B243C8",
-      "symbol": "ProtoHttpClose",
+      "symbol": "_ProtoHttpClose",
       "size": 116,
-      "evidence": "The native ProtoHttpClose compiled from vendor/dirtysdk/src/x360/protohttp.cpp equals this 116-byte body word for word outside its relocation fields, and the pairing is unique both ways among unpaired native bodies and unnamed ARTIST bodies of that size. 3 named call targets agree. ProtoHttpUpdate branches here at 0x82B25564, and its native counterpart references ProtoHttpClose."
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:249 declares _ProtoHttpClose. ARTIST 0x82B25564 branches to 0x82B243C8. Update closes the current SSL session and supplies an error reason. Prior exact identity renamed to its DWARF spelling."
     },
     "0x82B26288": {
       "exported_name": "sub_82B26288",
@@ -31108,6 +31109,62 @@
       "size": 140,
       "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
       "evidence": "Original ConnApiDisconnect calls _ConnApiDisconnectClient at 82B1553C and 82B15580. The exact rebuilt caller relocates the local helper at both sites. DecFIGS connapi.c:1059 declares its four-argument signature, and all 140 bytes plus its branches and diagnostic are verified."
+    },
+    "0x82B24228": {
+      "exported_name": "sub_82B24228",
+      "symbol": "_ProtoHttpParseUrl",
+      "size": 412,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:161 declares _ProtoHttpParseUrl. ARTIST 0x82B24610 branches to 0x82B24228. Request passes the URL, bounded scheme and host arrays and a writable port output."
+    },
+    "0x82B24440": {
+      "exported_name": "sub_82B24440",
+      "symbol": "_ProtoHttpFormatRequest",
+      "size": 300,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:317 declares _ProtoHttpFormatRequest. ARTIST 0x82B247A4 branches to 0x82B24440. Request supplies path, host, port, method name, payload pointer and unsigned payload length. Callback offset +4 and its six register arguments are also present."
+    },
+    "0x82B24570": {
+      "exported_name": "sub_82B24570",
+      "symbol": "_ProtoHttpRequest",
+      "size": 788,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:391 declares _ProtoHttpRequest. ARTIST 0x82B24CD8 branches to 0x82B24570. Get tail-calls this state owner with a null body, zero length and the HEAD/GET selector."
+    },
+    "0x82B24888": {
+      "exported_name": "sub_82B24888",
+      "symbol": "_ProtoHttpParseHeader",
+      "size": 676,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:532 declares _ProtoHttpParseHeader. ARTIST 0x82B253CC branches to 0x82B24888. Update invokes this owner after receiving the response header and uses its result and parsed state fields."
+    },
+    "0x82B24F18": {
+      "exported_name": null,
+      "symbol": "_ProtoHttpRedirect",
+      "size": 312,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:659 declares _ProtoHttpRedirect. ARTIST 0x82B25454 branches to 0x82B24F18. Update invokes this owner on a 3xx status. It reads the parsed Location and calls the request owner."
+    },
+    "0x82B24B30": {
+      "exported_name": "sub_82B24B30",
+      "symbol": "_ProtoHttpChunkProcess",
+      "size": 304,
+      "tu": "vendor/dirtysdk/src/x360/protohttp.c",
+      "evidence": "DecFIGS protohttp.c:731 declares _ProtoHttpChunkProcess. ARTIST 0x82B256B0 branches to 0x82B24B30. Receive selects this chunk-length owner using its bChunked field and passes the bounded requested length."
+    },
+    "0x82AEEE48": {
+      "exported_name": null,
+      "symbol": "AptNativeHash::HashSet",
+      "size": 676,
+      "tu": "src/SDKs/EATech/include/Apt/AptNativeHash.cpp",
+      "evidence": "The named Set and Expand paths call the same unwind-backed method at 0x82AF4BE8 and 0x82AEEDE8. It receives the hash, key and value, probes buckets, replaces through SetAt, and grows through Expand. The corresponding native method has the same owning table and call boundaries."
+    },
+    "0x82B143B0": {
+      "exported_name": "sub_82B143B0",
+      "symbol": "`anonymous namespace'::_ConnApiRemoveClient",
+      "size": 412,
+      "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
+      "evidence": "DecFIGS connapi.c:1126 declares the private client removal routine. The XDK public ConnApiRemoveClient calls this exact 412-byte body at 82B153C4, also the original ARTIST target. Callback and port removal calls, memmove, current client count and the local-player lookup all agree."
     }
   },
   "native_leaf_functions": {
@@ -32070,6 +32127,15 @@
       "caller": "0x82B16160",
       "refhi_site": "0x82B16274",
       "reflo_site": "0x82B16284"
+    },
+    "0x82886930": {
+      "symbol": "CgsNetwork::ServerInterfaceGames::OnlyFinishOnErrorCallback",
+      "size": 24,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceGames.cpp",
+      "caller": "0x82886E28",
+      "refhi_site": "0x82886EC0",
+      "reflo_site": "0x82886EC8",
+      "evidence": "The original JoinGame request passes this callback as its third StartGameManagerAction argument, with the same target loaded by CreateGame and QuickJoinGame. The native typed callback compares exactly in the disjoint 24-byte extent and tail-calls EndAction only for a nonzero LobbyApiMsgT code. The one direct branch reaches EndAction at 0x82877F48."
     }
   },
   "sdk_archive_splits": {
