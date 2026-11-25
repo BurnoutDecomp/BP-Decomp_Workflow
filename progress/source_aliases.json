@@ -19513,6 +19513,160 @@
       "x360_address": "0x82ADBC28",
       "byte_match": true,
       "evidence": "Original AptValue listener set call, typed set declaration's integer return and verified 184-byte ARTIST body with Release vtable slot 1."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::Basic2dColouredTexturedVertex>::BeginRendering",
+      "x360_address": "0x823ABED8",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dColTex.cpp",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderer.h:586 gives the zero-argument typed specialization. ARTIST 823E79C8 calls it for the textured 2D instance."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::EndRendering": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::Basic2dColouredTexturedVertex>::EndRendering",
+      "x360_address": "0x823ABFD8",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dColTex.cpp",
+      "name_evidence": true,
+      "evidence": "Paired typed EndRendering calls at 823E79C8 and 823E8750, and diagnostics from CgsImRenderer.h:645."
+    },
+    "CgsGraphics::Basic2dColouredVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::Basic2dColouredVertex>::BeginRendering",
+      "x360_address": "0x823F9640",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dUntex.cpp",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderer.h:586 declares this specialization. ARTIST 82405A30 calls it with the untextured 2D instance."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredTexturedVertex>::BeginRendering",
+      "x360_address": "0x8227B5E8",
+      "file": "src/GameSource/Effects/Particles/Native/BrnLionBlendIm3d.cpp",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderer.h:615 declares the signed-char overload. ARTIST sign-extends r4, checks its signed range at lines 617–620, and stores it at this+84. The existing specialization is instantiated alongside the same LionBlendVertex program-slot template."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::EndRendering": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredTexturedVertex>::EndRendering",
+      "x360_address": "0x8227B830",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST and DecFIGS name the typed specialization, and the body checks the active base renderer using CgsImRenderer.h:645."
+    },
+    "CgsGraphics::Basic2dColouredVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::Basic2dColouredVertex>::SetProgram",
+      "x360_address": "0x827DC018",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm2dUntex.cpp",
+      "name_evidence": true,
+      "evidence": "The original IDA name and DecFIGS CgsImRenderer.h:524 both identify the virtual signed-char specialization."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredTexturedVertex>::SetProgram",
+      "x360_address": "0x827DBC98",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3d.cpp",
+      "name_evidence": true,
+      "evidence": "The original IDA name and two CgsImRenderer.h:526/527 diagnostics distinguish the direct shader program setter."
+    },
+    "CgsGraphics::PositionOnlyVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::PositionOnlyVertex>::SetProgram",
+      "x360_address": "0x827DBE58",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dZOnly.cpp",
+      "name_evidence": true,
+      "evidence": "The original IDA name and two CgsImRenderer.h:526/527 diagnostics identify the direct Z-only shader program setter."
+    },
+    "CgsGraphics::BasicColouredVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredVertex>::SetProgram",
+      "x360_address": "0x827DBD78",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dUntex.cpp",
+      "name_evidence": true,
+      "evidence": "The original IDA name and two CgsImRenderer.h:526/527 diagnostics identify the direct untextured 3D shader program setter."
+    },
+    "BrnGraphics::Im3dSkyDomeVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::Im3dSkyDomeVertex>::BeginRendering",
+      "x360_address": "0x823F9938",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dSkyDome.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST and DecFIGS identify the SkyDome vertex specialization, with the CgsImRenderer.h:588–590 diagnostics and both program binds."
+    },
+    "BrnGraphics::Im3dSkyDomeVertex>::EndRendering": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::Im3dSkyDomeVertex>::EndRendering",
+      "x360_address": "0x823F9A38",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dSkyDome.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST and DecFIGS identify this typed specialization, with the CgsImRenderer.h:645 diagnostic and active renderer reset."
+    },
+    "BrnGraphics::Im3dSkyDomeVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::Im3dSkyDomeVertex>::SetProgram",
+      "x360_address": "0x827DC0F8",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dSkyDome.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST names the SkyDome vertex specialization and uses the CgsImRenderer.h:526/527 shader-slot diagnostics."
+    },
+    "BrnGraphics::WorldTexturedVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::WorldTexturedVertex>::BeginRendering",
+      "x360_address": "0x8227C090",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dTexPlusLighting.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST names the WorldTextured vertex specialization, with the CgsImRenderer.h:588–590 diagnostics and both program binds."
+    },
+    "BrnGraphics::WorldTexturedVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::WorldTexturedVertex>::SetProgram",
+      "x360_address": "0x827DC1D8",
+      "file": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dTexPlusLighting.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST names the WorldTextured vertex specialization and uses the CgsImRenderer.h:526/527 shader-slot diagnostics."
+    },
+    "BrnGraphics::LionBlendVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::LionBlendVertex>::BeginRendering",
+      "x360_address": "0x8227C3A8",
+      "file": "src/GameSource/Effects/Particles/Native/BrnLionBlendIm3d.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST names the LionBlend vertex signed-program specialization and verifies the same ordered binds and slot diagnostics as 8227B5E8."
+    },
+    "BrnGraphics::LionBlendVertex>::SetProgram": {
+      "symbol": "CgsGraphics::ImRenderer<BrnGraphics::LionBlendVertex>::SetProgram",
+      "x360_address": "0x827DC398",
+      "file": "src/GameSource/Effects/Particles/Native/BrnLionBlendIm3d.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST names the LionBlend vertex specialization with the CgsImRenderer.h:526/527 shader-slot diagnostics."
+    },
+    "__int64,int>::AddEntry": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::AddEntry",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828DF028",
+      "evidence": "ARTIST CgsResource::Pool::CreateEntryInSlot branches at 0x828FDF88. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. CgsLinearHashTable.h:253 declares the existing resource-id insertion and optional stored int.",
+      "byte_match": true
+    },
+    "__int64,int>::FindEntry": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::FindEntry",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828DF1B0",
+      "evidence": "ARTIST CgsResource::Pool::FindResourceIndex branches at 0x828ED238. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. The caller passes the resource ID hash and the inline table at +0x188. DecFIGS header line 434 declares the typed lookup.",
+      "byte_match": true
+    },
+    "__int64,int>::FindFirstEmptyIndex": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::FindFirstEmptyIndex",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828E0400",
+      "evidence": "ARTIST CgsContainers::LinearHashTable<unsigned __int64,int>::RemoveEntryInternal branches at 0x828EAC24. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. The private helper at DecFIGS line 400 returns the first invalid key slot tested by the repair caller.",
+      "byte_match": true
+    },
+    "__int64,int>::Initialize": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::Initialize",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828E9AD8",
+      "evidence": "ARTIST CgsResource::Pool::InitManagementData branches at 0x828F5B8C. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. The typed caller passes table +0x188, entry storage from +0x180 and the rounded slot count. DecFIGS header line 180 declares this signature.",
+      "byte_match": true
+    },
+    "__int64,int>::RemoveEntryInternal": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::RemoveEntryInternal",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828EAC10",
+      "evidence": "ARTIST CgsContainers::LinearHashTable<unsigned __int64,int>::RemoveEntry branches at 0x828F26BC. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. The public RemoveEntry forwards the matched slot index to the private DecFIGS line 351 helper. The callee emits the original empty slot search and key/value reinsertion.",
+      "name_evidence": true
+    },
+    "__int64,int>::RemoveEntry": {
+      "symbol": "CgsContainers::LinearHashTable<unsigned __int64,int>::RemoveEntry",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "x360_address": "0x828F2590",
+      "evidence": "ARTIST CgsResource::Pool::DeleteEntry branches at 0x828FE1B8. The typed native caller relocates to the same LinearHashTable<uint64_t,int> provider. The caller passes table +0x188 and the 64-bit ID from the selected 88-byte entry. DecFIGS header line 302 declares the typed removal.",
+      "byte_match": true
     }
   },
   "sdk_entry_groups": {
@@ -31291,6 +31445,48 @@
       "size": 344,
       "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
       "evidence": "The aligned exact native ProtoPingResponse call at ARTIST 82B38B9C selects this completion-queue helper. Its original 344-byte unwind extent matches all instructions, identifies peer and server branches through the same typed owner, and uses the three matching diagnostic strings."
+    },
+    "0x827DC568": {
+      "exported_name": "sub_827DC568",
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredVertex>::BeginRendering",
+      "size": 252,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dUntex.cpp",
+      "evidence": "The untextured occlusion query branch at 0x827F269C passes mpOccludeeIm3d, selected when the cheap Z-only shader is disabled. DecFIGS CgsOcclusionCullManager.cpp:280 names the BasicColouredVertex specialization. The callee has CgsImRenderer.h:588–590 diagnostics and binds the program pair and descriptor."
+    },
+    "0x827DC668": {
+      "exported_name": "sub_827DC668",
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::BasicColouredVertex>::EndRendering",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dUntex.cpp",
+      "evidence": "The matching untextured EndQueries branch at 0x827EDFE4 passes the same mpOccludeeIm3d. DecFIGS CgsOcclusionCullManager.cpp:369 identifies the BasicColouredVertex specialization. The callee tests the active renderer with CgsImRenderer.h:645 and clears it."
+    },
+    "0x827EF450": {
+      "exported_name": null,
+      "symbol": "CgsGraphics::ImRenderer<CgsGraphics::PositionOnlyVertex>::BeginRendering",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsIm3dZOnly.cpp",
+      "evidence": "Both 0x827F2690 and 0x827F26A8 receive mpOccludeeIm3dZOnly. The original IDA export identifies PositionOnlyVertex>::BeginRendering, and DecFIGS CgsOcclusionCullManager.cpp:280 corroborates the full ImRenderer specialization. The paired EndRendering is separately named at 0x827EB0F0."
+    },
+    "0x82B17F70": {
+      "exported_name": "sub_82B17F70",
+      "symbol": "_TagFieldSetupAppend",
+      "size": 588,
+      "tu": "vendor/dirtysdk/src/lobbytagfield.c",
+      "evidence": "DecFIGS lobbytagfield.c:244 declares the helper with the four record, length, name and minimum-data arguments used by ARTIST. The original and exact native TagFieldSetRaw branch at 82B1A298 enters this 588-byte unwind extent. The same name and target appear in TagFieldSetString, TagFieldSetNumber64, TagFieldSetToken, TagFieldSetBinary and TagFieldSetStructure. The helper body remains nonmatching."
+    },
+    "0x82B181C0": {
+      "exported_name": "sub_82B181C0",
+      "symbol": "_TagFieldSetupCancel",
+      "size": 128,
+      "tu": "vendor/dirtysdk/src/lobbytagfield.c",
+      "evidence": "DecFIGS lobbytagfield.c:387 declares the two original buffer pointers. ARTIST TagFieldSetRaw branches here at 82B1A348 and the exact native caller relocates _TagFieldSetupCancel at the matching location. The original 128-byte unwind extent walks backward to the divider and terminates the canceled record. The helper body remains nonmatching."
+    },
+    "0x82BAA258": {
+      "exported_name": null,
+      "symbol": "rw::collision::FindBestSeparatingDirVolCyl",
+      "size": 76,
+      "tu": "src/vendor/renderware/collision/GPRegistration.cpp",
+      "evidence": "ARTIST gapFindBestSeparatingDirection in initialized data at 0x82F91800 uses this 76-byte .pdata range for non-cylinder rows and cylinder column at 0x82F91814/2C/44/5C/74. The function pointer and native COFF table agree on all 36 slots and this typed GPInstance/VecFloat routine. Its branch at 0x82BAA278 calls FindBestSepDirWithCylinder at 0x82BB76E8, with reversed operand order and the original output sign flip. All 76 bytes and the branch binding match."
     }
   },
   "native_leaf_functions": {

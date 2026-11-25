@@ -1,16 +1,18 @@
 {
- "blob": "51022abe352c3a1f50cca8a7fae38c76642168f3",
- "commit": "2e7b1f5d6d77ca3362455ab7529c3224faf0aa34",
+ "blob": "c0f412ea4b48a788dd460c26373ae4cebddf2c64",
+ "commit": "c2d2ea9e6ad86108ba2cfb512f3295fbc692d129",
  "compiled": true,
- "measured": "2026-11-25T20:03:50Z",
+ "measured": "2026-11-25T20:32:09Z",
  "schema": 1,
  "source": "src/SDKs/EATech/include/Apt/AptScriptFunctionBase.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 23,
+ "unpaired": 26,
  "functions": [
   {"artist": "82846920", "artist_size": 16, "name": "AptValue::getVtblIndex", "score": 100.0, "size": 16, "status": "exact", "symbol": "?getVtblIndex@AptValue@@QBA?AW4AptVirtualFunctionTable_Indices@@XZ"},
   {"artist": "82846930", "artist_size": 12, "name": "AptValue::getIsDefined", "score": 100.0, "size": 12, "status": "exact", "symbol": "?getIsDefined@AptValue@@QBA_NXZ"},
+  {"artist": "82AD4CD0", "artist_size": 60, "name": "AptValue::isCIH", "score": 100.0, "size": 60, "status": "exact", "symbol": "?isCIH@AptValue@@QBA_N_N@Z"},
+  {"artist": "82AD5138", "artist_size": 28, "name": "AptCIH::IncZombieCount", "score": 100.0, "size": 28, "status": "exact", "symbol": "?IncZombieCount@AptCIH@@QAAXXZ"},
   {"artist": "82AD51B8", "artist_size": 16, "data_unchecked": 1, "name": "AptValue::~AptValue", "score": 100.0, "size": 16, "status": "exact", "symbol": "??1AptValue@@MAA@XZ"},
   {"artist": "82AD6618", "artist_size": 24, "data_unchecked": 2, "name": "AptScriptFunctionBase::SetupBeforeExecution", "score": 100.0, "size": 24, "status": "exact", "symbol": "?SetupBeforeExecution@AptScriptFunctionBase@@UAAXPAUSavedExecutionState@1@PAVAptValue@@11@Z"},
   {"artist": "82AD6630", "artist_size": 96, "data_unchecked": 3, "name": "AptScriptFunctionBase::CleanupAfterExecution", "score": 100.0, "size": 96, "status": "exact", "symbol": "?CleanupAfterExecution@AptScriptFunctionBase@@UAAXPAUSavedExecutionState@1@@Z"},
@@ -23,14 +25,14 @@
   {"artist": "82AE27B0", "artist_size": 168, "first_diff": 4, "name": "AptScriptFunctionBase::RegisterReferences", "score": 55.3, "size": 208, "status": "nonmatching", "symbol": "?RegisterReferences@AptScriptFunctionBase@@UAAXXZ"},
   {"artist": "82AEFE98", "artist_size": 84, "calls_unverified": 1, "data_unchecked": 1, "name": "AptValueWithHash::AptValueWithHash", "score": 100.0, "size": 84, "status": "exact", "symbol": "??0AptValueWithHash@@IAA@W4AptVirtualFunctionTable_Indices@@H@Z"},
   {"artist": "82AF0128", "artist_size": 80, "name": "AptObject::`scalar deleting destructor'", "score": 100.0, "size": 80, "status": "exact", "symbol": "??_GAptObject@@UAAPAXI@Z"},
-  {"artist": "82AF1030", "artist_size": 472, "first_diff": 116, "name": "AptScriptFunctionBase::AptScriptFunctionBase", "score": 70.2, "size": 360, "status": "nonmatching", "symbol": "??0AptScriptFunctionBase@@IAA@W4AptVirtualFunctionTable_Indices@@PAVAptValue@@1_N@Z"},
+  {"artist": "82AF1030", "artist_size": 472, "first_diff": 88, "name": "AptScriptFunctionBase::AptScriptFunctionBase", "score": 74.7, "size": 428, "status": "nonmatching", "symbol": "??0AptScriptFunctionBase@@IAA@W4AptVirtualFunctionTable_Indices@@PAVAptValue@@1_N@Z"},
   {"artist": "82AF1260", "artist_size": 140, "data_unchecked": 1, "name": "AptScriptFunctionBase::CreateFrameStack", "score": 100.0, "size": 140, "status": "exact", "symbol": "?CreateFrameStack@AptScriptFunctionBase@@QAAXXZ"},
   {"artist": "82AF12F0", "artist_size": 24, "data_unchecked": 1, "name": "AptScriptFunctionBase::CreatingNestedFunction", "score": 100.0, "size": 24, "status": "exact", "symbol": "?CreatingNestedFunction@AptScriptFunctionBase@@UAAXXZ"},
-  {"artist": "82AF1508", "artist_size": 184, "first_diff": 80, "name": "AptScriptFunctionBase::DestroyGCPointers", "score": 78.2, "size": 164, "status": "nonmatching", "symbol": "?DestroyGCPointers@AptScriptFunctionBase@@UAAXXZ"},
+  {"artist": "82AF1508", "artist_size": 184, "name": "AptScriptFunctionBase::DestroyGCPointers", "score": 100.0, "size": 184, "status": "exact", "symbol": "?DestroyGCPointers@AptScriptFunctionBase@@UAAXXZ"},
   {"artist": "82AF51F0", "artist_size": 104, "first_diff": 20, "name": "AptValueWithHash::`scalar deleting destructor'", "score": 69.2, "size": 104, "status": "nonmatching", "symbol": "??_GAptValueWithHash@@UAAPAXI@Z"},
   {"artist": "82AF52C0", "artist_size": 68, "data_unchecked": 2, "name": "AptScriptFunctionBase::SetInLocalScope", "score": 100.0, "size": 68, "status": "exact", "symbol": "?SetInLocalScope@AptScriptFunctionBase@@QAAXABVEAStringC@@PAVAptValue@@@Z"},
   {"artist": "82AF5308", "artist_size": 48, "data_unchecked": 1, "name": "AptScriptFunctionBase::SetWhereExistsInScopeChain", "score": 100.0, "size": 48, "status": "exact", "symbol": "?SetWhereExistsInScopeChain@AptScriptFunctionBase@@QAA_NABVEAStringC@@PAVAptValue@@@Z"},
   {"artist": "82AF5B08", "artist_size": 92, "calls_unverified": 1, "data_unchecked": 1, "name": "AptScriptFunctionBase::`scalar deleting destructor'", "score": 100.0, "size": 92, "status": "exact", "symbol": "??_GAptScriptFunctionBase@@MAAPAXI@Z"},
-  {"artist": "82B00E90", "artist_size": 364, "first_diff": 68, "name": "AptScriptFunctionBase::AptScriptFunctionBase", "score": 57.0, "size": 296, "status": "nonmatching", "symbol": "??0AptScriptFunctionBase@@IAA@W4AptVirtualFunctionTable_Indices@@ABU0@PAVAptValue@@@Z"}
+  {"artist": "82B00E90", "artist_size": 364, "first_diff": 88, "name": "AptScriptFunctionBase::AptScriptFunctionBase", "score": 76.3, "size": 328, "status": "nonmatching", "symbol": "??0AptScriptFunctionBase@@IAA@W4AptVirtualFunctionTable_Indices@@ABU0@PAVAptValue@@@Z"}
  ]
 }
