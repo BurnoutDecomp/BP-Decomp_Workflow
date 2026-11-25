@@ -18235,6 +18235,61 @@
       "x360_address": "0x82404A50",
       "name_evidence": true,
       "evidence": "DecFIGS CgsImRenderBuffer.h records the instantiated Prepare(unsigned int, unsigned int, rw::IResourceAllocator *, bool) and the typed fields in BrnRendererModule.h:341,350,356 identify the renderer buffer owners. ARTIST BrnRendererModule::Prepare passes the same member offset and argument tuple as the decorated native relocation at the site in the evidence. 0x82409D2C, mIm2dRenderBuffer at this+0xAEC."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::SetTexture": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::SetTexture",
+      "x360_address": "0x82458AE0",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetTexture@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPAVTexture@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82458AE0, with assertions for lpTexture!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::SetState": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::SetState",
+      "x360_address": "0x82458BD8",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVTextureState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82458BD8, with assertions for lpTextureState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::SetState": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::SetState",
+      "x360_address": "0x82459368",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVRasterizerState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82459368, with assertions for lpRasterizerState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::BasicColouredVertex>::BeginRendering": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::BeginRendering",
+      "x360_address": "0x82459650",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 232-byte native ?BeginRendering@?$ImRenderBuffer@UBasicColouredVertex@CgsGraphics@@@CgsGraphics@@QAAXXZ provider matches all ARTIST instruction and call fields at 0x82459650, with assertions for BeginRendering called inside a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::BasicColouredVertex>::EndRendering": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::EndRendering",
+      "x360_address": "0x82459738",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 236-byte native ?EndRendering@?$ImRenderBuffer@UBasicColouredVertex@CgsGraphics@@@CgsGraphics@@QAAXXZ provider matches all ARTIST instruction and call fields at 0x82459738, with assertions for EndRendering called without a matching call to BeginRendering, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::BasicColouredVertex>::SetState": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::SetState",
+      "x360_address": "0x824599C0",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVRasterizerState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x824599C0, with assertions for lpRasterizerState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::RenderEnd": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::RenderEnd",
+      "x360_address": "0x827F83F8",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 316-byte native ?RenderEnd@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXW4PrimitiveType@renderengine@@PBUBasicColouredTexturedVertex@2@I@Z provider matches all ARTIST instruction and call fields at 0x827F83F8, with assertions for Mismatched RenderEnd/RenderStart on ImRenderBuffer, lpVerticesFromRenderStart, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::RenderFromStaticVer": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::RenderFromStaticVertexBuffer",
+      "x360_address": "0x82856340",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 264-byte native ?RenderFromStaticVertexBuffer@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXW4PrimitiveType@renderengine@@PBUBasic2dColouredTexturedVertex@2@I@Z provider matches all ARTIST instruction and call fields at 0x82856340, with assertions for lpVertices, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "??$ScanForValidKey@VCollectionHashMap@ClassPrivate@Attrib@@@Attrib@@YA_KABVCollectionHashMap@ClassPrivate@0@I@Z": {
+      "symbol": "Attrib::ScanForValidKey<Attrib::CollectionHashMap>",
+      "x360_address": "0x82808ED8",
+      "byte_match": true,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "DecFIGS attribprivate.h:383 names the collection-map ScanForValidKey instantiation. ARTIST CollectionExportPolicy::PrepareToDeinitialize starts this scan at 0x8280CE84 and the cursor tail-branches to the typed collection GetKeyAtIndex at 0x82808F54. XDK 136 B exact and the sole branch relocation is independently checked."
     }
   },
   "sdk_entry_groups": {
@@ -27761,6 +27816,84 @@
       "size": 92,
       "tu": "src/GameSource/Graphics/BrnRendererModule.cpp",
       "evidence": "DecFIGS BrnRendererModule.h:818 declares the ERendererPrepareStage postfix increment. ARTIST Prepare calls it four times through the enum member at this+0x228, directly comparing the increment to stage 4 and using the header assertion line 818. The native 92-byte decorated ERendererPrepareStage instantiation matches all ARTIST instructions and call targets."
+    },
+    "0x82458CD0": {
+      "exported_name": "sub_82458CD0",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVRasterizerState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82458CD0, with assertions for lpRasterizerState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82458DC8": {
+      "exported_name": "sub_82458DC8",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVDepthStencilState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82458DC8, with assertions for lpDepthStencilState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82458EC0": {
+      "exported_name": "sub_82458EC0",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasic2dColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVBlendState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82458EC0, with assertions for lpBlendState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459190": {
+      "exported_name": "sub_82459190",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::BeginRendering",
+      "size": 232,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 232-byte native ?BeginRendering@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXXZ provider matches all ARTIST instruction and call fields at 0x82459190, with assertions for BeginRendering called inside a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459278": {
+      "exported_name": "sub_82459278",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::EndRendering",
+      "size": 236,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 236-byte native ?EndRendering@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXXZ provider matches all ARTIST instruction and call fields at 0x82459278, with assertions for EndRendering called without a matching call to BeginRendering, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459460": {
+      "exported_name": "sub_82459460",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVDepthStencilState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82459460, with assertions for lpDepthStencilState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459558": {
+      "exported_name": "sub_82459558",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredTexturedVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVBlendState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82459558, with assertions for lpBlendState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459AB8": {
+      "exported_name": "sub_82459AB8",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVDepthStencilState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82459AB8, with assertions for lpDepthStencilState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82459BB0": {
+      "exported_name": "sub_82459BB0",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DecFIGS CgsImRenderBuffer.h declares this typed ImRenderBuffer instantiation and its AllocateCommand helper at line 1213. The 248-byte native ?SetState@?$ImRenderBuffer@UBasicColouredVertex@CgsGraphics@@@CgsGraphics@@QAAXPBVBlendState@renderengine@@@Z provider matches all ARTIST instruction and call fields at 0x82459BB0, with assertions for lpBlendState!=NULL, Command called outside of a BeginRendering/EndRendering block, ImRenderBuffer command buffer is full and the same typed overflow rewind call."
+    },
+    "0x82807380": {
+      "exported_name": "sub_82807380",
+      "symbol": "Attrib::CollectionHashMap::GetKeyAtIndex",
+      "size": 176,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/vechashmap.cpp",
+      "native_symbol": "?GetKeyAtIndex@CollectionHashMap@Attrib@@QBA_KI@Z",
+      "evidence": "The CollectionHashMap cursor 0x82808ED8 tail-branches to 0x82807380 at 0x82808F54, and CollectionExportPolicy::PrepareToDeinitialize calls it at 0x8280D07C. DecFIGS vechashmap.h:168 confirms the collection table specialization. PData length 176 and all native XDK instructions match; all three calls, assertion line 168 and both exact strings at 0x820D98E8/0x820D999C are checked."
+    },
+    "0x828DEAA0": {
+      "exported_name": null,
+      "symbol": "CgsFileSystem::DevicePhysicalX360::Write",
+      "size": 244,
+      "tu": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
+      "evidence": "The original physical-device vtable at 0x820CEEE0 selects this extent from its Write slot +0x10. The native CgsFileSystem object corroborates the same virtual relocation. It takes the shared device handle, const buffer, unsigned count, and unsigned output count attested by DecFIGS CgsPhysicalPS3Device.h:110. ARTIST checks the record's write flag, calls the real XDK WriteFile, advances the 64-bit cursor and writes the byte count on success. The full 244-byte packed-unwind extent matches and all SDK/assert calls and strings are verified."
     }
   },
   "native_leaf_functions": {
@@ -28556,6 +28689,15 @@
       "caller": "0x827DFF48",
       "call_site": "0x827DFFB0",
       "evidence": "The owning BrnRendererModule constructor calls this constructor for its in-place BufferedDispatchFrame at this+0x2A8. DecFIGS CgsBufferedDispatchFrame.h:33–86 and :241 give the member layout and constructor. The native code matches the entire leaf and vtable relocation. The original nine-slot vtable at 0x820D5174 names the BufferedDispatchFrame virtual interface, including folded Prepare/Release."
+    },
+    "0x82808F60": {
+      "symbol": "Attrib::ScanForValidKey<Attrib::ClassTable>",
+      "size": 136,
+      "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "native_symbol": "??$ScanForValidKey@UClassTable@Attrib@@@Attrib@@YA_KABUClassTable@0@I@Z",
+      "caller": "0x8280CD80",
+      "call_site": "0x8280CDE0",
+      "evidence": "CollectionExportPolicy::PrepareToDeinitialize starts with the class table at offset +8 and index -1 then calls 0x82808F60 at 0x8280CDE0. The ARTIST cursor at 0x82808F60 examines 16-byte class buckets before tail-branching to class-table GetKeyAtIndex at 0x82808FDC. DecFIGS attribprivate.h:386 confirms the typed ClassTable cursor. The 136-byte exact leaf ends at blr 0x82808FE4; one call relocation verified."
     }
   },
   "sdk_archive_splits": {
