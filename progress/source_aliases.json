@@ -17918,6 +17918,13 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "DecFIGS CgsDebug2DImmediateRender.cpp:409 declares the (const char*, float32_t, float32_t, float32_t, RGBA) overload. ARTIST 0x82824048 packs X/Y in Vector2, forwards colour and false for culling, then calls the Vector2 overload at 0x82824080. Four distinct native callers use the scalar overload and their branch targets, strings, globals, and constants agree. The wrapper retains a zero-lane store difference."
+    },
+    "CgsSceneManager::TriangleCollisionDebugC": {
+      "symbol": "CgsSceneManager::TriangleCollisionDebugComponent::GetDrawCollisionPolyCallback",
+      "x360_address": "0x828AA458",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.h",
+      "evidence": "ARTIST RegisterDrawCollisionPolyCallback passes the newly allocated callback index at 0x828AAF70. The 104-byte target compares it to the existing registered count, fires the header assertion at line 352, and returns a callback-array slot. Exact XDK body and all original data relocations verified."
     }
   },
   "sdk_entry_groups": {
@@ -27648,6 +27655,15 @@
         "0x820B2238"
       ],
       "evidence": "ARTIST vtable slot +0x04 at 0x820B2238 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2F83C."
+    },
+    "0x82AD7F98": {
+      "symbol": "AptValue::setIsDefined",
+      "size": 132,
+      "caller": "0x82ADCCA8",
+      "call_site": "0x82ADCCD0",
+      "source": "src/SDKs/EATech/include/Apt/AptValue/AptValue.cpp",
+      "tu": "class:AptValue",
+      "evidence": "The AptValue constructor call at 0x82ADCCD0 and both pool value constructor calls at 0x82AE5F70 and 0x82AE5FC8 use this same leaf. The original declaration takes a bool and returns void. The complete 132-byte XDK leaf matches the lock, defined-bit mutation and unlock up to the terminal return at 0x82AD8018, and its only relocation resolves the shared ARTIST lock at 0x8324E75C."
     }
   },
   "sdk_archive_splits": {
