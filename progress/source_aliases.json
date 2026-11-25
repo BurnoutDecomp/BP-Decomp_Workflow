@@ -18319,6 +18319,41 @@
       "byte_match": true,
       "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
       "evidence": "ARTIST PhysicalDeviceThread uses virtual slot +0x20 at 0x828F20B0 with just the native handle. ARTIST's vtable at 0x820CEEE0 and native COFF bind that slot to the physical override. The method closes the Win32 handle and returns the exact FileHandleRecord index to the signed-byte pool. The full 148-byte method and all five branch targets match."
+    },
+    "*,13>::Insert": {
+      "symbol": "CgsContainers::HashTable<unsigned int,unsigned char const *,13>::Insert",
+      "x360_address": "0x82863DD0",
+      "file": "GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "name_evidence": true,
+      "evidence": "ARTIST AddStringPointer at 0x82864B14 passes the language manager hash table at this+8 and the original 16-byte element holding its u32 key at +8 and const UTF-8 pointer at +0xC. DecFIGS identifies the 13-bucket hash table operation and the XDK relocates the call to the complete typed symbol."
+    },
+    "BrnResource::GameDataEventSlot,short>::GetObjectIndex": {
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,96,short>::GetObjectIndex",
+      "x360_address": "0x82662F50",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "ProcessGetGameDataEvent @0x82672268 passes its GameDataEventSlot and its pool at this+0x6B410 to 0x82662F50 and sign-extends the returned short. The original helper divides by the 48-byte event record stride and checks against the signed-short capacity at pool+0xC. DecFIGS CgsIndexedPool.h:182 confirms the typed const-pointer lookup. The native owning GameDataModule object's 96-entry specialization matches 192 bytes; all six branches, seven data relocations and assertion line 222 verified."
+    },
+    "BrnResource::GameDataEventSlot,short>::PushIndex": {
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,96,short>::PushIndex",
+      "x360_address": "0x82663180",
+      "name_evidence": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "ProcessAttribSysRegisterVaultResponse passes the result of 0x82662F50 straight to this operation on the same GameDataEventSlot pool at 0x82666660/0x8266666C; ProcessGetVehicleListRequest passes its signed-short slot index and pool at this+0x6B410 to the same callee at 0x8266670C. The callee releases the index through the signed-short free list. DecFIGS CgsIndexedPool.h:191 confirms the typed method. The native specialization still differs in emitted instructions."
+    },
+    "CgsFileSystem::PhysicalX360Device::Read": {
+      "symbol": "CgsFileSystem::DevicePhysicalX360::Read",
+      "x360_address": "0x828DE9F0",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
+      "evidence": "The original and native physical-device tables select Read at +0xC, invoked by PhysicalDeviceThread at 0x828F1FC4 with the handle, buffer, unsigned size and output count from DecFIGS CgsPhysicalPS3Device.h:83. ARTIST passes the stack count directly to XDK ReadFile and consumes it only upon success; on failure it inlines the callback that DecFIGS locates at original CgsDevice.h:148. Full 172-byte extent and all six branch targets verified."
+    },
+    "CgsFileSystem::PhysicalX360Device::Close": {
+      "symbol": "CgsFileSystem::DevicePhysicalX360::Close",
+      "x360_address": "0x828F9D90",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
+      "evidence": "The original and native physical-device tables select Close at +0x8, invoked by PhysicalDeviceThread at 0x828F21B4 with the handle from DecFIGS CgsPhysicalPS3Device.h:79. ARTIST calls XDK CloseHandle and returns the signed-byte pool index on success. The failure path inlines Device::CallErrorCallback, which DecFIGS locates at original CgsDevice.h:148. Full 176-byte extent and all five branch targets verified."
     }
   },
   "sdk_entry_groups": {
@@ -27942,6 +27977,20 @@
       "size": 512,
       "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
       "evidence": "ARTIST FormatAutoDistanceStringLong at 0x828622E8 calls this owner on the small-unit branch. The original callee loads mrSmallDistanceConversion at this+0x60FC and the long small-unit template mpDistanceFormatShortL at this+0x6144 before CgsUnicode::_Print. The existing LanguageManager source and DecFIGS declare the matching typed formatter. This names an existing 512-byte .pdata body which remains nonmatching."
+    },
+    "0x828622F8": {
+      "exported_name": "sub_828622F8",
+      "symbol": "CgsContainers::LinkedListHelper<CgsContainers::HashTableElement<unsigned int,unsigned char const *> *,1024>::AddTail",
+      "size": 192,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "ARTIST AddStringPointer at 0x82864B20 passes mDynamicStringPointerElements at this+0x30C4 and the address of the new pointer. The callee takes a free node from its list at +0x3004, then inserts the supplied value. The existing DeCFIGS typed 1024-entry LinkedListHelper owner and native AddTail relocation identify the operation."
+    },
+    "0x82B0C430": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionPrevFrame",
+      "size": 76,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterSpecialOps.cpp",
+      "evidence": "ARTIST's Apt dispatch table at 0x82F73068 maps PrevFrame opcode 0x05 at 0x82F7307C to this 76-byte unwind extent. It mirrors the adjacent named NextFrame handler at 0x82B0C3E0, subtracting one from the frame before jumpToFrame and clearing the same play flag. The original Apt opcode source gives this member name and calls AptCIH::SetIsPlaying(false)."
     }
   },
   "native_leaf_functions": {
