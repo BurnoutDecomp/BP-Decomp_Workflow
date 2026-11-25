@@ -1377,6 +1377,13 @@
         "BrnNetwork::SuspensionManager::Release": "src/GameSource/Network/Managers/BrnNetworkSuspensionManager.cpp"
       },
       "evidence": "BrnNetwork::SuspensionManager::Release: 40 exact bytes and BrnNetworkManager::Release call at 0x8258E134."
+    },
+    "0x82ADBCE0": {
+      "exported_name": "*>::add",
+      "aliases": [
+        "AptAnimationTargetSet::add"
+      ],
+      "evidence": "The Key callback passes the original listener set at animation target +0x10 and AptValue operand to this method. The matching set declaration corroborates the operation."
     }
   },
   "xdk_functions": {
@@ -3228,12 +3235,12 @@
       "evidence": "TriangleCollisionManager::ProcessAddPolySoupListEvents at 0x828B31E0 calls the event lookup for the add-list queue. The explicit XDK instantiation compares exact over all 164 bytes."
     },
     "char>::Cl": {
-      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::Clear",
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,signed char>::Clear",
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
       "const": false,
       "x360_address": "0x828EB2B8",
       "byte_match": true,
-      "evidence": "ResourceModule::Construct at 0x82905718 calls this 80-byte method after binding the 16 embedded PendingFileResponse records and signed-byte free list. The native IndexedPool instantiation matches all 80 bytes. DecFIGS names the fixed-size pending response pool."
+      "evidence": "ResourceModule::Construct at 0x82905718 calls this 80-byte method after binding the 16 embedded PendingFileResponse records and signed-byte free list. The native IndexedPool instantiation matches all 80 bytes. DecFIGS names the fixed-size pending response pool. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::": {
       "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::GetResourceRequestInterface",
@@ -18346,19 +18353,19 @@
       "evidence": "DecFIGS BrnMapIconManager.h declares this const member taking a signed index and returning the typed SatNavIconInfo pointer. ARTIST GetSatNavIconPositions at 0x8250A8A4 and CrashNavMap::UpdateIconManager both call this same target with their existing MapIconManager receiver. The native COFF call names the complete original declaration."
     },
     "char>::GetObjectI": {
-      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,16,signed char>::GetObjectIndex",
+      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,signed char>::GetObjectIndex",
       "x360_address": "0x828EAE38",
       "byte_match": true,
       "name_evidence": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "The original physical Close and CloseDirectory pass their FileHandleRecord pointer and the pool at this+0x10. This callee divides the byte difference by the physical record stride of 272, sign-extends the index and checks the signed byte capacity at pool+0xA. DecFIGS CgsIndexedPool.h:321 corroborates the typed signed-byte method. The native physical-device object selects the 16-entry specialization and its full 192-byte extent, calls, assert line and data agree with ARTIST."
+      "evidence": "The original physical Close and CloseDirectory pass their FileHandleRecord pointer and the pool at this+0x10. This callee divides the byte difference by the physical record stride of 272, sign-extends the index and checks the signed byte capacity at pool+0xA. DecFIGS CgsIndexedPool.h:321 corroborates the typed signed-byte method. The native physical-device object selects the 16-entry specialization and its full 192-byte extent, calls, assert line and data agree with ARTIST. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "char>::PushIndex": {
-      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,16,signed char>::PushIndex",
+      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,signed char>::PushIndex",
       "x360_address": "0x828EAEF8",
       "name_evidence": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "Both ARTIST Close at 0x828F9DC8 and CloseDirectory at 0x828FA918 call GetObjectIndex, pass its signed-byte result directly and call this operation on the same physical-device pool. The callee checks capacity, scans the signed-byte free-index list and updates the byte counts. DecFIGS CgsIndexedPool.h:330 corroborates the typed operation. Native physical-device COFF has the corresponding 16-entry specialization. The native 384-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified.",
+      "evidence": "Both ARTIST Close at 0x828F9DC8 and CloseDirectory at 0x828FA918 call GetObjectIndex, pass its signed-byte result directly and call this operation on the same physical-device pool. The callee checks capacity, scans the signed-byte free-index list and updates the byte counts. DecFIGS CgsIndexedPool.h:330 corroborates the typed operation. Native physical-device COFF has the corresponding 16-entry specialization. The native 384-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage.",
       "byte_match": true
     },
     "CgsFileSystem::PhysicalX360Device::CloseDirectory": {
@@ -18376,18 +18383,18 @@
       "evidence": "ARTIST AddStringPointer at 0x82864B14 passes the language manager hash table at this+8 and the original 16-byte element holding its u32 key at +8 and const UTF-8 pointer at +0xC. DecFIGS identifies the 13-bucket hash table operation and the XDK relocates the call to the complete typed symbol."
     },
     "BrnResource::GameDataEventSlot,short>::GetObjectIndex": {
-      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,96,short>::GetObjectIndex",
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::GetObjectIndex",
       "x360_address": "0x82662F50",
       "byte_match": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "ProcessGetGameDataEvent @0x82672268 passes its GameDataEventSlot and its pool at this+0x6B410 to 0x82662F50 and sign-extends the returned short. The original helper divides by the 48-byte event record stride and checks against the signed-short capacity at pool+0xC. DecFIGS CgsIndexedPool.h:182 confirms the typed const-pointer lookup. The native owning GameDataModule object's 96-entry specialization matches 192 bytes; all six branches, seven data relocations and assertion line 222 verified."
+      "evidence": "ProcessGetGameDataEvent @0x82672268 passes its GameDataEventSlot and its pool at this+0x6B410 to 0x82662F50 and sign-extends the returned short. The original helper divides by the 48-byte event record stride and checks against the signed-short capacity at pool+0xC. DecFIGS CgsIndexedPool.h:182 confirms the typed const-pointer lookup. The native owning GameDataModule object's 96-entry specialization matches 192 bytes; all six branches, seven data relocations and assertion line 222 verified. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "BrnResource::GameDataEventSlot,short>::PushIndex": {
-      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,96,short>::PushIndex",
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::PushIndex",
       "x360_address": "0x82663180",
       "name_evidence": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "ProcessAttribSysRegisterVaultResponse passes the result of 0x82662F50 straight to this operation on the same GameDataEventSlot pool at 0x82666660/0x8266666C; ProcessGetVehicleListRequest passes its signed-short slot index and pool at this+0x6B410 to the same callee at 0x8266670C. The callee releases the index through the signed-short free list. DecFIGS CgsIndexedPool.h:191 confirms the typed method. The native 392-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified.",
+      "evidence": "ProcessAttribSysRegisterVaultResponse passes the result of 0x82662F50 straight to this operation on the same GameDataEventSlot pool at 0x82666660/0x8266666C; ProcessGetVehicleListRequest passes its signed-short slot index and pool at this+0x6B410 to the same callee at 0x8266670C. The callee releases the index through the signed-short free list. DecFIGS CgsIndexedPool.h:191 confirms the typed method. The native 392-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage.",
       "byte_match": true
     },
     "CgsFileSystem::PhysicalX360Device::Read": {
@@ -18412,18 +18419,18 @@
       "evidence": "ARTIST tests the writing lock and streams CgsOverlapGenerationModuleIO.h:227, then returns InputBuffer+0x10. DecFIGS declares the matching typed AddBody queue overload and the XDK verifies the complete body and relocations."
     },
     "ch": {
-      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::GetObjectIndex",
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,signed char>::GetObjectIndex",
       "x360_address": "0x828EB078",
       "byte_match": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "ProcessPendingFileSystemResponses constructs the receiver at this+0x58030 and passes its 12-byte PendingFileResponse pointer to this helper at four sites (0x828F43B4, 0x828F4414, 0x828F4478 and 0x828F44D4). Each immediately consumes the signed-byte index in the pool's PushIndex operation. DecFIGS CgsIndexedPool.h:400 confirms the typed pointer and signed return. The 192-byte native owning specialization, all six branches, seven data relocations and assertion line 222 agree with ARTIST."
+      "evidence": "ProcessPendingFileSystemResponses constructs the receiver at this+0x58030 and passes its 12-byte PendingFileResponse pointer to this helper at four sites (0x828F43B4, 0x828F4414, 0x828F4478 and 0x828F44D4). Each immediately consumes the signed-byte index in the pool's PushIndex operation. DecFIGS CgsIndexedPool.h:400 confirms the typed pointer and signed return. The 192-byte native owning specialization, all six branches, seven data relocations and assertion line 222 agree with ARTIST. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "char>::Pu": {
-      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::PushIndex",
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,signed char>::PushIndex",
       "x360_address": "0x828EB138",
       "byte_match": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "ProcessPendingFileSystemResponses directs the signed-byte lookup result on the same this+0x58030 pool to this operation at 0x828F43C0, 0x828F4420, 0x828F4484 and 0x828F44E0. DecFIGS CgsIndexedPool.h:409 agrees with the signed-byte index argument. The native resource object calls PushIndex directly and emits the same 384-byte body. All ten branches, eleven data relocations and both assertion lines match."
+      "evidence": "ProcessPendingFileSystemResponses directs the signed-byte lookup result on the same this+0x58030 pool to this operation at 0x828F43C0, 0x828F4420, 0x828F4484 and 0x828F44E0. DecFIGS CgsIndexedPool.h:409 agrees with the signed-byte index argument. The native resource object calls PushIndex directly and emits the same 384-byte body. All ten branches, eleven data relocations and both assertion lines match. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@CameraShake@Utils@Camera@BrnDirector@@QAAXAAVTextF": {
       "symbol": "BrnDirector::Camera::Utils::CameraShake::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
@@ -19278,10 +19285,10 @@
     },
     "CgsResource::": {
       "x360_address": "0x828F2890",
-      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::Pop",
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,signed char>::Pop",
       "byte_match": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "All four ARTIST request adders call this method with the embedded indexed pool at ResourceModule+0x58030. DecFIGS CgsIndexedPool.h:330 declares the typed signed-byte specialization. Its 112-byte body reloads the count after writing the free index and computes the 12-byte PendingFileResponse stride."
+      "evidence": "All four ARTIST request adders call this method with the embedded indexed pool at ResourceModule+0x58030. DecFIGS CgsIndexedPool.h:330 declares the typed signed-byte specialization. Its 112-byte body reloads the count after writing the free index and computes the 12-byte PendingFileResponse stride. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "rw::math::vpu::Matrix44Affine>::Push": {
       "symbol": "CgsContainers::RingBuffer<rw::math::vpu::Matrix44Affine>::Push",
@@ -19465,6 +19472,47 @@
       "caller": "0x8220CD58",
       "call_site": "0x8220CE3C",
       "evidence": "ARTIST ResolveLineTestNearestUsingNormalStrict forwards its named LineTestNearestPostBox& parameter at both 8220CE3C and 8220CE60. Its result supplies the line-test vectors. The accessor returns +0x10, the nearest result member aligned for its vector fields."
+    },
+    "char>::Get": {
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,signed char>::GetUsedList",
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "x360_address": "0x828DFD38",
+      "name_evidence": true,
+      "evidence": "ARTIST ProcessPendingFileSystemResponses calls the signed-byte pool at 828F42DC, passing the 16-entry output and pool member at +0x58030. The body compacts 12-byte PendingFileResponse records and fires the buffer-size assertion at CgsIndexedPool.h:400. DecFIGS declares GetUsedList at line 398 with the same concrete element and index types. The XDK shares one register with a preceding loop and emits 368 bytes versus 372."
+    },
+    "*>:": {
+      "symbol": "CgsContainers::LocklessQueue<BrnGameState::RichPresenceManagerX360::PresenceContext*>::Lock",
+      "file": "GameSource/GameState/RichPresenceManager/X360/BrnGameStateRichPresenceManagerX360.cpp",
+      "x360_address": "0x82360318",
+      "byte_match": true,
+      "evidence": "The private Lock(bool) is declared at DecFIGS CgsLocklessQueue.h:212. ARTIST's Post and Pop call this same body with true before entering the queue and after sleeping, at 0x82369180/0x823691F0 and 0x82369330/0x823693A4. The native typed Lock relocation occurs at all four corresponding offsets. The 232-byte body reads the lock word, sleeps with the EAThread immediate timeout, and atomically claims the lock while preserving both indices and count."
+    },
+    "??$New2@VDecoder@core@audio@rw@@@System@core@audio@rw@@QAAXPAPAVDecoder@123@PBDIIPAVICoreAllocator@Allocator@EA@@@Z": {
+      "symbol": "rw::audio::core::System::New2<rw::audio::core::Decoder>",
+      "file": "vendor/renderware/src/rw/audio/core/System.cpp",
+      "x360_address": "0x82B6C2D0",
+      "byte_match": true,
+      "evidence": "The reference SDK object map gives the native System::New2<Decoder> member instantiation. The ARTIST caller (DecoderRegistry::DecoderFactory at 0x82B6C778) passes its output slot, size and alignment. Native COFF matches the complete 128-byte allocator and construction body."
+    },
+    "??$New2@VPlugInRegistry@core@audio@rw@@@System@core@audio@rw@@QAAXPAPAVPlugInRegistry@123@PBDIIPAVICoreAllocator@Alloca": {
+      "symbol": "rw::audio::core::System::New2<rw::audio::core::PlugInRegistry>",
+      "file": "vendor/renderware/src/rw/audio/core/System.cpp",
+      "x360_address": "0x82B6C350",
+      "byte_match": true,
+      "evidence": "The reference SDK object map gives the native System::New2<PlugInRegistry> member instantiation. The ARTIST caller (0x82B6DBE8) passes its output slot, size and alignment. Native COFF matches the complete 132-byte allocator and construction body."
+    },
+    "??$New2@VVoice@core@audio@rw@@@System@core@audio@rw@@QAAXPAPAVVoice@123@PBDIIPAVICoreAllocator@Allocator@EA@@@Z": {
+      "symbol": "rw::audio::core::System::New2<rw::audio::core::Voice>",
+      "file": "vendor/renderware/src/rw/audio/core/System.cpp",
+      "x360_address": "0x82B6E140",
+      "byte_match": true,
+      "evidence": "The reference SDK object map gives the native System::New2<Voice> member instantiation. The ARTIST caller (Voice::CreateInstance at 0x82B6EC50) passes its output slot, size and alignment. Native COFF matches the complete 124-byte allocator and construction body."
+    },
+    "*>::remove": {
+      "symbol": "AptAnimationTargetSet::remove",
+      "x360_address": "0x82ADBC28",
+      "byte_match": true,
+      "evidence": "Original AptValue listener set call, typed set declaration's integer return and verified 184-byte ARTIST body with Release vtable slot 1."
     }
   },
   "sdk_entry_groups": {
@@ -29513,9 +29561,9 @@
     },
     "0x828AE988": {
       "exported_name": "sub_828AE988",
-      "symbol": "CgsContainers::IndexedPool<CgsSceneManager::LooseOctree::LooseOctreeNodeAllocation,0,unsigned short>::PushIndex",
+      "symbol": "CgsContainers::IndexedPool<CgsSceneManager::LooseOctree::LooseOctreeNodeAllocation,unsigned short>::PushIndex",
       "size": 376,
-      "evidence": "ARTIST 0x828BC72C passes LooseOctree+0x46A8 and the u16 group index (first child minus one divided by four). DecFIGS CgsLooseOctree.h:581 identifies mFreeNodeGroupPool, and CgsIndexedPool.h declares PushIndex(uint16_t). The complete 376-byte typed XDK instantiation matches."
+      "evidence": "ARTIST 0x828BC72C passes LooseOctree+0x46A8 and the u16 group index (first child minus one divided by four). DecFIGS CgsLooseOctree.h:581 identifies mFreeNodeGroupPool, and CgsIndexedPool.h declares PushIndex(uint16_t). The complete 376-byte typed XDK instantiation matches. DecFIGS CgsIndexedPool.h:33 specifies the element and index types. The capacity is stored in the pool and only sizes the derived fixed backing storage."
     },
     "0x828D0838": {
       "exported_name": null,
@@ -30983,6 +31031,83 @@
       "caller": "0x8222D828",
       "call_site": "0x8222D8A8",
       "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestFineResult case through its PostOffice<OutEventVolumeTestFineResult,1> member, confirmed by the DecFIGS member and typed event dispatch at 8223936C. The direct branch at 8222D8A8 lands at 82201D10. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
+    },
+    "0x828EA620": {
+      "exported_name": null,
+      "symbol": "CgsResource::ResourceModule::FileSystemFree<CgsResource::Events::OpenFileResponse>",
+      "size": 96,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "ProcessPendingFileSystemResponses case 20 passes its typed OpenFileResponse to ARTIST 828EA620 at branch 828F446C. DecFIGS CgsResourceModule.h:1030 declares the corresponding allocator free template. The native member dispatches the existing SDK FreeMemoryResource, matching the full 96-byte original extent."
+    },
+    "0x8280EBF0": {
+      "exported_name": null,
+      "size": 140,
+      "symbol": "CgsAttribSys::AttribSysModule::RegisterVault",
+      "tu": "src/GameShared/GameClasses/System/AttribSys/CgsAttribSysModule.cpp",
+      "evidence": "DecFIGS CgsAttribSysModule.cpp:360 declares the typed RegisterVaultRequest receiver. ARTIST ProcessInputs dispatches event 0 at 8280FC28 to this extent then returns to the queue loop. The 140-byte native body matches the schema guard at line 362, VaultArray registration and reply, including the original state and assertion strings."
+    },
+    "0x82B2A0A0": {
+      "exported_name": null,
+      "symbol": "ProtoAriesUpdate",
+      "size": 1296,
+      "tu": "vendor/dirtysdk/src/x360/protoaries_x360.c",
+      "evidence": "DirtySDK 5.5.3 DecFIGS protoaries.c:572 declares void ProtoAriesUpdate(ProtoAriesRefT*). ARTIST Send directly calls 0x82B2A0A0 at 0x82B2A5D0 and 0x82B2A7D0, Peek at 0x82B2A830, and the independent 0x82B116A0 export names that same callee. The packed unwind extent is 1296 bytes. The typed native Update is still nonmatching."
+    },
+    "0x82B6C248": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::System::New2<rw::audio::core::DecoderRegistry>",
+      "size": 132,
+      "tu": "vendor/renderware/src/rw/audio/core/System.cpp",
+      "evidence": "The reference SDK object map gives the native System::New2<DecoderRegistry> member instantiation. The ARTIST caller (0x82B6C750) passes its output slot, size and alignment. Native COFF matches the complete 132-byte allocator and construction body."
+    },
+    "0x82B197E8": {
+      "exported_name": null,
+      "symbol": "TagFieldGetEpoch",
+      "size": 1044,
+      "tu": "vendor/dirtysdk/src/lobbytagfield.c",
+      "evidence": "Existing IsNewsUpdated passes the TagFieldFind result and default epoch one at 0x8287A7B4 and 0x8287A7D0. Both calls reach this distinct unwind extent. The typed native TagFieldGetEpoch body independently shares the hexadecimal prefix, bounded decimal path, and date conversion behavior. Its body remains a partial match."
+    },
+    "0x82ADC7C0": {
+      "exported_name": null,
+      "symbol": "AptKey::sMethod_removeListener",
+      "size": 184,
+      "tu": "src/SDKs/EATech/include/Apt/AptKey.cpp",
+      "evidence": "AptKey::objectMemberLookup constructs an AptNativeFunction from this pointer at 0x82AF8ADC. The recovered Key declaration confirms the callback signature."
+    },
+    "0x827E8950": {
+      "exported_name": "sub_827E8950",
+      "symbol": "shadow::ApplyNativeSamplerState",
+      "size": 900,
+      "tu": "src/GameShared/GameClasses/Graphics/Dispatch/CgsShadowSamplerX360.cpp",
+      "evidence": "The bare sampler setter calls this owner at 82276A50 with the sampler state, index and prior-unset flag. The whole texture state binder uses the same target. The callee writes XDK texture-fetch fields, sampler state and the software sampler cache. Its ARTIST .pdata extent is 900 bytes."
+    },
+    "0x82860B98": {
+      "exported_name": null,
+      "symbol": "CgsLanguage::LanguageManagerDebugComponent::OnActivate",
+      "size": 728,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManagerDebugComponent.cpp",
+      "evidence": "ARTIST LanguageManagerDebugComponent vtable 820CE2C0 slot +0x18 targets 82860B98, the DecFIGS cpp:149 OnActivate override. The full 728-byte body matches the typed registration calls and local variable member offsets, with matching text and float data."
+    },
+    "0x82B141A8": {
+      "exported_name": "sub_82B141A8",
+      "symbol": "`anonymous namespace'::_ConnApiUpdateCallback",
+      "size": 104,
+      "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
+      "evidence": "DecFIGS connapi.c:945 declares _ConnApiUpdateCallback. ARTIST _ConnApiDestroyGameConnection calls it at 82B142AC with the game event and status 5 to 6. The native caller relocates the same typed helper, and all 104 bytes match, including the indirect callback and its in-callback guard."
+    },
+    "0x82B14210": {
+      "exported_name": "sub_82B14210",
+      "symbol": "`anonymous namespace'::_ConnApiDestroyGameConnection",
+      "size": 168,
+      "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
+      "evidence": "DecFIGS connapi.c:985 and :987 declare _ConnApiDestroyGameConnection and its unsigned bRefsDestroyed. _ConnApiDisconnectClient calls the 168-byte ARTIST body at 82B142D0. Native uses the existing callback dispatcher and matches every instruction, branch, and diagnostic byte."
+    },
+    "0x82B142B8": {
+      "exported_name": "sub_82B142B8",
+      "symbol": "`anonymous namespace'::_ConnApiDisconnectClient",
+      "size": 140,
+      "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
+      "evidence": "Original ConnApiDisconnect calls _ConnApiDisconnectClient at 82B1553C and 82B15580. The exact rebuilt caller relocates the local helper at both sites. DecFIGS connapi.c:1059 declares its four-argument signature, and all 140 bytes plus its branches and diagnostic are verified."
     }
   },
   "native_leaf_functions": {
@@ -31893,6 +32018,58 @@
       "call_site": "0x82B63BC0",
       "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/deviceparameters.cpp",
       "evidence": "Device::Start supplies its incoming Parameters reference at 82B63BC0 and returns false on failure. This frameless leaf checks the native front and back formats and front dimensions. Its returns are at 82B617E0 and 82B617E8, with one padding word before FixD3DDefaults at 82B617F0."
+    },
+    "0x8287A6B8": {
+      "symbol": "CgsNetwork::ServerInterfaceServerInfo::GetNewsUrl",
+      "size": 24,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceServerInfo.cpp",
+      "caller": "0x82549688",
+      "call_site": "0x825496D0",
+      "evidence": "DecFIGS CgsNetworkUnity.cpp declares this ServerInterfaceServerInfo method with the output pointer and length used by StateManager::StartNewsDownload. Its ARTIST call at 0x825496D0 reaches the isolated six-instruction wrapper. The wrapper loads NEWS_URL at 0x820E91BC and tail-branches to FindUrl. The typed native wrapper matches all 24 bytes after checking the literal and branch destinations."
+    },
+    "0x82B1AE70": {
+      "symbol": "LobbyApiInfo",
+      "size": 128,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "caller": "0x8287A758",
+      "call_site": "0x8287A780",
+      "evidence": "The existing typed IsNewsUpdated caller reaches this target with conf at 0x8287A780 and with perd at 0x8287A798. The leaf tests autd, conf, list, lkey and perd and reads the same five LobbyApiRefT members as the existing native SDK definition. The BLR at 0x82B1AEEC and next routine at 0x82B1AEF0 bound its extent. The native SDK body is a partial match."
+    },
+    "0x82AECEF8": {
+      "symbol": "AptKey::sMethod_getAscii",
+      "size": 56,
+      "tu": "src/SDKs/EATech/include/Apt/AptKey.cpp",
+      "caller": "0x82AF8780",
+      "refhi_site": "0x82AF8BEC",
+      "reflo_site": "0x82AF8BF0",
+      "evidence": "AptKey::objectMemberLookup passes 0x82AECEF8 to AptNativeFunction for the getAscii cache at 0x8324E3A0. The 56-byte body ends at the next Key callback and its two tails call AptInteger::Create."
+    },
+    "0x82882300": {
+      "symbol": "CgsNetwork::SignalMessage::GetPackedMessageSize",
+      "size": 32,
+      "tu": "GameShared/GameClasses/Network/Packeting/Messages/CgsSignalMessage.cpp",
+      "vtable_slots": [
+        "0x820CF294"
+      ],
+      "evidence": "ARTIST PlayerManager constructor at 0x827E2EC0 installs the SignalMessage vtable at 0x820CF28C. At +0x08 its size override clears GameID, flags, type, frame and both player IDs and tail-branches to Message::GetPackedMessageSize at 0x82880E68. DecFIGS CgsSignalMessage.h and the typed XDK vtable bind the same override."
+    },
+    "0x827DBBD0": {
+      "symbol": "CgsNetwork::PlayerManagerDebugComponent::GetName",
+      "size": 12,
+      "tu": "GameShared/GameClasses/Network/Players/CgsPlayerManager.cpp",
+      "vtable_slots": [
+        "0x820CE368"
+      ],
+      "evidence": "ARTIST PlayerManager constructor at 0x827E2EC4 loads the derived debug vtable at 0x820CE35C. Its +0x0C slot points to this getter, whose returned address 0x820CE37C is the exact PlayerManager name. DecFIGS CgsNetworkPlayerManagerDebugComponent.h:162 confirms the const override."
+    },
+    "0x82B16148": {
+      "symbol": "`anonymous namespace'::_ConnApiIdle",
+      "size": 20,
+      "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
+      "evidence": "DecFIGS connapi.c:1993 declares _ConnApiIdle. ARTIST ConnApiCreate loads its address at 82B16274 through 82B16284 for NetConnIdleAdd at 82B162A0. Native Create references the same local helper at that offset. The full 20-byte original leaf, including tail branch to ConnApiUpdate, matches.",
+      "caller": "0x82B16160",
+      "refhi_site": "0x82B16274",
+      "reflo_site": "0x82B16284"
     }
   },
   "sdk_archive_splits": {
