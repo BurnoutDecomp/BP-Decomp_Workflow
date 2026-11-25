@@ -1,13 +1,13 @@
 {
  "blob": "1002e42761573ece965f369307111d23088245fb",
- "commit": "21e663cf76866bef9c1732c2d3dcc79155ab6c58",
+ "commit": "4921b82ff3da91f136907b38933bc5f8e9334915",
  "compiled": true,
- "measured": "2026-11-25T22:09:04Z",
+ "measured": "2026-11-25T22:44:34Z",
  "schema": 1,
  "source": "src/GameSource/Physics/BrnPhysicsModuleUpdateFunctions.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 53,
+ "unpaired": 52,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -21,6 +21,8 @@
   {"artist": "823B7190", "artist_size": 172, "data_unchecked": 4, "name": "CgsModule::UnlockBuffersForIO", "score": 100.0, "size": 172, "status": "exact", "symbol": "?UnlockBuffersForIO@CgsModule@@YAXPAUIOBuffer@1@PBU21@1@Z"},
   {"artist": "8259BBD0", "artist_size": 320, "first_diff": 8, "name": "BrnPhysics::Deformation::DeformationManager::FindModelIndexByEntityID", "score": 32.8, "size": 216, "status": "nonmatching", "symbol": "?FindModelIndexByEntityID@DeformationManager@Deformation@BrnPhysics@@QBAHUEntityId@@@Z"},
   {"artist": "8259D3C8", "artist_size": 164, "data_unchecked": 4, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutContactSpy>::GetEvent", "score": 100.0, "size": 164, "status": "exact", "symbol": "?GetEvent@?$BaseEventQueue@VOutContactSpy@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAAAAVOutContactSpy@PhysicsSimulationIO@CgsPhysics@@H@Z"},
+  {"artist": "8259D518", "artist_size": 172, "data_unchecked": 4, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutJointSpy>::GetEvent", "score": 100.0, "size": 172, "status": "exact", "symbol": "?GetEvent@?$BaseEventQueue@VOutJointSpy@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAAAAVOutJointSpy@PhysicsSimulationIO@CgsPhysics@@H@Z"},
+  {"artist": "8259D5C8", "artist_size": 164, "data_unchecked": 4, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutDriveSpy>::GetEvent", "score": 100.0, "size": 164, "status": "exact", "symbol": "?GetEvent@?$BaseEventQueue@VOutDriveSpy@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAAAAVOutDriveSpy@PhysicsSimulationIO@CgsPhysics@@H@Z"},
   {"artist": "8259D940", "artist_size": 212, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::CreateIOBuffer<CgsPhysics::PhysicsSimulationIO::InputBuffer>", "score": 100.0, "size": 212, "status": "exact", "symbol": "??$CreateIOBuffer@UInputBuffer@PhysicsSimulationIO@CgsPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAUInputBuffer@PhysicsSimulationIO@CgsPhysics@@PBD@Z"},
   {"artist": "8259DA18", "artist_size": 216, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsPhysics::PhysicsSimulationIO::InputBuffer>", "score": 100.0, "size": 216, "status": "exact", "symbol": "??$DestroyIOBuffer@UInputBuffer@PhysicsSimulationIO@CgsPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAUInputBuffer@PhysicsSimulationIO@CgsPhysics@@@Z"},
   {"artist": "8259DAF0", "artist_size": 212, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::CreateIOBuffer<BrnPhysics::Vehicle::VehicleManagerOutputBuffer>", "score": 100.0, "size": 212, "status": "exact", "symbol": "??$CreateIOBuffer@UVehicleManagerOutputBuffer@Vehicle@BrnPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAUVehicleManagerOutputBuffer@Vehicle@BrnPhysics@@PBD@Z"},
@@ -38,7 +40,6 @@
   {"artist": "825AC3C8", "artist_size": 212, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::CreateIOBuffer<BrnPhysics::PhysicsModuleIO::PotentialContactInterface>", "score": 100.0, "size": 212, "status": "exact", "symbol": "??$CreateIOBuffer@UPotentialContactInterface@PhysicsModuleIO@BrnPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAUPotentialContactInterface@PhysicsModuleIO@BrnPhysics@@PBD@Z"},
   {"artist": "825AC4A0", "artist_size": 224, "data_unchecked": 7, "name": "CgsModule::IOBufferStack::CreateIOBuffer<BrnPhysics::Props::PropRaceCarContactBuffer>", "score": 100.0, "size": 224, "status": "exact", "symbol": "??$CreateIOBuffer@VPropRaceCarContactBuffer@Props@BrnPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAVPropRaceCarContactBuffer@Props@BrnPhysics@@PBD@Z"},
   {"artist": "825B0640", "artist_size": 7996, "first_diff": 24, "name": "BrnPhysics::PhysicsModule::Update", "score": 3.5, "size": 4996, "status": "nonmatching", "symbol": "?Update@PhysicsModule@BrnPhysics@@QAAXPAUIOBufferStack@CgsModule@@0PBVInputBuffer@PhysicsModuleIO@2@PAVOutputBuffer@62@G@Z"},
-  {"artist": "825BB5E8", "artist_size": 172, "first_diff": 48, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutJointSpy>::GetEvent", "score": 93.0, "size": 172, "status": "nonmatching", "symbol": "?GetEvent@?$BaseEventQueue@VOutJointSpy@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAAAAVOutJointSpy@PhysicsSimulationIO@CgsPhysics@@H@Z"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
   {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 15.6, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
  ]

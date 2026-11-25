@@ -1388,6 +1388,27 @@
         "AptAnimationTargetSet::add"
       ],
       "evidence": "The Key callback passes the original listener set at animation target +0x10 and AptValue operand to this method. The matching set declaration corroborates the operation."
+    },
+    "0x826D82D8": {
+      "exported_name": "CgsSound::Playback::GenericRwacMasterVoice::GetCpuTicks",
+      "aliases": {
+        "CgsSound::Playback::GenericRwacSubmixVoice::GetCpuTicks": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacSubmixVoice.cpp"
+      },
+      "evidence": "The ARTIST GenericRwacSubmixVoice and GenericRwacMasterVoice vtables point to the same GetCpuTicks extent at slots 0x820B5218 and 0x820B523C. Both native wrapper objects compile to the full 48-byte body and return the same zero constant on a null voice."
+    },
+    "0x826E9070": {
+      "exported_name": "CgsSound::Playback::MasterVoice::`scalar deleting destructor'",
+      "aliases": {
+        "CgsSound::Playback::MasterVoice::`vector deleting destructor'": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp"
+      },
+      "evidence": "ARTIST vtable slot at 0x820B50E8 selects this 80-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
+    },
+    "0x826C7EF8": {
+      "exported_name": "CgsSound::Playback::SubmixVoice::`scalar deleting destructor'",
+      "aliases": {
+        "CgsSound::Playback::SubmixVoice::`vector deleting destructor'": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp"
+      },
+      "evidence": "ARTIST vtable slot at 0x820B35E4 selects this 92-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
     }
   },
   "xdk_functions": {
@@ -20093,6 +20114,244 @@
       "byte_match": true,
       "x360_address": "0x825BC7D0",
       "evidence": "ARTIST BrnPhysics::Props::PropManager::BeginPropWorldContactGeneration calls this queue accessor at 0x82628D4C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/PropManager/BrnPropManager.cpp:2969 specifically lists GetEvent for the same element type in that caller. Original CgsBaseEventQueue.h assert lines 292/294/295 distinguish the mutable overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnWorld::Pro": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropVFXLocatorEvent>::GetEvent",
+      "file": "GameSource/World/EntityModules/PropEntityModule/SharedIO/BaseEventQueue_PropVFXLocatorEvent_AddEventSafeAppend.cpp",
+      "byte_match": true,
+      "x360_address": "0x8227BDA8",
+      "evidence": "ARTIST BrnEffects::PropCollisions::UpdateLocatorVfx calls this queue accessor at 0x8229940C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Effects/Props/PropCollisions.cpp:180 lists the typed accessor call in the same routine. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysic": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::GlassSmashOrCrackEvent>::GetEvent",
+      "file": "GameSource/Effects/EffectsModule.cpp",
+      "byte_match": true,
+      "x360_address": "0x8227BF00",
+      "evidence": "ARTIST BrnEffects::EffectsModule::HandleGlassSmashEventsForAllCars calls this queue accessor at 0x822975BC; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/DeformationManager/SharedIO/BrnDeformationOutputInterface.h:141 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Contac": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::RaceCarContact>::GetEvent",
+      "file": "GameSource/Physics/ContactSpies/BaseEventQueue_RaceCarContact_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x82285BB8",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::UpdateCrashingPlayerContacts calls this queue accessor at 0x822E8710; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyEvents.h:89 declares the original queue element or its typed queue alias. ARTIST 0x822E86B0 obtains the ContactSpyInterface, reads mpData at 0x822E86E4 and passes its first member, RaceCarContactQueue, to this call. DecFIGS BrnContactSpyData.h:192 identifies the first member. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::PhysicalCarPartContact>::GetEvent",
+      "file": "GameSource/Effects/EffectsModule.cpp",
+      "byte_match": true,
+      "x360_address": "0x82285C68",
+      "evidence": "ARTIST BrnEffects::EffectsModule::ProcessCarDetatchedPartContacts calls this queue accessor at 0x82293060; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyEvents.h:104 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Con": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::HingedPartContact>::GetEvent",
+      "file": "GameSource/Physics/ContactSpies/BaseEventQueue_HingedPartContact_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x82285D10",
+      "evidence": "ARTIST BrnEffects::EffectsModule::ProcessHingedPartContacts calls this queue accessor at 0x822934B4; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyEvents.h:97 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Vehi": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::TrafficCrashedEvent>::GetEvent",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule_NearMissTailgate.cpp",
+      "byte_match": true,
+      "x360_address": "0x822ACA38",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::UpdateNearMisses calls this queue accessor at 0x822FF538; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:132 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysi": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::DetachedPartRenderEvent>::GetEvent",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+      "byte_match": true,
+      "x360_address": "0x822ACC30",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::ReadUpdatedActiveRaceCarDataFromPhysics calls this queue accessor at 0x822E90EC; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/DeformationManager/SharedIO/BrnDeformationOutputInterface.h:261 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnWorld::DetachedPartR": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::DetachedPartRenderEvent>::GetEvent",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BaseEventQueue_DetachedPartRenderEvent_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x822AD0F0",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::RenderRaceCar calls this queue accessor at 0x822D0244; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/EntityModules/RaceCarEntityModule/BrnActiveRaceCar.h:52 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnWorl": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropGraphicsUnloadedEvent>::GetEvent",
+      "file": "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_PreScene.cpp",
+      "byte_match": true,
+      "x360_address": "0x822AD7B0",
+      "evidence": "ARTIST BrnWorld::PropEntityModule::PreSceneUpdate calls this queue accessor at 0x82309DDC; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.h:424 declares the original queue element or its typed queue alias. PreSceneUpdate's original call at 0x82309D48 obtains the named const GetPropGraphicsUnloadedQueue before entering its unload loop. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::ContactSp": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::PropContact>::GetEvent",
+      "file": "GameSource/Physics/ContactSpies/BaseEventQueue_PropContact_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x822C7450",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::ProcessPropContactQueue calls this queue accessor at 0x822D2724; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyEvents.h:117 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnWorld::C": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::CrashingTrafficUpdateEvent>::GetEvent",
+      "file": "GameSource/World/CrashModule/SharedIO/BaseEventQueue_CrashingTrafficUpdateEvent_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x8254D968",
+      "evidence": "ARTIST BrnNetwork::TrafficManager::GetCrashingTrafficData calls this queue accessor at 0x82551B10; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Network/Managers/BrnNetworkTrafficManager.cpp:774 lists the typed accessor call in the same routine. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "CgsPhysics::Physic": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutJointSpy>::GetEvent",
+      "file": "GameShared/GameClasses/Physics/BaseEventQueue_OutJointSpy_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x8259D518",
+      "evidence": "ARTIST BrnPhysics::PhysicsModule::Update calls this queue accessor at 0x825B1C00; the same native caller has a relocation naming the complete specialization. DecFIGS GameShared/GameClasses/Physics/CgsPhysicsSimulationModuleIO.h:727 declares the original queue element or its typed queue alias. ARTIST 0x825B1BD0 calls the typed mutable GetJointSpyQueue and passes its unmodified return through r19 to the accessor. Original CgsBaseEventQueue.h assert lines 292/294/295 distinguish the mutable overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Cont": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::DiscardedContact>::GetEvent",
+      "file": "GameSource/Physics/ContactSpies/BaseEventQueue_DiscardedContact_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x8259D898",
+      "evidence": "ARTIST BrnPhysics::PhysicsModule::BridgeSimulationToOutput calls this queue accessor at 0x825B059C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyData.h:78 declares the original queue element or its typed queue alias. ARTIST passes this return directly as the typed input of DiscardedContact::AddEventSafe at 0x825B05A8. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Pro": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::PropUpdateNotification>::GetEvent",
+      "file": "GameSource/Sound/Passby/BrnPassbyStateManager.cpp",
+      "byte_match": true,
+      "x360_address": "0x8268EA38",
+      "evidence": "ARTIST BrnSound::Logic::Passby::PassbyStateManager::UpdateDynamicPropBys calls this queue accessor at 0x826A0EEC; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/PropManager/SharedIO/BrnPropOutputInterface.h:19 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnWorld::": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::NetworkTrafficCrashingEvent>::GetEvent",
+      "file": "GameSource/World/CrashModule/SharedIO/BaseEventQueue_NetworkTrafficCrashingEvent_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x82709EF8",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandleCrashingNetworkTraffic calls this queue accessor at 0x82715F5C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/CrashModule/SharedIO/BrnCrashModuleTrafficIOInterfaces.h:395 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnPhysics::Vehicle::T": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::TrafficRemovedEvent>::GetEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_TrafficRemovedEvent_GetEvent.cpp",
+      "byte_match": true,
+      "x360_address": "0x827B4D48",
+      "evidence": "ARTIST BrnWorld::CrashModule::ClearUpRecycledTraffic calls this queue accessor at 0x827CE644; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:189 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 292/294/295 distinguish the mutable overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "CgsSce": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlapGenerationIO::InUpdateBody>::GetEvent",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModule.cpp",
+      "byte_match": true,
+      "x360_address": "0x828ADED8",
+      "evidence": "ARTIST CgsSceneManager::OverlapGenerationModule::ProcessUpdateBodyQueue calls this queue accessor at 0x828C1E50; the same native caller has a relocation naming the complete specialization. DecFIGS GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModuleIO.h:109 declares the original queue element or its typed queue alias. ARTIST passes the typed GetUpdateBodyQueue return at 0x828C1E48 unchanged as the receiver. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "CgsSceneManager::Overlap": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlappingPair>::GetEvent",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapCullingModule.cpp",
+      "byte_match": true,
+      "x360_address": "0x828AE0D0",
+      "evidence": "ARTIST CgsSceneManager::OverlapCullingModule::ProcessOverlapsQueue calls this queue accessor at 0x828D0404; the same native caller has a relocation naming the complete specialization. DecFIGS GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapCullingModuleIO.h:74 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "CgsSceneManager::Overl": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlappingIntervalPair>::GetEvent",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp",
+      "byte_match": true,
+      "x360_address": "0x828AE178",
+      "evidence": "ARTIST CgsSceneManager::SceneSweeper::BuildCollidingPairs calls this queue accessor at 0x828C2260; the same native caller has a relocation naming the complete specialization. DecFIGS GameShared/GameClasses/SceneManager/ContactGen/CgsSceneSweeper.cpp:270 lists the typed accessor call in the same routine. Original CgsBaseEventQueue.h assert lines 292/294/295 distinguish the mutable overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "BrnParticle::Pa": {
+      "symbol": "CgsModule::IOHelper<BrnParticle::ParticleIO::PrepareOutputBuffer>::IOHelper<BrnParticle::ParticleIO::PrepareOutputBuffer>",
+      "x360_address": "0x82295FD0",
+      "byte_match": true,
+      "file": "GameSource/Effects/Particles/BrnParticleResourceAccessors.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnParticle::ParticleIO::PrepareOutputBuffer> at 0x82295FF0 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 2 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnWorldIO::DispatchInputBuf": {
+      "symbol": "CgsModule::IOHelper<BrnWorldIO::DispatchInputBuffer>::IOHelper<BrnWorldIO::DispatchInputBuffer>",
+      "x360_address": "0x823C18F0",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnWorldIO::DispatchInputBuffer> at 0x823C1910 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 338 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnWorldIO::DispatchOutputB": {
+      "symbol": "CgsModule::IOHelper<BrnWorldIO::DispatchOutputBuffer>::IOHelper<BrnWorldIO::DispatchOutputBuffer>",
+      "x360_address": "0x823C1958",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnWorldIO::DispatchOutputBuffer> at 0x823C1978 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 362 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnEffects::Effec": {
+      "symbol": "CgsModule::IOHelper<BrnEffects::EffectsIO::DispatchInputBuffer>::IOHelper<BrnEffects::EffectsIO::DispatchInputBuffer>",
+      "x360_address": "0x823C19C0",
+      "byte_match": true,
+      "file": "GameSource/Effects/SharedIO/BrnEffectsModuleIO_DispatchInputBuffer_IOHelper.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnEffects::EffectsIO::DispatchInputBuffer> at 0x823C19E0 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 386 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsSceneM": {
+      "symbol": "CgsModule::IOHelper<CgsSceneManager::SceneManagerIO::InputBuffer_Query>::IOHelper<CgsSceneManager::SceneManagerIO::InputBuffer_Query>",
+      "x360_address": "0x823C1A28",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<CgsSceneManager::SceneManagerIO::InputBuffer_Query> at 0x823C1A48 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 530 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnDirector::": {
+      "symbol": "CgsModule::IOHelper<BrnDirector::DirectorIO::SceneQueryInputBuffer>::IOHelper<BrnDirector::DirectorIO::SceneQueryInputBuffer>",
+      "x360_address": "0x823C1A90",
+      "byte_match": true,
+      "file": "GameSource/Director/DirectorModule/BrnDirectorModuleIOSceneQuery.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnDirector::DirectorIO::SceneQueryInputBuffer> at 0x823C1AB0 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 554 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnDirector:": {
+      "symbol": "CgsModule::IOHelper<BrnDirector::DirectorIO::SceneQueryOutputBuffer>::IOHelper<BrnDirector::DirectorIO::SceneQueryOutputBuffer>",
+      "x360_address": "0x823C1AF8",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnDirector::DirectorIO::SceneQueryOutputBuffer> at 0x823C1B18 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 578 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsSceneManage": {
+      "symbol": "CgsModule::IOHelper<CgsSceneManager::SceneManagerIO::OutputBuffer>::IOHelper<CgsSceneManager::SceneManagerIO::OutputBuffer>",
+      "x360_address": "0x823C1B60",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<CgsSceneManager::SceneManagerIO::OutputBuffer> at 0x823C1B80 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 602 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsSceneManag": {
+      "symbol": "CgsModule::IOHelper<CgsSceneManager::SceneManagerIO::OutputBuffer>::~IOHelper<CgsSceneManager::SceneManagerIO::OutputBuffer>",
+      "x360_address": "0x823C1BC8",
+      "byte_match": true,
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "evidence": "ARTIST calls the previously identified DestroyIOBuffer<CgsSceneManager::SceneManagerIO::OutputBuffer> at 0x823C1BDC and uses the original CgsModuleIOHelper.h assertion at line 57. DecFIGS CgsModuleIOHelper.h export line 602 declares that specialization. The native 84-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsResource::ResourceIO": {
+      "symbol": "CgsModule::IOHelper<CgsResource::ResourceIO::InputBuffer>::IOHelper<CgsResource::ResourceIO::InputBuffer>",
+      "x360_address": "0x82665DC8",
+      "byte_match": true,
+      "file": "GameSource/Resource/BrnGameDataModule.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<CgsResource::ResourceIO::InputBuffer> at 0x82665DE8 and uses the original CgsModuleIOHelper.h assertion at line 52. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsResource::ResourceI": {
+      "symbol": "CgsModule::IOHelper<CgsResource::ResourceIO::InputBuffer>::~IOHelper<CgsResource::ResourceIO::InputBuffer>",
+      "x360_address": "0x82665E30",
+      "byte_match": true,
+      "file": "GameSource/Resource/BrnGameDataModule.cpp",
+      "evidence": "ARTIST calls the previously identified DestroyIOBuffer<CgsResource::ResourceIO::InputBuffer> at 0x82665E44 and uses the original CgsModuleIOHelper.h assertion at line 57. The native 84-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnAI::RouteMapModule": {
+      "symbol": "CgsModule::IOHelper<BrnAI::RouteMapModuleIO::OutputBuffer>::~IOHelper<BrnAI::RouteMapModuleIO::OutputBuffer>",
+      "x360_address": "0x82791820",
+      "byte_match": true,
+      "file": "GameSource/World/AI/BrnAIModule_ResetPump.cpp",
+      "evidence": "ARTIST calls the previously identified DestroyIOBuffer<BrnAI::RouteMapModuleIO::OutputBuffer> at 0x82791834 and uses the original CgsModuleIOHelper.h assertion at line 57. DecFIGS CgsModuleIOHelper.h export line 818 declares that specialization. The native 84-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "BrnAI::RouteMapModuleIO": {
+      "symbol": "CgsModule::IOHelper<BrnAI::RouteMapModuleIO::InputBuffer>::IOHelper<BrnAI::RouteMapModuleIO::InputBuffer>",
+      "x360_address": "0x82794B80",
+      "byte_match": true,
+      "file": "GameSource/World/AI/BrnAIModule_ResetPump.cpp",
+      "evidence": "ARTIST calls the previously identified CreateIOBuffer<BrnAI::RouteMapModuleIO::InputBuffer> at 0x82794BA0 and uses the original CgsModuleIOHelper.h assertion at line 52. DecFIGS CgsModuleIOHelper.h export line 794 declares that specialization. The native 104-byte .pdata body matches every unrelocated code bit and all 4 direct and 2 data references."
+    },
+    "CgsSound::Playback::SubmixVoice::`vector deleting destructor'": {
+      "symbol": "CgsSound::Playback::SubmixVoice::`scalar deleting destructor'",
+      "x360_address": "0x826C7EF8",
+      "file": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot at 0x820B35E4 selects this 92-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
+    },
+    "CgsSound::Playback::MasterVoice::`vector deleting destructor'": {
+      "symbol": "CgsSound::Playback::MasterVoice::`scalar deleting destructor'",
+      "x360_address": "0x826E9070",
+      "file": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot at 0x820B50E8 selects this 80-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
     }
   },
   "sdk_entry_groups": {
@@ -32103,6 +32362,153 @@
       "exported_name": null,
       "tu": "src/GameSource/Physics/PropManager/BrnPropManager.cpp",
       "evidence": "ARTIST BrnPhysics::Props::PropManager::ProcessAddPartInstanceEvents calls this queue accessor at 0x82628138; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/PropManager/BrnPropManager.cpp:1027 specifically lists GetEvent for the same element type in that caller. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x828DFA88": {
+      "symbol": "CgsContainers::LinearSOAHashTable<CgsResource::ImportHashTableValue,unsigned __int64>::FindEntry",
+      "size": 156,
+      "exported_name": "sub_828DFA88",
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourcePool.cpp",
+      "evidence": "ARTIST Pool::ResolveAllTempScratchResources at 0x828ED39C and ResolveAllDestScratchResources at 0x828ED4FC both call this specialization on ScratchPool+0x208, passing the 64-bit resource ID. The two typed native callers emit the same COFF relocation; they read value offsets 0 and 4 for temporary and final addresses respectively. DecFIGS CgsLinearSOAHashTable.h line 33 names the exact ImportHashTableValue* specialization and unsigned 64-bit key. The 156-byte native body matches every word and has no relocations."
+    },
+    "0x82B25D50": {
+      "exported_name": "sub_82B25D50",
+      "symbol": "_LobbyRankDispListCb",
+      "size": 136,
+      "tu": "vendor/dirtysdk/src/x360/lobbyrank.cpp",
+      "evidence": "DecFIGS lobbyrank.c:486 declares the display-list callback with an unsigned local row count. ARTIST _LobbyRankSnapCb constructs its address at 82B25FBC and passes the original rank list as the context to LobbyApiListAlloc. Its full 136-byte body matches the XDK object, including the verified folded DispListCount target and the rank owner callback."
+    },
+    "0x82B263F8": {
+      "exported_name": null,
+      "symbol": "LobbyRankCreate",
+      "size": 284,
+      "tu": "vendor/dirtysdk/src/x360/lobbyrank.cpp",
+      "evidence": "DecFIGS lobbyrank.c:911 declares the two-argument rank constructor. ARTIST ServerInterfaceRankings::OnEvent calls it at 8287BB5C with the existing lobby pointer and cache argument zero. The independent Prepare call at 8287BA48 reaches the same target. Its original 284-byte unwind extent matches XDK, including the one 0x2B0-byte owner/list allocation, 11-byte view clear, and four typed list initializers."
+    },
+    "0x82B42B70": {
+      "exported_name": null,
+      "symbol": "EA::Thread::Semaphore::Post",
+      "size": 320,
+      "tu": "src/SDKs/EATech/eathread/eathread_semaphore.cpp",
+      "evidence": "Native VP6_DecodeFrameToYUV_JOB at 82B584BC / 82B584C8 passes one permit and the two SemaphoreFactory-created handles. The body uses the native semaphore count, pending cancel count, UpdateCancelCount and XDK ReleaseSemaphore, matching the EAThread Post API. The two calls at 82B582DC and 82B58314 use the same typed completion semaphores."
+    },
+    "0x82B582B0": {
+      "exported_name": null,
+      "symbol": "DecodeCallBackJob",
+      "size": 128,
+      "tu": "src/SDKs/EATech/include/Common/vp6/vp6_startdecoder.cpp",
+      "evidence": "The original job submission loads this address at 82B58484 into the second EntryPoint. It reads the typed callback data (s64 frame number, callback, context and two trailing values), obtains VP6_GetYUVConfig and posts the slot and frame semaphores on opposite sides of the user callback."
+    },
+    "0x822ACB88": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateVehicleResult>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_822ACB88",
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+      "evidence": "ARTIST BrnWorld::RaceCarEntityModule::ProcessCreateVehicleEvents calls this queue accessor at 0x822FF71C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:168 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x822AD708": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropInstancesNeededForZoneEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_822AD708",
+      "tu": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule_Streaming.cpp",
+      "evidence": "ARTIST BrnWorld::PropEntityModule::GenerateTargetList calls this queue accessor at 0x822DA7A4; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO.h:409 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x82368330": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::ContactSpy::TrafficContact>::GetEvent",
+      "size": 172,
+      "exported_name": "sub_82368330",
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandleContactPoints calls this queue accessor at 0x8273435C; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/ContactSpies/BrnContactSpyEvents.h:93 declares the original queue element or its typed queue alias. The independently typed ARTIST ImportContactSpies<ContactSpyQueue<TrafficContact,400>> caller reaches this same extent at 0x826DD170. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x8259D5C8": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutDriveSpy>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_8259D5C8",
+      "tu": "src/GameSource/Physics/BrnPhysicsModuleUpdateFunctions.cpp",
+      "evidence": "ARTIST BrnPhysics::PhysicsModule::Update calls this queue accessor at 0x825B16A8; the same native caller has a relocation naming the complete specialization. DecFIGS GameShared/GameClasses/Physics/CgsPhysicsSimulationModuleIO.h:734 declares the original queue element or its typed queue alias. ARTIST 0x825B1660 calls the typed mutable GetDriveSpyQueue. The loop reads the queue length and calls this accessor with the getter's return still in r3. Original CgsBaseEventQueue.h assert lines 292/294/295 distinguish the mutable overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x8268E770": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::JointedPartStateEvent>::GetEvent",
+      "size": 164,
+      "exported_name": null,
+      "tu": "src/GameSource/Sound/Collision/BrnCollisionStateManager.cpp",
+      "evidence": "ARTIST BrnSound::Logic::Collision::CollisionStateManager::UpdateHingingBodyParts calls this queue accessor at 0x826D45C0; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/DeformationManager/SharedIO/BrnDeformationOutputInterface.h:113 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x827098A8": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::TrafficSlammedEvent>::GetEvent",
+      "size": 172,
+      "exported_name": "sub_827098A8",
+      "tu": "src/GameSource/World/CrashModule/BrnCrashModule_TrafficCrashes.cpp",
+      "evidence": "ARTIST BrnWorld::CrashModule::ProcessSlammedTrafficEvents calls this queue accessor at 0x827CB1E8; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:140 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 172-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x82709958": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::RaceCarResetEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_82709958",
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandleResetRaceCarEvents calls this queue accessor at 0x82742D68; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:161 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x82709AA8": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::TrafficRemovedEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_82709AA8",
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandleRecycledTraffic calls this queue accessor at 0x82741854; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.h:189 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x82709E50": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::CleanupTrafficEvent>::GetEvent",
+      "size": 164,
+      "exported_name": null,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::CleanUpCrashedVehicles calls this queue accessor at 0x82732AA0; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/CrashModule/SharedIO/BrnCrashModuleTrafficIOInterfaces.h:387 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x82709FA0": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::TrafficLightKnockDownEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_82709FA0",
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandlePropModuleRequests calls this queue accessor at 0x82720B60; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/EntityModules/PropEntityModule/SharedIO/BrnPropToTrafficInterface.h:64 declares the original queue element or its typed queue alias. The original loop checks lpTrafficLightKnockDownQueue at interface offset zero and sends this returned event to TrafficLightGotSmashed at 0x82720BA4. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x8270A048": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::TrafficLightRestoreEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_8270A048",
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST BrnTraffic::TrafficEntityModule::HandlePropModuleRequests calls this queue accessor at 0x82720C08; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/EntityModules/PropEntityModule/SharedIO/BrnPropToTrafficInterface.h:79 declares the original queue element or its typed queue alias. ARTIST adds 0x8C to GetPropToTrafficInterface's return at 0x82720BC0 and identifies the selected field as lpTrafficLightRestoreQueue in the original assertion. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x827B5130": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::RemoveCrashedTrafficEvent>::GetEvent",
+      "size": 164,
+      "exported_name": "sub_827B5130",
+      "tu": "src/GameSource/World/CrashModule/BrnCrashModule_TrafficCrashes.cpp",
+      "evidence": "ARTIST BrnWorld::CrashModule::HandleCleanedUpTrafficEvents calls this queue accessor at 0x827CCBC8; the same native caller has a relocation naming the complete specialization. DecFIGS GameSource/World/CrashModule/SharedIO/BrnCrashModuleTrafficIOInterfaces.h:69 declares the original queue element or its typed queue alias. Original CgsBaseEventQueue.h assert lines 272/274/275 distinguish the const overload. The native 164-byte .pdata body matches all instruction bits outside relocations and resolves all 11 branches and 4 data references."
+    },
+    "0x826C0990": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Voice::Voice",
+      "size": 864,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/CgsVoice.cpp",
+      "evidence": "The ARTIST MasterVoice constructor calls this entry at 0x826D79C0 before its SubmixVoice pointer and vtable stores. The callee installs Voice vtable 0x820B2D1C, consumes this, the client size, Factory reference, VoiceSpec reference and ident, and builds the tail of Voice. DecFIGS CgsVoice.cpp:111 declares that constructor. This is name evidence for the original unwind extent."
+    },
+    "0x826C1A98": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::GenericRwacFactory::`scalar deleting destructor'",
+      "size": 80,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsGenericRwacFactory.cpp",
+      "evidence": "The GenericRwacFactory vtable at 0x820B2E04 starts with this compiler-generated entry. It calls the named complete destructor at 0x826C19F8, then conditionally calls operator delete at 0x82C08FB0 for flag bit zero. The matching native scalar thunk covers the entire original unwind extent."
+    },
+    "0x828284D0": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<16384,16>::AddEventSafe<CgsDev::Internal::CInEventDrawLine2D>",
+      "size": 184,
+      "tu": "src/GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "evidence": "ARTIST Draw2DLineAtAngle passes event ID 2 at 0x8282B4CC and branches to this writer at 0x8282B5B4. Its sibling also reaches it at 0x8282B8F4. The helper sets the exact 20-byte record size at 0x8282856C and forwards to the named AddEventSafe on the 16384-byte queue. DecFIGS CgsDebugRender.cpp:473 explicitly names the CInEventDrawLine2D typed call. The native body matches the complete 184-byte .pdata extent and all relocations, including the same 0x83019240 assert lock independently bound by the exact native BeginAssert and EndAssert providers."
+    },
+    "0x82629330": {
+      "symbol": "CgsModule::VariableEventQueue<13440,16>::AddEvent<CgsSceneManager::SceneManagerIO::InEventLineTestNearest>",
+      "exported_name": null,
+      "size": 184,
+      "tu": "src/GameSource/Physics/VehicleManager/BrnVehicleManager.cpp",
+      "evidence": "The original branch at 0x82633AEC in GenerateAboveGroundLineTests and its native typed relocation select InEventLineTestNearest. The exact outgoing branch at 0x826293DC names the 13440-byte queue owner. DecFIGS CgsVariableEventQueue.h export line 5456 corroborates this template. The native 184-byte .pdata body matches every unrelocated code bit and all 7 direct and 7 data references."
     }
   },
   "native_leaf_functions": {
@@ -33117,6 +33523,14 @@
       "caller": "0x826C17A0",
       "call_site": "0x826C1864",
       "evidence": "The RWAC factory calls this leaf at 0x826C1864 and passes its return to PlugInRegistry::RegisterPlugInRunTime. It returns 0x82F8CC50, the GainFader record attested by its name, GaF0 GUID and GainFader callback targets. The existing native accessor emits the same complete three instructions and its data relocation resolves to that typed descriptor."
+    },
+    "0x828EB308": {
+      "symbol": "CgsResource::Heap::FindFreeNodeContainingAddress",
+      "size": 296,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "caller": "0x828F4808",
+      "call_site": "0x828F48D0",
+      "evidence": "ARTIST Heap::Malloc calls the fixed-address selector at 0x828F48D0, 0x828F48E8 and 0x828F4908 with the Heap, typed node, native size and address. The native Malloc names this method and DecFIGS CgsResourceHeap.h line 445 declares the same signature. The ARTIST leaf searches the node chain then wraps once; its final blr is at 0x828EB42C before FindFreeNodeBestFit at 0x828EB430. The native body matches all 296 bytes without relocations."
     }
   },
   "sdk_archive_splits": {
