@@ -27658,6 +27658,27 @@
       "size": 264,
       "tu": "src/GameSource/Sound/BrnResourceRegistrar.cpp",
       "evidence": "ARTIST call at 0x826E210C. ResourceRegistrar::ClearUnreferancedFiles accesses the checked removal-candidate array at +0x1F0 then reads the returned LinkedListNode pointer and calls CountElements for the node’s requester list. DecFIGS BrnResourceRegistrar.h:196 and .cpp:462–472 attest this Array<LinkedListNode<RequestedResource>*,124> and its indexing. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x82ADE820": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionPushStringDictWord",
+      "size": 124,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterStackOps.cpp",
+      "evidence": "The native interpreter dispatch table at 0x82F73068 maps opcode 0xA3 through slot 0x82F732F4 to this routine. The original Apt opcode source identifies _FunctionAptActionPushStringDictWord; the native body advances the bytecode operand and uses the typed constant-pool slot at interpreter +0x44. XEX .pdata supplies the function extent."
+    },
+    "0x82B059F8": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionDictCallFuncPop",
+      "size": 180,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterControlOps.cpp",
+      "evidence": "The native interpreter dispatch table at 0x82F73068 maps opcode 0xB0 through slot 0x82F73328 to this routine. The original Apt opcode source identifies _FunctionAptActionDictCallFuncPop; the native body advances the bytecode operand and uses the typed constant-pool slot at interpreter +0x44. XEX .pdata supplies the function extent."
+    },
+    "0x826522A0": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<512,16>::AllocateEvent",
+      "size": 380,
+      "tu": "src/GameSource/Replays/BrnReplayBaseSerialiser.cpp",
+      "evidence": "ARTIST ReadVariableQueue<512,16> at 0x82656CF0 calls the original typed allocator at 0x82656D4C. The 380-byte .pdata body, the typed padding helper, eleven branches, and the original streamed overflow diagnostic at 0x8209E81C agree with fresh native objects."
     }
   },
   "native_leaf_functions": {
