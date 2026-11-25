@@ -19215,6 +19215,29 @@
       "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddJoint>::GetEvent",
       "byte_match": true,
       "evidence": "ARTIST ProcessAddJointQueue obtains its typed queue at 0x828A4104 from InputBuffer accessor 0x8289E8A0 and uses that result for GetEvent at 0x828A4208. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "CgsResource::RwVertexDescResourceType::GetSerialisedResourceDescri": {
+      "x360_address": "0x828A8A28",
+      "symbol": "CgsResource::RwVertexDescResourceType::GetSerialisedResourceDescriptor",
+      "name_evidence": true,
+      "evidence": "The ARTIST truncated name and resource VTable identify the serialized descriptor sizing wrapper. It constructs the vertex parameter record and calls VertexDescriptor::GetParameters and VertexDescriptor::GetResourceDescriptor before forwarding the resource descriptor result.",
+      "byte_match": true
+    },
+    "??$CreateIOBuffer@VInputBuffer@MemoryIO@CgsMemory@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@MemoryIO@CgsMemory@@": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsMemory::MemoryIO::InputBuffer>",
+      "x360_address": "0x828E00B0",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST ResourceModule::Update at 0x8290799C targets the 208-byte typed CreateIOBuffer specialization. The original truncated export is a prefix of the native class-key-V decoration. The original 0x3014-byte InputBuffer size and typed buffer lifecycle call are independently verified."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@MemoryIO@CgsMemory@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@MemoryIO@CgsMemory@": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsMemory::MemoryIO::InputBuffer>",
+      "x360_address": "0x828E0180",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST ResourceModule::Update at 0x82907F88 targets the 212-byte typed DestroyIOBuffer specialization. The original truncated export is a prefix of the native class-key-V decoration. The original 0x3014-byte InputBuffer size and typed buffer lifecycle call are independently verified."
     }
   },
   "sdk_entry_groups": {
@@ -30542,6 +30565,62 @@
       "size": 12,
       "evidence": "The matching initializer 0x82C73950 passes this native destructor to atexit at 0x82C7396C. The 12-byte thunk loads the same independently identified object 0x8324E814 and tail-calls EA::Thread::ThreadLocalStorage::~ThreadLocalStorage.",
       "exported_name": "sub_82C75990"
+    },
+    "0x82AE9540": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionSubtract",
+      "size": 308,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterArith.cpp",
+      "evidence": "ARTIST's dispatch table at 0x82F73068 assigns opcode 0x0B to this 308-byte unwind extent, between Add at 0x0A and Multiply at 0x0C. The integer and float branches compute under minus top (PPC subf and fsubs) and use the original two-operand pop. The matching SDK opcode implementation and the native XDK comparison corroborate the owner, complete extent, seven direct branches, two globals and the AddRef virtual slot."
+    },
+    "0x82B61FE0": {
+      "exported_name": "sub_82B61FE0",
+      "symbol": "renderengine::UnbindVertexStreams",
+      "size": 164,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/vertexbuffer.cpp",
+      "evidence": "The ARTIST VertexBuffer::Destruct call at 82B62F90 supplies a native VertexBuffer receiver. The lower helper scans all 16 XDK vertex streams and clears those holding that exact resource. The helper's independent .pdata record supplies its extent."
+    },
+    "0x8289DD78": {
+      "exported_name": "sub_8289DD78",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveDrive>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ProcessRemoveDriveQueue calls this accessor at 0x8289FFF4 after resolving its typed queue via InputBuffer::GetRemoveDriveQueue at 0x8289FFAC. The DecFIGS event holds one DriveId and the ARTIST accessor scales by eight at 0x8289DE0C."
+    },
+    "0x8289FE88": {
+      "exported_name": null,
+      "symbol": "CgsPhysics::PhysicsSimulationModule::ProcessSetDriveSpyQueue",
+      "size": 272,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ProcessInputBuffers calls this final drain at 0x828A74B4. It obtains InputBuffer::GetSetDriveSpyQueue at 0x8289FE9C, reads the event by the exact typed GetEvent at 0x8289FED8, uses the 64-bit DriveId and writes the slot drive spy word at offset 0x1C. DecFIGS CgsPhysicsUnity.cpp corroborates the typed drain and calls."
+    },
+    "0x826AD8C0": {
+      "exported_name": null,
+      "symbol": "CgsSound::Logic::Voice::SetParameter",
+      "size": 200,
+      "tu": "src/GameShared/GameClasses/Sound/Logic/CgsVoice.cpp",
+      "evidence": "ARTIST VoicePoolBase::SetParameter calls this .pdata body from 826B6688 using index, f32 value and the by-value Name slot. DecFIGS CgsVoice.h:609 names the method. It asserts the index and live handle at lines 611 and 612, then calls the Playback voice setter at 826ACD38."
+    },
+    "0x826C78C8": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Voice::Attach",
+      "size": 128,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/CgsVoice.cpp",
+      "evidence": "ARTIST Module::AttachVoice calls this .pdata body from 826D7E2C with a Voice pointer, Name and Content handle. DecFIGS Playback CgsVoice.h:1191 declares the method. The body calls FindNamedSlot, copies the content handle with an acquire, and calls Slot::Attach."
+    },
+    "0x8268E0C8": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::Content>::operator->",
+      "size": 88,
+      "tu": "src/GameShared/GameClasses/Sound/Logic/CgsVoiceWrapper.cpp",
+      "evidence": "ARTIST VoiceWrapper::Release calls this .pdata body at 826C52E4 on the Content handle at wrapper+0x40. The body checks and returns the sole pointer with the nonconst CgsHandle.h:287 diagnostic. The typed XDK specialization has the same code and diagnostic."
+    },
+    "0x826EAE38": {
+      "exported_name": "sub_826EAE38",
+      "symbol": "CgsSound::Logic::Voice::Attach",
+      "size": 120,
+      "tu": "src/GameShared/GameClasses/Sound/Logic/CgsVoice.cpp",
+      "evidence": "DecFIGS Logic CgsVoice.h:143 declares Attach(QueueElement,const Logic::Content&). The .pdata body asserts using Logic CgsContent.h:201, copies/acquires the Content handle at +4, then calls the private Attach overload at 826DC4C8."
     }
   },
   "native_leaf_functions": {
@@ -31404,6 +31483,30 @@
         "0x820CF7DC"
       ],
       "evidence": "ARTIST constructor at 0x827DF220..0x827DF22C stores vtable 0x820CF7D0. Its Destruct slot at 0x820CF7DC selects this 68-byte cleanup tail call to ModuleSingleBuffered::Destruct. Both rebuilt native vtables select the same typed member in slot three."
+    },
+    "0x82B63058": {
+      "symbol": "renderengine::VertexBuffer::Xbox2UnSet",
+      "size": 4,
+      "caller": "0x8227D0A0",
+      "call_site": "0x8227D0D0",
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/vertexbuffer.cpp",
+      "evidence": "The native VertexBuffer::Lock calls this one-instruction forwarding entry before locking. It tail-branches to UnbindVertexStreams at 82B61FE0, the same lower resource-unbind routine that VertexBuffer::Destruct calls directly."
+    },
+    "0x8286BB00": {
+      "symbol": "CgsMemory::MemoryIO::InputBuffer::Construct",
+      "size": 20,
+      "tu": "src/GameShared/GameClasses/Memory/CgsMemoryModuleIO.cpp",
+      "caller": "0x828E00B0",
+      "call_site": "0x828E0164",
+      "evidence": "ARTIST CreateIOBuffer<MemoryIO::InputBuffer> allocates 0x3014 bytes and directly calls this 20-byte leaf at 0x828E0164. The XDK typed wrapper calls InputBuffer::Construct at the same offset. The leaf sets IOBuffer status to constructed then tail-branches from offset +16 to the 12288-byte VariableEventQueue::Construct. The next 4-byte word is padding before InputBuffer::Destruct."
+    },
+    "0x82BC9840": {
+      "symbol": "EA::Jobs::EntryPoint::SetCode",
+      "size": 20,
+      "tu": "src/SDKs/EATech/eajobs/entrypoint.cpp",
+      "caller": "0x8287ECC0",
+      "call_site": "0x8287ED60",
+      "evidence": "ARTIST NetworkTextureDXTCompress::Update calls this environment overload at 8287ED60 and 8287EEA0 with its typed EntryPoint subobject, local environment, DXT worker pointer and size zero. DecFIGS entry_point.h:55 corroborates the three arguments. The routine stores the environment at +0x18 and writes the callback at +0x28 only for the local environment. The five instructions match XDK exactly and end in blr before four zero alignment bytes and SetName at 82BC9858."
     }
   },
   "sdk_archive_splits": {
