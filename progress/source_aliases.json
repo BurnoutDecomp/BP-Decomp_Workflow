@@ -31217,6 +31217,80 @@
       "size": 112,
       "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/CgsServerInterfaceDirtySock.cpp",
       "evidence": "DecFIGS CgsServerInterfaceDirtySock.h declares the const component getter. The ARTIST const status and error queries each call this address twice. Its range diagnostic uses original header line 746, which distinguishes it from the mutable getter at 82541698 and header line 738. The typed const native body is exact over the whole unwind extent."
+    },
+    "0x82C08C00": {
+      "exported_name": "sub_82C08C00",
+      "symbol": "operator new[]",
+      "size": 4,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\new2.obj",
+        "archive_symbol": "??_U@YAPAXI@Z"
+      },
+      "evidence": "The code at 82C08C00 is the four-byte array allocation thunk. The XDK archive exports ??_U@YAPAXI@Z with an unconditional REL24 branch to ??2@YAPAXI@Z. ARTIST has the same instruction and its target is the registered operator new body at 82C08DF0. Both shader registration routines call this thunk."
+    },
+    "0x82BC2680": {
+      "exported_name": null,
+      "symbol": "rw::physics::Simulation::Osiris_Pipeline",
+      "size": 716,
+      "tu": "vendor/renderware/src/rw/physics/Simulation.cpp",
+      "evidence": "ARTIST SimulationUpdate 0x82BC6BE8 calls this 716-byte .pdata extent for the joint-only selector 2. The 0x14 stack and 0x6C count loads at 0x82BC2698..0x82BC26A0 and 0x180 row stride identify the joint Jacobian solver. The other solver calls resolve as Horus, Isis and Anubis. DecFIGS simulation.h:616 declares the remaining void Simulation::Osiris_Pipeline() member."
+    },
+    "0x82B01060": {
+      "exported_name": "sub_82B01060",
+      "symbol": "AptScriptFunction2::AptScriptFunction2",
+      "size": 92,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunction2.cpp",
+      "evidence": "ARTIST AptScriptFunction2::Duplicate at 0x82B02534 calls this constructor with the original function and replacement CIH. It calls the typed base copy constructor with tag 35, installs the same 0x82145D10 vtable as the main constructor, and copies the bytecode record pointer at +0x30. The native typed copy constructor matches all 92 bytes with both bindings attested."
+    },
+    "0x82B02500": {
+      "exported_name": null,
+      "symbol": "AptScriptFunction2::Duplicate",
+      "size": 88,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunction2.cpp",
+      "evidence": "ARTIST AptScriptFunction2 vtable cell 0x82145D4C identifies the Duplicate slot. It allocates exactly 0x34 bytes through AptScriptFunction2::operator new and calls the original typed copy constructor at 0x82B01060. The XDK method matches all 88 bytes and both direct branches."
+    },
+    "0x82B00E90": {
+      "exported_name": "sub_82B00E90",
+      "symbol": "AptScriptFunctionBase::AptScriptFunctionBase",
+      "size": 364,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunctionBase.cpp",
+      "evidence": "The AptScriptFunction2 copy ctor at 0x82B01088 and AptScriptFunction1 copy ctor at 0x82B01028 call this same base constructor with type tag, original function, and replacement CIH in the typed original copy constructor order. The body initializes the base then reads the prototype/hash and original captured scope. The native base copy constructor is present but still differs."
+    },
+    "0x82B381F8": {
+      "exported_name": "sub_82B381F8",
+      "symbol": "PingAllocRequest",
+      "size": 268,
+      "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
+      "evidence": "The aligned native ProtoPingRequest and ProtoPingRequestServer calls at 82B38ACC and 82B38B64 target this original request allocator. The 268-byte unwind extent calls DirtyMemAlloc, clears the 384-byte request with memset, and appends it to the same singly linked owner. The helper remains nonmatching."
+    },
+    "0x82B38308": {
+      "exported_name": null,
+      "symbol": "PingFreeRequest",
+      "size": 180,
+      "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
+      "evidence": "Both aligned exact native ProtoPingDestroy and ProtoPingResponse callers relocate this request release at ARTIST 82B38970 and 82B38C50. The original unwind extent matches all 180 bytes and the QoS release, cancellation and allocation release call targets."
+    },
+    "0x82B383C0": {
+      "exported_name": "sub_82B383C0",
+      "symbol": "PingStartPeer",
+      "size": 440,
+      "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
+      "evidence": "Exact PingPoll selects the peer request on type zero and calls this helper at ARTIST 82B387E4. The 440-byte unwind extent performs XSessionSearchByID, XGetOverlappedResult and the peer XNetQosLookup. The helper remains nonmatching."
+    },
+    "0x82B38578": {
+      "exported_name": "sub_82B38578",
+      "symbol": "PingStartServer",
+      "size": 500,
+      "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
+      "evidence": "Exact PingPoll selects the server request on type one and calls this helper at ARTIST 82B387FC. The 500-byte unwind extent passes one server address and service ID to XNetQosLookup. The helper remains nonmatching."
+    },
+    "0x82B38770": {
+      "exported_name": "sub_82B38770",
+      "symbol": "PingPoll",
+      "size": 344,
+      "tu": "vendor/dirtysdk/src/x360/protoping_x360.cpp",
+      "evidence": "The aligned exact native ProtoPingResponse call at ARTIST 82B38B9C selects this completion-queue helper. Its original 344-byte unwind extent matches all instructions, identifies peer and server branches through the same typed owner, and uses the three matching diagnostic strings."
     }
   },
   "native_leaf_functions": {
@@ -32196,6 +32270,24 @@
       "caller": "0x82875EF8",
       "call_site": "0x828760A4",
       "evidence": "ARTIST OnEvent reaches this three-instruction leaf with its typed game-manager reference and the LobbyApiUserT persona. The existing native provider uses its 16-byte strSelfName at offset 0x10E0 and tail-branches to ds_strnzcpy, matching the entire leaf. The next ARTIST body begins after the padding word at 82B1EE84."
+    },
+    "0x82BB0478": {
+      "caller": "0x82BBBC20",
+      "call_site": "0x82BBBC34",
+      "symbol": "rw::collision::VolumeBBoxQuery::AddPrimitiveRef",
+      "size": 260,
+      "tu": "src/vendor/renderware/collision/VolumeBBoxQuery.cpp",
+      "evidence": "DecFIGS volumebboxquery.h:63 declares the typed method. ARTIST VolumeBBoxQuery::AddVolumeRef 0x82BBBC34 tail-branches here for nonaggregate volumes, and GetOverlaps 0x82BBBFBC calls it with the current volume, transform, AABBox, tag and bit count. The body begins after ClipEnd and ends at 0x82BB0578 blr before the 0x82BB057C zero word and TriangleVolume::GetNormal at 0x82BB0580. All 260 native bytes match directly with zero relocations."
+    },
+    "0x82AF1480": {
+      "vtable_slots": [
+        "0x82145D5C"
+      ],
+      "native_symbol": "?GetByteCodeSize@AptScriptFunction2@@UBAHXZ",
+      "symbol": "AptScriptFunction2::GetByteCodeSize",
+      "size": 12,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunction2.cpp",
+      "evidence": "ARTIST AptScriptFunction2 vtable cell 0x82145D5C identifies GetByteCodeSize. Its adjacent 12-byte body loads the compiled bytecode record at +0x30 then the body length at record +0x10, followed by blr and alignment. The native override matches all three instructions."
     }
   },
   "sdk_archive_splits": {
