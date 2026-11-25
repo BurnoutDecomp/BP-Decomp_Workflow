@@ -1902,6 +1902,36 @@
     }
   },
   "functions": {
+    "CgsSound::Logic::State>::AddToClassTypeInfoArray": {
+      "symbol": "CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::State>::AddToClassTypeInfoArray",
+      "x360_address": "0x8268DF08",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsEffectBase.h:351 declares the private instance method on ClassTypeInfo<State>. Eleven ARTIST startup thunks pass their descriptor to 0x8268DF08. The XDK body matches all 220 instruction bytes and verified branch, registry and assertion relocations."
+    },
+    "BrnSound::Logic::Traffic:": {
+      "symbol": "BrnSound::Logic::Traffic::TrafficState::GetTypeInfo",
+      "x360_address": "0x826841A8",
+      "byte_match": true,
+      "evidence": "ARTIST class vtable slot at 0x820B1890 points to the getter of BrnSound::Logic::Traffic::TrafficState descriptor 0x82F2E8F0. The XDK body matches all 12 bytes outside its verified descriptor relocations."
+    },
+    "BrnSound::Logic::Collisio": {
+      "symbol": "BrnSound::Logic::Collision::CollisionState::GetTypeInfo",
+      "x360_address": "0x82688018",
+      "byte_match": true,
+      "evidence": "ARTIST class vtable slot at 0x820B25D4 points to the getter of BrnSound::Logic::Collision::CollisionState descriptor 0x82F2F8FC. The XDK body matches all 12 bytes outside its verified descriptor relocations."
+    },
+    "BrnSound::Logic::Passby::": {
+      "symbol": "BrnSound::Logic::Passby::PassbyState::GetTypeInfo",
+      "x360_address": "0x82688FC8",
+      "byte_match": true,
+      "evidence": "ARTIST class vtable slot at 0x820B2B1C points to the getter of BrnSound::Logic::Passby::PassbyState descriptor 0x82F2F95C. The XDK body matches all 12 bytes outside its verified descriptor relocations."
+    },
+    "BrnSound::Logic::Explosio": {
+      "symbol": "BrnSound::Logic::Explosion::ExplosionState::GetTypeInfo",
+      "x360_address": "0x82689198",
+      "byte_match": true,
+      "evidence": "ARTIST class vtable slot at 0x820B2B40 points to the getter of BrnSound::Logic::Explosion::ExplosionState descriptor 0x82F2F9AC. The XDK body matches all 12 bytes outside its verified descriptor relocations."
+    },
     "CgsSceneManager::SceneManagerIO::InEventAddDynamicVolume>::AddEven": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddDynamicVolume>::AddEvent",
       "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventAddDynamicVolume_AddEvent.cpp",
@@ -3379,6 +3409,7 @@
       "evidence": "ARTIST 0x825E5518 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Deformation::RemoveDeformationModelEvent>::AddEvent` from 0x82096A30. The native const-reference instantiation in GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_RemoveDeformationModelEvent_AddEvent.cpp matches its 312 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:11037 corroborates AddEvent(const T&)."
     },
     "BrnSound::Vehicles::AIVeh": {
+      "byte_match": true,
       "symbol": "BrnSound::Vehicles::AIVehicleState::GetTypeInfo",
       "file": "GameSource/Sound/Vehicles/BrnAIVehicleState.cpp",
       "x360_address": "0x826840B8",
@@ -3399,6 +3430,7 @@
       "evidence": "Slot 0 (IStreamUser::GetCreateParams) of the IStreamUser sub-object vtables 0x820B204C (CrashStreamEffect ctor stores it at this+0x38), 0x820B1F40 (AmbienceEffect) and 0x820B20D0 (SpeedStreamEffect); 'addi r3,r3,4' returns mParams right after the interface vptr; identical-code fold named after CrashStreamEffect."
     },
     "BrnSound::Vehicles::Playe": {
+      "byte_match": true,
       "symbol": "BrnSound::Vehicles::PlayerVehicleState::GetTypeInfo",
       "file": "GameSource/Sound/Vehicles/BrnPlayerVehicleState.cpp",
       "x360_address": "0x82683FD8",
@@ -27021,9 +27053,111 @@
       "size": 264,
       "tu": "class:CgsContainers::Array<BrnTraffic::FiredKillZoneInfo,8>",
       "evidence": "DrawRecentKillZones (0x8276125C) and UpdateDEBUG (0x8271DCDC and 0x8271DCF8) pass the mutable Array<FiredKillZoneInfo,8> at TrafficEntityModule+0x727E0. DecFIGS declares that field and ARTIST body verifies +0x80 count and 16-byte item stride. Native provider matches all 264 bytes, 11 branches and nine data operands, including the CgsArray.h path and diagnostics."
+    },
+    "0x828AF1C8": {
+      "exported_name": "sub_828AF1C8",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Update::GetInSceneUpdateInterface",
+      "size": 164,
+      "tu": "class:CgsSceneManager::SceneManagerIO::InputBuffer_Update",
+      "evidence": "ARTIST SceneManagerModule::StartUpdateTriangleCache calls this accessor at ARTIST 0x828C745C. The body tests read lock bit 4, fires the streamed diagnostic at CgsSceneManagerModuleIO.h:462 and returns the typed scene update member at +0x10. The const declaration is corroborated by DecFIGS and the XDK matches every instruction plus its historic assertion data."
     }
   },
   "native_leaf_functions": {
+    "0x82C65C00": {
+      "symbol": "`dynamic initializer for 'CgsSound::Logic::State::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameShared/GameClasses/Sound/Logic/CgsState.cpp",
+      "crt_slot": "0x82CD22A8",
+      "evidence": "ARTIST CRT table 0x82CD22A8 points to this 12-byte tail-call. Its two address operands select CgsSound::Logic::State descriptor 0x82F2FA90 and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C61B48": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::BrnState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Module/LogicModule/BrnState.cpp",
+      "crt_slot": "0x82CD1DE0",
+      "evidence": "ARTIST CRT table 0x82CD1DE0 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::BrnState descriptor 0x82F2E7DC and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C62D98": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::GlobalState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Global/BrnGlobalState.cpp",
+      "crt_slot": "0x82CD1FE4",
+      "evidence": "ARTIST CRT table 0x82CD1FE4 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::GlobalState descriptor 0x82F2F86C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C61C00": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::Streaming::StreamingState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Streaming/BrnStreamingState.cpp",
+      "crt_slot": "0x82CD1E00",
+      "evidence": "ARTIST CRT table 0x82CD1E00 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::Streaming::StreamingState descriptor 0x82F2E83C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C62D68": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::World::EmitterState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Module/LogicModule/BrnEmitterState.cpp",
+      "crt_slot": "0x82CD1FD8",
+      "evidence": "ARTIST CRT table 0x82CD1FD8 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::World::EmitterState descriptor 0x82F2F83C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C61C30": {
+      "symbol": "`dynamic initializer for 'BrnSound::Vehicles::PlayerVehicleState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Vehicles/BrnPlayerVehicleState.cpp",
+      "crt_slot": "0x82CD1E0C",
+      "evidence": "ARTIST CRT table 0x82CD1E0C points to this 12-byte tail-call. Its two address operands select BrnSound::Vehicles::PlayerVehicleState descriptor 0x82F2E86C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C61DA8": {
+      "symbol": "`dynamic initializer for 'BrnSound::Vehicles::AIVehicleState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Vehicles/BrnAIVehicleState.cpp",
+      "crt_slot": "0x82CD1E34",
+      "evidence": "ARTIST CRT table 0x82CD1E34 points to this 12-byte tail-call. Its two address operands select BrnSound::Vehicles::AIVehicleState descriptor 0x82F2E89C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C61DF8": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::Traffic::TrafficState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Traffic/BrnTrafficState.cpp",
+      "crt_slot": "0x82CD1E48",
+      "evidence": "ARTIST CRT table 0x82CD1E48 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::Traffic::TrafficState descriptor 0x82F2E8F0 and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C63140": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::Collision::CollisionState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Collision/BrnCollisionState.cpp",
+      "crt_slot": "0x82CD2048",
+      "evidence": "ARTIST CRT table 0x82CD2048 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::Collision::CollisionState descriptor 0x82F2F8FC and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82C63380": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::Passby::PassbyState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Passby/BrnPassbyState.cpp",
+      "crt_slot": "0x82CD2090",
+      "evidence": "ARTIST CRT table 0x82CD2090 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::Passby::PassbyState descriptor 0x82F2F95C and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x82688FD8": {
+      "symbol": "BrnSound::Logic::Passby::PassbyState::GetTypeName",
+      "size": 16,
+      "tu": "src/GameSource/Sound/Passby/BrnPassbyState.cpp",
+      "vtable_slots": [
+        "0x820B2B20"
+      ],
+      "evidence": "ARTIST class vtable slot at 0x820B2B20 points to the getter of BrnSound::Logic::Passby::PassbyState descriptor 0x82F2F95C. The XDK body matches all 16 bytes outside its verified descriptor relocations."
+    },
+    "0x82C633D0": {
+      "symbol": "`dynamic initializer for 'BrnSound::Logic::Explosion::ExplosionState::sTypeInfo''",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Explosions/BrnExplosionState.cpp",
+      "crt_slot": "0x82CD20A4",
+      "evidence": "ARTIST CRT table 0x82CD20A4 points to this 12-byte tail-call. Its two address operands select BrnSound::Logic::Explosion::ExplosionState descriptor 0x82F2F9AC and the last branch reaches ClassTypeInfo<State>::AddToClassTypeInfoArray at 0x8268DF08. The native .CRT initializer binds the same descriptor and target."
+    },
+    "0x826891A8": {
+      "symbol": "BrnSound::Logic::Explosion::ExplosionState::GetTypeName",
+      "size": 16,
+      "tu": "src/GameSource/Sound/Explosions/BrnExplosionState.cpp",
+      "vtable_slots": [
+        "0x820B2B44"
+      ],
+      "evidence": "ARTIST class vtable slot at 0x820B2B44 points to the getter of BrnSound::Logic::Explosion::ExplosionState descriptor 0x82F2F9AC. The XDK body matches all 16 bytes outside its verified descriptor relocations."
+    },
     "0x82B6BE18": {
       "symbol": "rw::audio::core::System::Alloc",
       "size": 48,
