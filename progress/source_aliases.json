@@ -18664,6 +18664,102 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "LanguageManager RemoveStringByHash and RemoveStringPointerByHash call this typed 13-bin removal at 0x828640C8 and 0x82864170. ARTIST obtains the bin from GetInternal and invokes BaseLinkedList::InternalRemoveNode. Both original assertions and the full 148-byte native body verify."
+    },
+    "BrnTraffic::TrafficData>::operator": {
+      "symbol": "CgsResource::ResourcePtr<BrnTraffic::TrafficData>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr.h",
+      "x360_address": "0x82211C60",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "The original const GetHull and two const runtime overloads take TrafficEntityModule::mpData at +0x71840 and branch here. Their native relocations name the const TrafficData ResourcePtr::operator->. The 160-byte callee uses the relative CgsResourcePtr.h filename and line 563, with a signed comparison where the current native const overload uses an unsigned pointer comparison."
+    },
+    "short,5": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::EntityId,unsigned short,541>::Get",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828CBC58",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFAD8 calls the const lookup on the typed EntityId table. DecFIGS CgsIndexedHashTable.h:281 declares the stored-value pointer return, and ARTIST uses 541 12-byte buckets and a uint16_t value at node +4. The complete native body agrees."
+    },
+    "i": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeInstanceId,unsigned int,509>::Get",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828CBF18",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CD4D0 calls the const lookup on the typed VolumeInstanceId table. DecFIGS CgsIndexedHashTable.h:281 declares the stored-value pointer return, and ARTIST uses 509 12-byte buckets and a uint32_t value at node +8. The complete native body agrees."
+    },
+    "CgsSceneManager::VolumeManagerVolume,5048,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::FreeObject",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828B75D0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFE38 passes VolumeManager+0x94A50 and the typed volume-pool index. The target pushes the free index and clears the occupancy bit. DecFIGS CgsObjectPool.h:203 declares FreeObject. This is a call identity and the helper body remains nonmatching."
+    },
+    "CgsSceneManager::VolumeMan": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828B7910",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFE10 and 828CFF2C dereference the mutable VolumeManagerVolume pool at VolumeManager+0x94A50. The result supplies the static flag at +0x18 and store slot at +0x14. DecFIGS describes the original mutable subscript. The typed call identity is established and the helper body remains nonmatching."
+    },
+    "int,227>:": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeId,unsigned int,227>::Get",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828CC300",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFDE8 calls the const lookup on the typed VolumeId table. DecFIGS CgsIndexedHashTable.h:281 declares the stored-value pointer return, and ARTIST uses 227 12-byte buckets and a uint32_t value at node +8. The complete native body agrees."
+    },
+    "int,227>::Remove": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeId,unsigned int,227>::Remove",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828CC380",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFE44 passes the typed VolumeId into the 227-bin table. The callee invokes its matching bucket walker and unlinks the node. DecFIGS CgsIndexedHashTable.h:344 declares this Remove overload. The complete 572-byte native body and all relocations agree."
+    },
+    "short,541>::Remove": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::EntityId,unsigned short,541>::Remove",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828CBCD8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CD764 passes the typed EntityId into the 541-bin table. The callee invokes its matching bucket walker and unlinks the node. DecFIGS CgsIndexedHashTable.h:344 declares this Remove overload. The complete 572-byte native body and all relocations agree."
+    },
+    "int,509>::Remove": {
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeInstanceId,unsigned int,509>::Remove",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828CBF98",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CDA3C passes the typed VolumeInstanceId into the 509-bin table. The callee invokes its matching bucket walker and unlinks the node. DecFIGS CgsIndexedHashTable.h:344 declares this Remove overload. The complete 572-byte native body and all relocations agree."
+    },
+    "CgsResource::HudMessageResourceType::GetSerialisedResourceDescript": {
+      "symbol": "CgsResource::HudMessageResourceType::GetSerialisedResourceDescriptor",
+      "x360_address": "0x8267B110",
+      "byte_match": true,
+      "evidence": "ARTIST resource vtable 0x820A0ED0 has GetTypeID at 0x82846578, the descriptor override in the next slot and FixDown at 0x828465E8. The original exported label truncates the descriptor name. The existing native owning class returns five rw::BaseResourceDescriptor lanes and all 68 code bytes match with no relocations."
+    },
+    "CgsContainers::DictionaryResourceTypeBase::GetSerialisedResourceD": {
+      "symbol": "CgsContainers::DictionaryResourceTypeBase::GetSerialisedResourceDescriptor",
+      "x360_address": "0x828158E0",
+      "byte_match": true,
+      "evidence": "ARTIST resource vtable 0x820A1A18 has GetTypeID at 0x826659E0, the descriptor override in the next slot and FixDown at 0x8266AA18. The original exported label truncates the descriptor name. The existing native owning class returns five rw::BaseResourceDescriptor lanes and all 68 code bytes match with no relocations."
+    },
+    "CgsGraphics::InstanceListResourceType::GetSerialisedResourceDescr": {
+      "symbol": "CgsGraphics::InstanceListResourceType::GetSerialisedResourceDescriptor",
+      "x360_address": "0x827F09B0",
+      "byte_match": true,
+      "evidence": "ARTIST resource vtable 0x820A1310 has GetTypeID at 0x827E6EE8, the descriptor override in the next slot and FixDown at 0x827F94C8. The original exported label truncates the descriptor name. The existing native owning class returns five rw::BaseResourceDescriptor lanes and all 84 code bytes match with no relocations."
+    },
+    "BrnTraffic::TrafficDataResourceType::GetSerialisedResourceDescript": {
+      "symbol": "BrnTraffic::TrafficDataResourceType::GetSerialisedResourceDescriptor",
+      "x360_address": "0x82760660",
+      "byte_match": true,
+      "evidence": "ARTIST TrafficDataResourceType vtable at 0x820A1520 places the descriptor in slot 1, after GetTypeID 0x82752560 and before the FixDown and FixUp slots. The full owner declaration and all 164 code bytes agree with the truncated export."
     }
   },
   "sdk_entry_groups": {
@@ -29314,6 +29410,51 @@
       "size": 164,
       "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
       "evidence": "ARTIST call at 0x823EF234. BrnGameModule::BridgeGameStateToGui passes its const OutputBuffer and asserts the returned takedown queue before passing it to the typed translation. The original getter asserts the read lock and returns the +0x4040 queue. DecFIGS BrnGameStateModuleIO.h:376 corroborates the const getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
+    },
+    "0x8271D9D0": {
+      "exported_name": "sub_8271D9D0",
+      "symbol": "BrnTraffic::TrafficEntityModule::GetHullRuntime",
+      "size": 156,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "DecFIGS declares the const u32 overload. ARTIST 0x8271D9D0 validates the input through the const TrafficData ResourcePtr at 0x82211C60 and uses the independent header line 2267. The full native body, typed branches, and diagnostic data agree."
+    },
+    "0x8271DB10": {
+      "exported_name": "sub_8271DB10",
+      "symbol": "BrnTraffic::TrafficEntityModule::GetHullRuntimeSafe",
+      "size": 156,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "DecFIGS declares the const u32 overload. ARTIST 0x8271DB10 validates the input through the const TrafficData ResourcePtr at 0x82211C60 and uses the independent header line 2313. The full native body, typed branches, and diagnostic data agree."
+    },
+    "0x828D6F80": {
+      "exported_name": null,
+      "symbol": "CgsSystem::HardwareSku::GetSku",
+      "size": 424,
+      "tu": "src/GameShared/GameClasses/System/X360/CgsHardwareSkuX360.cpp",
+      "evidence": "ARTIST FindLanguage first obtains the SKU at 0x828D7138, retaining it in r31 before obtaining the language. The callee caches an ESku and selects it with XGetGameRegion and the French and Japanese stream headers. The existing native caller relocation and the DecFIGS GetSku declaration identify the typed callee."
+    },
+    "0x828C5958": {
+      "exported_name": "sub_828C5958",
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::EntityId,unsigned short,541>::GetInternal",
+      "size": 152,
+      "evidence": "ARTIST 828CBCAC calls GetInternal from the typed EntityId lookup. The modulo and node traversal use 541 12-byte buckets and a uint16_t value at node +4. DecFIGS CgsIndexedHashTable.h:317 identifies the bucket walker. The complete native body agrees."
+    },
+    "0x828C59F0": {
+      "exported_name": "sub_828C59F0",
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeInstanceId,unsigned int,509>::GetInternal",
+      "size": 168,
+      "evidence": "ARTIST 828CBF6C calls GetInternal from the typed VolumeInstanceId lookup. The modulo and node traversal use 509 12-byte buckets and a uint32_t value at node +8. DecFIGS CgsIndexedHashTable.h:317 identifies the bucket walker. The complete native body agrees."
+    },
+    "0x828C5B88": {
+      "exported_name": "sub_828C5B88",
+      "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeId,unsigned int,227>::GetInternal",
+      "size": 168,
+      "evidence": "ARTIST 828CC354 calls GetInternal from the typed VolumeId lookup. The modulo and node traversal use 227 12-byte buckets and a uint32_t value at node +8. DecFIGS CgsIndexedHashTable.h:317 identifies the bucket walker. The complete native body agrees."
+    },
+    "0x828CFEE8": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::VolumeManager::ReplaceDynamicVolume",
+      "size": 192,
+      "evidence": "ARTIST 828D2E64 passes the typed ReplaceDynamicVolume queue event ID and volume image. The target checks the const VolumeId lookup, selects the mutable VolumeManagerVolume slot, and calls the original VolumeStore::ReplaceVolume. DecFIGS CgsVolumeManager.h:106 and the complete native body agree."
     }
   },
   "native_leaf_functions": {
@@ -30142,6 +30283,15 @@
       "caller": "0x827ED468",
       "call_site": "0x827ED51C",
       "evidence": "ARTIST ConstructDepthStencilState passes the allocation result and typed Parameters to this out-of-line initializer, with a second independent Device::Start witness at 0x82B64490. The leaf writes the 17 input words and expands six flag bytes, then sets initialized=1 at +0x5C, agreeing with the compiled DepthStencilState layout. The original 200 bytes match the native provider without relocations and end before RasterizerState::Initialize at 0x82B62958."
+    },
+    "0x82763E70": {
+      "symbol": "BrnTraffic::TrafficDataResourceType::FixUp",
+      "size": 8,
+      "tu": "src/SharedClasses/Traffic/BrnTrafficDataResourceType.cpp",
+      "vtable_slots": [
+        "0x820A1530"
+      ],
+      "evidence": "Vtable slot 4 at 0x820A1530 names the previously unlisted 8-byte ARTIST tail thunk. The body passes the resource from r4 as this and the rebasing address, then tail branches to named TrafficData::FixUp 0x827637D8. Its extant XDK provider matches both instructions with the branch verified."
     }
   },
   "sdk_archive_splits": {
