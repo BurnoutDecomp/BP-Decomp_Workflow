@@ -1,18 +1,19 @@
 {
- "blob": "7c6c6e94493a0c91dadd2868f15722e27ab4f159",
- "commit": "6c332545222516859d3c774c9f2d64cf19e5f2f9",
+ "blob": "5825b130dc1f7db55f5b70fd2c835ae170f5047b",
+ "commit": "4fdbb09506501932edca342446b3d4164310312b",
  "compiled": true,
- "measured": "2026-11-25T18:48:43Z",
+ "measured": "2026-11-25T19:21:07Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/System/FileSystem/CgsFileSystem.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 33,
+ "unpaired": 57,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
   {"artist": "821F05C8", "artist_size": 20, "name": "rw::BaseResourceDescriptor::BaseResourceDescriptor", "score": 100.0, "size": 20, "status": "exact", "symbol": "??0BaseResourceDescriptor@rw@@QAA@XZ"},
+  {"artist": "823FF7D0", "artist_size": 116, "name": "rw::IResourceAllocator::AllocateMemoryResource", "score": 100.0, "size": 116, "status": "exact", "symbol": "?AllocateMemoryResource@IResourceAllocator@rw@@QAAPAXIIPBD@Z"},
   {"artist": "8264AD10", "artist_size": 116, "name": "CgsFileSystem::BaseFile::GetStatus", "score": 100.0, "size": 116, "status": "exact", "symbol": "?GetStatus@BaseFile@CgsFileSystem@@QAA?AW4FileState@2@XZ"},
   {"artist": "8264AE28", "artist_size": 180, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::GetStatus", "score": 100.0, "size": 180, "status": "exact", "symbol": "?GetStatus@FileSystem@CgsFileSystem@@QAA?AW4FileState@2@I@Z"},
   {"artist": "827DF320", "artist_size": 196, "first_diff": 8, "name": "CgsFileSystem::FileSystem::FileSystem", "score": 39.0, "size": 296, "status": "nonmatching", "symbol": "??0FileSystem@CgsFileSystem@@QAA@XZ"},
@@ -24,14 +25,13 @@
   {"artist": "828E8B50", "artist_size": 208, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::WriteInternal", "score": 100.0, "size": 208, "status": "exact", "symbol": "?WriteInternal@FileSystem@CgsFileSystem@@AAA_NIPBX_K1@Z"},
   {"artist": "828E8C20", "artist_size": 192, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::RegisterMemFileInternal", "score": 100.0, "size": 192, "status": "exact", "symbol": "?RegisterMemFileInternal@FileSystem@CgsFileSystem@@AAA_NPBDPAX_K@Z"},
   {"artist": "828E8CE0", "artist_size": 176, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::UnregisterMemFileInternal", "score": 100.0, "size": 176, "status": "exact", "symbol": "?UnregisterMemFileInternal@FileSystem@CgsFileSystem@@AAA_NPBD@Z"},
-  {"artist": "828F04E8", "artist_size": 560, "first_diff": 8, "name": "CgsFileSystem::FileSystem::Prepare", "score": 33.6, "size": 464, "status": "nonmatching", "symbol": "?Prepare@FileSystem@CgsFileSystem@@QAA_NXZ"},
+  {"artist": "828F04E8", "artist_size": 560, "data_unchecked": 5, "name": "CgsFileSystem::FileSystem::Prepare", "score": 100.0, "size": 560, "status": "exact", "symbol": "?Prepare@FileSystem@CgsFileSystem@@QAA_NXZ"},
   {"artist": "828F0718", "artist_size": 220, "data_unchecked": 2, "name": "CgsFileSystem::FileSystem::OpenInternal", "score": 100.0, "size": 220, "status": "exact", "symbol": "?OpenInternal@FileSystem@CgsFileSystem@@AAAHPBDW4FileAccess@2@H_N@Z"},
   {"artist": "828F07F8", "artist_size": 208, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::ReadInternal", "score": 100.0, "size": 208, "status": "exact", "symbol": "?ReadInternal@FileSystem@CgsFileSystem@@AAA_NIPAX_K1@Z"},
   {"artist": "828F08C8", "artist_size": 184, "data_unchecked": 7, "name": "CgsFileSystem::FileSystem::CloseInternal", "score": 100.0, "size": 184, "status": "exact", "symbol": "?CloseInternal@FileSystem@CgsFileSystem@@AAA_NI@Z"},
   {"artist": "829033C0", "artist_size": 1216, "first_diff": 8, "name": "CgsFileSystem::FileSystem::Construct", "score": 33.9, "size": 812, "status": "nonmatching", "symbol": "?Construct@FileSystem@CgsFileSystem@@QAAXPAUIResourceAllocator@rw@@0PBDPAVDiskLayout@2@1@Z"},
   {"artist": "82903880", "artist_size": 1604, "first_diff": 8, "name": "CgsFileSystem::FileSystem::Release", "score": 17.9, "size": 364, "status": "nonmatching", "symbol": "?Release@FileSystem@CgsFileSystem@@QAA_NXZ"},
   {"artist": "82903EC8", "artist_size": 128, "name": "CgsFileSystem::FileSystem::CloseReadStreamInternal", "score": 100.0, "size": 128, "status": "exact", "symbol": "?CloseReadStreamInternal@FileSystem@CgsFileSystem@@AAAXUReadStream@2@@Z"},
-  {"artist": "82906950", "artist_size": 476, "data_unchecked": 11, "name": "CgsFileSystem::FileSystem::OpenReadStreamInternal", "score": 100.0, "size": 476, "status": "exact", "symbol": "?OpenReadStreamInternal@FileSystem@CgsFileSystem@@AAA?AUReadStream@2@PBDPAXIIHH_N@Z"},
-  {"artist": "82C08DF0", "artist_size": 192, "first_diff": 0, "name": "operator new", "score": 4.0, "size": 8, "status": "nonmatching", "symbol": "??2@YAPAXIPAX@Z"}
+  {"artist": "82906950", "artist_size": 476, "data_unchecked": 11, "name": "CgsFileSystem::FileSystem::OpenReadStreamInternal", "score": 100.0, "size": 476, "status": "exact", "symbol": "?OpenReadStreamInternal@FileSystem@CgsFileSystem@@AAA?AUReadStream@2@PBDPAXIIHH_N@Z"}
  ]
 }

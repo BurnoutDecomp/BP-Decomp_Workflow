@@ -31165,6 +31165,58 @@
       "size": 412,
       "tu": "vendor/dirtysdk/src/x360/connapi_x360.cpp",
       "evidence": "DecFIGS connapi.c:1126 declares the private client removal routine. The XDK public ConnApiRemoveClient calls this exact 412-byte body at 82B153C4, also the original ARTIST target. Callback and port removal calls, memmove, current client count and the local-player lookup all agree."
+    },
+    "0x82BBE2F8": {
+      "exported_name": null,
+      "symbol": "rw::core::filesys::Manager::RegisterDevice",
+      "size": 184,
+      "tu": "src/SDKs/EATech/rwcore/filesys/manager.cpp",
+      "evidence": "ARTIST FileSystem::Prepare calls the original manager with its new memory driver and zero flags at 828F06C8. DecFIGS manager.h:199 declares the same typed SDK method. The 184-byte callee allocates and constructs the typed Device then appends it to the singleton manager list. The native implementation still differs in the condition register and list branch order."
+    },
+    "0x827EE868": {
+      "exported_name": null,
+      "symbol": "CgsGraphics::DispatchList::RelocateForMainMemory",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp",
+      "evidence": "DispatchFrame::RelocateForMainMemory at 827EE9B4 passes the typed list receiver and bin addresses. The 264-byte unwind extent walks the list chain, rebases its pointers and publishes the head. The native chain assertion at 827EE924 identifies CgsDispatcherCommands.cpp:3165."
+    },
+    "0x827E9590": {
+      "exported_name": null,
+      "symbol": "CgsGraphics::DispatchList::Append",
+      "size": 276,
+      "tu": "src/GameShared/GameClasses/Graphics/Dispatch/CgsGraphicsDispatchList.cpp",
+      "evidence": "BrnRendererModule::ConvertObjectsToMeshes calls this body with its typed destination and source lists. The 276-byte unwind extent validates the list-to-append receiver, links the source chain, and clears its formerly owned count, head, and tail. DecFIGS CgsDispatcher.h:202 corroborates the Append declaration."
+    },
+    "0x82815018": {
+      "exported_name": null,
+      "symbol": "CgsContainers::BaseLinkedList::InternalRemoveTail",
+      "native_symbol": "?InternalRemoveTail@BaseLinkedList@CgsContainers@@IAAPAUBaseLinkedListNode@2@XZ",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Containers/CgsLinkedList.cpp",
+      "evidence": "The original InternalRemoveNode branches at 0x828157B0 after comparing the requested node against mpLast. Its COFF branch at +0xA8 names the typed InternalRemoveTail. The disjoint 172-byte unwind body updates mpLast through the previous node, clears the detached node's links and returns it. DecFIGS CgsLinkedList.h:127 and CgsLinkedList.cpp:221/223 corroborate the existing signature and original assertion site."
+    },
+    "0x828103E0": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::CgsCollision::SweptSphereListWithTriangleListJobDesc::Prepare",
+      "size": 148,
+      "tu": "src/GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsSweptSphereListWithTriangleListJobDesc.cpp",
+      "caller": "0x82814080",
+      "call_site": "0x828140F0",
+      "evidence": "ARTIST CollideSweptSphereListWithTriangleList passes the typed swept sphere and triangle lists to this Prepare at 828140F0. The swept stream worker also calls the same descriptor method at 82925388 with its typed command lists. The body writes type 13 and its own CgsSweptSphereListWithTriangleListJobDesc.cpp alignment diagnostic, matching the 148-byte disjoint unwind extent."
+    },
+    "0x82B27798": {
+      "exported_name": null,
+      "symbol": "PingManagerDestroy",
+      "size": 112,
+      "tu": "vendor/dirtysdk/src/x360/pingmanager.c",
+      "evidence": "DecFIGS protopingmanager.c:364 and the existing DirtySDK declaration identify this destructor. ARTIST LobbyApiDestroy calls it at 82B1C878; the independently rebuilt exact native caller relocates PingManagerDestroy at +0x38. The 112-byte unwind extent matches all native instructions, refcount/BSS layout, and calls to original ProtoPingDestroy and DirtyMemFree."
+    },
+    "0x8286F378": {
+      "exported_name": "sub_8286F378",
+      "symbol": "CgsNetwork::ServerInterfaceDirtySock::GetComponent",
+      "size": 112,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/CgsServerInterfaceDirtySock.cpp",
+      "evidence": "DecFIGS CgsServerInterfaceDirtySock.h declares the const component getter. The ARTIST const status and error queries each call this address twice. Its range diagnostic uses original header line 746, which distinguishes it from the mutable getter at 82541698 and header line 738. The typed const native body is exact over the whole unwind extent."
     }
   },
   "native_leaf_functions": {
@@ -32136,6 +32188,14 @@
       "refhi_site": "0x82886EC0",
       "reflo_site": "0x82886EC8",
       "evidence": "The original JoinGame request passes this callback as its third StartGameManagerAction argument, with the same target loaded by CreateGame and QuickJoinGame. The native typed callback compares exactly in the disjoint 24-byte extent and tail-calls EndAction only for a nonzero LobbyApiMsgT code. The one direct branch reaches EndAction at 0x82877F48."
+    },
+    "0x82B1EE78": {
+      "symbol": "GameManagerOnline",
+      "size": 12,
+      "tu": "vendor/dirtysdk/src/x360/gamemanager.cpp",
+      "caller": "0x82875EF8",
+      "call_site": "0x828760A4",
+      "evidence": "ARTIST OnEvent reaches this three-instruction leaf with its typed game-manager reference and the LobbyApiUserT persona. The existing native provider uses its 16-byte strSelfName at offset 0x10E0 and tail-branches to ds_strnzcpy, matching the entire leaf. The next ARTIST body begins after the padding word at 82B1EE84."
     }
   },
   "sdk_archive_splits": {
