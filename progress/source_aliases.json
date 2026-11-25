@@ -515,7 +515,7 @@
     },
     "0x8284CB38": {
       "exported_name": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct",
-      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST.",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST. ARTIST BrnCoronaManager::Release loads its original buffer pointers from +0x10 and +0x0C, then calls 0x8284CB38 at 0x823F7764 and 0x823F776C. DecFIGS rwgcoronabuffer.h:44 and rwgcoronabuffer.cpp:37 attest the original out-of-line owner. Its native COFF body is the same 4-byte blr with no relocations.",
       "aliases": {
         "CTwoPassInfoList::~CTwoPassInfoList": "xmedia.lib:obj\\xbox\\twopass.obj",
         "CTwoPassStatsList::~CTwoPassStatsList": "xmedia.lib:obj\\xbox\\twopass.obj",
@@ -578,7 +578,8 @@
         "ShaderConstantTable::EndFrame": "src/GameShared/GameClasses/Graphics/CgsShaderConstants.cpp",
         "CgsDev::DebugComponent::Construct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
         "CgsDev::DebugComponent::Destruct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
-        "CgsDev::DebugComponent::Update": "The base Update is empty (CgsDebugComponent.cpp:326; PS3 CgsResource::DebugComponent::Update 0xCE3A84 calls the base through sub_CB0BAC), so the compiled method matches all 4 bytes, and CgsResource::DebugComponent::Update's base call at 0x828FF00C lands here."
+        "CgsDev::DebugComponent::Update": "The base Update is empty (CgsDebugComponent.cpp:326; PS3 CgsResource::DebugComponent::Update 0xCE3A84 calls the base through sub_CB0BAC), so the compiled method matches all 4 bytes, and CgsResource::DebugComponent::Update's base call at 0x828FF00C lands here.",
+        "renderengine::CoronaBuffer::Release": "src/SDKs/RenderEngineClub/MAIN/components/src/coronas/rwgcoronabuffer.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -17957,6 +17958,14 @@
       "byte_match": true,
       "file": "GameShared/GameClasses/SceneManager/TriangleCollision/CgsTriangleCollisionDebugComponent.h",
       "evidence": "ARTIST RegisterDrawCollisionPolyCallback passes the newly allocated callback index at 0x828AAF70. The 104-byte target compares it to the existing registered count, fires the header assertion at line 352, and returns a callback-array slot. Exact XDK body and all original data relocations verified."
+    },
+    "BrnNetwork::BrnNetworkModule::GetNetworkEvent": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetNetworkEventQueue",
+      "file": "GameSource/Network/BrnNetworkModule.cpp",
+      "x360_address": "0x82542D50",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST ProcessBeforeSimulation asserts mpNetworkModule->GetNetworkEventQueue() after calling 0x82542D50, then uses the same result as the typed NetworkEventQueue at 0x82563EF8. The getter asserts BrnNetworkModule.h:530 and returns the queue at +0xD01A8. DecFIGS declares NetworkEventQueue mNetworkEventQueue and the NetworkEventQueue* getter; the 164-byte native function matches in full."
     }
   },
   "sdk_entry_groups": {
@@ -27798,6 +27807,17 @@
       "source": "src/SDKs/EATech/include/Apt/AptValue/AptValue.cpp",
       "tu": "class:AptValue",
       "evidence": "The AptValue constructor call at 0x82ADCCD0 and both pool value constructor calls at 0x82AE5F70 and 0x82AE5FC8 use this same leaf. The original declaration takes a bool and returns void. The complete 132-byte XDK leaf matches the lock, defined-bit mutation and unlock up to the terminal return at 0x82AD8018, and its only relocation resolves the shared ARTIST lock at 0x8324E75C."
+    },
+    "0x822A6E68": {
+      "symbol": "BrnWorld::BoostBurnout2::OnPlayerAttacksRival",
+      "size": 172,
+      "previous_size": 148,
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostBurnout2.cpp",
+      "native_symbol": "?OnPlayerAttacksRival@BoostBurnout2@BrnWorld@@UAAXW4EImpactType@Vehicle@BrnPhysics@@@Z",
+      "caller": "0x822A6E68",
+      "call_site": "0x822A6E88",
+      "table_entry": "0x822A6E90",
+      "evidence": "The nudge table entry targets the omitted blr at 0x822A6F10, followed by a zero word at 0x822A6F14 and the next function at 0x822A6F18. DecFIGS BrnBoostBurnout2.h:78 and BrnBoostBurnout5.h:155 identify the original EImpactType overrides. All 172 XDK COFF bytes compare exact and all eight case-label relocations and the table base resolve to ARTIST. BoostBurnout5 vtable entry 0x820CEDDC points to the same body."
     }
   },
   "sdk_archive_splits": {
