@@ -1,21 +1,24 @@
 {
- "blob": "71c318e019b13292e344ec94a698eeaecd9d8b19",
- "commit": "e83614500e7ceea710eec385a0fb228154405d05",
+ "blob": "f349312e8a94bc4e1dd21944f4a41c8fc06722f7",
+ "commit": "57ef1779833b5415faa487f80c95ea103f930c39",
  "compiled": true,
- "measured": "2026-11-25T10:40:50Z",
+ "measured": "2026-11-25T10:50:37Z",
  "schema": 1,
  "source": "src/SDKs/EATech/Apt/AptValueGCPoolManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 13,
+ "unpaired": 12,
  "functions": [
   {"artist": "82846920", "artist_size": 16, "name": "AptValue::getVtblIndex", "score": 100.0, "size": 16, "status": "exact", "symbol": "?getVtblIndex@AptValue@@QBA?AW4AptVirtualFunctionTable_Indices@@XZ"},
   {"artist": "82AD48D0", "artist_size": 8, "name": "_DOGMA_MemPool::GetFirstItem", "score": 100.0, "size": 8, "status": "exact", "symbol": "?GetFirstItem@_DOGMA_MemPool@@QAAPAXXZ"},
+  {"artist": "82AD48D8", "artist_size": 52, "name": "_DOGMA_MemPool::PtrIsInThisPool", "score": 100.0, "size": 52, "status": "exact", "symbol": "?PtrIsInThisPool@_DOGMA_MemPool@@QBA_NPBX@Z"},
   {"artist": "82AD4910", "artist_size": 16, "name": "_DOGMA_MemPool::GetBytesUsed", "score": 100.0, "size": 16, "status": "exact", "symbol": "?GetBytesUsed@_DOGMA_MemPool@@QAAIXZ"},
+  {"artist": "82AD4E60", "artist_size": 44, "first_diff": 24, "name": "_AptValueGC_MemItem::IsAllocated", "score": 78.3, "size": 48, "status": "nonmatching", "symbol": "?IsAllocated@_AptValueGC_MemItem@@QAA_NI@Z"},
+  {"artist": "82AD4EE8", "artist_size": 44, "first_diff": 24, "name": "_AptValueGC_MemItem::GetSize", "score": 78.3, "size": 48, "status": "nonmatching", "symbol": "?GetSize@_AptValueGC_MemItem@@QAAII@Z"},
   {"artist": "82ADB7E0", "artist_size": 108, "data_unchecked": 5, "name": "AptValueGC_PoolManager::StaticInitialize", "score": 100.0, "size": 108, "status": "exact", "symbol": "?StaticInitialize@AptValueGC_PoolManager@@SAXXZ"},
   {"artist": "82ADBEF8", "artist_size": 96, "data_unchecked": 4, "name": "AptValueGC_PoolManager::AptValueGC_PoolManager", "score": 100.0, "size": 96, "status": "exact", "symbol": "??0AptValueGC_PoolManager@@QAA@II@Z"},
   {"artist": "82AE0BE0", "artist_size": 532, "first_diff": 4, "name": "AptValueGC_PoolManager::GetNextAptValue", "score": 41.8, "size": 520, "status": "nonmatching", "symbol": "?GetNextAptValue@AptValueGC_PoolManager@@QAAPAVAptValue@@PAV2@@Z"},
-  {"artist": "82AE0DF8", "artist_size": 192, "first_diff": 64, "name": "AptValueGC_PoolManager::GetFirstAptValue", "score": 49.6, "size": 260, "status": "nonmatching", "symbol": "?GetFirstAptValue@AptValueGC_PoolManager@@QAAPAVAptValue@@XZ"},
+  {"artist": "82AE0DF8", "artist_size": 192, "data_unchecked": 1, "name": "AptValueGC_PoolManager::GetFirstAptValue", "score": 100.0, "size": 192, "status": "exact", "symbol": "?GetFirstAptValue@AptValueGC_PoolManager@@QAAPAVAptValue@@XZ"},
   {"artist": "82AE57D8", "artist_size": 72, "data_unchecked": 1, "name": "AptValueGC_PoolManager::DeallocateAptValueGC", "score": 100.0, "size": 72, "status": "exact", "symbol": "?DeallocateAptValueGC@AptValueGC_PoolManager@@QAAXPAXI@Z"}
  ]
 }

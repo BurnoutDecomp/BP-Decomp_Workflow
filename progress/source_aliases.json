@@ -17972,6 +17972,46 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "ARTIST ProcessBeforeSimulation asserts mpNetworkModule->GetNetworkEventQueue() after calling 0x82542D50, then uses the same result as the typed NetworkEventQueue at 0x82563EF8. The getter asserts BrnNetworkModule.h:530 and returns the queue at +0xD01A8. DecFIGS declares NetworkEventQueue mNetworkEventQueue and the NetworkEventQueue* getter; the 164-byte native function matches in full."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@CameraShake@Utils@Camera@BrnDirector@@QAAXAAVDebugMen": {
+      "symbol": "BrnDirector::Camera::Utils::CameraShake::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "x360_address": "0x82215540",
+      "name_evidence": true,
+      "evidence": "The linked ARTIST call at 0x8224C560, 0x8224C778, 0x8224BF70 targets 0x82215540. The same native COFF call relocates to the complete template specialization defined in BrnCameraShake.cpp. All 119 characters of the truncated ARTIST mangling match the COFF symbol prefix."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@Looker@Utils@Camera@BrnDirector@@QAAXAAVDebugMenuSeri": {
+      "symbol": "BrnDirector::Camera::Utils::Looker::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "x360_address": "0x822156E0",
+      "name_evidence": true,
+      "evidence": "The linked ARTIST call at 0x8224BFA4, 0x8224C9C4, 0x8224C2A4 targets 0x822156E0. The same native COFF call relocates to the complete template specialization defined in BrnLookerSerialise.cpp. All 119 characters of the truncated ARTIST mangling match the COFF symbol prefix."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@AttachmentTruck@Camera@BrnDirector@@QAAXAAVDebugMenuS": {
+      "symbol": "BrnDirector::Camera::AttachmentTruck::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "x360_address": "0x82215A38",
+      "name_evidence": true,
+      "evidence": "The linked ARTIST call at 0x8224C2D4 targets 0x82215A38. The same native COFF call relocates to the complete template specialization defined in BrnAttachmentTruck.cpp. All 119 characters of the truncated ARTIST mangling match the COFF symbol prefix."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Parameters@CameraImpactEffect@Utils@Camera@BrnDirector@@QAAXAAVD": {
+      "symbol": "BrnDirector::Camera::Utils::CameraImpactEffect::Parameters::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "x360_address": "0x822327B0",
+      "name_evidence": true,
+      "evidence": "The linked ARTIST call at 0x82254278 targets 0x822327B0. The same native COFF call relocates to the complete template specialization defined in BrnCameraImpactEffect.cpp. All 119 characters of the truncated ARTIST mangling match the COFF symbol prefix."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@SceneManagerIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@SceneM": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsSceneManager::SceneManagerIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823AF668",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The 119-character export is the unique prefix of the complete typed native COFF symbol. WorldModule::PrepareWorldCollision calls this extent at 0x827C9530, and its CreateIOBuffer body calls the SceneManager output owner at 0x828C7CA0. DecFIGS CgsIOBufferStack.h:976 attests the OutputBuffer specialization. The native definition matches all 212 bytes with the branch relocations checked. The original pointer-to-pointer diagnostic and CgsIOBufferStack.h filename match the COFF strings."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@SceneManagerIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Scene": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::SceneManagerIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/Module/CgsIOBufferStack.h",
+      "x360_address": "0x823AF740",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The 119-character export is the unique prefix of the complete typed native COFF symbol. WorldModule::PrepareWorldCollision calls this extent at 0x827C963C, and its DestroyIOBuffer body calls the SceneManager output owner at 0x828BAD38. DecFIGS CgsIOBufferStack.h:986 attests the OutputBuffer specialization. The native definition matches all 216 bytes with the branch relocations checked. The original pointer-to-pointer diagnostic and CgsIOBufferStack.h filename match the COFF strings."
     }
   },
   "sdk_entry_groups": {
@@ -27096,6 +27136,13 @@
       "size": 296,
       "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleEmitterManager.cpp",
       "evidence": "ARTIST BindingsRemove at 0x82914D20 calls 0x829146D0 with cParticleEmitterManager::Instance (0x831238E8), a descriptor reference, the bindings reference and the optional sibling bindings pointer in r3-r6. The target tests descriptor behaviour flag 0x1000, matches descriptor ancestry via cParticleDescriptor::IsChildOf and rebinds the emitter or calls the single-emitter UnRegister at 0x82913760. DecFIGS ParticleEmitterManager.h:64 declares the descriptor-reference overload. The ARTIST .pdata extent is 296 bytes."
+    },
+    "0x82912BA8": {
+      "exported_name": null,
+      "symbol": "cLionFX::Dispatch",
+      "size": 168,
+      "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionFX.cpp",
+      "evidence": "ARTIST 0x82912BA8 saves six floating arguments and forwards the native vertex buffer, Lion batch array, Z-fade flag, six floats and texture-state stack argument to cParticleRender::Dispatch at 0x82912C3C, after checking the same singleton guard as cLionFX::Render. DecFIGS LionFX.h:79 declares the nine-argument static Dispatch. Native XDK bytes match all 168 bytes outside verified relocations, and the ARTIST extent is independently recorded by .pdata."
     }
   },
   "native_leaf_functions": {
@@ -27865,6 +27912,16 @@
       "table_entry": "0x822A5FEC",
       "evidence": "Default jump-table entry 0x822A5FEC targets the omitted blr at 0x822A6088. Zero alignment word at 0x822A608C precedes SetBoostRequested at 0x822A6090. DecFIGS BrnBoostStrategy.h:424 gives OnModeStart(EGameModeType,bool). The original separate float assignments are exact over all 196 bytes, with all 14 case targets and the table base resolved to ARTIST.",
       "native_symbol": "?OnModeStart@BoostStrategy@BrnWorld@@QAAXW4EGameModeType@GameStateModuleIO@BrnGameState@@_N@Z"
+    },
+    "0x82C74928": {
+      "symbol": "`cParticleRender::Instance'::`2'::`dynamic atexit destructor for 'm_instance''",
+      "size": 4,
+      "native_symbol": "??__Fm_instance@?1??Instance@cParticleRender@@SAAAV1@XZ@YAXXZ",
+      "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionFX.cpp",
+      "caller": "0x82915758",
+      "refhi_site": "0x82915784",
+      "reflo_site": "0x82915788",
+      "evidence": "ARTIST cLionFX::Update passes this address to CRT atexit at 0x82915790 after setting the render singleton guard at 0x82FAD080. Render and Dispatch register the identical callback. The callback is a single blr, bounded by zero words at 0x82C74924 and 0x82C7492C. DecFIGS ParticleRender.h:172 names the original destructor. The XDK atexit callback symbol has all four identical bytes with no relocations."
     }
   },
   "sdk_archive_splits": {
