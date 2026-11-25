@@ -19961,6 +19961,27 @@
       "x360_address": "0x8270C068",
       "byte_match": true,
       "evidence": "Original ARTIST branch 0x8274BEB4 targets this body. TrafficEntityModule::HandleExternalRequests calls GetItem and passes the returned 64-bit region ID into FireKillZone. DecFIGS BrnGameActions.h declares the kill-zone region IDs as Array<CgsID,32>; the typed native caller uses this exact const overload. DecFIGS CgsID.h:195 gives the unsigned 64-bit element type. The original 264-byte .pdata extent matches outside relocation fields; all 11 branch targets and 9 data references match the existing PowerPC COFF provider."
+    },
+    "BrnWorld::PropEntityIO::PropInstancesNeededForZoneEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropInstancesNeededForZoneEvent>::AddEvent",
+      "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+      "x360_address": "0x822C8FE8",
+      "byte_match": true,
+      "evidence": "ARTIST BrnWorld::WorldEntityModule::UpdateStream calls this queue specialization at 0x822F99A4, and its diagnostic at 0x8201B3E8 spells the event type with the class key. DecFIGS BrnPropEntityModuleIO.h:119-175 corroborates the two-byte zone ID and its Construct/GetZone methods. The native 312-byte .pdata body matches with all 10 branch relocations and 10 data references verified."
+    },
+    "BrnWorld::PropEntityIO::PropGraphicsLoadedEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropGraphicsLoadedEvent>::AddEvent",
+      "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+      "x360_address": "0x822C9120",
+      "byte_match": true,
+      "evidence": "ARTIST BrnWorld::WorldEntityModule::OnWorldGraphicsLoadComplete calls this queue specialization at 0x822D7880, and its diagnostic at 0x8201B450 spells the event type with the class key. DecFIGS BrnPropEntityModuleIO.h:119-175 corroborates the two-byte zone ID and its Construct/GetZone methods. The native 312-byte .pdata body matches with all 10 branch relocations and 10 data references verified."
+    },
+    "BrnWorld::PropEntityIO::PropGraphicsUnloadedEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropGraphicsUnloadedEvent>::AddEvent",
+      "file": "GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModule.cpp",
+      "x360_address": "0x822C9258",
+      "byte_match": true,
+      "evidence": "ARTIST BrnWorld::WorldEntityModule::OnWorldGraphicsUnloadBegin calls this queue specialization at 0x822D7CF4, and its diagnostic at 0x8201B4B0 spells the event type with the class key. DecFIGS BrnPropEntityModuleIO.h:119-175 corroborates the two-byte zone ID and its Construct/GetZone methods. The native 312-byte .pdata body matches with all 10 branch relocations and 10 data references verified."
     }
   },
   "sdk_entry_groups": {
@@ -31773,7 +31794,7 @@
       "symbol": "_TagFieldSetupCancel",
       "size": 128,
       "tu": "vendor/dirtysdk/src/lobbytagfield.c",
-      "evidence": "DecFIGS lobbytagfield.c:387 declares the two original buffer pointers. ARTIST TagFieldSetRaw branches here at 82B1A348 and the exact native caller relocates _TagFieldSetupCancel at the matching location. The original 128-byte unwind extent walks backward to the divider and terminates the canceled record. The helper body remains nonmatching."
+      "evidence": "DecFIGS lobbytagfield.c:387 declares the two original buffer pointers. ARTIST TagFieldSetRaw branches here at 82B1A348, and the exact native caller relocates _TagFieldSetupCancel at the matching location. The complete 128-byte XDK object matches the original unwind extent, the original truncation diagnostic text, and the DirtyLib print dispatch slot initialized to NetPrintfCode."
     },
     "0x82BAA258": {
       "exported_name": null,
@@ -31795,6 +31816,70 @@
       "size": 168,
       "tu": "src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_OutputBuffer.cpp",
       "evidence": "DecFIGS CgsBundleLoaderModuleIO.h:152 declares this write-locked queue accessor. ARTIST checks the write lock and returns the typed queue at +0x1342C, with the original streamed diagnostic on failure."
+    },
+    "0x828E9BC8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::LinearSOAHashTable<int,int>::Initialize",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/System/FileSystem/CgsPatchManager.cpp",
+      "evidence": "ARTIST PatchManager::Construct uses its SOA member at offset 0x888 and branches at 0x828F0A60 to this 248-byte entry. Its existing XDK typed instance takes paired s32 arrays and an unsigned-width slot count. The native call relocates to that initializer and its streamed assertion matches the original SOA header at line 167. All six branch and seven data operands were verified."
+    },
+    "0x822BA570": {
+      "exported_name": "sub_822BA570",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetPropInstancesNeededForZoneQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_PreScene.cpp",
+      "evidence": "ARTIST BrnWorld::WorldEntityModule::UpdateStream calls this mutable output getter at 0x822F999C and sends the zone notification to the returned queue at 0x822F99A4. The getter checks the write lock, streams the original diagnostic at BrnWorldEntityModuleIO.h:130 and returns this+4. DecFIGS :130 names the matching mutable API. The const sibling at 0x827A2B30 checks the read lock at :129. The 164-byte native .pdata body matches all code, 6 direct relocations and 7 linked assertion data accesses."
+    },
+    "0x822B90A8": {
+      "exported_name": "sub_822B90A8",
+      "symbol": "BrnWorld::PropEntityIO::InputBuffer_PreScene::GetPropGraphicsLoadedQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_InputBuffer_PreScene.cpp",
+      "evidence": "ARTIST BrnWorld::PropEntityModule::PreSceneUpdate calls this const getter at 0x8230A060. It checks the read lock with source assertion line 452 and returns the queue at this+0x4C. DecFIGS BrnPropEntityModuleIO.h:449 names the accessor and its const queue pointer type. The 164-byte native .pdata body matches all code, 6 direct relocations and 7 linked assertion data accesses."
+    },
+    "0x822B9150": {
+      "exported_name": "sub_822B9150",
+      "symbol": "BrnWorld::PropEntityIO::InputBuffer_PreScene::GetPropGraphicsUnloadedQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_InputBuffer_PreScene.cpp",
+      "evidence": "ARTIST BrnWorld::PropEntityModule::PreSceneUpdate calls this const getter at 0x82309D48. It checks the read lock with source assertion line 455 and returns the queue at this+0x8C. DecFIGS BrnPropEntityModuleIO.h:452 names the accessor and its const queue pointer type. The 164-byte native .pdata body matches all code, 6 direct relocations and 7 linked assertion data accesses."
+    },
+    "0x822B91F8": {
+      "exported_name": "sub_822B91F8",
+      "symbol": "BrnWorld::PropEntityIO::InputBuffer_PreScene::GetPropInstancesNeededForZoneQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModuleIO_InputBuffer_PreScene.cpp",
+      "evidence": "ARTIST BrnWorld::PropEntityModule::PreSceneUpdate calls this const getter at 0x8230AD18. It checks the read lock with source assertion line 458 and returns the queue at this+0x4. DecFIGS BrnPropEntityModuleIO.h:455 names the accessor and its const queue pointer type. The 164-byte native .pdata body matches all code, 6 direct relocations and 7 linked assertion data accesses."
+    },
+    "0x82BBDD00": {
+      "exported_name": null,
+      "symbol": "rw::core::filesys::XenonFileDeviceDriver::QueryLocation",
+      "native_symbol": "?QueryLocation@XenonFileDeviceDriver@filesys@core@rw@@UAA_KPAX@Z",
+      "size": 64,
+      "tu": "src/SDKs/EATech/rwcore/filesys/xenonfiledriver.cpp",
+      "evidence": "ARTIST XenonFileDeviceDriver vtable 0x82181230+0x28 and the native COFF vtable both select this slot between Resize and GetMaxReadSize. DecFIGS device.h:236 provides the QueryLocation declaration. All 64 bytes match with the single XGetFilePhysicalSortKey branch at 0x82BBDD10."
+    },
+    "0x82C208F0": {
+      "exported_name": null,
+      "symbol": "XGetFilePhysicalSortKey",
+      "size": 88,
+      "sdk_provider": {
+        "lib": "xapilib.lib",
+        "member": "obj\\xbox\\xgetfilephysicalsortkey.obj",
+        "archive_symbol": "XGetFilePhysicalSortKey",
+        "archive_data_targets": {
+          "_fileIoHooks": "0x82F36D0C"
+        }
+      },
+      "evidence": "XDK 6534.4 xapilib.lib matches all 88 ARTIST bytes, with the RtlSetLastNTError branch at 0x82C20928 and the _fileIoHooks pointer independently anchored by SetFilePointerEx. The verified XenonFileDeviceDriver::QueryLocation call at 0x82BBDD10 identifies this target."
+    },
+    "0x82B64D00": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::CombFilter::CombFilterApplyFunc",
+      "size": 132,
+      "tu": "vendor/renderware/src/rw/audio/core/ReverbFilters.cpp",
+      "evidence": "A matching-platform SDK symbol map corroborates the CombFilter static apply callback and IFilter::LocationParams signature. ARTIST ReverbModel1::Process loads 0x82B64D00 at 0x82B9F81C and 0x82B9F824 and installs it in the six comb apply slots at 0x82B9F834. The existing disjoint unwind body calls CombFilterFunc and writes the returned state to the comb instance. Native COFF matches all 132 bytes and both branch targets."
     }
   },
   "native_leaf_functions": {
@@ -32792,6 +32877,15 @@
       "size": 12,
       "tu": "src/SDKs/EATech/include/Apt/AptScriptFunction2.cpp",
       "evidence": "ARTIST AptScriptFunction2 vtable cell 0x82145D5C identifies GetByteCodeSize. Its adjacent 12-byte body loads the compiled bytecode record at +0x30 then the body length at record +0x10, followed by blr and alignment. The native override matches all three instructions."
+    },
+    "0x82B3C580": {
+      "symbol": "CommTCPCallback",
+      "size": 20,
+      "tu": "vendor/dirtysdk/src/x360/commtcp_native_x360.cpp",
+      "caller": "0x82B3CB88",
+      "refhi_site": "0x82B3CC2C",
+      "reflo_site": "0x82B3CC44",
+      "evidence": "DecFIGS DirtySDK 5.5.3 commtcp.c:674 declares the CommTCP callback setter. ARTIST CommTCPConstruct materializes 0x82B3C580 at 0x82B3CC2C/0x82B3CC44 and installs it into the typed callback slot +0x20 at 0x82B3CC60. The complete 20-byte leaf stores the callback pointer at +0x21c, sets the event bit 2 at +0x218, and returns. Both native builds match all five words with zero relocations."
     }
   },
   "sdk_archive_splits": {
