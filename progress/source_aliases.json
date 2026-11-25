@@ -654,7 +654,11 @@
         "EA::Thread::Mutex::~Mutex": "src/SDKs/EATech/eathread/eathread_mutex.cpp",
         "MassiveAdClient3::MassiveLog": "src/SDKs/Packages/MassiveAd/MassiveAdClient3ClientCore.cpp",
         "rw::core::filesys::DefaultCompletion": "src/SDKs/EATech/rwcore/filesys/asyncop.cpp",
-        "EA::Jobs::EntryPoint::SetCodeRecycle": "src/SDKs/EATech/eajobs/entrypoint.cpp"
+        "EA::Jobs::EntryPoint::SetCodeRecycle": "src/SDKs/EATech/eajobs/entrypoint.cpp",
+        "VP6_VPDeInitLibrary": "src/SDKs/EATech/include/Common/vp6/vp6_api.cpp"
+      },
+      "call_evidence": {
+        "VP6_VPDeInitLibrary": "ARTIST MoviePlayer::ReleaseResources at 827EF290 calls the single-return native playback shutdown after releasing the stream buffers and before resetting vp6::SetAllocator. The same lifecycle calls VP6_VPInitLibrary at 827FAFF4. The parallel On2 encoder source declares the pair and calls VP6_VPDeInitLibrary from VPEDeInitLibrary."
       }
     },
     "0x82579CC8": {
@@ -3264,17 +3268,18 @@
       "evidence": "CgsResourcePtr_rw_graphics_postfx_ColourCube.cpp explicitly instantiates GetMemoryResource; baked assertion line 581 identifies the accessor, rather than operator-> or operator*."
     },
     "rw::math::vpu::Vector3>::Push": {
-      "symbol": "CgsContainers::RingBuffer::Push",
-      "file": "GameShared/GameClasses/Containers/CgsRingBuffer.h",
+      "symbol": "CgsContainers::RingBuffer<rw::math::vpu::Vector3>::Push",
+      "file": "GameSource/GameState/ModeManager/Scoring/RingBuffer_Vector3.cpp",
       "x360_address": "0x823194C0",
-      "evidence": "RingBuffer_Vector3.cpp explicitly instantiates the generic body and documents ARTIST offsets, 16-byte element stride, cursor advance and full-buffer handling."
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x8232C8D8 and the native typed relocation in BrnGameState::StuntModeScoring::UpdateAirStunts both identify this specialization. DecFIGS BrnStuntModeScoring.h declares the 256-entry RecentJumpSet of rw::math::vpu::Vector3. The original export preserves the element and Push method. The original 256-byte .pdata body matches every instruction outside relocation fields, with all 7 direct and 7 data references resolved."
     },
     "rw::math::vpu::Vector3>::operator[]": {
-      "symbol": "CgsContainers::RingBuffer::operator[]",
-      "const": false,
-      "file": "GameShared/GameClasses/Containers/CgsRingBuffer.h",
+      "symbol": "CgsContainers::RingBuffer<rw::math::vpu::Vector3>::operator[]",
+      "file": "GameSource/GameState/ModeManager/Scoring/RingBuffer_Vector3.cpp",
       "x360_address": "0x823195C0",
-      "evidence": "RingBuffer_Vector3.cpp explicitly instantiates the non-const accessor; ARTIST range assertion, modulo indexing and 16-byte stride match the generic body."
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x8232C878 and the native typed relocation in BrnGameState::StuntModeScoring::UpdateAirStunts both identify this specialization. DecFIGS BrnStuntModeScoring.h defines RecentJumpSet as FixedRingBuffer<rw::math::vpu::Vector3,256>. The original assertion line 258 and native call identify the mutable subscript. The original 136-byte .pdata body matches every instruction outside relocation fields, with all 3 direct and 2 data references resolved."
     },
     "rw::math::vpu::Vector3>::Record": {
       "symbol": "CgsSound::Utils::Average<9u,Vector3>::Record",
@@ -3963,10 +3968,11 @@
       "evidence": "Export name princeton_digital::stereo_room_t<float>::wet_dry_mix_set; body multiplies f1 by the dumped 0.0099999998 and stores this+0x5C, called from XAUDIO::CStereoRoomFloat::Process; generic in-class body instantiated for float."
     },
     "rw::math::vpu::Vector4>::FreeObject": {
-      "symbol": "BrnDirector::AbstractPool::FreeObject",
-      "file": "GameSource/Director/Utils/BrnAbstractPool.h",
+      "symbol": "BrnDirector::AbstractPool<250,8,rw::math::vpu::Vector4>::FreeObject",
+      "file": "GameSource/Director/BrnMainDirector.cpp",
+      "evidence": "The ARTIST 8-byte callback adjusts this to the ObjectPool member and tail-branches at 0x827DE4AC to the proven specialization at 0x827DDA08. The exact native AbstractPool wrapper has the same this adjustment and its only relocation carries the full typed destination.",
       "x360_address": "0x827DE4A8",
-      "evidence": "AbstractPool<250,8,rw::math::vpu::Vector4>::FreeObject: sole slot of its one-word free-interface vtable; body adds +0x10 (the embedded ObjectPool) and tail-calls ObjectPool<Vector4[250],8,int>::FreeObject (IDB callee name '_250__8_int___FreeObject')."
+      "byte_match": true
     },
     "??$Dispatch@VDevice@renderengine@@@MeshHelper@renderengine@@QBAXPAVDevice@1@@Z": {
       "symbol": "renderengine::MeshHelper::Dispatch<renderengine::Device>",
@@ -19982,6 +19988,55 @@
       "x360_address": "0x822C9258",
       "byte_match": true,
       "evidence": "ARTIST BrnWorld::WorldEntityModule::OnWorldGraphicsUnloadBegin calls this queue specialization at 0x822D7CF4, and its diagnostic at 0x8201B4B0 spells the event type with the class key. DecFIGS BrnPropEntityModuleIO.h:119-175 corroborates the two-byte zone ID and its Construct/GetZone methods. The native 312-byte .pdata body matches with all 10 branch relocations and 10 data references verified."
+    },
+    "[250],8,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [250],8,int>::FreeObject",
+      "file": "GameSource/Director/Camera/ObjectPool_LargeBehaviour_8.cpp",
+      "x360_address": "0x827DDA08",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x827DE4AC and the native typed relocation in BrnDirector::AbstractPool<250,8,rw::math::vpu::Vector4>::FreeObject both identify this specialization. DecFIGS BrnAbstractPool.h declares AbstractPool<250,8,Vector4>::mObjectPool with the matching 250-element bucket, capacity eight and signed index. The original 464-byte .pdata body matches every instruction outside relocation fields, with all 20 direct and 13 data references resolved."
+    },
+    "[70],20,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [70],20,int>::FreeObject",
+      "file": "GameSource/Director/MomentController/ObjectPool_MomentBucket_20.cpp",
+      "x360_address": "0x827DD838",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x827DE4BC and the native typed relocation in BrnDirector::AbstractPool<70,20,rw::math::vpu::Vector4>::FreeObject both identify this specialization. DecFIGS BrnAbstractPool.h declares AbstractPool<70,20,Vector4>::mObjectPool with the matching 70-element bucket, capacity 20 and signed index. The original 464-byte .pdata body matches every instruction outside relocation fields, with all 20 direct and 13 data references resolved."
+    },
+    "[100],20,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [100],20,int>::FreeObject",
+      "file": "GameSource/Director/Camera/ObjectPool_SmallBehaviourPool_100.cpp",
+      "x360_address": "0x827DDBD8",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x827DE4B4 and the native typed relocation in BrnDirector::AbstractPool<100,20,rw::math::vpu::Vector4>::FreeObject both identify this specialization. DecFIGS BrnAbstractPool.h declares AbstractPool<100,20,Vector4>::mObjectPool with the matching 100-element bucket, capacity 20 and signed index. The original 464-byte .pdata body matches every instruction outside relocation fields, with all 20 direct and 13 data references resolved."
+    },
+    "BrnAI::ResetOnTrackDebugComponent::ResetEntry>::Push": {
+      "symbol": "CgsContainers::RingBuffer<BrnAI::ResetOnTrackDebugComponent::ResetEntry>::Push",
+      "file": "GameSource/World/AI/ResetOnTrack/RingBuffer_ResetEntry.cpp",
+      "x360_address": "0x82769BA8",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x82778D34 and the native typed relocation in BrnAI::ResetOnTrackDebugComponent::PushResetInfo both identify this specialization. DecFIGS BrnResetOnTrackDebugComponent.h declares the 16-entry mResetRingBuffer of ResetEntry and the PushResetInfo API. The original export retains the full nested record name. The original 292-byte .pdata body matches every instruction outside relocation fields, with all 7 direct and 7 data references resolved."
+    },
+    "BrnAI::ResetOnTrackDebugComponent::HngTestEntry>::Push": {
+      "symbol": "CgsContainers::RingBuffer<BrnAI::ResetOnTrackDebugComponent::HngTestEntry>::Push",
+      "file": "GameSource/World/AI/ResetOnTrack/RingBuffer_HngTestEntry.cpp",
+      "x360_address": "0x82769D60",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x82778E14 and the native typed relocation in BrnAI::ResetOnTrackDebugComponent::PushHngTestInfo both identify this specialization. DecFIGS BrnResetOnTrackDebugComponent.h declares the 16-entry mHngTestRingBuffer of HngTestEntry. The original export retains the full nested record name. The original 292-byte .pdata body matches every instruction outside relocation fields, with all 7 direct and 7 data references resolved."
+    },
+    "BrnAI::ResetOnTrackManager::RecentResetEntry>::Push": {
+      "symbol": "CgsContainers::RingBuffer<BrnAI::ResetOnTrackManager::RecentResetEntry>::Push",
+      "file": "GameSource/World/AI/ResetOnTrack/RingBuffer_RecentResetEntry.cpp",
+      "x360_address": "0x8276A090",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x8279A118 and the native typed relocation in BrnAI::ResetOnTrackManager::ProcessResetOnTrackRequest both identify this specialization. DecFIGS BrnResetOnTrackManager.h declares FixedRingBuffer<RecentResetEntry,8> mRecentResets. The original export retains the full nested record name. The original 284-byte .pdata body matches every instruction outside relocation fields, with all 7 direct and 7 data references resolved."
+    },
+    "CgsSound::Logi": {
+      "symbol": "CgsContainers::ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>::operator[]",
+      "file": "GameShared/GameClasses/Sound/Logic/ObjectPool_StateManagerRegisteredContent_4.cpp",
+      "x360_address": "0x826A73B8",
+      "byte_match": true,
+      "evidence": "ARTIST branch 0x826C77E4 and the native typed relocation in CgsSound::Logic::StateManager::RegisterContent both identify this specialization. DecFIGS CgsStateManager.h declares ObjectPool<RegisteredContent,4,int32_t> mRegisteredContentPool. RegisterContent calls this typed mutable accessor and ARTIST uses the 218/219 assertion pair. The original 348-byte .pdata body matches every instruction outside relocation fields, with all 14 direct and 11 data references resolved."
     }
   },
   "sdk_entry_groups": {
@@ -31880,6 +31935,20 @@
       "size": 132,
       "tu": "vendor/renderware/src/rw/audio/core/ReverbFilters.cpp",
       "evidence": "A matching-platform SDK symbol map corroborates the CombFilter static apply callback and IFilter::LocationParams signature. ARTIST ReverbModel1::Process loads 0x82B64D00 at 0x82B9F81C and 0x82B9F824 and installs it in the six comb apply slots at 0x82B9F834. The existing disjoint unwind body calls CombFilterFunc and writes the returned state to the comb instance. Native COFF matches all 132 bytes and both branch targets."
+    },
+    "0x827DE4B8": {
+      "symbol": "BrnDirector::AbstractPool<70,20,rw::math::vpu::Vector4>::FreeObject",
+      "evidence": "The ARTIST 8-byte callback adjusts this to the ObjectPool member and tail-branches at 0x827DE4BC to the proven specialization at 0x827DD838. The exact native AbstractPool wrapper has the same this adjustment and its only relocation carries the full typed destination.",
+      "exported_name": "sub_827DE4B8",
+      "size": 8,
+      "tu": "src/GameSource/Director/BrnMainDirector.cpp"
+    },
+    "0x827DE4B0": {
+      "symbol": "BrnDirector::AbstractPool<100,20,rw::math::vpu::Vector4>::FreeObject",
+      "evidence": "The ARTIST 8-byte callback adjusts this to the ObjectPool member and tail-branches at 0x827DE4B4 to the proven specialization at 0x827DDBD8. The exact native AbstractPool wrapper has the same this adjustment and its only relocation carries the full typed destination.",
+      "exported_name": "sub_827DE4B0",
+      "size": 8,
+      "tu": "src/GameSource/Director/BrnMainDirector.cpp"
     }
   },
   "native_leaf_functions": {
