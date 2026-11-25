@@ -1884,6 +1884,22 @@
     }
   },
   "functions": {
+    "CgsSceneManager::SceneManagerIO::InEventVolumeTestDeepest>::AddEve": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventVolumeTestDeepest>::AddEvent",
+      "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventVolumeTestDeepest_AddEvent.cpp",
+      "x360_address": "0x82210870",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822171A0 calls from the typed SceneQueryInterface producer. The overflow literal names the exact event class. DecFIGS CgsBaseEventQueue.h:310 declares the const-reference member. The native 404-byte body matches all branches and diagnostic data, including the four matrix rows and 128-byte volume copy."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepest": {
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult,10>::AddPostBox",
+      "file": "GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "x360_address": "0x8222D628",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822331B4 calls through the Director wrapper's typed mpVolumeTestDeepestPostOffice at +0x18. DecFIGS BrnSceneQueryInterface.h:169 declares that member as PostOffice<OutEventVolumeTestDeepestResult,10>. The callee checks capacity 10 at 0x8222D674, posts the pointer in r29, sets its state to waiting at 0x8222D714, and returns the prior slot index at 0x8222D74C. This identifies the existing AddPostBox call target."
+    },
     "CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::AddEvent",
       "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
@@ -17722,6 +17738,20 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "ARTIST reads the instantiated name from 0x820F1D68 as CgsModule::BaseEventQueue<class CgsPhysics::PhysicsSimulationIO::OutUpdateRigidBody>::AddEvent. The XDK const-reference queue body matches 332 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
+    },
+    "CgsGui::CgsGuiModuleIO::OutputBuffer:": {
+      "symbol": "CgsGui::CgsGuiModuleIO::OutputBuffer::GetGuiResourceRequestQueue",
+      "x360_address": "0x8284F2E0",
+      "name_evidence": true,
+      "evidence": "The original getter checks IOBuffer read-lock bit 4, asserts at CgsGuiModuleIO.cpp:198 with Not locked for reading, and returns the resource request queue at this+4. DecFIGS CgsGuiModuleIO.h:27/133 gives the const overload and native CgsGuiModuleIO.h attests the typed ResourceRequestQueue<2048> at that offset. DoUpdate_GuiPreWorld calls this address at 0x823DCE10 and then appends its result."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarO": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::GetRaceCarState",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp",
+      "const": true,
+      "x360_address": "0x8227D690",
+      "name_evidence": true,
+      "evidence": "DecFIGS BrnRaceCarEntityModuleOutputInterface.h:220 and LegacySrc lines 528–536 declare and define the const getter with all three guards. ARTIST uses the same guards on lines 790–792 and returns the typed 1120-byte slot. The named RaceCarCache::Update call at 0x826BF53C relocates to the const getter. Its XDK body remains 252 bytes against 172 because it inlines IsRaceCarActive."
     }
   },
   "sdk_entry_groups": {
