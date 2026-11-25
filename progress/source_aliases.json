@@ -18693,17 +18693,17 @@
       "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::FreeObject",
       "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
       "x360_address": "0x828B75D0",
-      "byte_match": false,
+      "byte_match": true,
       "name_evidence": true,
-      "evidence": "ARTIST 828CFE38 passes VolumeManager+0x94A50 and the typed volume-pool index. The target pushes the free index and clears the occupancy bit. DecFIGS CgsObjectPool.h:203 declares FreeObject. This is a call identity and the helper body remains nonmatching."
+      "evidence": "ARTIST 828CFE38: VolumeManager::RemoveVolume frees its typed volume record at +0x94A50. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
     },
     "CgsSceneManager::VolumeMan": {
       "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::operator[]",
       "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
       "x360_address": "0x828B7910",
-      "byte_match": false,
+      "byte_match": true,
       "name_evidence": true,
-      "evidence": "ARTIST 828CFE10 and 828CFF2C dereference the mutable VolumeManagerVolume pool at VolumeManager+0x94A50. The result supplies the static flag at +0x18 and store slot at +0x14. DecFIGS describes the original mutable subscript. The typed call identity is established and the helper body remains nonmatching."
+      "evidence": "ARTIST 828CFE10: VolumeManager::RemoveVolume accesses the mutable volume record at +0x94A50. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
     },
     "int,227>:": {
       "symbol": "CgsContainers::IndexedHashTable<CgsSceneManager::VolumeId,unsigned int,227>::Get",
@@ -18760,6 +18760,141 @@
       "x360_address": "0x82760660",
       "byte_match": true,
       "evidence": "ARTIST TrafficDataResourceType vtable at 0x820A1520 places the descriptor in slot 1, after GetTypeID 0x82752560 and before the FixDown and FixUp slots. The full owner declaration and all 164 code bytes agree with the truncated export."
+    },
+    "CgsSceneManager::SceneManagerEntity,10000,int>::Clear": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::Clear",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828B8E30",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C5FDC: EntityManager::Prepare clears its leading entity pool. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeInstance,5048,int>::Clear": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::Clear",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828AEB00",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C5FE8: EntityManager::Prepare clears the pool at +0x27600. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeSlot,4608,int>::Clear": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::Clear",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp",
+      "x360_address": "0x828B9218",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFD4C: VolumeManager::Prepare clears the leading VolumeStore slot pool. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeManagerVolume,5048,int>::Clear": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::Clear",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828AEB70",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CFD60: VolumeManager::Prepare clears the pool at +0x94A50. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsDev::DebugUI::Window>::Add": {
+      "symbol": "CgsDev::Internal::DebugLinkedList<CgsDev::DebugUI::Window>::Add",
+      "file": "GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "x360_address": "0x82820F98",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The Window-list receiver, DebugUI's member at offset 4, is passed by DebugUI::AddWindow at 82828EC8. DecFIGS CgsDevelopmentUnity confirms this specialization; the intrusive next pointer at Window +0x20 is accessed by the callee."
+    },
+    "CgsDev::DebugUI::Variable>::A": {
+      "symbol": "CgsDev::Internal::DebugStaticPool<CgsDev::DebugUI::Variable>::Allocate",
+      "file": "GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "x360_address": "0x82827908",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "VariableManager::RegisterVariable at 82829AF4 passes mVariablePool at offset 0 and initializes the returned Variable's Variant, name, and metadata link. DecFIGS CgsDevelopmentUnity declares this specialization and CgsVariableManager.cpp:599 identifies its allocation."
+    },
+    "CgsDev::DebugUI::Menu": {
+      "symbol": "CgsDev::Internal::DebugStaticPool<CgsDev::DebugUI::MenuItemVariable>::Allocate",
+      "file": "GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "x360_address": "0x82827B10",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "VariableManager::RegisterVariable at 82829B38 passes mMenuItemPool at offset 0x14 and appends the MenuItemVariable before its virtual Prepare call. DecFIGS CgsDevelopmentUnity declares this specialization and CgsVariableManager.cpp:608 identifies its allocation."
+    },
+    "CgsDev::DebugUI::Vari": {
+      "symbol": "CgsDev::Internal::DebugStaticPool<CgsDev::DebugUI::VariableMetadata>::Allocate",
+      "file": "GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "x360_address": "0x82827D18",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "VariableManager::SetMetadata at 82829A28 passes mMetadataPool at offset 0x28 and initializes the returned VariableMetadata head before Variable::AddMetadata. DecFIGS CgsDevelopmentUnity declares this pool specialization and CgsVariableManager.cpp:418 records its call."
+    },
+    "BrnGameState::GameStateModuleIO::CarScoreData::op": {
+      "symbol": "BrnGameState::GameStateModuleIO::CarScoreData::operator=",
+      "file": "GameSource/GameState/BrnGameStateSharedIO.cpp",
+      "x360_address": "0x821F4740",
+      "byte_match": true,
+      "evidence": "ARTIST VehicleTracker::Update branches here at 0x8223B428 to copy into its typed CarScoreData member at +0x170. RaceCarEntityModule::UpdateBoost calls it at 0x82304CF4 with the source selected from 296-byte records. The routine copies the nine-element Time array and two 32-bit fields at +0x100 and +0x104, and returns the destination in r3. The typed XDK assignment matches all 644 bytes without relocations."
+    },
+    "CgsPhysics::Phys": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutContactSpy>::GetEvent",
+      "file": "GameSource/Physics/BrnPhysicsModuleUpdateFunctions.cpp",
+      "x360_address": "0x8259D3C8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST Update call 0x825B11B0 targets the mutable 164-byte OutContactSpy accessor. The typed XDK Update call targets QAAAAV; the distinct const consumer ProcessContactSpies calls 0x8259D470 and relocates against QBAABV. DecFIGS CgsBaseEventQueue.h:270 and :290 declare both overloads. ARTIST and native bind the same three messages, header path, 292/294/295 assertion lines, 112-byte element stride and all eleven branch targets. The shared GetEvent definition already emits this mutable body."
+    },
+    "CgsSceneManager::VolumeInstance,5048,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::FreeObject",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828B7000",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CDA48: SceneManagerModule::RemoveAllEntityVolumeInstances frees the typed pool at EntityManager+0x27600. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::SceneManagerEntity,10000,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::FreeObject",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828B6A28",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CD770: EntityManager::RemoveEntity frees its typed entity pool index. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::Scen": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::SceneManagerEntity,10000,int>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/CgsEntityManager.cpp",
+      "x360_address": "0x828B6C08",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C5E40: EntityManager::GetFirstEntityVolumeInstance reads the const entity slot. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::Vol": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828B77B0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C5EF4: VolumeManager::GetRwVolume reads the const volume record at +0x94A50. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeSlot,4608,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::FreeObject",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp",
+      "x360_address": "0x828B9030",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C418C: VolumeStore::RemoveVolume frees its typed slot at offset zero. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeSlot,4608,in": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp",
+      "x360_address": "0x828B93E0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828CC288: VolumeStore::ReplaceVolume updates the mutable typed slot. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
+    },
+    "CgsSceneManager::VolumeSlot,4": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::operator[]",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp",
+      "x360_address": "0x828B9280",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 828C5F30: VolumeManager::GetRwVolume reads the const VolumeSlot at the selected store offset. DecFIGS CgsObjectPool.h declares the typed public operation. Native code and relocations match the complete original body."
     }
   },
   "sdk_entry_groups": {
@@ -29455,6 +29590,189 @@
       "symbol": "CgsSceneManager::VolumeManager::ReplaceDynamicVolume",
       "size": 192,
       "evidence": "ARTIST 828D2E64 passes the typed ReplaceDynamicVolume queue event ID and volume image. The target checks the const VolumeId lookup, selects the mutable VolumeManagerVolume slot, and calls the original VolumeStore::ReplaceVolume. DecFIGS CgsVolumeManager.h:106 and the complete native body agree."
+    },
+    "0x82BA6E98": {
+      "exported_name": null,
+      "symbol": "rw::audio::core::XasEnc::EncodeBlock",
+      "size": 856,
+      "tu": "vendor/renderware/src/rw/audio/core/XasEnc.cpp",
+      "evidence": "The disjoint ARTIST unwind record is 856 bytes. Both branches from XasEnc::Encode at 0x82BA729C and 0x82BA72E8, and the partial-block branch from XasEnc::Flush at 0x82BA73F0, reach the same function with the encoder, interleaved float samples, byte destination, and channel count in r3 through r6. Related RenderWare Xbox 360 symbol metadata describes the private XasEnc::EncodeBlock(float*, unsigned char*, int), matching the compiled caller relocations and the block writer. This supplies the call identity. The EncodeBlock body still differs."
+    },
+    "0x82B166D0": {
+      "exported_name": "sub_82B166D0",
+      "symbol": "`anonymous namespace'::DecodeSession",
+      "size": 136,
+      "tu": "vendor/dirtysdk/src/x360/protomangle_lifecycle_x360.cpp",
+      "evidence": "ARTIST call at 0x82B16994. The original ProtoMangle session-migration function copies the serialized session string into its instance and calls this typed two-argument decoder before XSessionMigrateHost. Three DecodeAddress calls with sizes 36, 16, and 8 target the host, key, and session ID in XSESSION_INFO. Exact unpooled diagnostics hostAddress, keyExchangeKey, and sessionID corroborate the native X360 implementation. The complete typed COFF is exact across 136 bytes, 8 named branches and 1 data operands."
+    },
+    "0x82B16758": {
+      "exported_name": "sub_82B16758",
+      "symbol": "`anonymous namespace'::StartResult",
+      "size": 176,
+      "tu": "vendor/dirtysdk/src/x360/protomangle_lifecycle_x360.cpp",
+      "evidence": "ARTIST call at 0x82B17230. Named ProtoMangleUpdate passes the XSessionJoinLocal result, success/pending/failure states 0/5/17 and SDK operation label. The callee implements the XDK DWORD result handling for success and the 996/997 pending codes, updates the shared instance state and pending flag, and logs the same three operation outcomes. Its call sites from the other original XSession operations use the same typed result dispatcher. The complete typed COFF is exact across 176 bytes, 6 named branches and 3 data operands."
+    },
+    "0x82B17548": {
+      "exported_name": "sub_82B17548",
+      "symbol": "`anonymous namespace'::WaitForAsync",
+      "size": 160,
+      "tu": "vendor/dirtysdk/src/x360/protomangle_lifecycle_x360.cpp",
+      "evidence": "ARTIST call at 0x82B17880. Named ProtoMangleControl passes its own ProtoMangleRef and zero timeout before its sess/srch/async dispatch. The callee loads the instance default timeout at +0xB8 for this zero, then loops through the original named ProtoMangleUpdate and NetConnSleep. Both folded blocking/completed diagnostics match. The complete typed COFF is exact across 160 bytes, 9 named branches and 1 data operands."
+    },
+    "0x82B10250": {
+      "exported_name": null,
+      "symbol": "_TelemetryApiSendData",
+      "size": 152,
+      "tu": "vendor/dirtysdk/src/x360/telemetryapi.c",
+      "evidence": "ARTIST call at 0x82B1166C. The telemetry queue-drain body passes the owning TelemetryApiRef and message selector 0x266C6772 after filling its TagField payload. Native telemetryapi.c:125 has the same typed call. DecFIGS DirtySDK telemetryapi.c:403 independently names _TelemetryApiSendData(TelemetryApiRefT*,int32_t). Its four original protocol/tag branch targets and AUTH field bytes agree. The complete typed COFF is exact across 152 bytes, 4 named branches and 1 data operands."
+    },
+    "0x8282C0D0": {
+      "exported_name": null,
+      "symbol": "CgsDev::DebugRender::DrawSolidBox",
+      "size": 212,
+      "tu": "src/GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "evidence": "ARTIST call at 0x82238EB0. The original MainDirector call sites at 0x82238EB0 and 0x82238F44 pass two VMX vectors, a 64-byte matrix by const reference, and a color. The target builds the 76-byte CInEventDrawSolidBox record and calls the original named typed AddEventSafe<CInEventDrawSolidBox> at 0x8282C190. DecFIGS CgsDebugRenderStreamWriter.cpp:613 corroborates the transformed box signature and payload. The complete typed COFF is exact across 212 bytes, 1 named branches and 0 data operands."
+    },
+    "0x82817C88": {
+      "exported_name": null,
+      "symbol": "CgsDev::DebugUI::Menu::FindMenuItemByName",
+      "size": 132,
+      "tu": "src/GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "evidence": "ARTIST call at 0x8281A050. The original debug UI OpenWindowFromPath splits its path, uses the original named GetMenuFromPath at 0x8281A038, then calls this method on the returned Menu with the basename before virtual OpenAsWindow at slot +0x1C. DecFIGS CgsMenu.h:79 and CgsMenuManager.cpp:99 corroborate method and caller. The complete typed COFF is exact across 132 bytes, 1 named branches and 0 data operands."
+    },
+    "0x82B21B70": {
+      "exported_name": null,
+      "symbol": "_LobbyLoginConnCallback",
+      "size": 264,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "ARTIST caller reference at 0x82B21CE4. The exact original LobbyLoginCreate loads this callback address, passes selector 3 and its typed LobbyLoginRefT owner to LobbyApiSetCallback at 0x82B21D00. DecFIGS DirtySDK lobbylogin.c:2012 supplies the exact callback signature. The two remaining calls are independently bound to the non-exact _LobbyLoginDoLogin and _LobbyLoginSetContext bodies through their typed callers, discriminating diagnostics and SDK declarations. The folded GTAG and PASS operands agree. The complete typed COFF is exact across 264 bytes, 8 named branches and 1 data operands."
+    },
+    "0x82B1D980": {
+      "exported_name": "sub_82B1D980",
+      "symbol": "`anonymous namespace'::NetGameLinkNotify",
+      "size": 168,
+      "tu": "vendor/dirtysdk/src/x360/netgamelink_x360.cpp",
+      "evidence": "ARTIST caller reference at 0x82B1DB38. The exact original NetGameLinkCreate stores its typed NetGameLinkRefT at CommRef+0x4C and passes this callback address to CommRef::Callback at +0x20. DecFIGS DirtySDK netgamelink.c:607 supplies _NetGameLinkNotify(CommRef*,int32_t). The named exact NetGameLinkSend separately binds the same Process helper through the missed-event path, matching the DecFIGS _NetGameLinkProcess declaration. The complete typed COFF is exact across 168 bytes, 4 named branches and 0 data operands."
+    },
+    "0x82B26C60": {
+      "exported_name": null,
+      "symbol": "LobbyRankFetch",
+      "size": 932,
+      "evidence": "The original ServerInterfaceRankings::DownloadScoreboardData export identifies its direct branch at 0x82891A1C as LobbyRankFetch. The 932-byte .pdata body accepts the ranker in r3, offset and row count in r5/r6, buddy list and count in r7/r8, and the completion callback and userdata in r9/r10, agreeing with the vendor's lobbyrank.h declaration. The same entry reads the ranker state at +0x20 and returns the original unselected error -6. This registers the call identity only."
+    },
+    "0x823177E8": {
+      "exported_name": "sub_823177E8",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::Grow",
+      "size": 272,
+      "tu": "src/GameSource/GameState/BrnGameStateSharedIO.cpp",
+      "evidence": "ARTIST CarScoreData::GetChainableStuntMultipliers at 0x8231C1A0 and ScoringSystem::UpdateOnlineStuntModeScorePreWorld at 0x8234CEF0 both call this growing accessor. The second passes its 132-byte result table to StuntModeScoringOnline, whose same namespace-level Array instantiation is established by the named QSort and verified GetItem. The native namespace-level Grow matches all 272 bytes, 11 branches and nine data operands."
+    },
+    "0x8231DCD0": {
+      "exported_name": "sub_8231DCD0",
+      "symbol": "BrnGameState::ScoringSystem::GetCarData",
+      "size": 184,
+      "tu": "src/GameSource/GameState/ModeManager/Scoring/BrnScoringSystem_Lookup.cpp",
+      "evidence": "ScoringSystem::UpdateOnlineStuntModeScorePreWorld calls 0x8231DCD0 at 0x8234CE94 and writes the returned record. UpdateTeamStats calls it at 0x8231F368 before accumulating the returned record's times. DecFIGS BrnScoringSystem.h:884/887 corroborates both cv overloads. The mutable XDK body matches all 184 bytes, including the distinct BrnScoringSystem.h:2813 bounds assert, nine branches and four raw data destinations. The const twin has line 2793."
+    },
+    "0x82AE8428": {
+      "exported_name": "sub_82AE8428",
+      "symbol": "EAStringC::EAStringC",
+      "size": 120,
+      "tu": "src/SDKs/EATech/include/Apt/AptString/EAString.cpp",
+      "evidence": "ARTIST witness at 0x82AF3C6C. AptActionInterpreter::_FunctionAptActionAsciiToChar passes the result of AptValue::toInteger as the character and 1 as the repeat count before assigning the result with EAStringC::operator=. DecFIGS EAString.h:68 attests EAStringC(uint32_t,uint32_t). Both the allocated path and the shared empty sentinel are proved. The complete typed COFF is exact across 120 bytes, 4 named branches and 1 data operands."
+    },
+    "0x82AE83C0": {
+      "exported_name": "sub_82AE83C0",
+      "symbol": "EAStringC::EAStringC",
+      "size": 100,
+      "tu": "src/SDKs/EATech/include/Apt/AptString/EAString.cpp",
+      "evidence": "ARTIST witness at 0x82AF2A00. AptString::sMethod_fromCharCode passes twice its character count as the sole reservation size and then appends the converted characters. The original operator+ also calls the constructor at 0x82AE866C. DecFIGS EAString.h:65 attests EAStringC(uint32_t). The complete typed COFF is exact across 100 bytes, 1 named branches and 1 data operands."
+    },
+    "0x82AD8700": {
+      "exported_name": "sub_82AD8700",
+      "symbol": "EAStringC::EqualNoCase",
+      "size": 96,
+      "tu": "src/SDKs/EATech/include/Apt/AptString/EAString.cpp",
+      "evidence": "ARTIST witness at 0x82AEB5D4. AptNativeHash::Unset passes two EAStringC instances for a case-insensitive prototype-key check, tests the boolean result, and calls UnsetPrototype. AptNativeHash::Set and the enumerator use the same typed object comparison. DecFIGS EAString.h:190 independently attests the const EAStringC reference overload. The complete typed COFF is exact across 96 bytes, 1 named branches and 0 data operands."
+    },
+    "0x82AF5428": {
+      "exported_name": null,
+      "symbol": "AptScriptFunctionByteCodeBlock::`scalar deleting destructor'",
+      "size": 92,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunctionByteCodeBlock.cpp",
+      "evidence": "ARTIST witness at 0x82145DB0. Exact AptScriptFunctionByteCodeBlock constructor 0x82AF15C0 installs its own table at 0x82145D78. The original +0x38 virtual slot points here. Native COFF likewise binds the same-class vector deleting slot to the scalar deleting body through its weak fallback. The destructor installs the base table and calls AptObject::~AptObject and the exact 0x44-byte class deallocator. The complete typed COFF is exact across 92 bytes, 2 named branches and 1 data operands."
+    },
+    "0x82AF5B68": {
+      "exported_name": null,
+      "symbol": "AptScriptFunction1::`scalar deleting destructor'",
+      "size": 92,
+      "tu": "src/SDKs/EATech/include/Apt/AptScriptFunction1.cpp",
+      "evidence": "ARTIST witness at 0x82145CE0. Exact AptScriptFunction1 constructor 0x82AF1308 installs its table at 0x82145CA8. Its original +0x38 virtual slot points here. The native weak fallback binds that same-class vector deleting slot to the scalar body, which installs the base table and calls AptObject::~AptObject and the same-class size-aware deallocator. The complete typed COFF is exact across 92 bytes, 2 named branches and 1 data operands."
+    },
+    "0x82C6C8E0": {
+      "exported_name": "sub_82C6C8E0",
+      "symbol": "Attrib::`dynamic initializer for 'gDatabaseType''",
+      "size": 72,
+      "tu": "src/SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "ARTIST witness at 0x82CD2BA8. The original CRT initializer slot points to this full .pdata extent, and the same native .CRT$XCU lane names the Attrib::gDatabaseType initializer. It hashes Attrib::DatabaseLoadData and stores the key to the database export type at 0x83011CE0. Original Database::GetExportPolicies passes that same key to AddExportPolicy at 0x8280DDA8. DecFIGS attribdatabase.cpp:396 attests the global. The complete typed COFF is exact across 72 bytes, 1 named branches and 2 data operands."
+    },
+    "0x82C6C928": {
+      "exported_name": "sub_82C6C928",
+      "symbol": "Attrib::`dynamic initializer for 'gClassType''",
+      "size": 72,
+      "tu": "src/SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "ARTIST witness at 0x82CD2BAC. The original CRT initializer slot points to this full .pdata extent, and the same native .CRT$XCU lane names the Attrib::gClassType initializer. It hashes Attrib::ClassLoadData and stores the key at 0x83011CD8. Original Database::GetExportPolicies passes this class key at 0x8280DDBC. DecFIGS attribdatabase.cpp:399 attests the global. The complete typed COFF is exact across 72 bytes, 1 named branches and 2 data operands."
+    },
+    "0x82C6C970": {
+      "exported_name": "sub_82C6C970",
+      "symbol": "Attrib::`dynamic initializer for 'gCollectionType''",
+      "size": 72,
+      "tu": "src/SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
+      "evidence": "ARTIST witness at 0x82CD2BB0. The original CRT initializer slot points to this full .pdata extent, and the same native .CRT$XCU lane names the Attrib::gCollectionType initializer. It hashes Attrib::CollectionLoadData and stores the key at 0x83011CE8. Original Database::GetExportPolicies passes this collection key at 0x8280DDD0. DecFIGS attribdatabase.cpp:402 attests the global. The complete typed COFF is exact across 72 bytes, 1 named branches and 2 data operands."
+    },
+    "0x826AD0B8": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Environment::Allocate",
+      "size": 120,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/AEMS/CgsAemsPlayerVoice.cpp",
+      "evidence": "ARTIST witness at 0x826AD738. The original Playback Module::ImportStringTable loads its owned Environment, passes size plus four, alignment four, and the StringTable allocation label, then chains the returned chunk through its header. The 120-byte Allocate body makes the same order-descriptor virtual call through the allocator at Environment+0x30. DecFIGS Playback/CgsEnvironment.h:147 attests Allocate(uint32_t,uint32_t,const char*). The complete typed COFF is exact across 120 bytes, 0 named branches and 0 data operands."
+    },
+    "0x82B51C70": {
+      "exported_name": "sub_82B51C70",
+      "symbol": "RealmcIface::EntryContentName::EntryContentName",
+      "size": 80,
+      "tu": "src/SDKs/Realmc/RealmcEntryContentName.cpp",
+      "evidence": "ARTIST witness at 0x82B51D2C. The outer Realm copy passes its typed destination and source to this constructor before copying the outer fields at +0x130 and +0x134. This body copies the +0x12C size and calls original named EntryContentName::SetTitle and SetFileName on the two embedded fields of the source. Three original callers and the existing distinct value constructor at 0x82B51C10 corroborate the const-reference copy overload. The complete typed COFF is exact across 80 bytes, 2 named branches and 0 data operands."
+    },
+    "0x828E2A10": {
+      "exported_name": null,
+      "symbol": "CgsResource::BundleLoaderModule::ProcessBundleLoadRequests",
+      "native_symbol": "?ProcessBundleLoadRequests@BundleLoaderModule@CgsResource@@QAAXPBUInputBuffer_Update@BundleLoaderIO@2@PAUOutputBuffer@42@@Z",
+      "file": "src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
+      "tu": "GameShared/GameClasses/System/Resource/CgsBundleLoaderModule.cpp",
+      "size": 420,
+      "evidence": "Named BundleLoaderModule::Update calls 0x828E2A10 at 0x82907690 with the original DecFIGS input/output ABI. The callee reads the typed load/unload input queues, classifies load priority using TRK_, Prop and GuiApt\\SaveLoadComponent.bundle, and pushes both request types into the module’s matching priority queues. The helper body itself is not a byte match."
+    },
+    "0x821FF788": {
+      "exported_name": "sub_821FF788",
+      "symbol": "CgsContainers::Array<int,20>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayInt20.cpp",
+      "evidence": "ARTIST witness at 0x8224B404. ICEMoviePlaylist::Serialise<DebugMenuSerialiser> passes mMoviePoolIndicies and the loop index, then loads the signed value through the returned reference. Its direct consumer checks the index against capacity 20. DecFIGS BrnICEMoviePlayer.h:243 and the same class's const debug/serialise methods attest Array<int32_t,20>. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x822012F0": {
+      "exported_name": "sub_822012F0",
+      "symbol": "CgsContainers::Array<float,10>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayFloat10.cpp",
+      "evidence": "ARTIST witness at 0x8221C76C. The const MomentSelector::ActualDebugRender reads the indexed float through the returned reference and scales it into the alpha calculation. Selector::CalculateIntervals also passes its original weights to this same getter at 0x822143A4 and reads a float. DecFIGS BrnMomentSelector.h:253 and :77 attest the two Array<float32_t,10> owners. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x82201500": {
+      "exported_name": "sub_82201500",
+      "symbol": "CgsContainers::Array<int,50>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayInt50.cpp",
+      "evidence": "ARTIST witness at 0x822398B8. ShotSelector::GetCrashShot passes its indexed shot-time array and loads the signed time through the returned reference at 0x822398CC. The group index selects one of three 0xCC-byte arrays with the live count at +0xC8. DecFIGS BrnShotSelector.h:100 gives maaShotTimes as Array<int32_t,50>[3]. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
     }
   },
   "native_leaf_functions": {
