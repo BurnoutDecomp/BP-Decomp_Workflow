@@ -18290,6 +18290,35 @@
       "byte_match": true,
       "file": "SDKs/Packages/AttribSys/1.2.1.2/AttribSys/runtime/common/attribdatabase.cpp",
       "evidence": "DecFIGS attribprivate.h:383 names the collection-map ScanForValidKey instantiation. ARTIST CollectionExportPolicy::PrepareToDeinitialize starts this scan at 0x8280CE84 and the cursor tail-branches to the typed collection GetKeyAtIndex at 0x82808F54. XDK 136 B exact and the sole branch relocation is independently checked."
+    },
+    "BrnGui::MapIconManager::GetDriveThroughOrJun": {
+      "symbol": "BrnGui::MapIconManager::GetDriveThroughOrJunkyardAtIndex",
+      "x360_address": "0x824FAC10",
+      "file": "GameSource/Gui/BrnMapIconManager.cpp",
+      "name_evidence": true,
+      "evidence": "DecFIGS BrnMapIconManager.h declares this const member taking a signed index and returning the typed SatNavIconInfo pointer. ARTIST GetSatNavIconPositions at 0x8250A8A4 and CrashNavMap::UpdateIconManager both call this same target with their existing MapIconManager receiver. The native COFF call names the complete original declaration."
+    },
+    "char>::GetObjectI": {
+      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,16,signed char>::GetObjectIndex",
+      "x360_address": "0x828EAE38",
+      "byte_match": true,
+      "name_evidence": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "The original physical Close and CloseDirectory pass their FileHandleRecord pointer and the pool at this+0x10. This callee divides the byte difference by the physical record stride of 272, sign-extends the index and checks the signed byte capacity at pool+0xA. DecFIGS CgsIndexedPool.h:321 corroborates the typed signed-byte method. The native physical-device object selects the 16-entry specialization and its full 192-byte extent, calls, assert line and data agree with ARTIST."
+    },
+    "char>::PushIndex": {
+      "symbol": "CgsContainers::IndexedPool<CgsFileSystem::FileHandleRecord,16,signed char>::PushIndex",
+      "x360_address": "0x828EAEF8",
+      "name_evidence": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "Both ARTIST Close at 0x828F9DC8 and CloseDirectory at 0x828FA918 call GetObjectIndex, pass its signed-byte result directly and call this operation on the same physical-device pool. The callee checks capacity, scans the signed-byte free-index list and updates the byte counts. DecFIGS CgsIndexedPool.h:330 corroborates the typed operation. Native physical-device COFF has the corresponding 16-entry specialization; the native body differs."
+    },
+    "CgsFileSystem::PhysicalX360Device::CloseDirectory": {
+      "symbol": "CgsFileSystem::DevicePhysicalX360::CloseDirectory",
+      "x360_address": "0x828FA8B0",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
+      "evidence": "ARTIST PhysicalDeviceThread uses virtual slot +0x20 at 0x828F20B0 with just the native handle. ARTIST's vtable at 0x820CEEE0 and native COFF bind that slot to the physical override. The method closes the Win32 handle and returns the exact FileHandleRecord index to the signed-byte pool. The full 148-byte method and all five branch targets match."
     }
   },
   "sdk_entry_groups": {
@@ -27894,6 +27923,25 @@
       "size": 244,
       "tu": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
       "evidence": "The original physical-device vtable at 0x820CEEE0 selects this extent from its Write slot +0x10. The native CgsFileSystem object corroborates the same virtual relocation. It takes the shared device handle, const buffer, unsigned count, and unsigned output count attested by DecFIGS CgsPhysicalPS3Device.h:110. ARTIST checks the record's write flag, calls the real XDK WriteFile, advances the 64-bit cursor and writes the byte count on success. The full 244-byte packed-unwind extent matches and all SDK/assert calls and strings are verified."
+    },
+    "0x828AA4C0": {
+      "exported_name": "sub_828AA4C0",
+      "symbol": "CgsSceneManager::operator++",
+      "size": 92,
+      "evidence": "ARTIST 0x828D1474 advances the typed scene prepare stage. The callee returns the old enum, increments the stored enum, and checks the stage bound from CgsSceneManagerModule.h:686. DecFIGS declares the exact postfix overload and the Xbox 360 object matches all 92 bytes and relocations."
+    },
+    "0x828AA520": {
+      "exported_name": "sub_828AA520",
+      "symbol": "CgsSceneManager::operator++",
+      "size": 92,
+      "evidence": "ARTIST 0x828C7294 advances the typed scene release stage. The callee returns the old enum, increments the stored enum, and checks the stage bound from CgsSceneManagerModule.h:687. DecFIGS declares the exact postfix overload and the Xbox 360 object matches all 92 bytes and relocations."
+    },
+    "0x82861B88": {
+      "exported_name": null,
+      "symbol": "CgsLanguage::LanguageManager::FormatSmallDistanceStringLong",
+      "size": 512,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "ARTIST FormatAutoDistanceStringLong at 0x828622E8 calls this owner on the small-unit branch. The original callee loads mrSmallDistanceConversion at this+0x60FC and the long small-unit template mpDistanceFormatShortL at this+0x6144 before CgsUnicode::_Print. The existing LanguageManager source and DecFIGS declare the matching typed formatter. This names an existing 512-byte .pdata body which remains nonmatching."
     }
   },
   "native_leaf_functions": {
