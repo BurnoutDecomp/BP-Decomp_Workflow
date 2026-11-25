@@ -27854,6 +27854,17 @@
       "source": "src/SDKs/EATech/include/Apt/AptPseudoDisplayList.cpp",
       "tu": "class:AptPseudoDisplayList",
       "evidence": "Insert branches here at 0x82AEE4F8 and 0x82AEE51C with the signed node depth, predecessor and existing-node output addresses. The original FindInst declaration corroborates those typed parameters. The native leaf equals the full 80 ARTIST bytes including cmpw at +0x14 and +0x38 and the return at 0x82AD99EC."
+    },
+    "0x822A5FC8": {
+      "symbol": "BrnWorld::BoostStrategy::OnModeStart",
+      "size": 196,
+      "previous_size": 148,
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostStrategy.cpp",
+      "caller": "0x822A5FC8",
+      "call_site": "0x822A5FE4",
+      "table_entry": "0x822A5FEC",
+      "evidence": "Default jump-table entry 0x822A5FEC targets the omitted blr at 0x822A6088. Zero alignment word at 0x822A608C precedes SetBoostRequested at 0x822A6090. DecFIGS BrnBoostStrategy.h:424 gives OnModeStart(EGameModeType,bool). The original separate float assignments are exact over all 196 bytes, with all 14 case targets and the table base resolved to ARTIST.",
+      "native_symbol": "?OnModeStart@BoostStrategy@BrnWorld@@QAAXW4EGameModeType@GameStateModuleIO@BrnGameState@@_N@Z"
     }
   },
   "sdk_archive_splits": {
