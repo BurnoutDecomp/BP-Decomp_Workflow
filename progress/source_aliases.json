@@ -18181,6 +18181,34 @@
       "file": "GameSource/Network/BrnNetworkModule.cpp",
       "byte_match": true,
       "evidence": "ARTIST returns the original typed interface at 0xC73D0 after the assertion at line 416. DecFIGS BrnNetworkModule.h:414 declares the accessor. The 164-byte native body, all six calls, and all seven data operands agree."
+    },
+    "CgsFileSystem::PhysicalX360Device::Seek": {
+      "symbol": "CgsFileSystem::DevicePhysicalX360::Seek",
+      "x360_address": "0x828DEB98",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
+      "evidence": "The physical device vtable at 0x820CEEE0 has Seek in slot +0x14, between Write and the next Device operation, matching the native relocated vtable. The exact 148-byte method compares its 64-bit file cursor, calls SetFilePointerEx with FILE_BEGIN, and stores the returned position to the record and caller. DecFIGS CgsPhysicalPS3Device.h:115 corroborates its 64-bit interface."
+    },
+    "??$Serialise@VParameters@CameraShake@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParam": {
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::Utils::CameraShake::Parameters>",
+      "x360_address": "0x82231040",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST HeliCam debug serialization branches at 0x8224C140 to 0x82231040. The same XDK COFF site relocates to ??$Serialise@VParameters@CameraShake@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParameters@CameraShake@Utils@12@@Z. The export is its 119-character prefix, and the native specialization matches all 108 bytes and its four named branches."
+    },
+    "??$Serialise@VParameters@Looker@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParameters": {
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::Utils::Looker::Parameters>",
+      "x360_address": "0x822311C8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST HeliCam debug serialization branches at 0x8224C154 to 0x822311C8. The same XDK COFF site relocates to ??$Serialise@VParameters@Looker@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParameters@Looker@Utils@12@@Z. The export is its 119-character prefix, and the native specialization matches all 108 bytes and its four named branches."
+    },
+    "BrnGui::GuiEventUpdateSatNav::SatNavI": {
+      "symbol": "BrnGui::GuiEventUpdateSatNav::SatNavIconInfo::GetIconType",
+      "x360_address": "0x823A6B30",
+      "file": "GameSource/Gui/BrnGuiEventTypeDefs.h",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnGuiEventTypeDefs.h:1731 declares the const enum getter. ARTIST MapIconManager::GetNumRivalIcons uses this checked receiver for the second and third icon kinds. The native 136-byte body, both original source locations, and all call and data relocations match."
     }
   },
   "sdk_entry_groups": {
@@ -27588,6 +27616,48 @@
       "size": 248,
       "tu": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.cpp",
       "evidence": "ARTIST call at 0x82789B50. RaceBalancingManager::OnRaceStart appends its supplied graph array to the named array owner. DecFIGS BrnRaceBalancingManager.h:29/54 and BrnRaceBalancingManager.cpp:53–62 independently attest Array<RaceBalancingGraph,7> and AppendArray<7u>. The complete typed COFF is exact across 248 bytes, 16 named branches and 3 data operands."
+    },
+    "0x82929B80": {
+      "exported_name": null,
+      "symbol": "SetFilePointerEx",
+      "size": 284,
+      "sdk_provider": {
+        "lib": "xapilibi.lib",
+        "member": "obj\\xbox\\setfilepointerex.obj",
+        "archive_symbol": "SetFilePointerEx",
+        "archive_data_targets": {
+          "_fileIoHooks": "0x82F36D0C"
+        }
+      },
+      "evidence": "The original 284-byte SDK extent matches xapilibi.lib's setfilepointerex.obj, including all named calls. The linked _fileIoHooks pointer at 0x82F36D0C is independently anchored by RtlFindNextFile at 0x8292D010. The same pointer is loaded at each of the three provider relocations."
+    },
+    "0x82360ED0": {
+      "exported_name": "sub_82360ED0",
+      "symbol": "CgsContainers::Array<unsigned short,32>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayUnsignedShort32.cpp",
+      "evidence": "ARTIST call at 0x82374330. The ARTIST caller’s complete mangling is Array<uint16_t,32>::AppendArray<32u>. It indexes the source element before appending, and the target has the two-byte result stride and live count at +0x40. DecFIGS CgsArray.h:5600 onward attests the typed const/nonconst GetItem, and :7230 gives the caller's template signature. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8235FDF0": {
+      "exported_name": "sub_8235FDF0",
+      "symbol": "CgsContainers::Array<unsigned short,256>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/GameState/Array_short_256.cpp",
+      "evidence": "ARTIST call at 0x8239240C. TriggerQueryManager::UpdateTriggers checks the live count at +0x200, passes its typed trigger-region array and index, and reads the target’s first halfword. DecFIGS BrnTriggerQueryManager.cpp:561–562 and CgsArray.h:5519 onward attest Array<uint16_t,256> and indexing. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8270CCF8": {
+      "exported_name": "sub_8270CCF8",
+      "symbol": "CgsContainers::Array<unsigned short,72>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayUnsignedShort72.cpp",
+      "evidence": "ARTIST call at 0x82747600. TrafficEntityModule::ManageTriggers indexes the named mHullsToRemoveTriggersFor array and uses the returned halfword to identify the next hull. Its other loop calls the same target at 0x82747734 for mHullsToAddTriggersFor. DecFIGS BrnTrafficEntityModule.h:496/499 attests both Array<uint16_t,72> members. ARTIST checks the +0x90 live count. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x82690A38": {
+      "exported_name": "sub_82690A38",
+      "symbol": "CgsContainers::Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/Sound/BrnResourceRegistrar.cpp",
+      "evidence": "ARTIST call at 0x826E210C. ResourceRegistrar::ClearUnreferancedFiles accesses the checked removal-candidate array at +0x1F0 then reads the returned LinkedListNode pointer and calls CountElements for the node’s requester list. DecFIGS BrnResourceRegistrar.h:196 and .cpp:462–472 attest this Array<LinkedListNode<RequestedResource>*,124> and its indexing. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
     }
   },
   "native_leaf_functions": {
