@@ -1409,6 +1409,13 @@
         "CgsSound::Playback::SubmixVoice::`vector deleting destructor'": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp"
       },
       "evidence": "ARTIST vtable slot at 0x820B35E4 selects this 92-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
+    },
+    "0x828D0780": {
+      "exported_name": "CgsModule::VariableEventQueue<32768,16>::AddEvent<CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult>",
+      "aliases": {
+        "CgsModule::VariableEventQueue<32768,16>::AddEvent<CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult>": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp"
+      },
+      "evidence": "ARTIST ProcessSphereTestFast at 0x828D4454 reaches the same 184-byte result writer as ProcessLineTestFastDoubleSided. Its native typed AddEvent<OutEventSphereTestFastResult> carries the same complete code, branch targets and data. This folded call identity names one already counted original extent."
     }
   },
   "xdk_functions": {
@@ -20352,6 +20359,13 @@
       "file": "src/GameShared/GameClasses/Sound/Playback/CgsMasterVoice.cpp",
       "byte_match": true,
       "evidence": "ARTIST vtable slot at 0x820B50E8 selects this 80-byte deleting body. The native scalar COMDAT and its vector weak fallback share the address, matching all instructions, both direct branches and the original vtable binding."
+    },
+    "??$AddEvent@VOutEventLineTestFastDoubleSidedResult@SceneManagerIO@CgsSceneManager@@@?$VariableEventQueue@$0IAAA@$0BA@@C": {
+      "symbol": "CgsModule::VariableEventQueue<32768,16>::AddEvent<CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult>",
+      "x360_address": "0x828D0780",
+      "file": "GameShared/GameClasses/Module/VariableEventQueue_32768_16.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST ProcessLineTestFastDoubleSided calls this writer at 0x828D4084. The original clipped export is an exact class-key prefix of the native symbol. The 184-byte .pdata extent and every branch and data operand match."
     }
   },
   "sdk_entry_groups": {
@@ -23351,6 +23365,90 @@
       "caller": "0x82BCCCC8",
       "call_site": "0x82BCCD54",
       "evidence": "ARTIST CMassiveClientCore::ZoneManagerRemove identifies the list lookup at 0x82BCCD54 as CMassiveList::Find. The same branch in the XDK archive points to the same symbol. Its whole 32-byte archive body matches without any relocations."
+    },
+    "0x82936578": {
+      "previous_size": 1456,
+      "exported_name": "RtlCreateHeap",
+      "caller": "0x82934858",
+      "call_site": "0x82934904",
+      "fragments": [
+        {
+          "address": "0x82936B28",
+          "size": 12,
+          "archive_symbol": "$LN55"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC0016C04"
+        },
+        {
+          "offset": 1456,
+          "flags": "0x40000300"
+        }
+      ],
+      "lib": "xapilibi.lib",
+      "member": "obj\\xbox\\rtlheap.obj",
+      "symbol": "RtlCreateHeap",
+      "archive_symbol": "RtlCreateHeap",
+      "size": 1468,
+      "evidence": "The named XapiInitProcess entry calls the matching XapiInitHeap at 0x82934950. XapiInitHeap directly calls RtlCreateHeap at 0x82934904. Both entries and the 1468-byte heap creator match the installed 6534.4 archive and the frozen native link. The exception funclet is independently bound by the paired unwind record and its .xdata filter pointer. The four initialized heap defaults are contiguous and byte-identical. Both linked loads of the SDK's four-byte NtGlobalFlag common symbol agree on the native map address and on ARTIST's zero-initialized word.",
+      "archive_data_targets": {
+        "NtGlobalFlag": "0x832BE230",
+        "MmHeapSegmentReserve": "0x82F36DB0",
+        "MmHeapSegmentCommit": "0x82F36DB4",
+        "MmHeapDeCommitTotalFreeThreshold": "0x82F36DB8",
+        "MmHeapDeCommitFreeBlockThreshold": "0x82F36DBC"
+      }
+    },
+    "0x82C0F0C0": {
+      "previous_size": 708,
+      "exported_name": "_tmpfile_helper",
+      "symbol": "_tmpfile_helper",
+      "size": 816,
+      "lib": "libcMT.lib",
+      "member": "obj\\xbox\\tmpfile.obj",
+      "archive_symbol": "_tmpfile_helper",
+      "caller": "0x82C0F3F0",
+      "call_site": "0x82C0F40C",
+      "fragments": [
+        {
+          "address": "0x82C0F384",
+          "size": 108,
+          "archive_symbol": "$LN19"
+        },
+        {
+          "address": "0x82C0F3A4",
+          "size": 76,
+          "archive_symbol": "$LN22"
+        }
+      ],
+      "archive_unwind_records": [
+        {
+          "offset": 0,
+          "flags": "0xC000B104"
+        },
+        {
+          "offset": 708,
+          "flags": "0x40001B06"
+        }
+      ],
+      "archive_data_targets": {
+        "tmpfile_buf": "0x832BAD98",
+        "_commode": "0x832BAFA4"
+      },
+      "archive_literals": {
+        "??_C@_03PFDPJNJH@D?3?2?$AA@": {
+          "address": "0x82188F78",
+          "size": 4
+        },
+        "??_C@_01LFCBOECM@?4?$AA@": {
+          "address": "0x8202B15C",
+          "size": 2
+        }
+      },
+      "evidence": "The named tmpfile wrapper calls this libcMT tmpfile.obj owner at 0x82C0F40C, with the same direct dependency in the pinned native PE. All native and ARTIST branch relocs and both strings agree. The 20-byte static tmpfile buffer and independently witnessed _commode read agree. The primary and attached finally funclet unwind records and scope labels locate one complete 816-byte SDK body."
     }
   },
   "identified_functions": {
@@ -32509,6 +32607,159 @@
       "size": 184,
       "tu": "src/GameSource/Physics/VehicleManager/BrnVehicleManager.cpp",
       "evidence": "The original branch at 0x82633AEC in GenerateAboveGroundLineTests and its native typed relocation select InEventLineTestNearest. The exact outgoing branch at 0x826293DC names the 13440-byte queue owner. DecFIGS CgsVariableEventQueue.h export line 5456 corroborates this template. The native 184-byte .pdata body matches every unrelocated code bit and all 7 direct and 7 data references."
+    },
+    "0x828D6368": {
+      "exported_name": null,
+      "symbol": "CgsResource::BundleV2::ResourceEntry::GetUncompressedSize",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceBundle2.cpp",
+      "evidence": "ARTIST BundleLoaderModule::ProcessPoolResponses passes the 64-byte typed resource entry and current memory type at 0x828EC344. The native ProcessPoolResponses calls the same decorated const getter. DecFIGS CgsResourceBundle2.h:81 declares unsigned size and index. Native XDK checks the original line 328, header and assertion text plus all three direct operands over its full unwind extent."
+    },
+    "0x828F2740": {
+      "exported_name": null,
+      "symbol": "CgsModule::EventQueue<CgsResource::Events::UnloadBundleRequest,256>::Construct",
+      "size": 112,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsBundleLoaderModuleIO_InputBuffer.cpp",
+      "evidence": "ARTIST IOBufferStack::CreateIOBuffer for BundleLoaderIO::InputBuffer_Update at 0x828FACAC passes this+0x9410 after constructing the first queue at this+4. The typed input buffer's unload queue at that offset is EventQueue<UnloadBundleRequest,256> in DecFIGS CgsBundleLoaderModuleIO.h:47. Native Construct calls the same decorated specialization, checks the original line 160, header and assertion text, and all three direct operands."
+    },
+    "0x82213560": {
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::ICEMoviePlaylist::DebugMenuRemoveData,20,int>::operator[]",
+      "size": 348,
+      "exported_name": "sub_82213560",
+      "tu": "src/GameSource/Director/Utils/BrnICEMoviePlayer.cpp",
+      "evidence": "DecFIGS CgsObjectPool.h:55 records the DebugMenuRemoveData[20] pool and int32_t index. ARTIST ICEMoviePlaylist::InsertMovieBefore passes the embedded pool at playlist+0x3D8 to both calls, at 0x8221D634 and 0x8221D648, and stores the playlist pointer and s32 movie index at the returned entry offsets 0 and 4. The same frozen native owner emits both typed calls. All 348 bytes match with 14 checked branches and 11 checked data operands."
+    },
+    "0x824F65E0": {
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::SetUpAllEventStartsInterface::EventStart,175>::GetItem",
+      "size": 272,
+      "exported_name": "sub_824F65E0",
+      "tu": "src/GameSource/Gui/BrnGuiCache.cpp",
+      "evidence": "ARTIST 0x824F7688 checks luEventStartIndex < maEventStarts.GetLength() with original data at 0x820729CC and header 0x82002774, then calls at 0x824F7704. Both caller and callee use count offset 0x20D0, and the callee scales by the original 48-byte EventStart stride. DecFIGS CgsArray.h:46 names the 175-element EventStart specialization. The frozen typed SetUpAllEventStartsInterface::GetEventStart calls this const specialization. All 272 bytes match with 11 checked branches and 9 checked data operands."
+    },
+    "0x823AFFD8": {
+      "symbol": "CgsContainers::Array<unsigned __int64,128>::GetItem",
+      "size": 264,
+      "exported_name": "sub_823AFFD8",
+      "tu": "src/GameSource/Gui/Flow/Screen/States/BrnOnlineGameOptions.cpp",
+      "evidence": "ARTIST OnlineGameOptions::HandleCarInfoResponseEvent calls at 0x82490F88 on its 128-element event array, loads the complete 64-bit element, and passes it to VehicleList::GetVehicleIndex at 0x82490F98. The same frozen typed caller calls Array<CgsID,128>::GetItem. DecFIGS CgsID.h identifies CgsID as unsigned uint64_t. All 264 bytes match with 11 checked branches and 9 checked data operands."
+    },
+    "0x8276AB10": {
+      "symbol": "CgsContainers::Array<unsigned int,8>::GetItem",
+      "size": 264,
+      "exported_name": "sub_8276AB10",
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayU32_8.cpp",
+      "evidence": "ARTIST 0x8278A108 has an exported mangled Array<u32,8>::AppendArray specialization. It passes the same-specialization source array and ordinal into the call at 0x8278A1E0. The frozen native AppendArray makes the identical call at relative offset 0xD8. DecFIGS CgsArray.h:46 records the uint32_t[8] element type and count. All 264 bytes match with 11 checked branches and 9 checked data operands."
+    },
+    "0x82665F80": {
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::Pop",
+      "size": 116,
+      "exported_name": "sub_82665F80",
+      "tu": "src/GameSource/Resource/BrnGameDataModule.cpp",
+      "evidence": "ARTIST GameDataModule::ProcessSwapOutCollisionWorldRequest passes its pool at +0x6B410 to the call at 0x826715E4, and ProcessSwapInCollisionWorldRequest uses the same pool at 0x8267185C. Both frozen native callers emit the typed IndexedPool<GameDataEventSlot,s16> relocation. DecFIGS CgsIndexedPool.h confirms the signed int16_t index. ARTIST sign-extends the index and applies the 0x30-byte event slot stride. All 116 bytes match with 0 checked branches and 0 checked data operands."
+    },
+    "0x828B8DC0": {
+      "symbol": "CgsContainers::IndexedPool<CgsSceneManager::LooseOctree::LooseOctreeNodeAllocation,unsigned short>::Pop",
+      "size": 108,
+      "exported_name": "sub_828B8DC0",
+      "tu": "src/GameShared/GameClasses/SceneManager/SpatialPartitionModule/SpatialPartitions/CgsLooseOctree.cpp",
+      "evidence": "ARTIST 0x828BB4A0 calls this body at 0x828BB598 with the pool at LooseOctree+0x446A8, then reads the returned allocation halfword as the first child index before recursing. Its two original diagnostics name the invalid-node and child-allocation branches. The same frozen native LooseOctree::AllocRecursive calls the typed pool. DecFIGS CgsLooseOctree.h:581 declares the LooseOctreeNodeAllocation pool with uint16_t indices. All 108 bytes match with 0 checked branches and 0 checked data operands."
+    },
+    "0x8268EC00": {
+      "symbol": "CgsContainers::Array<CgsContainers::LinkedListNode<BrnSound::Logic::ResourceRegistrar::RequestedResource> *,124>::EraseFast",
+      "size": 152,
+      "exported_name": "sub_8268EC00",
+      "tu": "src/GameSource/Sound/BrnResourceRegistrar.cpp",
+      "evidence": "ARTIST ResourceRegistrar::UpdateRequests calls this swap-and-erase operation at 0x826B07A0 using the found index in its request pointer list. The target uses four-byte elements and its count resides at 0x1F0 (124 pointers). The frozen native caller emits the same LinkedListNode<RequestedResource>* specialization, independently declared in DecFIGS CgsArray.h. All 152 bytes match with 8 checked branches and 3 checked data operands."
+    },
+    "0x8270BE10": {
+      "symbol": "CgsContainers::Array<BrnTraffic::CrashingThingData,168>::GetLength",
+      "size": 88,
+      "exported_name": null,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST TrafficEntityModule::UpdateParams_TryStartSympatheticCrashing checks and rechecks the same CrashingThingData array length at 0x82716820 and 0x82716910. Its count at +0x1500 matches 168 native 32-byte records. The frozen caller emits both typed relocations, and DecFIGS CgsArray.h independently names the 168-element CrashingThingData specialization. All 88 bytes match with 3 checked branches and 2 checked data operands."
+    },
+    "0x827A5780": {
+      "exported_name": "sub_827A5780",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult>::AddEvent",
+      "tu": "src/GameSource/Unity/BrnWorldBridgesUnity.cpp",
+      "size": 340,
+      "evidence": "ARTIST WorldModule::BridgeSceneQueryResultsToPhysics calls this writer at 0x827A8F90. Its diagnostic at 0x820C96C0 spells OutEventLineTestNearestResult with the original class key. The existing native C++ bridge selects that same typed writer, and the 340-byte .pdata body, all branch targets and all linked diagnostic and global references compare exact."
+    },
+    "0x82B1BDF8": {
+      "exported_name": "sub_82B1BDF8",
+      "symbol": "_LobbyApiDisconnect",
+      "size": 228,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "evidence": "DecFIGS lobbyapi.c:1036 identifies the private void teardown routine. ARTIST and exact native LobbyApiDisconnect, LobbyApiCreate2 and LobbyApiDestroy reach it at 82B1BEE4, 82B1C810 and 82B1C860. The 228-byte unwind extent matches XDK, including the original logger, queue teardown and local direction string."
+    },
+    "0x82B1A8D8": {
+      "exported_name": "sub_82B1A8D8",
+      "symbol": "_LobbyApiDequeueRequestCallback",
+      "size": 308,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "evidence": "DecFIGS lobbyapi.c:404 records the 32-bit queue result and owner and record arguments. Exact native LobbyApiConnect and _LobbyApiDisconnect branch here at ARTIST 82B1B5DC and 82B1BEA8. The 308-byte original unwind extent matches the native sequence selection, fixed-width copies and compaction cursor."
+    },
+    "0x82B1B218": {
+      "exported_name": "sub_82B1B218",
+      "symbol": "_LobbyApiDebug",
+      "size": 368,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "evidence": "DecFIGS lobbyapi.c:226 declares the private typed logger. ARTIST _LobbyApiDisconnect calls it with locl at 82B1BE58, and the independent native LobbyApiAriesRequest owner calls it with send at 82B1B768. The 368-byte original unwind extent invokes the four-argument filter and formats kind, code and direction before diagnostics. The logger body remains nonmatching."
+    },
+    "0x82B1B738": {
+      "exported_name": null,
+      "symbol": "LobbyApiAriesRequest",
+      "size": 208,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "evidence": "DecFIGS lobbyapi.c:1723 identifies the typed request helper and its callback queue index. ARTIST LobbyApiRequestCB calls this address at 82B1BC18, and Suspend and Resume call it at 82B1C08C and 82B1C288. Its complete 208-byte unwind extent matches XDK, including the original debug logging, queue sequence write, typed ProtoAriesSend call and signed diagnostic selector decomposition."
+    },
+    "0x8264C280": {
+      "exported_name": null,
+      "symbol": "BrnReplays::BaseSerialiser::Construct",
+      "size": 496,
+      "tu": "src/GameSource/Replays/BrnReplayBaseSerialiser.cpp",
+      "caller": "0x8264C9F8",
+      "call_site": "0x8264CA28",
+      "evidence": "DecFIGS BrnReplayBaseSerialiser.cpp:17 declares the common serialiser initializer, and the ARTIST SoundSerialiser::Construct passes its typed base the channel, context, paired buffer sizes, Sound name, and native enable flag. The ARTIST callee stores those arguments in the corresponding base members. This identity verifies calls to an existing unwind extent."
+    },
+    "0x8264C9F8": {
+      "exported_name": null,
+      "symbol": "BrnReplays::SoundSerialiser::Construct",
+      "size": 92,
+      "tu": "src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp",
+      "caller": "0x826C9330",
+      "call_site": "0x826C9354",
+      "evidence": "SoundLogicModule::Construct calls this entry on its aligned SoundSerialiser at +0x13600. The complete 92-byte native body supplies the Sound channel payload to the original BaseSerialiser::Construct at 0x8264C280, then clears the derived elapsed-time and status fields. Both literal operands and the base branch match ARTIST."
+    },
+    "0x82694898": {
+      "exported_name": "sub_82694898",
+      "symbol": "BrnSound::Module::Io::RootInputBuffer::GetPhysicalTrafficStates",
+      "size": 164,
+      "tu": "src/GameSource/Sound/Module/BrnRootSoundModuleIO.cpp",
+      "caller": "0x826B7030",
+      "call_site": "0x826B714C",
+      "evidence": "TrafficInAir::UpdatePhysicsData calls this entry at 0x826B714C, and TrafficSkid::UpdateParams calls it at 0x826F0D4C. DecFIGS BrnRootSoundModuleIo.h:206 declares the const PhysicalTrafficStateQueue pointer accessor. The original returns the queue at RootInputBuffer +0x74C0 after the read-lock assertion. The typed native object matches all 164 bytes with the original stream, assertion and branch references."
+    },
+    "0x82694DD8": {
+      "exported_name": "sub_82694DD8",
+      "symbol": "BrnSound::Module::Io::RootInputBuffer::GetTrafficOutputInterface",
+      "size": 164,
+      "tu": "src/GameSource/Sound/Module/BrnRootSoundModuleIO.cpp",
+      "caller": "0x826A0398",
+      "call_site": "0x826A0478",
+      "evidence": "CollisionStateManager::FindEntity calls this entry at 0x826A0478 before resolving the traffic index. DecFIGS BrnRootSoundModuleIo.h:123 declares the const TrafficSoundOutputInterface reference accessor. The original returns the embedded interface at RootInputBuffer +0x6AB0 after the read-lock assertion. The typed native object matches all 164 bytes and the original branch and data references."
+    },
+    "0x82C0F000": {
+      "exported_name": "sub_82C0F000",
+      "symbol": "genfname",
+      "size": 184,
+      "evidence": "The named _tmpfile_helper directly calls this installed libcMT.lib:obj\\xbox\\tmpfile.obj symbol at 0x82C0F258. Its exact linked target, complete packed extent and every direct branch agree. The pinned universe already credits its SDK provider."
+    },
+    "0x82C1A200": {
+      "exported_name": null,
+      "symbol": "strcat_s",
+      "size": 276,
+      "evidence": "The named _tmpfile_helper directly calls this installed libcMT.lib:obj\\xbox\\strcat_s.obj symbol at 0x82C0F228. Its exact linked target, complete packed extent and every direct branch agree. The pinned universe already credits its SDK provider."
     }
   },
   "native_leaf_functions": {
