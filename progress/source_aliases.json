@@ -1311,6 +1311,13 @@
         "CgsNetwork::ReliableMessage::GetPackedMessageSize": "src/GameShared/GameClasses/Network/Packeting/Messages/CgsMessageWithPlayerIDs.cpp"
       },
       "evidence": "The three overrides share CgsNetworkUnity.cpp in DecFIGS. With the same compilation scope, XDK emits both 20-byte derived bodies as three identical zero stores and the same Message::GetPackedMessageSize tail as ARTIST. The ReadyMessage base delegate at 0x827DE0F8 and the related ReliableMessage subclasses call that entry."
+    },
+    "0x82ADBB58": {
+      "exported_name": "AptValueVector::SafePop",
+      "aliases": {
+        "AptActionInterpreter::stackSafePop": "src/SDKs/EATech/include/Apt/AptActionInterpreter.cpp"
+      },
+      "evidence": "The interpreter-specific and vector SafePop COFF bodies both match the 120-byte ARTIST body, with the same CRT branches. ARTIST's 0x82ADC128 interpreter stack helper branches directly here, and InitArray's original branch at 0x82AF3DA4 corresponds to the native interpreter stackSafePop call."
     }
   },
   "xdk_functions": {
@@ -17861,6 +17868,48 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "ARTIST 0x82233004 calls through the Director wrapper's mpLineTestFinePostOffice at +0x04. DecFIGS BrnSceneQueryInterface.h:164 and BrnDirectorPostOfficeTypes.h:54 type that member as PostOffice<const OutEventLineTestFineResult*,10>. The callee checks capacity 10 at 0x8222D1A4, posts the passed box and returns its new query index. The otherwise exact wrapper's branch relocation names this typed AddPostBox. The callee remains nonmatching."
+    },
+    "CgsSound::Logic::State::G": {
+      "symbol": "CgsSound::Logic::State::GetTypeInfo",
+      "x360_address": "0x8268D410",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot +0x04 at 0x820AE1F8 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2FA90."
+    },
+    "BrnSound::Logic::BrnState": {
+      "symbol": "BrnSound::Logic::BrnState::GetTypeInfo",
+      "x360_address": "0x82682A88",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot +0x04 at 0x820B1264 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2E7DC."
+    },
+    "BrnSound::Logic::GlobalSt": {
+      "symbol": "BrnSound::Logic::GlobalState::GetTypeInfo",
+      "x360_address": "0x826867F8",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot +0x04 at 0x820B22C8 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2F86C."
+    },
+    "BrnSound::Logic::Streamin": {
+      "symbol": "BrnSound::Logic::Streaming::StreamingState::GetTypeInfo",
+      "x360_address": "0x82683A58",
+      "byte_match": true,
+      "evidence": "ARTIST vtable slot +0x04 at 0x820B15B4 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2E83C."
+    },
+    "BrnProgression::ProgressionData::GetProgressionRankDa": {
+      "x360_address": "0x82311790",
+      "symbol": "BrnProgression::ProgressionData::GetProgressionRankData",
+      "name_evidence": true,
+      "evidence": "ARTIST tests the rank index against the +0x14 progression-rank count, asserts BrnProgressionData.h:330, and addresses the typed +0x10 rank table at stride 112. DecFIGS and the recovered BrnProgressionData owner corroborate GetProgressionRankData(u32) const."
+    },
+    "BrnWorld::GlobalColourPalett": {
+      "x360_address": "0x824BD480",
+      "symbol": "CgsResource::ResourcePtr<BrnWorld::GlobalColourPalette>::operator->",
+      "name_evidence": true,
+      "evidence": "The sole ARTIST caller 0x824BDA40 passes its GlobalColourPalette ResourcePtr. The callee tests its memory pointer, fires the original CgsResourcePtr.h:563 diagnostic, and returns the stored pointer. Its native explicit instantiation is the const-qualified operator->."
+    },
+    "CgsGui::GuiResourceModuleIO::OutputBu": {
+      "x360_address": "0x8284DEA8",
+      "symbol": "CgsGui::GuiResourceModuleIO::OutputBuffer::GetResourceRequestQueue",
+      "name_evidence": true,
+      "evidence": "ARTIST tests bit 4 (read lock), diagnoses the failure at CgsGuiResourceModuleIO.h:313, and returns this+4, the request queue member. The sole original caller 0x8285E120 passes a const output buffer and makes all three calls to this address."
     }
   },
   "sdk_entry_groups": {
@@ -26918,6 +26967,20 @@
       "size": 540,
       "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
       "evidence": "DecFIGS BrnTextField.cpp:262 identifies the variadic overload. ARTIST lines 264–266 carry the three contract assertions, 0x824E799C initializes the arguments before reading the StateInterface, and 0x824E79F8 calls LanguageManager::FormatTextV. The native varargs overload matches all 540 bytes at this address."
+    },
+    "0x82AF1CB0": {
+      "exported_name": "sub_82AF1CB0",
+      "symbol": "AptArray::AptArray",
+      "size": 100,
+      "tu": "class:AptArray",
+      "evidence": "ARTIST InitArray allocates an AptArray and calls this default constructor at 0x82AF3D3C. The native default constructor matches the 100-byte extent, including the AptArray vtable and the common AptValueWithHash constructor relocation."
+    },
+    "0x828B74A8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>::IsObjectAllocated",
+      "size": 296,
+      "tu": "class:CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>",
+      "evidence": "ARTIST 0x828B9FB0 in the typed const EntityManager::GetVolumeInstance passes the same volume-instance pool receiver as the adjacent named operator[] call at 0x828B9FC8. The target checks the exact 5048-item pool capacity at 0x828B74BC and queries the allocation bit for the passed signed index. The const COFF call relocation names this specialization. The existing callee source still differs in its own diagnostics."
     }
   },
   "native_leaf_functions": {
@@ -27534,6 +27597,24 @@
       "call_site": "0x822A6980",
       "table_entry": "0x822A6988",
       "evidence": "The nudge entry targets the omitted blr at 0x822A6A1C, immediately before the next function at 0x822A6A20. DecFIGS BrnBoostBurnout3.cpp:490 identifies the original EImpactType override. The complete 192-byte XDK COFF body compares exact, with all eight case targets and the jump table base resolved to the same ARTIST addresses."
+    },
+    "0x82868550": {
+      "symbol": "CgsMemory::SimpleDataStreamConsumer::AddResult",
+      "size": 24,
+      "file": "GameShared/GameClasses/Memory/DataStream/CgsSimpleDataStreamConsumer.cpp",
+      "native_symbol": "?AddResult@SimpleDataStreamConsumer@CgsMemory@@QAAXPAXH@Z",
+      "caller": "0x82915D88",
+      "call_site": "0x82915FA8",
+      "evidence": "ARTIST ExecuteFillTriangleCacheStream constructs a SimpleDataStreamConsumer and passes the same receiver, its mutable result record and the signed index written by ReadCo to 0x82915FA8. The same leaf is called at 0x829168CC and 0x82922204. DecFIGS BC1C04 names the method and independently confirms the void* result, signed index, slot stride at +0x10 and result-buffer base at +0x14. The XDK member matches all 24 bytes and the sole branch lands on XMemCpy at 0x82926BA0."
+    },
+    "0x82686788": {
+      "symbol": "BrnSound::Logic::World::EmitterState::GetTypeInfo",
+      "size": 12,
+      "tu": "src/GameSource/Sound/Module/LogicModule/BrnEmitterState.cpp",
+      "vtable_slots": [
+        "0x820B2238"
+      ],
+      "evidence": "ARTIST vtable slot +0x04 at 0x820B2238 names the virtual GetTypeInfo preceding GetTypeName. The XDK body matches all 12 bytes outside the two verified relocations to this class descriptor at 0x82F2F83C."
     }
   },
   "sdk_archive_splits": {
