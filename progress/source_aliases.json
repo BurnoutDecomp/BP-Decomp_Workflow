@@ -27679,6 +27679,55 @@
       "size": 380,
       "tu": "src/GameSource/Replays/BrnReplayBaseSerialiser.cpp",
       "evidence": "ARTIST ReadVariableQueue<512,16> at 0x82656CF0 calls the original typed allocator at 0x82656D4C. The 380-byte .pdata body, the typed padding helper, eleven branches, and the original streamed overflow diagnostic at 0x8209E81C agree with fresh native objects."
+    },
+    "0x827C2F28": {
+      "exported_name": "sub_827C2F28",
+      "symbol": "CgsContainers::Set<unsigned short,160>::Contains",
+      "size": 128,
+      "tu": "src/GameShared/GameClasses/Containers/CgsArrayShort160.cpp",
+      "evidence": "ARTIST call at 0x827C69F4. CrashModule::OnTrafficCarRemovedFromCrash passes the indexed maCrashingTrafficForPlayers set and the address of the vehicle u16; it tests the bool result before erasing. DecFIGS BrnCrashModule.h:242 and CgsSet.h:1038 onward attest Set<uint16_t,160> and Contains. The complete typed COFF is exact across 128 bytes, 4 named branches and 2 data operands."
+    },
+    "0x827C2E80": {
+      "exported_name": "sub_827C2E80",
+      "symbol": "CgsContainers::Set<unsigned short,160>::Erase",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Containers/CgsSetUnsignedShort160.cpp",
+      "evidence": "ARTIST call at 0x827C6A10. CrashModule::OnTrafficCarRemovedFromCrash passes the same named Set<uint16_t,160> and vehicle u16 reference after successful Contains to erase the member. DecFIGS BrnCrashModule.h:242 and CgsSet.h:1038 onward attest the set and Erase. The complete typed COFF is exact across 164 bytes, 9 named branches and 3 data operands."
+    },
+    "0x82814570": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitive",
+      "size": 140,
+      "tu": "src/GameShared/GameClasses/SceneManager/Collision/Primitives/CgsPrimitivePairListBuilder.cpp",
+      "evidence": "ARTIST call at 0x8260950C. DeformableObject::DoBodyPartWorldContactGeneration passes the typed 48-byte Box, padding and primitive tag. The original volume-kind switch also reaches this Box overload at 0x82814B80 after Box::Set. DecFIGS CgsPrimitivePairListBuilder.h:23 and .cpp:246 attest AddPrimitive(Box*,f32,u16). The complete typed COFF is exact across 140 bytes, 2 named branches and 0 data operands."
+    },
+    "0x82814678": {
+      "exported_name": "sub_82814678",
+      "symbol": "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitive",
+      "size": 144,
+      "tu": "src/GameShared/GameClasses/SceneManager/Collision/Primitives/CgsPrimitivePairListBuilder.cpp",
+      "evidence": "ARTIST call at 0x82609A60. DeformableObject::DoDetachedWheelWorldContactGeneration passes the local Cylinder, padding and primitive tag. The original volume-kind switch also calls this Cylinder overload at 0x82814CA4. DecFIGS CgsPrimitivePairListBuilder.h:32 and .cpp:231 attest AddPrimitive(Cylinder*,f32,u16). The complete typed COFF is exact across 144 bytes, 2 named branches and 0 data operands."
+    },
+    "0x823A6208": {
+      "exported_name": "sub_823A6208",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::TelemetryData::AddParameter",
+      "size": 132,
+      "tu": "src/GameSource/Network/SharedIO/BrnNetworkSharedIO.cpp",
+      "evidence": "ARTIST call at 0x823E2D70. BrnGameModule::BridgeGameStateToNetwork passes a local seconds word and float fraction for ModeResultsAction.mFinishTime before enqueueing telemetry. The callee implements the existing Time-in-hundredths conversion and string overload call. DecFIGS BrnNetworkSharedIO.h:730 attests AddParameter(Time). The complete typed COFF is exact across 132 bytes, 2 named branches and 2 data operands."
+    },
+    "0x82878C88": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::ServerInterfacePlayerInfo::EventStatusCallback",
+      "size": 184,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfacePlayerInfo.cpp",
+      "evidence": "ARTIST caller reference at 0x82888528. ServerInterfacePlayerInfo::Prepare forms this callback address in r5 at 0x82888520 and 0x82888528, and passes it with this in r6 and selector 4 to LobbyApiSetCallback at 0x82888534. The exact native Prepare has both REFHI and REFLO to the callback symbol at the same offsets. DecFIGS CgsServerInterfacePlayerInfo.h:269 attests EventStatusCallback(LobbyApiRefT*,LobbyApiMsgT*,void*). The complete typed COFF is exact across 184 bytes, 6 named branches and 2 data operands."
+    },
+    "0x827DB5D8": {
+      "exported_name": "sub_827DB5D8",
+      "symbol": "CgsGraphics::ImRendererBase::SetState",
+      "size": 128,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.cpp",
+      "evidence": "ARTIST caller reference at 0x827F9D08. Im2dRenderBuffer::Dispatch uses entry 7 at 0x827F9C4C in its command jump table for this call. It passes the ImRendererBase subobject and the pointer at command+8. The typed ImCommandSetStateRenderTarget payload and DecFIGS CgsImRenderer.h:102 identify SetState(const renderengine::RenderTargetState*). The complete typed COFF is exact across 128 bytes, 4 named branches and 4 data operands."
     }
   },
   "native_leaf_functions": {
