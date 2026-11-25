@@ -27532,6 +27532,62 @@
       "caller": "0x826651C0",
       "call_site": "0x826653A0",
       "evidence": "The ARTIST BrnResource linear allocator names the GetAvailable call at 0x826653A0 and passes the result destination and allocator. The recovered body passes capacity at this+0x18 and usage at this+0x40 to the existing descriptor operator- at 0x82B63E50. The XDK body matches all 56 bytes with the named call verified."
+    },
+    "0x82856878": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<CgsGui::AnimChannel,6>::Append",
+      "size": 352,
+      "tu": "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimator.cpp",
+      "evidence": "ARTIST call at 0x82859128. Animator::Construct passes maAnimChannels at this+0x14 and the default AnimChannel. DecFIGS CgsAptAnimator.h:84 declares its Array<AnimChannel,6>, and CgsArray.h:7888 onward attests its specialization. ARTIST copies a 36-byte element and increments the count at +0xD8. The complete typed COFF is exact across 352 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8284D1A8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<CgsContainers::HashTableElement<unsigned int,renderengine::TextureState *>,256>::Append",
+      "size": 312,
+      "tu": "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.cpp",
+      "evidence": "ARTIST call at 0x828597AC. AptRenderHandler::Render appends the local typed texture-state table element immediately after TextureState::Initialize. DecFIGS CgsAptRender.h:82/88 and CgsAptRender.cpp:235–250 attest HashTableElement<uint32_t, TextureState*> and Array<...,256>::Append. Its 16-byte copy uses the live count at +0x1000. The complete typed COFF is exact across 312 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8284D728": {
+      "exported_name": "sub_8284D728",
+      "symbol": "CgsContainers::Array<CgsContainers::HashTableElement<unsigned int,renderengine::TextureState *>,256>::GetItem",
+      "size": 264,
+      "tu": "src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptRenderHandler.cpp",
+      "evidence": "ARTIST call at 0x828597C4. AptRenderHandler::Render indexes the same table immediately after Append and GetLength with length minus one, then writes the captured texture state to the resulting record. DecFIGS CgsAptRender.cpp:250–255 attests the matching Array<...,256> operator[] expression. The XDK body is that array's nonconst GetItem using stride 16. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x828AE5B8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<unsigned short,16384>::Append",
+      "size": 292,
+      "tu": "src/GameShared/GameClasses/SceneManager/FineIntersectionTestModule/CgsFineIntersectionTestModule.cpp",
+      "evidence": "ARTIST call at 0x828C9654. FineIntersectionTestModule::ComputeVolumeTestFine calls the target on a positive intersection and appends the local halfword entity index. DecFIGS CgsFineIntersectionTestModuleIO.h:236 declares EntityBuffer as Array<uint16_t,16384>, and CgsFineIntersectionTestModule.cpp:139 attests Append. The body uses the two-byte stride. The complete typed COFF is exact across 292 bytes, 11 named branches and 9 data operands."
+    },
+    "0x82360500": {
+      "exported_name": "sub_82360500",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateImageManagerBase::ImageLoadRequest,3>::GetItem",
+      "size": 272,
+      "tu": "src/GameSource/GameState/ImageManager/BrnGameStateImageManagerBase.cpp",
+      "evidence": "ARTIST call at 0x823840B4. GameStateImageManagerBase::UpdateNewImageRequests passes maImageLoadRequests and the checked index to this accessor, then reads the image request's slot word at offset 4. DecFIGS BrnGameStateImageManagerBase.h:47 and CgsArray.h:6906 onward identify the three-element ImageLoadRequest array. The complete typed COFF is exact across 272 bytes, 11 named branches and 9 data operands."
+    },
+    "0x827BA4C0": {
+      "exported_name": "sub_827BA4C0",
+      "symbol": "CgsContainers::Array<BrnWorld::RaceCarCrash,8>::GetItem",
+      "size": 272,
+      "tu": "src/GameSource/World/CrashModule/BrnCrashModule.cpp",
+      "evidence": "ARTIST call at 0x827C6B48. CrashModule::FindCrashForRaceCar passes mRaceCarCrashes and its current index, bounded by the live count at +0xC0. DecFIGS BrnCrashModule.h:224 attests Array<RaceCarCrash,8>. The lookup returns the checked 24-byte record. The complete typed COFF is exact across 272 bytes, 11 named branches and 9 data operands."
+    },
+    "0x827BA6D8": {
+      "exported_name": "sub_827BA6D8",
+      "symbol": "CgsContainers::Array<BrnWorld::TrafficCrash,160>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/World/CrashModule/BrnCrashModule_TrafficCrashes.cpp",
+      "evidence": "ARTIST call at 0x827C6C10. CrashModule::FindCrashForTrafficVehicle passes mTrafficCrashes and its current index, bounded by the live count at +0x500, and reads the vehicle halfword at result+2. DecFIGS BrnCrashModule.h:227 identifies Array<TrafficCrash,160>, and the accessor uses the eight-byte stride. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8277B490": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<BrnAI::RaceBalancingGraph,7>::AppendArray",
+      "size": 248,
+      "tu": "src/GameSource/World/AI/RaceBalancing/BrnRaceBalancingManager.cpp",
+      "evidence": "ARTIST call at 0x82789B50. RaceBalancingManager::OnRaceStart appends its supplied graph array to the named array owner. DecFIGS BrnRaceBalancingManager.h:29/54 and BrnRaceBalancingManager.cpp:53–62 independently attest Array<RaceBalancingGraph,7> and AppendArray<7u>. The complete typed COFF is exact across 248 bytes, 16 named branches and 3 data operands."
     }
   },
   "native_leaf_functions": {
