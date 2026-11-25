@@ -30657,6 +30657,20 @@
       "exported_name": null,
       "tu": "src/GameShared/GameClasses/Graphics/MoviePlayer/CgsMovieVideoRenderer.cpp",
       "evidence": "ARTIST MovieVideoRenderer vtable at 0x820D5A48 places the typed Y-position query between GetPositionX and GetPositionZ at slot +0x24. DecFIGS CgsMovieVideoRenderer.h:113 corroborates the slot, return type and original diagnostic line. The complete XDK body, three assert calls, source filename, assertion text and zero float match."
+    },
+    "0x827DE5B0": {
+      "symbol": "CgsGraphics::MoviePlayerCoreAllocator::Alloc",
+      "size": 420,
+      "exported_name": "sub_827DE5B0",
+      "tu": "src/GameShared/GameClasses/Graphics/MoviePlayer/CgsMoviePlayerChunkBuffer.cpp",
+      "evidence": "The derived ARTIST MoviePlayerCoreAllocator vtable at 0x820CE054 places the unaligned Alloc override at +8, between the aligned override and Free. The typed XDK table places that same three-argument method at +8. The native and original bodies check the allocator and result at lines 127 and 129, allocate the original 16-byte aligned memory resource and match every branch and data reference."
+    },
+    "0x82B60EC8": {
+      "exported_name": null,
+      "symbol": "renderengine::Texture::GetWidth",
+      "size": 112,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/texture.cpp",
+      "evidence": "ARTIST Texture::Lock at 82B62C58 calls this receiver-only helper and stores its mip-adjusted result as width at offset 0x0C. PixelBuffer::Xbox2ResolveTo at 82B623DC and 82B623EC uses the same return value for the horizontal resolve bound. The body uses the 1D, 2D, and 3D fetch width fields, and DecFIGS texture.h:156 declares Texture::GetWidth() const. The ARTIST .pdata extent is 112 bytes."
     }
   },
   "native_leaf_functions": {
