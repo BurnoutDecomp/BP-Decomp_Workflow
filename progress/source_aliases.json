@@ -790,9 +790,10 @@
       "aliases": {
         "CgsNetwork::ServerInterfaceCustomCommands::Prepare": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
         "CgsNetwork::ServerInterfaceCustomCommands::Release": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
-        "BrnNetwork::LiveRevengeDebugComponent::Release": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp"
+        "BrnNetwork::LiveRevengeDebugComponent::Release": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp",
+        "CgsResource::Type::DeSerialise": "src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp"
       },
-      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address."
+      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address. The inherited GraphicsSpecResourceType DeSerialise slots at 0x820A1648 and 0x820A1678 are the same linked address. The eight-byte original CgsResource::Type::DeSerialise and the typed particle resource caller were verified."
     },
     "0x82B42DC0": {
       "exported_name": "rw::movie::VideoRenderable::~VideoRenderable",
@@ -1336,6 +1337,13 @@
         "BrnNetwork::ConnectionManager::Destruct": "src/GameSource/Network/Managers/BrnNetworkConnectionManager.cpp"
       },
       "evidence": "The original BrnNetworkManager::Destruct call at 0x8258E414 targets this 12-byte body, which resets the connection manager owner pointer at offset 8. The native typed implementation matches all 12 bytes."
+    },
+    "0x82BCCCC8": {
+      "exported_name": "MassiveAdClient3::CMassiveClientCore::ZoneManagerRemove",
+      "aliases": {
+        "MassiveAdClient3::XMassiveAdClient::ZoneManagerRemove": "xmassiveadclient.lib:obj\\xbox\\massiveclientcore.obj"
+      },
+      "evidence": "Alternate SDK spelling of the same member. The ordinary XMassiveAdClient::Instance spellings are already attested on CMassiveClientCore::Instance, and ARTIST calls Instance immediately before this member at 0x82BD356C. The 192-byte member's independently audited call sites have the same list-lookup, iteration, error, and removal targets under both names, including the attested Find address. The callee itself remains nonmatching, including the signed SetLastError literal."
     }
   },
   "xdk_functions": {
@@ -1917,9 +1925,63 @@
         "archive_symbol": "_strnicmp"
       },
       "evidence": "XDK 6534.4 string.h declares _strnicmp. Its 172-byte libcMT.lib archive implementation matches ARTIST at 0x82C0BD40 with all five call relocations confirmed: _errno twice, _invalid_parameter twice, and __ascii_strnicmp. The current universe already classifies this same extent as SDK."
+    },
+    "MassiveAdClient3::CFlag::`vector deleting destructor'": {
+      "symbol": "MassiveAdClient3::CFlag::`scalar deleting destructor'",
+      "x360_address": "0x82BCC758",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\massiveclientcore.obj",
+        "archive_symbol": "??_GCFlag@MassiveAdClient3@@UAAPAXI@Z",
+        "archive_data_targets": {
+          "??_7CFlag@MassiveAdClient3@@6B@": "0x82183CA0"
+        }
+      },
+      "evidence": "The archive's CFlag vtable names the weak vector deleting destructor, whose same-class fallback is the scalar body. ARTIST CMassiveClientCore::CMassiveClientCore passes the literal CFlag to the base and installs the table at 0x82183CA0 in both CFlag subobjects (0x82BCD4BC and 0x82BCD4C8). Its sole slot points to 0x82BCC758. The 88-byte deleting destructor matches the archive with both direct calls and the independently identified CFlag table relocation verified."
+    },
+    "MassiveAdClient3::CTransactionHTTP::`vector deleting destructor'": {
+      "symbol": "MassiveAdClient3::CTransactionHTTP::`scalar deleting destructor'",
+      "x360_address": "0x82BD90E0",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\transactionhttp.obj",
+        "archive_symbol": "??_GCTransactionHTTP@MassiveAdClient3@@UAAPAXI@Z"
+      },
+      "evidence": "The same-member COFF weak external for ??_ECTransactionHTTP selects the verified scalar body. All 76 bytes match outside the relocations to CTransactionHTTP::~CTransactionHTTP at 0x82BD8900 and CMassiveBaseObject::operator delete at 0x82BCF0B8."
+    },
+    "MassiveAdClient3::CMassiveZoneManager::HandleResponse": {
+      "symbol": "MassiveAdClient3::CMassiveZoneManager::HandleResponse",
+      "x360_address": "0x82BD3410",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "xmassiveadclient.lib",
+        "member": "obj\\xbox\\massivezonemanager.obj",
+        "archive_symbol": "?HandleResponse@CMassiveZoneManager@MassiveAdClient3@@UAAXPAVCRequestObject@2@@Z",
+        "archive_literals": {
+          "??_C@_0CI@ODGIMPIJ@Impression?5Update?5received?5succe@": {
+            "address": "0x82185964",
+            "size": 40
+          }
+        }
+      },
+      "evidence": "The 368-byte XDK function matches all instruction fields, all direct call names, the 40-byte diagnostic at 0x82185964 and the zero float literal. The direct GetAssets and ZoneManagerRemove calls use separately evidenced names at 0x82BDBB18 and 0x82BCCCC8."
     }
   },
   "functions": {
+    "CgsResource::BinaryFileResource>::PurgeLoadData": {
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::BinaryFileResource>::PurgeLoadData",
+      "x360_address": "0x826AADE8",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsContentLoader.h:93 and the inlined Environment::Free declare this owner. The original BinaryFileResource helper at 0x826AADE8 clears the state after freeing through allocator slot +0x14. All 180 bytes outside matching relocations and the source assertion line 226 are verified."
+    },
+    "CgsResource::AlignedBinaryFileResource>::PurgeLoadData": {
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::AlignedBinaryFileResource>::PurgeLoadData",
+      "x360_address": "0x826AAEA0",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsContentLoader.h:93 and the inlined Environment::Free declare this owner. The original AlignedBinaryFileResource helper at 0x826AAEA0 clears the state after freeing through allocator slot +0x14. All 180 bytes outside matching relocations and the source assertion line 226 are verified."
+    },
     "CgsResource::BinaryFileResource>::StartResourceModuleLoad": {
       "symbol": "CgsSound::Playback::ContentLoader<CgsResource::BinaryFileResource>::StartResourceModuleLoading",
       "x360_address": "0x826C6998",
@@ -18083,6 +18145,42 @@
       "x360_address": "0x8289E190",
       "name_evidence": true,
       "evidence": "The full original decorated name at 0x8289E190 is identical to the XDK symbol and is the specialization reached by the original update call at 0x828A76BC. The ARTIST class key is V and the allocation size is 0x4B2. The original function body still differs from the native body."
+    },
+    "??$_Sort@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@H@std@@YAXPAUModelInstanceInfo@ModelInstanceCollector": {
+      "symbol": "std::_Sort<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,int>",
+      "x360_address": "0x82801A38",
+      "file": "GameShared/GameClasses/Graphics/CgsModel.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The 119-character export is the unique prefix of the complete native STL symbol. FlushInstanceCollection's branch at 0x82801BC4 passes two ModelInstanceInfo pointers and the count from their 12-byte stride to this exact 272-byte sort body. The existing native source calls std::sort on that typed array."
+    },
+    "??$_Unguarded_partition@PAUModelInstanceInfo@ModelInstanceCollector@CgsGraphics@@@std@@YA?AU?$pair@PAUModelInstanceInfo": {
+      "symbol": "std::_Unguarded_partition<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *>",
+      "x360_address": "0x827FB3A0",
+      "file": "GameShared/GameClasses/Graphics/CgsModel.cpp",
+      "name_evidence": true,
+      "evidence": "The 119-character export uniquely prefixes this native typed STL definition. The original exact ModelInstanceInfo sort body passes two element pointers and the hidden pair return at 0x82801A78. The XDK algorithm header's _Sort calls this initial partition with the same signature. This is a name proof. The partition body is nonmatching."
+    },
+    "BrnNetwork::BrnNetworkModule::GetTraffic": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetTrafficInputInterface",
+      "x360_address": "0x82542818",
+      "file": "GameSource/Network/BrnNetworkModule.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST returns the original typed interface at 0xC3640 after the assertion at line 392. DecFIGS BrnNetworkModule.h:390 declares the accessor. The 164-byte native body, all six calls, and all seven data operands agree."
+    },
+    "BrnNetwork::BrnNetworkModule::Get": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetTrafficOutputInterface",
+      "x360_address": "0x825428C0",
+      "file": "GameSource/Network/BrnNetworkModule.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST returns the original typed interface at 0xC36B0 after the assertion at line 400. DecFIGS BrnNetworkModule.h:398 declares the accessor. The 164-byte native body, all six calls, and all seven data operands agree."
+    },
+    "BrnNetwork::BrnNetworkModule::GetCrashOutputInt": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetCrashOutputInterface",
+      "x360_address": "0x82542A10",
+      "file": "GameSource/Network/BrnNetworkModule.cpp",
+      "byte_match": true,
+      "evidence": "ARTIST returns the original typed interface at 0xC73D0 after the assertion at line 416. DecFIGS BrnNetworkModule.h:414 declares the accessor. The 164-byte native body, all six calls, and all seven data operands agree."
     }
   },
   "sdk_entry_groups": {
@@ -21032,6 +21130,56 @@
         "0x8210BCA8"
       ],
       "evidence": "The exact same-member CStreamEngine destructor loads the owning IXCamStreamEngine vtable. The archive table’s SetEncoderTargetFramerate relocation occupies the same ARTIST slot, which names this complete disjoint leaf."
+    },
+    "0x8295F248": {
+      "symbol": "sendto",
+      "size": 32,
+      "lib": "xnet.lib",
+      "member": "obj\\xbox\\sockapi.obj",
+      "archive_symbol": "sendto",
+      "caller": "0x8258BA18",
+      "call_site": "0x8258BB44",
+      "evidence": "ARTIST CameraX360::SendVideoData names sendto at 0x8258BB44, independently confirmed by SocketSendto at 0x82B2C0AC. The whole 32-byte xnet archive body matches and its only relocation is the named NetDll_sendto tail branch."
+    },
+    "0x8295F0D0": {
+      "symbol": "getpeername",
+      "size": 20,
+      "lib": "xnet.lib",
+      "member": "obj\\xbox\\sockapi.obj",
+      "archive_symbol": "getpeername",
+      "caller": "0x82B2C2A0",
+      "call_site": "0x82B2C5B4",
+      "evidence": "ARTIST SocketInfo names getpeername at both 0x82B2C5B4 and 0x82B2C5E8. The whole 20-byte xnet archive body matches and its only relocation is the named NetDll_getpeername tail branch."
+    },
+    "0x8295EE08": {
+      "symbol": "XNetRegisterKey",
+      "size": 16,
+      "lib": "xnet.lib",
+      "member": "obj\\xbox\\xnetapi.obj",
+      "archive_symbol": "XNetRegisterKey",
+      "caller": "0x82B12690",
+      "call_site": "0x82B12934",
+      "evidence": "ARTIST sub_82B12690 names XNetRegisterKey at 0x82B12934. The whole 16-byte xnet archive body matches and its only relocation is the named NetDll_XNetRegisterKey tail branch."
+    },
+    "0x82C33F08": {
+      "symbol": "XHVCreateEngine",
+      "size": 12,
+      "lib": "xhv.lib",
+      "member": "obj\\xbox\\xhv.obj",
+      "archive_symbol": "XHVCreateEngine",
+      "caller": "0x82B29638",
+      "call_site": "0x82B297A0",
+      "evidence": "ARTIST VoipStartup names XHVCreateEngine at 0x82B297A0. The whole 12-byte xhv archive body matches and its only relocation is the named XHVpCreateEngine tail branch."
+    },
+    "0x82BCF040": {
+      "symbol": "MassiveAdClient3::CMassiveList::Find",
+      "size": 32,
+      "lib": "xmassiveadclient.lib",
+      "member": "obj\\xbox\\massivelist.obj",
+      "archive_symbol": "?Find@CMassiveList@MassiveAdClient3@@QAAPAVCMassiveListNode@2@PAX@Z",
+      "caller": "0x82BCCCC8",
+      "call_site": "0x82BCCD54",
+      "evidence": "ARTIST CMassiveClientCore::ZoneManagerRemove identifies the list lookup at 0x82BCCD54 as CMassiveList::Find. The same branch in the XDK archive points to the same symbol. Its whole 32-byte archive body matches without any relocations."
     }
   },
   "identified_functions": {
@@ -27285,6 +27433,38 @@
         "archive_symbol": "_snprintf"
       },
       "evidence": "The 276-byte packed-unwind ARTIST extent agrees with libcMT's snprintf.obj outside its branch relocations. Every branch resolves to the same named CRT target."
+    },
+    "0x8266AC50": {
+      "exported_name": null,
+      "symbol": "rw::IResourceAllocator::Alloc",
+      "size": 120,
+      "file": "vendor/renderware/src/rwcore_alloc.cpp",
+      "tu": "SDKs/EATech/include/cmn/rw/core/resource/resourceallocator.h",
+      "native_symbol": "?Alloc@IResourceAllocator@rw@@UAAPAXIPBDIII@Z",
+      "vtable_slots": [
+        "0x8218111C"
+      ],
+      "evidence": "ARTIST's Xbox2NativeSystemAllocator vtable has the aligned Alloc at +0x04 (0x8218111C) and the short overload at +0x08 (0x82181120). The aligned body stores the incoming r7 alignment in its lane-zero descriptor at 0x8266AC64, whereas the short overload stores one at 0x8266AC00. DecFIGS resourceallocator.h:116 and :122 declare both virtual overloads; resourcetarget.h:105 declares the typed size/alignment descriptor. The XDK matches the full 120-byte aligned body and the DoAllocate vtable access at +0x10."
+    },
+    "0x82ADF458": {
+      "exported_name": null,
+      "symbol": "AptCharacterInst::GetRenderItemWritable",
+      "size": 188,
+      "tu": "src/SDKs/EATech/include/Apt/AptCharacterInst.cpp",
+      "evidence": "The 4-byte named AptCharacterInst::GetRenderItemDynamicTextWritable thunk at 0x82AE1BF8 tail-branches directly here. This function loads the character instance's render item at +4, creates a revision through AptRenderItem::Manager_CreateNewRevision at 0x82ADABA0 when the item is stale, then transfers the reference through AptRenderItem::ReleaseReference at 0x82ADAA98. Named plain and text setters enter the same callee, including direct calls at 0x82AE1C14, 0x82AE1CFC, 0x82AE1D2C, 0x82AE1DAC, 0x82AE66D4, and 0x82AE670C. XEX .pdata gives 188 bytes."
+    },
+    "0x82BDBB18": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CRequestEnterZone::GetAssets",
+      "size": 136,
+      "evidence": "ARTIST names the GetAssets target in HandleResponse at 0x82BD34E0. In the separate matching-size XDK archive getter, all eight call sites and instructions align except for the compare/conditional-branch condition register at 0x82BDBB90/0x82BDBB94. It traverses the assets list and copies each element into the supplied destination list. The existing CRequestEnterZone.h declaration matches the archive signature. The callee itself remains nonmatching."
+    },
+    "0x8290A118": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<LionBatch,512>::Append",
+      "size": 312,
+      "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/source/ParticleRender/ParticleRender.cpp",
+      "evidence": "ARTIST EmitterRender at 0x82913C60 and EmitterCubeRender at 0x82914368 both call this body to append a completed LionBatch into the same render batch array. DecFIGS LionBatch.h identifies the 512-element LionBatchArray. Unwind extent is 312 bytes. The XDK Array<LionBatch,512>::Append body matches all instructions outside verified assert text and call relocations."
     }
   },
   "native_leaf_functions": {
@@ -28064,6 +28244,14 @@
       "refhi_site": "0x82915784",
       "reflo_site": "0x82915788",
       "evidence": "ARTIST cLionFX::Update passes this address to CRT atexit at 0x82915790 after setting the render singleton guard at 0x82FAD080. Render and Dispatch register the identical callback. The callback is a single blr, bounded by zero words at 0x82C74924 and 0x82C7492C. DecFIGS ParticleRender.h:172 names the original destructor. The XDK atexit callback symbol has all four identical bytes with no relocations."
+    },
+    "0x827FB800": {
+      "symbol": "std::_Insertion_sort1<CgsGraphics::ModelInstanceCollector::ModelInstanceInfo *,CgsGraphics::ModelInstanceCollector::ModelInstanceInfo>",
+      "size": 280,
+      "tu": "src/GameShared/GameClasses/Graphics/CgsModel.cpp",
+      "caller": "0x82801A38",
+      "call_site": "0x82801AFC",
+      "evidence": "The native typed sort's small-range branch at 0x82801AFC relocates to this STL instantiation. ARTIST uses a 12-byte element with unsigned model pointer at +0, signed LOD state at +4 and copied matrix pointer at +8, matching CgsModel.h and type-specific operator<. The copy-backward-to-front and insertion-hole paths are the XDK algorithm header's _Insertion_sort1. This disjoint leaf returns at 0x827FB914, followed by the next framed function at 0x827FB918. The leaf body is nonmatching."
     }
   },
   "sdk_archive_splits": {
