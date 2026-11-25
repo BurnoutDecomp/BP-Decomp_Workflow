@@ -1903,6 +1903,12 @@
     }
   },
   "functions": {
+    "CgsResource::BinaryFileResource>::StartResourceModuleLoad": {
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::BinaryFileResource>::StartResourceModuleLoading",
+      "x360_address": "0x826C6998",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsContentLoader.h:118 declares the typed StartResourceModuleLoading. ARTIST 0x826dcc8c calls this fresh-load specialization. Its diagnostic CgsContentLoader.cpp:243 precedes allocation of ResourceModuleLoadData and the new-request field stores, distinct from restart."
+    },
     "CgsSound::Logic::State>::AddToClassTypeInfoArray": {
       "symbol": "CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::State>::AddToClassTypeInfoArray",
       "x360_address": "0x8268DF08",
@@ -20918,6 +20924,13 @@
     }
   },
   "identified_functions": {
+    "0x826C6D40": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::ContentLoader<CgsResource::AlignedBinaryFileResource>::StartResourceModuleLoading",
+      "size": 256,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsContentLoader.cpp",
+      "evidence": "DecFIGS CgsContentLoader.h:118 declares the typed StartResourceModuleLoading. ARTIST 0x826dd654 calls this fresh-load specialization. Its diagnostic CgsContentLoader.cpp:243 precedes allocation of ResourceModuleLoadData and the new-request field stores, distinct from restart."
+    },
     "0x828B8C60": {
       "exported_name": "sub_828B8C60",
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlappingIntervalPair>::AllocateEvent",
@@ -27076,6 +27089,13 @@
       "size": 88,
       "tu": "SharedClasses/DataLists/ChallengeList.h",
       "evidence": "DecFIGS ChallengeList.h:101 declares GetChallengeData(CgsID) const. ARTIST calls GetChallengeIndex with the full 64-bit ID, tests the signed result, then calls the GetChallengeData(s32) overload or returns null. The native CgsID COMDAT in BrnChallengeManager.obj matches all 88 bytes and the call targets."
+    },
+    "0x829146D0": {
+      "exported_name": "sub_829146D0",
+      "symbol": "cParticleEmitterManager::UnRegister",
+      "size": 296,
+      "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleEmitterManager.cpp",
+      "evidence": "ARTIST BindingsRemove at 0x82914D20 calls 0x829146D0 with cParticleEmitterManager::Instance (0x831238E8), a descriptor reference, the bindings reference and the optional sibling bindings pointer in r3-r6. The target tests descriptor behaviour flag 0x1000, matches descriptor ancestry via cParticleDescriptor::IsChildOf and rebinds the emitter or calls the single-emitter UnRegister at 0x82913760. DecFIGS ParticleEmitterManager.h:64 declares the descriptor-reference overload. The ARTIST .pdata extent is 296 bytes."
     }
   },
   "native_leaf_functions": {
@@ -27825,6 +27845,15 @@
       "call_site": "0x822A6E88",
       "table_entry": "0x822A6E90",
       "evidence": "The nudge table entry targets the omitted blr at 0x822A6F10, followed by a zero word at 0x822A6F14 and the next function at 0x822A6F18. DecFIGS BrnBoostBurnout2.h:78 and BrnBoostBurnout5.h:155 identify the original EImpactType overrides. All 172 XDK COFF bytes compare exact and all eight case-label relocations and the table base resolve to ARTIST. BoostBurnout5 vtable entry 0x820CEDDC points to the same body."
+    },
+    "0x82AD99A0": {
+      "symbol": "AptPseudoDisplayList::FindInst",
+      "size": 80,
+      "caller": "0x82AEE4D0",
+      "call_site": "0x82AEE4F8",
+      "source": "src/SDKs/EATech/include/Apt/AptPseudoDisplayList.cpp",
+      "tu": "class:AptPseudoDisplayList",
+      "evidence": "Insert branches here at 0x82AEE4F8 and 0x82AEE51C with the signed node depth, predecessor and existing-node output addresses. The original FindInst declaration corroborates those typed parameters. The native leaf equals the full 80 ARTIST bytes including cmpw at +0x14 and +0x38 and the return at 0x82AD99EC."
     }
   },
   "sdk_archive_splits": {
