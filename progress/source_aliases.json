@@ -16760,6 +16760,22 @@
       "x360_address": "0x8235C080",
       "byte_match": true,
       "evidence": "Profile::SetTargetEventScore at 0x823714F8 calls this address from 0x823715A0. The native call relocates to Array<TargetEventScore,49>::Grow through AddNew. The 280-byte COMDAT matches at this address with all 11 named calls. ARTIST verifies the capacity 49, the 40-byte element stride and both CgsArray.h assertions at 289 and 290."
+    },
+    "BrnStreetData::StreetData>::oper": {
+      "symbol": "CgsResource::ResourcePtr<BrnStreetData::StreetData>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnStreetData_StreetData.cpp",
+      "const": true,
+      "x360_address": "0x82324DC0",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82335288, 0x823361AC and 0x823508BC call this overload. Its checked pointer read returns the resource at offset zero and the guard uses CgsResourcePtr.h line 563, the const operator-> declaration. The corresponding XDK leaves use the QBA decorated overload. The native null test uses cmplwi where ARTIST uses cmpwi. The original relative assertion path is still a linked-data difference."
+    },
+    "BrnStreetData::StreetData>::operator->": {
+      "symbol": "CgsResource::ResourcePtr<BrnStreetData::StreetData>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnStreetData_StreetData.cpp",
+      "const": false,
+      "x360_address": "0x82324E60",
+      "name_evidence": true,
+      "evidence": "The two typed native FillInRoadRulesQuery relocations at 0x823365C4 and 0x82336628 target the QAA mutable operator->. Both ARTIST calls reach this 160-byte body. It matches the XDK instruction words and assertion line 544. The original relative assertion path is still a linked-data difference."
     }
   },
   "sdk_entry_groups": {
