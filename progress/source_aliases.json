@@ -1884,6 +1884,22 @@
     }
   },
   "functions": {
+    "CgsSceneManager::SceneManagerIO::InEventAddDynamicVolume>::AddEven": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddDynamicVolume>::AddEvent",
+      "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventAddDynamicVolume_AddEvent.cpp",
+      "x360_address": "0x822AAEC8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822B15E8 in the typed producer at 0x822B1518 calls this queue. The overflow literal at 0x82017F08 names its exact event class. Its native 348-byte body matches the 144-byte stride, all direct branches and diagnostic data."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventReplaceDynamicVolume>::Add": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventReplaceDynamicVolume>::AddEvent",
+      "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventReplaceDynamicVolume_AddEvent.cpp",
+      "x360_address": "0x822AB670",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822B16C4 in the typed producer at 0x822B15F8 calls this queue. The overflow literal at 0x82018168 names its exact event class. Its native 348-byte body matches the 144-byte stride, all direct branches and diagnostic data."
+    },
     "CgsSceneManager::SceneManagerIO::InEventVolumeTestDeepest>::AddEve": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventVolumeTestDeepest>::AddEvent",
       "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventVolumeTestDeepest_AddEvent.cpp",
@@ -17752,6 +17768,20 @@
       "x360_address": "0x8227D690",
       "name_evidence": true,
       "evidence": "DecFIGS BrnRaceCarEntityModuleOutputInterface.h:220 and LegacySrc lines 528–536 declare and define the const getter with all three guards. ARTIST uses the same guards on lines 790–792 and returns the typed 1120-byte slot. The named RaceCarCache::Update call at 0x826BF53C relocates to the const getter. Its XDK body remains 252 bytes against 172 because it inlines IsRaceCarActive."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventClearCullingTable>::Append": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventClearCullingTable>::Append",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x827A6488",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x827A9460 passes both mClearCullingTableQueue members at +0xB444C; the typed native relocation targets the same Append instantiation. The 216-byte callee has the same three diagnostics and an independent instruction scheduling residual beginning at byte 164."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventRemoveAllEntities>::Append": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveAllEntities>::Append",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x827A6E20",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x827A9550 passes both mRemoveAllEntitiesQueue members at +0xC7E3C; the typed native relocation targets the same Append instantiation. The 216-byte callee has the same three diagnostics and an independent instruction scheduling residual beginning at byte 164."
     }
   },
   "sdk_entry_groups": {
@@ -26675,6 +26705,13 @@
       "size": 164,
       "tu": "src/GameShared/GameClasses/Module/CgsModuleUnity.cpp",
       "evidence": "The ModuleSingleBuffered vtable slot at 0x820CE51C is between the named LockForInput and LockForOutput slots at 0x820CE518 and 0x820CE520. DecFIGS CgsModuleSingleBuffered.h lists UnlockForInput after LockForInput. The body calls UnlockInputForWrite at 0x8286EC88 and asserts at source line 400. The Unity COFF matches the full extent and its branch relocations."
+    },
+    "0x825E4340": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateExternalBody>::AddEvent",
+      "size": 388,
+      "tu": "src/GameSource/Physics/DeformationManager/DeformationPhysics/BrnPhysicalBodyPart.cpp",
+      "evidence": "ARTIST 0x825E7D08 calls from the typed InUpdateExternalBody producer, after the update queue getter at 0x825E7D04. Its overflow string at 0x82096608 names the event class. The 388-byte XDK body copies only the typed RigidBodyId and six SIMD lanes, matching all calls and diagnostic data."
     }
   },
   "native_leaf_functions": {
