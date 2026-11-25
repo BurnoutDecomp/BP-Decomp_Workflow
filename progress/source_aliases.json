@@ -19079,6 +19079,122 @@
       "x360_address": "0x821FEF00",
       "byte_match": true,
       "evidence": "ARTIST PostOffice<OutEventLineTestFineResult const*,10>::Clear has two original branches to this 264-byte extent, at 0x8221CCF8 and 0x8221CD14. The native relocations on both select ?GetItem@?$Array@PAV?$PostBox@PBUOutEventLineTestFineResult@SceneManagerIO@CgsSceneManager@@@BrnDirector@@$09@CgsContainers@@QAAAAPAV?$PostBox@PBUOutEventLineTestFineResult@SceneManagerIO@CgsSceneManager@@@BrnDirector@@I@Z. The legacy export gives the generic label __cde."
+    },
+    "BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::QSort": {
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::QSort",
+      "file": "GameSource/GameState/SharedIO/Array_ChainableMultiplierInfo_8.cpp",
+      "x360_address": "0x82317950",
+      "name_evidence": true,
+      "byte_match": true,
+      "evidence": "ARTIST checks the original unsigned count at +0x80, passes the typed 16-byte stride and comparator to qsort, and returns void. DecFIGS CgsArray.h:626 declares this overload. The original line-636 stream assertion, row size and native QSort provider identify the full 188-byte extent."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@OverlapCullingIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Over": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsSceneManager::OverlapCullingIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828CC698",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateContactGeneration at 828D5DB8 passes the typed culler buffer. The target allocates 0x100020 bytes and constructs the typed contact queue at buffer +0x10. The native typed provider agrees with the complete original body."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@OverlapCullingIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@Overl": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::OverlapCullingIO::InputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C4F70",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateContactGeneration at 828D5FE8 passes the typed culler buffer. The target clears the overlap, removed-volume and added-volume queues before the base destructor and frees 0x41028 bytes. The native typed provider agrees with the complete original body."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@OverlapCullingIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@Ove": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::OverlapCullingIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C5148",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateContactGeneration at 828D6000 passes the typed culler buffer. The target clears the typed contact queue length at buffer +0x18 before the base destructor and frees 0x100020 bytes. The native typed provider agrees with the complete original body."
+    },
+    "int,4>::Contains": {
+      "symbol": "CgsContainers::Array<int,4>::Contains",
+      "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
+      "x360_address": "0x822CAC60",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x822CACB0 to 0x822B0258. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
+    },
+    "int,5>::Contains": {
+      "symbol": "CgsContainers::Array<int,5>::Contains",
+      "file": "GameShared/GameClasses/Containers/CgsArrayInt5.cpp",
+      "x360_address": "0x8244FE48",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x8244FE98 to 0x824494B8. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
+    },
+    "__int64,128>::Contains": {
+      "symbol": "CgsContainers::Array<unsigned __int64,128>::Contains",
+      "file": "GameSource/GameState/BrnGameStateModule.cpp",
+      "x360_address": "0x8235CE78",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x8235CEC8 to 0x8235CDE0. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@_K$0IA@@CgsContainers@@QBAIAB_K@Z. Both diagnostic literals agree."
+    },
+    "short,1>::Contains": {
+      "symbol": "CgsContainers::Array<unsigned short,1>::Contains",
+      "file": "GameShared/GameClasses/Containers/CgsArrayShort1.cpp",
+      "x360_address": "0x8271A908",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x8271A958 to 0x8270C630. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@G$00@CgsContainers@@QBAIABG@Z. Both diagnostic literals agree."
+    },
+    "short,160>::Contains": {
+      "symbol": "CgsContainers::Array<unsigned short,160>::Contains",
+      "file": "GameShared/GameClasses/Containers/CgsArrayShort160.cpp",
+      "x360_address": "0x8271B090",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x8271B0E0 to 0x8270D0C0. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@G$0KA@@CgsContainers@@QBAIABG@Z. Both diagnostic literals agree."
+    },
+    "BrnDirector::Camera::BehaviourHelperIndex,28>::Contains": {
+      "symbol": "CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>::Contains",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.cpp",
+      "x360_address": "0x82211F88",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x82211FD8 to 0x821FFE98. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@VBehaviourHelperIndex@Camera@BrnDirector@@$0BM@@CgsContainers@@QBAIABVBehaviourHelperIndex@Camera@BrnDirector@@@Z. Both diagnostic literals agree."
+    },
+    "BrnDirector::HookNameStringWrapper,100>::Contains": {
+      "symbol": "CgsContainers::Array<BrnDirector::HookNameStringWrapper,100>::Contains",
+      "file": "GameSource/Director/Utils/BrnDirectorEffectTrigger.cpp",
+      "x360_address": "0x82210540",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x82210590 to 0x821FED28. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@UHookNameStringWrapper@BrnDirector@@$0GE@@CgsContainers@@QBAIABUHookNameStringWrapper@BrnDirector@@@Z. Both diagnostic literals agree."
+    },
+    "BrnGameState::LandmarkIndex,16>::Contains": {
+      "symbol": "CgsContainers::Array<BrnGameState::LandmarkIndex,16>::Contains",
+      "file": "GameSource/GameState/Array_LandmarkIndex_16.cpp",
+      "x360_address": "0x82325220",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x82325270 to 0x8231AB70. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@VLandmarkIndex@BrnGameState@@$0BA@@CgsContainers@@QBAIABVLandmarkIndex@BrnGameState@@@Z. Both diagnostic literals agree."
+    },
+    "char,16>::Contains": {
+      "symbol": "CgsContainers::Array<char,16>::Contains",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
+      "x360_address": "0x8271B6F8",
+      "byte_match": true,
+      "evidence": "The clipped original export is attested by the branch at 0x8271B748 to 0x8270D680. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. Both diagnostic literals agree."
+    },
+    "int,4>::FindFirstInstanceOf": {
+      "symbol": "CgsContainers::Array<int,4>::FindFirstInstanceOf",
+      "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
+      "x360_address": "0x822B0258",
+      "name_evidence": true,
+      "evidence": "The original Array::Contains body 0x822CAC60 branches to this clipped export at 0x822CACB0. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+    },
+    "int,5>::FindFirstInstanceOf": {
+      "symbol": "CgsContainers::Array<int,5>::FindFirstInstanceOf",
+      "file": "GameShared/GameClasses/Containers/CgsArrayInt5.cpp",
+      "x360_address": "0x824494B8",
+      "name_evidence": true,
+      "evidence": "The original Array::Contains body 0x8244FE48 branches to this clipped export at 0x8244FE98. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+    },
+    "char,16>::FindFirstInstanceOf": {
+      "symbol": "CgsContainers::Array<char,16>::FindFirstInstanceOf",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
+      "x360_address": "0x8270D680",
+      "name_evidence": true,
+      "evidence": "The original Array::Contains body 0x8271B6F8 branches to this clipped export at 0x8271B748. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
     }
   },
   "sdk_entry_groups": {
@@ -30196,6 +30312,48 @@
       "size": 92,
       "tu": "src/SDKs/EATech/eathread/eathread_semaphore.cpp",
       "evidence": "The EAThread SDK and DecFIGS declare Semaphore(int). ARTIST CgsFileSystem::AsyncOp::AsyncOp passes its initial count at 0x828DE310. The overload constructs the default intra-process parameters with that count and calls Semaphore::Init at 0x82B42988. The typed native overload matches all 92 bytes and the Init branch."
+    },
+    "0x82360400": {
+      "exported_name": "sub_82360400",
+      "symbol": "CgsContainers::LocklessQueue<BrnGameState::RichPresenceManagerX360::PresenceContext*>::Unlock",
+      "size": 252,
+      "tu": "src/GameSource/GameState/RichPresenceManager/X360/BrnGameStateRichPresenceManagerX360.cpp",
+      "evidence": "ARTIST Post and Pop call this typed queue owner at 0x823691D8 and 0x8236938C before sleeping and reacquiring. It clears the low lock field using the original atomic update while preserving indices and count. Original assertion locations are CgsLocklessQueue.h:275 and :284."
+    },
+    "0x828EB430": {
+      "exported_name": "sub_828EB430",
+      "symbol": "CgsResource::Heap::FindFreeNodeBestFit",
+      "size": 276,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "evidence": "ARTIST CgsResource::Heap::Malloc calls this 276-byte body at 0x828F494C. XDK retains the same decorated typed provider at caller offsets +0x130. The best-fit branch in the typed Malloc path calls the uint32 size search from DecFIGS header line 449."
+    },
+    "0x828EB548": {
+      "exported_name": "sub_828EB548",
+      "symbol": "CgsResource::Heap::FindFreeNodeFromTop",
+      "size": 208,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "evidence": "ARTIST CgsResource::Heap::Malloc calls this 208-byte body at 0x828F49C0. XDK retains the same decorated typed provider at caller offsets +0x14C. The top-first branch in typed Malloc calls the next-link and head search from DecFIGS header line 453."
+    },
+    "0x828EB618": {
+      "exported_name": "sub_828EB618",
+      "symbol": "CgsResource::Heap::FindFreeNodeFromBottom",
+      "size": 208,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "evidence": "ARTIST CgsResource::Heap::Malloc calls this 208-byte body at 0x828F4A38. XDK retains the same decorated typed provider at caller offsets +0x144. The bottom-first branch in typed Malloc calls the predecessor-link and tail search from DecFIGS header line 457."
+    },
+    "0x828F4568": {
+      "exported_name": "sub_828F4568",
+      "symbol": "CgsResource::Heap::GetNewNode",
+      "size": 368,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "evidence": "ARTIST CgsResource::Heap::Malloc calls this 368-byte body at 0x828F4ABC. XDK retains the same decorated typed provider at caller offsets +0x1D0, +0x3B0. ARTIST passes the raw address, signed size, allocated flag, debug name and owner at the typed Malloc call. DecFIGS CgsResourceHeap.cpp:207 corroborates the method, and the body removes the unused-list head and calls HeapEntry::SetSize. Reprepare separately calls the same helper at 0x828FD820."
+    },
+    "0x828FD918": {
+      "exported_name": "sub_828FD918",
+      "symbol": "CgsResource::Heap::Free",
+      "size": 224,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
+      "evidence": "ARTIST CgsResource::Pool::DeleteMemoryForEntry calls this 224-byte body at 0x828FEFC0. XDK retains the same decorated typed provider at caller offsets +0xA8. The typed pool caller selects the pointer overload of Free. DecFIGS CgsResourceHeap.cpp:490 corroborates its void-pointer argument and exact-address list walk, and the original body calls the distinct index overload at 0x828F4F80."
     }
   },
   "native_leaf_functions": {
