@@ -1884,6 +1884,46 @@
     }
   },
   "functions": {
+    "CgsSc": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveAllEntities>::AllocateEvent",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x822C6AE8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST calls from 0x822DF028 reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp matches all 160 bytes and six assert relocations."
+    },
+    "BrnGameStat": {
+      "symbol": "CgsModule::BaseEventQueue<BrnGameState::GameStateModuleIO::RecordPropHitEvent>::AllocateEvent",
+      "file": "GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp",
+      "x360_address": "0x822C9658",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST calls from 0x822FAC5C, 0x822FACEC reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameSource/World/EntityModules/PropEntityModule/BrnPropEntityModule.cpp matches all 164 bytes and six assert relocations."
+    },
+    "BrnPhysics::Props::Pr": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::PropUpdateNotification>::AllocateEvent",
+      "file": "GameSource/Physics/PropManager/SharedIO/BrnPropOutputInterface.cpp",
+      "x360_address": "0x825BC878",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST calls from 0x82615418 reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameSource/Physics/PropManager/SharedIO/BrnPropOutputInterface.cpp matches all 164 bytes and six assert relocations."
+    },
+    "CgsPhys": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveAllRigidBodies>::AllocateEvent",
+      "file": "GameSource/Physics/PropManager/BrnPropManager.cpp",
+      "x360_address": "0x825E4020",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST calls from 0x8260F030 reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameSource/Physics/PropManager/BrnPropManager.cpp matches all 160 bytes and six assert relocations."
+    },
+    "BrnPhysics::Vehicle::": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::PhysicalTrafficState>::AllocateEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_PhysicalTrafficState_AddEvent.cpp",
+      "x360_address": "0x825E5010",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST calls from 0x825EC3A8 reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_PhysicalTrafficState_AddEvent.cpp matches all 164 bytes and six assert relocations."
+    },
     "CgsSceneManager::SceneManagerIO::InEventLineTestFine>::AddEvent": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFine>::AddEvent",
       "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventLineTestFine_AddEvent.cpp",
@@ -20466,6 +20506,12 @@
     }
   },
   "identified_functions": {
+    "0x828B8C60": {
+      "exported_name": "sub_828B8C60",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlappingIntervalPair>::AllocateEvent",
+      "size": 164,
+      "evidence": "ARTIST calls from 0x828C1400, 0x828C1628, 0x828C1764 reserve the typed tail slot. The body has the two CgsBaseEventQueue.h:360/361 assertions and returns the prior tail pointer. DecFIGS CgsBaseEventQueue.h:356 declares T* AllocateEvent(). The native instantiation in GameShared/GameClasses/SceneManager/ContactGen/CgsIntervalStack.cpp matches all 164 bytes and six assert relocations."
+    },
     "0x82C2A468": {
       "exported_name": null,
       "symbol": "XGRAPHICS::Resource::`scalar deleting destructor'",
@@ -26340,6 +26386,76 @@
       "file": "GameSource/GameState/Progression/BrnProfile.cpp",
       "const": true,
       "evidence": "Profile::GetTargetEvent at 0x82371458 calls this address at 0x823714BC and 0x823714DC. Both relocations name the const GetItem(u32). The exact 272-byte COMDAT verifies the 40-byte element stride and the distinct CgsArray.h assertion lines 538 and 539, with all 11 named calls."
+    },
+    "0x827A61C8": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveVolumeInstance>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A9424 passes both InEventRemoveVolumeInstance queues at +0x9F520. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A6720": {
+      "exported_name": "sub_827A6720",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstanceForCaching>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A94B0 passes both InEventAddVolumeInstanceForCaching queues at +0xBF4C0. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A68E0": {
+      "exported_name": "sub_827A68E0",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceCullingGroup>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A949C passes both InEventSetVolumeInstanceCullingGroup queues at +0xBF920. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A6B80": {
+      "exported_name": "sub_827A6B80",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventRemoveFromCache>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A9508 passes both InEventRemoveFromCache queues at +0xC77E0. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A6C60": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCollisionManagerIO::InEventAddPolySoupList>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A9528 passes both InEventAddPolySoupList queues at +0xC7C94. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A6D40": {
+      "exported_name": "sub_827A6D40",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCollisionManagerIO::InEventClearPolySoupLists>::Append",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "evidence": "InSceneUpdateInterface::Append at 0x827A953C passes both InEventClearPolySoupLists queues at +0xC7DE0. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A7728": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<unsigned short>::Append",
+      "size": 220,
+      "tu": "src/GameSource/Physics/VehicleManager/SharedIO/BrnVehicleManagerOutputInterface.cpp",
+      "evidence": "VehicleManagerOutputInterface::operator= at 0x827A9B9C passes both unsigned-short mTrafficTypeRequestQueue members at +0x750. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x827A81F0": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::AddCrashingTrafficEvent>::Append",
+      "size": 220,
+      "tu": "src/GameSource/World/CrashModule/SharedIO/TrafficInputInterface.cpp",
+      "evidence": "TrafficInputInterface::operator= at 0x827AA504 passes both AddCrashingTrafficEvent queues at +0x0. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x828B9668": {
+      "exported_name": "sub_828B9668",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTest>::Append",
+      "size": 236,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_TriangleCollisionQueues.cpp",
+      "evidence": "ProcessFineQueriesDirectly at 0x828D5528 passes the two triangle line-test queues returned by their getters at 0x828AF708 and 0x828AFBA0. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x828B9758": {
+      "exported_name": "sub_828B9758",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTestNearest>::Append",
+      "size": 236,
+      "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_TriangleCollisionQueues.cpp",
+      "evidence": "ProcessFineQueriesDirectly at 0x828D5544 passes the two nearest triangle line-test queues returned by their getters at 0x828AF7B0 and 0x828AFC48. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
     }
   },
   "native_leaf_functions": {
