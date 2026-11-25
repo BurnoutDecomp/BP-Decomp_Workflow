@@ -17910,6 +17910,14 @@
       "symbol": "CgsGui::GuiResourceModuleIO::OutputBuffer::GetResourceRequestQueue",
       "name_evidence": true,
       "evidence": "ARTIST tests bit 4 (read lock), diagnoses the failure at CgsGuiResourceModuleIO.h:313, and returns this+4, the request queue member. The sole original caller 0x8285E120 passes a const output buffer and makes all three calls to this address."
+    },
+    "MaybeDrawText": {
+      "symbol": "CgsDev::Debug2DImmediateRender::DrawText",
+      "file": "GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug2DImmediateRender.cpp",
+      "x360_address": "0x82824048",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsDebug2DImmediateRender.cpp:409 declares the (const char*, float32_t, float32_t, float32_t, RGBA) overload. ARTIST 0x82824048 packs X/Y in Vector2, forwards colour and false for culling, then calls the Vector2 overload at 0x82824080. Four distinct native callers use the scalar overload and their branch targets, strings, globals, and constants agree. The wrapper retains a zero-lane store difference."
     }
   },
   "sdk_entry_groups": {
@@ -26981,6 +26989,31 @@
       "size": 296,
       "tu": "class:CgsContainers::ObjectPool<CgsSceneManager::VolumeInstance,5048,int>",
       "evidence": "ARTIST 0x828B9FB0 in the typed const EntityManager::GetVolumeInstance passes the same volume-instance pool receiver as the adjacent named operator[] call at 0x828B9FC8. The target checks the exact 5048-item pool capacity at 0x828B74BC and queries the allocation bit for the passed signed index. The const COFF call relocation names this specialization. The existing callee source still differs in its own diagnostics."
+    },
+    "0x82666128": {
+      "exported_name": "sub_82666128",
+      "symbol": "rw::IResourceAllocator::Free",
+      "file": "vendor/renderware/src/rwcore_alloc.cpp",
+      "native_symbol": "?Free@IResourceAllocator@rw@@UAAXPAXI@Z",
+      "size": 84,
+      "tu": "SDKs/EATech/include/cmn/rw/core/resource/resourceallocator.h",
+      "vtable_slots": [
+        "0x82181124"
+      ],
+      "evidence": "ARTIST Xbox2NativeSystemAllocator vtable at 0x82181118 points to this body at slot +0x0C. DecFIGS resourceallocator.h:129 declares that virtual Free(void*, size_t) overload; :151 declares the nonvirtual pointer overload at 0x8227D048, called directly by both formatter deleting destructors. The native virtual Free decorated symbol matches all 84 bytes and loads DoFree from vtable slot +0x14."
+    },
+    "0x82588498": {
+      "exported_name": "sub_82588498",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetPlayerResultsInterface",
+      "size": 168,
+      "evidence": "ARTIST OutputPlayerResultsInfo passes its mutable OutputBuffer to the callee at 0x8258891C and indexes the returned pointer with a 28-byte stride. This extent checks the writing lock (bit 0x08), reports BrnNetworkModuleIO.h:957, and returns mPlayerResultsInterface at 0x2CE30. DecFIGS declares the mutable PlayerResultsInterface* getter in OutputBuffer."
+    },
+    "0x8270D368": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<BrnTraffic::FiredKillZoneInfo,8>::GetItem",
+      "size": 264,
+      "tu": "class:CgsContainers::Array<BrnTraffic::FiredKillZoneInfo,8>",
+      "evidence": "DrawRecentKillZones (0x8276125C) and UpdateDEBUG (0x8271DCDC and 0x8271DCF8) pass the mutable Array<FiredKillZoneInfo,8> at TrafficEntityModule+0x727E0. DecFIGS declares that field and ARTIST body verifies +0x80 count and 16-byte item stride. Native provider matches all 264 bytes, 11 branches and nine data operands, including the CgsArray.h path and diagnostics."
     }
   },
   "native_leaf_functions": {
