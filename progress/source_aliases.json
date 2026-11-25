@@ -646,14 +646,15 @@
     },
     "0x82AD5078": {
       "exported_name": "STUB",
-      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST. EA::Thread::Mutex::~Mutex compares exact across 4 bytes and the aligned caller at 0x82B6BD88 targets this address. MassiveAdClient3::MassiveLog compares exact across 4 bytes and the aligned caller at 0x82BD15C4 targets this address. The callback is the single relocation-free blr at 0x82AD5078. The AsyncOp constructor, Read and Write all materialize this same address when selecting their original no-op completion.",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST. EA::Thread::Mutex::~Mutex compares exact across 4 bytes and the aligned caller at 0x82B6BD88 targets this address. MassiveAdClient3::MassiveLog compares exact across 4 bytes and the aligned caller at 0x82BD15C4 targets this address. The callback is the single relocation-free blr at 0x82AD5078. The AsyncOp constructor, Read and Write all materialize this same address when selecting their original no-op completion. ARTIST calls the EA::Jobs::EntryPoint method on the embedded Job+4 at 82810568 in CollisionBatch::SetupJob and 82810E38 in RunFillTriangleCacheStream. The typed XDK provider and the original 82AD5078 are each exactly one blr.",
       "aliases": {
         "MassiveAdClient3::CLog::Log": "xmassiveadclient.lib:obj\\xbox\\massiveadobject.obj",
         "MassiveAdClient3::CRequestObject::DumpByteArray": "xmassiveadclient.lib:obj\\xbox\\requestobject.obj",
         "MassiveDNSCleanUp": "xmassiveadclient.lib:obj\\xbox\\x360massivednssecure.obj",
         "EA::Thread::Mutex::~Mutex": "src/SDKs/EATech/eathread/eathread_mutex.cpp",
         "MassiveAdClient3::MassiveLog": "src/SDKs/Packages/MassiveAd/MassiveAdClient3ClientCore.cpp",
-        "rw::core::filesys::DefaultCompletion": "src/SDKs/EATech/rwcore/filesys/asyncop.cpp"
+        "rw::core::filesys::DefaultCompletion": "src/SDKs/EATech/rwcore/filesys/asyncop.cpp",
+        "EA::Jobs::EntryPoint::SetCodeRecycle": "src/SDKs/EATech/eajobs/entrypoint.cpp"
       }
     },
     "0x82579CC8": {
@@ -30621,6 +30622,41 @@
       "size": 120,
       "tu": "src/GameShared/GameClasses/Sound/Logic/CgsVoice.cpp",
       "evidence": "DecFIGS Logic CgsVoice.h:143 declares Attach(QueueElement,const Logic::Content&). The .pdata body asserts using Logic CgsContent.h:201, copies/acquires the Content handle at +4, then calls the private Attach overload at 826DC4C8."
+    },
+    "0x828667B8": {
+      "exported_name": "sub_828667B8",
+      "symbol": "CgsMemory::TraceFunc",
+      "size": 144,
+      "tu": "src/GameShared/GameClasses/Memory/CgsHeapMalloc.cpp",
+      "evidence": "DecFIGS CgsHeapMalloc.cpp:176 declares TraceFunc(const char*, void*). ARTIST HeapMalloc::PrintAllocations forms 0x828667B8 at 0x82866848 and 0x82866858, then passes it to TraceAllocatedMemory. The typed native callback relocation and exact message filter, log receiver, null-string substitution and newline independently corroborate the identity."
+    },
+    "0x828669B8": {
+      "exported_name": "sub_828669B8",
+      "symbol": "CgsMemory::HeapMallocCoreAllocator::Alloc",
+      "size": 500,
+      "tu": "src/GameShared/GameClasses/Memory/CgsHeapMalloc.cpp",
+      "evidence": "The derived ARTIST HeapMallocCoreAllocator vtable at 0x820D6ADC has aligned Alloc at +4, default Alloc at +8 and Free at +12. The XDK vtable relocates those slots to the same three typed methods. The five-argument size/alignment/offset ABI, original assert lines 265/268 and call to GeneralAllocator::MallocAligned corroborate the aligned overload."
+    },
+    "0x82B02F80": {
+      "exported_name": "sub_82B02F80",
+      "symbol": "AptActionInterpreter::getContext",
+      "size": 196,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterContext.cpp",
+      "evidence": "ARTIST CallFrame at 0x82B05330 and GotoFrame2 at 0x82B0C7AC pass scope, with target, string path, context out-pointer and EAStringC leaf. The 196-byte routine scans for path syntax, directly assigns the name for a plain context, or calls the char-buffer getContext overload at 0x82B01830 and assigns the resolved leaf. The original SDK declarations attest both static resolver signatures."
+    },
+    "0x82AEB338": {
+      "exported_name": null,
+      "symbol": "AptMovie::runFrameActions",
+      "size": 284,
+      "tu": "src/SDKs/EATech/include/Apt/AptMovie.cpp",
+      "evidence": "ARTIST CallFrame 0x82B053C4 supplies the movie embedded at character +0x10, its CIH and the resolved frame. The 284-byte routine iterates the frame's type-1 bytecode commands with a saved register window, calls AptActionInterpreter::runStream and restores that window after each command. The matching SDK declarations attest the movie owner and typed inputs."
+    },
+    "0x827EAC78": {
+      "symbol": "CgsGraphics::MovieVideoRenderer::GetPositionY",
+      "size": 68,
+      "exported_name": null,
+      "tu": "src/GameShared/GameClasses/Graphics/MoviePlayer/CgsMovieVideoRenderer.cpp",
+      "evidence": "ARTIST MovieVideoRenderer vtable at 0x820D5A48 places the typed Y-position query between GetPositionX and GetPositionZ at slot +0x24. DecFIGS CgsMovieVideoRenderer.h:113 corroborates the slot, return type and original diagnostic line. The complete XDK body, three assert calls, source filename, assertion text and zero float match."
     }
   },
   "native_leaf_functions": {
