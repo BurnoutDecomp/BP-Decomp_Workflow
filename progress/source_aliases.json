@@ -27465,6 +27465,73 @@
       "size": 312,
       "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/source/ParticleRender/ParticleRender.cpp",
       "evidence": "ARTIST EmitterRender at 0x82913C60 and EmitterCubeRender at 0x82914368 both call this body to append a completed LionBatch into the same render batch array. DecFIGS LionBatch.h identifies the 512-element LionBatchArray. Unwind extent is 312 bytes. The XDK Array<LionBatch,512>::Append body matches all instructions outside verified assert text and call relocations."
+    },
+    "0x827DC838": {
+      "exported_name": "sub_827DC838",
+      "symbol": "Attrib::Gen::shotgroup::shotgroup",
+      "size": 140,
+      "native_symbol": "??0shotgroup@Gen@Attrib@@QAA@PAUCollection@2@PAX@Z",
+      "evidence": "Unlisted ARTIST packed unwind entry. DirectorResourceManager::DirectorResourceManager at 0x827DEB98 constructs the typed shotgroup with (Collection*, owner) null arguments at 0x827DEBC4 and 63 subsequent shotgroup element calls. DecFIGS shotgroup.h:18 attests this Collection constructor. All 140 native XDK code bytes and 8 call relocations agree. It is distinct from the collection-key overload."
+    },
+    "0x827DC8C8": {
+      "exported_name": null,
+      "symbol": "Attrib::Gen::cameradefaults::cameradefaults",
+      "size": 168,
+      "native_symbol": "??0cameradefaults@Gen@Attrib@@QAA@PAUCollection@2@PAX@Z",
+      "evidence": "Unlisted ARTIST packed unwind entry. DirectorResourceManager::DirectorResourceManager at 0x827DEB98 constructs the typed cameradefaults with (Collection*, owner) null arguments at 0x827DEF64, member +0x5D8. DecFIGS cameradefaults.h:18 attests this Collection constructor. All 168 native XDK code bytes and 9 call relocations agree. It is distinct from the collection-key overload."
+    },
+    "0x82204998": {
+      "exported_name": "sub_82204998",
+      "symbol": "Attrib::Gen::burnoutcarasset::burnoutcarasset",
+      "size": 124,
+      "native_symbol": "??0burnoutcarasset@Gen@Attrib@@QAA@_KPAX@Z",
+      "evidence": "Original ARTIST packed unwind boundary, with the full generated burnoutcarasset class key staged at 0x822049C4. The existing key constructor's XDK COFF body matches all 124 bytes, with 3 resolved calls and no unchecked relocations. The original typed Instance base call targets 0x82802DB8. Witness object BrnActiveRaceCar-24c4a31c.obj."
+    },
+    "0x825BDAE0": {
+      "exported_name": null,
+      "symbol": "Attrib::Gen::physicsvehiclehandling::physicsvehiclehandling",
+      "size": 168,
+      "native_symbol": "??0physicsvehiclehandling@Gen@Attrib@@QAA@PAUCollection@2@PAX@Z",
+      "evidence": "Original ARTIST packed unwind boundary, with the full generated physicsvehiclehandling class key staged at 0x825BDB44. The existing Collection constructor's XDK COFF body matches all 168 bytes, with 9 resolved calls and no unchecked relocations. The original typed Instance base call targets 0x82802DB8. Witness object BrnAICar-11094538.obj."
+    },
+    "0x82206728": {
+      "exported_name": "sub_82206728",
+      "symbol": "Attrib::Gen::aftertouchcam::aftertouchcam",
+      "size": 168,
+      "native_symbol": "??0aftertouchcam@Gen@Attrib@@QAA@ABURefSpec@2@PAX@Z",
+      "evidence": "Original ARTIST packed unwind boundary, with the full generated aftertouchcam class key staged at 0x8220678C. The existing RefSpec constructor's XDK COFF body matches all 168 bytes, with 9 resolved calls and no unchecked relocations. The original typed Instance base call targets 0x8280A248. Witness object BrnArbStateTestbed-d9585664.obj."
+    },
+    "0x8227FB58": {
+      "exported_name": "sub_8227FB58",
+      "symbol": "Attrib::Gen::surface::surface",
+      "size": 168,
+      "native_symbol": "??0surface@Gen@Attrib@@QAA@ABURefSpec@2@PAX@Z",
+      "evidence": "Original ARTIST packed unwind boundary, with the full generated surface class key staged at 0x8227FBBC. The existing RefSpec constructor's XDK COFF body matches all 168 bytes, with 9 resolved calls and no unchecked relocations. The original typed Instance base call targets 0x8280A248. Witness object BrnRoadNoise-1af8808b.obj."
+    },
+    "0x8227EA48": {
+      "exported_name": "sub_8227EA48",
+      "symbol": "Attrib::Gen::debrisparams::debrisparams",
+      "size": 124,
+      "native_symbol": "??0debrisparams@Gen@Attrib@@QAA@_KPAX@Z",
+      "evidence": "Original ARTIST packed unwind boundary, with the full generated debrisparams class key staged at 0x8227EA74. The existing key constructor's XDK COFF body matches all 124 bytes, with 3 resolved calls and no unchecked relocations. The original typed Instance base call targets 0x82802DB8. Witness object EffectsModule-87aee4b9.obj."
+    },
+    "0x82204148": {
+      "exported_name": "sub_82204148",
+      "symbol": "BrnDirector::Camera::ValidityAccount::SetFlag",
+      "size": 284,
+      "tu": "src/GameSource/Director/Camera/BrnCameraValidityAccount.cpp",
+      "evidence": "DecFIGS BrnCameraValidityAccount.h:145 declares the ENoCutFromFlag overload. ARTIST Behaviour::SetCantSwitchFromMeNow branches at 0x822063D4 to 0x82204148 with camera+0x138. The body checks 27 <= flag < 31 and carries the matching no-cut-from assertion at line 245. The typed XDK overload matches all 284 bytes and 11 named call relocations."
+    },
+    "0x82BBC840": {
+      "exported_name": null,
+      "symbol": "rw::LinearResourceAllocator::GetAvailable",
+      "native_symbol": "?GetAvailable@LinearResourceAllocator@rw@@QBA?AUResourceDescriptor@2@XZ",
+      "size": 56,
+      "file": "vendor/renderware/src/rwcore_alloc.cpp",
+      "tu": "SDKs/EATech/include/cmn/rw/core/resource/linearresourceallocator.h",
+      "caller": "0x826651C0",
+      "call_site": "0x826653A0",
+      "evidence": "The ARTIST BrnResource linear allocator names the GetAvailable call at 0x826653A0 and passes the result destination and allocator. The recovered body passes capacity at this+0x18 and usage at this+0x40 to the existing descriptor operator- at 0x82B63E50. The XDK body matches all 56 bytes with the named call verified."
     }
   },
   "native_leaf_functions": {
