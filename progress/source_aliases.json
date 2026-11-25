@@ -17825,6 +17825,42 @@
       "x360_address": "0x82ADBB58",
       "byte_match": true,
       "evidence": "The existing native AptValueVector::SafePop matches ARTIST's 120-byte guarded multi-pop extent, including CRT calls and no data relocations. The truncated export name ends in the same method."
+    },
+    "CgsSceneManager::SceneM": {
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetResultsQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO.h",
+      "x360_address": "0x823B1ED0",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same read lock bit and uses the streamed assertion at line 624. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "CgsScene": {
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetOverlapPairsQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO.h",
+      "x360_address": "0x8279C140",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same read lock bit and uses the streamed assertion at line 627. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "CgsSceneMan": {
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetPotentialContactQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO.h",
+      "x360_address": "0x828AF9A8",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same write lock bit and uses the streamed assertion at line 632. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "CgsSceneManager::SceneManagerIO::Output": {
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetTriangleCacheInterface",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO.h",
+      "x360_address": "0x828AFAF8",
+      "byte_match": true,
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same write lock bit and uses the streamed assertion at line 634. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestFineResul": {
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *,10>::AddPostBox",
+      "file": "GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "x360_address": "0x8222D158",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82233004 calls through the Director wrapper's mpLineTestFinePostOffice at +0x04. DecFIGS BrnSceneQueryInterface.h:164 and BrnDirectorPostOfficeTypes.h:54 type that member as PostOffice<const OutEventLineTestFineResult*,10>. The callee checks capacity 10 at 0x8222D1A4, posts the passed box and returns its new query index. The otherwise exact wrapper's branch relocation names this typed AddPostBox. The callee remains nonmatching."
     }
   },
   "sdk_entry_groups": {
@@ -26847,6 +26883,41 @@
       "size": 420,
       "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
       "evidence": "BrnTextField.cpp:386–387 in ARTIST and present as this overload in DecFIGS. ShowtimeInstantResultsState 0x824C6138 passes f32 in f1 and the value format in r7. The body calls FormatTextFromFloat. XDK COFF matches at this exact address."
+    },
+    "0x8279C098": {
+      "exported_name": "sub_8279C098",
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetPotentialContactQueue",
+      "size": 168,
+      "tu": "class:CgsSceneManager::SceneManagerIO::OutputBuffer",
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same read lock bit and uses the streamed assertion at line 625. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "0x828AF900": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetResultsQueue",
+      "size": 164,
+      "tu": "class:CgsSceneManager::SceneManagerIO::OutputBuffer",
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same write lock bit and uses the streamed assertion at line 631. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "0x828AFA50": {
+      "exported_name": "sub_828AFA50",
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetOverlapPairsQueue",
+      "size": 168,
+      "tu": "class:CgsSceneManager::SceneManagerIO::OutputBuffer",
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same write lock bit and uses the streamed assertion at line 633. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "0x8279C1E8": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::SceneManagerIO::OutputBuffer::GetTriangleCacheInterface",
+      "size": 168,
+      "tu": "class:CgsSceneManager::SceneManagerIO::OutputBuffer",
+      "evidence": "DecFIGS CgsSceneManagerModuleIO.h declares this OutputBuffer accessor. ARTIST reads the same read lock bit and uses the streamed assertion at line 628. The typed XDK body matches the full extent, all calls, flags, path and message relocations."
+    },
+    "0x824E7800": {
+      "exported_name": "sub_824E7800",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 540,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "DecFIGS BrnTextField.cpp:262 identifies the variadic overload. ARTIST lines 264–266 carry the three contract assertions, 0x824E799C initializes the arguments before reading the StateInterface, and 0x824E79F8 calls LanguageManager::FormatTextV. The native varargs overload matches all 540 bytes at this address."
     }
   },
   "native_leaf_functions": {
