@@ -16753,6 +16753,13 @@
       "x360_address": "0x8232BEF8",
       "byte_match": true,
       "evidence": "DecFIGS BrnCrashModeScoring.h:226 declares the const method and const RecentCrash result. The XDK reproduces the 152-byte body and both const Array::GetItem call sites at 0x8232BF54 and 0x8232BF84 with their ARTIST targets."
+    },
+    "BrnGameState::Game": {
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::TargetEventScore,49>::Grow",
+      "file": "GameSource/GameState/Progression/BrnProfile.cpp",
+      "x360_address": "0x8235C080",
+      "byte_match": true,
+      "evidence": "Profile::SetTargetEventScore at 0x823714F8 calls this address from 0x823715A0. The native call relocates to Array<TargetEventScore,49>::Grow through AddNew. The 280-byte COMDAT matches at this address with all 11 named calls. ARTIST verifies the capacity 49, the 40-byte element stride and both CgsArray.h assertions at 289 and 290."
     }
   },
   "sdk_entry_groups": {
@@ -25563,6 +25570,22 @@
       "size": 216,
       "file": "SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/ParticleRandomSeed.cpp",
       "evidence": "DecFIGS ParticleRandomSeed.h:87 declares Build(s32,s32). Two original calls in cParticleEmitter::Generate correspond to native calls of that overload. The XDK body, both RandomInt diagnostics and the shared build monitor match ARTIST."
+    },
+    "0x8235EE30": {
+      "exported_name": "sub_8235EE30",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::TargetEventScore,49>::GetItem",
+      "size": 272,
+      "file": "GameSource/GameState/Progression/BrnProfile.cpp",
+      "const": false,
+      "evidence": "Profile::SetTargetEventScore at 0x823714F8 calls this address at 0x8237156C and 0x8237158C. Both relocations name the non-const GetItem(u32). The exact 272-byte COMDAT verifies the 40-byte element stride and the distinct CgsArray.h assertion lines 556 and 557, with all 11 named calls."
+    },
+    "0x8235EF40": {
+      "exported_name": "sub_8235EF40",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::TargetEventScore,49>::GetItem",
+      "size": 272,
+      "file": "GameSource/GameState/Progression/BrnProfile.cpp",
+      "const": true,
+      "evidence": "Profile::GetTargetEvent at 0x82371458 calls this address at 0x823714BC and 0x823714DC. Both relocations name the const GetItem(u32). The exact 272-byte COMDAT verifies the 40-byte element stride and the distinct CgsArray.h assertion lines 538 and 539, with all 11 named calls."
     }
   },
   "native_leaf_functions": {
@@ -26168,6 +26191,17 @@
       "source": "vendor/renderware/src/rw/audio/core/HELPER_CMpegBase.cpp",
       "tu": "class:rw::audio::core::HELPER_CMpegBase",
       "evidence": "HELPER_CMpegBase::Open dispatches through slot 4. The ARTIST vtable at 0x8215A898 and the XDK vtable emitted for the existing C++ both resolve that slot to OpenLayer. Its complete 52-byte body ends in blr and fits the disjoint gap after GetHeader."
+    },
+    "0x822A6960": {
+      "symbol": "BrnWorld::BoostBurnout3::OnPlayerAttacksRival",
+      "size": 192,
+      "previous_size": 164,
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/Boost/BrnBoostBurnout3.cpp",
+      "native_symbol": "?OnPlayerAttacksRival@BoostBurnout3@BrnWorld@@UAAXW4EImpactType@Vehicle@BrnPhysics@@@Z",
+      "caller": "0x822A6960",
+      "call_site": "0x822A6980",
+      "table_entry": "0x822A6988",
+      "evidence": "The nudge entry targets the omitted blr at 0x822A6A1C, immediately before the next function at 0x822A6A20. DecFIGS BrnBoostBurnout3.cpp:490 identifies the original EImpactType override. The complete 192-byte XDK COFF body compares exact, with all eight case targets and the jump table base resolved to the same ARTIST addresses."
     }
   },
   "sdk_archive_splits": {
