@@ -1881,6 +1881,17 @@
       "x360_address": "0x82C1B1D0",
       "byte_match": true,
       "evidence": "The named CRT __tzset archive branches to this complete same-member body. The code and unwind records agree."
+    },
+    "strnicmp": {
+      "symbol": "_strnicmp",
+      "x360_address": "0x82C0BD40",
+      "byte_match": true,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\strnicmp.obj",
+        "archive_symbol": "_strnicmp"
+      },
+      "evidence": "XDK 6534.4 string.h declares _strnicmp. Its 172-byte libcMT.lib archive implementation matches ARTIST at 0x82C0BD40 with all five call relocations confirmed: _errno twice, _invalid_parameter twice, and __ascii_strnicmp. The current universe already classifies this same extent as SDK."
     }
   },
   "functions": {
@@ -17782,6 +17793,14 @@
       "x360_address": "0x827A6E20",
       "name_evidence": true,
       "evidence": "ARTIST 0x827A9550 passes both mRemoveAllEntitiesQueue members at +0xC7E3C; the typed native relocation targets the same Append instantiation. The 216-byte callee has the same three diagnostics and an independent instruction scheduling residual beginning at byte 164."
+    },
+    "*>::": {
+      "symbol": "CgsContainers::LocklessQueue<BrnGameState::RichPresenceManagerX360::PresenceContext*>::Post",
+      "file": "GameShared/GameClasses/Containers/CgsLocklessQueue.h",
+      "x360_address": "0x82369160",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82372C70 posts the just-filled PresenceContext pointer to the pending queue at owner +0xC0; ARTIST 0x82372CDC returns the processed pointer to the free queue at +0xB0. This target writes the supplied pointer into the write slot, increments the item count and asserts at CgsLocklessQueue.h:349. DecFIGS CgsLocklessQueue.h:298 corroborates the templated bool Post(const T*, bool, int) declaration. The helper body remains nonmatching."
     }
   },
   "sdk_entry_groups": {
@@ -26712,6 +26731,51 @@
       "size": 388,
       "tu": "src/GameSource/Physics/DeformationManager/DeformationPhysics/BrnPhysicalBodyPart.cpp",
       "evidence": "ARTIST 0x825E7D08 calls from the typed InUpdateExternalBody producer, after the update queue getter at 0x825E7D04. Its overflow string at 0x82096608 names the event class. The 388-byte XDK body copies only the typed RigidBodyId and six SIMD lanes, matching all calls and diagnostic data."
+    },
+    "0x82AF4128": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionPushString",
+      "size": 140,
+      "tu": "class:AptActionInterpreter",
+      "evidence": "ARTIST AptActionInterpreter opcode 0xA1 dispatch pointer at 0x82F732EC, paired to the same typed handler in AptActionDispatch.cpp, with exact XDK COFF and checked relocations."
+    },
+    "0x82B053D0": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionCallFuncAndPop",
+      "size": 88,
+      "tu": "class:AptActionInterpreter",
+      "evidence": "ARTIST AptActionInterpreter opcode 0x5B dispatch pointer at 0x82F731D4, paired to the same typed handler in AptActionDispatch.cpp, with exact XDK COFF and checked relocations."
+    },
+    "0x82ADB9E8": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::stackPop",
+      "size": 96,
+      "tu": "class:AptActionInterpreter",
+      "evidence": "Exact XDK COFF with no unchecked relocations, independently named by direct call operands in the ARTIST Throw, Trace, Delete2, CallMethodPop and DictCallMethodPop opcodes."
+    },
+    "0x82369310": {
+      "exported_name": "sub_82369310",
+      "symbol": "CgsContainers::LocklessQueue<BrnGameState::RichPresenceManagerX360::PresenceContext*>::Pop",
+      "size": 444,
+      "evidence": "ARTIST 0x82372C4C pops an unused PresenceContext pointer from the free queue at owner +0xB0 and initializes the resulting record; ARTIST 0x82372CB4 takes a filled pointer from the pending queue at +0xC0 before XUserSetContext. This target loads the pointer from the read slot, decrements the item count and asserts at CgsLocklessQueue.h:421. DecFIGS CgsLocklessQueue.h:370 corroborates the templated bool Pop(T*, bool, int) declaration. Its .pdata extent is 444 bytes and the body remains nonmatching."
+    },
+    "0x82927AB0": {
+      "exported_name": null,
+      "symbol": "XShowGamerCardUI",
+      "size": 84,
+      "sdk_provider": {
+        "lib": "xapilibi.lib",
+        "member": "obj\\xbox\\uiapithunk.obj",
+        "archive_symbol": "XShowGamerCardUI"
+      },
+      "evidence": "ARTIST's ShowProfile call at 0x8288007C names XShowGamerCardUI. The full 84-byte .pdata extent matches the XDK 6534.4 archive symbol, with its only relocation at 0x82927ADC calling the named XamShowGamerCardUIForXUID at 0x82C75C9C. The extent is already classified SDK and no code is added."
+    },
+    "0x82203EE8": {
+      "exported_name": "sub_82203EE8",
+      "symbol": "CgsDev::StrStreamBase::operator<<",
+      "size": 136,
+      "tu": "class:CgsDev::StrStreamBase",
+      "evidence": "ARTIST AddVolumeInstance at 0x822CB6F4 passes the entire packed volume ID in r4 to the unsigned 64-bit stream insertion. DecFIGS CgsStrStream.h:668 declares the uint64_t overload. Its XDK standalone and unity COFF both match the 136-byte body and the named Append64IntHex and ConvertI64ToA targets."
     }
   },
   "native_leaf_functions": {
