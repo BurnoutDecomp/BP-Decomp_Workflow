@@ -3294,17 +3294,20 @@
       "evidence": "The ARTIST branch from VisibilityCollisionPolicy::ProcessSceneQueryResults at 0x822246EC agrees with the XDK call relocation for the volume-test post box. DecFIGS BrnPostBox.h declares the same const reference return. The 88-byte body returns the package at +4 and matches both diagnostic strings."
     },
     "BrnDirector::Camera::B": {
-      "symbol": "BrnDirector::BehaviourCollection<TBehaviour,TParameters,N>::GetCamera",
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::GetCamera",
+      "evidence": "UpdateCamera branches at 0x8223AD28, 0x8223ADB0 with the BystanderCam capacity-2 collection at MomentPlayerJumping+0x184. DecFIGS declares the const camera reference return. The two latch assertions, const Shot accessor at 0x8222CC50, and behaviour pool lookup returning BehaviourHelper::mCamera at +16 identify the body.",
       "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.h",
       "x360_address": "0x8222CBD8",
-      "evidence": "BehaviourCollection<BehaviourBystanderCam,Parameters,2>::GetCamera const: asserts mbAllocatedShots (+0x41, h:97) and mbHasCurrentCamera (+0x40, h:98), maShots[miCurrentCamera (+0x3C)] via Array const operator[], then the handle's IsAllocated() + pool[key] + 0x10 (BehaviourHelper::mCamera); callers MomentPlayerJumping::UpdateCamera x2."
+      "byte_match": true,
+      "name_evidence": true
     },
     "BrnDirector::Camera::Beha": {
-      "symbol": "Array::operator[]",
-      "const": true,
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Shot,4>::GetItem",
+      "evidence": "ARTIST branches at 0x8222DED4 from the Rig capacity-4 BehaviourCollection::Release. The XDK relocation selects the mutable GetItem overload on the nested Shot array. The count is at +0x60, elements are 24 bytes, and CgsArray.h assertion lines 556/557 agree with the overload and the DecFIGS Shot type.",
       "file": "GameShared/GameClasses/Containers/CgsArray.h",
       "x360_address": "0x82200460",
-      "evidence": "Array<BehaviourCollection<BehaviourRig,..,4>::Shot,4>::operator[] const: CgsArray.h:556/557 asserts (the const accessor's lines), count at +0x60, 24-byte stride; callers are the N=4 collection's GetCamera/Release/Prepare helpers under MomentPlayerJumping::UpdateCamera/Release/PrepareCameras."
+      "byte_match": true,
+      "name_evidence": true
     },
     "BrnDirector::Camera::Behav": {
       "symbol": "Array::operator[]",
@@ -3320,10 +3323,11 @@
       "evidence": "BehaviourHandle<BehaviourAftertouchCam>::IsBehaviourPrepared (tree name IsReadyToPrepare): mbIsAllocated assert (h:517), IsBehaviourWaitingToPrepare(key) then the cntlzw/extrwi boolean negation; caller ArbStateCrashMode::Prepare."
     },
     "BrnDirector::Camera::BehaviourB": {
-      "symbol": "Array::Append",
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Shot,2>::Append",
+      "evidence": "The Bystander capacity-2 AddShot branches at 0x8224B114 to the nested Shot array Append. The typed native relocation resolves the exact mangled Append instantiation. Original CgsArray.h lines 225/226, the capacity 2, count offset 0x30, and 24-byte element copy establish the implementation.",
       "file": "GameShared/GameClasses/Containers/CgsArray.h",
       "x360_address": "0x8222F740",
-      "evidence": "Array<BehaviourCollection<BehaviourBystanderCam,Parameters,2>::Shot,2>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 2), 24-byte element copy (byte + five words), count at +0x30; caller the N=2 collection's AddShot ('can't add shots' assert at +0x41) from MomentPlayerJumping::Prepare."
+      "name_evidence": true
     },
     "BrnDirector::Camera::BehaviourBystand": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
@@ -3416,10 +3420,11 @@
       "evidence": "BehaviourHandle<BehaviourPassengerCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourPassengerCam>."
     },
     "BrnDirector::Camera::BehaviourR": {
-      "symbol": "Array::Append",
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Shot,4>::Append",
+      "evidence": "The Rig capacity-4 AddShot branches at 0x8224B19C to the nested Shot array Append. The typed native relocation resolves the exact mangled Append instantiation. Original CgsArray.h lines 225/226, the capacity 4, count offset 0x60, and 24-byte element copy establish the implementation.",
       "file": "GameShared/GameClasses/Containers/CgsArray.h",
       "x360_address": "0x8222F890",
-      "evidence": "Array<BehaviourCollection<BehaviourRig,Parameters,4>::Shot,4>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 4), 24-byte element copy (byte + five words), count at +0x60; caller the N=4 collection's AddShot ('can't add shots' assert at +0x71) from MomentPlayerJumping::Prepare."
+      "name_evidence": true
     },
     "BrnDirector::Camera::BehaviourRenderM": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
@@ -8307,10 +8312,11 @@
       "evidence": "The original body clears then appends the three typed traffic-network queues in TrafficNetworkOutputInterface member order. Complete XDK body and all relocated fields agree."
     },
     "CgsModule::BaseEventQu": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::GetEvent",
       "x360_address": "0x828AC770",
-      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::GetEvent",
       "byte_match": true,
-      "evidence": "The original BridgeInputSceneUpdateInterfaceToSubModules calls the typed add-volume event queue accessor. Its element stride and bounds assertions agree. Complete XDK body and all relocated fields agree."
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "evidence": "ARTIST 828D353C indexes the const InEventSetVolumeInstanceTransform queue. The returned event reaches EntityManager::SetVolumeInstanceTransform at 828D358C. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
     },
     "CgsModule::BaseEventQue": {
       "x360_address": "0x828AD0D0",
@@ -18503,6 +18509,143 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "The ARTIST truncated name agrees with the typed DecFIGS StreetManager declaration and C++ definition. ARTIST constructs the returned ChallengePlayerScoreEntry and uses the const RoadRulesMessageData pointer. The 128-byte native body, seven direct branches and two diagnostic literals are verified."
+    },
+    "BrnDirector::Cam": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Shot,2>::GetItem",
+      "evidence": "ARTIST branches at 0x8222CC50 from the BystanderCam capacity-2 BehaviourCollection::GetCamera. The XDK relocation selects the const GetItem overload on the nested Shot array. The count is at +0x30, elements are 24 bytes, and CgsArray.h assertion lines 538/539 agree with the overload and the DecFIGS Shot type.",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x82200350",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "const": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Shot,5>::GetItem",
+      "evidence": "ARTIST branches at 0x8222E09C from the IceAnim capacity-5 BehaviourCollection::Release. The XDK relocation selects the mutable GetItem overload on the nested Shot array. The count is at +0x78, elements are 24 bytes, and CgsArray.h assertion lines 556/557 agree with the overload and the DecFIGS Shot type.",
+      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "x360_address": "0x82200790",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "BrnDirec": {
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::Camera::BehaviourManager::BehaviourHelper,28,BrnDirector::Camera::BehaviourHelperIndex>::operator[]",
+      "evidence": "All four BehaviourCollection::GetCamera instantiations branch to this body with the BehaviourHandle pool at +8 and BehaviourHelperIndex key at +4. Their XDK call relocations select the same typed operator[]. ARTIST uses a 28-element bound, 384-byte slots, and CgsObjectPool.h assertion lines 218/219 plus CgsBitArray.h line 203. DecFIGS declares this ObjectPool specialization as the backing pool for BehaviourHandle.",
+      "file": "GameShared/GameClasses/Containers/CgsObjectPool.h",
+      "x360_address": "0x821FC770",
+      "name_evidence": true
+    },
+    "BrnDirecto": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::CanSwitchToMeNow",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A404 from the switch arm selecting the BystanderCam capacity-2 collection at MomentPlayerJumping+0x184. The XDK relocation has the same typed CanSwitchToMeNow signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 123/124.",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "x360_address": "0x821FD088",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "BrnDirector::Camera": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::CanSwitchToMeNow",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A438 from the switch arm selecting the Rig capacity-4 collection at MomentPlayerJumping+0x1C8. The XDK relocation has the same typed CanSwitchToMeNow signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 123/124.",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "x360_address": "0x821FD1A8",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "Attrib::RefSpec": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::CanSwitchToMeNow",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A3D0 from the switch arm selecting the IceAnim capacity-5 collection at MomentPlayerJumping+0x2E0. The XDK relocation has the same typed CanSwitchToMeNow signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 123/124.",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "x360_address": "0x821FD528",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetVehicleDriverInterface",
+      "x360_address": "0x822B5CA8",
+      "byte_match": true,
+      "evidence": "ProcessPlayerVehicleInput and PrePhysicsUpdate use the returned driver input queue. ARTIST calls at 0x82300148, 0x82300704, 0x82307438, 0x82307490, checks the write lock, diagnoses BrnRaceCarEntityModuleIO.h:483, and returns this+0x22B70. DecFIGS confirms the mutable declaration and interface type."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::OutputBuffer": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetVehicleEffectsInterface",
+      "x360_address": "0x822B5D50",
+      "byte_match": true,
+      "evidence": "CrashPlayManager::UpdateTrafficStomp uses the returned vehicle-effects interface to enqueue air ram. ARTIST calls at 0x822F9150, checks the write lock, diagnoses BrnRaceCarEntityModuleIO.h:486, and returns this+0x24020. DecFIGS confirms the mutable declaration and interface type."
+    },
+    "CgsSceneManager::SceneManagerI": {
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetCoarseQueryQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_InputBuffer_Query.cpp",
+      "x360_address": "0x828AF270",
+      "byte_match": true,
+      "evidence": "ARTIST 0x828AF270 checks the read lock, streams CgsSceneManagerModuleIO.h:509, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 164-byte native body and all relocations agree."
+    },
+    "_": {
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineLineTestFastDoubleSidedQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_InputBuffer_Query.cpp",
+      "x360_address": "0x828AF468",
+      "byte_match": true,
+      "evidence": "ARTIST 0x828AF468 checks the read lock, streams CgsSceneManagerModuleIO.h:513, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTestNearest,256>": {
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetTriangleCollisionLineTestNearestQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_InputBuffer_Query.cpp",
+      "x360_address": "0x828AF7B0",
+      "byte_match": true,
+      "evidence": "ARTIST 0x828AF7B0 checks the read lock, streams CgsSceneManagerModuleIO.h:518, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "__cd": {
+      "symbol": "CgsSceneManager::SceneManagerIO::TriCacheQueryBuffer::GetTriangleCollisionLineTestQueue",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_InputBuffer_Query.cpp",
+      "x360_address": "0x828AFBA0",
+      "byte_match": true,
+      "evidence": "ARTIST 0x828AFBA0 checks the write lock, streams CgsSceneManagerModuleIO.h:678, and returns the owning queue. DecFIGS names the matching TriCacheQueryBuffer overload. The complete 164-byte native body and all relocations agree."
+    },
+    "??$NewBehaviour@VBehaviourBystanderCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHand": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourBystanderCam>",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82260FA8",
+      "name_evidence": true,
+      "evidence": "The BystanderCam collection Prepare branches to 0x82260FA8 at 0x82267D28. The corresponding XDK relocation agrees with all 119 characters of the underlying decorated name and binds the same typed BehaviourHandle and NewBehaviour template."
+    },
+    "??$NewBehaviour@VBehaviourRig@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VBehav": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRig>",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82260A18",
+      "name_evidence": true,
+      "evidence": "The Rig collection Prepare branches to 0x82260A18 at 0x82267FB8. The corresponding XDK relocation agrees with all 119 characters of the underlying decorated name and binds the same typed BehaviourHandle and NewBehaviour template."
+    },
+    "??$NewBehaviour@VBehaviourIceAnim@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VB": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourIceAnim>",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "x360_address": "0x82268018",
+      "name_evidence": true,
+      "evidence": "The IceAnim collection Prepare branches to 0x82268018 at 0x82273448. The corresponding XDK relocation agrees with all 119 characters of the underlying decorated name and binds the same typed BehaviourHandle and NewBehaviour template."
+    },
+    "BrnDirector::Camer": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::GetBehaviour",
+      "evidence": "UpdateCamera branches at 0x8223AC04 with the IceAnim capacity-5 collection at MomentPlayerJumping+0x2E0. The name and mutable reference return are corroborated by DecFIGS. ARTIST asserts both latches at BrnMomentPlayerJumping.h:89/90 and the GetItem call returns a writable Shot (0x82200790). It inlines the handle getter, returning the typed behaviour via the pool.",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.h",
+      "x360_address": "0x8222CF38",
+      "byte_match": true,
+      "name_evidence": true
+    },
+    "CgsS": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveVolume>::GetEvent",
+      "x360_address": "0x828ACA28",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "evidence": "ARTIST 828D2094 indexes the const InEventRemoveVolume queue. The returned event reaches VolumeManager::RemoveVolume with ID from event+0x00 at 828D20A4. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 164 bytes."
+    },
+    "CgsModule::BaseEventQueue<cl": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventReplaceDynamicVolume>::GetEvent",
+      "x360_address": "0x828ACAD0",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "evidence": "ARTIST 828D2E2C indexes the const InEventReplaceDynamicVolume queue. The returned event reaches VolumeManager::ReplaceDynamicVolume with ID at +0x00 and volume at +0x10 at 828D2E64. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
+    },
+    "CgsModule::BaseEventQueue<cla": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetCullingGroupPair>::GetEvent",
+      "x360_address": "0x828ACB80",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "evidence": "ARTIST 828D3218 indexes the const InEventSetCullingGroupPair queue. The returned event reaches CullingGroupManager::SetCullingGroupPair with the three event fields at 828D3230. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
     }
   },
   "sdk_entry_groups": {
@@ -28290,6 +28433,660 @@
       "size": 124,
       "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
       "evidence": "ARTIST OnActivate at 0x82763274..0x82763294 passes this typed kill-zone callback, confirmed by the full native 124-byte body, 0x40 selection field, four internal branches, SDK frame, and both exact original assertion strings."
+    },
+    "0x82862838": {
+      "exported_name": "sub_82862838",
+      "symbol": "CgsLanguage::LanguageManager::FormatHoursMinutesAndSecondsString",
+      "size": 368,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "The float FormatText switch slot 1 calls this leaf at 0x82864364. It rounds the float, splits hours, minutes and seconds, and calls the named three-integer overload at 0x828617B0. The DecFIGS CgsLanguageManager declaration supplies the UTF-8 target and float input types. The current native body retains arithmetic scheduling differences."
+    },
+    "0x828629A8": {
+      "exported_name": null,
+      "symbol": "CgsLanguage::LanguageManager::FormatMinutesAndSecondsAndHundredsString",
+      "size": 692,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "The float FormatText switch slot 2 calls this leaf at 0x8286437C. It scales time into hundredths, formats three integer fields, and uses the owning minute-second-hundredths template at LanguageManager+0x6124. DecFIGS CgsLanguageManager supplies the typed signature. Its native arithmetic and frame remain nonmatching."
+    },
+    "0x828641F0": {
+      "exported_name": "sub_828641F0",
+      "symbol": "CgsLanguage::LanguageManager::FormatText",
+      "size": 876,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "The ARTIST float TextFieldRef overload at 0x8246CE38 forwards the f1 value and ParameterFormatType, as does the format resolver at 0x828650FC. DecFIGS declares the char-pointer, unsigned capacity, float, and enum signature. All 876 native bytes, 28 direct branch targets, 20 switch destinations and 13 data bindings are verified."
+    },
+    "0x82864C48": {
+      "exported_name": "sub_82864C48",
+      "symbol": "CgsLanguage::LanguageManager::FormatText",
+      "size": 1364,
+      "tu": "src/GameShared/GameClasses/Language/CgsLanguageManager.cpp",
+      "evidence": "The exact FormatAndAddText and both typed single-value wrappers call this resolver with a const char input and ParameterFormatType. ARTIST branches to the float and integer overloads after atof/atoi, and to FindString for IDs. DecFIGS CgsLanguageManager declares the same char-pointer, unsigned capacity, const char-pointer, and enum signature. The resolver body remains nonmatching."
+    },
+    "0x827F8630": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::RenderEnd",
+      "size": 316,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "exported_name": null,
+      "evidence": "ARTIST TextRenderer::RenderBufferRenderEnd branches here when this+0 has mpIm2dRenderBuffer, passing its base at +4. DecFIGS CgsFontRenderer.h:331 and the typed native caller establish the 2d specialization. The adjacent 3d fallback targets the already named textured 3d provider."
+    },
+    "0x827F8538": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::SetState",
+      "size": 248,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "exported_name": "sub_827F8538",
+      "evidence": "ARTIST TextRenderer::RenderBufferSetTextureState branches here from this+4 mpIm3dRenderBuffer, following the separate 2d TextureState call. DecFIGS CgsFontRenderer.h:332 and the native typed caller establish textured 3d. ARTIST Debug3DImmediateRender::DispatchVertices at 0x8281B930 is a second textured 3d call. The exact lpTextureState!=NULL diagnostic establishes the state overload."
+    },
+    "0x82458898": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::EndRendering",
+      "size": 236,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "exported_name": "sub_82458898",
+      "evidence": "ARTIST AboveCarRenderer::RenderBankingScores at 0x8245C7E8 closes the same 2d buffer whose opening call is at 0x8245C0C4. The exact EndRendering diagnostic and typed 2d overflow-rewind target corroborate the specialization and operation."
+    },
+    "0x824587B0": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::BeginRendering",
+      "size": 232,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "exported_name": "sub_824587B0",
+      "evidence": "ARTIST AboveCarRenderer::RenderBankingScores at 0x8245C0C4 opens the 2d buffer before issuing the texture and draw commands. The exact BeginRendering diagnostic and typed 2d overflow-rewind target corroborate the specialization and operation."
+    },
+    "0x827B64E0": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::WorldEntityIO::OutputBuffer_PreScene>",
+      "size": 212,
+      "tu": "src/GameSource/World/BrnWorldModule.cpp",
+      "evidence": "WorldModule::Update at 0x827D68FC passes its output stack, the sp+0xD8 pointer slot and WorldEntityPreScene. This specialization allocates 0xB8610 bytes and calls WorldEntityIO::OutputBuffer_PreScene::Construct at 0x822EDF78. DecFIGS CgsIOBufferStack.h has the typed overload."
+    },
+    "0x827B8308": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::TriggerEntityModuleIO::InputBuffer_PrePhysics>",
+      "size": 212,
+      "tu": "src/GameSource/World/BrnWorldModule.cpp",
+      "evidence": "WorldModule::Update at 0x827D6648 passes its input stack, the sp+0x184 pointer slot and TriggerPrePhysics. This specialization allocates 0x8014 bytes and calls TriggerEntityModuleIO::InputBuffer_PrePhysics::Construct at 0x822DA198. DecFIGS CgsIOBufferStack.h has the typed overload."
+    },
+    "0x827C82A8": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnTraffic::BrnTrafficIO::InputBuffer_PreDispatch>",
+      "size": 212,
+      "tu": "src/GameSource/World/BrnWorldModule.cpp",
+      "evidence": "WorldModule::GenerateDispatchLists at 0x827D2DC0 passes the input stack and the same sp+0xFC pointer slot as the named CreateIOBuffer<InputBuffer_PreDispatch> at 0x827D1FAC. The original Destruct call, 0xA50 Free size, nulling store and DecFIGS specialization corroborate the type and direction."
+    },
+    "0x827C8CF8": {
+      "exported_name": null,
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene>",
+      "size": 212,
+      "tu": "src/GameSource/World/BrnWorldModule.cpp",
+      "evidence": "WorldModule::Update at 0x827D6F08 passes the input stack and the same sp+0xCC pointer slot as the named CreateIOBuffer<InputBuffer_PreScene> at 0x827D6B30. The stack pointer saved at sp+0xC8, original Destruct call, 0x3DF0 Free size and DecFIGS specialization confirm the owner."
+    },
+    "0x827ABE28": {
+      "exported_name": null,
+      "symbol": "BrnWorld::WorldModule::BridgeWorldModuleToEntityModules_Render",
+      "size": 280,
+      "tu": "src/GameSource/Unity/BrnWorldBridgesUnity.cpp",
+      "evidence": "WorldModule::GenerateDispatchLists and GenerateShadowMapDispatchLists call at 0x827D2514 and 0x827C9C1C with the four typed write-locked destinations and the world dispatch source. The WorldModule declaration and DecFIGS BrnWorldBridgesUnity.cpp:2587 match the 21 typed operations and WorldModule shadow-map offset 0x5E26E0."
+    },
+    "0x8279EC78": {
+      "exported_name": null,
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::InputBuffer_GenerateDispatchLists::SetShadowMap",
+      "size": 176,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "WorldModule::BridgeWorldModuleToEntityModules_Render calls at 0x827ABF34 with its race-car destination and WorldModule shadow-map pointer. The original writes the pointer at 0x818C, matching GetShadowMap at 0x822B6C80. DecFIGS BrnRaceCarEntityModuleIO.h declares the typed setter after the other dispatch-list setters. ARTIST asserts at line 652."
+    },
+    "0x822B5DF8": {
+      "exported_name": "sub_822B5DF8",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetPlayerResetInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PrePhysics mutable PlayerResetInterface. ProcessResetOnTrackResultQueue later updates the position and reset result through it. ARTIST calls at 0x822F4718, with the write lock check, header line 489 and member address this+0x24720. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x822B61E8": {
+      "exported_name": "sub_822B61E8",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::GetContactSpyInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "InputBuffer_PostPhysics const ContactSpyInterface. ProcessPropContactQueue, UpdateCrashingPlayerContacts, and UpdateRaceCarContacts use the returned interface. ARTIST calls at 0x822D26A8, 0x822D26BC, 0x822E86B0, 0x822F5A68, with the read lock check, header line 537 and member address this+0xD6B20. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279D850": {
+      "exported_name": "sub_8279D850",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PreScene::GetAudioCarLoadedDataQueue",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PreScene const AudioCarLoadedDataQueue, read by BridgeRaceCarEntityInfoToOutput_PreScene. ARTIST calls at 0x827AF36C, with the read lock check, header line 307 and member address this+0xF5258. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279E118": {
+      "exported_name": "sub_8279E118",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetVehicleEffectsInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PrePhysics const VehicleEffectsInterface, read by BridgeEntityModulesToPhysicsModule_PrePhysics. ARTIST calls at 0x827AB120, with the read lock check, header line 485 and member address this+0x24020. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279E268": {
+      "exported_name": "sub_8279E268",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetGameEventQueue",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PrePhysics const GameEventQueue, read by BridgeRaceCarEntityInfoToOutput_PrePhysics. ARTIST calls at 0x827ADAF4, with the read lock check, header line 491 and member address this+0x24740. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279E720": {
+      "exported_name": "sub_8279E720",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::GetActiveRaceCarOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PostPhysics const ActiveRaceCarOutputInterface, read by BridgeRaceCarEntityInfoToOutput_PostPhysics. ARTIST calls at 0x827ADCB4, with the read lock check, header line 581 and member address this+0xCA1A0. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279E7C8": {
+      "exported_name": "sub_8279E7C8",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::GetGlobalRaceCarOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "OutputBuffer_PostPhysics const GlobalRaceCarOutputInterface, read separately by BridgeRaceCarEntityInfoToOutput_PostPhysics. ARTIST calls at 0x827ADCDC, with the read lock check, header line 584 and member address this+0xCCA90. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x8279D308": {
+      "exported_name": "sub_8279D308",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PreScene::GetAudioCarLoadedDataQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "InputBuffer_PreScene mutable AudioCarLoadedDataQueue, populated by BridgeActionsToRaceCarModule. ARTIST calls at 0x827ABFD8, with the write lock check, header line 176 and member address this+0x3C60. DecFIGS BrnRaceCarEntityModuleIO.h confirms the return type and qualifiers."
+    },
+    "0x82881DF8": {
+      "exported_name": "sub_82881DF8",
+      "symbol": "CgsNetwork::PackOrUnpackDateAndTime",
+      "size": 772,
+      "tu": "src/GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp",
+      "evidence": "ARTIST LiveRevengeSyncMessage::PackOrUnpack calls at 0x825804DC with Message this and the copied DateAndTime. ARTIST exchanges seconds, minutes, hours, day, month, and year in that order via CgsSystem::DateAndTime methods, verifies the invalid mode at CgsMessage.cpp:1377, and agrees at all 772 native bytes with call and data relocs verified."
+    },
+    "0x82580480": {
+      "exported_name": "sub_82580480",
+      "symbol": "BrnNetwork::LiveRevengeSyncMessage::PackOrUnpack",
+      "size": 292,
+      "tu": "src/GameSource/Network/Messages/BrnLiveRevengeSyncMessage.cpp",
+      "evidence": "ARTIST LiveRevengeSyncMessage vtable slot at 0x820CFCD8 follows GetPackedMessageSize 0x8257B4E8 and GetName 0x827DFD00. DecFIGS BrnLiveRevengeSyncMessage.h lists its virtual PackOrUnpack at original .cpp:139. XDK body agrees across all 292 bytes, including the recovered date-time provider call at 0x825804DC and both distinct CommonRelationshipStats calls."
+    },
+    "0x82709380": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<BrnTraffic::BrnTrafficIO::TrafficDirectorEntity,32>::Append",
+      "size": 364,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST call at 0x827271F8. ProcessNearbyTrafficSceneQueryResults passes the local TrafficDirectorEntity and its output array after reading its 32-element count at array+0xE00. DecFIGS BrnTrafficDirectorInterfaces.h:2,37 and CgsArray.h:569 attest the payload and Array<TrafficDirectorEntity,32>::Append. The complete typed COFF is exact across 364 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8270B0F8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<BrnTraffic::TrafficCrashInfo,160>::Append",
+      "size": 312,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST call at 0x82720FDC. RecordTrafficVehicleIsPhysical passes maNewCrashedVehicles at this+0x568EC and a local 16-byte TrafficCrashInfo. The second caller HandleExternalResponses branches at 0x82733450. DecFIGS BrnTrafficEntityModule.h:532 and CgsArray.h:10014 attest Array<TrafficCrashInfo,160>::Append. The complete typed COFF is exact across 312 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8270A648": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Array<BrnTraffic::PurgatoryInfo,400>::Append",
+      "size": 296,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST call at 0x827165BC. PutParamInPurgatory passes maPurgatoryList at this+0x3D7F8 and the local pair of halfwords for parameter index and five decision frames. DecFIGS BrnTrafficEntityModule.h:457 and CgsArray.h:9528 attest Array<PurgatoryInfo,400>::Append. The complete typed COFF is exact across 296 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8271AAF8": {
+      "exported_name": null,
+      "symbol": "CgsContainers::Stack<unsigned short,400>::Peek",
+      "size": 176,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST call at 0x827233CC. TryAllocateParamId passes mFreeParams after testing its count at +0x320, then loads a u16 from the returned reference. DecFIGS BrnTrafficEntityModule.h:460 and CgsStack.h:404,429 attest the const Stack<uint16_t,400>::Peek. The complete typed COFF is exact across 176 bytes, 11 named branches and 3 data operands."
+    },
+    "0x82707E38": {
+      "exported_name": "sub_82707E38",
+      "symbol": "BrnTraffic::TrafficEntityModule::GetParamPlan",
+      "size": 200,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule.cpp",
+      "evidence": "ARTIST call at 0x82724D2C. The const DoesParamNeedToStopForStopline passes this, parameter ID and section ID and tests the returned plan pointer. DecFIGS BrnTrafficEntityModule.h:1188,1683 attest the const GetParamPlan(uint32_t,uint32_t) overload. The complete typed COFF is exact across 200 bytes, 11 named branches and 4 data operands."
+    },
+    "0x825E5F90": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<signed char>::AddEvent",
+      "size": 308,
+      "tu": "src/GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager_Remove.cpp",
+      "evidence": "ARTIST call at 0x825EFC08. DisposeOfNonCrashingTraffic passes the manager's unused-potential-traffic queue and the local signed-byte vehicle index by reference. DecFIGS BrnPhysicalTrafficManager.cpp:1273,1283 shows BaseEventQueue<int8_t>::AddEvent in this caller, and the native diagnostic spells the same signed-char specialization. The complete typed COFF is exact across 308 bytes, 10 named branches and 10 data operands."
+    },
+    "0x828AD020": {
+      "exported_name": "sub_828AD020",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSphereTestFast>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 0x828D52B0 indexes the const GetFineSphereTestFastQueue result from 0x828D52A8 and passes the returned sphere event to ProcessSphereTestFast. DecFIGS CgsSceneManagerModuleIO.h:514 types that queue."
+    },
+    "0x828AE220": {
+      "exported_name": "sub_828AE220",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlapCullingIO::AddInternalCollisionVolume>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 0x828B550C uses the typed add-internal-volume queue and reads all three words of AddInternalCollisionVolume immediately after the call. DecFIGS CgsOverlapCullingModule.h:307 identifies the owner."
+    },
+    "0x828ACC30": {
+      "exported_name": "sub_828ACC30",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::TriangleCacheManagerIO::InEventAddToCache>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828B2D1C indexes InAddToCacheQueue. At 0x828B2A48 the remove cross-check also indexes the add queue at InSceneUpdateInterface+0xC4930 and compares its cache slot. DecFIGS types mAddToCacheQueue."
+    },
+    "0x828ACED0": {
+      "exported_name": "sub_828ACED0",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestFine>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828D5090 indexes the const GetFineLineTestQueue result from 0x828D5088 and passes the returned event to ProcessLineTestFine. DecFIGS CgsSceneManagerModuleIO.h:511 types that queue."
+    },
+    "0x828ACF78": {
+      "exported_name": "sub_828ACF78",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventLineTestNearest>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828D5118 indexes the const GetFineLineTestNearestQueue result from 0x828D5110 and hands the event to ProcessLineTestNearest. DecFIGS CgsSceneManagerModuleIO.h:512 types that queue."
+    },
+    "0x828ADE30": {
+      "exported_name": "sub_828ADE30",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlapGenerationIO::InAddBody>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828C1D84 indexes the const GetAddBodyQueue result from 0x828C1D7C. It passes the event and its typed body ID/tag fields to the sweeper. DecFIGS CgsOverlapGenerationModuleIO.h:222 types the queue."
+    },
+    "0x828ADF80": {
+      "exported_name": "sub_828ADF80",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlapGenerationIO::InRemoveBody>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828C1F04 indexes the const GetRemoveBodyQueue result from 0x828C1EFC, reading the index at +0x08 for SceneSweeper::RemoveObject. DecFIGS CgsOverlapGenerationModuleIO.h:224 types the queue."
+    },
+    "0x828AE028": {
+      "exported_name": "sub_828AE028",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::OverlapGenerationIO::InForceNoPadding>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 0x828B5748 indexes the const GetForceNoPaddingQueue result from 0x828B5740 and reads the single volume-instance index at +0x00. DecFIGS CgsOverlapGenerationModuleIO.h:225 types that queue."
+    },
+    "0x828AE988": {
+      "exported_name": "sub_828AE988",
+      "symbol": "CgsContainers::IndexedPool<CgsSceneManager::LooseOctree::LooseOctreeNodeAllocation,0,unsigned short>::PushIndex",
+      "size": 376,
+      "evidence": "ARTIST 0x828BC72C passes LooseOctree+0x46A8 and the u16 group index (first child minus one divided by four). DecFIGS CgsLooseOctree.h:581 identifies mFreeNodeGroupPool, and CgsIndexedPool.h declares PushIndex(uint16_t). The complete 376-byte typed XDK instantiation matches."
+    },
+    "0x828D0838": {
+      "exported_name": null,
+      "symbol": "CgsModule::VariableEventQueue<32768,16>::AddEvent<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult>",
+      "size": 184,
+      "evidence": "ARTIST ProcessVolumeTestDeepest passes the 64-byte result type at 0x828D45B8 and 0x828D4870. Its body calls the 32768-byte alignment-16 queue owner with event type 5 and the full payload extent. DecFIGS and the typed native SceneManager producer uniquely identify the result overload."
+    },
+    "0x828149F8": {
+      "exported_name": "sub_828149F8",
+      "symbol": "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddPrimitivePair",
+      "size": 188,
+      "evidence": "ARTIST 0x82605E00 passes a wheel cylinder and car box, and the target posts a cylinder/box header at 0x82814A18 then copies those two shapes. The DecFIGS pair-builder overload and typed native caller name the same method. All 188 bytes and branch relocations agree."
+    },
+    "0x82814480": {
+      "exported_name": "sub_82814480",
+      "symbol": "CgsSceneManager::CgsCollision::PrimitivePairListBuilder::AddCollisionHeader",
+      "size": 136,
+      "evidence": "ARTIST 0x82814A18 passes cylinder and box EVolumeType codes, f32 padding and both u16 tags. The target allocates one 16-byte header, indexes the volume-size table with both enum parameters, then stores both types/tags, padding and the checksum. DecFIGS CgsPrimitivePairListBuilder.h:54 names this exact two-primitive overload. This identity resolves original branches while the helper body remains nonmatching."
+    },
+    "0x8222DDB0": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Release",
+      "evidence": "ARTIST MomentPlayerJumping::Release branches at 0x8223AF00 with this+0x184, the BystanderCam capacity-2 collection in DecFIGS BrnMomentPlayerJumping.h. The loop branches to the corresponding mutable Shot GetItem at 0x8222DE1C, releases its BehaviourHandle and clears the two camera latches.",
+      "exported_name": "sub_8222DDB0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 184
+    },
+    "0x82202550": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Shot,2>::GetItem",
+      "evidence": "ARTIST branches at 0x8222DE1C from the BystanderCam capacity-2 BehaviourCollection::Release. The XDK relocation selects the mutable GetItem overload on the nested Shot array. The count is at +0x30, elements are 24 bytes, and CgsArray.h assertion lines 556/557 agree with the overload and the DecFIGS Shot type.",
+      "exported_name": "sub_82202550",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 272
+    },
+    "0x8222DE68": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Release",
+      "evidence": "ARTIST MomentPlayerJumping::Release branches at 0x8223AF08 with this+0x1C8, the Rig capacity-4 collection in DecFIGS BrnMomentPlayerJumping.h. The loop branches to the corresponding mutable Shot GetItem at 0x8222DED4, releases its BehaviourHandle and clears the two camera latches.",
+      "exported_name": "sub_8222DE68",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 184
+    },
+    "0x82200570": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Shot,4>::GetItem",
+      "evidence": "ARTIST branches at 0x8222CE00 from the Rig capacity-4 BehaviourCollection::GetCamera. The XDK relocation selects the const GetItem overload on the nested Shot array. The count is at +0x60, elements are 24 bytes, and CgsArray.h assertion lines 538/539 agree with the overload and the DecFIGS Shot type.",
+      "exported_name": "sub_82200570",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 272
+    },
+    "0x8222DF20": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::Release",
+      "evidence": "ARTIST MomentPlayerJumping::Release branches at 0x8223AEF8 with this+0x23C, the Rig capacity-6 collection in DecFIGS BrnMomentPlayerJumping.h. The loop branches to the corresponding mutable Shot GetItem at 0x8222DF8C, releases its BehaviourHandle and clears the two camera latches.",
+      "exported_name": "sub_8222DF20",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 184
+    },
+    "0x82202660": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::Shot,6>::GetItem",
+      "evidence": "ARTIST branches at 0x8222DF8C from the Rig capacity-6 BehaviourCollection::Release. The XDK relocation selects the mutable GetItem overload on the nested Shot array. The count is at +0x90, elements are 24 bytes, and CgsArray.h assertion lines 556/557 agree with the overload and the DecFIGS Shot type.",
+      "exported_name": "sub_82202660",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 272
+    },
+    "0x82200680": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::Shot,6>::GetItem",
+      "evidence": "ARTIST branches at 0x8222CED8 from the Rig capacity-6 BehaviourCollection::GetCamera. The XDK relocation selects the const GetItem overload on the nested Shot array. The count is at +0x90, elements are 24 bytes, and CgsArray.h assertion lines 538/539 agree with the overload and the DecFIGS Shot type.",
+      "exported_name": "sub_82200680",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 272
+    },
+    "0x8222E030": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Release",
+      "evidence": "ARTIST MomentPlayerJumping::Release branches at 0x8223AF10 with this+0x2E0, the IceAnim capacity-5 collection in DecFIGS BrnMomentPlayerJumping.h. The loop branches to the corresponding mutable Shot GetItem at 0x8222E09C, releases its BehaviourHandle and clears the two camera latches.",
+      "exported_name": "sub_8222E030",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 184
+    },
+    "0x822008A0": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Shot,5>::GetItem",
+      "evidence": "ARTIST branches at 0x8222D088 from the IceAnim capacity-5 BehaviourCollection::GetCamera. The XDK relocation selects the const GetItem overload on the nested Shot array. The count is at +0x78, elements are 24 bytes, and CgsArray.h assertion lines 538/539 agree with the overload and the DecFIGS Shot type.",
+      "exported_name": "sub_822008A0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 272
+    },
+    "0x821FD118": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::HasFailed",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A3F0 from the switch arm selecting the BystanderCam capacity-2 collection at MomentPlayerJumping+0x184. The XDK relocation has the same typed HasFailed signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 146/147.",
+      "exported_name": "sub_821FD118",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 140
+    },
+    "0x821FD238": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::HasFailed",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A424 from the switch arm selecting the Rig capacity-4 collection at MomentPlayerJumping+0x1C8. The XDK relocation has the same typed HasFailed signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 146/147.",
+      "exported_name": "sub_821FD238",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 140
+    },
+    "0x8222CD88": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::GetCamera",
+      "evidence": "UpdateCamera branches at 0x8223AC78, 0x8223AE20 with the Rig capacity-4 collection at MomentPlayerJumping+0x1C8. DecFIGS declares the const camera reference return. The two latch assertions, const Shot accessor at 0x8222CE00, and behaviour pool lookup returning BehaviourHelper::mCamera at +16 identify the body.",
+      "exported_name": "sub_8222CD88",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 212
+    },
+    "0x821FD2C8": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::CanSwitchToMeNow",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A46C from the switch arm selecting the Rig capacity-6 collection at MomentPlayerJumping+0x23C. The XDK relocation has the same typed CanSwitchToMeNow signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 123/124.",
+      "exported_name": "sub_821FD2C8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 140
+    },
+    "0x821FD358": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::HasFailed",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A458 from the switch arm selecting the Rig capacity-6 collection at MomentPlayerJumping+0x23C. The XDK relocation has the same typed HasFailed signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 146/147.",
+      "exported_name": "sub_821FD358",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 140
+    },
+    "0x8222CE60": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::GetCamera",
+      "evidence": "UpdateCamera branches at 0x8223ACA0, 0x8223AD50, 0x8223AE6C with the Rig capacity-6 collection at MomentPlayerJumping+0x23C. DecFIGS declares the const camera reference return. The two latch assertions, const Shot accessor at 0x8222CED8, and behaviour pool lookup returning BehaviourHelper::mCamera at +16 identify the body.",
+      "exported_name": "sub_8222CE60",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 212
+    },
+    "0x821FD5B8": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::HasFailed",
+      "evidence": "ARTIST GetCameraStatus branches at 0x8220A3B4 from the switch arm selecting the IceAnim capacity-5 collection at MomentPlayerJumping+0x2E0. The XDK relocation has the same typed HasFailed signature as DecFIGS. Both latches are checked at ARTIST BrnMomentPlayerJumping.cpp lines 146/147.",
+      "exported_name": "sub_821FD5B8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 140
+    },
+    "0x8222D010": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::GetCamera",
+      "evidence": "UpdateCamera branches at 0x8223ABD8 with the IceAnim capacity-5 collection at MomentPlayerJumping+0x2E0. DecFIGS declares the const camera reference return. The two latch assertions, const Shot accessor at 0x8222D088, and behaviour pool lookup returning BehaviourHelper::mCamera at +16 identify the body.",
+      "exported_name": "sub_8222D010",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 212
+    },
+    "0x82403420": {
+      "symbol": "rw::graphics::postfx::AllocateAndInitializeTexture",
+      "exported_name": "sub_82403420",
+      "size": 172,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertarget.cpp",
+      "evidence": "DecFIGS rwgpfxrendertarget.cpp:70 declares AllocateAndInitializeTexture with Target::Parameters and Texture::Parameters. ARTIST CreateColor at 0x82403528 and CreateDepth at 0x824036DC/0x8240370C pass these references. The 172-byte native helper matches both Texture calls, the default Resource initialization, five-lane assignment, and virtual alloc slot +0x10."
+    },
+    "0x822B5EA0": {
+      "exported_name": "sub_822B5EA0",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PrePhysics::GetGameEventQueue",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "The crash-play and pre-physics callers append events through the returned queue. ARTIST calls at 0x822F46FC, 0x822F77FC, 0x822F90AC, 0x822F91F8, 0x822F9254, 0x822F9284, 0x822F92DC, 0x823072C8, 0x82307304, checks the write lock, diagnoses BrnRaceCarEntityModuleIO.h:492, and returns this+0x24740. DecFIGS confirms the mutable declaration and interface type."
+    },
+    "0x822B6530": {
+      "exported_name": "sub_822B6530",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::GetActiveRaceCarOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "RaceCarEntityModule::PostPhysicsUpdate fills the active race-car output through this pointer. ARTIST calls at 0x823075CC, 0x823076CC, 0x82307704, 0x82307724, checks the write lock, diagnoses BrnRaceCarEntityModuleIO.h:582, and returns this+0xCA1A0. DecFIGS confirms the mutable declaration and interface type."
+    },
+    "0x822B65D8": {
+      "exported_name": "sub_822B65D8",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostPhysics::GetGlobalRaceCarOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModuleIO.cpp",
+      "evidence": "RaceCarEntityModule::PostPhysicsUpdate fills the distinct global race-car output through this pointer. ARTIST calls at 0x823076F8, checks the write lock, diagnoses BrnRaceCarEntityModuleIO.h:585, and returns this+0xCCA90. DecFIGS confirms the mutable declaration and interface type."
+    },
+    "0x828AF318": {
+      "exported_name": "sub_828AF318",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineLineTestQueue",
+      "size": 164,
+      "evidence": "ARTIST 0x828AF318 checks the read lock, streams CgsSceneManagerModuleIO.h:511, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 164-byte native body and all relocations agree."
+    },
+    "0x828AF3C0": {
+      "exported_name": "sub_828AF3C0",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineLineTestNearestQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF3C0 checks the read lock, streams CgsSceneManagerModuleIO.h:512, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AF510": {
+      "exported_name": "sub_828AF510",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineSphereTestFastQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF510 checks the read lock, streams CgsSceneManagerModuleIO.h:514, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AF5B8": {
+      "exported_name": "sub_828AF5B8",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineVolumeTestDeepestQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF5B8 checks the read lock, streams CgsSceneManagerModuleIO.h:515, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AF660": {
+      "exported_name": "sub_828AF660",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetFineVolumeTestQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF660 checks the read lock, streams CgsSceneManagerModuleIO.h:516, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AF708": {
+      "exported_name": "sub_828AF708",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetTriangleCollisionLineTestQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF708 checks the read lock, streams CgsSceneManagerModuleIO.h:517, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AF858": {
+      "exported_name": "sub_828AF858",
+      "symbol": "CgsSceneManager::SceneManagerIO::InputBuffer_Query::GetTriangleCollisionSphereTestQueue",
+      "size": 168,
+      "evidence": "ARTIST 0x828AF858 checks the read lock, streams CgsSceneManagerModuleIO.h:519, and returns the owning queue. DecFIGS names the matching InputBuffer_Query overload. The complete 168-byte native body and all relocations agree."
+    },
+    "0x828AFC48": {
+      "exported_name": "sub_828AFC48",
+      "symbol": "CgsSceneManager::SceneManagerIO::TriCacheQueryBuffer::GetTriangleCollisionLineTestNearestQueue",
+      "size": 164,
+      "evidence": "ARTIST 0x828AFC48 checks the write lock, streams CgsSceneManagerModuleIO.h:679, and returns the owning queue. DecFIGS names the matching TriCacheQueryBuffer overload. The complete 164-byte native body and all relocations agree."
+    },
+    "0x828AFCF0": {
+      "exported_name": "sub_828AFCF0",
+      "symbol": "CgsSceneManager::SceneManagerIO::TriCacheQueryBuffer::GetTriangleCollisionSphereTestQueue",
+      "size": 164,
+      "evidence": "ARTIST 0x828AFCF0 checks the write lock, streams CgsSceneManagerModuleIO.h:680, and returns the owning queue. DecFIGS names the matching TriCacheQueryBuffer overload. The complete 164-byte native body and all relocations agree."
+    },
+    "0x82B3CF38": {
+      "exported_name": "sub_82B3CF38",
+      "symbol": "_CommSRPProcessCtrl",
+      "size": 268,
+      "tu": "vendor/dirtysdk/src/x360/commsrp_native_x360.cpp",
+      "evidence": "ARTIST call at 0x82B3D2B8. In the original CommSRP receive drain the datagram-code interval 16 through 63 selects this typed (CommSRPRef*, raw packet*, sockaddr*) control handler. DecFIGS DirtySDK 5.5.3 commsrp.c:519 calls the corresponding SDK function _CommSRPProcessCtrl. Native now defines the original SDK helper name, with identical code and branch and data relocation identities."
+    },
+    "0x82B3CD18": {
+      "exported_name": "sub_82B3CD18",
+      "symbol": "_CommSRPSetAddrInfo",
+      "size": 200,
+      "tu": "vendor/dirtysdk/src/x360/commsrp_native_x360.cpp",
+      "evidence": "ARTIST call at 0x82B3CFC0. The original control handler passes its CommSRPRef and receive sockaddr at 0x82B3CFC0 and 0x82B3D014 while entering the connected state. This body writes peer/host address and port through SocketInfo and SocketGetLocalAddr and logs those values. DecFIGS commsrp.c:245 identifies _CommSRPSetAddrInfo for the same role. Native now defines the original SDK helper name, with identical code and branch and data relocation identities."
+    },
+    "0x82B23D88": {
+      "exported_name": "sub_82B23D88",
+      "symbol": "_LobbyFindUserExtractToCache",
+      "size": 264,
+      "tu": "vendor/dirtysdk/src/x360/lobbyfinduser.cpp",
+      "evidence": "ARTIST call at 0x82B23F3C. Exact LobbyFindUser registers the online response callback address 0x82B23E90 via LobbyApiRequestCB with the onln selector at 0x82B241FC. That callback passes its LobbyFindUserT* and response data at +0x10, then uses the returned index of the cache record at +0x30. DecFIGS lobbyfinduser.c:131 and :199 identify _LobbyFindUserExtractToCache and _LobbyFindUserOnlnCallback. Native now defines the original SDK helper name, with identical code and branch and data relocation identities."
+    },
+    "0x82B39608": {
+      "exported_name": null,
+      "symbol": "VoipConnectionActivate",
+      "size": 180,
+      "tu": "vendor/dirtysdk/src/x360/voipconnection_x360.cpp",
+      "evidence": "ARTIST call at 0x82B39FBC. The original VoIP receive path passes its voice connection list and a matching 0x170-byte connection while its state is pending. All three callers use the same pair at 0x82B39FBC, 0x82B3A024 and 0x82B3A08C. The body updates the typed connection and calls the list's registration callback with enable=1. Both fixed connection-established and user-registration diagnostics match, including the string folded through the -0x34 addend from the referenced label. The complete typed COFF is exact across 180 bytes, 5 named branches and 1 data operands."
+    },
+    "0x82B209A0": {
+      "exported_name": "sub_82B209A0",
+      "symbol": "_LobbyLoginSaveResponse",
+      "size": 104,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "ARTIST call at 0x82B21B88. The original LobbyLogin connection callback passes its LobbyLoginRefT* and LobbyApiMsgT* before checking the conn message. DecFIGS lobbylogin.c:1311 identifies _LobbyLoginSaveResponse, including the SDK lobby response owner fields. ARTIST copies the optional TagField payload and saves kind/code to +0x18C/+0x190, and six other typed login callbacks call the same body. The complete typed COFF is exact across 104 bytes, 1 named branches and 0 data operands."
+    },
+    "0x82B261E0": {
+      "exported_name": "sub_82B261E0",
+      "symbol": "RankSelectIndex",
+      "size": 168,
+      "tu": "vendor/dirtysdk/src/x360/lobbyrank.cpp",
+      "evidence": "DecFIGS DirtySDK 5.5.3 lobbyrank.c:709 declares _LobbyRankSelectIndex(LobbyRankT*,u32,s32,u32). The exact LobbyRankSelect calls the typed helper at 0x82B26AA8, 0x82B26AD8 and 0x82B26B00. All 168 code bytes and both relocated operands match ARTIST. The table at 0x821465D8 and its same-body base at 0x82B26214 send -91, -92 and -93 to the shared -1 return."
+    },
+    "0x82267C40": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Prepare",
+      "evidence": "PrepareCameras passes BystanderCam capacity-2 at MomentPlayerJumping+0x184 at 0x822756B8, 0x82275734. DecFIGS declares the typed Prepare member. ARTIST checks the shot count at CgsArray.h:336, then selects the shot modulo that count. Its four Shot references call the mutable GetItem at 0x82202550, and the same shot type selects the NewBehaviour template, handle getter and SetParameters.",
+      "exported_name": "sub_82267C40",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 328
+    },
+    "0x822127D0": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourBystanderCam>::Get",
+      "evidence": "The branch at 0x82267D64 in BystanderCam capacity-2 Prepare relocates to ?Get@?$BehaviourHandle@VBehaviourBystanderCam@Camera@BrnDirector@@@Camera@BrnDirector@@QAAPAVBehaviourBystanderCam@23@XZ. DecFIGS declares the mutable Get pointer return. The body asserts IsAllocated() at ARTIST BrnBehaviourManager.h:589, resolves the BehaviourHelper pool with the handle +8 and +4, then loads the helper first word as the behaviour.",
+      "exported_name": "sub_822127D0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 100
+    },
+    "0x82267D88": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Prepare",
+      "evidence": "PrepareCameras passes Rig capacity-4 at MomentPlayerJumping+0x1C8 at 0x8227563C, 0x82275778. DecFIGS declares the typed Prepare member. ARTIST checks the shot count at CgsArray.h:336, then selects the shot modulo that count. Its four Shot references call the mutable GetItem at 0x82200460, and the same shot type selects the NewBehaviour template, handle getter and SetParameters.",
+      "exported_name": "sub_82267D88",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 328
+    },
+    "0x821FCFB8": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRig>::Get",
+      "evidence": "The branch at 0x82267FF4 in Rig capacity-6 Prepare relocates to ?Get@?$BehaviourHandle@VBehaviourRig@Camera@BrnDirector@@@Camera@BrnDirector@@QAAPAVBehaviourRig@23@XZ. DecFIGS declares the mutable Get pointer return. The body asserts IsAllocated() at ARTIST BrnBehaviourManager.h:589, resolves the BehaviourHelper pool with the handle +8 and +4, then loads the helper first word as the behaviour.",
+      "exported_name": "sub_821FCFB8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 100
+    },
+    "0x8222CCB0": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::GetBehaviour",
+      "evidence": "UpdateCamera branches at 0x8223AC54, 0x8223AC68, 0x8223ADFC, 0x8223AE10 with the Rig capacity-4 collection at MomentPlayerJumping+0x1C8. The name and mutable reference return are corroborated by DecFIGS. ARTIST asserts both latches at BrnMomentPlayerJumping.h:89/90 and the GetItem call returns a writable Shot (0x82200460). It inlines the handle getter, returning the typed behaviour via the pool.",
+      "exported_name": "sub_8222CCB0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 212
+    },
+    "0x82267ED0": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::Prepare",
+      "evidence": "PrepareCameras passes Rig capacity-6 at MomentPlayerJumping+0x23C at 0x82275678, 0x822756F4, 0x822757BC. DecFIGS declares the typed Prepare member. ARTIST checks the shot count at CgsArray.h:336, then selects the shot modulo that count. Its four Shot references call the mutable GetItem at 0x82202660, and the same shot type selects the NewBehaviour template, handle getter and SetParameters.",
+      "exported_name": "sub_82267ED0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 328
+    },
+    "0x82273360": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Prepare",
+      "evidence": "PrepareCameras passes IceAnim capacity-5 at MomentPlayerJumping+0x2E0 at 0x822755F8. DecFIGS declares the typed Prepare member. ARTIST checks the shot count at CgsArray.h:336, then selects the shot modulo that count. Its four Shot references call the mutable GetItem at 0x82200790, and the same shot type selects the NewBehaviour template, handle getter and SetParameters.",
+      "exported_name": "sub_82273360",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 328
+    },
+    "0x821FD3E8": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourIceAnim>::Get",
+      "evidence": "The branch at 0x82273484 in IceAnim capacity-5 Prepare relocates to ?Get@?$BehaviourHandle@VBehaviourIceAnim@Camera@BrnDirector@@@Camera@BrnDirector@@QAAPAVBehaviourIceAnim@23@XZ. DecFIGS declares the mutable Get pointer return. The body asserts IsAllocated() at ARTIST BrnBehaviourManager.h:589, resolves the BehaviourHelper pool with the handle +8 and +4, then loads the helper first word as the behaviour.",
+      "exported_name": "sub_821FD3E8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 100
+    },
+    "0x8224B0A8": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::AddShot",
+      "evidence": "MomentPlayerJumping::Prepare branches at 0x822510D0, 0x822510DC to this Bystander capacity-2 AddShot using its collection at this+0x184. DecFIGS declares the typed const parameters pointer. The body asserts that shots are unallocated, clears the five handle fields, stores the parameters pointer and calls the corresponding typed Shot array Append.",
+      "exported_name": "sub_8224B0A8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 136
+    },
+    "0x8224B130": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::AddShot",
+      "evidence": "MomentPlayerJumping::Prepare branches at 0x822510EC, 0x822510F8, 0x82251104 to this Rig capacity-4 AddShot using its collection at this+0x1C8. DecFIGS declares the typed const parameters pointer. The body asserts that shots are unallocated, clears the five handle fields, stores the parameters pointer and calls the corresponding typed Shot array Append.",
+      "exported_name": "sub_8224B130",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 136
+    },
+    "0x8224B1B8": {
+      "symbol": "BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::AddShot",
+      "evidence": "MomentPlayerJumping::Prepare branches at 0x82251084, 0x82251090, 0x8225109C, 0x822510A8, 0x822510B4, 0x822510C0 to this Rig capacity-6 AddShot using its collection at this+0x23C. DecFIGS declares the typed const parameters pointer. The body asserts that shots are unallocated, clears the five handle fields, stores the parameters pointer and calls the corresponding typed Shot array Append.",
+      "exported_name": "sub_8224B1B8",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 136
+    },
+    "0x8222F9E0": {
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,6>::Shot,6>::Append",
+      "evidence": "The Rig capacity-6 AddShot branches at 0x8224B224 to the nested Shot array Append. The typed native relocation resolves the exact mangled Append instantiation. Original CgsArray.h lines 225/226, the capacity 6, count offset 0x90, and 24-byte element copy establish the implementation.",
+      "exported_name": "sub_8222F9E0",
+      "tu": "src/GameSource/Director/MomentController/Moments/BrnMomentPlayerJumping.cpp",
+      "size": 336
+    },
+    "0x828AC820": {
+      "exported_name": "sub_828AC820",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddDynamicVolume>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 828D2BF0 indexes the const InEventAddDynamicVolume queue. The returned event reaches VolumeManager::AddDynamicVolume with its flag byte from event+0x08 at 828D2C2C. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
+    },
+    "0x828AC8D0": {
+      "exported_name": "sub_828AC8D0",
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 828D2C60 indexes the const InEventAddVolumeInstance queue. The returned event reaches EntityManager::AddVolumeInstance with IDs at +0x00/+0x08 and transform at +0x10 at 828D2C78. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
+    },
+    "0x828AC980": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveForCollision>::GetEvent",
+      "size": 164,
+      "evidence": "ARTIST 828D20CC indexes the const InEventRemoveForCollision queue. The returned event reaches ProcessRemoveForCollisionEvent at 828D20DC. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 164 bytes."
+    },
+    "0x828AD180": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventTriangleCollisionLineTestNearest>::GetEvent",
+      "size": 172,
+      "evidence": "ARTIST 828D4934 indexes the const InEventTriangleCollisionLineTestNearest queue. The returned event reaches ProcessTriangleCollisionLineTestNearests over its DecFIGS const BaseEventQueue at 828D4938. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
+    },
+    "0x8246CE38": {
+      "exported_name": "sub_8246CE38",
+      "symbol": "BrnFlapt::TextFieldRef::SetLocalisedText",
+      "size": 220,
+      "tu": "src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp",
+      "evidence": "DecFIGS BrnFlaptTextFieldRef.h declares SetLocalisedText(float, ParameterFormatType). The ARTIST bare-value overload supplies the float input register to LanguageManager::FormatText and forwards its local buffer to SetText. The XDK overload matches the 220 original bytes, 9 resolved calls, all seven data relocations and the original assertion."
+    },
+    "0x8246CF18": {
+      "exported_name": "sub_8246CF18",
+      "symbol": "BrnFlapt::TextFieldRef::SetLocalisedText",
+      "size": 212,
+      "tu": "src/GameSource/Gui/Flapt/BrnFlaptTextFieldRef.cpp",
+      "evidence": "DecFIGS BrnFlaptTextFieldRef.h declares SetLocalisedText(int, ParameterFormatType). The ARTIST bare-value overload supplies the int input register to LanguageManager::FormatText and forwards its local buffer to SetText. The XDK overload matches the 212 original bytes, 9 resolved calls, all seven data relocations and the original assertion."
+    },
+    "0x8240E740": {
+      "exported_name": "sub_8240E740",
+      "symbol": "BrnGui::BrnFlaptComponent::Prepare",
+      "size": 160,
+      "tu": "src/GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponent.cpp",
+      "evidence": "DecFIGS BrnGuiFlaptComponent.h declares Prepare(const BrnFlapt::MovieClipRef*). ARTIST checks the pointer at original header line 164, copies its two words, and resets the bound MovieClip at line 272. The XDK pointer overload matches all 160 ARTIST bytes, seven direct branches and four diagnostic data relocations."
     }
   },
   "native_leaf_functions": {
@@ -29094,6 +29891,22 @@
       "caller": "0x8280CD80",
       "call_site": "0x8280CDE0",
       "evidence": "CollectionExportPolicy::PrepareToDeinitialize starts with the class table at offset +8 and index -1 then calls 0x82808F60 at 0x8280CDE0. The ARTIST cursor at 0x82808F60 examines 16-byte class buckets before tail-branching to class-table GetKeyAtIndex at 0x82808FDC. DecFIGS attribprivate.h:386 confirms the typed ClassTable cursor. The 136-byte exact leaf ends at blr 0x82808FE4; one call relocation verified."
+    },
+    "0x827E73B0": {
+      "symbol": "rw::graphics::postfx::RenderTarget::Parameters::Parameters",
+      "size": 244,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/postfx/src/rwgpfxrendertarget.cpp",
+      "caller": "0x827ECC28",
+      "call_site": "0x827ECCCC",
+      "evidence": "ARTIST CgsRenderTarget vtable 0x820460B4 slot zero points to Construct 0x827ECC28, which calls this leaf at 0x827ECCCC on the stack Parameters at r1+0x60. DecFIGS rwgpfxrendertarget.h:535 declares the owning Parameters constructor. The 244-byte PowerPC COFF body matches ARTIST without relocations, constructing the four colour and one depth records before clearing the provided pointer array and depth pointer."
+    },
+    "0x82B97BF0": {
+      "symbol": "rw::audio::core::LowPassButterworth::GetPlugInDescRunTime",
+      "size": 12,
+      "tu": "vendor/renderware/src/rw/audio/core/plugins/LowPassButterworth.cpp",
+      "caller": "0x826C17A0",
+      "call_site": "0x826C18C4",
+      "evidence": "GenericRwacFactory::GenericRwacFactory calls this accessor at 0x826C18C4, then registers its returned descriptor. The leaf returns 0x82F8D24C, which starts with the LowPassButterworth string and has the LPB0 GUID, three attributes, and the original LowPassButterworth callback addresses. Original RenderWare symbol metadata identifies the typed accessor, and the native PowerPC body and descriptor and array relocations match ARTIST."
     }
   },
   "sdk_archive_splits": {
