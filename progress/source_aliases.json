@@ -515,7 +515,7 @@
     },
     "0x8284CB38": {
       "exported_name": "CgsSceneManager::CgsCollision::BaseCollisionGenerator::Destruct",
-      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST. ARTIST BrnCoronaManager::Release loads its original buffer pointers from +0x10 and +0x0C, then calls 0x8284CB38 at 0x823F7764 and 0x823F776C. DecFIGS rwgcoronabuffer.h:44 and rwgcoronabuffer.cpp:37 attest the original out-of-line owner. Its native COFF body is the same 4-byte blr with no relocations.",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x8284CB38 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x8284CB38 in ARTIST. ARTIST BrnCoronaManager::Release loads its original buffer pointers from +0x10 and +0x0C, then calls 0x8284CB38 at 0x823F7764 and 0x823F776C. DecFIGS rwgcoronabuffer.h:44 and rwgcoronabuffer.cpp:37 attest the original out-of-line owner. Its native COFF body is the same 4-byte blr with no relocations. BrnNetworkManager::Destruct at 0x8258E378 calls this same four-byte return for the original NetworkNotificationManagerBase::Destruct. The native typed destructor is the same four-byte blr.",
       "aliases": {
         "CTwoPassInfoList::~CTwoPassInfoList": "xmedia.lib:obj\\xbox\\twopass.obj",
         "CTwoPassStatsList::~CTwoPassStatsList": "xmedia.lib:obj\\xbox\\twopass.obj",
@@ -579,7 +579,8 @@
         "CgsDev::DebugComponent::Construct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
         "CgsDev::DebugComponent::Destruct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
         "CgsDev::DebugComponent::Update": "The base Update is empty (CgsDebugComponent.cpp:326; PS3 CgsResource::DebugComponent::Update 0xCE3A84 calls the base through sub_CB0BAC), so the compiled method matches all 4 bytes, and CgsResource::DebugComponent::Update's base call at 0x828FF00C lands here.",
-        "renderengine::CoronaBuffer::Release": "src/SDKs/RenderEngineClub/MAIN/components/src/coronas/rwgcoronabuffer.cpp"
+        "renderengine::CoronaBuffer::Release": "src/SDKs/RenderEngineClub/MAIN/components/src/coronas/rwgcoronabuffer.cpp",
+        "BrnNetwork::NetworkNotificationManagerBase::Destruct": "src/GameSource/Network/Managers/BrnNetworkNotificationManagerBase.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -1319,6 +1320,22 @@
         "AptActionInterpreter::stackSafePop": "src/SDKs/EATech/include/Apt/AptActionInterpreter.cpp"
       },
       "evidence": "The interpreter-specific and vector SafePop COFF bodies both match the 120-byte ARTIST body, with the same CRT branches. ARTIST's 0x82ADC128 interpreter stack helper branches directly here, and InitArray's original branch at 0x82AF3DA4 corresponds to the native interpreter stackSafePop call."
+    },
+    "0x822A9750": {
+      "exported_name": "BrnPhysics::Props::PropDebugComponent::OnRegister",
+      "aliases": {
+        "BrnNetwork::LiveRevengeDebugComponent::Destruct": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp"
+      },
+      "call_evidence": {
+        "BrnNetwork::LiveRevengeDebugComponent::Destruct": "ARTIST LiveRevengeManager::Destruct passes its embedded debug component and tail-branches at 0x8255AB74 to 0x822A9750. This leaf tail-branches to the folded CgsDev::DebugComponent::Destruct at 0x8284CB38. DecFIGS 651E50 delegates the same receiver through 4C0E08 to the named base destructor. The native override with that base call matches the complete four-byte ARTIST wrapper."
+      }
+    },
+    "0x822D8C38": {
+      "exported_name": "BrnWorld::PVSIO::InputBuffer::Destruct",
+      "aliases": {
+        "BrnNetwork::ConnectionManager::Destruct": "src/GameSource/Network/Managers/BrnNetworkConnectionManager.cpp"
+      },
+      "evidence": "The original BrnNetworkManager::Destruct call at 0x8258E414 targets this 12-byte body, which resets the connection manager owner pointer at offset 8. The native typed implementation matches all 12 bytes."
     }
   },
   "xdk_functions": {
@@ -18012,6 +18029,60 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "The 119-character export is the unique prefix of the complete typed native COFF symbol. WorldModule::PrepareWorldCollision calls this extent at 0x827C963C, and its DestroyIOBuffer body calls the SceneManager output owner at 0x828BAD38. DecFIGS CgsIOBufferStack.h:986 attests the OutputBuffer specialization. The native definition matches all 216 bytes with the branch relocations checked. The original pointer-to-pointer diagnostic and CgsIOBufferStack.h filename match the COFF strings."
+    },
+    "??$Serialise@VParameters@OrientationLag@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVPa": {
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::Utils::OrientationLag::Parameters>",
+      "x360_address": "0x822310B0",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82254128 branches to 0x822310b0. At the same site XDK COFF relocates to the full typed serialization specialization in BehaviourRigSerialise.cpp; its mangling matches all 119 characters in the truncated ARTIST export."
+    },
+    "??$Serialise@VParams@CameraRig@Utils@Camera@BrnDirector@@@DebugMenuSerialiser@Camera@BrnDirector@@QAAXPBDAAVParams@Came": {
+      "symbol": "BrnDirector::Camera::DebugMenuSerialiser::Serialise<BrnDirector::Camera::Utils::CameraRig::Params>",
+      "x360_address": "0x8224D280",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82254150 branches to 0x8224d280. At the same site XDK COFF relocates to the full typed serialization specialization in BehaviourRigSerialise.cpp; its mangling matches all 119 characters in the truncated ARTIST export."
+    },
+    "??$Serialise@VDebugMenuSerialiser@Camera@BrnDirector@@@Params@CameraRig@Utils@Camera@BrnDirector@@QAAXAAVDebugMenuSeria": {
+      "symbol": "BrnDirector::Camera::Utils::CameraRig::Params::Serialise<BrnDirector::Camera::DebugMenuSerialiser>",
+      "x360_address": "0x822326A8",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x8224d2a4 branches to 0x822326a8. At the same site XDK COFF relocates to the full typed serialization specialization in BrnCameraRig.cpp; its mangling matches all 119 characters in the truncated ARTIST export."
+    },
+    "BrnDirector::DebugLog::LogSt": {
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::DebugLog::LogString,20,int>::operator[]",
+      "x360_address": "0x82211048",
+      "name_evidence": true,
+      "evidence": "ARTIST DebugLog::Update 0x8221BA6C, 0x8221BA84 targets 0x82211048 with the typed string pool at DebugLog +0x08. DecFIGS BrnDirectorModuleDebugPrinter.h:184 declares ObjectPool<LogString,20,int32_t>. The retail bounds diagnostics, 20-slot bound, and 72-byte record stride identify the instantiated pool; the same COFF call targets the definition in BrnDebugLogStringPool.cpp."
+    },
+    "BrnDirector::DebugLog::LogString,20,int>::FreeObject": {
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::DebugLog::LogString,20,int>::FreeObject",
+      "x360_address": "0x82210E78",
+      "name_evidence": true,
+      "evidence": "ARTIST DebugLog::Update 0x8221BA9C targets 0x82210E78 with the typed string pool at DebugLog +0x08. DecFIGS BrnDirectorModuleDebugPrinter.h:184 declares ObjectPool<LogString,20,int32_t>. The retail bounds diagnostics, 20-slot bound, and 72-byte record stride identify the instantiated pool; the same COFF call targets the definition in BrnDebugLogStringPool.cpp."
+    },
+    "*,96>::Push": {
+      "symbol": "CgsContainers::Stack<BrnParticle::Native::TrailEmitter *,96>::Push",
+      "x360_address": "0x82286280",
+      "byte_match": true,
+      "evidence": "ARTIST TrailSystem::Prepare at 0x8228BEC8 and EndOfFrame call this stack insertion. DecFIGS BrnTrailSystem.h declares its Stack<TrailEmitter*,96> and the signed count lies at +0x180. The XDK struct-pointer specialization matches all 192 bytes, six assert calls and the three distinct assert-string relocations. Its decorated COFF symbol agrees with the native caller."
+    },
+    "MassiveInet_ntop": {
+      "x360_address": "0x82BD5510",
+      "symbol": "MassiveAdClient3::MassiveInet_ntop",
+      "byte_match": true,
+      "evidence": "The existing named ARTIST symbol's 120-byte body matches the native typed owner after restoring the _snprintf edge at 0x82BD5564. Its format, size check, four byte arguments and XDK target are independently verified."
+    },
+    "??$CreateIOBuffer@VIslandGenerator@CgsPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAVIslandGenerator@CgsPhysics@@PBD@Z": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsPhysics::IslandGenerator>",
+      "x360_address": "0x8289E0D0",
+      "name_evidence": true,
+      "evidence": "The full original decorated name at 0x8289E0D0 is identical to the XDK symbol and is the specialization reached by the original update call at 0x828A75C0. The ARTIST class key is V and the allocation size is 0x4B2. The original function body still differs from the native body."
+    },
+    "??$DestroyIOBuffer@VIslandGenerator@CgsPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAVIslandGenerator@CgsPhysics@@@Z": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsPhysics::IslandGenerator>",
+      "x360_address": "0x8289E190",
+      "name_evidence": true,
+      "evidence": "The full original decorated name at 0x8289E190 is identical to the XDK symbol and is the specialization reached by the original update call at 0x828A76BC. The ARTIST class key is V and the allocation size is 0x4B2. The original function body still differs from the native body."
     }
   },
   "sdk_entry_groups": {
@@ -27143,6 +27214,77 @@
       "size": 168,
       "tu": "src/SDKs/Packages/Lion/Final/eauk_lion/Dev/LionRuntime/include/LionFX.cpp",
       "evidence": "ARTIST 0x82912BA8 saves six floating arguments and forwards the native vertex buffer, Lion batch array, Z-fade flag, six floats and texture-state stack argument to cParticleRender::Dispatch at 0x82912C3C, after checking the same singleton guard as cLionFX::Render. DecFIGS LionFX.h:79 declares the nine-argument static Dispatch. Native XDK bytes match all 168 bytes outside verified relocations, and the ARTIST extent is independently recorded by .pdata."
+    },
+    "0x8282D6B0": {
+      "exported_name": "sub_8282D6B0",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D6B0 builds a 256-byte path, wraps the first argument in Variant tag 5 (f32*), and dispatches through the debug singleton at 0x83018EF4. The decorated native overload matches the full unity body and both branch targets."
+    },
+    "0x8282D720": {
+      "exported_name": null,
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D720 builds a 256-byte path, wraps the first argument in Variant tag 6 (s32*), and dispatches through the debug singleton at 0x83018EF4. The decorated native overload matches the full unity body and both branch targets."
+    },
+    "0x8282D790": {
+      "exported_name": "sub_8282D790",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D790 builds a 256-byte path, wraps the first argument in Variant tag 7 (u32*), and dispatches through the debug singleton at 0x83018EF4. The decorated native overload matches the full unity body and both branch targets."
+    },
+    "0x8282D800": {
+      "exported_name": "sub_8282D800",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 108,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D800 builds a 256-byte path, wraps the first argument in Variant tag 8 (bool*), and dispatches through the debug singleton at 0x83018EF4. The decorated native overload matches the full unity body and both branch targets."
+    },
+    "0x821F0F40": {
+      "exported_name": "sub_821F0F40",
+      "symbol": "CgsDev::StrStreamBase::operator<<",
+      "size": 128,
+      "tu": "src/GameShared/GameClasses/Development/CgsStrStream.cpp",
+      "evidence": "ARTIST 0x823A9A5C, 0x823A9A98, 0x823A9AD4, and 0x823A9B10 pass PerfMonCpuMonitorData's four floats in f1. The callee's decimal arm reads %f through 0x82F31950, passes its double promotion, and calls StrStreamBase::AppendFormat. The native callback has the float overload decoration at all four corresponding calls. This establishes the callee identity."
+    },
+    "0x82881198": {
+      "exported_name": "sub_82881198",
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 184,
+      "evidence": "DecFIGS CgsMessage.cpp:576 declares the signed halfword member. ARTIST loads and sign-extends the halfword and stores the return of SmartBitStream::GetQuantisedInt through that field. SelectedRoutes passes its landmark index at 0x8257B1E4."
+    },
+    "0x82881250": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::Message::PackOrUnpack",
+      "size": 288,
+      "evidence": "DecFIGS CgsMessage.cpp:617 declares the unsigned halfword member. ARTIST zero-extends the halfword, passes the numeric bounds, and stores the unpacked halfword. CarSelect passes its typed colour and paint finish at 0x8257A5C0 and 0x8257A5E0."
+    },
+    "0x82871568": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::IntQuantiser::Pack",
+      "size": 420,
+      "evidence": "ARTIST 0x82881044, 0x82881168, 0x82881210, 0x82881340 and 0x82881460 pass signed value and bounds, an unsigned packed output pointer and a signed bit-count output pointer. The target checks range, computes an unsigned offset and stores its bit width. DecFIGS CgsIntQuantiser.cpp:53 supplies the typed owner and parameter roles."
+    },
+    "0x828A58E0": {
+      "exported_name": null,
+      "symbol": "CgsPhysics::PhysicsSimulationModule::AddJointSpiesToOutputQueue",
+      "size": 1068,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST Update at 0x828A7688 passes the module in r3 and the output buffer in r4. The callee calls GetJointSpyQueue at 0x8259F1C8 and walks joint spies using the vendor simulation pointer at module+0x4864. The next separate call at 0x828A7694 is the named drive-spy writer. DecFIGS CgsPhysicsSimulationModule.h declares AddJointSpiesToOutputQueue separately with the same typed output argument. This identifies the existing .pdata extent; its body remains different."
+    },
+    "0x82C10930": {
+      "exported_name": "sub_82C10930",
+      "symbol": "_snprintf",
+      "size": 276,
+      "sdk_provider": {
+        "lib": "libcMT.lib",
+        "member": "obj\\xbox\\snprintf.obj",
+        "archive_symbol": "_snprintf"
+      },
+      "evidence": "The 276-byte packed-unwind ARTIST extent agrees with libcMT's snprintf.obj outside its branch relocations. Every branch resolves to the same named CRT target."
     }
   },
   "native_leaf_functions": {

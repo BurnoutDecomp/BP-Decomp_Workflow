@@ -1,13 +1,13 @@
 {
- "blob": "b9cf7ea4379593990344f4632402503ef037de56",
- "commit": "57ef1779833b5415faa487f80c95ea103f930c39",
+ "blob": "19fc0b8d993814a90b74d4928a3066363bf3086b",
+ "commit": "a0b4c17537a774585d1f63ecb3b8888f84998d50",
  "compiled": true,
- "measured": "2026-11-25T10:50:37Z",
+ "measured": "2026-11-25T10:59:15Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 33,
+ "unpaired": 31,
  "functions": [
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
@@ -32,14 +32,16 @@
   {"artist": "828806A8", "artist_size": 1020, "first_diff": 8, "name": "CgsNetwork::TranslateFrame50HzTo60Hz", "score": 30.6, "size": 576, "status": "nonmatching", "symbol": "?TranslateFrame50HzTo60Hz@CgsNetwork@@YAGGGG@Z"},
   {"artist": "82880AA8", "artist_size": 956, "first_diff": 8, "name": "CgsNetwork::TranslateFrame60HzTo50Hz", "score": 28.1, "size": 608, "status": "nonmatching", "symbol": "?TranslateFrame60HzTo50Hz@CgsNetwork@@YAGGGG@Z"},
   {"artist": "82880E68", "artist_size": 228, "first_diff": 4, "name": "CgsNetwork::Message::GetPackedMessageSize", "score": 24.2, "size": 168, "status": "nonmatching", "symbol": "?GetPackedMessageSize@Message@CgsNetwork@@UAAHXZ"},
-  {"artist": "82880F50", "artist_size": 292, "first_diff": 4, "name": "CgsNetwork::Message::PackOrUnpack", "score": 24.4, "size": 200, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPACHH@Z"},
-  {"artist": "82881078", "artist_size": 288, "first_diff": 4, "name": "CgsNetwork::Message::PackOrUnpack", "score": 23.3, "size": 192, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAEHH@Z"},
-  {"artist": "82881370", "artist_size": 288, "first_diff": 4, "name": "CgsNetwork::Message::PackOrUnpack", "score": 23.3, "size": 192, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAHHH@Z"},
+  {"artist": "82880F50", "artist_size": 292, "data_unchecked": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 292, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPACHH@Z"},
+  {"artist": "82881078", "artist_size": 288, "data_unchecked": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 288, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAEHH@Z"},
+  {"artist": "82881198", "artist_size": 184, "data_unchecked": 2, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 184, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAFHH@Z"},
+  {"artist": "82881250", "artist_size": 288, "data_unchecked": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 288, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAGHH@Z"},
+  {"artist": "82881370", "artist_size": 288, "data_unchecked": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 288, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAHHH@Z"},
   {"artist": "828815B0", "artist_size": 964, "first_diff": 8, "name": "CgsNetwork::Message::GetEulerAnglesFromMatrix", "score": 15.6, "size": 472, "status": "nonmatching", "symbol": "?GetEulerAnglesFromMatrix@Message@CgsNetwork@@SAXABUMatrix44Affine@vpu@math@rw@@PAM11@Z"},
   {"artist": "82881978", "artist_size": 628, "first_diff": 8, "name": "CgsNetwork::Message::GetAnglesFromVector", "score": 9.0, "size": 436, "status": "nonmatching", "symbol": "?GetAnglesFromVector@Message@CgsNetwork@@SAXU__vector4@@PAM11@Z"},
   {"artist": "82881BF0", "artist_size": 16, "name": "CgsNetwork::Message::PackOrUnpack", "score": 100.0, "size": 16, "status": "exact", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPAH@Z"},
-  {"artist": "82881C00", "artist_size": 500, "first_diff": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 41.4, "size": 388, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPA_K@Z"},
+  {"artist": "82881C00", "artist_size": 500, "first_diff": 8, "name": "CgsNetwork::Message::PackOrUnpack", "score": 43.2, "size": 388, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPA_K@Z"},
   {"artist": "8288DDA0", "artist_size": 136, "first_diff": 24, "name": "CgsNetwork::Message::PackOrUnpack", "score": 97.1, "size": 144, "status": "nonmatching", "symbol": "?PackOrUnpack@Message@CgsNetwork@@QAAEPA_N@Z"},
-  {"artist": "8288EA70", "artist_size": 244, "first_diff": 4, "name": "CgsNetwork::Message::PackOrUnpackBuffer", "score": 12.2, "size": 148, "status": "nonmatching", "symbol": "?PackOrUnpackBuffer@Message@CgsNetwork@@QAAEPADH@Z"}
+  {"artist": "8288EA70", "artist_size": 244, "data_unchecked": 8, "name": "CgsNetwork::Message::PackOrUnpackBuffer", "score": 100.0, "size": 244, "status": "exact", "symbol": "?PackOrUnpackBuffer@Message@CgsNetwork@@QAAEPADH@Z"}
  ]
 }
