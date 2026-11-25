@@ -793,9 +793,24 @@
         "BrnNetwork::LiveRevengeDebugComponent::Release": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp",
         "CgsResource::Type::DeSerialise": "src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp",
         "CgsGraphics::BufferedDispatchFrame::Prepare": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp",
-        "CgsGraphics::BufferedDispatchFrame::Release": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp"
+        "CgsGraphics::BufferedDispatchFrame::Release": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp",
+        "BrnNetwork::TeamSelectionManager::Release": "src/GameSource/Network/Managers/BrnNetworkTeamSelectionManager.cpp",
+        "BrnNetwork::EventScoresManager::Release": "src/GameSource/Network/Managers/BrnEventScoresManager.cpp",
+        "BrnNetwork::ChallengeSuccessManager::Release": "src/GameSource/Network/Managers/BrnChallengeSuccessManager.cpp",
+        "BrnNetwork::NetworkDirtyTrickManager::Release": "src/GameSource/Network/Managers/BrnNetworkDirtyTrickManager.cpp",
+        "BrnNetwork::NetworkAggressiveDrivingManager::Release": "src/GameSource/Network/Managers/BrnNetworkAggressiveDrivingManager.cpp",
+        "BrnNetwork::TrafficManager::Release": "src/GameSource/Network/Managers/BrnNetworkTrafficManager.cpp",
+        "BrnNetwork::StandingsManager::Release": "src/GameSource/Network/Managers/BrnNetworkStandingsManager.cpp",
+        "BrnNetwork::ConnectionManager::Release": "src/GameSource/Network/Managers/BrnNetworkConnectionManager.cpp",
+        "BrnNetwork::ConnectionManager::Prepare": "src/GameSource/Network/Managers/BrnNetworkConnectionManager.cpp",
+        "BrnNetwork::StandingsManager::Prepare": "src/GameSource/Network/Managers/BrnNetworkStandingsManager.cpp",
+        "BrnNetwork::NetworkAggressiveDrivingManager::Prepare": "src/GameSource/Network/Managers/BrnNetworkAggressiveDrivingManager.cpp",
+        "BrnNetwork::NetworkDirtyTrickManager::Prepare": "src/GameSource/Network/Managers/BrnNetworkDirtyTrickManager.cpp",
+        "BrnNetwork::ChallengeSuccessManager::Prepare": "src/GameSource/Network/Managers/BrnChallengeSuccessManager.cpp",
+        "BrnNetwork::EventScoresManager::Prepare": "src/GameSource/Network/Managers/BrnEventScoresManager.cpp",
+        "BrnNetwork::TeamSelectionManager::Prepare": "src/GameSource/Network/Managers/BrnNetworkTeamSelectionManager.cpp"
       },
-      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address. The inherited GraphicsSpecResourceType DeSerialise slots at 0x820A1648 and 0x820A1678 are the same linked address. The eight-byte original CgsResource::Type::DeSerialise and the typed particle resource caller were verified. ARTIST BufferedDispatchFrame vtable 0x820D5174 slots +4/+8 point to 0x82C296C8. DecFIGS CgsBufferedDispatchFrame.h:77/95 lists the Prepare and Release slots, and both native providers match return true exactly."
+      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address. The inherited GraphicsSpecResourceType DeSerialise slots at 0x820A1648 and 0x820A1678 are the same linked address. The eight-byte original CgsResource::Type::DeSerialise and the typed particle resource caller were verified. ARTIST BufferedDispatchFrame vtable 0x820D5174 slots +4/+8 point to 0x82C296C8. DecFIGS CgsBufferedDispatchFrame.h:77/95 lists the Prepare and Release slots, and both native providers match return true exactly. BrnNetwork::TeamSelectionManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258DE30. BrnNetwork::EventScoresManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258DE70. BrnNetwork::ChallengeSuccessManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258DEB0. BrnNetwork::NetworkDirtyTrickManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258DFCC. BrnNetwork::NetworkAggressiveDrivingManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258E00C. BrnNetwork::TrafficManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258E068. BrnNetwork::StandingsManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258E084. BrnNetwork::ConnectionManager::Release: 8 exact bytes and BrnNetworkManager::Release call at 0x8258E16C. BrnNetwork::ConnectionManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259AEA4. BrnNetwork::StandingsManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259AF84. BrnNetwork::NetworkAggressiveDrivingManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259B008. BrnNetwork::NetworkDirtyTrickManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259B04C. BrnNetwork::ChallengeSuccessManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259B184. BrnNetwork::EventScoresManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259B1C4. BrnNetwork::TeamSelectionManager::Prepare: 8 exact bytes and BrnNetworkManager::Prepare call at 0x8259B204."
     },
     "0x82B42DC0": {
       "exported_name": "rw::movie::VideoRenderable::~VideoRenderable",
@@ -1346,6 +1361,20 @@
         "MassiveAdClient3::XMassiveAdClient::ZoneManagerRemove": "xmassiveadclient.lib:obj\\xbox\\massiveclientcore.obj"
       },
       "evidence": "Alternate SDK spelling of the same member. The ordinary XMassiveAdClient::Instance spellings are already attested on CMassiveClientCore::Instance, and ARTIST calls Instance immediately before this member at 0x82BD356C. The 192-byte member's independently audited call sites have the same list-lookup, iteration, error, and removal targets under both names, including the attested Find address. The callee itself remains nonmatching, including the signed SetLastError literal."
+    },
+    "0x825488C8": {
+      "exported_name": "BrnNetwork::NetworkInviteManager::Prepare",
+      "aliases": {
+        "BrnNetwork::NetworkInviteManager::Release": "src/GameSource/Network/Managers/BrnNetworkInviteManager.cpp"
+      },
+      "evidence": "BrnNetwork::NetworkInviteManager::Release: 20 exact bytes and BrnNetworkManager::Release call at 0x8258DF50."
+    },
+    "0x82544C38": {
+      "exported_name": "BrnNetwork::SuspensionManager::Prepare",
+      "aliases": {
+        "BrnNetwork::SuspensionManager::Release": "src/GameSource/Network/Managers/BrnNetworkSuspensionManager.cpp"
+      },
+      "evidence": "BrnNetwork::SuspensionManager::Release: 40 exact bytes and BrnNetworkManager::Release call at 0x8258E134."
     }
   },
   "xdk_functions": {
@@ -18311,7 +18340,8 @@
       "x360_address": "0x828EAEF8",
       "name_evidence": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "Both ARTIST Close at 0x828F9DC8 and CloseDirectory at 0x828FA918 call GetObjectIndex, pass its signed-byte result directly and call this operation on the same physical-device pool. The callee checks capacity, scans the signed-byte free-index list and updates the byte counts. DecFIGS CgsIndexedPool.h:330 corroborates the typed operation. Native physical-device COFF has the corresponding 16-entry specialization; the native body differs."
+      "evidence": "Both ARTIST Close at 0x828F9DC8 and CloseDirectory at 0x828FA918 call GetObjectIndex, pass its signed-byte result directly and call this operation on the same physical-device pool. The callee checks capacity, scans the signed-byte free-index list and updates the byte counts. DecFIGS CgsIndexedPool.h:330 corroborates the typed operation. Native physical-device COFF has the corresponding 16-entry specialization. The native 384-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified.",
+      "byte_match": true
     },
     "CgsFileSystem::PhysicalX360Device::CloseDirectory": {
       "symbol": "CgsFileSystem::DevicePhysicalX360::CloseDirectory",
@@ -18339,7 +18369,8 @@
       "x360_address": "0x82663180",
       "name_evidence": true,
       "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
-      "evidence": "ProcessAttribSysRegisterVaultResponse passes the result of 0x82662F50 straight to this operation on the same GameDataEventSlot pool at 0x82666660/0x8266666C; ProcessGetVehicleListRequest passes its signed-short slot index and pool at this+0x6B410 to the same callee at 0x8266670C. The callee releases the index through the signed-short free list. DecFIGS CgsIndexedPool.h:191 confirms the typed method. The native specialization still differs in emitted instructions."
+      "evidence": "ProcessAttribSysRegisterVaultResponse passes the result of 0x82662F50 straight to this operation on the same GameDataEventSlot pool at 0x82666660/0x8266666C; ProcessGetVehicleListRequest passes its signed-short slot index and pool at this+0x6B410 to the same callee at 0x8266670C. The callee releases the index through the signed-short free list. DecFIGS CgsIndexedPool.h:191 confirms the typed method. The native 392-byte extent matches after recovering the inlined DebugIsIndexFree helper at original CgsIndexedPool.h:374. All ten branches, eleven data relocations and both assertion lines verified.",
+      "byte_match": true
     },
     "CgsFileSystem::PhysicalX360Device::Read": {
       "symbol": "CgsFileSystem::DevicePhysicalX360::Read",
@@ -18354,6 +18385,87 @@
       "byte_match": true,
       "file": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
       "evidence": "The original and native physical-device tables select Close at +0x8, invoked by PhysicalDeviceThread at 0x828F21B4 with the handle from DecFIGS CgsPhysicalPS3Device.h:79. ARTIST calls XDK CloseHandle and returns the signed-byte pool index on success. The failure path inlines Device::CallErrorCallback, which DecFIGS locates at original CgsDevice.h:148. Full 176-byte extent and all five branch targets verified."
+    },
+    "CgsSceneMana": {
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetAddBodyQueue",
+      "file": "GameShared/GameClasses/SceneManager/ContactGen/CgsOverlapGenerationModuleIO_InputBuffer.cpp",
+      "x360_address": "0x828B0188",
+      "byte_match": true,
+      "evidence": "ARTIST tests the writing lock and streams CgsOverlapGenerationModuleIO.h:227, then returns InputBuffer+0x10. DecFIGS declares the matching typed AddBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "ch": {
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::GetObjectIndex",
+      "x360_address": "0x828EB078",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "ProcessPendingFileSystemResponses constructs the receiver at this+0x58030 and passes its 12-byte PendingFileResponse pointer to this helper at four sites (0x828F43B4, 0x828F4414, 0x828F4478 and 0x828F44D4). Each immediately consumes the signed-byte index in the pool's PushIndex operation. DecFIGS CgsIndexedPool.h:400 confirms the typed pointer and signed return. The 192-byte native owning specialization, all six branches, seven data relocations and assertion line 222 agree with ARTIST."
+    },
+    "char>::Pu": {
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::PushIndex",
+      "x360_address": "0x828EB138",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "ProcessPendingFileSystemResponses directs the signed-byte lookup result on the same this+0x58030 pool to this operation at 0x828F43C0, 0x828F4420, 0x828F4484 and 0x828F44E0. DecFIGS CgsIndexedPool.h:409 agrees with the signed-byte index argument. The native resource object calls PushIndex directly and emits the same 384-byte body. All ten branches, eleven data relocations and both assertion lines match."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@CameraShake@Utils@Camera@BrnDirector@@QAAXAAVTextF": {
+      "symbol": "BrnDirector::Camera::Utils::CameraShake::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "x360_address": "0x82202EE0",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822321E8 targets 0x82202EE0. The matching XDK site relocates to ??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@CameraShake@Utils@Camera@BrnDirector@@QAAXAAVTextFileReadSerialiser@34@@Z, defined in BrnCameraShake.cpp. The complete native symbol matches every byte of the 119-character exported prefix."
+    },
+    "??$Serialise@VParameters@CameraShake@Utils@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVPa": {
+      "symbol": "BrnDirector::Camera::TextFileReadSerialiser::Serialise<BrnDirector::Camera::Utils::CameraShake::Parameters>",
+      "x360_address": "0x82215BB8",
+      "name_evidence": true,
+      "evidence": "ARTIST 0x8223140C targets 0x82215BB8. The matching XDK site relocates to ??$Serialise@VParameters@CameraShake@Utils@Camera@BrnDirector@@@TextFileReadSerialiser@Camera@BrnDirector@@QAAXPBDAAVParameters@CameraShake@Utils@12@@Z, defined in BrnBehaviourAftertouchCamParameters.cpp. The complete native symbol matches every byte of the 119-character exported prefix."
+    },
+    "??$AppendRequestInterface@$0BAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0BAA@@12@@Z": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<256>",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.h",
+      "x360_address": "0x823EDED8",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST retained the full decorated name for the void member taking a pointer to the const source interface. This is its decoded name. DecFIGS BrnGameDataModuleIO.h:202 corroborates the declaration."
+    },
+    "??$AppendRequestInterface@$0CAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0CAA@@12@@Z": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<512>",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.h",
+      "x360_address": "0x823CEAC0",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST retained the full decorated name for the void member taking a pointer to the const source interface. This is its decoded name. DecFIGS BrnGameDataModuleIO.h:202 corroborates the declaration."
+    },
+    "??$AppendRequestInterface@$0EAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0EAA@@12@@Z": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<1024>",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.h",
+      "x360_address": "0x823EE038",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST retained the full decorated name for the void member taking a pointer to the const source interface. This is its decoded name. DecFIGS BrnGameDataModuleIO.h:202 corroborates the declaration."
+    },
+    "??$AppendRequestInterface@$0MAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0MAA@@12@@Z": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<3072>",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.h",
+      "x360_address": "0x823EDF88",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST retained the full decorated name for the void member taking a pointer to the const source interface. This is its decoded name. DecFIGS BrnGameDataModuleIO.h:202 corroborates the declaration."
+    },
+    "??$AppendRequestInterface@$0BAAA@@InputBuffer@GameDataIO@BrnResource@@QAAXPBV?$RequestInterface@$0BAAA@@12@@Z": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::AppendRequestInterface<4096>",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.h",
+      "x360_address": "0x823C76B8",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST retained the full decorated name for the void member taking a pointer to the const source interface. This is its decoded name. DecFIGS BrnGameDataModuleIO.h:202 corroborates the declaration."
+    },
+    "BrnResource::GameDataIO::OutputBuffer:": {
+      "symbol": "BrnResource::GameDataIO::OutputBuffer::GetFileSystemStatusInterface",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B16E0",
+      "name_evidence": true,
+      "byte_match": false,
+      "evidence": "ARTIST CheckDiskError calls 0x823B16E0 under the GameData output read lock at 0x823BC7B8, then tests the returned disk-error byte. Callee returns the named filesystem interface at output+9 and identifies BrnGameDataModuleIO.h:178 in its read-lock diagnostic. DecFIGS declares the same read accessor."
     }
   },
   "sdk_entry_groups": {
@@ -27957,7 +28069,7 @@
       "symbol": "CgsFileSystem::DevicePhysicalX360::Write",
       "size": 244,
       "tu": "GameShared/GameClasses/System/FileSystem/Devices/CgsDevicePhysicalX360.cpp",
-      "evidence": "The original physical-device vtable at 0x820CEEE0 selects this extent from its Write slot +0x10. The native CgsFileSystem object corroborates the same virtual relocation. It takes the shared device handle, const buffer, unsigned count, and unsigned output count attested by DecFIGS CgsPhysicalPS3Device.h:110. ARTIST checks the record's write flag, calls the real XDK WriteFile, advances the 64-bit cursor and writes the byte count on success. The full 244-byte packed-unwind extent matches and all SDK/assert calls and strings are verified."
+      "evidence": "The original physical-device vtable at 0x820CEEE0 selects this extent from its Write slot +0x10. The native CgsFileSystem object corroborates the same virtual relocation. It takes the shared device handle, const buffer, unsigned count, and unsigned output count attested by DecFIGS CgsPhysicalPS3Device.h:112. ARTIST checks the record's write flag, calls the real XDK WriteFile, advances the 64-bit cursor and writes the byte count on success. The full 244-byte packed-unwind extent matches and all SDK/assert calls and strings are verified."
     },
     "0x828AA4C0": {
       "exported_name": "sub_828AA4C0",
@@ -27991,6 +28103,135 @@
       "size": 76,
       "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterSpecialOps.cpp",
       "evidence": "ARTIST's Apt dispatch table at 0x82F73068 maps PrevFrame opcode 0x05 at 0x82F7307C to this 76-byte unwind extent. It mirrors the adjacent named NextFrame handler at 0x82B0C3E0, subtracting one from the frame before jumpToFrame and clearing the same play flag. The original Apt opcode source gives this member name and calls AptCIH::SetIsPlaying(false)."
+    },
+    "0x828AFEE8": {
+      "exported_name": "sub_828AFEE8",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetAddBodyQueue",
+      "size": 164,
+      "evidence": "ARTIST tests the reading lock and streams CgsOverlapGenerationModuleIO.h:222, then returns InputBuffer+0x10. DecFIGS declares the matching typed AddBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828AFF90": {
+      "exported_name": "sub_828AFF90",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetUpdateBodyQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the reading lock and streams CgsOverlapGenerationModuleIO.h:223, then returns InputBuffer+0x100020. DecFIGS declares the matching typed UpdateBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B0230": {
+      "exported_name": "sub_828B0230",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetUpdateBodyQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the writing lock and streams CgsOverlapGenerationModuleIO.h:228, then returns InputBuffer+0x100020. DecFIGS declares the matching typed UpdateBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B0038": {
+      "exported_name": "sub_828B0038",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetRemoveBodyQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the reading lock and streams CgsOverlapGenerationModuleIO.h:224, then returns InputBuffer+0x200030. DecFIGS declares the matching typed RemoveBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B02D8": {
+      "exported_name": "sub_828B02D8",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetRemoveBodyQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the writing lock and streams CgsOverlapGenerationModuleIO.h:229, then returns InputBuffer+0x200030. DecFIGS declares the matching typed RemoveBody queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B00E0": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetForceNoPaddingQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the reading lock and streams CgsOverlapGenerationModuleIO.h:225, then returns InputBuffer+0x240040. DecFIGS declares the matching typed ForceNoPadding queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B0380": {
+      "exported_name": "sub_828B0380",
+      "symbol": "CgsSceneManager::OverlapGenerationIO::InputBuffer::GetForceNoPaddingQueue",
+      "size": 168,
+      "evidence": "ARTIST tests the writing lock and streams CgsOverlapGenerationModuleIO.h:230, then returns InputBuffer+0x240040. DecFIGS declares the matching typed ForceNoPadding queue overload and the XDK verifies the complete body and relocations."
+    },
+    "0x828B9FD8": {
+      "exported_name": "sub_828B9FD8",
+      "symbol": "CgsSceneManager::EntityManager::GetVolumeInstance",
+      "size": 172,
+      "evidence": "ARTIST 0x828C7588 calls the original mutable VolumeInstance lookup. The callee identifies the mutable overload through CgsEntityManager.h:518/523 and its call at 0x828BA078 to the mutable pool subscript. DecFIGS and the native complete 172-byte function agree."
+    },
+    "0x828C7528": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::SceneManagerModule::UpdateCollisionBody",
+      "size": 252,
+      "evidence": "ARTIST 0x828CFA30 and 0x828CFD08 pass the signed volume-instance index, packed VolumeInstanceId, and OverlapGenerationIO input. The target looks up the instance and volume, computes its bounding box, and calls InputBuffer::UpdateBody at 0x828C75F4. The DecFIGS declaration and complete matching XDK function agree."
+    },
+    "0x828C5E68": {
+      "exported_name": null,
+      "symbol": "CgsSceneManager::VolumeManager::GetRwVolume",
+      "size": 348,
+      "evidence": "ARTIST 0x828C75AC receives the VolumeManager and the instance volume index. The target asserts CgsVolumeManager.h:182/183, reads the VolumeManagerVolume pool at +0x94A50, and selects the VolumeSlot store or ResourcePtr<CollisionMeshData> according to the static-volume flag. DecFIGS CgsVolumeManager.h:133 identifies the exact const method. The helper is identified for verified callers and its own body remains nonmatching."
+    },
+    "0x82AEE418": {
+      "exported_name": null,
+      "symbol": "AptAnimationTarget::AddToRemList",
+      "size": 180,
+      "tu": "src/SDKs/EATech/include/Apt/AptAnimationTarget.cpp",
+      "evidence": "Named AptDisplayListState::AddToDelayReleaseList calls directly at 0x82AFD08C from the active AptTarget +0x18 animation-target pointer when a removed item retains a reference. The callee tests the removal bit, uses the shared list globals and calls AptAnimationTarget::CleanRemList at 0x82AEE44C before enqueuing. The original Apt source has the same named director method and caller."
+    },
+    "0x8282D560": {
+      "exported_name": "sub_8282D560",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 112,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D560 resolves the group path with MakeFullPath, uses Variant tag 6 for s32*, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282D5D0": {
+      "exported_name": "sub_8282D5D0",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 112,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D5D0 resolves the group path with MakeFullPath, uses Variant tag 7 for u32*, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282D640": {
+      "exported_name": "sub_8282D640",
+      "symbol": "CgsDev::DebugComponent::RegisterVariable",
+      "size": 112,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282D640 resolves the group path with MakeFullPath, uses Variant tag 8 for bool*, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282F598": {
+      "exported_name": "sub_8282F598",
+      "symbol": "CgsDev::DebugComponent::SetRange",
+      "size": 84,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282F598 preserves the original argument order, uses Variant tag 2 for s32, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282F5F0": {
+      "exported_name": "sub_8282F5F0",
+      "symbol": "CgsDev::DebugComponent::SetRange",
+      "size": 84,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282F5F0 preserves the original argument order, uses Variant tag 3 for u32, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282F688": {
+      "exported_name": "sub_8282F688",
+      "symbol": "CgsDev::DebugComponent::SetStep",
+      "size": 68,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "ARTIST 0x8282F688 preserves the original argument order, uses Variant tag 2 for s32, and dispatches through DebugManager::mpInstance at 0x83018EF4. The decorated native unity overload matches the full body and every branch target."
+    },
+    "0x8282F720": {
+      "exported_name": "sub_8282F720",
+      "symbol": "CgsDev::DebugComponent::RegisterFunction",
+      "size": 80,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "The typed callback/path-only overload calls GetComponentPath, accesses the debug singleton, and forwards to FunctionManager::RegisterFunction. The full native unity body and all four branch targets agree."
+    },
+    "0x82873F38": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::PlayerManager::RegisterEventCallback",
+      "size": 120,
+      "tu": "src/GameShared/GameClasses/Network/Players/CgsPlayerManager.cpp",
+      "evidence": "BrnNetworkManager::Prepare calls this leaf at 0x8259AE00 with PlayerManager, callback and user data. DecFIGS PlayerManager declaration and ARTIST callback-count assert at line 1687, 120 identical native instruction bytes, five call targets and both diagnostic string relocations independently verified."
+    },
+    "0x82B42D88": {
+      "symbol": "EA::Thread::Thread::GetGlobalRunnableFunctionUserWrapper",
+      "exported_name": "sub_82B42D88",
+      "size": 12,
+      "evidence": "ARTIST 0x82B42D88 loads the process-wide runnable-function wrapper slot at 0x8324FF00 and returns. The named SetGlobalRunnableFunctionUserWrapper at 0x82B42D98 guards and writes that same slot. The read is called from CheckDiskError 0x823BC828 and supplies r7 to Thread::Begin."
     }
   },
   "native_leaf_functions": {
