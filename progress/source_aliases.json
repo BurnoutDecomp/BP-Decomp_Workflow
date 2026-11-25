@@ -3276,16 +3276,24 @@
       "evidence": "Explicit vector specialization documents this exact truncated IDA name and AIPhysicsControl caller; writes sample, wraps modulo 9, sums lanes and scales by 1/9."
     },
     "CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult,10>::D": {
-      "symbol": "BrnDirector::PostOffice::Deliver",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult,10>::Deliver",
       "file": "GameSource/Director/Utils/BrnPostOffice.h",
       "x360_address": "0x8222D558",
-      "evidence": "PostOffice header enumerates this emitted Deliver instantiation; ARTIST asserts slot bounds/non-null then calls TakePackage."
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventSphereTestFastResult case through its PostOffice<OutEventSphereTestFastResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239320. The direct branch at 82239320 lands at 8222D558. Deliver checks bounds/non-null and passes the payload to the matching PostBox.",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x82239320",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp"
     },
     "CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult>::TakePac": {
-      "symbol": "BrnDirector::PostBox::TakePackage",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult>::TakePackage",
       "file": "GameSource/Director/Utils/BrnPostBox.h",
       "x360_address": "0x821FF238",
-      "evidence": "SceneManagerModuleIO.h pins the two-word sphere-result payload from this exact TakePackage address; generic PostBox checks WAITING, copies payload and sets GOT_PACKAGE."
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventSphereTestFastResult case through its PostOffice<OutEventSphereTestFastResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239320. The direct branch at 8222D618 lands at 821FF238. TakePackage checks state at BrnPostBox.cpp:65, copies the typed payload, then stores GOT_PACKAGE.",
+      "byte_match": true,
+      "caller": "0x8222D558",
+      "call_site": "0x8222D618",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp"
     },
     "BrnDirector::PostBox<cla": {
       "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult>::GetPackage",
@@ -19239,6 +19247,224 @@
       "byte_match": true,
       "name_evidence": true,
       "evidence": "ARTIST ResourceModule::Update at 0x82907F88 targets the 212-byte typed DestroyIOBuffer specialization. The original truncated export is a prefix of the native class-key-V decoration. The original 0x3014-byte InputBuffer size and typed buffer lifecycle call are independently verified."
+    },
+    "??$FileSystemAlloc@VOpenFileResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAPAVOpenFileResponse@Events@": {
+      "x360_address": "0x828F2A30",
+      "symbol": "CgsResource::ResourceModule::FileSystemAlloc<CgsResource::Events::OpenFileResponse>",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "The ARTIST caller at 828F3DB4 passes the typed response output slot to this template. DecFIGS CgsResourceModule.h:407 declares the same void function and double-pointer argument. The XDK typed class decoration completes the export and the entire allocation body matches."
+    },
+    "??$FileSystemAlloc@VCloseFileResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAPAVCloseFileResponse@Event": {
+      "x360_address": "0x828F2AC8",
+      "symbol": "CgsResource::ResourceModule::FileSystemAlloc<CgsResource::Events::CloseFileResponse>",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "The ARTIST caller at 828F3EF8 passes the typed response output slot to this template. DecFIGS CgsResourceModule.h:407 declares the same void function and double-pointer argument. The XDK typed class decoration completes the export and the entire allocation body matches."
+    },
+    "??$FileSystemAlloc@VOpenReadStreamResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAPAVOpenReadStreamResp": {
+      "x360_address": "0x828F2900",
+      "symbol": "CgsResource::ResourceModule::FileSystemAlloc<CgsResource::Events::OpenReadStreamResponse>",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "The ARTIST caller at 8290712C passes the typed response output slot to this template. DecFIGS CgsResourceModule.h:407 declares the same void function and double-pointer argument. The XDK typed class decoration completes the export and the entire allocation body matches."
+    },
+    "??$FileSystemAlloc@VCloseReadStreamResponse@Events@CgsResource@@@ResourceModule@CgsResource@@AAAXPAPAVCloseReadStreamRe": {
+      "x360_address": "0x828F2998",
+      "symbol": "CgsResource::ResourceModule::FileSystemAlloc<CgsResource::Events::CloseReadStreamResponse>",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "The ARTIST caller at 82905440 passes the typed response output slot to this template. DecFIGS CgsResourceModule.h:407 declares the same void function and double-pointer argument. The XDK typed class decoration completes the export and the entire allocation body matches."
+    },
+    "CgsResource::": {
+      "x360_address": "0x828F2890",
+      "symbol": "CgsContainers::IndexedPool<CgsResource::ResourceModule::PendingFileResponse,16,signed char>::Pop",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Containers/CgsIndexedPool.h",
+      "evidence": "All four ARTIST request adders call this method with the embedded indexed pool at ResourceModule+0x58030. DecFIGS CgsIndexedPool.h:330 declares the typed signed-byte specialization. Its 112-byte body reloads the count after writing the free index and computes the 12-byte PendingFileResponse stride."
+    },
+    "rw::math::vpu::Matrix44Affine>::Push": {
+      "symbol": "CgsContainers::RingBuffer<rw::math::vpu::Matrix44Affine>::Push",
+      "file": "GameSource/World/AI/ResetOnTrack/RingBuffer_Matrix44Affine.cpp",
+      "x360_address": "0x822AD1A0",
+      "byte_match": true,
+      "evidence": "ARTIST BrnWorld::ActiveRaceCar::UpdateResetTransform calls 0x822AD1A0 at 0x822BFA14 with the typed ring member mPrevTransforms at +0x590 and 0x2D0 matrix storage, with four 16-byte vectors copied by Push. DecFIGS declares that member as FixedRingBuffer<rw::math::vpu::Matrix44Affine,4> and the Push specialization at CgsRingBuffer.h:122. The existing explicit native instantiation in GameSource/World/AI/ResetOnTrack/RingBuffer_Matrix44Affine.cpp matches all 296 bytes, with all direct calls, both strings, assert line 137 and shared static operands checked."
+    },
+    "CgsSceneManager::EntityId>::Push": {
+      "symbol": "CgsContainers::RingBuffer<CgsSceneManager::EntityId>::Push",
+      "file": "GameShared/GameClasses/SceneManager/RingBuffer_EntityId.cpp",
+      "x360_address": "0x822AD3E8",
+      "byte_match": true,
+      "evidence": "ARTIST BrnWorld::CrashPlayManager::OnCarCrash calls 0x822AD3E8 at 0x822C32F4 with the typed ring member mRecentCrashSet at +0x30 and the stack EntityId, with one 32-bit copy in Push. DecFIGS declares that member as FixedRingBuffer<CgsSceneManager::EntityId,32> and the Push specialization at CgsRingBuffer.h:122. The existing explicit native instantiation in GameShared/GameClasses/SceneManager/RingBuffer_EntityId.cpp matches all 256 bytes, with all direct calls, both strings, assert line 137 and shared static operands checked."
+    },
+    "CgsNetwork::PlayersConnectionM": {
+      "symbol": "CgsNetwork::PlayersConnectionManager::GetEntry",
+      "x360_address": "0x82874890",
+      "byte_match": true,
+      "file": "GameShared/GameClasses/Network/Players/CgsPlayersConnectionManagerLookup.cpp",
+      "const": true,
+      "evidence": "DecFIGS CgsPlayersConnectionManager.h:194 declares the const connection-entry lookup. The exact native GetConnectionStatus const caller at 0x82874E14 branches here. The native const GetEntry matches the disjoint 356-byte extent and its direct branches and data destinations. The mutable lookup is independently identified at 0x828749F8."
+    },
+    "CgsResource::MaterialStateResourceType::GetSerialisedResourceDescr": {
+      "x360_address": "0x828A98C0",
+      "symbol": "CgsResource::MaterialStateResourceType::GetSerialisedResourceDescriptor",
+      "name_evidence": true,
+      "evidence": "The truncated export and material resource vtable use the fixed native descriptor with a 0xFC-byte, 16-aligned first lane."
+    },
+    "CgsSceneManager::SceneManagerIO::Out": {
+      "x360_address": "0x82201728",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *> *,10>::FindFirstInstanceOf",
+      "byte_match": true,
+      "caller": "0x82213E00",
+      "call_site": "0x82213E50",
+      "source_tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<const OutEventLineTestFineResult*>*,10>. ARTIST AddPostBox at 8222D158 passes its first and sole member directly with the address of the PostBox pointer. The branch at 82213E50 lands here. FindFirstInstanceOf uses the line 480 check and searches four-byte pointers, returning the index or -1."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLin": {
+      "x360_address": "0x821FEDE0",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *> *,10>::Append",
+      "byte_match": true,
+      "caller": "0x8222D158",
+      "call_site": "0x8222D248",
+      "source_tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<const OutEventLineTestFineResult*>*,10>. ARTIST AddPostBox at 8222D158 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D248 lands here. Append uses the line 225 and 226 checks, preserves the typed capacity and writes the pointer before incrementing the length."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVol": {
+      "x360_address": "0x821FF2B8",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult> *,10>::Append",
+      "byte_match": true,
+      "caller": "0x8222D628",
+      "call_site": "0x8222D718",
+      "source_tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventVolumeTestDeepestResult>*,10>. ARTIST AddPostBox at 8222D628 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D718 lands here. Append uses the line 225 and 226 checks, preserves the typed capacity and writes the pointer before incrementing the length."
+    },
+    "*,": {
+      "x360_address": "0x82210A08",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *,10>::Deliver",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x82239354",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the const OutEventLineTestFineResult* case through its PostOffice<const OutEventLineTestFineResult*,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239354. The direct branch at 82239354 lands at 82210A08. Deliver checks bounds/non-null and passes the payload to the matching PostBox."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,40>::": {
+      "x360_address": "0x8222D3B8",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult,40>::Deliver",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x82239338",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestNearestResult case through its PostOffice<OutEventLineTestNearestResult,40> member, confirmed by the DecFIGS member and typed event dispatch at 82239338. The direct branch at 82239338 lands at 8222D3B8. Deliver checks bounds/non-null and passes the payload to the matching PostBox."
+    },
+    "Cg": {
+      "x360_address": "0x82201858",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult> *,40>::GetItem",
+      "byte_match": true,
+      "caller": "0x8222D3B8",
+      "call_site": "0x8222D438",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestNearestResult case through its PostOffice<OutEventLineTestNearestResult,40> member, confirmed by the DecFIGS member and typed event dispatch at 82239338. The direct branch at 8222D438 lands at 82201858. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult>::TakePa": {
+      "x360_address": "0x821FF128",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult>::TakePackage",
+      "byte_match": true,
+      "caller": "0x8222D3B8",
+      "call_site": "0x8222D478",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestNearestResult case through its PostOffice<OutEventLineTestNearestResult,40> member, confirmed by the DecFIGS member and typed event dispatch at 82239338. The direct branch at 8222D478 lands at 821FF128. TakePackage checks state at BrnPostBox.cpp:65, copies the typed payload, then stores GOT_PACKAGE."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResu": {
+      "x360_address": "0x8222D488",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult,10>::Deliver",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x82239308",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestFastDoubleSidedResult case through its PostOffice<OutEventLineTestFastDoubleSidedResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239308. The direct branch at 82239308 lands at 8222D488. Deliver checks bounds/non-null and passes the payload to the matching PostBox."
+    },
+    "__": {
+      "x360_address": "0x82201960",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult> *,10>::GetItem",
+      "byte_match": true,
+      "caller": "0x8222D488",
+      "call_site": "0x8222D508",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestFastDoubleSidedResult case through its PostOffice<OutEventLineTestFastDoubleSidedResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239308. The direct branch at 8222D508 lands at 82201960. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult>": {
+      "x360_address": "0x821FF1B8",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFastDoubleSidedResult>::TakePackage",
+      "byte_match": true,
+      "caller": "0x8222D488",
+      "call_site": "0x8222D548",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventLineTestFastDoubleSidedResult case through its PostOffice<OutEventLineTestFastDoubleSidedResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239308. The direct branch at 8222D548 lands at 821FF1B8. TakePackage checks state at BrnPostBox.cpp:65, copies the typed payload, then stores GOT_PACKAGE."
+    },
+    "Cgs": {
+      "x360_address": "0x82201A68",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventSphereTestFastResult> *,10>::GetItem",
+      "byte_match": true,
+      "caller": "0x8222D558",
+      "call_site": "0x8222D5D8",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventSphereTestFastResult case through its PostOffice<OutEventSphereTestFastResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239320. The direct branch at 8222D5D8 lands at 82201A68. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult,10>": {
+      "x360_address": "0x8222D758",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult,10>::Deliver",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x82239384",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestDeepestResult case through its PostOffice<OutEventVolumeTestDeepestResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239384. The direct branch at 82239384 lands at 8222D758. Deliver checks bounds/non-null and passes the payload to the matching PostBox."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult>::Take": {
+      "x360_address": "0x821FF3D8",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult>::TakePackage",
+      "byte_match": true,
+      "caller": "0x8222D758",
+      "call_site": "0x8222D818",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestDeepestResult case through its PostOffice<OutEventVolumeTestDeepestResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239384. The direct branch at 8222D818 lands at 821FF3D8. TakePackage checks state at BrnPostBox.cpp:65, copies the typed payload, then stores GOT_PACKAGE."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVolumeTestFineResult,1>::De": {
+      "x360_address": "0x8222D828",
+      "symbol": "BrnDirector::PostOffice<CgsSceneManager::SceneManagerIO::OutEventVolumeTestFineResult,1>::Deliver",
+      "byte_match": true,
+      "caller": "0x82239278",
+      "call_site": "0x8223936C",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestFineResult case through its PostOffice<OutEventVolumeTestFineResult,1> member, confirmed by the DecFIGS member and typed event dispatch at 8223936C. The direct branch at 8223936C lands at 8222D828. Deliver checks bounds/non-null and passes the payload to the matching PostBox."
+    },
+    "CgsSceneManager::SceneManagerIO::OutEventVolumeTestFineResult>::TakePac": {
+      "x360_address": "0x821FF460",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestFineResult>::TakePackage",
+      "byte_match": true,
+      "caller": "0x8222D828",
+      "call_site": "0x8222D8E8",
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestFineResult case through its PostOffice<OutEventVolumeTestFineResult,1> member, confirmed by the DecFIGS member and typed event dispatch at 8223936C. The direct branch at 8222D8E8 lands at 821FF460. TakePackage checks state at BrnPostBox.cpp:65, copies the typed payload, then stores GOT_PACKAGE."
+    },
+    "BrnDirector::PostBox<": {
+      "x360_address": "0x821FC260",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *>::GetPackage",
+      "byte_match": true,
+      "file": "GameSource/Director/Utils/BrnPostBox.h",
+      "tu": "src/GameSource/Director/Utils/BrnPostBox.cpp",
+      "caller": "0x8220F850",
+      "call_site": "0x8220F8DC",
+      "evidence": "ARTIST supplies RoadRunner mLineTestFineA at this+0x150, plus mLineTestFineB at this+0x158 at call site 8220F9DC. DecFIGS BrnBehaviourRoadRunner.h:119/:122 type both members as LineTestFinePostBox. The caller dereferences the returned pointer slot and reads the fine-result hit count at result+4."
+    },
+    "BrnDirector::PostBox<class": {
+      "x360_address": "0x821FBF48",
+      "symbol": "BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult>::GetPackage",
+      "byte_match": true,
+      "file": "GameSource/Director/Utils/BrnPostBox.h",
+      "tu": "src/GameSource/Director/Utils/BrnPostBox.cpp",
+      "caller": "0x8220CD58",
+      "call_site": "0x8220CE3C",
+      "evidence": "ARTIST ResolveLineTestNearestUsingNormalStrict forwards its named LineTestNearestPostBox& parameter at both 8220CE3C and 8220CE60. Its result supplies the line-test vectors. The accessor returns +0x10, the nearest result member aligned for its vector fields."
     }
   },
   "sdk_entry_groups": {
@@ -30671,6 +30897,92 @@
       "size": 112,
       "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/texture.cpp",
       "evidence": "ARTIST Texture::Lock at 82B62C58 calls this receiver-only helper and stores its mip-adjusted result as width at offset 0x0C. PixelBuffer::Xbox2ResolveTo at 82B623DC and 82B623EC uses the same return value for the horizontal resolve bound. The body uses the 1D, 2D, and 3D fetch width fields, and DecFIGS texture.h:156 declares Texture::GetWidth() const. The ARTIST .pdata extent is 112 bytes."
+    },
+    "0x828F3D30": {
+      "exported_name": null,
+      "symbol": "CgsResource::ResourceModule::AddOpenFileRequest",
+      "size": 432,
+      "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceModule.cpp",
+      "evidence": "DecFIGS CgsResourceModule.h:910 declares the typed OpenFileRequest. This unwind extent opens the file with the existing lock wrapper, constructs the typed handle on success, allocates OpenFileResponse at 828F3DB4 and retains the response under event 20. The native body and all resolved operands match."
+    },
+    "0x82B23430": {
+      "exported_name": "sub_82B23430",
+      "symbol": "_LobbyStatbookViewInfoCb",
+      "size": 432,
+      "tu": "vendor/dirtysdk/src/x360/lobbystatbook.c",
+      "evidence": "DecFIGS lobbystatbook.c:273 declares this callback. LobbyStatbookFetchViewInfo loads it at ARTIST 82B23D20 through 82B23D38 before LobbyApiRequestCB at 82B23D48, and the exact C caller relocates _LobbyStatbookViewInfoCb at the same instruction. The 432-byte callback matches XDK with all branch targets and nine data uses checked."
+    },
+    "0x82213E00": {
+      "exported_name": "sub_82213E00",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestFineResult const *> *,10>::Contains",
+      "size": 128,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x8222D158",
+      "call_site": "0x8222D1DC",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<const OutEventLineTestFineResult*>*,10>. ARTIST AddPostBox at 8222D158 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D1DC lands here. Contains uses the line 506 check, calls FindFirstInstanceOf, and converts its -1 return to false."
+    },
+    "0x82213E80": {
+      "exported_name": "sub_82213E80",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult> *,40>::Contains",
+      "size": 128,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x8222D288",
+      "call_site": "0x8222D30C",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventLineTestNearestResult>*,40>. ARTIST AddPostBox at 8222D288 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D30C lands here. Contains uses the line 506 check, calls FindFirstInstanceOf, and converts its -1 return to false."
+    },
+    "0x822017C0": {
+      "exported_name": "sub_822017C0",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult> *,40>::FindFirstInstanceOf",
+      "size": 152,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x82213E80",
+      "call_site": "0x82213ED0",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventLineTestNearestResult>*,40>. ARTIST AddPostBox at 8222D288 passes its first and sole member directly with the address of the PostBox pointer. The branch at 82213ED0 lands here. FindFirstInstanceOf uses the line 480 check and searches four-byte pointers, returning the index or -1."
+    },
+    "0x821FF008": {
+      "exported_name": "sub_821FF008",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventLineTestNearestResult> *,40>::Append",
+      "size": 284,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x8222D288",
+      "call_site": "0x8222D378",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventLineTestNearestResult>*,40>. ARTIST AddPostBox at 8222D288 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D378 lands here. Append uses the line 225 and 226 checks, preserves the typed capacity and writes the pointer before incrementing the length."
+    },
+    "0x82213F00": {
+      "exported_name": "sub_82213F00",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult> *,10>::Contains",
+      "size": 128,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x8222D628",
+      "call_site": "0x8222D6AC",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventVolumeTestDeepestResult>*,10>. ARTIST AddPostBox at 8222D628 passes its first and sole member directly with the address of the PostBox pointer. The branch at 8222D6AC lands here. Contains uses the line 506 check, calls FindFirstInstanceOf, and converts its -1 return to false."
+    },
+    "0x82201B70": {
+      "exported_name": "sub_82201B70",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult> *,10>::FindFirstInstanceOf",
+      "size": 152,
+      "tu": "src/GameSource/Director/Utils/BrnSceneQueryInterface.cpp",
+      "caller": "0x82213F00",
+      "call_site": "0x82213F50",
+      "evidence": "DecFIGS BrnPostOffice.h:68 and CgsArray.h type this office as Array<PostBox<OutEventVolumeTestDeepestResult>*,10>. ARTIST AddPostBox at 8222D628 passes its first and sole member directly with the address of the PostBox pointer. The branch at 82213F50 lands here. FindFirstInstanceOf uses the line 480 check and searches four-byte pointers, returning the index or -1."
+    },
+    "0x82201C08": {
+      "exported_name": "sub_82201C08",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestDeepestResult> *,10>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "caller": "0x8222D758",
+      "call_site": "0x8222D7D8",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestDeepestResult case through its PostOffice<OutEventVolumeTestDeepestResult,10> member, confirmed by the DecFIGS member and typed event dispatch at 82239384. The direct branch at 8222D7D8 lands at 82201C08. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
+    },
+    "0x82201D10": {
+      "exported_name": "sub_82201D10",
+      "symbol": "CgsContainers::Array<BrnDirector::PostBox<CgsSceneManager::SceneManagerIO::OutEventVolumeTestFineResult> *,1>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/Director/DirectorModule/BrnDirectorModule.cpp",
+      "caller": "0x8222D828",
+      "call_site": "0x8222D8A8",
+      "evidence": "ARTIST ProcessSceneQueryResults dispatches the OutEventVolumeTestFineResult case through its PostOffice<OutEventVolumeTestFineResult,1> member, confirmed by the DecFIGS member and typed event dispatch at 8223936C. The direct branch at 8222D8A8 lands at 82201D10. Deliver invokes the mutable Array::GetItem on its first member, a typed PostBox pointer array, for both slot reads."
     }
   },
   "native_leaf_functions": {
@@ -31557,6 +31869,30 @@
       "caller": "0x8287ECC0",
       "call_site": "0x8287ED60",
       "evidence": "ARTIST NetworkTextureDXTCompress::Update calls this environment overload at 8287ED60 and 8287EEA0 with its typed EntryPoint subobject, local environment, DXT worker pointer and size zero. DecFIGS entry_point.h:55 corroborates the three arguments. The routine stores the environment at +0x18 and writes the callback at +0x28 only for the local environment. The five instructions match XDK exactly and end in blr before four zero alignment bytes and SetName at 82BC9858."
+    },
+    "0x82B23B70": {
+      "symbol": "LobbyStatbookStatus",
+      "size": 56,
+      "tu": "vendor/dirtysdk/src/x360/lobbystatbook.c",
+      "caller": "0x82888560",
+      "call_site": "0x828885CC",
+      "evidence": "ARTIST ServerInterfacePlayerInfo::Update calls this leaf with the statbook and slot 0 at 828885CC. Native XDK Update relocates LobbyStatbookStatus there, and DecFIGS lobbystatbook.c:656 gives the same declaration. The raw body ends before RowInfo at 82B23BA8 and matches the native 56-byte leaf exactly."
+    },
+    "0x82B63738": {
+      "symbol": "renderengine::RasterizerState::GetResourceDescriptor",
+      "size": 64,
+      "caller": "0x82B64108",
+      "call_site": "0x82B644E4",
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/states/rasterizerstate.cpp",
+      "evidence": "StateHelper::Initialize constructs raster parameters, calls this 64-byte leaf for the five-lane descriptor with 0x34-byte lane zero, then allocates and calls RasterizerState::Initialize. The rasterizer factory independently calls it at 827EBFC4."
+    },
+    "0x82B616B0": {
+      "symbol": "renderengine::Device::Parameters::Validate",
+      "size": 316,
+      "caller": "0x82B63BA8",
+      "call_site": "0x82B63BC0",
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/deviceparameters.cpp",
+      "evidence": "Device::Start supplies its incoming Parameters reference at 82B63BC0 and returns false on failure. This frameless leaf checks the native front and back formats and front dimensions. Its returns are at 82B617E0 and 82B617E8, with one padding word before FixD3DDefaults at 82B617F0."
     }
   },
   "sdk_archive_splits": {
