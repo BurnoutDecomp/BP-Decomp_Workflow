@@ -18993,6 +18993,53 @@
       "x360_address": "0x822C9F68",
       "byte_match": true,
       "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<CgsSceneManager::ZoneList>::operator-> (`CgsSceneManager::ZoneList>::operator->`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/System/Resource/CgsResourcePtr_CgsSceneManager_ZoneList.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree. The XDK verifies the linked assert data, including the ARTIST filename at 0x8201AE48."
+    },
+    "??$CreateIOBuffer@VInputBuffer_Update@SpatialPartitionIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuff": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsSceneManager::SpatialPartitionIO::InputBuffer_Update>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C5228",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateScene branches at 828D4D24 to the complete typed stack template. The target allocates 0x21014 bytes and constructs the 135168-byte variable-event queue at 828C52F0. The native relocation names the same buffer template. DecFIGS declares the payload and named stack interface."
+    },
+    "??$CreateIOBuffer@VOutputBuffer@OverlapGenerationIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@O": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<CgsSceneManager::OverlapGenerationIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828CC780",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateScene branches at 828D4D5C to the complete typed stack template. The target allocates 0x40010 bytes and constructs the typed 16384-entry pair queue at 828CC848. The native relocation names the same buffer template. DecFIGS declares the payload and named stack interface."
+    },
+    "??$DestroyIOBuffer@VInputBuffer@OverlapGenerationIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer@Ov": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::OverlapGenerationIO::InputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C53F0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateScene branches at 828D4E2C to the complete typed stack template. The target uses the same typed buffer pointer slot as the creation at 828D4D3C and frees 0x240250 bytes. The native relocation names the same buffer template. DecFIGS declares the payload and named stack interface."
+    },
+    "??$DestroyIOBuffer@VInputBuffer_Update@SpatialPartitionIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuf": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::SpatialPartitionIO::InputBuffer_Update>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C54F0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateScene branches at 828D4E38 to the complete typed stack template. The target calls the 135168-byte variable-event queue destructor at 828C55A4 before freeing 0x21014 bytes. The native relocation names the same buffer template. DecFIGS declares the payload and named stack interface."
+    },
+    "??$DestroyIOBuffer@VOutputBuffer@OverlapGenerationIO@CgsSceneManager@@@IOBufferStack@CgsModule@@QAA_NPAPAVOutputBuffer@": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<CgsSceneManager::OverlapGenerationIO::OutputBuffer>",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
+      "x360_address": "0x828C5068",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST UpdateScene branches at 828D4E44 to the complete typed stack template. The target uses the same typed pair-queue pointer slot as creation at 828D4D5C and frees 0x40010 bytes. The native relocation names the same buffer template. DecFIGS declares the payload and named stack interface."
+    },
+    "CgsResource::AlignedBinar": {
+      "symbol": "CgsResource::ResourcePtr<CgsResource::AlignedBinaryFileResource>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr.h",
+      "x360_address": "0x826AAD48",
+      "byte_match": true,
+      "evidence": "ARTIST UpdateResourceModuleLoading at 826C6E40 calls 826AAD48 with its AlignedBinaryFileResource pointer at 826C6F74. DecFIGS CgsResourcePtr.h:538 declares the non-const specialization. The typed XDK relocation, native 160-byte body and relative line-544 diagnostic agree with the original."
     }
   },
   "sdk_entry_groups": {
@@ -29899,6 +29946,146 @@
       "size": 280,
       "tu": "src/GameShared/GameClasses/Graphics/Dispatch/CgsDispatcherCommands.cpp",
       "evidence": "DecFIGS CgsDispatcherCommands.cpp:709 declares the helper with the five native arguments. ARTIST 827FA3C8–827FA3DC and 827FA5D8–827FA5EC set these arguments including Z-only false and true, respectively. The shared callee reserves native dispatch-bin memory at 827FA024 and invokes ShaderConstantsExternal::AddToDispatchBinFromStatePointers for the vertex/pixel blocks at shader technique offsets 0x1C/0x50 and 0x2C/0x60 before ending the allocation at 827FA0C0."
+    },
+    "0x821FC608": {
+      "exported_name": "sub_821FC608",
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::Camera::BehaviourManager::BehaviourHelper,28,BrnDirector::Camera::BehaviourHelperIndex>::operator[]",
+      "size": 356,
+      "tu": "src/GameSource/Director/Camera/BrnBehaviourManager.cpp",
+      "evidence": "Exact ARTIST caller BrnDirector::Camera::BehaviourManager::RefCountLogDump has a branch at 0x82220508 to 0x821FC608. The matching native COFF branch relocation selects ??A?$ObjectPool@UBehaviourHelper@BehaviourManager@Camera@BrnDirector@@$0BM@VBehaviourHelperIndex@34@@CgsContainers@@QBAABUBehaviourHelper@BehaviourManager@Camera@BrnDirector@@VBehaviourHelperIndex@45@@Z, whose 356-byte body and relocations agree with ARTIST."
+    },
+    "0x82200B30": {
+      "exported_name": "sub_82200B30",
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [70],20,int>::operator[]",
+      "size": 348,
+      "tu": "src/GameSource/Director/MomentController/BrnMomentController.cpp",
+      "evidence": "Exact ARTIST caller BrnDirector::AbstractPool<70,20,rw::math::vpu::Vector4>::AllocateVoid<BrnDirector::MomentHardStop> has a branch at 0x8222E5D4 to 0x82200B30. The matching native COFF branch relocation selects ??A?$ObjectPool@$$BY0EG@VVector4@vpu@math@rw@@$0BE@H@CgsContainers@@QAAAAY0EG@VVector4@vpu@math@rw@@H@Z, whose 348-byte body and relocations agree with ARTIST."
+    },
+    "0x82202110": {
+      "exported_name": "sub_82202110",
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [250],8,int>::operator[]",
+      "size": 348,
+      "tu": "src/GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp",
+      "evidence": "Exact ARTIST caller BrnDirector::AbstractPool<250,8,rw::math::vpu::Vector4>::AllocateVoid<BrnDirector::Camera::BehaviourGameplayBumper> has a branch at 0x8224BB64 to 0x82202110. The matching native COFF branch relocation selects ??A?$ObjectPool@$$BY0PK@VVector4@vpu@math@rw@@$07H@CgsContainers@@QAAAAY0PK@VVector4@vpu@math@rw@@H@Z, whose 348-byte body and relocations agree with ARTIST."
+    },
+    "0x822023F0": {
+      "exported_name": "sub_822023F0",
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [100],20,int>::operator[]",
+      "size": 348,
+      "tu": "src/GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp",
+      "evidence": "Exact ARTIST caller BrnDirector::AbstractPool<100,20,rw::math::vpu::Vector4>::AllocateVoid<BrnDirector::Camera::BehaviourRoadRunner> has a branch at 0x82230A44 to 0x822023F0. The matching native COFF branch relocation selects ??A?$ObjectPool@$$BY0GE@VVector4@vpu@math@rw@@$0BE@H@CgsContainers@@QAAAAY0GE@VVector4@vpu@math@rw@@H@Z, whose 348-byte body and relocations agree with ARTIST."
+    },
+    "0x822B0608": {
+      "exported_name": "sub_822B0608",
+      "symbol": "CgsContainers::Array<BrnWorld::NearMissData<4,8>::VehicleTimePair,8>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+      "evidence": "Exact ARTIST caller BrnWorld::NearMissData<4,8>::AddChecked has a branch at 0x822E4080 to 0x822B0608. The matching native COFF branch relocation selects ?GetItem@?$Array@UVehicleTimePair@?$NearMissData@$03$07@BrnWorld@@$07@CgsContainers@@QAAAAUVehicleTimePair@?$NearMissData@$03$07@BrnWorld@@I@Z, whose 264-byte body and relocations agree with ARTIST."
+    },
+    "0x822B0710": {
+      "exported_name": "sub_822B0710",
+      "symbol": "CgsContainers::Array<BrnWorld::NearMissData<4,8>::VehicleTimePair,8>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/NearMisses/BrnNearMissData.cpp",
+      "evidence": "Exact ARTIST caller BrnWorld::NearMissData<4,8>::IsRecentTrafficCheck has a branch at 0x822E4278 to 0x822B0710. The matching native COFF branch relocation selects ?GetItem@?$Array@UVehicleTimePair@?$NearMissData@$03$07@BrnWorld@@$07@CgsContainers@@QBAABUVehicleTimePair@?$NearMissData@$03$07@BrnWorld@@I@Z, whose 264-byte body and relocations agree with ARTIST."
+    },
+    "0x822B0A28": {
+      "exported_name": "sub_822B0A28",
+      "symbol": "CgsContainers::Array<BrnWorld::NearMissData<4,7>::VehicleTimePair,7>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule.cpp",
+      "evidence": "Exact ARTIST caller BrnWorld::NearMissData<4,7>::AddTakenDown has a branch at 0x822E49C0 to 0x822B0A28. The matching native COFF branch relocation selects ?GetItem@?$Array@UVehicleTimePair@?$NearMissData@$03$06@BrnWorld@@$06@CgsContainers@@QAAAAUVehicleTimePair@?$NearMissData@$03$06@BrnWorld@@I@Z, whose 264-byte body and relocations agree with ARTIST."
+    },
+    "0x82310240": {
+      "exported_name": "sub_82310240",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::GetPlayerRaceCarState",
+      "size": 172,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp",
+      "evidence": "Exact ARTIST caller BrnGameState::ChallengeManager::CheckForModifiers has a branch at 0x82316740 to 0x82310240. The matching native COFF branch relocation selects ?GetPlayerRaceCarState@RCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@QBAPBURaceCarState@Vehicle@BrnPhysics@@XZ, whose 172-byte body and relocations agree with ARTIST."
+    },
+    "0x823102F0": {
+      "exported_name": "sub_823102F0",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::GetPlayerPosition",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp",
+      "evidence": "Exact ARTIST caller BrnTraffic::TrafficEntityModule::GenerateNearbyParkedTrafficOutput has a branch at 0x8271FB48 to 0x823102F0. The matching native COFF branch relocation selects ?GetPlayerPosition@RCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@QBA?AVVector3@vpu@math@rw@@XZ, whose 164-byte body and relocations agree with ARTIST."
+    },
+    "0x82310398": {
+      "exported_name": "sub_82310398",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityActiveRaceCarOutputInterface::GetPlayerDirection",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityActiveRaceCarOutputInterface.cpp",
+      "evidence": "Exact ARTIST caller BrnTraffic::TrafficEntityModule::GenerateNearbyParkedTrafficOutput has a branch at 0x8271FB5C to 0x82310398. The matching native COFF branch relocation selects ?GetPlayerDirection@RCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@QBA?AVVector3@vpu@math@rw@@XZ, whose 164-byte body and relocations agree with ARTIST."
+    },
+    "0x8235F158": {
+      "exported_name": "sub_8235F158",
+      "symbol": "CgsContainers::Array<unsigned __int64,8>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/GameState/CarSelect/BrnCarSelectManager.cpp",
+      "evidence": "Exact ARTIST caller BrnProgression::ProgressionManager::AddCar has a branch at 0x8237AAE4 to 0x8235F158. The matching native COFF branch relocation selects ?GetItem@?$Array@_K$07@CgsContainers@@QAAAA_KI@Z, whose 264-byte body and relocations agree with ARTIST."
+    },
+    "0x823B2368": {
+      "exported_name": "sub_823B2368",
+      "symbol": "CgsContainers::Array<BrnTraffic::BrnTrafficIO::TrafficDirectorEntity,32>::operator=",
+      "size": 144,
+      "tu": "src/GameSource/Game/GameBridgeWorldToX.cpp",
+      "evidence": "Exact ARTIST caller BrnWorldIO::UpdateOutputBuffer::SetTrafficDirectorOutputInterface has a branch at 0x827A8B64 to 0x823B2368. The matching native COFF branch relocation selects ??4?$Array@UTrafficDirectorEntity@BrnTrafficIO@BrnTraffic@@$0CA@@CgsContainers@@QAAAAV01@ABV01@@Z, whose 144-byte body and relocations agree with ARTIST."
+    },
+    "0x8241DE10": {
+      "exported_name": "sub_8241DE10",
+      "symbol": "CgsContainers::Array<BrnGui::BoostMessageSlot,3>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/Gui/Flow/HUD/Components/BrnBoostMessageManager.cpp",
+      "evidence": "Exact ARTIST caller BrnGui::BoostMessageManager::GetNumActiveSlots has a branch at 0x82429120 to 0x8241DE10. The matching native COFF branch relocation selects ?GetItem@?$Array@VBoostMessageSlot@BrnGui@@$02@CgsContainers@@QBAABVBoostMessageSlot@BrnGui@@I@Z, whose 264-byte body and relocations agree with ARTIST."
+    },
+    "0x82710BD8": {
+      "exported_name": "sub_82710BD8",
+      "symbol": "BrnTraffic::BrnTrafficIO::InputBuffer_PreScene::GetActiveRaceCarOutputInterface",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.cpp",
+      "evidence": "Exact ARTIST caller BrnTraffic::TrafficEntityModule::GenerateNearbyParkedTrafficOutput has a branch at 0x8271FB3C to 0x82710BD8. The matching native COFF branch relocation selects ?GetActiveRaceCarOutputInterface@InputBuffer_PreScene@BrnTrafficIO@BrnTraffic@@QBAPBURCEntityActiveRaceCarOutputInterface@RaceCarEntityModuleIO@BrnWorld@@XZ, whose 164-byte body and relocations agree with ARTIST."
+    },
+    "0x8279EFD8": {
+      "exported_name": "sub_8279EFD8",
+      "symbol": "BrnPhysics::PhysicsModuleIO::InputBuffer::GetPotentialContactQueue",
+      "size": 168,
+      "tu": "src/GameSource/Physics/BrnPhysicsModuleIO_InputBuffer_Accessors.cpp",
+      "evidence": "Exact ARTIST caller WorldModule::BridgeScenePotentialContactsToPhysics has a branch at 0x827ABDF4 to 0x8279EFD8. The matching native COFF branch relocation selects ?GetPotentialContactQueue@InputBuffer@PhysicsModuleIO@BrnPhysics@@QAAPAV?$EventQueue@VPotentialContact@SceneManagerIO@CgsSceneManager@@$0IAA@@CgsModule@@XZ, whose 168-byte body and relocations agree with ARTIST."
+    },
+    "0x827A2A88": {
+      "exported_name": "sub_827A2A88",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetPropGraphicsLoadedQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_PreScene.cpp",
+      "evidence": "Exact ARTIST caller WorldModule::BridgeWorldModuleToPropModule_PreScene has a branch at 0x827AAD2C to 0x827A2A88. The matching native COFF branch relocation selects ?GetPropGraphicsLoadedQueue@OutputBuffer_PreScene@WorldEntityIO@BrnWorld@@QBAPBV?$EventQueue@UPropGraphicsLoadedEvent@PropEntityIO@BrnWorld@@$0BJ@@CgsModule@@XZ, whose 164-byte body and relocations agree with ARTIST."
+    },
+    "0x827A2BD8": {
+      "exported_name": "sub_827A2BD8",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetPropGraphicsUnloadedQueue",
+      "size": 164,
+      "tu": "src/GameSource/World/EntityModules/WorldEntityModule/BrnWorldEntityModuleIO_OutputBuffer_PreScene.cpp",
+      "evidence": "Exact ARTIST caller WorldModule::BridgeWorldModuleToPropModule_PreScene has a branch at 0x827AAD48 to 0x827A2BD8. The matching native COFF branch relocation selects ?GetPropGraphicsUnloadedQueue@OutputBuffer_PreScene@WorldEntityIO@BrnWorld@@QBAPBV?$EventQueue@UPropGraphicsUnloadedEvent@PropEntityIO@BrnWorld@@$0BJ@@CgsModule@@XZ, whose 164-byte body and relocations agree with ARTIST."
+    },
+    "0x8282E400": {
+      "exported_name": "sub_8282E400",
+      "symbol": "CgsDev::DebugInterface::RegisterVariable",
+      "size": 68,
+      "tu": "src/GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "evidence": "Exact ARTIST caller BrnNetwork::BrnNetworkModule::Prepare has a branch at 0x8259B4F0 to 0x8282E400. The matching native COFF branch relocation selects ?RegisterVariable@DebugInterface@CgsDev@@QAAXPA_NPBD1@Z, whose 68-byte body and relocations agree with ARTIST."
+    },
+    "0x827E68A0": {
+      "exported_name": null,
+      "symbol": "shadow::Device::SetMeshBuffers",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/Graphics/Dispatch/shadowingdevice.cpp",
+      "evidence": "DecFIGS shadowingdevice.h:482 declares SetMeshBuffers(const RenderableMesh*). The CgsDispatcherCommands.cpp dwarf dump lists the method in both mesh interpreters. ARTIST passes the mesh at 827F7240 to 827F7244; the callee compares the shadow mesh at 83010950, binds the original index and vertex buffer slots and then stores the mesh and clears its MeshHelper shadow. ARTIST .pdata supplies the 220-byte extent."
+    },
+    "0x826A7710": {
+      "exported_name": null,
+      "symbol": "CgsResource::ResourcePtr<CgsResource::BinaryFileResource>::operator->",
+      "size": 160,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/RWAC/CgsContentLoader.cpp",
+      "evidence": "ARTIST UpdateResourceModuleLoading at 826C6A98 calls 826A7710 with its BinaryFileResource pointer at 826C6BCC. The callee reads the cached main-memory pointer and asserts with CgsResourcePtr.h:544 when null. DecFIGS CgsResourcePtr.h:538 declares the non-const specialization. The typed XDK relocation, native body and relative diagnostic string agree. The original .pdata extent is 160 bytes."
     }
   },
   "native_leaf_functions": {
@@ -30736,6 +30923,22 @@
         "0x820A1530"
       ],
       "evidence": "Vtable slot 4 at 0x820A1530 names the previously unlisted 8-byte ARTIST tail thunk. The body passes the resource from r4 as this and the rebasing address, then tail branches to named TrafficData::FixUp 0x827637D8. Its extant XDK provider matches both instructions with the branch verified."
+    },
+    "0x82B4D810": {
+      "symbol": "EA::Allocator::GeneralAllocator::GetLargeBinIndexFromChunkSize",
+      "size": 104,
+      "tu": "vendor/PPMalloc/source/EAGeneralAllocator.cpp",
+      "caller": "0x82B502C0",
+      "call_site": "0x82B503BC",
+      "evidence": "ARTIST MallocInternal at 0x82B503BC and 0x82B50490 directly calls this separate 104-byte leaf, passing an unsigned 32-bit chunk size. Native MallocInternal emits the same typed static GetLargeBinIndexFromChunkSize(uint32_t) relocation and DecFIGS EAGeneralAllocator.h:1215 declares it. All words including the bounded bin returns match in the existing native leaf, and the subsequent 0x82B4D878 function begins directly after its final blr."
+    },
+    "0x82B4E1E8": {
+      "symbol": "EA::Allocator::GeneralAllocator::GetChunkIsFenceChunk",
+      "size": 108,
+      "tu": "vendor/PPMalloc/source/EAGeneralAllocator.cpp",
+      "caller": "0x82B4F5D8",
+      "call_site": "0x82B4F778",
+      "evidence": "ARTIST FreeInternal at 0x82B4F778 and CheckState at 0x82B4EBF8 call this separate const chunk predicate. The XDK FreeInternal relocation names GetChunkIsFenceChunk with the const Chunk pointer and const owner from DecFIGS EAGeneralAllocator.h:1203. The complete native body scans the recovered CoreBlock links with the same widths and matches all 108 bytes through blr at 0x82B4E250. The word at 0x82B4E254 is alignment and CheckChunk begins at 0x82B4E258."
     }
   },
   "sdk_archive_splits": {
