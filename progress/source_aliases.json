@@ -3390,10 +3390,12 @@
       "evidence": "Array<Array<BehaviourHelperIndex,28>,28>::Array, the generic default constructor: 28 times _vector_constructor_iterator over the 28 BehaviourHelperIndex elements (count 0x1C, size 4, empty element ctor) then stw -1 to the inner count (+0x70, stride 0x74), finally stw -1 to the outer count (+0xCB0); sole caller BehaviourManager::BehaviourManager (the mDebugBehaviourRefCountIndexLog member)."
     },
     "BrnDirector::Camera::BehaviourI": {
-      "symbol": "Array::Append",
+      "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Shot,5>::Append",
       "file": "GameShared/GameClasses/Containers/CgsArray.h",
       "x360_address": "0x8222FBE8",
-      "evidence": "Array<BehaviourCollection<BehaviourIceAnim,const RefSpec,5>::Shot,5>::Append: CgsArray.h:225/226 asserts (unconstructed / out of space, capacity 5), 24-byte element copy (byte + five words), count at +0x78; caller MomentPlayerJumping::Prepare (ice shot loop)."
+      "name_evidence": true,
+      "byte_match": true,
+      "evidence": "ARTIST 0x822511F4 calls the capacity-five IceAnim Shot Append. The XDK relocation in MomentPlayerJumping::Prepare names the same typed Append; the original bound, count at +0x78 and 24-byte Shot copy corroborate its identity. Restoring the original BehaviourHelperIndex assignment makes all four typed Shot Append copies match the native instruction stream."
     },
     "BrnDirector::Camera::BehaviourIceAnim": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
@@ -18646,6 +18648,22 @@
       "byte_match": true,
       "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerModule.cpp",
       "evidence": "ARTIST 828D3218 indexes the const InEventSetCullingGroupPair queue. The returned event reaches CullingGroupManager::SetCullingGroupPair with the three event fields at 828D3230. DecFIGS declares the consumer and typed const queue, and the XDK reproduces all 172 bytes."
+    },
+    "*,13>::Get": {
+      "symbol": "CgsContainers::HashTable<unsigned int,unsigned char const *,13>::Get",
+      "x360_address": "0x82863EE8",
+      "file": "GameShared/GameClasses/Containers/CgsHashTableUtf8Ptr13.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "LanguageManager::FindStringByHash at 0x8286403C calls this const 13-bin UTF-8 value accessor. DecFIGS CgsHashTable and the original scalar type agree. ARTIST validates initialization, calls the same GetInternal and returns the value pointer at node+12 when present. The typed 124-byte native body and all operand targets verify."
+    },
+    "*,13>::Remove": {
+      "symbol": "CgsContainers::HashTable<unsigned int,unsigned char const *,13>::Remove",
+      "x360_address": "0x82863F68",
+      "file": "GameShared/GameClasses/Containers/CgsHashTableUtf8Ptr13.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "LanguageManager RemoveStringByHash and RemoveStringPointerByHash call this typed 13-bin removal at 0x828640C8 and 0x82864170. ARTIST obtains the bin from GetInternal and invokes BaseLinkedList::InternalRemoveNode. Both original assertions and the full 148-byte native body verify."
     }
   },
   "sdk_entry_groups": {
@@ -29087,6 +29105,215 @@
       "size": 160,
       "tu": "src/GameSource/Gui/Flow/Shared/FlaptComponents/BrnGuiFlaptComponent.cpp",
       "evidence": "DecFIGS BrnGuiFlaptComponent.h declares Prepare(const BrnFlapt::MovieClipRef*). ARTIST checks the pointer at original header line 164, copies its two words, and resets the bound MovieClip at line 272. The XDK pointer overload matches all 160 ARTIST bytes, seven direct branches and four diagnostic data relocations."
+    },
+    "0x82862408": {
+      "exported_name": "sub_82862408",
+      "symbol": "CgsContainers::HashTable<unsigned int,unsigned char const *,13>::GetInternal",
+      "size": 132,
+      "tu": "src/GameShared/GameClasses/Containers/CgsHashTableUtf8Ptr13.cpp",
+      "evidence": "The original Get and Remove call sites at 0x82863F3C and 0x82863FB8 pass the hash key and a null or typed bin-output pointer. The shared 132-byte helper walks the key modulo 13 bin and returns its matching linked-list node. Legacy RenderWare game declarations and named InternalGetHead agree with the full exact native body."
+    },
+    "0x8235F050": {
+      "exported_name": "sub_8235F050",
+      "symbol": "CgsContainers::Array<BrnNetwork::LocalEventScoreUploadData,49>::GetItem",
+      "size": 264,
+      "evidence": "ARTIST Profile::SetEventScoreToUpload and RemoveEventScoreToUpload call the same mutable Array<LocalEventScoreUploadData,49> accessor. It checks count +0x310 at CgsArray.h:556/557 and returns this+16*index. Its 264-byte XDK body and all 11 calls match. The const counterpart at 0x8254E3E8 uses lines 538/539."
+    },
+    "0x821FCEE0": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGyroCam>::GetCamera",
+      "exported_name": "sub_821FCEE0",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x1E4 at 0x8226B92C, passes that handle to the branch at 0x8226B960, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mGyroCam as BehaviourHandle<BehaviourGyroCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FD020": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRig>::GetCamera",
+      "exported_name": "sub_821FD020",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x1A8 at 0x8226B84C, passes that handle to the branch at 0x8226B880, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mRigCam as BehaviourHandle<BehaviourRig>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FD450": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourIceAnim>::GetCamera",
+      "exported_name": "sub_821FD450",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x25C at 0x8226B6A4, passes that handle to the branch at 0x8226B700, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mIceCam as BehaviourHandle<BehaviourIceAnim>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FD6B0": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourFixedCam>::GetCamera",
+      "exported_name": "sub_821FD6B0",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x248 at 0x8226BAA4, passes that handle to the branch at 0x8226BAD8, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mFixedCam as BehaviourHandle<BehaviourFixedCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FD780": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourLooseAttachment>::GetCamera",
+      "exported_name": "sub_821FD780",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x234 at 0x8226BA38, passes that handle to the branch at 0x8226BA98, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mLooseAttachment as BehaviourHandle<BehaviourLooseAttachment>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FDC58": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner>::GetCamera",
+      "exported_name": "sub_821FDC58",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x298 at 0x8226BB7C, passes that handle to the branch at 0x8226BBB0, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mRoadRunner as BehaviourHandle<BehaviourRoadRunner>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FDD98": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourSpirallingDeathcam>::GetCamera",
+      "exported_name": "sub_821FDD98",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x284 at 0x8226BB30, passes that handle to the branch at 0x8226BB70, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mSpirallingDeathCam as BehaviourHandle<BehaviourSpirallingDeathcam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FDE68": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourAftertouchCrash>::GetCamera",
+      "exported_name": "sub_821FDE68",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x194 at 0x8226B80C, passes that handle to the branch at 0x8226B840, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mAftertouchCrash as BehaviourHandle<BehaviourAftertouchCrash>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FDF38": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRotateAboutVehicle>::GetCamera",
+      "exported_name": "sub_821FDF38",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x270 at 0x8226BAF0, passes that handle to the branch at 0x8226BB24, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mRotateAboutVehicleCam as BehaviourHandle<BehaviourRotateAboutVehicle>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x82212288": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGameplayExternal>::GetCamera",
+      "exported_name": "sub_82212288",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x1F8 at 0x8226B96C, passes that handle to the branch at 0x8226B9AC, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mGameplayExternal as BehaviourHandle<BehaviourGameplayExternal>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x82212768": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourPassengerCam>::GetCamera",
+      "exported_name": "sub_82212768",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x220 at 0x8226B9F8, passes that handle to the branch at 0x8226BA2C, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mPassenger as BehaviourHandle<BehaviourPassengerCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x82212838": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourBystanderCam>::GetCamera",
+      "exported_name": "sub_82212838",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x1D0 at 0x8226B8D8, passes that handle to the branch at 0x8226B920, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mBystander as BehaviourHandle<BehaviourBystanderCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x82213728": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourAftertouchCam>::GetCamera",
+      "exported_name": "sub_82213728",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x180 at 0x8226B798, passes that handle to the branch at 0x8226B800, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mAftertouch as BehaviourHandle<BehaviourAftertouchCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x822137F8": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourHeliCam>::GetCamera",
+      "exported_name": "sub_822137F8",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x1BC at 0x8226B898, passes that handle to the branch at 0x8226B8CC, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mHeliCam as BehaviourHandle<BehaviourHeliCam>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x822138C8": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourFailsafe>::GetCamera",
+      "exported_name": "sub_822138C8",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "evidence": "Testbed::Update picks this+0x20C at 0x8226B9B8, passes that handle to the branch at 0x8226B9EC, and stores the returned camera. DecFIGS BrnArbStateTestbed.h declares mFailsafe as BehaviourHandle<BehaviourFailsafe>. The corresponding native Testbed::Update calls that typed GetCamera const accessor once."
+    },
+    "0x821FCD40": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourInterpolate>::GetCamera",
+      "exported_name": "sub_821FCD40",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp",
+      "evidence": "ARTIST B3ClassicTakedownPlayer::Update passes the Interpolate handle at this+0x18 at 0x8226577C, then 0x82265784 calls the accessor. The corresponding native Update calls the typed Interpolate GetCamera; DecFIGS BrnArbStateTakedown.h declares the member mInterpolaterA."
+    },
+    "0x821FCE10": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::Behaviour>::GetCamera",
+      "exported_name": "sub_821FCE10",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateDriveThru.cpp",
+      "evidence": "ARTIST ArbStateDriveThru::Update passes its handle at this+0x180 at 0x82235E28, then 0x82235E34 calls the accessor. DecFIGS BrnArbStateDriveThru.h declares mDriveThruBehaviourHandle as BehaviourHandle<Behaviour>. The native relocation in the corresponding Update selects that type."
+    },
+    "0x821FE010": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRenderMetrics>::GetCamera",
+      "exported_name": "sub_821FE010",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp",
+      "evidence": "ARTIST ArbStateRenderMetrics::Update passes this+0x180 in r3 then calls the accessor at 0x82236730. DecFIGS BrnArbStateRenderMetrics.h declares the RenderMetrics handle mCam. The native Update calls that typed accessor."
+    },
+    "0x82212438": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGameplayBumper>::GetCamera",
+      "exported_name": "sub_82212438",
+      "size": 100,
+      "tu": "src/GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp",
+      "evidence": "ARTIST ArbStateRoaming::Update uses SharedCameraContainer+0x18 at 0x82264614 for the Bumper arm. DecFIGS BrnDirectorArbitratorSharedCameraContainer.h names mGameplayBumper and mGameplayExternal. The opposite arm uses +0x04 and calls the already identified External accessor at 0x8226460C. Native SharedCameraContainer::GetSelectedGameplayCamera calls each corresponding typed accessor."
+    },
+    "0x8231A6D0": {
+      "exported_name": "sub_8231A6D0",
+      "symbol": "CgsContainers::Array<BrnGameState::GameStateModuleIO::ChainableMultiplierInfo,8>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
+      "evidence": "ARTIST call at 0x8232D288. CalculateChainedMultipliers calls the original named Array of GameStateModuleIO::ChainableMultiplierInfo,8 QSort at 0x8232D1F0 and invokes this accessor on the same array before reading field +8. GetChainableTableEntry also calls the named same-type GetLength before its call at 0x8232A1FC. Those original typed siblings resolve the competing reconstructed nested CarScoreData record. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x8231AFC0": {
+      "exported_name": "sub_8231AFC0",
+      "symbol": "CgsContainers::Array<BrnGameState::StuntModeScoringOnline::MultiplierData,3>::GetItem",
+      "size": 272,
+      "tu": "src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
+      "evidence": "ARTIST call at 0x82340E1C. StuntModeScoringOnline::Update passes the named maMultiplierData array and live index, copies the six-word record from result+4, then calls the original typed MultiplierData,3 Erase on the same array and index at 0x82340E54. EndCombo independently reads the same 40-byte element at 0x8232DD8C. The complete typed COFF is exact across 272 bytes, 11 named branches and 9 data operands."
+    },
+    "0x82360610": {
+      "exported_name": "sub_82360610",
+      "symbol": "CgsContainers::Array<BrnGameState::DeveloperChallengeManager::CollectedBillboard,5>::GetItem",
+      "size": 264,
+      "tu": "src/GameSource/GameState/DeveloperChallengeManager/BrnDeveloperChallengeManager.cpp",
+      "evidence": "ARTIST call at 0x82372FF0. DeveloperChallengeManager::UpdateBufferedCollectedBillboards calls this accessor on its five-entry array, reads the float timestamp at result+8, and below the expiry branch calls the original typed CollectedBillboard,5 Erase at 0x82373008 with the same array and index. OnCollectStunt independently calls the accessor at 0x823731C0. The complete typed COFF is exact across 264 bytes, 11 named branches and 9 data operands."
+    },
+    "0x823BA038": {
+      "exported_name": "sub_823BA038",
+      "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetRaceCarRaceDistanceInterface",
+      "size": 168,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x823E1928. BridgeGameStateToWorld passes its read-locked GameState OutputBuffer, then forwards the returned value to the original typed BrnWorldIO::UpdateInputBuffer::SetRaceCarRaceDistanceInterface at 0x823E1934. The callee returns its +0x2A48C seat. DecFIGS BrnGameStateModuleIO.h:454 corroborates the const getter. The complete typed COFF is exact across 168 bytes, 6 named branches and 7 data operands."
+    },
+    "0x8231CF78": {
+      "exported_name": "sub_8231CF78",
+      "symbol": "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::GetPlayerStatusInterface",
+      "size": 164,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x8234C824. ModeManager::HandleOnlineTeamModes passes its PreWorldInputBuffer and checks the returned player-status interface. The original getter returns the typed +0x2CC8 seat under the read lock. DecFIGS BrnGameStateModuleIO.h:120 corroborates the const getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
+    },
+    "0x8231D2C0": {
+      "exported_name": "sub_8231D2C0",
+      "symbol": "BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetActiveRaceCarOutputInterface",
+      "size": 164,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x8233A5A0. BurnoutSkillzManager::PostWorldUpdate passes its PostWorldInputBuffer and reads the active race-car output count at return+0x2858. The getter returns the +0x7250 seat under the read lock. DecFIGS BrnGameStateModuleIO.h:234 corroborates the const getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
+    },
+    "0x82362778": {
+      "exported_name": "sub_82362778",
+      "symbol": "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::GetTakedownEventInputQueue",
+      "size": 164,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x823997C4. TakedownManager::DetectNetworkTakedowns passes its const PreWorldInputBuffer, reads the returned queue count at +8 and iterates the typed events. The read-locked getter returns the +0x660 queue. DecFIGS BrnGameStateModuleIO.h:102 corroborates the const getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
+    },
+    "0x823B8EC0": {
+      "exported_name": "sub_823B8EC0",
+      "symbol": "BrnGameState::GameStateModuleIO::PreWorldInputBuffer::GetControllerToGameStateInterface",
+      "size": 164,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x823CD778. BrnGameModule::BridgeControllerToGameState passes the same writable PreWorldInputBuffer at 0x823CD778, 0x823CD784 and 0x823CD878 to reach the controller's bind results, unbind results and active-controller port. The original body asserts the write lock and returns the +0x2BE8 seat. DecFIGS BrnGameStateModuleIO.h:117 corroborates the mutable getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
+    },
+    "0x823B9840": {
+      "exported_name": "sub_823B9840",
+      "symbol": "BrnGameState::GameStateModuleIO::OutputBuffer::GetTakedownEventOutputQueue",
+      "size": 164,
+      "tu": "src/GameSource/GameState/BrnGameStateModuleIO.cpp",
+      "evidence": "ARTIST call at 0x823EF234. BrnGameModule::BridgeGameStateToGui passes its const OutputBuffer and asserts the returned takedown queue before passing it to the typed translation. The original getter asserts the read lock and returns the +0x4040 queue. DecFIGS BrnGameStateModuleIO.h:376 corroborates the const getter. The complete typed COFF is exact across 164 bytes, 6 named branches and 7 data operands."
     }
   },
   "native_leaf_functions": {
@@ -29907,6 +30134,14 @@
       "caller": "0x826C17A0",
       "call_site": "0x826C18C4",
       "evidence": "GenericRwacFactory::GenericRwacFactory calls this accessor at 0x826C18C4, then registers its returned descriptor. The leaf returns 0x82F8D24C, which starts with the LowPassButterworth string and has the LPB0 GUID, three attributes, and the original LowPassButterworth callback addresses. Original RenderWare symbol metadata identifies the typed accessor, and the native PowerPC body and descriptor and array relocations match ARTIST."
+    },
+    "0x82B62890": {
+      "symbol": "renderengine::DepthStencilState::Initialize",
+      "size": 200,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/states/depthstencilstate.cpp",
+      "caller": "0x827ED468",
+      "call_site": "0x827ED51C",
+      "evidence": "ARTIST ConstructDepthStencilState passes the allocation result and typed Parameters to this out-of-line initializer, with a second independent Device::Start witness at 0x82B64490. The leaf writes the 17 input words and expands six flag bytes, then sets initialized=1 at +0x5C, agreeing with the compiled DepthStencilState layout. The original 200 bytes match the native provider without relocations and end before RasterizerState::Initialize at 0x82B62958."
     }
   },
   "sdk_archive_splits": {
