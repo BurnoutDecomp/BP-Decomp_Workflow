@@ -17801,6 +17801,30 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "ARTIST 0x82372C70 posts the just-filled PresenceContext pointer to the pending queue at owner +0xC0; ARTIST 0x82372CDC returns the processed pointer to the free queue at +0xB0. This target writes the supplied pointer into the write slot, increments the item count and asserts at CgsLocklessQueue.h:349. DecFIGS CgsLocklessQueue.h:298 corroborates the templated bool Post(const T*, bool, int) declaration. The helper body remains nonmatching."
+    },
+    "CgsGui::AnimChannelData,6>::GetItem": {
+      "symbol": "CgsContainers::Array<CgsGui::AnimChannelData,6>::GetItem",
+      "x360_address": "0x8284D830",
+      "byte_match": true,
+      "evidence": "ARTIST const Array::GetItem has the CgsArray.h:538/539 assertions, stride 24, and the original array receiver at 0x828534CC. The const specialization compiled from src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimChannelDataArray6.cpp matches all 272 bytes outside relocation fields, with matching call and diagnostic data relocations."
+    },
+    "CgsGui::AnimData::AnimatorChan": {
+      "symbol": "CgsContainers::Array<enum CgsGui::AnimData::AnimatorChannel,6>::GetItem",
+      "x360_address": "0x8284D940",
+      "byte_match": true,
+      "evidence": "ARTIST const Array::GetItem has the CgsArray.h:538/539 assertions, stride 4, and the original array receiver at 0x828534AC. The const specialization compiled from src/GameShared/GameClasses/Gui/View/AptInterface/CgsAptAnimDataAnimatorChannelArray6.cpp matches all 264 bytes outside relocation fields, with matching call and diagnostic data relocations."
+    },
+    "AptValue>::pop": {
+      "symbol": "AptValueVector::pop",
+      "x360_address": "0x82ADBBD0",
+      "byte_match": true,
+      "evidence": "ARTIST's 88-byte pop releases the top operand, then decrements the vector's depth. Eleven direct callers, including AptIntervalTimer::CleanParams at 0x82ADF148, discard r3. The void XDK COFF copy matches exactly without relocations."
+    },
+    "AptValue>::SafePop": {
+      "symbol": "AptValueVector::SafePop",
+      "x360_address": "0x82ADBB58",
+      "byte_match": true,
+      "evidence": "The existing native AptValueVector::SafePop matches ARTIST's 120-byte guarded multi-pop extent, including CRT calls and no data relocations. The truncated export name ends in the same method."
     }
   },
   "sdk_entry_groups": {
@@ -26776,6 +26800,53 @@
       "size": 136,
       "tu": "class:CgsDev::StrStreamBase",
       "evidence": "ARTIST AddVolumeInstance at 0x822CB6F4 passes the entire packed volume ID in r4 to the unsigned 64-bit stream insertion. DecFIGS CgsStrStream.h:668 declares the uint64_t overload. Its XDK standalone and unity COFF both match the 136-byte body and the named Append64IntHex and ConvertI64ToA targets."
+    },
+    "0x8287FCD8": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::BuddyManagerX360::HasBuddyInvitedMe",
+      "size": 132,
+      "evidence": "ARTIST's concrete buddy manager vtable at 0x820D0170 has HasBuddyInvitedMe at +0x54 and the separately named HaveIInvitedMyBuddy at +0x58. This 132-byte .pdata extent finds the HLB buddy by name, then reads its received-invite flag (bit 27, HLB_BUDFLAG_INVITE_RECV) at 0x8287FD4C. The adjacent +0x58 implementation instead reads bit 26, HLB_BUDFLAG_INVITE_SENT. DecFIGS CgsBuddyManagerDirtySock.h declares the two consecutive virtuals. The native CgsBuddyManagerDirtySockX360.cpp body matches the full extent, direct calls and assertion literals."
+    },
+    "0x82894138": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::BuddyManagerX360::UpdatePictureDownload",
+      "size": 328,
+      "evidence": "The ARTIST concrete buddy manager vtable at 0x820D0170 points here at +0x7C, the same slot called by BuddyManagerX360::Update at 0x8288C97C. The body checks pending profile or picture states, polls the gamer-picture XOVERLAPPED at member +0x138D4 through XGetOverlappedResult, mutates the per-picture byte flag at member +0x20, and calls DownloadNextPicture at 0x82894264. The .pdata extent is 328 bytes."
+    },
+    "0x824E7608": {
+      "exported_name": "sub_824E7608",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 256,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "BrnTextField.cpp:194 in ARTIST and present as this overload in DecFIGS. CrashNavDriverDetails 0x824B8618 passes f32 in f1 and format in r5. XDK COFF matches at this exact address."
+    },
+    "0x824E7708": {
+      "exported_name": "sub_824E7708",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 248,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "BrnTextField.cpp:224 in ARTIST and present as this overload in DecFIGS. CrashNavDriverDetails 0x824B8618 passes the integer in r4 and format in r5. XDK COFF matches at this exact address."
+    },
+    "0x824E7A20": {
+      "exported_name": "sub_824E7A20",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 524,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "BrnTextField.cpp:314–316 in ARTIST and present as this overload in DecFIGS. OnlinePreEventMessages 0x8241A328 passes count and both arrays. The body calls Obsolete_FormatTextByArray. XDK COFF matches at this exact address."
+    },
+    "0x824E7C30": {
+      "exported_name": "sub_824E7C30",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 412,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "BrnTextField.cpp:356–357 in ARTIST and present as this overload in DecFIGS. The body calls LanguageManager::FormatTextFromInt with the original single argument and its format. XDK COFF matches at this exact address."
+    },
+    "0x824E7DD0": {
+      "exported_name": "sub_824E7DD0",
+      "symbol": "BrnGui::TextField::SetLocalisedText",
+      "size": 420,
+      "tu": "GameSource/Gui/Flow/Shared/Components/BrnTextField.cpp",
+      "evidence": "BrnTextField.cpp:386–387 in ARTIST and present as this overload in DecFIGS. ShowtimeInstantResultsState 0x824C6138 passes f32 in f1 and the value format in r7. The body calls FormatTextFromFloat. XDK COFF matches at this exact address."
     }
   },
   "native_leaf_functions": {
