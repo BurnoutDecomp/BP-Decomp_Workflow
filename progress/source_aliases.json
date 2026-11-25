@@ -27069,6 +27069,13 @@
       "size": 164,
       "tu": "class:CgsSceneManager::SceneManagerIO::InputBuffer_Update",
       "evidence": "ARTIST SceneManagerModule::StartUpdateTriangleCache calls this accessor at ARTIST 0x828C745C. The body tests read lock bit 4, fires the streamed diagnostic at CgsSceneManagerModuleIO.h:462 and returns the typed scene update member at +0x10. The const declaration is corroborated by DecFIGS and the XDK matches every instruction plus its historic assertion data."
+    },
+    "0x82337200": {
+      "exported_name": "sub_82337200",
+      "symbol": "BrnResource::ChallengeList::GetChallengeData",
+      "size": 88,
+      "tu": "SharedClasses/DataLists/ChallengeList.h",
+      "evidence": "DecFIGS ChallengeList.h:101 declares GetChallengeData(CgsID) const. ARTIST calls GetChallengeIndex with the full 64-bit ID, tests the signed result, then calls the GetChallengeData(s32) overload or returns null. The native CgsID COMDAT in BrnChallengeManager.obj matches all 88 bytes and the call targets."
     }
   },
   "native_leaf_functions": {
