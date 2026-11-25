@@ -18466,6 +18466,43 @@
       "name_evidence": true,
       "byte_match": false,
       "evidence": "ARTIST CheckDiskError calls 0x823B16E0 under the GameData output read lock at 0x823BC7B8, then tests the returned disk-error byte. Callee returns the named filesystem interface at output+9 and identifies BrnGameDataModuleIO.h:178 in its read-lock diagnostic. DecFIGS declares the same read accessor."
+    },
+    "BrnResource::GameDataIO::AllocatorList::GetRWLinearResourceAllocato": {
+      "symbol": "BrnResource::GameDataIO::AllocatorList::GetRWLinearResourceAllocator",
+      "x360_address": "0x822775B8",
+      "byte_match": true,
+      "file": "GameSource/Resource/SharedIO/BrnGameDataAllocatorList.cpp",
+      "evidence": "ARTIST PhysicsModule::Prepare calls this function four times with bank 23 on its const AllocatorList. The callee checks E_ALLOCATORTYPE_RWLINEAR = 3 and indexes the pointer array at AllocatorList+0x26C. DecFIGS BrnGameDataAllocatorList.h:84 corroborates the const signed-bank getter and its rw::LinearResourceAllocator pointer return. Streamed assert lines 150-152 and the full 468-byte native extent verified."
+    },
+    "BrnGui::FreeburnChallengeManager::GetCu": {
+      "symbol": "BrnGui::FreeburnChallengeManager::GetCurrentSuccessForARCI",
+      "file": "GameSource/Gui/BrnGuiFreeburnChallengeManager.cpp",
+      "x360_address": "0x8240ED50",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnGuiFreeburnChallengeManager.h:115 declares GetCurrentSuccessForARCI. ARTIST reads the named target data and embeds header assertions at lines 270 through 274. Native XDK matches all 256 .pdata-bounded bytes with 17 verified branch relocations and 6 data bindings."
+    },
+    "BrnGui::FreeburnChallengeManager::GetCur": {
+      "symbol": "BrnGui::FreeburnChallengeManager::GetCurrentTargetType",
+      "file": "GameSource/Gui/BrnGuiFreeburnChallengeManager.cpp",
+      "x360_address": "0x8240EF50",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnGuiFreeburnChallengeManager.h:136 declares GetCurrentTargetType. ARTIST reads the named target data and embeds header assertions at lines 341 through 343. Native XDK matches all 196 .pdata-bounded bytes with 9 verified branch relocations and 4 data bindings."
+    },
+    "BrnTraffic::TrafficData>::operator->": {
+      "symbol": "CgsResource::ResourcePtr<BrnTraffic::TrafficData>::operator->",
+      "file": "SharedClasses/Traffic/BrnTrafficDataResourcePtr.cpp",
+      "x360_address": "0x82719B90",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST DebugComponent::OnActivate sends mutable TrafficEntityModule::mpData at +0x71840 and consumes the TrafficData counts. Five native providers emit the same 160-byte body with six verified branches and seven checked data references, including the relative historical CgsResourcePtr.h at 0x82007258 and line 544."
+    },
+    "BrnGameState::StreetManager::CreateUserChallengeScoreFr": {
+      "symbol": "BrnGameState::StreetManager::CreateUserChallengeScoreFromRoadRulesData",
+      "x360_address": "0x82324AC0",
+      "file": "GameSource/GameState/StreetData/BrnGameStateStreetManager.cpp",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The ARTIST truncated name agrees with the typed DecFIGS StreetManager declaration and C++ definition. ARTIST constructs the returned ChallengePlayerScoreEntry and uses the const RoadRulesMessageData pointer. The 128-byte native body, seven direct branches and two diagnostic literals are verified."
     }
   },
   "sdk_entry_groups": {
@@ -28232,6 +28269,27 @@
       "exported_name": "sub_82B42D88",
       "size": 12,
       "evidence": "ARTIST 0x82B42D88 loads the process-wide runnable-function wrapper slot at 0x8324FF00 and returns. The named SetGlobalRunnableFunctionUserWrapper at 0x82B42D98 guards and writes that same slot. The read is called from CheckDiskError 0x823BC828 and supplies r7 to Thread::Begin."
+    },
+    "0x823A8A78": {
+      "symbol": "BrnHW::operator++",
+      "exported_name": "sub_823A8A78",
+      "size": 92,
+      "evidence": "ARTIST System360HW::Release at 0x823C6CC8 passes &meReleaseStage at +0x9C and postfix dummy zero. This callee returns the old enum and increments the stage, diagnosing leEnumIndex <= System360HW::E_RELEASESTAGE_DONE at BrnSystemHWX360.h:133."
+    },
+    "0x82BBCD90": {
+      "exported_name": null,
+      "symbol": "rw::LinearResourceAllocator::GetResourceDescriptor",
+      "native_symbol": "?GetResourceDescriptor@LinearResourceAllocator@rw@@SA?AUResourceDescriptor@2@ABU32@@Z",
+      "size": 160,
+      "file": "vendor/renderware/src/rwcore_alloc.cpp",
+      "evidence": "Distinct PPC calls at 0x82666BAC, 0x82666C9C and 0x82666E88 return a descriptor that the caller copies before asking the companion LinearResourceAllocator::Initialize to use the reserved backing. The body copies five descriptor entries from its input, rounds the known 0x94-byte LinearResourceAllocator object size to lane-zero alignment, adds that reserve via the existing 0x8268D9F8 descriptor operator, and returns the resulting descriptor through the native hidden return pointer. The sibling named rw::core::GeneralResourceAllocator::GetResourceDescriptor at 0x82BC0E28 implements the same contract using the general allocator size."
+    },
+    "0x8275BB40": {
+      "exported_name": null,
+      "symbol": "BrnTraffic::DebugComponent::FireKillZone",
+      "size": 124,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficDebugComponent.cpp",
+      "evidence": "ARTIST OnActivate at 0x82763274..0x82763294 passes this typed kill-zone callback, confirmed by the full native 124-byte body, 0x40 selection field, four internal branches, SDK frame, and both exact original assertion strings."
     }
   },
   "native_leaf_functions": {
