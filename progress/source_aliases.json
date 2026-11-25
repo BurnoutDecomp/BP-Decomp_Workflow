@@ -646,13 +646,14 @@
     },
     "0x82AD5078": {
       "exported_name": "STUB",
-      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST. EA::Thread::Mutex::~Mutex compares exact across 4 bytes and the aligned caller at 0x82B6BD88 targets this address. MassiveAdClient3::MassiveLog compares exact across 4 bytes and the aligned caller at 0x82BD15C4 targets this address.",
+      "evidence": "Each listed XDK 6534.4 symbol matches all 4 bytes at 0x82AD5078 with no relocations. The SDK caller has a branch relocation to that symbol at the instruction that branches to 0x82AD5078 in ARTIST. EA::Thread::Mutex::~Mutex compares exact across 4 bytes and the aligned caller at 0x82B6BD88 targets this address. MassiveAdClient3::MassiveLog compares exact across 4 bytes and the aligned caller at 0x82BD15C4 targets this address. The callback is the single relocation-free blr at 0x82AD5078. The AsyncOp constructor, Read and Write all materialize this same address when selecting their original no-op completion.",
       "aliases": {
         "MassiveAdClient3::CLog::Log": "xmassiveadclient.lib:obj\\xbox\\massiveadobject.obj",
         "MassiveAdClient3::CRequestObject::DumpByteArray": "xmassiveadclient.lib:obj\\xbox\\requestobject.obj",
         "MassiveDNSCleanUp": "xmassiveadclient.lib:obj\\xbox\\x360massivednssecure.obj",
         "EA::Thread::Mutex::~Mutex": "src/SDKs/EATech/eathread/eathread_mutex.cpp",
-        "MassiveAdClient3::MassiveLog": "src/SDKs/Packages/MassiveAd/MassiveAdClient3ClientCore.cpp"
+        "MassiveAdClient3::MassiveLog": "src/SDKs/Packages/MassiveAd/MassiveAdClient3ClientCore.cpp",
+        "rw::core::filesys::DefaultCompletion": "src/SDKs/EATech/rwcore/filesys/asyncop.cpp"
       }
     },
     "0x82579CC8": {
@@ -19195,6 +19196,25 @@
       "x360_address": "0x8270D680",
       "name_evidence": true,
       "evidence": "The original Array::Contains body 0x8271B6F8 branches to this clipped export at 0x8271B748. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+    },
+    "AptValue>::PopAndPush": {
+      "symbol": "AptValueVector::PopAndPush",
+      "x360_address": "0x82ADBAB8",
+      "byte_match": true,
+      "evidence": "The same truncated AptValue> operand-stack family owns ARTIST's SafePop and pop. The stackPopAndPush thunk at 0x82ADC110 and each bitwise handler pass a live AptValue as the replacement. The body calls its AddRef at virtual slot 0, releases popped entries at slot +4, and stores that same value in the existing typed stack triple. The matching SDK stack declaration corroborates the operation and type. Native COFF matches all 160 bytes and both CRT branches."
+    },
+    "CgsResource::RwShaderProgramBufferResourceType::GetSerialisedResou": {
+      "x360_address": "0x828A9910",
+      "symbol": "CgsResource::RwShaderProgramBufferResourceType::GetSerialisedResourceDescriptor",
+      "name_evidence": true,
+      "evidence": "The ARTIST export truncates the decoded method name. This body sizes the five-lane program resource from header +0x08 cached microcode size, +0x04 variable count and +0x0C physical size. It has the resource descriptor return ABI and the original shader-program resource owner.",
+      "byte_match": true
+    },
+    "CgsPhysics::P": {
+      "x360_address": "0x8289D968",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddJoint>::GetEvent",
+      "byte_match": true,
+      "evidence": "ARTIST ProcessAddJointQueue obtains its typed queue at 0x828A4104 from InputBuffer accessor 0x8289E8A0 and uses that result for GetEvent at 0x828A4208. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
     }
   },
   "sdk_entry_groups": {
@@ -30354,6 +30374,174 @@
       "size": 224,
       "tu": "src/GameShared/GameClasses/System/Resource/CgsResourceHeap.cpp",
       "evidence": "ARTIST CgsResource::Pool::DeleteMemoryForEntry calls this 224-byte body at 0x828FEFC0. XDK retains the same decorated typed provider at caller offsets +0xA8. The typed pool caller selects the pointer overload of Free. DecFIGS CgsResourceHeap.cpp:490 corroborates its void-pointer argument and exact-address list walk, and the original body calls the distinct index overload at 0x828F4F80."
+    },
+    "0x82AE9FE0": {
+      "exported_name": null,
+      "symbol": "AptActionInterpreter::_FunctionAptActionBitAnd",
+      "size": 152,
+      "tu": "src/SDKs/EATech/include/Apt/AptActionInterpreterBitwise.cpp",
+      "evidence": "ARTIST dispatch table at 0x82F73068 assigns opcode 0x60 to this entry; the consecutive 0x61–0x64 entries are BitOr, BitXor, BitLShift and BitRShift. The result combines the two coerced integers with PPC and at 0x82AEA058 before AptInteger::Create and the typed operand stack replacement. The matching SDK opcode implementation corroborates the method. Native COFF matches the 152-byte unwind extent, six direct branches and both data references."
+    },
+    "0x82B62088": {
+      "exported_name": "sub_82B62088",
+      "symbol": "renderengine::Device::UnSetResource",
+      "size": 116,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/device.cpp",
+      "evidence": "ARTIST ProgramBuffer::Release at 82B6260C supplies its ProgramBufferData pointer, then invalidates the type. The callee reads the type and queries the embedded XDK shader at +0x14. It clears the active vertex or pixel shader when D3DResource_IsSet reports a binding. It follows the same resource-unbinding family in the device owner at 82B61F08, 82B61F90 and 82B61FE0."
+    },
+    "0x82836460": {
+      "exported_name": null,
+      "symbol": "CgsFsm::LuaState::NextState",
+      "size": 176,
+      "tu": "src/GameShared/GameClasses/Fsm/CgsFsmUnity.cpp",
+      "evidence": "ARTIST ScriptedFsm::SendEvent at 0x82836884 passes the LuaState at this+8 and the event CgsID at event+0x40 to this method. Its body reads the original NextState function-name pointer, pushes that typed ID, calls Lua with one argument and no results, then clears the stack and collects through lua_gc. DecFIGS CgsLuaState.h:122 declares this method and its CgsID argument."
+    },
+    "0x82B453C0": {
+      "exported_name": "sub_82B453C0",
+      "symbol": "Nicotine::SnapshotVolumeCurve",
+      "size": 400,
+      "tu": "src/SDKs/EATech/include/Nicotine/SnapshotMixer.cpp",
+      "evidence": "ARTIST SnapshotChannel::GetCurrentVolume passes a single-precision ramp ratio and selector 1 or 7 at 82B47248 to this existing 400-byte .pdata extent. The callee checks the same ramp bounds through IDynamicMixer, recurses for complementary/squared curves, and reads the same 512-word interpolation table at 82F86F88. Nicotine::SnapshotVolumeCurve is the established source name of this recovery."
+    },
+    "0x8289D570": {
+      "exported_name": "sub_8289D570",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddRigidBody>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessAddRigidBodyQueue obtains its typed queue at 0x828A2724 from InputBuffer accessor 0x8289E408 and uses that result for GetEvent at 0x828A2784, 0x828A27AC, 0x828A28CC. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289D6D0": {
+      "exported_name": "sub_8289D6D0",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InApplyForce>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessApplyForceQueue obtains its typed queue at 0x828A6B94 from InputBuffer accessor 0x8289E558 and uses that result for GetEvent at 0x828A6BD0. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289D820": {
+      "exported_name": "sub_8289D820",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveRigidBody>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessRemoveRigidBodyQueue obtains its typed queue at 0x828A2BEC from InputBuffer accessor 0x8289E6A8 and uses that result for GetEvent at 0x828A2C4C, 0x828A2C74, 0x828A2E10. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DA18": {
+      "exported_name": "sub_8289DA18",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveJoint>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessRemoveJointQueue obtains its typed queue at 0x8289F984 from InputBuffer accessor 0x8289E948 and uses that result for GetEvent at 0x8289FA24. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DAC0": {
+      "exported_name": "sub_8289DAC0",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateJointFrames>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessUpdateJointFramesQueue obtains its typed queue at 0x8289F304 from InputBuffer accessor 0x8289E9F0 and uses that result for GetEvent at 0x8289F3A4. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DB70": {
+      "exported_name": "sub_8289DB70",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateJointLimits>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessUpdateJointLimitsQueue obtains its typed queue at 0x8289F55C from InputBuffer accessor 0x8289EA98 and uses that result for GetEvent at 0x8289F5E0. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DC20": {
+      "exported_name": "sub_8289DC20",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InSetJointSpy>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessSetJointSpyQueue obtains its typed queue at 0x8289F77C from InputBuffer accessor 0x8289EB40 and uses that result for GetEvent at 0x8289F800. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DCC8": {
+      "exported_name": "sub_8289DCC8",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddDrive>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessAddDriveQueue obtains its typed queue at 0x828A4CCC from InputBuffer accessor 0x8289EBE8 and uses that result for GetEvent at 0x828A4D1C. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DE20": {
+      "exported_name": null,
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateDriveFrames>::GetEvent",
+      "size": 172,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessUpdateDriveFramesQueue obtains its typed queue at 0x8289FC3C from InputBuffer accessor 0x8289ED38 and uses that result for GetEvent at 0x8289FC84. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289DF80": {
+      "exported_name": "sub_8289DF80",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InSetDriveSpy>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessSetDriveSpyQueue obtains its typed queue at 0x8289FE9C from InputBuffer accessor 0x8289EE88 and uses that result for GetEvent at 0x8289FED8. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8289E028": {
+      "exported_name": "sub_8289E028",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateExternalBody>::GetEvent",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "evidence": "ARTIST ProcessUpdateExternalBodyQueue obtains its typed queue at 0x828A3B44 from InputBuffer accessor 0x8289EF30 and uses that result for GetEvent at 0x828A3BA0, 0x828A3BC8, 0x828A3D70. DecFIGS CgsPhysicsUnity.cpp corroborates the queue and event types. All native call relocations and the four assertion string references match."
+    },
+    "0x8281B4C8": {
+      "exported_name": "sub_8281B4C8",
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::Render",
+      "size": 536,
+      "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/ImRenderBuffer/CgsImRenderBufferNative.cpp",
+      "evidence": "DispatchVertices at 8281B974 passes the BasicColouredTexturedVertex buffer, primitive type, vertex pointer and count. This callee computes count times 32 at 8281B4F4, books the render-primitives command and copies the vertex data at 8281B610. The native typed Render overload and DecFIGS CgsImRenderBuffer.h describe the same interface."
+    },
+    "0x8281CE80": {
+      "exported_name": null,
+      "symbol": "CgsDev::Debug3DImmediateRender::AddTriangle",
+      "size": 412,
+      "tu": "src/GameShared/GameClasses/Development/DebugSystem/Render/CgsDebug3DImmediateRender.cpp",
+      "evidence": "DrawSolidTriangle at 8281D548 and DrawTriangle at 8281F118 pass this, three Vector3 values and RGBA. The callee reserves three slots and emits one position, colour and UV per point. DecFIGS CgsDebug3DImmediateRender.h:214 and cpp:310 name AddTriangle with that signature."
+    },
+    "0x82B22D68": {
+      "exported_name": null,
+      "symbol": "LobbyApiListFree",
+      "size": 180,
+      "tu": "vendor/dirtysdk/src/x360/lobbyapi.cpp",
+      "evidence": "ARTIST ServerInterfaceGames::FreeDisplayLists calls this callee at 0x82877BE8 with the owner lobby reference, list type 3 and stored display list. The body checks type <= 10, iterates the display-list records, calls the existing display and hash destruction APIs, and clears the selected slot. The typed vendor LobbyApiListFree implementation independently uses those same arguments and ordered leaf calls. Its body is still a partial match."
+    },
+    "0x82C6E9E0": {
+      "exported_name": "sub_82C6E9E0",
+      "symbol": "`dynamic initializer for 'CgsNetwork::ServerInterfaceDirtySock::mNetStreamLogChannelOutput''",
+      "size": 72,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/CgsServerInterfaceDirtySock.cpp",
+      "evidence": "ARTIST CRT initializer slot 0x82CD2E4C points here. The typed existing COFF initializer is exact for all 72 bytes. It resets the same object at 0x82F335C8, writes the -1 channel, and installs the same LogChannelOutput vtable at 0x82014B8C."
+    },
+    "0x82877AF0": {
+      "exported_name": null,
+      "symbol": "CgsNetwork::ServerInterfaceGames::AllocDisplayLists",
+      "size": 160,
+      "tu": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceGames.cpp",
+      "evidence": "ARTIST Prepare calls the member at 0x82898384. The typed member checks its display-list pointer, logs conditionally, obtains list type 3 through LobbyApiListAlloc and asserts the resulting pointer at original line 467. All 160 bytes, five branches and five data targets match."
+    },
+    "0x82C6C750": {
+      "symbol": "`dynamic initializer for 'sDecodeSemaphore''",
+      "tu": "src/GameShared/GameClasses/Graphics/MoviePlayer/CgsMoviePlayer.cpp",
+      "size": 60,
+      "evidence": "ARTIST CRT slot 0x82CD2B8C and native .CRT$XCU name the initializer. The typed DecodeCallback reference at 0x827EA4A8 selects its object 0x830113B0; the linked atexit operand at 0x82C6C774 selects its paired destructor at 0x82C75368.",
+      "exported_name": "sub_82C6C750"
+    },
+    "0x82C75368": {
+      "symbol": "`dynamic atexit destructor for 'sDecodeSemaphore''",
+      "tu": "src/GameShared/GameClasses/Graphics/MoviePlayer/CgsMoviePlayer.cpp",
+      "size": 12,
+      "evidence": "The matching initializer 0x82C6C750 passes this native destructor to atexit at 0x82C6C774. The 12-byte thunk loads the same independently identified object 0x830113B0 and tail-calls EA::Thread::Semaphore::~Semaphore.",
+      "exported_name": "sub_82C75368"
+    },
+    "0x82C73950": {
+      "symbol": "`dynamic initializer for 'gAptTargetTls''",
+      "tu": "src/SDKs/EATech/AptGlobals.cpp",
+      "size": 52,
+      "evidence": "ARTIST CRT slot 0x82CD3C08 and native .CRT$XCU name the initializer. The typed AptUpdateTarget reference at 0x82B0DE98 selects its object 0x8324E814; the linked atexit operand at 0x82C7396C selects its paired destructor at 0x82C75990.",
+      "exported_name": "sub_82C73950"
+    },
+    "0x82C75990": {
+      "symbol": "`dynamic atexit destructor for 'gAptTargetTls''",
+      "tu": "src/SDKs/EATech/AptGlobals.cpp",
+      "size": 12,
+      "evidence": "The matching initializer 0x82C73950 passes this native destructor to atexit at 0x82C7396C. The 12-byte thunk loads the same independently identified object 0x8324E814 and tail-calls EA::Thread::ThreadLocalStorage::~ThreadLocalStorage.",
+      "exported_name": "sub_82C75990"
     }
   },
   "native_leaf_functions": {
@@ -31207,6 +31395,15 @@
       "caller": "0x82B4F5D8",
       "call_site": "0x82B4F778",
       "evidence": "ARTIST FreeInternal at 0x82B4F778 and CheckState at 0x82B4EBF8 call this separate const chunk predicate. The XDK FreeInternal relocation names GetChunkIsFenceChunk with the const Chunk pointer and const owner from DecFIGS EAGeneralAllocator.h:1203. The complete native body scans the recovered CoreBlock links with the same widths and matches all 108 bytes through blr at 0x82B4E250. The word at 0x82B4E254 is alignment and CheckChunk begins at 0x82B4E258."
+    },
+    "0x828A2120": {
+      "symbol": "CgsPhysics::PhysicsSimulationModule::Destruct",
+      "size": 68,
+      "tu": "src/GameShared/GameClasses/Physics/CgsPhysicsSimulationModule.cpp",
+      "vtable_slots": [
+        "0x820CF7DC"
+      ],
+      "evidence": "ARTIST constructor at 0x827DF220..0x827DF22C stores vtable 0x820CF7D0. Its Destruct slot at 0x820CF7DC selects this 68-byte cleanup tail call to ModuleSingleBuffered::Destruct. Both rebuilt native vtables select the same typed member in slot three."
     }
   },
   "sdk_archive_splits": {
