@@ -791,9 +791,11 @@
         "CgsNetwork::ServerInterfaceCustomCommands::Prepare": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
         "CgsNetwork::ServerInterfaceCustomCommands::Release": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceCustomCommands.cpp",
         "BrnNetwork::LiveRevengeDebugComponent::Release": "src/GameSource/Network/Debug Components/BrnNetworkLiveRevengeDebugComponent.cpp",
-        "CgsResource::Type::DeSerialise": "src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp"
+        "CgsResource::Type::DeSerialise": "src/GameShared/GameClasses/System/Resource/CgsResourceTypeBase.cpp",
+        "CgsGraphics::BufferedDispatchFrame::Prepare": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp",
+        "CgsGraphics::BufferedDispatchFrame::Release": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp"
       },
-      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address. The inherited GraphicsSpecResourceType DeSerialise slots at 0x820A1648 and 0x820A1678 are the same linked address. The eight-byte original CgsResource::Type::DeSerialise and the typed particle resource caller were verified."
+      "evidence": "CgsNetwork::ServerInterfaceCustomCommands::Prepare compares exact across 8 bytes and the aligned caller at 0x8258378C targets this address. CgsNetwork::ServerInterfaceCustomCommands::Release compares exact across 8 bytes and the aligned caller at 0x82583824 targets this address. BrnNetwork::LiveRevengeDebugComponent::Release compares exact across 8 bytes and the aligned caller at 0x8255AB10 targets this address. The inherited GraphicsSpecResourceType DeSerialise slots at 0x820A1648 and 0x820A1678 are the same linked address. The eight-byte original CgsResource::Type::DeSerialise and the typed particle resource caller were verified. ARTIST BufferedDispatchFrame vtable 0x820D5174 slots +4/+8 point to 0x82C296C8. DecFIGS CgsBufferedDispatchFrame.h:77/95 lists the Prepare and Release slots, and both native providers match return true exactly."
     },
     "0x82B42DC0": {
       "exported_name": "rw::movie::VideoRenderable::~VideoRenderable",
@@ -18209,6 +18211,30 @@
       "file": "GameSource/Gui/BrnGuiEventTypeDefs.h",
       "byte_match": true,
       "evidence": "DecFIGS BrnGuiEventTypeDefs.h:1731 declares the const enum getter. ARTIST MapIconManager::GetNumRivalIcons uses this checked receiver for the second and third icon kinds. The native 136-byte body, both original source locations, and all call and data relocations match."
+    },
+    "BrnResource::GameDataIO::AllocatorList::GetRWGeneralResource": {
+      "symbol": "BrnResource::GameDataIO::AllocatorList::GetRWGeneralResourceAllocator",
+      "x360_address": "0x823F3F98",
+      "name_evidence": true,
+      "evidence": "BrnGameDataAllocatorList.h:32 and DecFIGS BrnGameDataAllocatorList.h:87 identify the typed accessor. ARTIST BrnRendererModule::Prepare at 0x82409D0C calls it with bank 31 and uses its return at allocator argument r6 in the buffer Prepare calls."
+    },
+    "CgsGraphics::BasicColouredTexturedVertex>::Prepare": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredTexturedVertex>::Prepare",
+      "x360_address": "0x82404308",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h records the instantiated Prepare(unsigned int, unsigned int, rw::IResourceAllocator *, bool) and the typed fields in BrnRendererModule.h:341,350,356 identify the renderer buffer owners. ARTIST BrnRendererModule::Prepare passes the same member offset and argument tuple as the decorated native relocation at the site in the evidence. 0x82409D70, mIm3dRenderBuffer at this+0x1094."
+    },
+    "CgsGraphics::BasicColouredVertex>::Prepare": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::BasicColouredVertex>::Prepare",
+      "x360_address": "0x824045B0",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h records the instantiated Prepare(unsigned int, unsigned int, rw::IResourceAllocator *, bool) and the typed fields in BrnRendererModule.h:341,350,356 identify the renderer buffer owners. ARTIST BrnRendererModule::Prepare passes the same member offset and argument tuple as the decorated native relocation at the site in the evidence. 0x82409DB0, mIm3dRenderBufferUntex at this+0x1274."
+    },
+    "CgsGraphics::Basic2dColouredTexturedVertex>::Prepare": {
+      "symbol": "CgsGraphics::ImRenderBuffer<CgsGraphics::Basic2dColouredTexturedVertex>::Prepare",
+      "x360_address": "0x82404A50",
+      "name_evidence": true,
+      "evidence": "DecFIGS CgsImRenderBuffer.h records the instantiated Prepare(unsigned int, unsigned int, rw::IResourceAllocator *, bool) and the typed fields in BrnRendererModule.h:341,350,356 identify the renderer buffer owners. ARTIST BrnRendererModule::Prepare passes the same member offset and argument tuple as the decorated native relocation at the site in the evidence. 0x82409D2C, mIm2dRenderBuffer at this+0xAEC."
     }
   },
   "sdk_entry_groups": {
@@ -27728,6 +27754,13 @@
       "size": 128,
       "tu": "src/GameShared/GameClasses/Graphics/ImmediateMode/CgsImRenderer.cpp",
       "evidence": "ARTIST caller reference at 0x827F9D08. Im2dRenderBuffer::Dispatch uses entry 7 at 0x827F9C4C in its command jump table for this call. It passes the ImRendererBase subobject and the pointer at command+8. The typed ImCommandSetStateRenderTarget payload and DecFIGS CgsImRenderer.h:102 identify SetState(const renderengine::RenderTargetState*). The complete typed COFF is exact across 128 bytes, 4 named branches and 4 data operands."
+    },
+    "0x823F51A8": {
+      "symbol": "operator++",
+      "exported_name": "sub_823F51A8",
+      "size": 92,
+      "tu": "src/GameSource/Graphics/BrnRendererModule.cpp",
+      "evidence": "DecFIGS BrnRendererModule.h:818 declares the ERendererPrepareStage postfix increment. ARTIST Prepare calls it four times through the enum member at this+0x228, directly comparing the increment to stage 4 and using the header assertion line 818. The native 92-byte decorated ERendererPrepareStage instantiation matches all ARTIST instructions and call targets."
     }
   },
   "native_leaf_functions": {
@@ -28515,6 +28548,14 @@
       "caller": "0x82801A38",
       "call_site": "0x82801AFC",
       "evidence": "The native typed sort's small-range branch at 0x82801AFC relocates to this STL instantiation. ARTIST uses a 12-byte element with unsigned model pointer at +0, signed LOD state at +4 and copied matrix pointer at +8, matching CgsModel.h and type-specific operator<. The copy-backward-to-front and insertion-hole paths are the XDK algorithm header's _Insertion_sort1. This disjoint leaf returns at 0x827FB914, followed by the next framed function at 0x827FB918. The leaf body is nonmatching."
+    },
+    "0x827E7968": {
+      "symbol": "CgsGraphics::BufferedDispatchFrame::BufferedDispatchFrame",
+      "size": 44,
+      "tu": "src/GameShared/GameClasses/Graphics/CgsBufferedDispatchFrame.cpp",
+      "caller": "0x827DFF48",
+      "call_site": "0x827DFFB0",
+      "evidence": "The owning BrnRendererModule constructor calls this constructor for its in-place BufferedDispatchFrame at this+0x2A8. DecFIGS CgsBufferedDispatchFrame.h:33–86 and :241 give the member layout and constructor. The native code matches the entire leaf and vtable relocation. The original nine-slot vtable at 0x820D5174 names the BufferedDispatchFrame virtual interface, including folded Prepare/Release."
     }
   },
   "sdk_archive_splits": {
