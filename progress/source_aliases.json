@@ -1884,6 +1884,110 @@
     }
   },
   "functions": {
+    "CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::AddEvent",
+      "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
+      "x360_address": "0x822C6560",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822C65F8 loads the overflow function text `CgsModule::BaseEventQueue<class CgsSceneManager::SceneManagerIO::InEventSetVolumeInstanceTransform>::AddEvent` from 0x8201AC68. The native const-reference instantiation in GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp matches its 372 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:113 corroborates AddEvent(const T&)."
+    },
+    "CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::AddEve": {
+      "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::AddEvent",
+      "file": "GameShared/GameClasses/SceneManager/BaseEventQueue_InEventAddVolumeInstance_AddEvent.cpp",
+      "x360_address": "0x822C66D8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822C6770 loads the overflow function text `CgsModule::BaseEventQueue<class CgsSceneManager::SceneManagerIO::InEventAddVolumeInstance>::AddEvent` from 0x8201ACD8. The native const-reference instantiation in GameShared/GameClasses/SceneManager/BaseEventQueue_InEventAddVolumeInstance_AddEvent.cpp matches its 380 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:381 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Vehicle::ResetVehicleEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::ResetVehicleEvent>::AddEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_ResetVehicleEvent_AppendAddEvent.cpp",
+      "x360_address": "0x822C7A20",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822C7AB8 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Vehicle::ResetVehicleEvent>::AddEvent` from 0x8201AFF0. The native const-reference instantiation in GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_ResetVehicleEvent_AppendAddEvent.cpp matches its 428 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:6481 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Props::AddPhysicalPropEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::AddPhysicalPropEvent>::AddEvent",
+      "file": "GameSource/Physics/PropManager/SharedIO/BaseEventQueue_AddPhysicalPropEvent_AddEvent.cpp",
+      "x360_address": "0x822C8308",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822C83A0 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Props::AddPhysicalPropEvent>::AddEvent` from 0x8201B1C8. The native const-reference instantiation in GameSource/Physics/PropManager/SharedIO/BaseEventQueue_AddPhysicalPropEvent_AddEvent.cpp matches its 396 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:3463 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Props::AddPhysicalPartEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::AddPhysicalPartEvent>::AddEvent",
+      "file": "GameSource/Physics/PropManager/SharedIO/BaseEventQueue_AddPhysicalPartEvent_AddEvent.cpp",
+      "x360_address": "0x822C8498",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x822C8530 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Props::AddPhysicalPartEvent>::AddEvent` from 0x8201B220. The native const-reference instantiation in GameSource/Physics/PropManager/SharedIO/BaseEventQueue_AddPhysicalPartEvent_AddEvent.cpp matches its 388 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:3530 corroborates AddEvent(const T&)."
+    },
+    "BrnWorld::CrashIO::CrashingTrafficUpdateEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::CrashIO::CrashingTrafficUpdateEvent>::AddEvent",
+      "file": "GameSource/World/CrashModule/SharedIO/EventQueue_CrashingTrafficUpdateEvent_24.cpp",
+      "x360_address": "0x825581E0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82558278 loads the overflow function text `CgsModule::BaseEventQueue<class BrnWorld::CrashIO::CrashingTrafficUpdateEvent>::AddEvent` from 0x82081418. The native const-reference instantiation in GameSource/World/CrashModule/SharedIO/EventQueue_CrashingTrafficUpdateEvent_24.cpp matches its 372 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:9027 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Deformation::AddDeformationModelEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::AddDeformationModelEvent>::AddEvent",
+      "file": "GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_AddDeformationModelEvent_AddEvent.cpp",
+      "x360_address": "0x825E52B0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x825E5348 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Deformation::AddDeformationModelEvent>::AddEvent` from 0x820969D0. The native const-reference instantiation in GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_AddDeformationModelEvent_AddEvent.cpp matches its 460 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:10970 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Deformation::DetachedPartRenderEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::DetachedPartRenderEvent>::AddEvent",
+      "file": "GameSource/Physics/DeformationManager/SharedIO/EventQueue_DetachedPartRenderEvent_50.cpp",
+      "x360_address": "0x825E5C78",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x825E5D10 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Deformation::DetachedPartRenderEvent>::AddEvent` from 0x82096BB8. The native const-reference instantiation in GameSource/Physics/DeformationManager/SharedIO/EventQueue_DetachedPartRenderEvent_50.cpp matches its 380 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:7888 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Props::UpdatePropEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::UpdatePropEvent>::AddEvent",
+      "file": "GameSource/Physics/PropManager/SharedIO/BaseEventQueue_UpdatePropEvent_AddEvent.cpp",
+      "x360_address": "0x825E5DF8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x825E5E90 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Props::UpdatePropEvent>::AddEvent` from 0x82096C18. The native const-reference instantiation in GameSource/Physics/PropManager/SharedIO/BaseEventQueue_UpdatePropEvent_AddEvent.cpp matches its 404 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:8089 corroborates AddEvent(const T&)."
+    },
+    "BrnPhysics::Vehicle::UpdateNetworkTrafficEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::UpdateNetworkTrafficEvent>::AddEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_UpdateNetworkTrafficEvent_AddEvent.cpp",
+      "x360_address": "0x827C2950",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x827C29E8 loads the overflow function text `CgsModule::BaseEventQueue<class BrnPhysics::Vehicle::UpdateNetworkTrafficEvent>::AddEvent` from 0x820CC030. The native const-reference instantiation in GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_UpdateNetworkTrafficEvent_AddEvent.cpp matches its 372 bytes and all 10 direct branch relocations. DecFIGS CgsBaseEventQueue.h:7084 corroborates AddEvent(const T&)."
+    },
+    "BrnWorld::DetachedPartRenderEvent>::AddEventSafe": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::DetachedPartRenderEvent>::AddEventSafe",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BaseEventQueue_DetachedPartRenderEvent_AddEventSafeAppend.cpp",
+      "x360_address": "0x822C88B0",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The ARTIST calls at 0x822E9154 pass the typed event to this queue. The body has the CgsBaseEventQueue.h:331 pointer assertion and the typed transform copy. The native instantiated CgsModule::BaseEventQueue<BrnWorld::DetachedPartRenderEvent>::AddEventSafe from GameSource/World/EntityModules/RaceCarEntityModule/BaseEventQueue_DetachedPartRenderEvent_AddEventSafeAppend.cpp matches all 212 bytes, three assert branches and both diagnostic strings."
+    },
+    "BrnWorld::PropEntityIO::PropVFXLocatorEvent>::AddEventSafe": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropVFXLocatorEvent>::AddEventSafe",
+      "file": "GameSource/World/EntityModules/PropEntityModule/SharedIO/BaseEventQueue_PropVFXLocatorEvent_AddEventSafeAppend.cpp",
+      "x360_address": "0x822C9970",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The ARTIST calls at 0x822F15C8, 0x822FAFD4 pass the typed event to this queue. The body has the CgsBaseEventQueue.h:331 pointer assertion and the typed transform copy. The native instantiated CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropVFXLocatorEvent>::AddEventSafe from GameSource/World/EntityModules/PropEntityModule/SharedIO/BaseEventQueue_PropVFXLocatorEvent_AddEventSafeAppend.cpp matches all 212 bytes, three assert branches and both diagnostic strings."
+    },
+    "BrnPhysics::Deformation::DetachedPartCurrentPositionEvent>::AddEve": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::DetachedPartCurrentPositionEvent>::AddEventSafe",
+      "file": "GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_DetachedPartCurrentPositionEvent_AddEventSafe.cpp",
+      "x360_address": "0x825E5B00",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The ARTIST calls at 0x8260DDAC pass the typed event to this queue. The body has the CgsBaseEventQueue.h:331 pointer assertion and the typed transform copy. The native instantiated CgsModule::BaseEventQueue<BrnPhysics::Deformation::DetachedPartCurrentPositionEvent>::AddEventSafe from GameSource/Physics/DeformationManager/SharedIO/BaseEventQueue_DetachedPartCurrentPositionEvent_AddEventSafe.cpp matches all 212 bytes, three assert branches and both diagnostic strings."
+    },
     "CgsSc": {
       "symbol": "CgsModule::BaseEventQueue<CgsSceneManager::SceneManagerIO::InEventRemoveAllEntities>::AllocateEvent",
       "file": "GameShared/GameClasses/SceneManager/CgsSceneManagerIO_SceneUpdate.cpp",
@@ -17554,6 +17658,70 @@
       "x360_address": "0x82324E60",
       "name_evidence": true,
       "evidence": "The two typed native FillInRoadRulesQuery relocations at 0x823365C4 and 0x82336628 target the QAA mutable operator->. Both ARTIST calls reach this 160-byte body. It matches the XDK instruction words and assertion line 544. The original relative assertion path is still a linked-data difference."
+    },
+    "BrnPhysics::Vehicle::CreateRaceCarEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateRaceCarEvent>::AddEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_CreateRaceCarEvent_AppendAddEvent.cpp",
+      "x360_address": "0x822C77A8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST reads the instantiated name from 0x8201AF40 as CgsModule::BaseEventQueue<class BrnPhysics::Vehicle::CreateRaceCarEvent>::AddEvent. The XDK const-reference queue body matches 320 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
+    },
+    "BrnNetwork::NetworkPlayerStats>::AddEventSafe": {
+      "symbol": "CgsModule::BaseEventQueue<BrnNetwork::NetworkPlayerStats>::AddEventSafe",
+      "file": "GameSource/Network/SharedIO/BaseEventQueue_NetworkPlayerStats_AddEventSafe.cpp",
+      "x360_address": "0x82557E90",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST 0x82557EFC commits the length before the native NetworkPlayerStats::operator= call at 0x82557F00. The typed caller at 0x8255A1B8 and CgsBaseEventQueue.h line 331 identify the 152-byte exact body. The XDK reproduces the diagnostic strings and all four branch relocations."
+    },
+    "BrnPhysics::Vehicle::CreatePhysicalTrafficEvent": {
+      "symbol": "BrnPhysics::Vehicle::CreatePhysicalTrafficEvent::operator=",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/CreatePhysicalTrafficEvent.cpp",
+      "x360_address": "0x825B7AE8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The typed branch at 0x82719D60 reaches this assignment. ARTIST copies four Matrix44Affine rows and the velocity vectors at 0x825B7B20..0x825B7B50, then the named scalar fields. The native CV-qualified reference assignment and all 168 code bytes match."
+    },
+    "CgsPhysics::PhysicsSimulationIO::InUpdateRigidBody>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateRigidBody>::AddEvent",
+      "file": "GameShared/GameClasses/Physics/BaseEventQueue_InUpdateRigidBody_AddEvent.cpp",
+      "x360_address": "0x82614928",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST reads the instantiated name from 0x82099940 as CgsModule::BaseEventQueue<class CgsPhysics::PhysicsSimulationIO::InUpdateRigidBody>::AddEvent. The XDK const-reference queue body matches 332 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
+    },
+    "BrnPhysics::Vehicle::CreateArticulatedTraffi": {
+      "symbol": "BrnPhysics::Vehicle::CreateArticulatedTrafficEvent::operator=",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/CreateArticulatedTrafficEvent.cpp",
+      "x360_address": "0x8270BF70",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "The typed branch at 0x82719E98 reaches this assignment. ARTIST copies the two matrices and four vectors via VMX rows at 0x8270BF7C..0x8270C008. The XDK const-reference assignment matches all 248 code bytes and both register-save branch targets."
+    },
+    "BrnPhysics::Vehicle::CreatePhysicalTrafficEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreatePhysicalTrafficEvent>::AddEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_CreatePhysicalTrafficEvent_AppendAddEvent.cpp",
+      "x360_address": "0x82719C30",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST reads the instantiated name from 0x820BCC30 as CgsModule::BaseEventQueue<class BrnPhysics::Vehicle::CreatePhysicalTrafficEvent>::AddEvent. The XDK const-reference queue body matches 320 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
+    },
+    "BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::AddEvent",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BaseEventQueue_CreateArticulatedTrafficEvent_AppendAddEvent.cpp",
+      "x360_address": "0x82719D70",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST reads the instantiated name from 0x820BCC90 as CgsModule::BaseEventQueue<class BrnPhysics::Vehicle::CreateArticulatedTrafficEvent>::AddEvent. The XDK const-reference queue body matches 312 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
+    },
+    "CgsPhysics::PhysicsSimulationIO::OutUpdateRigidBody>::AddEvent": {
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::OutUpdateRigidBody>::AddEvent",
+      "file": "GameShared/GameClasses/Physics/BaseEventQueue_OutUpdateRigidBody_AddEvent.cpp",
+      "x360_address": "0x828A66F8",
+      "byte_match": true,
+      "name_evidence": true,
+      "evidence": "ARTIST reads the instantiated name from 0x820F1D68 as CgsModule::BaseEventQueue<class CgsPhysics::PhysicsSimulationIO::OutUpdateRigidBody>::AddEvent. The XDK const-reference queue body matches 332 code bytes, all 11 branch targets and all 10 linked diagnostic data references."
     }
   },
   "sdk_entry_groups": {
@@ -26456,6 +26624,27 @@
       "size": 236,
       "tu": "src/GameShared/GameClasses/SceneManager/CgsSceneManagerIO_TriangleCollisionQueues.cpp",
       "evidence": "ProcessFineQueriesDirectly at 0x828D5544 passes the two nearest triangle line-test queues returned by their getters at 0x828AF7B0 and 0x828AFC48. The existing typed native instantiation has the same extent, instructions and twelve named branch relocations after masking relocated operands. ARTIST calls XMemCpy and asserts at CgsBaseEventQueue.h lines 413, 414 and 486."
+    },
+    "0x822C95C8": {
+      "exported_name": "sub_822C95C8",
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::PropEntityIO::PropBecamePhysicalEvent>::AllocateEventSafe",
+      "size": 144,
+      "tu": "src/GameSource/World/EntityModules/PropEntityModule/BrnPropZoneManager.cpp",
+      "evidence": "PropZoneManager::UpdateInstance passes its typed PropBecamePhysicalEvent queue at ARTIST 0x822F1564 and checks the returned pointer. The body computes the slot address before the length store and uses assertion line 381. The native XDK instantiation matches all 144 bytes and its three assertion calls."
+    },
+    "0x825E3C30": {
+      "exported_name": "sub_825E3C30",
+      "symbol": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InUpdateRigidBody>::AllocateEventSafe",
+      "size": 152,
+      "tu": "src/GameSource/Physics/PropManager/BrnPropManager.cpp",
+      "evidence": "PropManager::ReadUpdatedBodies passes its typed InUpdateRigidBody queue at ARTIST 0x82633068. The body tests the signed limit, computes the 192-byte slot address before the length store, and uses assertion line 381. The native XDK instantiation matches all 152 bytes and its three assertion calls."
+    },
+    "0x8286EBF0": {
+      "exported_name": null,
+      "symbol": "CgsModule::ModuleSingleBuffered::UnlockForInput",
+      "size": 164,
+      "tu": "src/GameShared/GameClasses/Module/CgsModuleUnity.cpp",
+      "evidence": "The ModuleSingleBuffered vtable slot at 0x820CE51C is between the named LockForInput and LockForOutput slots at 0x820CE518 and 0x820CE520. DecFIGS CgsModuleSingleBuffered.h lists UnlockForInput after LockForInput. The body calls UnlockInputForWrite at 0x8286EC88 and asserts at source line 400. The Unity COFF matches the full extent and its branch relocations."
     }
   },
   "native_leaf_functions": {
