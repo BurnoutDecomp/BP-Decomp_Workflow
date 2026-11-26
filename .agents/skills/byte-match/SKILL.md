@@ -150,10 +150,12 @@ with no name is counted as unverified, not wrong. Read the `calls_unverified` an
   (`work match diff|measure`). Never launch the game, run a harness case or build the PC exe to
   check native work.
 - **Keep recorded assertion locations behind the matching option.** Use
-  `CGS_ASSERT_AT(condition, message, file, line)` or `CGS_ASSERT_STREAM_AT(...)`. For an
-  existing message-wrapper expansion use `CGS_ASSERT_MESSAGE_AT` or
-  `CGS_ASSERT_STREAM_MESSAGE_AT` to preserve its code generation. Pass
-  `CGS_ASSERT_LOCATION(file, line)` to a manual `FireAssert` sequence, or use
+  `CGS_ASSERT_AT(condition, message, file, line)` or `CGS_ASSERT_STREAM_AT(...)`, and for an
+  always-failing assertion `CGS_FAIL_AT(message, file, line)` / `CGS_FAIL_STREAM_AT(...)` (or
+  `CGS_FAIL` / `CGS_FAIL_STREAM`). These expand to the original's plain `if (!(cond)) { ... }` and
+  bare `{ ... }` block: never wrap an assertion in `do { } while (0)`, which the XDK inliner treats
+  as a loop, and never use the retired `CGS_ASSERT_MESSAGE_AT` / `CGS_ASSERT_STREAM_MESSAGE_AT`
+  wrappers. Pass `CGS_ASSERT_LOCATION(file, line)` to a manual `FireAssert` sequence, or use
   `CGS_JOB_ASSERT_LOG` for worker assertions that call `PrintStringed`.
   Define each repeated historical path once in its source file and keep its original spelling,
   including slashes and case. Record the original line at each assertion site. Keep ordinary
