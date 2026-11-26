@@ -503,7 +503,13 @@
         "XAudPixEndEvent": "xaudio.lib:obj\\xbox\\xaudpix.obj",
         "XAudPixInit": "xaudio.lib:obj\\xbox\\xaudpix.obj",
         "_isatty": "libcMT.lib:obj\\xbox\\isatty.obj",
-        "_matherr": "libcMT.lib:obj\\xbox\\matherr.obj"
+        "_matherr": "libcMT.lib:obj\\xbox\\matherr.obj",
+        "CgsNetwork::Message::PackOrUnpack": "src/GameShared/GameClasses/Network/Packeting/Messages/CgsMessage.cpp",
+        "CgsNetwork::ServerInterfaceDirtySockX360::Release": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/X360/CgsServerInterfaceDirtySockX360.cpp"
+      },
+      "call_evidence": {
+        "CgsNetwork::Message::PackOrUnpack": "The fold body is `li r3,0; blr`; both natives are exact at the address. Callers calling 0x827E2F38 where ours calls the base Message::PackOrUnpack: AggressiveDrivingMessage 0x8257A8C0, CameraStatusMessage 0x8257AD58, CrashingTrafficMessage 0x8257A650, FburnSuccessUpdateMessage 0x8257C898, StatsUpdateMessage 0x8257D000, TrafficHashMessage 0x8257A410, UpdateMessage 0x82579DA0 (all ::PackOrUnpack). BrnServerInterfaceBase::Release 0x82589958 calls it twice where ours calls ServerInterfaceDirtySockX360::Release.",
+        "CgsNetwork::ServerInterfaceDirtySockX360::Release": "The fold body is `li r3,0; blr`; both natives are exact at the address. Callers calling 0x827E2F38 where ours calls the base Message::PackOrUnpack: AggressiveDrivingMessage 0x8257A8C0, CameraStatusMessage 0x8257AD58, CrashingTrafficMessage 0x8257A650, FburnSuccessUpdateMessage 0x8257C898, StatsUpdateMessage 0x8257D000, TrafficHashMessage 0x8257A410, UpdateMessage 0x82579DA0 (all ::PackOrUnpack). BrnServerInterfaceBase::Release 0x82589958 calls it twice where ours calls ServerInterfaceDirtySockX360::Release."
       }
     },
     "0x82815E58": {
@@ -583,7 +589,10 @@
         "BrnNetwork::NetworkNotificationManagerBase::Destruct": "src/GameSource/Network/Managers/BrnNetworkNotificationManagerBase.cpp",
         "BrnGui::ProfileMessageComponent::Destruct": "src/GameSource/Gui/Flow/HUD/States/BrnBootProfile.cpp",
         "CgsNetwork::ServerInterfaceServerInfo::Update": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceServerInfo.cpp",
-        "CgsNetwork::ServerInterfaceRankings::Update": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceRankings.cpp"
+        "CgsNetwork::ServerInterfaceRankings::Update": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceRankings.cpp",
+        "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "src/GameSource/Network/Debug Components/BrnNetworkImageManagerDebugComponent.cpp",
+        "BrnNetwork::LiveRevengeManager::OnGameFinish": "src/GameSource/Network/Managers/BrnNetworkLiveRevengeManager.cpp",
+        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "src/GameSource/Network/Managers/BrnNetworkPlayerStatsManager.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -617,7 +626,10 @@
         "CgsDev::DebugComponent::Destruct": "The DecFIGS body (0xB178D0) is a bare blr, so the compiled method matches all 4 bytes, and BrnNetwork::BuddyManagerDebugComponent::Destruct's base tail call at 0x825856EC lands here (as does EventScoresManagerDebugComponent::Destruct's at 0x82586580).",
         "BrnGui::ProfileMessageComponent::Destruct": "DWARF BrnBootProfile.h:176 declares ProfileMessageComponent::Destruct() defined at BrnBootProfile.cpp:98 with an empty body (DecFIGS 0x451244 `._ZN6BrnGui23ProfileMessageComponent8DestructEv` is a bare return). DecFIGS CrashNavProfile::OnLeave 0x4EB1F8 calls it (through thunk 0x4BF588) between the inlined ProfileManager::DetachMessageDisplay and MenuComponent::Clear; ARTIST CrashNavProfile::OnLeave 0x824CD7C0 makes the same call at 0x824CD7EC to the folded four-byte blr 0x8284CB38. Our ProfileMessageComponent::Destruct is the same four-byte blr; with it, CrashNavProfile::OnLeave (188 B) is byte-identical apart from that call's name (97.9 now, exact once aliased) (gui lane, agent 7).",
         "CgsNetwork::ServerInterfaceServerInfo::Update": "Both bodies are empty (a bare blr, the 4 bytes at 0x8284CB38; DWARF CgsServerInterfaceServerInfo.h:138 and CgsServerInterfaceRankings.h:159 declare `void Update()`). BrnNetwork::BrnServerInterfaceBase::Update (0x825935D8) calls 0x8284CB38 at 0x82593678 (on this+0x6C8 = mServerInfo) and at 0x825936AC (on this+0xB88 = mRankings), exactly where ours calls mServerInfo.Update() and mRankings.Update() between the PM6 and PM8 monitor pairs. (BrnServerInterfaceBase::Update's remaining difference is the empty BrnNetwork::ServerInterfaceCustomCommands::Update, DWARF BrnServerInterfaceCustomCommands.cpp:1117, which ARTIST inlines away inside the BrnNetworkUnity TU.)",
-        "CgsNetwork::ServerInterfaceRankings::Update": "Both bodies are empty (a bare blr, the 4 bytes at 0x8284CB38; DWARF CgsServerInterfaceServerInfo.h:138 and CgsServerInterfaceRankings.h:159 declare `void Update()`). BrnNetwork::BrnServerInterfaceBase::Update (0x825935D8) calls 0x8284CB38 at 0x82593678 (on this+0x6C8 = mServerInfo) and at 0x825936AC (on this+0xB88 = mRankings), exactly where ours calls mServerInfo.Update() and mRankings.Update() between the PM6 and PM8 monitor pairs. (BrnServerInterfaceBase::Update's remaining difference is the empty BrnNetwork::ServerInterfaceCustomCommands::Update, DWARF BrnServerInterfaceCustomCommands.cpp:1117, which ARTIST inlines away inside the BrnNetworkUnity TU.)"
+        "CgsNetwork::ServerInterfaceRankings::Update": "Both bodies are empty (a bare blr, the 4 bytes at 0x8284CB38; DWARF CgsServerInterfaceServerInfo.h:138 and CgsServerInterfaceRankings.h:159 declare `void Update()`). BrnNetwork::BrnServerInterfaceBase::Update (0x825935D8) calls 0x8284CB38 at 0x82593678 (on this+0x6C8 = mServerInfo) and at 0x825936AC (on this+0xB88 = mRankings), exactly where ours calls mServerInfo.Update() and mRankings.Update() between the PM6 and PM8 monitor pairs. (BrnServerInterfaceBase::Update's remaining difference is the empty BrnNetwork::ServerInterfaceCustomCommands::Update, DWARF BrnServerInterfaceCustomCommands.cpp:1117, which ARTIST inlines away inside the BrnNetworkUnity TU.)",
+        "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
+        "BrnNetwork::LiveRevengeManager::OnGameFinish": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
+        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart)."
       }
     },
     "0x829646E0": {
@@ -671,10 +683,12 @@
       "exported_name": "BrnNetwork::AggressiveDrivingMessage::Construct",
       "evidence": "The listed methods share the ARTIST entry point. The per-symbol evidence records the matched body and an aligned call.",
       "aliases": {
-        "BrnNetwork::UpdateMessage::Construct": "src/GameSource/Network/Messages/BrnUpdateMessage.cpp"
+        "BrnNetwork::UpdateMessage::Construct": "src/GameSource/Network/Messages/BrnUpdateMessage.cpp",
+        "BrnNetwork::CrashingTrafficMessage::Construct": "src/GameSource/Network/Messages/BrnCrashingTrafficMessage.cpp"
       },
       "call_evidence": {
-        "BrnNetwork::UpdateMessage::Construct": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x825823FC, 0x82582404, 0x82582414 lands here."
+        "BrnNetwork::UpdateMessage::Construct": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x825823FC, 0x82582404, 0x82582414 lands here.",
+        "BrnNetwork::CrashingTrafficMessage::Construct": "Already folds UpdateMessage::Construct. Our CrashingTrafficMessage::Construct is exact at the address; TrafficManager::Construct 0x82558F20 and Destruct 0x825590B0 call 0x82579CC8 where ours calls it."
       }
     },
     "0x828804D8": {
@@ -1447,6 +1461,56 @@
       },
       "call_evidence": {
         "rw::core::filesys::detail::ListSingle<rw::core::filesys::Device>::Remove": "Manager::UnregisterDevice 0x82BBEE68 calls 0x82BBDED0 where ours calls ListSingle<Device>::Remove (sdk lane round 4)."
+      }
+    },
+    "0x8257FE20": {
+      "exported_name": "BrnNetwork::CheckpointTriggeredMessage::Retrieve",
+      "evidence": "Ours is exact at the address (64 B: valid flag test, copy of the s32 at +0x28, invalidate, return true; else -1/false). BrnNetworkPlayer::_StuntScoreUpdatedMessageArrivedCallback 0x825945C0 calls 0x8257FE20 where ours calls StuntScoreUpdatedMessage::Retrieve; that caller is otherwise identical (97.6).",
+      "aliases": {
+        "BrnNetwork::StuntScoreUpdatedMessage::Retrieve": "src/GameSource/Network/Messages/BrnStuntScoreUpdatedMessage.cpp"
+      },
+      "call_evidence": {
+        "BrnNetwork::StuntScoreUpdatedMessage::Retrieve": "Ours is exact at the address (64 B: valid flag test, copy of the s32 at +0x28, invalidate, return true; else -1/false). BrnNetworkPlayer::_StuntScoreUpdatedMessageArrivedCallback 0x825945C0 calls 0x8257FE20 where ours calls StuntScoreUpdatedMessage::Retrieve; that caller is otherwise identical (97.6)."
+      }
+    },
+    "0x8257B988": {
+      "exported_name": "BrnNetwork::RoadRulesPersonalBestMessage::Construct",
+      "evidence": "Our RoadRulesMessage::Construct is exact at the address; NetworkRoadRulesManager::Construct 0x82560E98 and Destruct 0x8255C928 call 0x8257B988 where ours calls it.",
+      "aliases": {
+        "BrnNetwork::RoadRulesMessage::Construct": "src/GameSource/Network/Messages/BrnRoadRulesMessage.cpp"
+      },
+      "call_evidence": {
+        "BrnNetwork::RoadRulesMessage::Construct": "Our RoadRulesMessage::Construct is exact at the address; NetworkRoadRulesManager::Construct 0x82560E98 and Destruct 0x8255C928 call 0x8257B988 where ours calls it."
+      }
+    },
+    "0x8231C2C8": {
+      "exported_name": "BrnGameState::CheckpointData::CheckpointData",
+      "evidence": "Our BurningHomeRunSwitchRunnerMessage::Construct is exact at the address; BrnNetworkPlayer::Construct 0x8258E468 and OnRoundStart 0x82582318 call 0x8231C2C8 where ours calls it.",
+      "aliases": {
+        "BrnNetwork::BurningHomeRunSwitchRunnerMessage::Construct": "src/GameSource/Network/Messages/BrnBurningHomeRunSwitchRunnerMessage.cpp"
+      },
+      "call_evidence": {
+        "BrnNetwork::BurningHomeRunSwitchRunnerMessage::Construct": "Our BurningHomeRunSwitchRunnerMessage::Construct is exact at the address; BrnNetworkPlayer::Construct 0x8258E468 and OnRoundStart 0x82582318 call 0x8231C2C8 where ours calls it."
+      }
+    },
+    "0x82983E68": {
+      "exported_name": "XCAM::CEncoder::SetBitrate",
+      "evidence": "Our GameParams::SetLocality is exact at the address; StateManager::CreateGame 0x82572D50 and ModifyGame 0x825692C8 call 0x82983E68 where ours calls it.",
+      "aliases": {
+        "BrnNetwork::GameParams::SetLocality": "src/GameSource/Network/BrnNetworkGameParams.cpp"
+      },
+      "call_evidence": {
+        "BrnNetwork::GameParams::SetLocality": "Our GameParams::SetLocality is exact at the address; StateManager::CreateGame 0x82572D50 and ModifyGame 0x825692C8 call 0x82983E68 where ours calls it."
+      }
+    },
+    "0x82C44D78": {
+      "exported_name": "RealmcCore::IRunnableTask::~IRunnableTask",
+      "evidence": "Our RealmcCore::Message::~Message is exact at the address; the scalar deleting destructors of RealmcIface::MessageBootupDone 0x82B55240 and MessageCheckLoadedData 0x82B56E98 call 0x82C44D78 where ours calls it.",
+      "aliases": {
+        "RealmcCore::Message::~Message": "src/SDKs/Realmc/RealmcCore.cpp"
+      },
+      "call_evidence": {
+        "RealmcCore::Message::~Message": "Our RealmcCore::Message::~Message is exact at the address; the scalar deleting destructors of RealmcIface::MessageBootupDone 0x82B55240 and MessageCheckLoadedData 0x82B56E98 call 0x82C44D78 where ours calls it."
       }
     }
   },
@@ -21172,6 +21236,45 @@
       "byte_match": false,
       "evidence": "IDA's name is the decorated symbol truncated at 120 characters; the full decorated name is the XDK's for the DWARF-declared template instance (DecFIGS CgsIOBufferStack.h:1507 DestroyIOBuffer<BrnPhysics::Vehicle::ArticulatedJointCreateBuffer>). Its caller PhysicalTrafficManager::DeallocateInternalBuffers 0x82615A38 passes &mpArticulatedJointCreateBuffer. With ArticulatedJointCreateBuffer::Destruct restored from DWARF (BrnPhysicalTrafficManagerIO.h:67, PS3 body 0x6D7834) our instance compares exact (msgs/physnd_cmp.py: exact 100.0, 220 B, calls_wrong=[]), and with the name DeallocateInternalBuffers (212 B) is exact apart from this call. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnWorld::CrashIO::InputBuffer_PreScene:": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PreScene::GetVehicleDriverInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB3D8",
+      "byte_match": false,
+      "evidence": "Export name truncated. Read-lock bit, li r5,0x51 = DWARF BrnCrashModuleIO.h:81 (GetVehicleDriverInterface() const), returns this+0x3CD0 (mVehicleDriverInterface). Caller CrashModule::ResetCrashedNetworkRaceCars 0x827CE788. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 9d86364ed at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnWorld::CrashIO::InputBuffe": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PreScene::GetGameActionQueue",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB528",
+      "byte_match": false,
+      "evidence": "Export name truncated. Read-lock bit, li r5,0x57 = DWARF :87 (GetGameActionQueue() const), returns this+0x7A70 (mGameActionQueue, DWARF :29). (Landed as name evidence: the conductor's compiled objects predated the lane's commit 9d86364ed at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnWorld::CrashIO::InputBuffer_PostPhysics::G": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PostPhysics::GetVehicleOutputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB870",
+      "byte_match": false,
+      "evidence": "Export name truncated. Read-lock bit, li r5,0xAB = DWARF :171 (GetVehicleOutputInterface() const), returns this+0xDA0. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 9d86364ed at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnWorld::CrashIO::InputBuffer_PostPhy": {
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PostPhysics::GetVehicleManagerOutputInterface",
+      "file": "GameSource/World/CrashModule/SharedIO/BrnCrashModuleIO_InputBuffers.cpp",
+      "x360_address": "0x827BB918",
+      "byte_match": false,
+      "evidence": "Export name truncated. Read-lock bit, li r5,0xAE = DWARF :174 (GetVehicleManagerOutputInterface() const), returns this+0x79B0. Callers CrashModule::ProcessCrashedRaceCarEvents, ProcessSlammedTrafficEvents, PostPhysicsUpdate 0x827D3C04 (DWARF lists GetVehicleManagerOutputInterface there). (Landed as name evidence: the conductor's compiled objects predated the lane's commit 9d86364ed at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetActiveRa": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::GameStateToNetworkInterface::GetActiveRaceCarIndex",
+      "x360_address": "0x82542190",
+      "byte_match": false,
+      "evidence": "IDA truncates the name to `...GameStateToNetworkInterface::GetActiveRa` (universe row 82542190). Our GetActiveRaceCarIndex(NetworkPlayerID) const is exact at the address (assert lNetworkPlayerID != CgsNetwork::K_INVALID_PLAYER_ID at BrnNetworkModuleGameStateIOInterfaces.h:495, li r5,0x1EF @0x825421BC; the 8-row mapping search). 16 callers call 0x82542190 where ours calls this method, 3 of them otherwise identical: BrnNetworkManager::GetActiveRaceCarIndex 0x825822A0, LiveRevengeManager::NetworkPlayerIDToActiveRaceCarIndex 0x82547778, BrnNetworkPlayer::_ActiveFreeburnChallengeMessageArrivedCallback 0x825943D0; others: OutputPlayerStatusInfo 0x82596018, PlayerManagerEventCallback 0x82599430, UpdateMenuDataFromPlayerParams 0x825959F0, HandleSendingUpdateMessage 0x8258E9F0, TellNetworkCarAboutRecievedUpdateMessage 0x82596DD8, UpdatePaybacksData 0x8255FC38, NetworkAggressiveDrivingManager::HandleReceivingMessages 0x825703C0, NetworkDirtyTrickManager::ReceiveDirtyTrickMessage 0x8255BAC8, NetworkImageManager::ReceiveImageMessage 0x825732A8, StateManager::OutputPlayerTexture 0x82569588, TrafficManager::ReceiveCrashingTrafficMessages 0x8255EEE0 / _HullSyncMessageArrivedCallback 0x825592E8 / _RestartTrafficMessageArrivedCallback 0x82551838. (Landed as name evidence: the conductor's compiled objects predated the lane's later commits at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -36278,6 +36381,60 @@
       "symbol": "CgsNetwork::UniquePlayerIDX360::Construct",
       "size": 124,
       "evidence": "Export hole (no JSON; ppcdis shows the body). The ServerInterfacePlayerParamsBase* overload of UniquePlayerIDX360::Construct (our CgsUniquePlayerIDX360.h `void Construct(ServerInterfacePlayerParamsBase* lpPlayerParams)`): asserts the pointer (li r5,0x76 = line 118, file string 0x8202D668), converts the player's address with DirtyAddrToHostAddr(buf, 8, param+4), then tail-calls the (name, xuid) overload 0x82541A10 (exact). Caller: BrnNetwork::NetworkImageManager::GetUniqueIDByPlayerID 0x8256BE54 `bl 0x82541ab8` with (lpUniqueID, &lPlayerParams), where ours calls lpUniqueID->Construct(&lPlayerParams); that caller is now exact apart from this unverified call. Same-name overload: identity keeps both addresses."
+    },
+    "0x827BB480": {
+      "exported_name": null,
+      "symbol": "BrnWorld::CrashIO::InputBuffer_PreScene::GetActiveRaceCarInterface",
+      "size": 164,
+      "evidence": "Export hole (no JSON; ppcdis). Read-lock bit, li r5,0x54 = DWARF :84 (GetActiveRaceCarInterface() const), returns this+0x5180. Callers CrashModule::PreSceneUpdate 0x827D3A90 / 0x827D3AEC (exact apart from these two calls once named; DWARF _compile/BrnWorldUnity.cpp lists GetActiveRaceCarInterface twice in PreSceneUpdate), TickCrashes 0x827C6648 / 0x827C66EC."
+    },
+    "0x827BBA68": {
+      "exported_name": "sub_827BBA68",
+      "symbol": "BrnWorld::CrashIO::OutputBuffer_PostPhysics::GetGameEventQueue",
+      "size": 164,
+      "evidence": "Unnamed. WRITE-lock bit (rlwinm 0x1d), 'Not locked for writing', li r5,0xD3 = DWARF :211 (GetGameEventQueue(), non-const), returns this+0x7A0 (mGameEventQueue). Only caller CrashModule::PostPhysicsUpdate 0x827D3CD4, which posts the crash-ending event (DWARF :640 PlayerCrashEndingEvent lEndSoonEvent, CrashIO::OutputBuffer_PostPhysics::GetGameEventQueue)."
+    },
+    "0x8276DA70": {
+      "exported_name": null,
+      "symbol": "BrnAI::AIModuleIO::OutputBuffer::GetAIResourceRequestInterface",
+      "size": 164,
+      "evidence": "Export hole. Write-lock bit, streamed 'Not locked for writing', li r5,0x1A0 = 416 on the BrnAIModuleIO.h path, returns this+4: the non-const accessor (its const read twin is 0x8279CAA8 at :423). Our non-const overload equals it word for word."
+    },
+    "0x827A99B0": {
+      "exported_name": null,
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::InputBuffer_PostPhysics::SetDeformationOutputInterfaceForEntityModules",
+      "size": 180,
+      "evidence": "Export hole. Write-lock bit, streamed 'Not locked for writing', li r5,0x214 = 532 on BrnRaceCarEntityModuleIO.h, then copies the deformation interface into the buffer. Our body equals it word for word."
+    },
+    "0x827BBC50": {
+      "exported_name": null,
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_Prepare::GetSceneInputInterface",
+      "size": 164,
+      "evidence": "Export hole. Write-lock bit, streamed 'Not locked for writing', li r5,0x4C = DWARF BrnWorldEntityModuleIO.h:76 (the non-const accessor; the const read twin 0x827BBBA8 is :75). Our non-const overload equals it word for word."
+    },
+    "0x827A2C80": {
+      "exported_name": "sub_827A2C80",
+      "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetSoundWorldLoadInterface",
+      "size": 168,
+      "evidence": "Unnamed. Read-lock bit, streamed 'Not locked for reading', li r5,0x87 = 135 on the world entity IO header; the const twin BridgeWorldEntityInfoToOutput 0x827ADD78 calls. Our const overload equals it word for word."
+    },
+    "0x82582200": {
+      "exported_name": "sub_82582200",
+      "symbol": "BrnNetwork::BrnNetworkManager::CaptureTelemetryEvent",
+      "size": 156,
+      "evidence": "Unnamed (sub_82582200). The (ETelemetryHook, s32) overload of CaptureTelemetryEvent: asserts GetServerInterface() / GetTelemetryComponent() at BrnNetworkManager.cpp:3138/3139 (li r5,0xC42 @0x82582230, 0xC43 @0x82582258; the const char* overload 0x82582180 asserts at 3121/3122), SPrintf(\"%i\") into a 16-byte buffer, then TelemetryComponent::CaptureEvent. Ours is exact at the address in src/GameSource/Unity/BrnNetworkUnity.cpp. Callers: LiveRevengeManager::DisplayPlayerTakedownMessage 0x8255FE70, DisplayRivalTakedownMessage 0x82560020, StateManager::StartGameMode 0x8256EE50. Same-name overload: identity keeps both addresses."
+    },
+    "0x82BD11D8": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CNetworkManager::GetServerPortU16",
+      "size": 132,
+      "evidence": "Unnamed (sub_82BD11D8). Our CNetworkManager::GetServerPortU16 is exact at the address. Callers that call 0x82BD11D8 where ours calls it: CNetworkManager::Connect 0x82BD1CA8, CNetworkManager::Tick 0x82BD1E40, CTransactionHTTP::ProcessRequest 0x82BD8980."
+    },
+    "0x82BDA330": {
+      "exported_name": null,
+      "symbol": "MassiveAdClient3::CMassiveAsset::Suspend",
+      "size": 36,
+      "evidence": "Unnamed (sub_82BDA330). Our CMassiveAsset::Suspend is exact at the address. Caller: CMassiveZoneManager::Suspend 0x82BD2FE0 calls 0x82BDA330 where ours calls CMassiveAsset::Suspend."
     }
   },
   "native_leaf_functions": {
@@ -37505,6 +37662,22 @@
       "size": 384,
       "fallthrough": true,
       "evidence": "IDA cut the export at 0x82909F50 (360 B); its last kept instruction falls through into 6 more word(s) ending with an unconditional transfer at 0x82909F64, every instruction after a transfer is a branch or jump-table target inside the extent, and the next word is the next function 0x82909F68."
+    },
+    "0x82B22898": {
+      "symbol": "DispListIndex",
+      "size": 56,
+      "file": "vendor/dirtysdk/src/lobbydisplist.cpp",
+      "caller": "0x82878168",
+      "call_site": "0x828781D4",
+      "evidence": "Frameless 56-byte leaf in an export hole, ending with blr at 0x82B228CC right before DispListSort 0x82B228D0; ServerInterfaceGames::GetFoundGame 0x82878168 calls it at 0x828781D4 (also IsPlayerInOurUserset 0x8287C5D8, KickPlayer 0x82889854). Export hole (no JSON, not in the universe; ppcdis shows the body 0x82B22898..0x82B228CC, then DispListSort 0x82B228D0). Our DispListIndex is word-identical over all 14 words with no relocations (null ref -> 0; index < 0 or >= ref+0x1C -> 0; else *(ref+0x44)[index]). Callers calling 0x82B22898 where ours calls DispListIndex: ServerInterfaceUsersets::KickPlayerByID 0x8288996C, IsPlayerInOurUserset 0x8287C5D8, KickPlayer 0x82889854 (all three now exact apart from this unverified call), LobbyApiRequestCB and the Games found-list readers."
+    },
+    "0x82876AE8": {
+      "symbol": "CgsNetwork::ServerInterfaceConnection::ConvertError",
+      "size": 88,
+      "file": "GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceConnection.cpp",
+      "caller": "0x82876BC8",
+      "call_site": "0x82876C2C",
+      "evidence": "Frameless 88-byte leaf in an export hole, ending with blr at 0x82876B3C right before EndAction 0x82876B40; ServerInterfaceConnection::ServerLogin 0x82876BC8 calls it at 0x82876C2C (also Update 0x82886484, ServerConnect 0x8288661C). Export hole between ServerInterfaceConnection::Release 0x82876A88 (96 B, ends 0x82876AE4) and EndAction 0x82876B40. The (LobbyLoginAlertE, EAction) overload DWARF declares beside ConvertError(s32, EAction) (the s32 one is inlined into EndAction): li r3,1 default (unhandled); alert 0 -> return 0; else walk the 16 {alert, error} rows of the .rdata table at 0x820F8CE0 (lis 0x820F / addi 0x8CE0, row stride 8, 0x80 bytes) and return the row's error. Our 88-byte body is word-identical over all 22 words; the only two differing words are the lis/addi our object relocates to the table (offsets 20, 28). Caller: ServerInterfaceConnection::ServerLoginCallback 0x82876BC8 calls 0x82876AE8 at 0x82876C2C where ours calls this overload (ServerLoginCallback is exact apart from that unverified call)."
     }
   },
   "sdk_archive_splits": {
