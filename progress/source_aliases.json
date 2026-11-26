@@ -21449,6 +21449,14 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA truncated the export. IDA truncated the symbol. Its only assert is 'meActiveSubState < E_ACTIVE_SUBSTATE_EVENT_COUNT' at BrnShowtimeInstantResults.h:273 (the header-inline accessor), and its caller ShowtimeInstantResultsState::UpdateSubstate 0x824DC3C8 is byte-identical to ours (x360 tree after e9b4e7836, 97.8) except that this call relocation names our ShowtimeInstantResultsState::GetNextSubstate (0x824DC51C: meActiveSubState = GetNextSubstate() in the E_ACTIVE_SUBSTATE_EVENT_NONE arm)."
+    },
+    "EA::Jobs::LocalBackend::LocalBackend::`vector deleting destructor'": {
+      "symbol": "EA::Jobs::LocalBackend::LocalBackend::`scalar deleting destructor'",
+      "file": "SDKs/EATech/eajobs/BB_runtime.job_manager.cpp",
+      "x360_address": "0x82BCC420",
+      "byte_match": false,
+      "evidence": "ARTIST's name for 0x82BCC420 says `vector deleting destructor', but the body is a scalar one (~LocalBackend 0x82BCBF38, then only the bit-0 delete flag is tested, 0x82BCC440; no array-cookie loop). It is the deleting destructor in LocalBackend's vtable slot 0, called by JobScheduler::Destroy 0x82BC9B18 with r4 = 1. With LocalBackend's class operator delete (sdk lane round 7) our compiler-generated `scalar deleting destructor' (??_G) is byte-exact against 0x82BCC420, 108 B (scratchpad adiff.py: exact, 100.0). Same deleting-dtor naming class as the 24 aliases landed in a51ada7bd. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
