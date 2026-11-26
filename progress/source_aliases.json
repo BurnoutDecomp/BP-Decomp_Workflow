@@ -580,7 +580,8 @@
         "CgsDev::DebugComponent::Destruct": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
         "CgsDev::DebugComponent::Update": "The base Update is empty (CgsDebugComponent.cpp:326; PS3 CgsResource::DebugComponent::Update 0xCE3A84 calls the base through sub_CB0BAC), so the compiled method matches all 4 bytes, and CgsResource::DebugComponent::Update's base call at 0x828FF00C lands here.",
         "renderengine::CoronaBuffer::Release": "src/SDKs/RenderEngineClub/MAIN/components/src/coronas/rwgcoronabuffer.cpp",
-        "BrnNetwork::NetworkNotificationManagerBase::Destruct": "src/GameSource/Network/Managers/BrnNetworkNotificationManagerBase.cpp"
+        "BrnNetwork::NetworkNotificationManagerBase::Destruct": "src/GameSource/Network/Managers/BrnNetworkNotificationManagerBase.cpp",
+        "BrnGui::ProfileMessageComponent::Destruct": "src/GameSource/Gui/Flow/HUD/States/BrnBootProfile.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -611,7 +612,8 @@
         "CgsGraphics::PerformanceTracker::EndFrame": "The compiled static is a lone blr with no relocations, and the native branch at 0x823FC6B0 (BrnRendererModule::SwapBuffers) lands here. The DecFIGS PS3 SwapBuffers calls the same position through stub 0x11E50, which names ._ZN11CgsGraphics18PerformanceTracker8EndFrameEv, a lone blr at 0xAAF2D0.",
         "ShaderConstantTable::EndFrame": "The compiled method is a lone blr with no relocations, and the native branch at 0x823FC6AC (BrnRendererModule::SwapBuffers, r3 = &mShaderConstantTable) lands here. The DecFIGS PS3 SwapBuffers calls the same position through stub 0x10D00, which names ._ZN19ShaderConstantTable8EndFrameEv, a lone blr at 0xAB022C.",
         "CgsDev::DebugComponent::Construct": "The DecFIGS body (0xB178C8) is a bare blr, so the compiled method matches all 4 bytes, and BrnNetwork::BuddyManagerDebugComponent::Construct's base call at 0x82585664 lands here (as does EventScoresManagerDebugComponent::Construct's at 0x8258654C).",
-        "CgsDev::DebugComponent::Destruct": "The DecFIGS body (0xB178D0) is a bare blr, so the compiled method matches all 4 bytes, and BrnNetwork::BuddyManagerDebugComponent::Destruct's base tail call at 0x825856EC lands here (as does EventScoresManagerDebugComponent::Destruct's at 0x82586580)."
+        "CgsDev::DebugComponent::Destruct": "The DecFIGS body (0xB178D0) is a bare blr, so the compiled method matches all 4 bytes, and BrnNetwork::BuddyManagerDebugComponent::Destruct's base tail call at 0x825856EC lands here (as does EventScoresManagerDebugComponent::Destruct's at 0x82586580).",
+        "BrnGui::ProfileMessageComponent::Destruct": "DWARF BrnBootProfile.h:176 declares ProfileMessageComponent::Destruct() defined at BrnBootProfile.cpp:98 with an empty body (DecFIGS 0x451244 `._ZN6BrnGui23ProfileMessageComponent8DestructEv` is a bare return). DecFIGS CrashNavProfile::OnLeave 0x4EB1F8 calls it (through thunk 0x4BF588) between the inlined ProfileManager::DetachMessageDisplay and MenuComponent::Clear; ARTIST CrashNavProfile::OnLeave 0x824CD7C0 makes the same call at 0x824CD7EC to the folded four-byte blr 0x8284CB38. Our ProfileMessageComponent::Destruct is the same four-byte blr; with it, CrashNavProfile::OnLeave (188 B) is byte-identical apart from that call's name (97.9 now, exact once aliased) (gui lane, agent 7)."
       }
     },
     "0x829646E0": {
@@ -13238,11 +13240,12 @@
       "evidence": "The export truncates the name BrnWorld::TriggerEntityModuleIO::OutputBuffer_PrePhysics::GetOutputInterface. Of the 65 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_QueueAccessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
     },
     "BrnWorld::TriggerEntityModuleI": {
-      "symbol": "BrnWorld::TriggerEntityModuleIO::InputBuffer_PostScene::GetQueryInputInterface",
-      "file": "GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_QueueAccessors.cpp",
+      "symbol": "BrnWorld::TriggerEntityModuleIO::InputBuffer_PreScene::GetInputInterface",
+      "file": "GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_Accessors.cpp",
       "x360_address": "0x827A3120",
-      "byte_match": true,
-      "evidence": "The export truncates the name BrnWorld::TriggerEntityModuleIO::InputBuffer_PostScene::GetQueryInputInterface. Of the 41 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_QueueAccessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The export truncates BrnWorld::TriggerEntityModuleIO::...; it is the write-lock InputBuffer_PreScene accessor (:65). World lane CR-15 (scratch/BYTEMATCH_1123/logs/world.md): the two non-const accessors differ only in their lock bit and assert line. ARTIST 0x822BCE90 (read lock, DWARF BrnTriggerEntityModuleIO.h:64) and 0x827A3120 (write lock, :65) are InputBuffer_PreScene's const and non-const accessors; 0x822BCFE0 (read, :118) and 0x827A3270 (write, :119) are InputBuffer_PostScene::GetQueryInputInterface's. Callers agree: WorldModule::BridgeTrafficToTrigger_PreScene 0x827AD7FC calls 0x827A3120 on its pre-scene trigger buffer, and 0x827A3270's only caller is BridgeInputToEntityModules' post-scene query append. The earlier byte-exact aliases were swapped because the tree's assert lines had been set to fit them."
     },
     "BrnWorld::TriggerEntityModuleIO::": {
       "symbol": "BrnWorld::TriggerEntityModuleIO::OutputBuffer_PreScene::GetSceneInputInterface",
@@ -13252,11 +13255,12 @@
       "evidence": "The export truncates the name BrnWorld::TriggerEntityModuleIO::OutputBuffer_PreScene::GetSceneInputInterface. Of the 41 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_Accessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
     },
     "BrnWorld::TriggerEntityModuleIO::In": {
-      "symbol": "BrnWorld::TriggerEntityModuleIO::InputBuffer_PreScene::GetInputInterface",
-      "file": "GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_Accessors.cpp",
+      "symbol": "BrnWorld::TriggerEntityModuleIO::InputBuffer_PostScene::GetQueryInputInterface",
+      "file": "GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_QueueAccessors.cpp",
       "x360_address": "0x827A3270",
-      "byte_match": true,
-      "evidence": "The export truncates the name BrnWorld::TriggerEntityModuleIO::InputBuffer_PreScene::GetInputInterface. Of the 20 compiled native functions whose names extend it, only that one, compiled from src/GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_Accessors.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The export truncates BrnWorld::TriggerEntityModuleIO::In...; it is the write-lock InputBuffer_PostScene::GetQueryInputInterface (:119). World lane CR-15 (scratch/BYTEMATCH_1123/logs/world.md): the two non-const accessors differ only in their lock bit and assert line. ARTIST 0x822BCE90 (read lock, DWARF BrnTriggerEntityModuleIO.h:64) and 0x827A3120 (write lock, :65) are InputBuffer_PreScene's const and non-const accessors; 0x822BCFE0 (read, :118) and 0x827A3270 (write, :119) are InputBuffer_PostScene::GetQueryInputInterface's. Callers agree: WorldModule::BridgeTrafficToTrigger_PreScene 0x827AD7FC calls 0x827A3120 on its pre-scene trigger buffer, and 0x827A3270's only caller is BridgeInputToEntityModules' post-scene query append. The earlier byte-exact aliases were swapped because the tree's assert lines had been set to fit them."
     },
     "BrnWorld::Wor": {
       "symbol": "BrnWorld::WorldEntityIO::OutputBuffer_PreScene::GetPropGraphicsUnloadedQueue",
@@ -14057,18 +14061,18 @@
       "evidence": "IDA kept only part of the name CgsContainers::Array<unsigned __int64,80>::FindFirstInstanceOf (`__int64,80>::FindFirstInstanceOf`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp, equals this 152-byte function word for word outside its relocation fields. 3 named call targets agree."
     },
     "char,16>::Append": {
-      "symbol": "CgsContainers::Array<char,16>::Append",
+      "symbol": "CgsContainers::Array<unsigned char,16>::Append",
       "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
       "x360_address": "0x8270B970",
       "byte_match": true,
-      "evidence": "IDA kept only part of the name CgsContainers::Array<char,16>::Append (`char,16>::Append`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp, equals this 280-byte function word for word outside its relocation fields. 11 named call targets agree."
+      "evidence": "ARTIST compares unsigned bytes (lbz/lbzx then cmplw at 0x8270D6E0, no extsb); DWARF _compile/BrnTrafficUnity.cpp:15167..15179 instantiates CgsContainers::Array<uint8_t,16u> (Construct/Contains/FindFirstInstanceOf) for TrafficEntityModule::AddVehiclesToTargetList's asset-id set; ours is Array<char,16> (signed: extsb + cmpw). Re-pointed with the world lane's retype to Array<unsigned char,16> (CR-14); previous evidence: IDA kept only part of the name CgsContainers::Array<char,16>::Append (`char,16>::Append`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp, equals this 280-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "char,16>::GetItem": {
-      "symbol": "CgsContainers::Array<char,16>::GetItem",
+      "symbol": "CgsContainers::Array<unsigned char,16>::GetItem",
       "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
       "x360_address": "0x8270D710",
       "byte_match": true,
-      "evidence": "IDA kept only part of the name CgsContainers::Array<char,16>::GetItem (`char,16>::GetItem`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp, equals this 260-byte function word for word outside its relocation fields. 11 named call targets agree."
+      "evidence": "ARTIST compares unsigned bytes (lbz/lbzx then cmplw at 0x8270D6E0, no extsb); DWARF _compile/BrnTrafficUnity.cpp:15167..15179 instantiates CgsContainers::Array<uint8_t,16u> (Construct/Contains/FindFirstInstanceOf) for TrafficEntityModule::AddVehiclesToTargetList's asset-id set; ours is Array<char,16> (signed: extsb + cmpw). Re-pointed with the world lane's retype to Array<unsigned char,16> (CR-14); previous evidence: IDA kept only part of the name CgsContainers::Array<char,16>::GetItem (`char,16>::GetItem`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp, equals this 260-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "char,199>::Peek": {
       "symbol": "CgsContainers::Stack<unsigned char,199>::Peek",
@@ -14127,25 +14131,25 @@
       "evidence": "IDA kept only part of the name CgsContainers::Array<unsigned int,3>::GetItem (`int,3>::GetItem`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayU32_3.cpp, equals this 264-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "int,4>::Append": {
-      "symbol": "CgsContainers::Array<int,4>::Append",
+      "symbol": "CgsContainers::Array<unsigned int,4>::Append",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
       "x360_address": "0x822AEC00",
       "byte_match": true,
-      "evidence": "IDA kept only part of the name CgsContainers::Array<int,4>::Append (`int,4>::Append`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt4.cpp, equals this 284-byte function word for word outside its relocation fields. 11 named call targets agree."
+      "evidence": "ARTIST compares the elements unsigned (cmplw r9,r8 at 0x822B02BC; ours with int: cmpw). DWARF BrnNearMissData.h:43/46 types mauCurrentFrameNearTraffic/mauPreviousFrameNearTraffic as Array<BrnAI::AISectionId,4u>, AISection::AISectionId = typedef uint32_t (SharedClasses/AI/AISectionsData.h:214). The IDA name `int,4>::...` is front-truncated and fits `unsigned int,4>`. Re-pointed with the world lane's retype to Array<unsigned int,4> (CR-14); previous evidence: IDA kept only part of the name CgsContainers::Array<int,4>::Append (`int,4>::Append`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt4.cpp, equals this 284-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "int,4>::GetItem": {
-      "symbol": "CgsContainers::Array<int,4>::GetItem",
+      "symbol": "CgsContainers::Array<unsigned int,4>::GetItem",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
       "x360_address": "0x822B02F0",
       "byte_match": true,
-      "evidence": "IDA kept only part of the name CgsContainers::Array<int,4>::GetItem (`int,4>::GetItem`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt4.cpp, equals this 264-byte function word for word outside its relocation fields. 11 named call targets agree."
+      "evidence": "ARTIST compares the elements unsigned (cmplw r9,r8 at 0x822B02BC; ours with int: cmpw). DWARF BrnNearMissData.h:43/46 types mauCurrentFrameNearTraffic/mauPreviousFrameNearTraffic as Array<BrnAI::AISectionId,4u>, AISection::AISectionId = typedef uint32_t (SharedClasses/AI/AISectionsData.h:214). The IDA name `int,4>::...` is front-truncated and fits `unsigned int,4>`. Re-pointed with the world lane's retype to Array<unsigned int,4> (CR-14); previous evidence: IDA kept only part of the name CgsContainers::Array<int,4>::GetItem (`int,4>::GetItem`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt4.cpp, equals this 264-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "int,5>::Append": {
-      "symbol": "CgsContainers::Array<int,5>::Append",
+      "symbol": "CgsContainers::Array<unsigned int,5>::Append",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt5.cpp",
       "x360_address": "0x82448C28",
       "byte_match": true,
-      "evidence": "IDA kept only part of the name CgsContainers::Array<int,5>::Append (`int,5>::Append`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt5.cpp, equals this 284-byte function word for word outside its relocation fields. 11 named call targets agree."
+      "evidence": "ARTIST compares the elements unsigned (cmplw cr6, r9, r8 @0x8244951C; ours with s32: cmpw, nonmatching 92.1, the only difference). DWARF GameSource/Gui/CustomRenderer/Renderers/BrnCrashNavIconRenderer.h:366 `Array<uint32_t,5u> mOnlineStartpointsToIgnore`. The IDA name `int,5>::...` is front-truncated and fits `unsigned int,5>` (CR-14's finding for int,4>). Re-pointed with the gui lane's retype to Array<unsigned int,5>; previous evidence: IDA kept only part of the name CgsContainers::Array<int,5>::Append (`int,5>::Append`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Containers/CgsArrayInt5.cpp, equals this 284-byte function word for word outside its relocation fields. 11 named call targets agree."
     },
     "rw::math::vpu::VecFloat,8>::Append": {
       "symbol": "CgsContainers::Array<rw::math::vpu::VecFloat,8>::Append",
@@ -19157,18 +19161,18 @@
       "evidence": "ARTIST UpdateContactGeneration at 828D6000 passes the typed culler buffer. The target clears the typed contact queue length at buffer +0x18 before the base destructor and frees 0x100020 bytes. The native typed provider agrees with the complete original body."
     },
     "int,4>::Contains": {
-      "symbol": "CgsContainers::Array<int,4>::Contains",
+      "symbol": "CgsContainers::Array<unsigned int,4>::Contains",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
       "x360_address": "0x822CAC60",
       "byte_match": true,
-      "evidence": "The clipped original export is attested by the branch at 0x822CACB0 to 0x822B0258. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
+      "evidence": "ARTIST compares the elements unsigned (cmplw r9,r8 at 0x822B02BC; ours with int: cmpw). DWARF BrnNearMissData.h:43/46 types mauCurrentFrameNearTraffic/mauPreviousFrameNearTraffic as Array<BrnAI::AISectionId,4u>, AISection::AISectionId = typedef uint32_t (SharedClasses/AI/AISectionsData.h:214). The IDA name `int,4>::...` is front-truncated and fits `unsigned int,4>`. Re-pointed with the world lane's retype to Array<unsigned int,4> (CR-14); previous evidence: The clipped original export is attested by the branch at 0x822CACB0 to 0x822B0258. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
     },
     "int,5>::Contains": {
-      "symbol": "CgsContainers::Array<int,5>::Contains",
+      "symbol": "CgsContainers::Array<unsigned int,5>::Contains",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt5.cpp",
       "x360_address": "0x8244FE48",
       "byte_match": true,
-      "evidence": "The clipped original export is attested by the branch at 0x8244FE98 to 0x824494B8. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
+      "evidence": "ARTIST compares the elements unsigned (cmplw cr6, r9, r8 @0x8244951C; ours with s32: cmpw, nonmatching 92.1, the only difference). DWARF GameSource/Gui/CustomRenderer/Renderers/BrnCrashNavIconRenderer.h:366 `Array<uint32_t,5u> mOnlineStartpointsToIgnore`. The IDA name `int,5>::...` is front-truncated and fits `unsigned int,5>` (CR-14's finding for int,4>). Re-pointed with the gui lane's retype to Array<unsigned int,5>; previous evidence: The clipped original export is attested by the branch at 0x8244FE98 to 0x824494B8. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. Both diagnostic literals agree."
     },
     "__int64,128>::Contains": {
       "symbol": "CgsContainers::Array<unsigned __int64,128>::Contains",
@@ -19213,32 +19217,32 @@
       "evidence": "The clipped original export is attested by the branch at 0x82325270 to 0x8231AB70. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@VLandmarkIndex@BrnGameState@@$0BA@@CgsContainers@@QBAIABVLandmarkIndex@BrnGameState@@@Z. Both diagnostic literals agree."
     },
     "char,16>::Contains": {
-      "symbol": "CgsContainers::Array<char,16>::Contains",
+      "symbol": "CgsContainers::Array<unsigned char,16>::Contains",
       "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
       "x360_address": "0x8271B6F8",
       "byte_match": true,
-      "evidence": "The clipped original export is attested by the branch at 0x8271B748 to 0x8270D680. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. Both diagnostic literals agree."
+      "evidence": "ARTIST compares unsigned bytes (lbz/lbzx then cmplw at 0x8270D6E0, no extsb); DWARF _compile/BrnTrafficUnity.cpp:15167..15179 instantiates CgsContainers::Array<uint8_t,16u> (Construct/Contains/FindFirstInstanceOf) for TrafficEntityModule::AddVehiclesToTargetList's asset-id set; ours is Array<char,16> (signed: extsb + cmpw). Re-pointed with the world lane's retype to Array<unsigned char,16> (CR-14); previous evidence: The clipped original export is attested by the branch at 0x8271B748 to 0x8270D680. The complete native COFF matches the 128-byte body and the branch relocation selects ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. Both diagnostic literals agree."
     },
     "int,4>::FindFirstInstanceOf": {
-      "symbol": "CgsContainers::Array<int,4>::FindFirstInstanceOf",
+      "symbol": "CgsContainers::Array<unsigned int,4>::FindFirstInstanceOf",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt4.cpp",
       "x360_address": "0x822B0258",
       "name_evidence": true,
-      "evidence": "The original Array::Contains body 0x822CAC60 branches to this clipped export at 0x822CACB0. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+      "evidence": "ARTIST compares the elements unsigned (cmplw r9,r8 at 0x822B02BC; ours with int: cmpw). DWARF BrnNearMissData.h:43/46 types mauCurrentFrameNearTraffic/mauPreviousFrameNearTraffic as Array<BrnAI::AISectionId,4u>, AISection::AISectionId = typedef uint32_t (SharedClasses/AI/AISectionsData.h:214). The IDA name `int,4>::...` is front-truncated and fits `unsigned int,4>`. Re-pointed with the world lane's retype to Array<unsigned int,4> (CR-14); previous evidence: The original Array::Contains body 0x822CAC60 branches to this clipped export at 0x822CACB0. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$03@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
     },
     "int,5>::FindFirstInstanceOf": {
-      "symbol": "CgsContainers::Array<int,5>::FindFirstInstanceOf",
+      "symbol": "CgsContainers::Array<unsigned int,5>::FindFirstInstanceOf",
       "file": "GameShared/GameClasses/Containers/CgsArrayInt5.cpp",
       "x360_address": "0x824494B8",
       "name_evidence": true,
-      "evidence": "The original Array::Contains body 0x8244FE48 branches to this clipped export at 0x8244FE98. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+      "evidence": "ARTIST compares the elements unsigned (cmplw cr6, r9, r8 @0x8244951C; ours with s32: cmpw, nonmatching 92.1, the only difference). DWARF GameSource/Gui/CustomRenderer/Renderers/BrnCrashNavIconRenderer.h:366 `Array<uint32_t,5u> mOnlineStartpointsToIgnore`. The IDA name `int,5>::...` is front-truncated and fits `unsigned int,5>` (CR-14's finding for int,4>). Re-pointed with the gui lane's retype to Array<unsigned int,5>; previous evidence: The original Array::Contains body 0x8244FE48 branches to this clipped export at 0x8244FE98. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@H$04@CgsContainers@@QBAIABH@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
     },
     "char,16>::FindFirstInstanceOf": {
-      "symbol": "CgsContainers::Array<char,16>::FindFirstInstanceOf",
+      "symbol": "CgsContainers::Array<unsigned char,16>::FindFirstInstanceOf",
       "file": "GameSource/World/EntityModules/TrafficEntityModule/Array_char_16.cpp",
       "x360_address": "0x8270D680",
       "name_evidence": true,
-      "evidence": "The original Array::Contains body 0x8271B6F8 branches to this clipped export at 0x8271B748. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
+      "evidence": "ARTIST compares unsigned bytes (lbz/lbzx then cmplw at 0x8270D6E0, no extsb); DWARF _compile/BrnTrafficUnity.cpp:15167..15179 instantiates CgsContainers::Array<uint8_t,16u> (Construct/Contains/FindFirstInstanceOf) for TrafficEntityModule::AddVehiclesToTargetList's asset-id set; ours is Array<char,16> (signed: extsb + cmpw). Re-pointed with the world lane's retype to Array<unsigned char,16> (CR-14); previous evidence: The original Array::Contains body 0x8271B6F8 branches to this clipped export at 0x8271B748. The exact native caller relocates this branch to ?FindFirstInstanceOf@?$Array@D$0BA@@CgsContainers@@QBAIABD@Z. The original and the candidate agree on the specialization. The native callee body retains differences."
     },
     "AptValue>::PopAndPush": {
       "symbol": "AptValueVector::PopAndPush",
@@ -20857,6 +20861,187 @@
       "x360_address": "0x82200140",
       "byte_match": true,
       "evidence": "IDA cut the template arguments. Every NewBehaviour<T> calls it at +0x494 on manager+0x14B44 (mDebugBehaviourRefCountIndexLog) with the helper index, then clears the returned inner array's count (+0x70 = 28 entries * 4). Our ?GetItem@?$Array@V?$Array@VBehaviourHelperIndex... compares exact against the 264 bytes (state-tools/cmpaddr.py)."
+    },
+    "BrnPhysics::Deformation::GlassSmashOrCrackEvent>::AddEventSafe": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Deformation::GlassSmashOrCrackEvent>::AddEventSafe",
+      "file": "GameSource/Physics/DeformationManager/DeformationPhysics/BrnDeformableObject_GlassState.cpp",
+      "x360_address": "0x825E5BD8",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsModule::BaseEventQueue<BrnPhysics::Deformation::GlassSmashOrCrackEvent>::AddEventSafe (`BrnPhysics::Deformation::GlassSmashOrCrackEvent>::AddEventSafe`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/Physics/DeformationManager/DeformationPhysics/BrnDeformableObject_GlassState.cpp, equals this 160-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Logic::Brn3DUserSpaceEffectControl::CreateObjec": {
+      "symbol": "BrnSound::Logic::Brn3DUserSpaceEffectControl::CreateObject",
+      "file": "GameSource/Sound/Module/LogicModule/Brn3DUserSpaceEffectControl.cpp",
+      "x360_address": "0x826E0E10",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Logic::Brn3DUserSpaceEffectControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Module/LogicModule/Brn3DUserSpaceEffectControl.cpp, equals this 128-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Logic::Collision::Collision3DControl::CreateObj": {
+      "symbol": "BrnSound::Logic::Collision::Collision3DControl::CreateObject",
+      "file": "GameSource/Sound/Collision/BrnCollisionEffect.cpp",
+      "x360_address": "0x826F80E8",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Logic::Collision::Collision3DControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Collision/BrnCollisionEffect.cpp, equals this 128-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Logic::Collision::CollisionStateManager::CreateO": {
+      "symbol": "BrnSound::Logic::Collision::CollisionStateManager::CreateObject",
+      "file": "GameSource/Sound/Collision/BrnCollisionStateManager.cpp",
+      "x360_address": "0x82701FA8",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Logic::Collision::CollisionStateManager::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Collision/BrnCollisionStateManager.cpp, equals this 132-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Logic::Streaming::StreamingStateManager::CreateO": {
+      "symbol": "BrnSound::Logic::Streaming::StreamingStateManager::CreateObject",
+      "file": "GameSource/Sound/Streaming/BrnStreamingStateManager.cpp",
+      "x360_address": "0x82700B68",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Logic::Streaming::StreamingStateManager::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Streaming/BrnStreamingStateManager.cpp, equals this 128-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Logic::Traffic::TrafficStateManager::CreateObjec": {
+      "symbol": "BrnSound::Logic::Traffic::TrafficStateManager::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Traffic/BrnTrafficStateManager.cpp",
+      "x360_address": "0x82701208",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Logic::Traffic::TrafficStateManager::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Traffic/BrnTrafficStateManager.cpp, equals this 128-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Vehicles::Deformation::DeformationEffect::Create": {
+      "symbol": "BrnSound::Vehicles::Deformation::DeformationEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Deformation/BrnDeformationEffect.cpp",
+      "x360_address": "0x826E4BA0",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Deformation::DeformationEffect::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Deformation/BrnDeformationEffect.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Engines::AIClutchControl::CreateObjec": {
+      "symbol": "BrnSound::Vehicles::Engines::AIClutchControl::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp",
+      "x360_address": "0x826F12E8",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Engines::AIClutchControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Engines::AIPhysicsControl::CreateObje": {
+      "symbol": "BrnSound::Vehicles::Engines::AIPhysicsControl::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Engines/BrnAIPhysicsControl.cpp",
+      "x360_address": "0x826E4558",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Engines::AIPhysicsControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Engines/BrnAIPhysicsControl.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Environment::AmbienceControl::CreateO": {
+      "symbol": "BrnSound::Vehicles::Environment::AmbienceControl::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnAmbienceControl.cpp",
+      "x360_address": "0x826D0B70",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Environment::AmbienceControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Environment/BrnAmbienceControl.cpp, equals this 336-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Environment::CarStereoEffect::CreateOb": {
+      "symbol": "BrnSound::Vehicles::Environment::CarStereoEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnCarStereoEffect.cpp",
+      "x360_address": "0x826E6298",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Environment::CarStereoEffect::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Environment/BrnCarStereoEffect.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Environment::CrashStreamEffect::Create": {
+      "symbol": "BrnSound::Vehicles::Environment::CrashStreamEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnCrashStreamEffect.cpp",
+      "x360_address": "0x826B9E50",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Environment::CrashStreamEffect::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Environment/BrnCrashStreamEffect.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Environment::ReverbEffect::CreateObjec": {
+      "symbol": "BrnSound::Vehicles::Environment::ReverbEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnReverbEffect.cpp",
+      "x360_address": "0x826D1438",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Environment::ReverbEffect::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Environment/BrnReverbEffect.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::Environment::StaticPassbyControl::Cre": {
+      "symbol": "BrnSound::Vehicles::Environment::StaticPassbyControl::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnStaticPassbyControl.cpp",
+      "x360_address": "0x826D0E38",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Environment::StaticPassbyControl::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Environment/BrnStaticPassbyControl.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "BrnSound::Vehicles::PlayerVehicleStateManager::CreateObjec": {
+      "symbol": "BrnSound::Vehicles::PlayerVehicleStateManager::CreateObject",
+      "file": "GameSource/Sound/Vehicles/BrnPlayerVehicleStateManager.cpp",
+      "x360_address": "0x827022D8",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::PlayerVehicleStateManager::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/BrnPlayerVehicleStateManager.cpp, equals this 128-byte function word for word outside its relocation fields. 4 named call targets agree."
+    },
+    "BrnSound::Vehicles::Wheels::JunkyardInAirEffect::CreateObj": {
+      "symbol": "BrnSound::Vehicles::Wheels::JunkyardInAirEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Wheels/BrnJunkyardInAirEffect.cpp",
+      "x360_address": "0x826FDB78",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnSound::Vehicles::Wheels::JunkyardInAirEffect::CreateObject; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Sound/Vehicles/Wheels/BrnJunkyardInAirEffect.cpp, equals this 92-byte function word for word outside its relocation fields. 2 named call targets agree."
+    },
+    "CgsSound::Logic::EffectControl>::AddToClassTypeInfoArray": {
+      "symbol": "CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::EffectControl>::AddToClassTypeInfoArray",
+      "file": "GameShared/GameClasses/Sound/Logic/CgsEffectBase.cpp",
+      "x360_address": "0x8268DD48",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::EffectControl>::AddToClassTypeInfoArray (`CgsSound::Logic::EffectControl>::AddToClassTypeInfoArray`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/Sound/Logic/CgsEffectBase.cpp, equals this 220-byte function word for word outside its relocation fields. 7 named call targets agree."
+    },
+    "CgsSound::Logic::EffectObject>::AddToClassTypeInfoArray": {
+      "symbol": "CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::EffectObject>::AddToClassTypeInfoArray",
+      "file": "GameShared/GameClasses/Sound/Logic/CgsEffectBase.cpp",
+      "x360_address": "0x8268DE28",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsSound::Logic::ClassTypeInfo<CgsSound::Logic::EffectObject>::AddToClassTypeInfoArray (`CgsSound::Logic::EffectObject>::AddToClassTypeInfoArray`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/Sound/Logic/CgsEffectBase.cpp, equals this 220-byte function word for word outside its relocation fields. 7 named call targets agree."
+    },
+    "rw::shared_globals::internal::`anonymou": {
+      "symbol": "rw::shared_globals::internal::`anonymous namespace'::AllocateAndConstructOSGlobalManager",
+      "file": "vendor/renderware/src/rw/OSGlobalManager.cpp",
+      "x360_address": "0x82BBC8D8",
+      "byte_match": true,
+      "evidence": "The export truncates the name rw::shared_globals::internal::`anonymous namespace'::AllocateAndConstructOSGlobalManager. Of the 8 compiled native functions whose names extend it, only that one, compiled from vendor/renderware/src/rw/OSGlobalManager.cpp, equals this 64-byte function word for word outside its relocation fields. 3 named call targets agree."
+    },
+    "CgsSound": {
+      "symbol": "CgsContainers::ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>::operator[]",
+      "file": "GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+      "x360_address": "0x826A7258",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name to \"CgsSound\". The 348-byte body is the ObjectPool operator[] of a 4-slot pool: it asserts \"Array index out of bounds\" and \"The referenced object has not been allocated\" on CgsObjectPool.h:228/229 (file string 0x82005940), which are the lines of the CONST overload in the tree's CgsObjectPool.h (the non-const one asserts on 218/219), and returns &maObjectPool[i]. Its callers are CgsSound::Logic::StateManager::GetContent 0x826ACA30 and 0x826ACA64 on this+0x30 (mContentPool, ObjectPool<RegisteredContent,4,int>), and DWARF declares that method `const Content* GetContent(Name) const` (CgsStateManager.h:493), so the pool is indexed const. Name only: our const instantiation is not emitted yet (GetContent is still non-const in the tree); the non-const instantiation differs from this body only in the two assert lines."
+    },
+    "BrnGui::ImageGalleryState::GetGsmIOCategoryFro": {
+      "symbol": "BrnGui::ImageGalleryState::GetGsmIOCategoryFromGuiEnum",
+      "file": "GameSource/Gui/Flow/Screen/States/BrnImageGallery.cpp",
+      "x360_address": "0x824847A0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA's name for 0x824847A0 (268 B) is front-cut at 'GetGsmIOCategoryFro'; DWARF BrnImageGallery.h:283 declares ImageGalleryState::GetGsmIOCategoryFromGuiEnum(EGuiImageCategories) -> GameStateModuleIO::EImageGalleryType, the only member with that prefix. Its caller ImageGalleryState::UpdateSetup 0x82495F20 is byte-identical to ours (99.1) apart from that one call (bl 0x824847A0 @0x82495F78, ours names ?GetGsmIOCategoryFromGuiEnum@ImageGalleryState@BrnGui@@AAA?AW4EImageGalleryType@GameStateModuleIO@BrnGameState@@W4EGuiImageCategories@2@@Z). Our own body is not yet exact (27.3), so this is a name, not a byte match (gui lane, agent 7)."
+    },
+    "BrnWorld::TriggerEntityModule": {
+      "symbol": "BrnWorld::TriggerEntityModuleIO::InputBuffer_PostScene::GetQueryInputInterface",
+      "file": "GameSource/World/EntityModules/TriggerEntityModule/BrnTriggerEntityModuleIO_QueueAccessors.cpp",
+      "x360_address": "0x822BCFE0",
+      "byte_match": false,
+      "evidence": "The export truncates the name. ARTIST tests the read-lock bit (rlwinm 0x1c) and returns this+4; its assert line is li r5,0x76 = DWARF BrnTriggerEntityModuleIO.h:118, the declaration line of InputBuffer_PostScene::GetQueryInputInterface() const. Its only caller is TriggerEntityModule::ProcessTriggerQueryEvents. The const overload compiled from BrnTriggerEntityModuleIO_QueueAccessors.cpp (x360 03dde38f4) equals the 164-byte function word for word outside its relocation fields (the non-const overload is 0x827A3270, :119). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "int,10>::AddElement": {
+      "symbol": "BrnDirector::Selector<unsigned int,10>::AddElement",
+      "file": "GameSource/Director/MomentController/BrnMomentSelector.cpp",
+      "x360_address": "0x82213D50",
+      "byte_match": false,
+      "evidence": "IDA cut the name to 'int,10>::AddElement' (172 B). SelectBestRandomMomentWithExclusion calls it at 0x8223A7E4 with (selector, weighting in f1, &loop index). Asserts 'lfWeight0To1 > 0.0f' h:329 / '<= 1.0f' h:330; our body is byte-identical (state-tools/r2/udiff.py: exact). ARTIST's assert strings in it cite ..\\..\\..\\GameSource\\Director/MomentController/BrnMomentSelector.h (0x820039C8), where DWARF homes BrnDirector::Selector<uint32_t,10u> (BrnMomentSelector.h:175, members Construct h:54, AddElement h:327, GetSelection h:66, CalculateIntervals h:74); the only instantiation is the one MomentSelector::SelectBestRandomMomentWithExclusion (0x8223A668) builds on its stack. Our instance compiles in src/GameSource/Director/MomentController/BrnMomentSelector.cpp's object (the template lives in BrnMomentSelectorSelector.h). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "int,10>::GetSelection": {
+      "symbol": "BrnDirector::Selector<unsigned int,10>::GetSelection",
+      "file": "GameSource/Director/MomentController/BrnMomentSelector.cpp",
+      "x360_address": "0x8222EE38",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the name (420 B). Called at 0x8223A82C with (selector, Random&); assert 'mOriginalWeights.GetLength() > 0' at h:670. Our body equals it except its call to the truncated CalculateIntervals 0x822142D8 (99.0). ARTIST's assert strings in it cite ..\\..\\..\\GameSource\\Director/MomentController/BrnMomentSelector.h (0x820039C8), where DWARF homes BrnDirector::Selector<uint32_t,10u> (BrnMomentSelector.h:175, members Construct h:54, AddElement h:327, GetSelection h:66, CalculateIntervals h:74); the only instantiation is the one MomentSelector::SelectBestRandomMomentWithExclusion (0x8223A668) builds on its stack. Our instance compiles in src/GameSource/Director/MomentController/BrnMomentSelector.cpp's object (the template lives in BrnMomentSelectorSelector.h)."
+    },
+    "int,10>::CalculateIntervals": {
+      "symbol": "BrnDirector::Selector<unsigned int,10>::CalculateIntervals",
+      "file": "GameSource/Director/MomentController/BrnMomentSelector.cpp",
+      "x360_address": "0x822142D8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the name (460 B). GetSelection 0x8222EE38 calls it; asserts h:704 ('mOriginalWeights.GetLength() > 0') and h:715 ('!rw::math::fpu::IsZero(lfWeightsSum)', message 0x82007594). Ours 86.8: ARTIST inlines IsZero. ARTIST's assert strings in it cite ..\\..\\..\\GameSource\\Director/MomentController/BrnMomentSelector.h (0x820039C8), where DWARF homes BrnDirector::Selector<uint32_t,10u> (BrnMomentSelector.h:175, members Construct h:54, AddElement h:327, GetSelection h:66, CalculateIntervals h:74); the only instantiation is the one MomentSelector::SelectBestRandomMomentWithExclusion (0x8223A668) builds on its stack. Our instance compiles in src/GameSource/Director/MomentController/BrnMomentSelector.cpp's object (the template lives in BrnMomentSelectorSelector.h)."
     }
   },
   "sdk_entry_groups": {
@@ -33599,6 +33784,18 @@
       "symbol": "EA::Jobs::LocalBackend::LocalBackend::AddBarrier",
       "size": 192,
       "evidence": "LocalBackend vtable 0x82182500 slot +0x38 (0x82182538 -> 0x82BCA7B8), between AddEvent (+0x34, 0x82BCC1D8) and SleepOn (+0x3C, 0x82BCBA80), both named; JobInstanceHandle::AddBarrier 0x82BC9A50 dispatches slot +0x38 with the Event return buffer in r3 and the by-value JobInstanceHandle in r5:r6. PS3 DecFIGS mangles LocalBackend::AddBarrier(JobInstanceHandle) (_ZN2EA4Jobs12LocalBackend12LocalBackend10AddBarrierENS0_17JobInstanceHandleE). The body resolves the instance slot, calls GetEnabler through slot +0x2C, increments the instance's barrier count and fills the returned write Event (type 1, value, location, decrementer = &count), which is our LocalBackend::AddBarrier."
+    },
+    "0x821FC8D8": {
+      "exported_name": "sub_821FC8D8",
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::Camera::BehaviourManager::BehaviourHelper,28,BrnDirector::Camera::BehaviourHelperIndex>::IsObjectAllocated",
+      "size": 292,
+      "evidence": "Unnamed export. Our compiled IsObjectAllocated instance in BrnBehaviourManager.cpp's object is byte-identical to the 292 bytes at 0x821FC8D8 (state-tools/cmpaddr.py: exact). Its callers BehaviourManager::SetBehaviourUsedByHandle (0x822191A4), UnSetBehaviourUsedByHandle (0x822194CC) and SetBehaviourUpdatesDuringPause (0x822083B0) pass this+0x10000-0x550 = mBehaviourHelperPool and the helper index, and assert its result with the text 'mBehaviourHelperPool.IsObjectAllocated(lBehaviourHelperIndex)'; the body asserts the index bound at CgsObjectPool.h:260 (li r5,0x104). The three callers are exact apart from this unverified call on x360 after this batch."
+    },
+    "0x82707090": {
+      "exported_name": null,
+      "symbol": "BrnReplays::TrafficEntitySerialiser::GetStaticLayout",
+      "size": 212,
+      "evidence": "0x82707090 (212 bytes, an export hole) is instruction for instruction the body of ARTIST's named BrnReplays::TrafficEntitySerialiser::GetStaticLayout 0x8264C710: static buffer size at +0x24 compared with 0x2D480, buffer at +0x20 non-null, asserts on lines 0x1AE/0x1AF (430/431). Only the assert file string differs: 0x820BB268 is the traffic unity TU's relative include spelling `..\\..\\GameSource\\Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h`, 0x8209E020 the absolute path of the same header. So it is the out-of-line copy of a header-inline accessor emitted in the traffic TU (not foldable because the path strings differ). Its caller TrafficEntityModule::AddVehiclesToTargetList 0x8272261C calls it on mTrafficEntitySerialiser (this+0x724C0) and reads the player hull at +0x94; our source calls mTrafficEntitySerialiser.GetStaticLayout() there. Byte-matching it needs GetStaticLayout moved header-inline in BrnReplayTrafficEntitySerialiser.h (Replays, not the world lane's file)."
     }
   },
   "native_leaf_functions": {
@@ -34666,6 +34863,14 @@
       "caller": "0x826849B0",
       "call_site": "0x826849B4",
       "evidence": "The bounds branch at 0x826849B4 (cmplwi cr6 against 4) reaches the switch's default arm `li r3,-1; blr` at 0x82684A18, beyond the 96-byte clipped export. All 5 absolute jump-table cases at 0x826849D0 land inside the complete 112-byte body, which ends at its final blr; the word after it is the next function. The native body compiled from src/GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp has the same length (physnd lane)."
+    },
+    "0x82689A00": {
+      "symbol": "CgsSound::Playback::Name::HashTable::Retrieve",
+      "size": 80,
+      "file": "GameShared/GameClasses/Sound/Playback/CgsCommon.cpp",
+      "caller": "0x82691420",
+      "call_site": "0x82691450",
+      "evidence": "CgsSound::Playback::operator<<(StrStreamBase&, const Name&) 0x82691420 calls this frameless 80-byte leaf at 0x82691450; it sits in the export hole between Name::HashTable::Store (ends 0x826899FC) and Name::MakeHash 0x82689A50 and ends with blr at 0x82689A4C. The body walks the hash's bucket BST (sapHashNode table 0x82FFB958 indexed by (hash << 1) & 0x7C, less/more children +8/+0xC, compares node+0 with the hash) and returns node+4 or the empty string 0x820046A7: the static Name::HashTable::Retrieve(uintptr_t) of CgsCommon.cpp (DWARF CgsCommon.cpp:189..196). Its caller CgsSound::Playback::operator<<(StrStreamBase&, const Name&) 0x82691450 passes the name's hash and streams the result, as GetCString() does. Our Retrieve (x360 27cda8196) is word-identical to 0x82689A00..0x82689A4C (scratch/BYTEMATCH_1123/msgs/physnd_cmp.py and the /FAc listing); with the name, operator<< (176 B, exact apart from this unverified call) is fully verified."
     }
   },
   "sdk_archive_splits": {
