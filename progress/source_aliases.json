@@ -21457,6 +21457,14 @@
       "byte_match": false,
       "evidence": "ARTIST's name for 0x82BCC420 says `vector deleting destructor', but the body is a scalar one (~LocalBackend 0x82BCBF38, then only the bit-0 delete flag is tested, 0x82BCC440; no array-cookie loop). It is the deleting destructor in LocalBackend's vtable slot 0, called by JobScheduler::Destroy 0x82BC9B18 with r4 = 1. With LocalBackend's class operator delete (sdk lane round 7) our compiler-generated `scalar deleting destructor' (??_G) is byte-exact against 0x82BCC420, 108 B (scratchpad adiff.py: exact, 100.0). Same deleting-dtor naming class as the 24 aliases landed in a51ada7bd. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnNetwork::TrafficManager::BufferedMessage::operat": {
+      "symbol": "BrnNetwork::TrafficManager::BufferedMessage::operator=",
+      "file": "GameSource/Network/Managers/BrnNetworkTrafficManager.cpp",
+      "x360_address": "0x82551D50",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name to 'BrnNetwork::TrafficManager::BufferedMessage::operat' (universe row 82551D50, 1392 B, class:BrnNetwork::TrafficManager::BufferedMessage). Its only caller, BrnNetwork::TrafficManager::RemoveBufferedMessage 0x82559840, calls it at 0x8255989C with r3 = lpBufferedMessage, r4 = &maBufferedCrashingTrafficMessages[miNumMessagesBuffered - 1] (the copy-assignment `*lpBufferedMessage = maBufferedCrashingTrafficMessages[...]`, DWARF lists operator= in RemoveBufferedMessage, BrnNetworkTrafficManager.cpp). With the name, RemoveBufferedMessage is exact in the net tree (only wrong call: ours operator= vs ARTIST 'operat'). Our operator= body itself is not byte-identical (1304 vs 1392 B)."
     }
   },
   "sdk_entry_groups": {
@@ -36712,6 +36720,41 @@
       "symbol": "BrnSound::Logic::Streaming::StreamingStateManager::PostStreamRequest",
       "size": 208,
       "evidence": "Unnamed in ARTIST (208 B). Four callers are byte-identical to ours in the BrnSoundUnity object (x360 physnd round 2 agent 7) apart from this one call: SpeechEffect::Detach 0x826F7FEC, PresentationEffect::Detach 0x826F78C4, SpeedStreamEffect::Detach 0x826F53DC, CrashStreamEffect::Detach 0x826F531C. Each asserts \"lpStreamingStateMan\" (string 0x820AF450), builds a 16-byte stop request {effect, 0.25f (.rdata 0x82003F40), 0.0f, 0} on its stack and calls 0x826835D8 with r3 = the streaming state manager, r4 = that request: our source's lpStreamingStateMan->PostStreamRequest(StreamStopRequest(this, 0.25f)). DWARF BrnStreamingStateManager.h:117/120 declares the two overloads PostStreamRequest(const StreamRequest &) and PostStreamRequest(const StreamStopRequest &); the decorated name given is the StreamStopRequest overload. Our body is not exact yet (46.8)."
+    },
+    "0x82B204B0": {
+      "exported_name": "sub_82B204B0",
+      "symbol": "_LobbyLoginSetXenonInfo",
+      "size": 1008,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "PROVISIONAL NAME. Writes the signed-in user's XUID/PUID/MID/MADDR, BORN, LOC and (account requests) the profile name/address fields into a login tagfield buffer; the Xenon counterpart of the PS3 build's _LobbyLoginSetPS3Info (DWARF lobbylogin.c:87), named after DirtySDK's 'xenon' platform modules (netconnxenon/lobbyapixenon in the Revenge X360 PDB). ARTIST callers: sub_82B208A0 (_LobbyLoginRequest, iKind == 'acct'), sub_82B212C0, sub_82B214F8 (_LobbyLoginAuthCallback). Ours 75.8 at the address."
+    },
+    "0x82B20390": {
+      "exported_name": "sub_82B20390",
+      "symbol": "_LobbyLoginRemapConfig",
+      "size": 172,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "PROVISIONAL NAME. Reads LobbyApiInfo('conf') and hands its XBOX_ADDR_REMAP / XBOX_NAME_REMAP tagfields to 0x82B1FD80 / 0x82B20070. Only ARTIST caller sub_82B214F8 (_LobbyLoginAuthCallback) after the persona list. Ours 49.4 at the address."
+    },
+    "0x82B1FD80": {
+      "exported_name": "sub_82B1FD80",
+      "symbol": "_LobbyLoginParseAddrRemap",
+      "size": 748,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "PROVISIONAL NAME. Parses the address remap table ('lobbylogin: parsing new-style remap table'), sets it with NetConnControl('xmap') and 'xdns'. Only ARTIST caller sub_82B20390. Ours 27.0 at the address."
+    },
+    "0x82B20070": {
+      "exported_name": "sub_82B20070",
+      "symbol": "_LobbyLoginParseNameRemap",
+      "size": 800,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "PROVISIONAL NAME. Parses the name remap table and sets it with NetConnControl('xnam'). Only ARTIST caller sub_82B20390. Ours 24.9 at the address."
+    },
+    "0x82B1FCE0": {
+      "exported_name": null,
+      "symbol": "_LobbyLoginGetServiceAddr",
+      "size": 160,
+      "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
+      "evidence": "PROVISIONAL NAME. Export hole (no JSON; universe row sub_82B1FCE0 unnamed, 160 B). Walks NetConnStatus('serv', i) for i < 4 and returns SocketHtonl of the matching service's address, else logs 'lobbylogin: could not map serviceID 0x%08x - using fallback method' and returns NetConnStatus('host'). Called by 0x82B1FD80 and 0x82B20070. Ours is EXACT at the address (net_cmpaddr: exact 100.0, 160/160 B)."
     }
   },
   "native_leaf_functions": {
