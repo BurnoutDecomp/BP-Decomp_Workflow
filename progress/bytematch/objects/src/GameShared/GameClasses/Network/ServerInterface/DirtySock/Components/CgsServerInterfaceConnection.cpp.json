@@ -1,22 +1,23 @@
 {
  "blob": "85997b0c20afd6ffc51c6b4edfed0ca8d8986496",
- "commit": "8483b10285d3a22d276e1ddb7ef46b272889bc9a",
+ "commit": "1bf502055b42e31a56d8e5edc092b8e830f0a322",
  "compiled": true,
- "measured": "2026-11-26T12:01:44Z",
+ "measured": "2026-11-26T12:33:16Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceConnection.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
  "unpaired": 11,
  "functions": [
+  {"artist": "82580B48", "artist_size": 88, "data_unchecked": 2, "name": "CgsNetwork::ServerInterfaceDirtySock::GetMessageBuffer", "score": 100.0, "size": 88, "status": "exact", "symbol": "?GetMessageBuffer@ServerInterfaceDirtySock@CgsNetwork@@QBAPADXZ"},
   {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"},
   {"artist": "82876A20", "artist_size": 60, "first_diff": 0, "name": "CgsNetwork::ServerInterfaceConnection::Construct", "score": 11.8, "size": 76, "status": "nonmatching", "symbol": "?Construct@ServerInterfaceConnection@CgsNetwork@@UAAXXZ"},
   {"artist": "82876A60", "artist_size": 36, "name": "CgsNetwork::ServerInterfaceConnection::Destruct", "score": 100.0, "size": 36, "status": "exact", "symbol": "?Destruct@ServerInterfaceConnection@CgsNetwork@@QAAXXZ"},
   {"artist": "82876A88", "artist_size": 96, "name": "CgsNetwork::ServerInterfaceConnection::Release", "score": 100.0, "size": 96, "status": "exact", "symbol": "?Release@ServerInterfaceConnection@CgsNetwork@@QAA_NXZ"},
   {"artist": "82876B40", "artist_size": 136, "first_diff": 8, "name": "CgsNetwork::ServerInterfaceConnection::EndAction", "score": 71.6, "size": 132, "status": "nonmatching", "symbol": "?EndAction@ServerInterfaceConnection@CgsNetwork@@AAAXH@Z"},
   {"artist": "82876BC8", "artist_size": 144, "first_diff": 24, "name": "CgsNetwork::ServerInterfaceConnection::ServerLoginCallback", "score": 75.0, "size": 144, "status": "nonmatching", "symbol": "?ServerLoginCallback@ServerInterfaceConnection@CgsNetwork@@CAXPAULobbyLoginRefT@@W4LobbyLoginContextE@@W4LobbyLoginStatusE@@PAX@Z"},
-  {"artist": "82876C58", "artist_size": 300, "first_diff": 8, "name": "CgsNetwork::ServerInterfaceConnection::AgreeTOS", "score": 23.0, "size": 188, "status": "nonmatching", "symbol": "?AgreeTOS@ServerInterfaceConnection@CgsNetwork@@QAAX_N@Z"},
-  {"artist": "82876D88", "artist_size": 400, "first_diff": 8, "name": "CgsNetwork::ServerInterfaceConnection::AgreeShareInfo", "score": 31.7, "size": 256, "status": "nonmatching", "symbol": "?AgreeShareInfo@ServerInterfaceConnection@CgsNetwork@@QAAX_N0@Z"},
+  {"artist": "82876C58", "artist_size": 300, "first_diff": 16, "name": "CgsNetwork::ServerInterfaceConnection::AgreeTOS", "score": 87.2, "size": 296, "status": "nonmatching", "symbol": "?AgreeTOS@ServerInterfaceConnection@CgsNetwork@@QAAX_N@Z"},
+  {"artist": "82876D88", "artist_size": 400, "first_diff": 352, "name": "CgsNetwork::ServerInterfaceConnection::AgreeShareInfo", "score": 95.5, "size": 396, "status": "nonmatching", "symbol": "?AgreeShareInfo@ServerInterfaceConnection@CgsNetwork@@QAAX_N0@Z"},
   {"artist": "82876FA8", "artist_size": 132, "first_diff": 52, "name": "CgsNetwork::ServerInterfaceConnection::IsLoggedIn", "score": 76.1, "size": 152, "status": "nonmatching", "symbol": "?IsLoggedIn@ServerInterfaceConnection@CgsNetwork@@QBA_NXZ"},
   {"artist": "82877030", "artist_size": 64, "name": "CgsNetwork::ServerInterfaceConnection::IsConnectedToNetworkService", "score": 100.0, "size": 64, "status": "exact", "symbol": "?IsConnectedToNetworkService@ServerInterfaceConnection@CgsNetwork@@QBA_NXZ"},
   {"artist": "82877070", "artist_size": 16, "name": "CgsNetwork::ServerInterfaceConnection::DisconnectFromServer", "score": 100.0, "size": 16, "status": "exact", "symbol": "?DisconnectFromServer@ServerInterfaceConnection@CgsNetwork@@QAAXXZ"},
@@ -27,7 +28,7 @@
   {"artist": "828864B8", "artist_size": 192, "first_diff": 20, "name": "CgsNetwork::ServerInterfaceConnection::OnEvent", "score": 41.2, "size": 196, "status": "nonmatching", "symbol": "?OnEvent@ServerInterfaceConnection@CgsNetwork@@UAAXW4EServerInterfaceEvent@2@PAX@Z"},
   {"artist": "82886578", "artist_size": 12, "name": "CgsNetwork::ServerInterfaceConnection::DefaultCallback", "score": 100.0, "size": 12, "status": "exact", "symbol": "?DefaultCallback@ServerInterfaceConnection@CgsNetwork@@CAXPAULobbyApiRefT@@PAULobbyApiMsgT@@PAX@Z"},
   {"artist": "82886588", "artist_size": 200, "calls_unverified": 1, "data_unchecked": 1, "name": "CgsNetwork::ServerInterfaceConnection::ServerConnectCallback", "score": 100.0, "size": 200, "status": "exact", "symbol": "?ServerConnectCallback@ServerInterfaceConnection@CgsNetwork@@CAXPAULobbyLoginRefT@@W4LobbyLoginContextE@@W4LobbyLoginStatusE@@PAX@Z"},
-  {"artist": "82886650", "artist_size": 548, "first_diff": 8, "name": "CgsNetwork::ServerInterfaceConnection::LogInToServer", "score": 44.0, "size": 324, "status": "nonmatching", "symbol": "?LogInToServer@ServerInterfaceConnection@CgsNetwork@@QAAXPBD0PAX@Z"},
-  {"artist": "828910C8", "artist_size": 652, "first_diff": 8, "name": "CgsNetwork::ServerInterfaceConnection::ConnectToServer", "score": 30.2, "size": 328, "status": "nonmatching", "symbol": "?ConnectToServer@ServerInterfaceConnection@CgsNetwork@@QAAXPBDHH@Z"}
+  {"artist": "82886650", "artist_size": 548, "first_diff": 12, "name": "CgsNetwork::ServerInterfaceConnection::LogInToServer", "score": 78.0, "size": 436, "status": "nonmatching", "symbol": "?LogInToServer@ServerInterfaceConnection@CgsNetwork@@QAAXPBD0PAX@Z"},
+  {"artist": "828910C8", "artist_size": 652, "first_diff": 12, "name": "CgsNetwork::ServerInterfaceConnection::ConnectToServer", "score": 82.4, "size": 504, "status": "nonmatching", "symbol": "?ConnectToServer@ServerInterfaceConnection@CgsNetwork@@QAAXPBDHH@Z"}
  ]
 }

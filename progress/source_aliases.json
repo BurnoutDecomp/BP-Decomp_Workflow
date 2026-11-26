@@ -1438,6 +1438,16 @@
       "call_evidence": {
         "rw::core::filesys::Stream::Gettable": "SndPlayer1::EventEvent calls 0x82BBD940 on the stream handle where ours calls Stream::Gettable(); the 8-byte body `lwz r3,0xc(r3); blr` is shared by ICF with AptNativeHash::GetPrototype (sdk lane round 3)."
       }
+    },
+    "0x82BBDED0": {
+      "exported_name": "rw::core::filesys::detail::ListSingle<rw::core::filesys::AsyncOp>::Remove",
+      "evidence": "ICF: ARTIST keeps one 212-byte ListSingle<T>::Remove body at 0x82BBDED0 for both the AsyncOp and the Device instantiation (identical code: the list walk does not depend on T beyond the link at +0). rw::core::filesys::Manager::UnregisterDevice 0x82BBEE68 (96 B) calls 0x82BBDED0 where ours calls ListSingle<Device>::Remove, and is otherwise word-identical (sdk lane round 4, logs/sdk.md). Our Device instantiation is compiled out of line from the filesys sources and has the same body.",
+      "aliases": {
+        "rw::core::filesys::detail::ListSingle<rw::core::filesys::Device>::Remove": "src/SDKs/EATech/rwcore/filesys/BB_filesys.cpp"
+      },
+      "call_evidence": {
+        "rw::core::filesys::detail::ListSingle<rw::core::filesys::Device>::Remove": "Manager::UnregisterDevice 0x82BBEE68 calls 0x82BBDED0 where ours calls ListSingle<Device>::Remove (sdk lane round 4)."
+      }
     }
   },
   "xdk_functions": {
@@ -21138,6 +21148,30 @@
       "byte_match": false,
       "evidence": "IDA cut the name to '...::GetActi' (120 B). Asserts 'leGlobalRaceCarIndex >= E_GLOBAL_RACE_CAR_INDEX_0' / '< E_GLOBAL_RACE_CAR_INDEX_COUNT' (BrnRaceCarEntityModuleOutputInterface.h:1512/1513) and returns maeActiveRaceCarIndices[idx] (+0x834). Its only sibling with that prefix and signature is GetActiveRaceCarIndex(EGlobalRaceCarIndex) (DWARF BrnRaceCarEntityModuleOutputInterface.h); our body is byte-identical after this batch (udiff exact). Callers MainDirector::ProcessInputQueue, BurningRouteMode::PreWorldUpdate, ModeManager::CheckForOutOfRangeCarsReachingFinish (0x823408B4). (Landed as name evidence: the conductor's compiled objects predated the lane's commit 2dc9c8f42 at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnPhysics::Deformation::DetachedWheelManager::Get": {
+      "symbol": "BrnPhysics::Deformation::DetachedWheelManager::GetWheel",
+      "file": "GameSource/Physics/DeformationManager/DeformationPhysics/BrnDetachedWheelManager_Accessors.cpp",
+      "x360_address": "0x825A0B10",
+      "byte_match": false,
+      "evidence": "IDA truncated the name to \"DetachedWheelManager::Get\"; truncated6.json lists it as ambiguous between GetWheel(u16) and GetWheel(EntityId,int) const. It is the raw-slot overload: its body asserts \"IsSlotUsed(luSlot)\" (BrnDetachedWheelManager.h:114, file string 0x8208D620) after calling IsSlotUsed 0x825A0A10 with the u16 slot and returns this + 144*slot; its caller DeformationManager::FixupWheelVehicleContact 0x825A0D98 passes `clrlwi r4, r11, 16` of muPolyTagA. Our GetWheel(u16) (bm-physnd, assert moved to h:114) is word-identical to 0x825A0B10..0x825A0B84 (msgs/physnd_cmp.py: exact 100.0, 120 B), and with the name FixupWheelVehicleContact (536 B) is exact apart from this call. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnPhysics::Pr": {
+      "symbol": "CgsModule::BaseEventQueue<BrnPhysics::Props::RemovePhysicalPropEvent>::GetEvent",
+      "file": "GameSource/Physics/PropManager/BrnPropManager.cpp",
+      "x360_address": "0x825BC680",
+      "byte_match": false,
+      "evidence": "IDA's name \"BrnPhysics::Pr\" is a truncated garbage name (prototype 'BrnPhysics::Print'). The body is the event-queue accessor (asserts mpEvents != NULL / liIndex < GetLength() / liIndex >= 0 at CgsBaseEventQueue lines 272/274/275, returns mpEvents + 8*liIndex), the same 164 B shape as its exact neighbours GetEvent<RemovePhysicalPartEvent> 0x825BC728 and GetEvent<UpdatePropEvent> 0x825BC7D0. Its only caller is PropManager::ProcessRemovePropInstanceEvents 0x82627778, which calls it on GetRemovePhysicalPropQueue(). Our instance compares exact against 0x825BC680 (msgs/physnd_cmp.py: exact 100.0, 164 B, calls_wrong=[]), and with the name ProcessRemovePropInstanceEvents (156 B) is exact apart from this call. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "??$DestroyIOBuffer@VArticulatedJointCreateBuffer@Vehicle@BrnPhysics@@@IOBufferStack@CgsModule@@QAA_NPAPAVArticulatedJoi": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnPhysics::Vehicle::ArticulatedJointCreateBuffer>",
+      "file": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager_Remove.cpp",
+      "x360_address": "0x82614BD0",
+      "byte_match": false,
+      "evidence": "IDA's name is the decorated symbol truncated at 120 characters; the full decorated name is the XDK's for the DWARF-declared template instance (DecFIGS CgsIOBufferStack.h:1507 DestroyIOBuffer<BrnPhysics::Vehicle::ArticulatedJointCreateBuffer>). Its caller PhysicalTrafficManager::DeallocateInternalBuffers 0x82615A38 passes &mpArticulatedJointCreateBuffer. With ArticulatedJointCreateBuffer::Destruct restored from DWARF (BrnPhysicalTrafficManagerIO.h:67, PS3 body 0x6D7834) our instance compares exact (msgs/physnd_cmp.py: exact 100.0, 220 B, calls_wrong=[]), and with the name DeallocateInternalBuffers (212 B) is exact apart from this call. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -36238,6 +36272,12 @@
       "symbol": "BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetGlobalRaceCarOutputInterface",
       "size": 168,
       "evidence": "Unnamed export, 168 B. Read-lock streamed assert at BrnGameStateModuleIO.h:213 (li r5,0xD5 at 0x8231D3EC) and returns this+0x9B40 (the global race-car interface); its sibling at 0x8231D2C0 (named PostWorldInputBuffer::GetActiveRaceCarOutputInterface, h:210) and 0x8231D410 (GetAICarOutputInterface, h:216) have the same shape. Our const GetGlobalRaceCarOutputInterface in BrnGameStateModuleIO.cpp's object is byte-identical (state-tools/r2/udiff.py: exact). Callers: ModeManager::CheckForOutOfRangeCarsReachingFinish (0x82340818, otherwise exact after this batch) and the other PostWorld readers."
+    },
+    "0x82541AB8": {
+      "exported_name": "sub_82541AB8",
+      "symbol": "CgsNetwork::UniquePlayerIDX360::Construct",
+      "size": 124,
+      "evidence": "Export hole (no JSON; ppcdis shows the body). The ServerInterfacePlayerParamsBase* overload of UniquePlayerIDX360::Construct (our CgsUniquePlayerIDX360.h `void Construct(ServerInterfacePlayerParamsBase* lpPlayerParams)`): asserts the pointer (li r5,0x76 = line 118, file string 0x8202D668), converts the player's address with DirtyAddrToHostAddr(buf, 8, param+4), then tail-calls the (name, xuid) overload 0x82541A10 (exact). Caller: BrnNetwork::NetworkImageManager::GetUniqueIDByPlayerID 0x8256BE54 `bl 0x82541ab8` with (lpUniqueID, &lPlayerParams), where ours calls lpUniqueID->Construct(&lPlayerParams); that caller is now exact apart from this unverified call. Same-name overload: identity keeps both addresses."
     }
   },
   "native_leaf_functions": {
@@ -37321,6 +37361,54 @@
       "caller": "0x82BA5C48",
       "call_site": "0x82BA5E3C",
       "evidence": "Frameless 72-byte leaf in the export hole between 0x82BBD940 and Stream::GetState 0x82BBD990, ending with blr at 0x82BBD98C; the unnamed SndPlayer1::EventEvent 0x82BA5C48 calls it at 0x82BA5E3C with the streamer request id. Export hole between 0x82BBD940 and GetState 0x82BBD990 (0x82BBD948..0x82BBD98C). DecFIGS stream.h:221 declares `int Gettable(int) const`. The body reads the engine from the handle (+4), checks the request slot (id & 0xFF < requests), the id and a non-free state, and returns the request's buffered bytes (+0x138) -- the same lookup as GetRequestState 0x82BBD9D0 returning a different field. SndPlayer1::EventEvent 0x82BA5E3C calls it with the streamer request id. Our Stream::Gettable(int) is byte-identical to it (ledger comparator: exact, 72 B). Overload of the 0x82BBD940 Gettable(): the pairing needs the signature (?Gettable@Stream@filesys@core@rw@@QBAHH@Z) to tell the two apart."
+    },
+    "0x822A62C0": {
+      "exported_name": "BrnWorld::BoostBurnout2::OnNearMiss",
+      "symbol": "BrnWorld::BoostBurnout2::OnNearMiss",
+      "previous_size": 140,
+      "size": 152,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x822A634C (140 B), after an instruction (C023008C) that falls through into 3 more word(s) ending with an unconditional transfer (4E800420) at 0x822A6354; the next word is the next function 0x822A6358."
+    },
+    "0x822A66A8": {
+      "exported_name": "BrnWorld::BoostBurnout3::OnNearMiss",
+      "symbol": "BrnWorld::BoostBurnout3::OnNearMiss",
+      "previous_size": 84,
+      "size": 92,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x822A66FC (84 B), after an instruction (7D6903A6) that falls through into 2 more word(s) ending with an unconditional transfer (4E800020) at 0x822A6700; the next word is alignment padding."
+    },
+    "0x824E0468": {
+      "exported_name": "BrnGui::InGame::HandleControllerInput",
+      "symbol": "BrnGui::InGame::HandleControllerInput",
+      "previous_size": 156,
+      "size": 208,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x824E0504 (156 B), after an instruction (38800001) that falls through into 13 more word(s) ending with an unconditional transfer (4BFFEAB4) at 0x824E0534; the next word is the next function 0x824E0538."
+    },
+    "0x8248DFA8": {
+      "exported_name": "BrnGui::OnlineQuickCustomCreate::HandleControllerInputPressed",
+      "symbol": "BrnGui::OnlineQuickCustomCreate::HandleControllerInputPressed",
+      "previous_size": 148,
+      "size": 192,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x8248E03C (148 B), after an instruction (7D635B78) that falls through into 11 more word(s) ending with an unconditional transfer (4E800020) at 0x8248E064; the next word is the next function 0x8248E068."
+    },
+    "0x82395FE8": {
+      "exported_name": "BrnProgression::ProgressionManager::UnlockTrophyForEventTypeAllCompleted",
+      "symbol": "BrnProgression::ProgressionManager::UnlockTrophyForEventTypeAllCompleted",
+      "previous_size": 80,
+      "size": 112,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x82396038 (80 B), after an instruction (3880000C) that falls through into 8 more word(s) ending with an unconditional transfer (4E800020) at 0x82396054; the next word is the next function 0x82396058."
+    },
+    "0x82B44908": {
+      "exported_name": "Nicotine::DMixIO::GetDMixOutput",
+      "symbol": "Nicotine::DMixIO::GetDMixOutput",
+      "previous_size": 112,
+      "size": 124,
+      "fallthrough": true,
+      "evidence": "IDA cut the export at 0x82B44978 (112 B), after an instruction (5563043E) that falls through into 3 more word(s) ending with an unconditional transfer (4E800020) at 0x82B44980; the next word is alignment padding."
     }
   },
   "sdk_archive_splits": {
