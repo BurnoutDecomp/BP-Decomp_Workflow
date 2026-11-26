@@ -1,19 +1,20 @@
 {
- "blob": "d4d68e168da9397c515fa65cea28e22b84d4d3d9",
- "commit": "60ea10b9a29957aed6f6f30a9cb9a0ede2ad4495",
+ "blob": "1906bfa7a83273206ee1bb8a3d692800e216cca8",
+ "commit": "11877c3ab3253d03cf1c0d1e96f89507755b63a7",
  "compiled": true,
- "measured": "2026-11-26T16:49:50Z",
+ "measured": "2026-11-26T17:31:10Z",
  "schema": 1,
  "source": "src/GameSource/Sound/Streaming/BrnStreamingStateManager.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 36,
+ "unpaired": 34,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F05C8", "artist_size": 20, "name": "rw::BaseResourceDescriptor::BaseResourceDescriptor", "score": 100.0, "size": 20, "status": "exact", "symbol": "??0BaseResourceDescriptor@rw@@QAA@XZ"},
   {"artist": "823FF7D0", "artist_size": 116, "name": "rw::IResourceAllocator::AllocateMemoryResource", "score": 100.0, "size": 116, "status": "exact", "symbol": "?AllocateMemoryResource@IResourceAllocator@rw@@QAAPAXIIPBD@Z"},
   {"artist": "82680D48", "artist_size": 20, "name": "CgsSound::Logic::StateManager::IsStateAlias", "score": 100.0, "size": 20, "status": "exact", "symbol": "?IsStateAlias@StateManager@Logic@CgsSound@@UAA_NH@Z"},
   {"artist": "826834F0", "artist_size": 232, "data_unchecked": 2, "name": "BrnSound::Logic::Streaming::StreamingStateManager::PostStreamRequest", "score": 100.0, "size": 232, "status": "exact", "symbol": "?PostStreamRequest@StreamingStateManager@Streaming@Logic@BrnSound@@QAAXABUStreamRequest@234@@Z"},
+  {"artist": "826835D8", "artist_size": 208, "first_diff": 16, "name": "BrnSound::Logic::Streaming::StreamingStateManager::PostStreamRequest", "score": 46.8, "size": 168, "status": "nonmatching", "symbol": "?PostStreamRequest@StreamingStateManager@Streaming@Logic@BrnSound@@QAAXABUStreamStopRequest@234@@Z"},
   {"artist": "826836A8", "artist_size": 164, "data_unchecked": 2, "name": "BrnSound::Logic::Streaming::StreamingStateManager::PostStreamRequestInternal", "score": 100.0, "size": 164, "status": "exact", "symbol": "?PostStreamRequestInternal@StreamingStateManager@Streaming@Logic@BrnSound@@AAAXABUStreamRequest@234@@Z"},
   {"artist": "82683750", "artist_size": 164, "data_unchecked": 2, "name": "BrnSound::Logic::Streaming::StreamingStateManager::RePostStreamRequest", "score": 100.0, "size": 164, "status": "exact", "symbol": "?RePostStreamRequest@StreamingStateManager@Streaming@Logic@BrnSound@@AAAXABUStreamRequest@234@@Z"},
   {"artist": "82683A78", "artist_size": 12, "data_unchecked": 1, "name": "BrnSound::Logic::Streaming::StreamingStateManager::GetTypeInfo", "score": 100.0, "size": 12, "status": "exact", "symbol": "?GetTypeInfo@StreamingStateManager@Streaming@Logic@BrnSound@@UBAPAU?$ClassTypeInfo@VStateManager@Logic@CgsSound@@@3CgsSound@@XZ"},
@@ -24,9 +25,8 @@
   {"artist": "826B0D38", "artist_size": 384, "first_diff": 8, "name": "BrnSound::Logic::Streaming::StreamingStateManager::UpdateParams", "score": 48.8, "size": 304, "status": "nonmatching", "symbol": "?UpdateParams@StreamingStateManager@Streaming@Logic@BrnSound@@UAAXM@Z"},
   {"artist": "826B0EB8", "artist_size": 760, "first_diff": 8, "name": "BrnSound::Logic::Streaming::StreamingStateManager::GetFreeState", "score": 23.2, "size": 412, "status": "nonmatching", "symbol": "?GetFreeState@StreamingStateManager@Streaming@Logic@BrnSound@@UAAPAUState@3CgsSound@@PAX@Z"},
   {"artist": "826EE680", "artist_size": 588, "first_diff": 8, "name": "BrnSound::Logic::Streaming::StreamingStateManager::Prepare", "score": 51.0, "size": 432, "status": "nonmatching", "symbol": "?Prepare@StreamingStateManager@Streaming@Logic@BrnSound@@UAA_NXZ"},
-  {"artist": "826FBFE0", "artist_size": 464, "first_diff": 8, "name": "BrnSound::Logic::Streaming::StreamingStateManager::StreamingStateManager", "score": 14.2, "size": 496, "status": "nonmatching", "symbol": "??0StreamingStateManager@Streaming@Logic@BrnSound@@QAA@XZ"},
+  {"artist": "826FBFE0", "artist_size": 464, "first_diff": 8, "name": "BrnSound::Logic::Streaming::StreamingStateManager::StreamingStateManager", "score": 14.4, "size": 480, "status": "nonmatching", "symbol": "??0StreamingStateManager@Streaming@Logic@BrnSound@@QAA@XZ"},
   {"artist": "826FC1B0", "artist_size": 160, "first_diff": 20, "name": "BrnSound::Logic::Streaming::StreamingStateManager::`scalar deleting destructor'", "score": 76.7, "size": 132, "status": "nonmatching", "symbol": "??_GStreamingStateManager@Streaming@Logic@BrnSound@@UAAPAXI@Z"},
-  {"artist": "82700B68", "artist_size": 128, "data_unchecked": 1, "name": "BrnSound::Logic::Streaming::StreamingStateManager::CreateObject", "score": 100.0, "size": 128, "status": "exact", "symbol": "?CreateObject@StreamingStateManager@Streaming@Logic@BrnSound@@SAPAVStateManager@3CgsSound@@I@Z"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
+  {"artist": "82700B68", "artist_size": 128, "data_unchecked": 1, "name": "BrnSound::Logic::Streaming::StreamingStateManager::CreateObject", "score": 100.0, "size": 128, "status": "exact", "symbol": "?CreateObject@StreamingStateManager@Streaming@Logic@BrnSound@@SAPAVStateManager@3CgsSound@@I@Z"}
  ]
 }

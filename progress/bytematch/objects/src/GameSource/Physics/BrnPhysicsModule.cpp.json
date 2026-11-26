@@ -1,13 +1,13 @@
 {
- "blob": "839eb090284457850e532dcadb73e28cb9ebee82",
- "commit": "c77e0fa10aaadfee8432083cea366c0a912f5463",
+ "blob": "2a906c88e2ae0e1b806e85c9dc0cbd1bffb3b6a6",
+ "commit": "11877c3ab3253d03cf1c0d1e96f89507755b63a7",
  "compiled": true,
- "measured": "2026-11-26T16:08:10Z",
+ "measured": "2026-11-26T17:31:10Z",
  "schema": 1,
  "source": "src/GameSource/Physics/BrnPhysicsModule.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 205,
+ "unpaired": 202,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
@@ -16,6 +16,8 @@
   {"artist": "821F0DB0", "artist_size": 36, "first_diff": 0, "name": "rw::math::vpu::Vector2::Vector2", "score": 20.0, "size": 4, "status": "nonmatching", "symbol": "??0Vector2@vpu@math@rw@@QAA@XZ"},
   {"artist": "821F0DD8", "artist_size": 40, "first_diff": 0, "name": "rw::math::vpu::Vector3::Vector3", "score": 73.7, "size": 36, "status": "nonmatching", "symbol": "??0Vector3@vpu@math@rw@@QAA@MMM@Z"},
   {"artist": "821F0E00", "artist_size": 32, "first_diff": 0, "name": "rw::math::vpu::Vector4::Vector4", "score": 22.2, "size": 4, "status": "nonmatching", "symbol": "??0Vector4@vpu@math@rw@@QAA@XZ"},
+  {"artist": "821F0E50", "artist_size": 116, "data_unchecked": 2, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 116, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@H@Z"},
+  {"artist": "821F0EC8", "artist_size": 116, "data_unchecked": 2, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 116, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@I@Z"},
   {"artist": "821F1FA0", "artist_size": 224, "first_diff": 0, "name": "CgsSystem::Time::Time", "score": 6.5, "size": 24, "status": "nonmatching", "symbol": "??0Time@CgsSystem@@QAA@XZ"},
   {"artist": "821FC0A0", "artist_size": 224, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<13312,16>::GetFirstEvent", "score": 100.0, "size": 224, "status": "exact", "symbol": "?GetFirstEvent@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@QBAHPAPBUEvent@2@PAH@Z"},
   {"artist": "821FFA08", "artist_size": 176, "data_unchecked": 7, "name": "CgsModule::VariableEventQueue<13312,16>::GetEventPaddingSize", "score": 100.0, "size": 176, "status": "exact", "symbol": "?GetEventPaddingSize@?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@IBAHH@Z"},
@@ -32,7 +34,7 @@
   {"artist": "825A1508", "artist_size": 144, "data_unchecked": 2, "name": "BrnPhysics::PhysicsModule::UpdateNetworkCatchup", "score": 100.0, "size": 144, "status": "exact", "symbol": "?UpdateNetworkCatchup@PhysicsModule@BrnPhysics@@QAAXPBVInputBuffer@PhysicsModuleIO@2@G@Z"},
   {"artist": "825A3000", "artist_size": 328, "data_unchecked": 10, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddRigidBody>::AddEvent", "score": 100.0, "size": 328, "status": "exact", "symbol": "?AddEvent@?$BaseEventQueue@VInAddRigidBody@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAA_NABVInAddRigidBody@PhysicsSimulationIO@CgsPhysics@@@Z"},
   {"artist": "825A3898", "artist_size": 236, "data_unchecked": 3, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddRigidBody>::Append", "score": 100.0, "size": 236, "status": "exact", "symbol": "?Append@?$BaseEventQueue@VInAddRigidBody@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAA_NABV12@@Z"},
-  {"artist": "825A70C0", "artist_size": 556, "first_diff": 12, "name": "BrnPhysics::PhysicsModule::HandleGameActionsPostScene", "score": 24.6, "size": 616, "status": "nonmatching", "symbol": "?HandleGameActionsPostScene@PhysicsModule@BrnPhysics@@AAAXPBV?$VariableEventQueue@$0DEAA@$0BA@@CgsModule@@PAUInputBuffer@PhysicsSimulationIO@CgsPhysics@@PAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@@Z"},
+  {"artist": "825A70C0", "artist_size": 556, "first_diff": 12, "name": "BrnPhysics::PhysicsModule::HandleGameActionsPostScene", "score": 24.6, "size": 616, "status": "nonmatching", "symbol": "?HandleGameActionsPostScene@PhysicsModule@BrnPhysics@@AAAXPBV?$BaseGameActionQueue@$0DEAA@@GameStateModuleIO@BrnGameState@@PAUInputBuffer@PhysicsSimulationIO@CgsPhysics@@PAUInSceneUpdateInterface@SceneManagerIO@CgsSceneManager@@@Z"},
   {"artist": "825A8228", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<CgsPhysics::PhysicsSimulationIO::InAddRigidBody,1>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@VInAddRigidBody@PhysicsSimulationIO@CgsPhysics@@$00@CgsModule@@QAAXXZ"},
   {"artist": "825A8298", "artist_size": 216, "data_unchecked": 8, "name": "CgsPhysics::PhysicsSimulationIO::InputBuffer::AppendAddRigidBodyQueue<1>", "score": 100.0, "size": 216, "status": "exact", "symbol": "??$AppendAddRigidBodyQueue@$00@InputBuffer@PhysicsSimulationIO@CgsPhysics@@QAAXPBV?$EventQueue@VInAddRigidBody@PhysicsSimulationIO@CgsPhysics@@$00@CgsModule@@@Z"},
   {"artist": "825A9750", "artist_size": 660, "first_diff": 8, "name": "BrnPhysics::PhysicsModule::PrepareWorldRigidBody", "score": 37.1, "size": 612, "status": "nonmatching", "symbol": "?PrepareWorldRigidBody@PhysicsModule@BrnPhysics@@QAA_NPAUInputBuffer@PhysicsSimulationIO@CgsPhysics@@@Z"},
@@ -45,7 +47,6 @@
   {"artist": "827E42E8", "artist_size": 252, "first_diff": 8, "name": "BrnPhysics::Vehicle::PhysicalTrafficManager::PhysicalTrafficManager", "score": 25.1, "size": 544, "status": "nonmatching", "symbol": "??0PhysicalTrafficManager@Vehicle@BrnPhysics@@QAA@XZ"},
   {"artist": "827E4D58", "artist_size": 440, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleManager::VehicleManager", "score": 36.4, "size": 660, "status": "nonmatching", "symbol": "??0VehicleManager@Vehicle@BrnPhysics@@QAA@XZ"},
   {"artist": "827E5400", "artist_size": 176, "first_diff": 8, "name": "BrnPhysics::PhysicsModule::PhysicsModule", "score": 64.4, "size": 172, "status": "nonmatching", "symbol": "??0PhysicsModule@BrnPhysics@@QAA@XZ"},
-  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"},
-  {"artist": "82820810", "artist_size": 112, "first_diff": 8, "name": "CgsDev::Assert::FireAssert", "score": 15.6, "size": 144, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUStreamMessageAt@12@PBDH@Z"}
+  {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"}
  ]
 }

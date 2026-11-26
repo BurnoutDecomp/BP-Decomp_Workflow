@@ -21442,6 +21442,13 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleI` of the name BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface. 2 callers whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface (BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9BFC; BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9C80)."
+    },
+    "BrnGui::ShowtimeInstantResultsState:": {
+      "symbol": "BrnGui::ShowtimeInstantResultsState::GetNextSubstate",
+      "x360_address": "0x824B3B30",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export. IDA truncated the symbol. Its only assert is 'meActiveSubState < E_ACTIVE_SUBSTATE_EVENT_COUNT' at BrnShowtimeInstantResults.h:273 (the header-inline accessor), and its caller ShowtimeInstantResultsState::UpdateSubstate 0x824DC3C8 is byte-identical to ours (x360 tree after e9b4e7836, 97.8) except that this call relocation names our ShowtimeInstantResultsState::GetNextSubstate (0x824DC51C: meActiveSubState = GetNextSubstate() in the E_ACTIVE_SUBSTATE_EVENT_NONE arm)."
     }
   },
   "sdk_entry_groups": {
@@ -36691,6 +36698,12 @@
       "size": 76,
       "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/device.cpp",
       "evidence": "PROVISIONAL NAME (no DWARF/PS3/SDK name: the PS3 renderengine is the GCM one, and no other build names it). Export hole; ppcdis: loads the descriptor's D3DVertexDeclaration (lwz r3,0(r3)), tests D3DResource_IsSet against the captured device 0x83271608 and clears the binding with D3DDevice_SetVertexDeclaration(device, 0). It lies in device.cpp's run of resource unbinders, between the ARTIST-named Device::UnSetResource(D3DResource*) 0x82B61F08 and the ProgramBufferData overload 0x82B62088 (identified as UnSetResource), with their shape; its caller is renderengine::VertexDescriptor::Release 0x82B63250. Declared as a third static UnSetResource overload (const VertexDescriptorData*), so the ledger pairs it among the overloads by body."
+    },
+    "0x826835D8": {
+      "exported_name": "sub_826835D8",
+      "symbol": "BrnSound::Logic::Streaming::StreamingStateManager::PostStreamRequest",
+      "size": 208,
+      "evidence": "Unnamed in ARTIST (208 B). Four callers are byte-identical to ours in the BrnSoundUnity object (x360 physnd round 2 agent 7) apart from this one call: SpeechEffect::Detach 0x826F7FEC, PresentationEffect::Detach 0x826F78C4, SpeedStreamEffect::Detach 0x826F53DC, CrashStreamEffect::Detach 0x826F531C. Each asserts \"lpStreamingStateMan\" (string 0x820AF450), builds a 16-byte stop request {effect, 0.25f (.rdata 0x82003F40), 0.0f, 0} on its stack and calls 0x826835D8 with r3 = the streaming state manager, r4 = that request: our source's lpStreamingStateMan->PostStreamRequest(StreamStopRequest(this, 0.25f)). DWARF BrnStreamingStateManager.h:117/120 declares the two overloads PostStreamRequest(const StreamRequest &) and PostStreamRequest(const StreamStopRequest &); the decorated name given is the StreamStopRequest overload. Our body is not exact yet (46.8)."
     }
   },
   "native_leaf_functions": {
