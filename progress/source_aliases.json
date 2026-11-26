@@ -3531,16 +3531,18 @@
       "byte_match": true
     },
     "BrnDirector::Camera::BehaviourHelperIndex,28": {
-      "symbol": "Array::Append",
-      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "symbol": "CgsContainers::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>::Append",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager.cpp",
       "x360_address": "0x82212008",
-      "evidence": "Array<Array<BehaviourHelperIndex,28>,28>::Append: CgsArray.h:225/226 asserts, capacity 28, 0x74-byte element (28 words + count) copy, outer count at +0xCB0; sole caller BehaviourManager::Construct (mDebugBehaviourRefCountIndexLog)."
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>::Append (`BrnDirector::Camera::BehaviourHelperIndex,28`). Of the 38 compiled native functions whose names contain it, only that one, compiled from src/GameSource/Director/Camera/BrnBehaviourManager.cpp, equals this 324-byte function word for word outside its relocation fields. 11 named call targets agree. (Replaces an inert entry that named Array::Append.)"
     },
     "BrnDirector::Camera::BehaviourHelperIndex,28>,28>": {
-      "symbol": "Array::Array",
-      "file": "GameShared/GameClasses/Containers/CgsArray.h",
+      "symbol": "CgsContainers::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>",
+      "file": "GameSource/Director/BrnMainDirector.cpp",
       "x360_address": "0x827DE450",
-      "evidence": "Array<Array<BehaviourHelperIndex,28>,28>::Array, the generic default constructor: 28 times _vector_constructor_iterator over the 28 BehaviourHelperIndex elements (count 0x1C, size 4, empty element ctor) then stw -1 to the inner count (+0x70, stride 0x74), finally stw -1 to the outer count (+0xCB0); sole caller BehaviourManager::BehaviourManager (the mDebugBehaviourRefCountIndexLog member)."
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28> (`BrnDirector::Camera::BehaviourHelperIndex,28>,28>`). Of the 7 compiled native functions whose names contain it, only that one, compiled from src/GameSource/Director/BrnMainDirector.cpp, equals this 88-byte function word for word outside its relocation fields. 3 named call targets agree. (Replaces an inert entry that named Array::Array.)"
     },
     "BrnDirector::Camera::BehaviourI": {
       "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourIceAnim,Attrib::RefSpecconst,5>::Shot,5>::Append",
@@ -3831,9 +3833,10 @@
     },
     "CgsSceneManager::CgsCollision::FillTriangleCacheS": {
       "symbol": "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetSpatialMapPointer",
-      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsFillTriangleCacheStreamJobDesc.h",
+      "file": "GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp",
       "x360_address": "0x82916F78",
-      "evidence": "GetData() shim then `lwz r3, 0(r3)`; called only by PolygonSoupTesterJob::ExecuteFillTriangleCacheStream for the 'No spacial map' check and LoadPrimitive: the descriptor's GetSpatialMapPointer() const (+0x00)."
+      "byte_match": true,
+      "evidence": "The export truncates the name CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetSpatialMapPointer. Of the 5 compiled native functions whose names extend it, only that one, compiled from src/GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp, equals this 44-byte function word for word outside its relocation fields. (Replaces an inert entry that named CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetSpatialMapPointer.)"
     },
     "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDe": {
       "symbol": "CgsSceneManager::CgsCollision::FillTriangleCacheStreamJobDesc::GetDataStreamProducer",
@@ -3843,15 +3846,17 @@
     },
     "CgsSceneManager::CgsCollision::LineWithPolySoupSt": {
       "symbol": "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetSpatialMapPointer",
-      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsLineWithPolySoupListJobDesc.h",
+      "file": "GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp",
       "x360_address": "0x82917028",
-      "evidence": "GetData() shim then `lwz r3, 0(r3)`; PolygonSoupTesterJob::ExecuteLineTest calls it for the 'No spacial map' check and LoadPrimitive: GetSpatialMapPointer() const (+0x00), the map RunCollideLineAgainstPolySoupStream stores first."
+      "byte_match": true,
+      "evidence": "The export truncates the name CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetSpatialMapPointer. Of the 7 compiled native functions whose names extend it, only that one, compiled from src/GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp, equals this 44-byte function word for word outside its relocation fields. (Replaces an inert entry that named CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetSpatialMapPointer.)"
     },
     "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDes": {
       "symbol": "CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetStream",
-      "file": "GameShared/GameClasses/SceneManager/Collision/ContactGenerator/JobDescription/CgsLineWithPolySoupListJobDesc.h",
+      "file": "GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp",
       "x360_address": "0x82917058",
-      "evidence": "GetData() shim then `lwz r3, 4(r3)`; ExecuteLineTest hands the result to SimpleDataStreamConsumer::Construct: GetStream() const (+0x04)."
+      "byte_match": true,
+      "evidence": "The export truncates the name CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetStream. Of the 7 compiled native functions whose names extend it, only that one, compiled from src/GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp, equals this 44-byte function word for word outside its relocation fields. (Replaces an inert entry that named CgsSceneManager::CgsCollision::LineWithPolySoupStreamJobDesc::GetStream.)"
     },
     "CgsSound::Playback::Aem": {
       "symbol": "CgsSound::Playback::EntityFixer<T>::DoGetTypeName",
@@ -21355,6 +21360,88 @@
       "byte_match": false,
       "evidence": "The export truncates the name of the local class's virtual Write at the first backquote. DWARF _compile/BrnSharedClassesUnity.cpp (ParticleDescriptionResourceType.cpp:347-368) declares `struct SerialMemoryWriter : public iLionBinWriter` local to ParticleDescriptionResourceType::Serialise, with `virtual void Write(void *apData, U32 aSize)` at :352; the PS3 symtab names its body ._ZZNK11BrnParticle31ParticleDescriptionResourceType9Serialise...EN18SerialMemoryWriter5WriteEPvj and its vtable _ZTVZNK...E18SerialMemoryWriter. ARTIST's vtable 0x820A7F30 (IDA off_820A7F30), stored by Serialise 0x8267C220, has this function as its only slot. The local class compiled from src/SharedClasses/Graphics/ParticleDescriptionResourceType.cpp (x360, names lane) equals this 80-byte function word for word (memcpy call, size rounded up to 16 with clrrwi); Serialise itself is now exact against 0x8267C220. (Landed as name evidence: the conductor's compiled objects predated the names lane's commit at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "??$CreateIOBuffer@VInputBuffer_PreScene@PropEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreScene": {
+      "symbol": "CgsModule::IOBufferStack::CreateIOBuffer<BrnWorld::PropEntityIO::InputBuffer_PreScene>",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827B88D0",
+      "byte_match": true,
+      "evidence": "The export truncates the decorated name ??$CreateIOBuffer@VInputBuffer_PreScene@PropEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreScene@PropEntityIO@BrnWorld@@PBD@Z; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/World/BrnWorldModule.cpp, equals this 208-byte function word for word outside its relocation fields. 9 named call targets agree."
+    },
+    "??$DestroyIOBuffer@VInputBuffer_PreScene@PropEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreScen": {
+      "symbol": "CgsModule::IOBufferStack::DestroyIOBuffer<BrnWorld::PropEntityIO::InputBuffer_PreScene>",
+      "file": "GameSource/World/BrnWorldModule.cpp",
+      "x360_address": "0x827B89A0",
+      "byte_match": true,
+      "evidence": "The export truncates the decorated name ??$DestroyIOBuffer@VInputBuffer_PreScene@PropEntityIO@BrnWorld@@@IOBufferStack@CgsModule@@QAA_NPAPAVInputBuffer_PreScene@PropEntityIO@BrnWorld@@@Z; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/World/BrnWorldModule.cpp, equals this 212-byte function word for word outside its relocation fields. 8 named call targets agree."
+    },
+    "AptFile>::operator=": {
+      "symbol": "AptSharedPtr<AptFile>::operator=",
+      "file": "SDKs/EATech/Apt/BB_runtime.Apt.cpp",
+      "x360_address": "0x82AFD548",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name AptSharedPtr<AptFile>::operator= (`AptFile>::operator=`). It is the only compiled native function whose name contains it, and that body, compiled from src/SDKs/EATech/Apt/BB_runtime.Apt.cpp, equals this 148-byte function word for word outside its relocation fields. 1 named call target agree."
+    },
+    "BrnNetwork::BrnNetworkModule::GetVehicleDriver": {
+      "symbol": "BrnNetwork::BrnNetworkModule::GetVehicleDriverInputInterface",
+      "file": "GameSource/Network/BrnNetworkPlayer.cpp",
+      "x360_address": "0x82581700",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnNetwork::BrnNetworkModule::GetVehicleDriverInputInterface; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Network/BrnNetworkPlayer.cpp, equals this 164-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "CgsGeometric::PolygonSoupLeafNode>::Release": {
+      "symbol": "CgsContainers::ReadOnlyObjectCache<CgsGeometric::PolygonSoupLeafNode>::Release",
+      "file": "GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp",
+      "x360_address": "0x829172D0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ReadOnlyObjectCache<CgsGeometric::PolygonSoupLeafNode>::Release (`CgsGeometric::PolygonSoupLeafNode>::Release`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp, equals this 12-byte function word for word outside its relocation fields."
+    },
+    "CgsSceneManager::CgsCollisi": {
+      "symbol": "CgsSceneManager::CgsCollision::CollisionJobDescription::GetCollisionType",
+      "file": "GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp",
+      "x360_address": "0x82916E98",
+      "byte_match": true,
+      "evidence": "The export truncates the name CgsSceneManager::CgsCollision::CollisionJobDescription::GetCollisionType. Of the 148 compiled native functions whose names extend it, only that one, compiled from src/GameShared/Jobs/PolygonSoupTester/PolygonSoupTesterJob.cpp, equals this 20-byte function word for word outside its relocation fields."
+    },
+    "BrnGameState::GameS": {
+      "symbol": "BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetRaceCarCrashEventQueue",
+      "file": "GameSource/GameState/ModeManager/BrnModeManager.cpp",
+      "x360_address": "0x8231D170",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnGameState::GameS` of the name BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetRaceCarCrashEventQueue. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetRaceCarCrashEventQueue (BrnGameState::ModeManager::ProcessPlayerCrashes at 0x8231E64C)."
+    },
+    "BrnWorldI": {
+      "symbol": "BrnWorldIO::UpdateOutputBuffer::GetPropBecamePhysicalEventQueue",
+      "file": "GameSource/Game/GameBridgeWorldToX.cpp",
+      "x360_address": "0x823B69E0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnWorldI` of the name BrnWorldIO::UpdateOutputBuffer::GetPropBecamePhysicalEventQueue. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnWorldIO::UpdateOutputBuffer::GetPropBecamePhysicalEventQueue (BrnGame::BrnGameModule::BridgeWorldToSound at 0x823CD674)."
+    },
+    "BrnNetwork::BrnNetworkModuleIO::OutputBuf": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGameEventQueue",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823BBC58",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO::OutputBuf` of the name BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGameEventQueue. 2 callers whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetGameEventQueue (BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9B6C; BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9B98)."
+    },
+    "BrnNetwork::BrnNetworkModuleIO": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetTakedownEventOutputQueue",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823BBD00",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleIO` of the name BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetTakedownEventOutputQueue. 2 callers whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetTakedownEventOutputQueue (BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9BB4; BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9BE0)."
+    },
+    "BrnNetwork::BrnNetworkModuleI": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface",
+      "file": "GameSource/Game/BrnGameModule.cpp",
+      "x360_address": "0x823BC300",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnNetwork::BrnNetworkModuleI` of the name BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface. 2 callers whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface (BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9BFC; BrnGame::BrnGameModule::BridgeNetworkToGameState at 0x823E9C80)."
     }
   },
   "sdk_entry_groups": {
