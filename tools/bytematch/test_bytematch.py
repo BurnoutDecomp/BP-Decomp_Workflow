@@ -1083,6 +1083,41 @@ def test_exported_native_leaf_can_recover_a_switch_tail():
             recover(words, proof)
 
 
+def test_exported_native_leaf_can_recover_a_fallthrough_tail():
+    leaf = 0x821FE000
+    # A virtual tail call IDA cut after its argument load: lwz r11,0(r3); lfs f1,0x8C(r3) |
+    # lwz r11,0xC4(r11); mtctr r11; bctr, then alignment padding.
+    body = [0x81630000, 0xC023008C, 0x816B00C4, 0x7D6903A6, 0x4E800420]
+    tail, end = leaf + 8, leaf + 4 * len(body)
+    addr = f"0x{leaf:08X}"
+    proof = {"symbol": "Leaf", "previous_size": tail - leaf, "size": end - leaf, "fallthrough": True}
+
+    def recover(words, witness, after=(0,)):
+        image = FakeArtist([(leaf, "Leaf", list(words) + list(after)), (end + 4 * len(after), "Next", [BLR])])
+        pack = {**image.pack, addr: {**image.pack[addr], "n": (tail - leaf) // 4, "native_leaf": witness}}
+        return Artist(pack=pack, read=lambda address, size: b"" if address == PDATA_START else image.bytes(address, size))
+
+    art = recover(body, proof)
+    assert art.size(leaf) == (20, "native_leaf")
+    bad = {
+        "kept a return": [0x81630000, BLR] + body[2:],
+        "zero in tail": body[:3] + [0, 0x4E800420],
+        "open tail": body[:4] + [0x38600000],
+    }
+    for words in bad.values():
+        with pytest.raises(ValueError, match="does not fall through"):
+            recover(words, proof)
+    with pytest.raises(ValueError, match="does not fall through"):
+        recover(body, proof, after=(0x38600000,))
+
+    # Code after a return inside the tail belongs to the function only when a branch reaches it.
+    reached = [0x419A000C, 0xC023008C, BLR, 0x38600000, BLR]   # beq cr6,+12 -> the li
+    unreached = [0x60000000, 0xC023008C, BLR, 0x38600000, BLR]  # nop: nothing branches to the li
+    assert recover(reached, proof).size(leaf) == (20, "native_leaf")
+    with pytest.raises(ValueError, match="does not fall through"):
+        recover(unreached, proof)
+
+
 def _universe():
     return {"meta": {"functions": 5},
             "functions": [["82100000", 40, "A::f", "game", "GameSource/World", "tuA"],

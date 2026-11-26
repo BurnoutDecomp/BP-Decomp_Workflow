@@ -40,6 +40,7 @@ CRT_LEAF_OPCODES = {4, 5, 6, 14, 15, 24, 32, 36, 48, 52, 59, 62}
 CRT_LEAF_EXTENDED_OPS = {0x7C00040E, 0x7C00044E, 0x7C0000A6, 0x7C000164,
                          0x7C000028, 0x7C00012D, 0x7C0003A6}
 BLR = 0x4E800020
+BCTR = 0x4E800420
 
 
 def packed_extents(pdata: bytes, start=TEXT_START, end=TEXT_END, *, record_kind=1):
@@ -386,8 +387,8 @@ class Artist:
         while pending:
             deferred = []
             for start, address, kind, proof in pending:
-                if (not {"crt_slot", "vtable_slots", "function_table_slots", "data_table_slot"} & proof.keys()
-                        and int(proof["caller"], 16) not in occupied):
+                if (not {"crt_slot", "vtable_slots", "function_table_slots", "data_table_slot", "fallthrough"}
+                        & proof.keys() and int(proof["caller"], 16) not in occupied):
                     deferred.append((start, address, kind, proof))
                     continue
                 self._add_witnessed_leaf(occupied, start, address, kind, proof)
@@ -437,6 +438,10 @@ class Artist:
             if (kind != "sdk_leaf" or start != address or offset < 0 or offset % 4 or slot % 4
                     or self.bytes(slot, 4) != struct.pack(">I", address)):
                 raise ValueError(f"{label} {address:08X} has no matching data table witness")
+        elif "fallthrough" in proof:
+            if (kind != "native_leaf" or start == address
+                    or not self._falls_into_tail(occupied, address, start, address + size)):
+                raise ValueError(f"{label} {address:08X} does not fall through into its omitted tail")
         elif "refhi_site" in proof:
             self._check_leaf_address(occupied, start, address, proof)
         elif "crt_slot" not in proof:
@@ -487,6 +492,36 @@ class Artist:
         linked = [record for record in struct.iter_unpack(">II", self.bytes(PDATA_START, PDATA_END - PDATA_START))
                   if address <= record[0] < end]
         return linked == described
+
+    def _falls_into_tail(self, occupied, address, tail, end):
+        """Check that a clipped export's last kept instruction runs straight on into its omitted tail.
+
+        The instruction before the tail must be able to fall through (no blr, bctr or b), the tail
+        must hold no zero word and end with one of those unconditional transfers, every tail
+        instruction that follows an unconditional transfer must be a branch or jump-table target from
+        inside the extent, and the extent must stop at alignment padding or at the next known
+        function, so the tail cannot be a neighbour.
+        """
+        from compare import branch_target
+
+        def unconditional(word):
+            return word in (BLR, BCTR) or (word >> 26 == 18 and not word & 1)
+
+        body = [word for (word,) in struct.iter_unpack(">I", self.bytes(address, end - address))]
+        targets = set(body)
+        for index, word in enumerate(body):
+            if word >> 26 in (16, 18) and not word & 2:
+                targets.add(branch_target(word, address + 4 * index, 0x03FFFFFC if word >> 26 == 18 else 0x0000FFFC))
+        cut = (tail - address) // 4
+        words = body[cut:]
+        last = body[cut - 1]
+        if not words or not last or unconditional(last) or not all(words) or not unconditional(words[-1]):
+            return False
+        if any(unconditional(body[index - 1]) and address + 4 * index not in targets
+               for index in range(cut + 1, len(body))):
+            return False
+        following = self.bytes(end, 4) if end < TEXT_END else b"\0\0\0\0"
+        return following == b"\0\0\0\0" or end in occupied
 
     def _check_leaf_address(self, occupied, start, address, proof):
         from compare import refhi_lo_address
