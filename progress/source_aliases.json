@@ -21465,6 +21465,14 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA truncated the name to 'BrnNetwork::TrafficManager::BufferedMessage::operat' (universe row 82551D50, 1392 B, class:BrnNetwork::TrafficManager::BufferedMessage). Its only caller, BrnNetwork::TrafficManager::RemoveBufferedMessage 0x82559840, calls it at 0x8255989C with r3 = lpBufferedMessage, r4 = &maBufferedCrashingTrafficMessages[miNumMessagesBuffered - 1] (the copy-assignment `*lpBufferedMessage = maBufferedCrashingTrafficMessages[...]`, DWARF lists operator= in RemoveBufferedMessage, BrnNetworkTrafficManager.cpp). With the name, RemoveBufferedMessage is exact in the net tree (only wrong call: ours operator= vs ARTIST 'operat'). Our operator= body itself is not byte-identical (1304 vs 1392 B)."
+    },
+    "CgsSound::Logic::StateManager::RegisteredContent,4,int>::~ObjectPool<cl": {
+      "symbol": "CgsContainers::ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>::~ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826EAC90",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (160 B, universe row 'CgsSound::Logic::StateManager::RegisteredContent,4,int>::~ObjectPool<cl'). The body is the implicit destructor of CgsStateManager.h's mContentPool (ObjectPool<RegisteredContent, KI_NUM_CONTENT_SLOTS = 4, int>): a reverse loop over the four 16-byte elements (li r26,3 ... addi r30,r30,-0x10 ... bge), each installing Logic::Content's vtable 0x820B3250 and dropping the held handle through the inlined Object::Release (assert 'mu32RefCount > 0', CgsObject.h:117, strings 0x820AA960 / 0x820AA924). Every StateManager-derived destructor calls it right after restoring StateManager's vtable 0x820B66E4 on this+0x30's pool; BrnSoundUnity's StreamingStateManager scalar deleting destructor 0x826FC1B0 (160 B) is byte-identical to ours apart from this one call (bl 0x826eac90 at 0x826FC1DC; wrong call ours '...ObjectPool<RegisteredContent,4,int>::~ObjectPool' vs ARTIST's truncated name), x360 physnd round 2 agent 8. Our own copy compares 95.0 against 0x826EAC90 (cmpwi vs cmplwi on the handle pointer: the interim Handle model)."
     }
   },
   "sdk_entry_groups": {
