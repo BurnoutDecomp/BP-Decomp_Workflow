@@ -1117,6 +1117,13 @@ def test_exported_native_leaf_can_recover_a_fallthrough_tail():
     with pytest.raises(ValueError, match="does not fall through"):
         recover(unreached, proof)
 
+    # ... except the XDK's dead epilogue blr right after a closing bctr.
+    epilogue = body + [BLR]
+    assert recover(epilogue, {**proof, "size": 4 * len(epilogue)}).size(leaf) == (24, "native_leaf")
+    after_blr = body[:4] + [BLR, BLR]
+    with pytest.raises(ValueError, match="does not fall through"):
+        recover(after_blr, {**proof, "size": 4 * len(after_blr)})
+
 
 def _universe():
     return {"meta": {"functions": 5},

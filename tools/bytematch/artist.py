@@ -517,7 +517,10 @@ class Artist:
         last = body[cut - 1]
         if not words or not last or unconditional(last) or not all(words) or not unconditional(words[-1]):
             return False
-        if any(unconditional(body[index - 1]) and address + 4 * index not in targets
+        # The XDK closes a switch whose arms all tail-call through ctr with a dead epilogue blr
+        # right after the last bctr; that one unreached word is the function's own.
+        dead_epilogue = len(body) - 1 if body[-1] == BLR and body[-2] == BCTR else None
+        if any(unconditional(body[index - 1]) and address + 4 * index not in targets and index != dead_epilogue
                for index in range(cut + 1, len(body))):
             return False
         following = self.bytes(end, 4) if end < TEXT_END else b"\0\0\0\0"
