@@ -7735,13 +7735,6 @@
       "byte_match": true,
       "evidence": "The definition's ARTIST annotation is at src/SDKs/EATech/include/Apt/AptCIHBehaviour.cpp:2145. The existing native body compares exact across the full 36-byte ARTIST extent."
     },
-    "BrnGameState::StuntModeScoringOnline::Relase": {
-      "symbol": "BrnGameState::StuntModeScoringOnline::Release",
-      "file": "GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
-      "x360_address": "0x82321878",
-      "byte_match": true,
-      "evidence": "The definition's ARTIST annotation is at src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp:108. The existing native body compares exact across the full 20-byte ARTIST extent."
-    },
     "BrnDirector::Camera::BehaviourBystanderCam::GetCol": {
       "symbol": "BrnDirector::Camera::BehaviourBystanderCam::GetCollisionPolicy",
       "file": "GameSource/Director/Camera/Behaviours/BehaviourBystanderCam.cpp",
@@ -20366,6 +20359,348 @@
       "file": "GameShared/GameClasses/Module/VariableEventQueue_32768_16.cpp",
       "byte_match": true,
       "evidence": "ARTIST ProcessLineTestFastDoubleSided calls this writer at 0x828D4084. The original clipped export is an exact class-key prefix of the native symbol. The 184-byte .pdata extent and every branch and data operand match."
+    },
+    "??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@CameraImpactEffect@Utils@Camera@BrnDirector@@QAAXA": {
+      "symbol": "BrnDirector::Camera::Utils::CameraImpactEffect::Parameters::Serialise<BrnDirector::Camera::TextFileReadSerialiser>",
+      "file": "GameSource/Director/Camera/Utils/BrnCameraImpactEffect.cpp",
+      "x360_address": "0x82215CF0",
+      "byte_match": true,
+      "evidence": "The export truncates the decorated name ??$Serialise@VTextFileReadSerialiser@Camera@BrnDirector@@@Parameters@CameraImpactEffect@Utils@Camera@BrnDirector@@QAAXAAVTextFileReadSerialiser@34@@Z; it is the only compiled native function whose name extends it, and that body, compiled from src/GameSource/Director/Camera/Utils/BrnCameraImpactEffect.cpp, equals this 160-byte function word for word outside its relocation fields. 7 named call targets agree."
+    },
+    "BrnDirector::Camera::Behaviour>::Prep": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::Behaviour>::Prepare",
+      "file": "GameSource/Director/Camera/BrnBehaviourManager_NewBehaviourFromShot.cpp",
+      "x360_address": "0x8224AFF0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::Behaviour>::Prepare (`BrnDirector::Camera::Behaviour>::Prep`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/Director/Camera/BrnBehaviourManager_NewBehaviourFromShot.cpp, equals this 184-byte function word for word outside its relocation fields. 8 named call targets agree."
+    },
+    "BrnDirector::Camera::BehaviourRig>::P": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRig>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x8222F518",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRig>::Prepare (`BrnDirector::Camera::BehaviourRig>::P`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp, equals this 184-byte function word for word outside its relocation fields. 8 named call targets agree."
+    },
+    "BrnGameState::ChallengeManager::CarLeapingData,7,int>::IsObjectAl": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::ChallengeManager::CarLeapingData,7,int>::IsObjectAllocated",
+      "file": "GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp",
+      "x360_address": "0x8231A448",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<BrnGameState::ChallengeManager::CarLeapingData,7,int>::IsObjectAllocated (`BrnGameState::ChallengeManager::CarLeapingData,7,int>::IsObjectAl`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjec": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjectAllocated",
+      "file": "GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp",
+      "x360_address": "0x82318E98",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjectAllocated (`BrnGameState::ChallengeManager::StoredLeapingData,7,int>::IsObjec`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::IsObjec": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::IsObjectAllocated",
+      "file": "GameSource/GameState/ModeManager/Hud/BrnHUDMessageLogic.cpp",
+      "x360_address": "0x8235DE80",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::IsObjec` of the name CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::IsObjectAllocated. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::IsObjectAllocated (BrnGameState::HUDMessageLogic::RemoveCrashingMessagesForTakendownPlayers at 0x823665D0)."
+    },
+    "BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::IsOb": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::IsObjectAllocated",
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
+      "x360_address": "0x8231A040",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::IsObjectAllocated (`BrnGameState::StuntModeScoringOnline::CarLeapingData,7,int>::IsOb`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::F": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::FreeObject",
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
+      "x360_address": "0x823255C0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::FreeObject (`BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::F`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp, equals this 464-byte function word for word outside its relocation fields. 20 named call targets agree."
+    },
+    "BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::I": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::IsObjectAllocated",
+      "file": "GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp",
+      "x360_address": "0x82319928",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::IsObjectAllocated (`BrnGameState::StuntModeScoringOnline::StoredLeapingData,7,int>::I`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/GameState/ModeManager/Scoring/BrnStuntModeScoringOnline.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "BrnPhysics::Deformation::GlassSmashOrCrackEvent": {
+      "symbol": "BrnPhysics::Deformation::GlassSmashOrCrackEvent::operator=",
+      "file": "GameSource/Effects/EffectsModule.cpp",
+      "x360_address": "0x82279838",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnPhysics::Deformation::GlassSmashOrCrackEvent::operator=. Of the 2 compiled native functions whose names extend it, only that one, compiled from src/GameSource/Effects/EffectsModule.cpp, equals this 152-byte function word for word outside its relocation fields."
+    },
+    "BrnResource::ChallengeListEntryAction:": {
+      "symbol": "BrnResource::ChallengeListEntryAction::GetActionType",
+      "file": "GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp",
+      "x360_address": "0x8230EDC8",
+      "byte_match": true,
+      "evidence": "The export truncates the name BrnResource::ChallengeListEntryAction::GetActionType. Of the 18 compiled native functions whose names extend it, only that one, compiled from src/GameSource/GameState/ModeManager/ChallengeManager/BrnChallengeManager.cpp, equals this 88-byte function word for word outside its relocation fields. 3 named call targets agree."
+    },
+    "BrnResource::GameDataEventSlot,short>::Clear": {
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::Clear",
+      "file": "GameSource/Resource/BrnGameDataModule.cpp",
+      "x360_address": "0x826638D0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::Clear (`BrnResource::GameDataEventSlot,short>::Clear`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/Resource/BrnGameDataModule.cpp, equals this 84-byte function word for word outside its relocation fields."
+    },
+    "BrnTraffic::GraphicsStub>::operat": {
+      "symbol": "CgsResource::ResourcePtr<BrnTraffic::GraphicsStub>::operator->",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp",
+      "x360_address": "0x8271A7E8",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<BrnTraffic::GraphicsStub>::operator-> (`BrnTraffic::GraphicsStub>::operat`). Of the 4 compiled native functions whose names contain it, only that one, compiled from src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModule_Render.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "BrnTrigger::TriggerData>::GetMemor": {
+      "symbol": "CgsResource::ResourcePtr<BrnTrigger::TriggerData>::GetMemoryResource",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnTriggerData.cpp",
+      "x360_address": "0x82211E40",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<BrnTrigger::TriggerData>::GetMemoryResource (`BrnTrigger::TriggerData>::GetMemor`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnTriggerData.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "BrnVehicle::GraphicsSpec>::operat": {
+      "symbol": "CgsResource::ResourcePtr<BrnVehicle::GraphicsSpec>::operator->",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule_Render.cpp",
+      "x360_address": "0x822C81C8",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<BrnVehicle::GraphicsSpec>::operator-> (`BrnVehicle::GraphicsSpec>::operat`). Of the 6 compiled native functions whose names contain it, only that one, compiled from src/GameSource/World/EntityModules/RaceCarEntityModule/BrnRaceCarEntityModule_Render.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "BrnWheel::GraphicsSpec>::operator->": {
+      "symbol": "CgsResource::ResourcePtr<BrnWheel::GraphicsSpec>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnWheel_GraphicsSpec.cpp",
+      "x360_address": "0x822C8268",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<BrnWheel::GraphicsSpec>::operator-> (`BrnWheel::GraphicsSpec>::operator->`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/System/Resource/CgsResourcePtr_BrnWheel_GraphicsSpec.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement": {
+      "symbol": "CgsContainers::HashTableElement<int,CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement<int,CgsGui::EventInterpreterModule::sMapEntry>",
+      "file": "GameShared/GameClasses/Gui/CgsGuiUnity.cpp",
+      "x360_address": "0x827E1790",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::HashTableElement<int,CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement<int,CgsGui::EventInterpreterModule::sMapEntry> (`CgsGui::EventInterpreterModule::sMapEntry>::HashTableElement`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Gui/CgsGuiUnity.cpp, equals this 32-byte function word for word outside its relocation fields."
+    },
+    "CgsGui::GuiPopupResource>::operat": {
+      "symbol": "CgsResource::ResourcePtr<CgsGui::GuiPopupResource>::operator->",
+      "file": "GameShared/GameClasses/Gui/Model/Resources/CgsResourcePtr_CgsGui_GuiPopupResource.cpp",
+      "x360_address": "0x8267A4E8",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<CgsGui::GuiPopupResource>::operator-> (`CgsGui::GuiPopupResource>::operat`). Of the 2 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Gui/Model/Resources/CgsResourcePtr_CgsGui_GuiPopupResource.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "CgsSceneManager::VolumeManagerVolume,5048,int>::IsObjectAllocated": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::IsObjectAllocated",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp",
+      "x360_address": "0x828B7A70",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<CgsSceneManager::VolumeManagerVolume,5048,int>::IsObjectAllocated (`CgsSceneManager::VolumeManagerVolume,5048,int>::IsObjectAllocated`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/SceneManager/CgsVolumeManager.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "CgsSceneManager::VolumeSlot,4608,int>::IsObjectAllocated": {
+      "symbol": "CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::IsObjectAllocated",
+      "file": "GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp",
+      "x360_address": "0x828B9540",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<CgsSceneManager::VolumeSlot,4608,int>::IsObjectAllocated (`CgsSceneManager::VolumeSlot,4608,int>::IsObjectAllocated`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/SceneManager/CgsVolumeStore.cpp, equals this 296-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "CgsSceneManager::ZoneList>::oper": {
+      "symbol": "CgsResource::ResourcePtr<CgsSceneManager::ZoneList>::operator->",
+      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr_CgsSceneManager_ZoneList.cpp",
+      "x360_address": "0x827C2FA8",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsResource::ResourcePtr<CgsSceneManager::ZoneList>::operator-> (`CgsSceneManager::ZoneList>::oper`). Of the 3 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/System/Resource/CgsResourcePtr_CgsSceneManager_ZoneList.cpp, equals this 160-byte function word for word outside its relocation fields. 6 named call targets agree."
+    },
+    "CgsSound::Logic::StateManager::RegisteredContent,4,int>::IsObjectA": {
+      "symbol": "CgsContainers::ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>::IsObjectAllocated",
+      "file": "GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp",
+      "x360_address": "0x826A7518",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<CgsSound::Logic::StateManager::RegisteredContent,4,int>::IsObjectAllocated (`CgsSound::Logic::StateManager::RegisteredContent,4,int>::IsObjectA`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameShared/GameClasses/Sound/Logic/CgsStateManager.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "CgsSound::Playback::Voice>::operator": {
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::Voice>::operator->",
+      "file": "GameShared/GameClasses/Sound/Logic/CgsVoice.cpp",
+      "x360_address": "0x8268E1D0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsSound::Playback::Handle<CgsSound::Playback::Voice>::operator-> (`CgsSound::Playback::Voice>::operator`). Of the 5 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Sound/Logic/CgsVoice.cpp, equals this 88-byte function word for word outside its relocation fields. 3 named call targets agree."
+    },
+    "[70],20,int>::IsObjectAllocated": {
+      "symbol": "CgsContainers::ObjectPool<rw::math::vpu::Vector4 [70],20,int>::IsObjectAllocated",
+      "file": "GameSource/Director/MomentController/BrnMomentController.cpp",
+      "x360_address": "0x82200C90",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::ObjectPool<rw::math::vpu::Vector4 [70],20,int>::IsObjectAllocated (`[70],20,int>::IsObjectAllocated`). It is the only compiled native function whose name contains it, and that body, compiled from src/GameSource/Director/MomentController/BrnMomentController.cpp, equals this 292-byte function word for word outside its relocation fields. 11 named call targets agree."
+    },
+    "rw::core::filesys::AsyncOp>::InsertAfter": {
+      "symbol": "rw::core::filesys::detail::ListSingle<rw::core::filesys::AsyncOp>::InsertAfter",
+      "file": "SDKs/EATech/rwcore/filesys/device.cpp",
+      "x360_address": "0x82BBDE70",
+      "byte_match": true,
+      "evidence": "IDA mangled the template name to 'rw::core::filesys::AsyncOp>::InsertAfter' (the export's own name). Its only caller is Device::InsertOp 0x82BBF7C8 (`bl 0x82bbde70` with r3 = device+8 = the op list, r4 = the predecessor, r5 = the op), which our device.cpp compiles as ListSingle<AsyncOp>::InsertAfter. Our out-of-line ListSingle<AsyncOp>::InsertAfter (list.h after sdk batch 1) is byte-exact against 0x82BBDE70 (96 B), and with the alias Device::InsertOp 0x82BBF6B0 is exact (its only difference is this call's name)."
+    },
+    "rw::core::filesys::AsyncOp>::Remove": {
+      "symbol": "rw::core::filesys::detail::ListSingle<rw::core::filesys::AsyncOp>::Remove",
+      "file": "SDKs/EATech/rwcore/filesys/device.cpp",
+      "x360_address": "0x82BBDED0",
+      "byte_match": true,
+      "evidence": "Same IDA template-name truncation. Called by Device::ChangeOpPriority 0x82BBF820 (r3 = device+8, r4 = op, r5 = 0) and by the device-list Remove sites. Our ListSingle<AsyncOp>::Remove is byte-exact against 0x82BBDED0 (212 B); with the alias Device::ChangeOpPriority 0x82BBF7E8 is exact (its only difference is this call's name)."
+    },
+    "short>::Push": {
+      "symbol": "CgsContainers::RingBuffer<unsigned short>::Push",
+      "file": "GameShared/GameClasses/Module/EventQueue_unsigned_short.cpp",
+      "x360_address": "0x823190E0",
+      "byte_match": true,
+      "evidence": "IDA kept only part of the name CgsContainers::RingBuffer<unsigned short>::Push (`short>::Push`). Of the 3 compiled native functions whose names contain it, only that one, compiled from src/GameShared/GameClasses/Module/EventQueue_unsigned_short.cpp, equals this 256-byte function word for word outside its relocation fields. 7 named call targets agree."
+    },
+    "??$NewBehaviour@VBehaviourSpirallingDeathcam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behavio": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourSpirallingDeathcam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp",
+      "x360_address": "0x82262B78",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `??$NewBehaviour@VBehaviourSpirallingDeathcam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behavio` of the name BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourSpirallingDeathcam>. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourSpirallingDeathcam> (BrnDirector::ArbStateCrashing::Prepare at 0x82265668)."
+    },
+    "BrnGameState": {
+      "symbol": "CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::operator[]",
+      "file": "GameSource/GameState/ModeManager/Hud/BrnHUDMessageLogic.cpp",
+      "x360_address": "0x8235DD20",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `BrnGameState` of the name CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::operator[]. 1 caller whose bodies equal ours word for word outside their relocation fields call this address where ours call CgsContainers::ObjectPool<BrnGameState::HUDMessageLogic::BufferedCrashingCar,8,int>::operator[] (BrnGameState::HUDMessageLogic::RemoveCrashingMessagesForTakendownPlayers at 0x823665E8)."
+    },
+    "BrnResource::GameDataIO::InputBuffe": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::GetAttribSysRequestInterface",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B1830",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the export name after `InputBuffe`. 168 bytes: write-lock stream assert (bit 3, 'Not locked for writing', line 0xE2 = 226 = DWARF BrnGameDataModuleIO.h:226 for the non-const GetAttribSysRequestInterface, as our header comment cites), then returns this+0x8014. BrnGame::BrnGameModule::BridgeWorldToResource 0x823E5300 (100 B) is byte-identical to ours except this call (0x823E5340); our source calls InputBuffer::GetAttribSysRequestInterface() there. Our body (core lane, Resource) is 96 B: it lacks the lock assert, so it stays nonmatching until core restores it."
+    },
+    "BrnSound::Logic::B": {
+      "symbol": "BrnSound::Logic::BrnStateManager::GetTypeInfo",
+      "x360_address": "0x82682AA8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::B`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2E7EC (lis/addi r3), whose name pointer (+4) reads \"BrnStateManager\", the class's own name: it is BrnSound::Logic::BrnStateManager::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::": {
+      "symbol": "BrnSound::Logic::BrnEffectControl::GetTypeInfo",
+      "x360_address": "0x82682C08",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2E80C (lis/addi r3), whose name pointer (+4) reads \"BrnEffectControl\", the class's own name: it is BrnSound::Logic::BrnEffectControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::S": {
+      "symbol": "BrnSound::Logic::Streaming::StreamingStateManager::GetTypeInfo",
+      "x360_address": "0x82683A78",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::S`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2E84C (lis/addi r3), whose name pointer (+4) reads \"StreamingStateManager\", the class's own name: it is BrnSound::Logic::Streaming::StreamingStateManager::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Vehicles": {
+      "symbol": "BrnSound::Vehicles::PlayerVehicleStateManager::GetTypeInfo",
+      "x360_address": "0x82683FF8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Vehicles`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2E87C (lis/addi r3), whose name pointer (+4) reads \"PlayerVehicleStateManager\", the class's own name: it is BrnSound::Vehicles::PlayerVehicleStateManager::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::T": {
+      "symbol": "BrnSound::Logic::Traffic::TrafficEngine::GetTypeInfo",
+      "x360_address": "0x826840F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::T`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2E8BC (lis/addi r3), whose name pointer (+4) reads \"TrafficEngine\", the class's own name: it is BrnSound::Logic::Traffic::TrafficEngine::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Vehicle": {
+      "symbol": "BrnSound::Vehicles::Engines::PhysicsControl::GetTypeInfo",
+      "x360_address": "0x82684368",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Vehicle`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F578 (lis/addi r3), whose name pointer (+4) reads \"PhysicsControl\", the class's own name: it is BrnSound::Vehicles::Engines::PhysicsControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::W": {
+      "symbol": "BrnSound::Logic::World::EmitterEffect::GetTypeInfo",
+      "x360_address": "0x82686668",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::W`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F81C (lis/addi r3), whose name pointer (+4) reads \"EmitterEffect\", the class's own name: it is BrnSound::Logic::World::EmitterEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::G": {
+      "symbol": "BrnSound::Logic::GlobalStateManager::GetTypeInfo",
+      "x360_address": "0x826867D8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::G`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F85C (lis/addi r3), whose name pointer (+4) reads \"GlobalStateManager\", the class's own name: it is BrnSound::Logic::GlobalStateManager::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::H": {
+      "symbol": "BrnSound::Logic::HUDEffect::GetTypeInfo",
+      "x360_address": "0x82686838",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::H`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F88C (lis/addi r3), whose name pointer (+4) reads \"HUDEffect\", the class's own name: it is BrnSound::Logic::HUDEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::M": {
+      "symbol": "BrnSound::Logic::MusicEffect::GetTypeInfo",
+      "x360_address": "0x826871D8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::M`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F8AC (lis/addi r3), whose name pointer (+4) reads \"MusicEffect\", the class's own name: it is BrnSound::Logic::MusicEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::F": {
+      "symbol": "BrnSound::Logic::FxEffect::GetTypeInfo",
+      "x360_address": "0x82687948",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::F`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F8BC (lis/addi r3), whose name pointer (+4) reads \"FxEffect\", the class's own name: it is BrnSound::Logic::FxEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::P": {
+      "symbol": "BrnSound::Logic::PresentationEffect::GetTypeInfo",
+      "x360_address": "0x82687968",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::P`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F8CC (lis/addi r3), whose name pointer (+4) reads \"PresentationEffect\", the class's own name: it is BrnSound::Logic::PresentationEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::C": {
+      "symbol": "BrnSound::Logic::Collision::CollisionEffect::GetTypeInfo",
+      "x360_address": "0x82688058",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::C`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F91C (lis/addi r3), whose name pointer (+4) reads \"CollisionEffect\", the class's own name: it is BrnSound::Logic::Collision::CollisionEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnSound::Logic::E": {
+      "symbol": "BrnSound::Logic::Explosion::ExplosionEffect::GetTypeInfo",
+      "x360_address": "0x82689178",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `BrnSound::Logic::E`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2F99C (lis/addi r3), whose name pointer (+4) reads \"ExplosionEffect\", the class's own name: it is BrnSound::Logic::Explosion::ExplosionEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "CgsSound::Logic::": {
+      "symbol": "CgsSound::Logic::EffectControl::GetTypeInfo",
+      "x360_address": "0x8268CEA8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `CgsSound::Logic::`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2FA70 (lis/addi r3), whose name pointer (+4) reads \"EffectControl\", the class's own name: it is CgsSound::Logic::EffectControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "CgsSound::Logic::S": {
+      "symbol": "CgsSound::Logic::StateManager::GetTypeInfo",
+      "x360_address": "0x8268D798",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the export to `CgsSound::Logic::S`. ARTIST's 12-byte getter returns the static descriptor at 0x82F2FAA0 (lis/addi r3), whose name pointer (+4) reads \"StateManager\", the class's own name: it is CgsSound::Logic::StateManager::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "BrnDirector::Camera::BehaviourManager::BehaviourHandle<cl": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGyroCam>::Get",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentTumbling.cpp",
+      "x360_address": "0x821FCE78",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the template argument. MomentTumbling::SignalIsGoodTimeToPlant 0x8220A0CC and MomentHitTraffic::Update 0x82271E38 call it on their GyroCam handles (tumbling +0x190; hit-traffic mHeliCamHandle is a BehaviourHandle<BehaviourGyroCam>, allocated by NewBehaviour<BehaviourGyroCam>). DWARF BrnBehaviourManager.h:574 Get(). Our ?Get@?$BehaviourHandle@VBehaviourGyroCam@... (h:589 assert, helper-pool lookup) equals the 100 bytes word for word (state-tools/cmpaddr.py); named, SignalIsGoodTimeToPlant is exact (its only difference is this call)."
+    },
+    "BrnDirector::Camera::BehaviourManager::Behavio": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourSpirallingDeathcam>::Get",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp",
+      "x360_address": "0x821FDD30",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the name. ArbStateCrashing::Prepare 0x82265678 calls it on mDeathcam straight after NewBehaviour<BehaviourSpirallingDeathcam> (0x82265668) and hands the result to BehaviourSpirallingDeathcam::SetParameters. Body equals our BehaviourHandle<T>::Get (h:589 assert + pool lookup), 100 bytes."
     }
   },
   "sdk_entry_groups": {
@@ -32760,6 +33095,354 @@
       "symbol": "strcat_s",
       "size": 276,
       "evidence": "The named _tmpfile_helper directly calls this installed libcMT.lib:obj\\xbox\\strcat_s.obj symbol at 0x82C0F228. Its exact linked target, complete packed extent and every direct branch agree. The pinned universe already credits its SDK provider."
+    },
+    "0x8279DA48": {
+      "exported_name": "sub_8279DA48",
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::OutputBuffer_PostScene::GetAIModuleRequestInterface",
+      "size": 168,
+      "evidence": "Unnamed export. Its only caller WorldModule::BridgeRaceCarModuleToAIModule_PostScene 0x827AD688 is byte-identical to ours (x360 2e096fe75, src/GameSource/World/Bridges/WorldBridgeEntityModulesToAI.cpp) apart from this call, where ours calls OutputBuffer_PostScene::GetAIModuleRequestInterface() const (BrnRaceCarEntityModuleIO.h:575) on the bridge's const OutputBuffer_PostScene* (r29 -> r3) and passes the result to AIModuleIO::InputBuffer::AppendAIModuleRequestInterface 0x827AC960. The body opens with the streamed read-lock assert (BeginAssert / StrStream Reset 0x82815E58), the IO-accessor shape."
+    },
+    "0x8279F8E0": {
+      "exported_name": "sub_8279F8E0",
+      "symbol": "BrnPhysics::PhysicsModuleIO::OutputBuffer::GetContactSpyInterface",
+      "size": 168,
+      "evidence": "Unnamed export. Its caller WorldModule::BridgePhysicsModuleToAIModule_PostPhysics 0x827A5680 is byte-identical to ours (x360 2e096fe75, src/GameSource/World/Bridges/WorldBridgeAIModule.cpp) apart from this call, where ours calls PhysicsModuleIO::OutputBuffer::GetContactSpyInterface() const on the const output buffer and passes the result to AIModuleIO::InputBuffer_PostPhysics::AppendContacts. Same streamed read-lock accessor shape as 0x8279DA48."
+    },
+    "0x82682BE8": {
+      "exported_name": "sub_82682BE8",
+      "symbol": "BrnSound::Logic::BrnEffectObject::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E7FC (lis/addi r3), whose name pointer (+4) reads \"BrnEffectObject\", the class's own name: it is BrnSound::Logic::BrnEffectObject::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82682C28": {
+      "exported_name": "sub_82682C28",
+      "symbol": "BrnSound::Logic::Brn3DEffectControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E81C (lis/addi r3), whose name pointer (+4) reads \"Brn3DEffectControl\", the class's own name: it is BrnSound::Logic::Brn3DEffectControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82682C48": {
+      "exported_name": "sub_82682C48",
+      "symbol": "BrnSound::Logic::Brn3DUserSpaceEffectControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E82C (lis/addi r3), whose name pointer (+4) reads \"Brn3DUserSpaceEffectControl\", the class's own name: it is BrnSound::Logic::Brn3DUserSpaceEffectControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82683A98": {
+      "exported_name": "sub_82683A98",
+      "symbol": "BrnSound::Logic::Streaming::StreamingEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E85C (lis/addi r3), whose name pointer (+4) reads \"StreamingEffect\", the class's own name: it is BrnSound::Logic::Streaming::StreamingEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684148": {
+      "exported_name": "sub_82684148",
+      "symbol": "BrnSound::Logic::Traffic::TrafficHorn::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E8D0 (lis/addi r3), whose name pointer (+4) reads \"TrafficHorn\", the class's own name: it is BrnSound::Logic::Traffic::TrafficHorn::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684188": {
+      "exported_name": "sub_82684188",
+      "symbol": "BrnSound::Logic::Traffic::TrafficSkid::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E8E0 (lis/addi r3), whose name pointer (+4) reads \"TrafficSkid\", the class's own name: it is BrnSound::Logic::Traffic::TrafficSkid::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684318": {
+      "exported_name": "sub_82684318",
+      "symbol": "BrnSound::Logic::Traffic::TrafficControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2E910 (lis/addi r3), whose name pointer (+4) reads \"TrafficControl\", the class's own name: it is BrnSound::Logic::Traffic::TrafficControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826848D0": {
+      "exported_name": "sub_826848D0",
+      "symbol": "BrnSound::Vehicles::Engines::ShiftControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F598 (lis/addi r3), whose name pointer (+4) reads \"ShiftControl\", the class's own name: it is BrnSound::Vehicles::Engines::ShiftControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684970": {
+      "exported_name": "sub_82684970",
+      "symbol": "BrnSound::Vehicles::Engines::HybridExhaustControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F5A8 (lis/addi r3), whose name pointer (+4) reads \"HybridExhaustControl\", the class's own name: it is BrnSound::Vehicles::Engines::HybridExhaustControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684990": {
+      "exported_name": "sub_82684990",
+      "symbol": "BrnSound::Vehicles::Engines::HybridEngineControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F5B8 (lis/addi r3), whose name pointer (+4) reads \"HybridEngineControl\", the class's own name: it is BrnSound::Vehicles::Engines::HybridEngineControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684C38": {
+      "exported_name": "sub_82684C38",
+      "symbol": "BrnSound::Vehicles::Engines::ClutchControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F5C8 (lis/addi r3), whose name pointer (+4) reads \"ClutchControl\", the class's own name: it is BrnSound::Vehicles::Engines::ClutchControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684C58": {
+      "exported_name": "sub_82684C58",
+      "symbol": "BrnSound::Vehicles::Engines::AIClutchControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F5D8 (lis/addi r3), whose name pointer (+4) reads \"AIClutchControl\", the class's own name: it is BrnSound::Vehicles::Engines::AIClutchControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82684E68": {
+      "exported_name": "sub_82684E68",
+      "symbol": "BrnSound::Vehicles::Engines::DualGinsuExhaustEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F5F8 (lis/addi r3), whose name pointer (+4) reads \"DualGinsuExhaustEffect\", the class's own name: it is BrnSound::Vehicles::Engines::DualGinsuExhaustEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685088": {
+      "exported_name": "sub_82685088",
+      "symbol": "BrnSound::Vehicles::Engines::SingleGinsuEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F608 (lis/addi r3), whose name pointer (+4) reads \"SingleGinsuEffect\", the class's own name: it is BrnSound::Vehicles::Engines::SingleGinsuEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826851D0": {
+      "exported_name": "sub_826851D0",
+      "symbol": "BrnSound::Vehicles::Engines::BoostEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F628 (lis/addi r3), whose name pointer (+4) reads \"BoostEffect\", the class's own name: it is BrnSound::Vehicles::Engines::BoostEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826852F0": {
+      "exported_name": "sub_826852F0",
+      "symbol": "BrnSound::Vehicles::Engines::AIPhysicsControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F638 (lis/addi r3), whose name pointer (+4) reads \"AIPhysicsControl\", the class's own name: it is BrnSound::Vehicles::Engines::AIPhysicsControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685310": {
+      "exported_name": "sub_82685310",
+      "symbol": "BrnSound::Vehicles::Engines::TurboEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F648 (lis/addi r3), whose name pointer (+4) reads \"TurboEffect\", the class's own name: it is BrnSound::Vehicles::Engines::TurboEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685440": {
+      "exported_name": "sub_82685440",
+      "symbol": "BrnSound::Vehicles::Engines::WhineEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F658 (lis/addi r3), whose name pointer (+4) reads \"WhineEffect\", the class's own name: it is BrnSound::Vehicles::Engines::WhineEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685538": {
+      "exported_name": "sub_82685538",
+      "symbol": "BrnSound::Vehicles::Engines::SweetenersEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F670 (lis/addi r3), whose name pointer (+4) reads \"SweetenersEffect\", the class's own name: it is BrnSound::Vehicles::Engines::SweetenersEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685720": {
+      "exported_name": "sub_82685720",
+      "symbol": "BrnSound::Vehicles::Deformation::DeformationEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F680 (lis/addi r3), whose name pointer (+4) reads \"DeformationEffect\", the class's own name: it is BrnSound::Vehicles::Deformation::DeformationEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685800": {
+      "exported_name": "sub_82685800",
+      "symbol": "BrnSound::Vehicles::Car3DControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F690 (lis/addi r3), whose name pointer (+4) reads \"Car3DControl\", the class's own name: it is BrnSound::Vehicles::Car3DControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685820": {
+      "exported_name": "sub_82685820",
+      "symbol": "BrnSound::Vehicles::Engine3dControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F6A0 (lis/addi r3), whose name pointer (+4) reads \"Engine3dControl\", the class's own name: it is BrnSound::Vehicles::Engine3dControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685840": {
+      "exported_name": "sub_82685840",
+      "symbol": "BrnSound::Vehicles::Exhaust3dControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F6B0 (lis/addi r3), whose name pointer (+4) reads \"Exhaust3dControl\", the class's own name: it is BrnSound::Vehicles::Exhaust3dControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685860": {
+      "exported_name": "sub_82685860",
+      "symbol": "BrnSound::Vehicles::LeftSide3dControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F6C0 (lis/addi r3), whose name pointer (+4) reads \"LeftSide3dControl\", the class's own name: it is BrnSound::Vehicles::LeftSide3dControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826859C0": {
+      "exported_name": "sub_826859C0",
+      "symbol": "BrnSound::Vehicles::Wheels::SkidEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F6E0 (lis/addi r3), whose name pointer (+4) reads \"SkidEffect\", the class's own name: it is BrnSound::Vehicles::Wheels::SkidEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685A70": {
+      "exported_name": "sub_82685A70",
+      "symbol": "BrnSound::Vehicles::Wheels::InAirEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F6F0 (lis/addi r3), whose name pointer (+4) reads \"InAirEffect\", the class's own name: it is BrnSound::Vehicles::Wheels::InAirEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685AB0": {
+      "exported_name": "sub_82685AB0",
+      "symbol": "BrnSound::Vehicles::Wheels::TrafficInAir::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F710 (lis/addi r3), whose name pointer (+4) reads \"TrafficInAir\", the class's own name: it is BrnSound::Vehicles::Wheels::TrafficInAir::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685B28": {
+      "exported_name": "sub_82685B28",
+      "symbol": "BrnSound::Vehicles::Wheels::WheelControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F740 (lis/addi r3), whose name pointer (+4) reads \"WheelControl\", the class's own name: it is BrnSound::Vehicles::Wheels::WheelControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685B48": {
+      "exported_name": "sub_82685B48",
+      "symbol": "BrnSound::Vehicles::Wheels::AIWheelControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F750 (lis/addi r3), whose name pointer (+4) reads \"AIWheelControl\", the class's own name: it is BrnSound::Vehicles::Wheels::AIWheelControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685CF8": {
+      "exported_name": "sub_82685CF8",
+      "symbol": "BrnSound::Vehicles::Wheels::RoadnoiseEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F760 (lis/addi r3), whose name pointer (+4) reads \"RoadnoiseEffect\", the class's own name: it is BrnSound::Vehicles::Wheels::RoadnoiseEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685D18": {
+      "exported_name": "sub_82685D18",
+      "symbol": "BrnSound::Vehicles::Wheels::AISkidEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F774 (lis/addi r3), whose name pointer (+4) reads \"AISkidEffect\", the class's own name: it is BrnSound::Vehicles::Wheels::AISkidEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82685D68": {
+      "exported_name": "sub_82685D68",
+      "symbol": "BrnSound::Vehicles::Environment::EnclosureControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F784 (lis/addi r3), whose name pointer (+4) reads \"EnclosureControl\", the class's own name: it is BrnSound::Vehicles::Environment::EnclosureControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826860E8": {
+      "exported_name": "sub_826860E8",
+      "symbol": "BrnSound::Vehicles::Environment::AmbienceEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7A8 (lis/addi r3), whose name pointer (+4) reads \"AmbienceEffect\", the class's own name: it is BrnSound::Vehicles::Environment::AmbienceEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686208": {
+      "exported_name": "sub_82686208",
+      "symbol": "BrnSound::Vehicles::Environment::StaticPassbyControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7B8 (lis/addi r3), whose name pointer (+4) reads \"StaticPassbyControl\", the class's own name: it is BrnSound::Vehicles::Environment::StaticPassbyControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686290": {
+      "exported_name": "sub_82686290",
+      "symbol": "BrnSound::Vehicles::Environment::CrashStreamEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7C8 (lis/addi r3), whose name pointer (+4) reads \"CrashStreamEffect\", the class's own name: it is BrnSound::Vehicles::Environment::CrashStreamEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686318": {
+      "exported_name": "sub_82686318",
+      "symbol": "BrnSound::Vehicles::Environment::SpeedStreamControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7D8 (lis/addi r3), whose name pointer (+4) reads \"SpeedStreamControl\", the class's own name: it is BrnSound::Vehicles::Environment::SpeedStreamControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686338": {
+      "exported_name": "sub_82686338",
+      "symbol": "BrnSound::Vehicles::Environment::SpeedStreamEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7E8 (lis/addi r3), whose name pointer (+4) reads \"SpeedStreamEffect\", the class's own name: it is BrnSound::Vehicles::Environment::SpeedStreamEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686440": {
+      "exported_name": "sub_82686440",
+      "symbol": "BrnSound::Vehicles::Environment::ReverbEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F7F8 (lis/addi r3), whose name pointer (+4) reads \"ReverbEffect\", the class's own name: it is BrnSound::Vehicles::Environment::ReverbEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686510": {
+      "exported_name": "sub_82686510",
+      "symbol": "BrnSound::Vehicles::Environment::CarStereoEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F808 (lis/addi r3), whose name pointer (+4) reads \"CarStereoEffect\", the class's own name: it is BrnSound::Vehicles::Environment::CarStereoEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686688": {
+      "exported_name": "sub_82686688",
+      "symbol": "BrnSound::Logic::World::Emitter3dControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F82C (lis/addi r3), whose name pointer (+4) reads \"Emitter3dControl\", the class's own name: it is BrnSound::Logic::World::Emitter3dControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686818": {
+      "exported_name": "sub_82686818",
+      "symbol": "BrnSound::Logic::MixerControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F87C (lis/addi r3), whose name pointer (+4) reads \"MixerControl\", the class's own name: it is BrnSound::Logic::MixerControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82686C60": {
+      "exported_name": "sub_82686C60",
+      "symbol": "BrnSound::Logic::CameraControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F89C (lis/addi r3), whose name pointer (+4) reads \"CameraControl\", the class's own name: it is BrnSound::Logic::CameraControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82687EC8": {
+      "exported_name": "sub_82687EC8",
+      "symbol": "BrnSound::Logic::SubmixesEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F8DC (lis/addi r3), whose name pointer (+4) reads \"SubmixesEffect\", the class's own name: it is BrnSound::Logic::SubmixesEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82687F58": {
+      "exported_name": "sub_82687F58",
+      "symbol": "BrnSound::Logic::SpeechEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F8EC (lis/addi r3), whose name pointer (+4) reads \"SpeechEffect\", the class's own name: it is BrnSound::Logic::SpeechEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82688038": {
+      "exported_name": "sub_82688038",
+      "symbol": "BrnSound::Logic::Collision::Collision3DControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F90C (lis/addi r3), whose name pointer (+4) reads \"Collision3DControl\", the class's own name: it is BrnSound::Logic::Collision::Collision3DControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826884C0": {
+      "exported_name": "sub_826884C0",
+      "symbol": "BrnSound::Logic::Collision::CollisionControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F92C (lis/addi r3), whose name pointer (+4) reads \"CollisionControl\", the class's own name: it is BrnSound::Logic::Collision::CollisionControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x826885A0": {
+      "exported_name": "sub_826885A0",
+      "symbol": "BrnSound::Logic::Collision::ScrapeEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F93C (lis/addi r3), whose name pointer (+4) reads \"ScrapeEffect\", the class's own name: it is BrnSound::Logic::Collision::ScrapeEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82689008": {
+      "exported_name": "sub_82689008",
+      "symbol": "BrnSound::Logic::Passby::Passby3DControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F97C (lis/addi r3), whose name pointer (+4) reads \"Passby3DControl\", the class's own name: it is BrnSound::Logic::Passby::Passby3DControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x82689028": {
+      "exported_name": "sub_82689028",
+      "symbol": "BrnSound::Logic::Passby::PassbyEffect::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2F98C (lis/addi r3), whose name pointer (+4) reads \"PassbyEffect\", the class's own name: it is BrnSound::Logic::Passby::PassbyEffect::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x8268CEE8": {
+      "exported_name": "sub_8268CEE8",
+      "symbol": "CgsSound::Logic::Cgs3dEffectControl::GetTypeInfo",
+      "size": 12,
+      "evidence": "ARTIST's 12-byte getter returns the static descriptor at 0x82F2FA80 (lis/addi r3), whose name pointer (+4) reads \"Cgs3dEffectControl\", the class's own name: it is CgsSound::Logic::Cgs3dEffectControl::GetTypeInfo, which every sound class defines as `return &sTypeInfo;` (DWARF sTypeInfo static; x360 6ba755c8d)."
+    },
+    "0x8246D158": {
+      "exported_name": "sub_8246D158",
+      "symbol": "BrnFlapt::TextFieldRef::SetLocalisedText",
+      "size": 344,
+      "evidence": "Unnamed 0x8246D158 (344 B) is the five-argument overload TextFieldRef::SetLocalisedText(const char* lpcStringId, s32 liStringIdType, s32 liNumParams, const char* const* lppcParams, const s32* lpeParamFormatTypes) (DWARF BrnFlaptTextFieldRef.h:54): its two streamed asserts name it, 'Text field is invalid in TextField::SetLocalisedText' (0x8205944C, BrnFlaptTextFieldRef.cpp:221) and 'Wrong number of Parameters int SetLocalisedText' (0x82059484, cpp:222), then TextFieldRef::GetLanguageManager, LanguageManager::Obsolete_FormatTextByArray and TextFieldRef::SetText, the same chain as the named overloads 0x8246CD00/0x8246CE38/0x8246CF18. Its four ARTIST callers pass (field, id, 9, count, params, formats): OnlineInviteMessageComponent::ShowMessage 0x82415F18, InGameMessagesComponent::RefreshString, JunctionInfoComponent::SetEventNameText, BaseOverlayState::SetupOverlay; our tree defines the overload in BrnFlaptTextFieldRef.cpp (not yet byte-exact: validate_aliases nonmatching), so naming it turns those callers' unverified call into a checked one (gui lane, agent 6)."
+    },
+    "0x824EB720": {
+      "exported_name": "sub_824EB720",
+      "symbol": "BrnGui::GuiHudMessage::AddParam",
+      "size": 552,
+      "evidence": "Unnamed 0x824EB720 (552 B) is the float overload GuiHudMessage::AddParam(HudMessageParamTypes, s32 liStringIndex, f32 lfValue): the streamed assert 'Invalid string index.' on liStringIndex > 2 carries BrnGuiEventTypeDefs.h:7333 (the int overload 0x824EB508, already named, asserts the same text at h:7300; the const char* overload is the named 0x824EB2C8), and its only two callers, HudMessageAnalyzer::HandleLeaderPassedMileBoundary 0x8251C2F0 and HandleLeaderPassedKMBoundary, pass (message, 3 = E_HUDMESSAGEPARAMTYPES_FLOAT, 0, f1 = distance * conversion). Our BrnGuiEventTypeDefs.cpp defines the three overloads; naming it lets those two callers (90.5 each) pair the call (gui lane, agent 6)."
+    },
+    "0x824E2B90": {
+      "exported_name": "sub_824E2B90",
+      "symbol": "BrnGui::IconComponent::SetState",
+      "size": 116,
+      "evidence": "Unnamed 0x824E2B90 (116 B) is IconComponent::SetState(const char*) (DWARF BrnIcon.h:24, the overload beside SetState(uint32_t) 0x824E2B60): plain assert 'lStateIdentifier != NULL' (0x8206BDB4) at BrnIcon.cpp:85 (file string 0x8206BDD0), then GuiComponent::AddOutputAptViewState(this, \"apt_state\" (0x8206B9FC), lStateIdentifier, false) (0x8285BB48). 56 ARTIST callers (DriveThruMapPanel, RivalMapPanel, EventPanel, RoadPanel::TransitionIn/Out, LicenseComponent::SetRank, ...) pass (component, state string). Our SetState(const char*) in BrnIcon.cpp is byte-exact once its assert carries cpp:85 (gui lane batch 3, symbol ?SetState@IconComponent@BrnGui@@QAAXPBD@Z; checked with a direct compare of the compiled object against 0x824E2B90: exact, 116 B)."
+    },
+    "0x82BBF898": {
+      "exported_name": null,
+      "symbol": "rw::core::filesys::Handle::Handle",
+      "size": 472,
+      "evidence": "AsyncOp::DoOpen 0x82BBFACC calls it on the 0x28-byte block it just allocated through the filesys allocator (sizeof(Handle) == 0x28), passing the path copy (+0x30), the open flags (+0x24) and the op's device (+0x40), and stores the result as the op's file handle (+0x10) -- the `new (storage) Handle(path, flags, device)` of DoOpen. The body walks the Manager's search paths, opens through the device driver's Open slot and fills the Handle fields at +4..+0x20 exactly as our Handle::Handle does; our 472-byte Handle::Handle scores 84.7 against it (register allocation only). Size 0x82BBF898..0x82BBFA70."
+    },
+    "0x82BCBA40": {
+      "exported_name": null,
+      "symbol": "EA::Jobs::LocalBackend::LocalBackend::RequestEnd",
+      "size": 60,
+      "evidence": "LocalBackend vtable 0x82182500 slot +0x14 (read with x360rd: 0x82182514 -> 0x82BCBA40), the SchedulerBackend RequestEnd slot between AddThread (+0x10, 0x82BCA6C0) and WaitForEnd (+0x18, 0x82BCA738), both named. PS3 DecFIGS mangles the same member as LocalBackend::RequestEnd(JobThreadHandle) (_ZN2EA4Jobs12LocalBackend12LocalBackend10RequestEndENS0_15JobThreadHandleE). The body spills the by-value JobThreadHandle and reads its index word (std r4,0x78(r1); lwz r11,0x7c(r1)) exactly as WaitForEnd 0x82BCA738 does, then sets the indexed worker's quit byte (+0x1d) and SetEvent's its wake event (+0x3c), which is our LocalBackend::RequestEnd."
+    },
+    "0x82BCA7B8": {
+      "exported_name": null,
+      "symbol": "EA::Jobs::LocalBackend::LocalBackend::AddBarrier",
+      "size": 192,
+      "evidence": "LocalBackend vtable 0x82182500 slot +0x38 (0x82182538 -> 0x82BCA7B8), between AddEvent (+0x34, 0x82BCC1D8) and SleepOn (+0x3C, 0x82BCBA80), both named; JobInstanceHandle::AddBarrier 0x82BC9A50 dispatches slot +0x38 with the Event return buffer in r3 and the by-value JobInstanceHandle in r5:r6. PS3 DecFIGS mangles LocalBackend::AddBarrier(JobInstanceHandle) (_ZN2EA4Jobs12LocalBackend12LocalBackend10AddBarrierENS0_17JobInstanceHandleE). The body resolves the instance slot, calls GetEnabler through slot +0x2C, increments the instance's barrier count and fills the returned write Event (type 1, value, location, decrementer = &count), which is our LocalBackend::AddBarrier."
     }
   },
   "native_leaf_functions": {
