@@ -21275,6 +21275,41 @@
       "byte_match": false,
       "evidence": "IDA truncates the name to `...GameStateToNetworkInterface::GetActiveRa` (universe row 82542190). Our GetActiveRaceCarIndex(NetworkPlayerID) const is exact at the address (assert lNetworkPlayerID != CgsNetwork::K_INVALID_PLAYER_ID at BrnNetworkModuleGameStateIOInterfaces.h:495, li r5,0x1EF @0x825421BC; the 8-row mapping search). 16 callers call 0x82542190 where ours calls this method, 3 of them otherwise identical: BrnNetworkManager::GetActiveRaceCarIndex 0x825822A0, LiveRevengeManager::NetworkPlayerIDToActiveRaceCarIndex 0x82547778, BrnNetworkPlayer::_ActiveFreeburnChallengeMessageArrivedCallback 0x825943D0; others: OutputPlayerStatusInfo 0x82596018, PlayerManagerEventCallback 0x82599430, UpdateMenuDataFromPlayerParams 0x825959F0, HandleSendingUpdateMessage 0x8258E9F0, TellNetworkCarAboutRecievedUpdateMessage 0x82596DD8, UpdatePaybacksData 0x8255FC38, NetworkAggressiveDrivingManager::HandleReceivingMessages 0x825703C0, NetworkDirtyTrickManager::ReceiveDirtyTrickMessage 0x8255BAC8, NetworkImageManager::ReceiveImageMessage 0x825732A8, StateManager::OutputPlayerTexture 0x82569588, TrafficManager::ReceiveCrashingTrafficMessages 0x8255EEE0 / _HullSyncMessageArrivedCallback 0x825592E8 / _RestartTrafficMessageArrivedCallback 0x82551838. (Landed as name evidence: the conductor's compiled objects predated the lane's later commits at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnPhysics::Vehicle::PhysicalTrafficVehicle::GetFullTraffic": {
+      "symbol": "BrnPhysics::Vehicle::PhysicalTrafficVehicle::GetFullTrafficPhysics",
+      "file": "GameSource/Physics/VehicleManager/BrnPhysicalTrafficManager.cpp",
+      "x360_address": "0x825C0148",
+      "byte_match": true,
+      "evidence": "IDA truncated the name to \"PhysicalTrafficVehicle::GetFullTraffic\". DWARF BrnPhysicalTrafficVehicle.h:187 declares `TrafficPhysics* GetFullTrafficPhysics()` (the const overload is h:191); the body asserts \"IsFullyPhysical()\" on BrnPhysicalTrafficVehicle.h:391 (string 0x82093364, file 0x82090130) after the inlined IsFullyPhysical's h:382 range assert and returns mpVehicleBody (lwz 0x1C) as a non-const pointer, which its callers PreparePhysical 0x82641058 (then TrafficPhysics::PreparePhysical), AddAirRam 0x826152E0 and Update 0x826411C0 (then UpdateFreezing / TrafficPhysics::Update) use mutably. Our GetFullTrafficPhysics compares exact against 0x825C0148 (msgs/physnd_cmp.py: exact 100.0, 112 B, calls_wrong=[]); with the name PreparePhysical (360 B), AddAirRam (192 B) and Update (252 B) are exact apart from this call (x360 bm-physnd round 2 agent 5)."
+    },
+    "BrnReplays::PropSerialiserF": {
+      "symbol": "BrnReplays::BrnReplayArray<BrnReplays::PropLoadedZoneRecord,9,BrnReplays::DefaultAreDifferentFunctor<BrnReplays::PropLoadedZoneRecord>>::operator[]",
+      "x360_address": "0x822AA058",
+      "byte_match": true,
+      "evidence": "IDA name truncated to 'BrnReplays::PropSerialiserF'. Count byte at +0x5E8 (9 x 0xA8-byte records), mulli 0xA8. BrnReplayArray.h's non-const operator[] streams its h:93 assert as ARTIST does (\"Array index out of bounds: \" 0x820058EC << index << \" Length: \" 0x82017DF4 << muLength << \"\n\", file 0x82017DC4, li r5,0x5D); all eight ARTIST copies 0x822AA058/250/348/4C0/638/7B0/928/AAA0 carry that assert and none is const. Measured with msgs/net_cmpaddr.py <source> operator[] <addr> in the state tree (x360 bd244489d + this round's local work). Callers that call 0x822AA058 where ours calls this accessor, otherwise instruction-identical: PropSerialiserFrame::GetZone 0x822BBBB8 (2 sites), PropSerialiserFrame::RemoveLoadedZone 0x822BBB10.",
+      "file": "GameSource/Replays/Array_PropLoadedZoneRecord_9_operator_index.cpp"
+    },
+    "BrnReplays::DefaultAreDifferentFunc": {
+      "symbol": "BrnReplays::BrnReplayArray<unsigned int,4,BrnReplays::DefaultAreDifferentFunctor<unsigned int>>::operator[]",
+      "x360_address": "0x822AA250",
+      "byte_match": true,
+      "evidence": "IDA name truncated to 'BrnReplays::DefaultAreDifferentFunc'. Count byte at +0x10, slwi 2. BrnReplayArray.h's non-const operator[] streams its h:93 assert as ARTIST does (\"Array index out of bounds: \" 0x820058EC << index << \" Length: \" 0x82017DF4 << muLength << \"\n\", file 0x82017DC4, li r5,0x5D); all eight ARTIST copies 0x822AA058/250/348/4C0/638/7B0/928/AAA0 carry that assert and none is const. Measured with msgs/net_cmpaddr.py <source> operator[] <addr> in the state tree (x360 bd244489d + this round's local work). Caller: PropSerialiserFrame::IsCellActive 0x822BBDA0 (instruction-identical otherwise).",
+      "file": "GameSource/Replays/Array_u32_4_operator_index.cpp"
+    },
+    "BrnReplays::DefaultAreDiffere": {
+      "symbol": "BrnReplays::BrnReplayArray<unsigned short,254,BrnReplays::DefaultAreDifferentFunctor<unsigned short>>::operator[]",
+      "x360_address": "0x822AA638",
+      "byte_match": true,
+      "evidence": "IDA name truncated to 'BrnReplays::DefaultAreDiffere'. Count byte at +0x1FC, slwi 1. BrnReplayArray.h's non-const operator[] streams its h:93 assert as ARTIST does (\"Array index out of bounds: \" 0x820058EC << index << \" Length: \" 0x82017DF4 << muLength << \"\n\", file 0x82017DC4, li r5,0x5D); all eight ARTIST copies 0x822AA058/250/348/4C0/638/7B0/928/AAA0 carry that assert and none is const. Measured with msgs/net_cmpaddr.py <source> operator[] <addr> in the state tree (x360 bd244489d + this round's local work). Callers per the source banner: BrnWorld::PropEntityModule::ReplayUpdatePropsInScene / RenderReplayProp (world lane).",
+      "file": "GameSource/Replays/Array_u16_254_operator_index.cpp"
+    },
+    "AptRenderTreeManager::_AptRenderItemRootLi": {
+      "symbol": "AptRenderTreeManager::_AptRenderItemRootList::Create",
+      "x360_address": "0x82AE1B78",
+      "byte_match": false,
+      "evidence": "IDA truncated the demangled name after the class prefix. The body allocates an 8-byte cell from the shared Apt pool (off_8324D808, DOGMA_PoolManager::Allocate 0x82AE1B98), zeroes it on a non-null block, takes an atomic reference on the item passed in r3 (+0x24) and stores {item, 0}: a static factory with no `this`, not a constructor. Its only caller is AptRenderTreeManager::Update_SetRootItem 0x82AE5598 (`bl 0x82AE1B78; stw r3,0(r31)`: the new head cell). Our static _AptRenderItemRootList::Create (src/SDKs/EATech/include/Apt/AptRenderTreeManager.cpp, via BB_runtime.Apt.cpp) is exact against 0x82AE1B78 (124 B) with the ledger comparator. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 4e2a2590d at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -34028,7 +34063,7 @@
       "exported_name": null,
       "symbol": "BrnReplays::TrafficEntitySerialiser::GetStaticLayout",
       "size": 212,
-      "evidence": "0x82707090 (212 bytes, an export hole) is instruction for instruction the body of ARTIST's named BrnReplays::TrafficEntitySerialiser::GetStaticLayout 0x8264C710: static buffer size at +0x24 compared with 0x2D480, buffer at +0x20 non-null, asserts on lines 0x1AE/0x1AF (430/431). Only the assert file string differs: 0x820BB268 is the traffic unity TU's relative include spelling `..\\..\\GameSource\\Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h`, 0x8209E020 the absolute path of the same header. So it is the out-of-line copy of a header-inline accessor emitted in the traffic TU (not foldable because the path strings differ). Its caller TrafficEntityModule::AddVehiclesToTargetList 0x8272261C calls it on mTrafficEntitySerialiser (this+0x724C0) and reads the player hull at +0x94; our source calls mTrafficEntitySerialiser.GetStaticLayout() there. Byte-matching it needs GetStaticLayout moved header-inline in BrnReplayTrafficEntitySerialiser.h (Replays, not the world lane's file)."
+      "evidence": "Unnamed 212-byte function 0x82707090, called by TrafficEntityModule::AddVehiclesToTargetList 0x8272261C on mTrafficEntitySerialiser (this+0x724C0), which then reads the static layout's player hull at +0x94. Its body equals the named BrnReplays::TrafficEntitySerialiser::GetStaticLayout 0x8264C710 except for the assert locations: same static buffer pointer (+0x20) and size test against 0x2D480 (+0x24), but asserts on BrnReplayTrafficEntitySerialiser.h lines 0x1AE/0x1AF (430/431; file string 0x820BB268, the traffic unity TU's relative include spelling) where 0x8264C710 asserts on 0x1A6/0x1A7 (422/423; 0x8209E020). Two definitions eight lines apart with one body over the same fields are the header's non-const/const GetStaticLayout overload pair; which of the two this is is not attested (the header has no DWARF dump), so the identity holds the normalised name only (world lane CR-17; lines corrected by the conductor from the state lane's reading)."
     },
     "0x8276B998": {
       "exported_name": null,
