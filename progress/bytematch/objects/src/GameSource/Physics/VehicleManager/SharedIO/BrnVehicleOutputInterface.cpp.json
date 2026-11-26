@@ -1,18 +1,18 @@
 {
  "blob": "f948e47037a469c54dfe09efa06f05e676b3024c",
- "commit": "a15d3753b55a17fce9583166d030ccb16f3f1a42",
+ "commit": "bc88b6a48221f3ebfe5491b087ef87bf7561d4b3",
  "compiled": true,
- "measured": "2026-11-26T19:06:32Z",
+ "measured": "2026-11-26T20:50:40Z",
  "schema": 1,
  "source": "src/GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 107,
+ "unpaired": 121,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "821F0158", "artist_size": 80, "data_unchecked": 2, "name": "CgsDev::StrStream::StrStream", "score": 100.0, "size": 80, "status": "exact", "symbol": "??0StrStream@CgsDev@@QAA@PADH@Z"},
   {"artist": "821F01A8", "artist_size": 88, "data_unchecked": 1, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 88, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@PBD@Z"},
-  {"artist": "821F0DA0", "artist_size": 16, "first_diff": 0, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 33.3, "size": 8, "status": "nonmatching", "symbol": "??0VecFloat@vpu@math@rw@@QAA@U__vector4@@@Z"},
+  {"artist": "821F0DA0", "artist_size": 16, "name": "rw::math::vpu::VecFloat::VecFloat", "score": 100.0, "size": 16, "status": "exact", "symbol": "??0VecFloat@vpu@math@rw@@QAA@ABM@Z"},
   {"artist": "821F0E50", "artist_size": 116, "data_unchecked": 2, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 116, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@H@Z"},
   {"artist": "821F0EC8", "artist_size": 116, "data_unchecked": 2, "name": "CgsDev::StrStreamBase::operator<<", "score": 100.0, "size": 116, "status": "exact", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@I@Z"},
   {"artist": "821F0F40", "artist_size": 128, "first_diff": 0, "name": "CgsDev::StrStreamBase::operator<<", "score": 5.9, "size": 8, "status": "nonmatching", "symbol": "??6StrStreamBase@CgsDev@@QAAAAU01@W4PrintMode@1@@Z"},
@@ -61,11 +61,12 @@
   {"artist": "825A7DC8", "artist_size": 112, "data_unchecked": 2, "name": "CgsModule::EventQueue<CgsPhysics::PhysicsSimulationIO::InRemoveJoint,10>::Construct", "score": 100.0, "size": 112, "status": "exact", "symbol": "?Construct@?$EventQueue@VInRemoveJoint@PhysicsSimulationIO@CgsPhysics@@$09@CgsModule@@QAAXXZ"},
   {"artist": "825A8908", "artist_size": 884, "data_unchecked": 19, "name": "CgsModule::VariableEventQueue<13440,16>::OutputQueueContents", "score": 100.0, "size": 884, "status": "exact", "symbol": "?OutputQueueContents@?$VariableEventQueue@$0DEIA@$0BA@@CgsModule@@QBAXXZ"},
   {"artist": "825AC068", "artist_size": 412, "data_unchecked": 17, "name": "CgsModule::VariableEventQueue<13440,16>::Append<13440,16>", "score": 100.0, "size": 412, "status": "exact", "symbol": "??$Append@$0DEIA@$0BA@@?$VariableEventQueue@$0DEIA@$0BA@@CgsModule@@QAA_NABV01@@Z"},
+  {"artist": "825B2620", "artist_size": 8, "name": "rw::math::vpu::operator+", "score": 100.0, "size": 8, "status": "exact", "symbol": "??Hvpu@math@rw@@YA?AVVecFloat@012@V3012@0@Z"},
   {"artist": "825C08D0", "artist_size": 300, "data_unchecked": 10, "name": "BrnPhysics::Vehicle::VehicleOutputInterface::GetRaceCarState", "score": 100.0, "size": 300, "status": "exact", "symbol": "?GetRaceCarState@VehicleOutputInterface@Vehicle@BrnPhysics@@QAAPAURaceCarState@23@H@Z"},
   {"artist": "825E40C0", "artist_size": 328, "data_unchecked": 10, "name": "CgsModule::BaseEventQueue<CgsPhysics::PhysicsSimulationIO::InAddJoint>::AddEvent", "score": 100.0, "size": 328, "status": "exact", "symbol": "?AddEvent@?$BaseEventQueue@VInAddJoint@PhysicsSimulationIO@CgsPhysics@@@CgsModule@@QAA_NABVInAddJoint@PhysicsSimulationIO@CgsPhysics@@@Z"},
   {"artist": "825E5010", "artist_size": 164, "data_unchecked": 3, "name": "CgsModule::BaseEventQueue<BrnPhysics::Vehicle::PhysicalTrafficState>::AllocateEvent", "score": 100.0, "size": 164, "status": "exact", "symbol": "?AllocateEvent@?$BaseEventQueue@UPhysicalTrafficState@Vehicle@BrnPhysics@@@CgsModule@@QAAPAUPhysicalTrafficState@Vehicle@BrnPhysics@@XZ"},
   {"artist": "825E7170", "artist_size": 212, "first_diff": 16, "name": "BrnPhysics::Vehicle::VehicleOutputRequestInterface::AddJoint", "score": 76.8, "size": 184, "status": "nonmatching", "symbol": "?AddJoint@VehicleOutputRequestInterface@Vehicle@BrnPhysics@@QAAXABVInAddJoint@PhysicsSimulationIO@CgsPhysics@@@Z"},
-  {"artist": "825EC390", "artist_size": 1140, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleOutputInterface::AddTrafficState", "score": 10.8, "size": 860, "status": "nonmatching", "symbol": "?AddTrafficState@VehicleOutputInterface@Vehicle@BrnPhysics@@QAAXUEntityId@@PBUPhysicalTrafficVehicle@23@@Z"},
+  {"artist": "825EC390", "artist_size": 1140, "first_diff": 8, "name": "BrnPhysics::Vehicle::VehicleOutputInterface::AddTrafficState", "score": 11.0, "size": 1048, "status": "nonmatching", "symbol": "?AddTrafficState@VehicleOutputInterface@Vehicle@BrnPhysics@@QAAXUEntityId@@PBUPhysicalTrafficVehicle@23@@Z"},
   {"artist": "82815E68", "artist_size": 20, "name": "CgsDev::StrStream::Reset", "score": 100.0, "size": 20, "status": "exact", "symbol": "?Reset@StrStream@CgsDev@@UAAXXZ"}
  ]
 }

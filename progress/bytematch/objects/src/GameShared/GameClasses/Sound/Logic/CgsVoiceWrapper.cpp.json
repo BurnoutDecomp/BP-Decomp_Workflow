@@ -1,13 +1,13 @@
 {
- "blob": "b428bc62ee72d762b0bd7aaa41c9f4c79cf43172",
- "commit": "a15d3753b55a17fce9583166d030ccb16f3f1a42",
+ "blob": "ed610d834ea45e4af1e9f3a527c4cbcfe3bd96c0",
+ "commit": "bc88b6a48221f3ebfe5491b087ef87bf7561d4b3",
  "compiled": true,
- "measured": "2026-11-26T19:06:32Z",
+ "measured": "2026-11-26T20:50:40Z",
  "schema": 1,
  "source": "src/GameShared/GameClasses/Sound/Logic/CgsVoiceWrapper.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 22,
+ "unpaired": 27,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "82680938", "artist_size": 120, "data_unchecked": 2, "name": "CgsSound::Playback::Object::Release", "score": 100.0, "size": 120, "status": "exact", "symbol": "?Release@Object@Playback@CgsSound@@QAAXXZ"},
@@ -16,11 +16,12 @@
   {"artist": "826A7070", "artist_size": 104, "name": "CgsSound::Playback::Handle<CgsSound::Playback::Content>::operator=", "score": 100.0, "size": 104, "status": "exact", "symbol": "??4?$Handle@UContent@Playback@CgsSound@@@Playback@CgsSound@@QAAAAU012@ABU012@@Z"},
   {"artist": "826C5218", "artist_size": 88, "name": "CgsSound::Logic::VoiceWrapper::GetGain", "score": 100.0, "size": 88, "status": "exact", "symbol": "?GetGain@VoiceWrapper@Logic@CgsSound@@QBAMPBH@Z"},
   {"artist": "826C5270", "artist_size": 184, "name": "CgsSound::Logic::VoiceWrapper::Release", "score": 100.0, "size": 184, "status": "exact", "symbol": "?Release@VoiceWrapper@Logic@CgsSound@@QAAXXZ"},
-  {"artist": "826C7E80", "artist_size": 116, "first_diff": 36, "name": "CgsSound::Logic::VoiceWrapper::~VoiceWrapper", "score": 62.2, "size": 64, "status": "nonmatching", "symbol": "??1VoiceWrapper@Logic@CgsSound@@UAA@XZ"},
+  {"artist": "826C7E80", "artist_size": 116, "first_diff": 52, "name": "CgsSound::Logic::VoiceWrapper::~VoiceWrapper", "score": 80.8, "size": 92, "status": "nonmatching", "symbol": "??1VoiceWrapper@Logic@CgsSound@@UAA@XZ"},
+  {"artist": "826DC3E0", "artist_size": 232, "first_diff": 8, "name": "CgsSound::Logic::Voice::Construct", "score": 7.7, "size": 80, "status": "nonmatching", "symbol": "?Construct@Voice@Logic@CgsSound@@QAAXPAVModule@23@II@Z"},
   {"artist": "826DC570", "artist_size": 108, "name": "CgsSound::Logic::VoiceWrapper::Stop", "score": 100.0, "size": 108, "status": "exact", "symbol": "?Stop@VoiceWrapper@Logic@CgsSound@@QAAXXZ"},
   {"artist": "826DC5E0", "artist_size": 596, "first_diff": 4, "name": "CgsSound::Logic::VoiceWrapper::Update", "score": 64.0, "size": 504, "status": "nonmatching", "symbol": "?Update@VoiceWrapper@Logic@CgsSound@@QAAXXZ"},
-  {"artist": "826E0B88", "artist_size": 132, "first_diff": 16, "name": "CgsSound::Logic::VoiceWrapper::`scalar deleting destructor'", "score": 44.8, "size": 100, "status": "nonmatching", "symbol": "??_GVoiceWrapper@Logic@CgsSound@@UAAPAXI@Z"},
-  {"artist": "826EAEB0", "artist_size": 472, "first_diff": 36, "name": "CgsSound::Logic::VoiceWrapper::Create", "score": 42.8, "size": 500, "status": "nonmatching", "symbol": "?Create@VoiceWrapper@Logic@CgsSound@@QAAXABUCreateParams@123@@Z"},
+  {"artist": "826E0B88", "artist_size": 132, "first_diff": 20, "name": "CgsSound::Logic::VoiceWrapper::`scalar deleting destructor'", "score": 71.8, "size": 180, "status": "nonmatching", "symbol": "??_GVoiceWrapper@Logic@CgsSound@@UAAPAXI@Z"},
+  {"artist": "826EAEB0", "artist_size": 472, "calls_wrong": [{"artist": "CgsSound::Playback::Module::Module:", "at": 276, "ours": "CgsSound::Playback::Module::Module::CreateContent"}], "data_unchecked": 8, "first_diff": 276, "name": "CgsSound::Logic::VoiceWrapper::Create", "score": 99.2, "size": 472, "status": "nonmatching", "symbol": "?Create@VoiceWrapper@Logic@CgsSound@@QAAXABUCreateParams@123@@Z"},
   {"artist": "826EB088", "artist_size": 120, "data_unchecked": 2, "name": "CgsSound::Logic::VoiceWrapper::Play", "score": 100.0, "size": 120, "status": "exact", "symbol": "?Play@VoiceWrapper@Logic@CgsSound@@QAAXI@Z"}
  ]
 }
