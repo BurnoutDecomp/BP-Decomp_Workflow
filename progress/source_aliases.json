@@ -1514,6 +1514,16 @@
       "call_evidence": {
         "RealmcCore::Message::~Message": "Our RealmcCore::Message::~Message is exact at the address; the scalar deleting destructors of RealmcIface::MessageBootupDone 0x82B55240 and MessageCheckLoadedData 0x82B56E98 call 0x82C44D78 where ours calls it."
       }
+    },
+    "0x82B0F1B8": {
+      "exported_name": "MassiveAdClient3::CMassiveAdObject::GetBestImpression",
+      "evidence": "ICF fold of a `return 0` body: 0x82B0F1B8 is exactly `li r3,0; blr` (8 B). ARTIST CgsNetwork::BuddyManagerBase::IsBuddyBlocked 0x8287D5A8 calls it at 0x8287D5CC with r3 = the HLBListGetBuddyByName result, where our IsBuddyBlocked (CgsBuddyManagerDirtySock.cpp, unity CgsNetworkUnity.cpp) calls HLBBudIsBlocked; the X360 hlbudapi.c HLBBudIsBlocked returns 0 and is byte-identical to 0x82B0F1B8 (net_cmpaddr: exact 100.0, 8 B). D7 condition met: an ARTIST caller lands on the shared address where our counterpart names the folded function.",
+      "aliases": {
+        "HLBBudIsBlocked": "vendor/dirtysdk/src/x360/hlbudapi.c"
+      },
+      "call_evidence": {
+        "HLBBudIsBlocked": "ARTIST CgsNetwork::BuddyManagerBase::IsBuddyBlocked 0x8287D5A8 calls 0x82B0F1B8 at 0x8287D5CC where our IsBuddyBlocked calls HLBBudIsBlocked; HLBBudIsBlocked's `return 0` body is byte-identical to 0x82B0F1B8 (li r3,0; blr)."
+      }
     }
   },
   "xdk_functions": {
@@ -21681,6 +21691,152 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "ARTIST's name for 0x826E78A8 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~PresentationEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::PresentationEffect in BrnSoundUnity.cpp is byte-exact against 0x826E78A8, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSou": {
+      "symbol": "BrnSound::Module::Io::RootInputBuffer::GetAudioCarLoadedDataQueue",
+      "file": "GameSource/Sound/Module/BrnRootSoundModuleIO.cpp",
+      "x360_address": "0x823B80F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name to 'BrnSou'. Write-lock streamed assert at line 0xBA = 186, file 0x820370E0 '..\\..\\..\\GameSource\\Sound/Module/BrnRootSoundModuleIo.h'; DWARF BrnRootSoundModuleIo.h:186 declares RootInputBuffer::GetAudioCarLoadedDataQueue() (non-const; :185 is the const twin). The tree spelled it GetAudioCarDataLoadedQueue; the state lane renames it to the DWARF name in the same landing (sound files claimed). Called by BridgeWorldToSound 0x823CD648; its result is the Append destination. Native body exact (168 B). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)"
+    },
+    "??$FactoryNew@VGenericRwacWaveContent@Playback@CgsSound@@VContentSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handle@VG": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::GenericRwacWaveContent,CgsSound::Playback::ContentSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DD6F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826DD6F8 (196 B) is IDA's truncated raw MSVC decoration of Factory::FactoryNew<GenericRwacWaveContent,ContentSpec,unsigned int>(const ContentSpec&, const unsigned int&) (protected member template, DWARF CgsFactory.h:195). Its only caller GenericRwacFactory::DoCreateContent 0x826E9990 (248 B, BrnSoundUnity) is byte-identical to ours apart from this call and the ReverbIR one (bl 0x826dd6f8 at 0x826E99D8), x360 physnd round 2 agent 10. Our FactoryNew copy differs only by the out-of-line BaseResourcePtr constructor (ARTIST inlines it)."
+    },
+    "??$FactoryNew@VGenericRwacReverbIRContent@Playback@CgsSound@@VContentSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handl": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::GenericRwacReverbIRContent,CgsSound::Playback::ContentSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DD7C0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (196 B) of Factory::FactoryNew<GenericRwacReverbIRContent,ContentSpec,unsigned int> (DWARF CgsFactory.h:195). Called by GenericRwacFactory::DoCreateContent 0x826E9A28, which is byte-identical to ours apart from the two FactoryNew call names, x360 physnd round 2 agent 10."
+    },
+    "??$FactoryNew@VCsisContent@Playback@CgsSound@@VContentSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handle@VCsisContent@": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::CsisContent,CgsSound::Playback::ContentSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DD888",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (200 B) of Factory::FactoryNew<CsisContent,ContentSpec,unsigned int> (DWARF CgsFactory.h:195). Called by AemsFactory::DoCreateContent 0x826E9BE0, which is byte-identical to ours apart from this call and the AemsContent instance (sub_826DD950), x360 physnd round 2 agent 10."
+    },
+    "??$FactoryNew@VSplicerContent@Playback@CgsSound@@VContentSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handle@VSplicerCo": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::SplicerContent,CgsSound::Playback::ContentSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DDA18",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (220 B) of Factory::FactoryNew<SplicerContent,ContentSpec,unsigned int> (DWARF CgsFactory.h:195, the BrnSoundUnity DWARF of SplicerFactory::DoCreateContent lists it). Called by SplicerFactory::DoCreateContent 0x826E9CF0 after the SplicerContent::SK_CONTENT_TYPE assert, x360 physnd round 2 agent 10."
+    },
+    "??$FactoryNew@VGenericRwacSubmixVoice@Playback@CgsSound@@VVoiceSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handle@VGen": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::GenericRwacSubmixVoice,CgsSound::Playback::VoiceSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DFDA0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (152 B) of Factory::FactoryNew<GenericRwacSubmixVoice,VoiceSpec,unsigned int> (DWARF CgsFactory.h:195). Our BrnSoundUnity copy is byte-exact against 0x826DFDA0 (physnd_multi/compare exact 100.0, 152 B), and its caller CreateVoiceInternal<GenericRwacSubmixVoice> 0x826EB5F0 is byte-identical to ours apart from this call name, x360 physnd round 2 agent 10. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)"
+    },
+    "??$FactoryNew@VGenericRwacMasterVoice@Playback@CgsSound@@VVoiceSpec@23@I@Factory@Playback@CgsSound@@IAA?AV?$Handle@VGen": {
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::GenericRwacMasterVoice,CgsSound::Playback::VoiceSpec,unsigned int>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DFE38",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (148 B) of Factory::FactoryNew<GenericRwacMasterVoice,VoiceSpec,unsigned int> (DWARF CgsFactory.h:195). Our BrnSoundUnity copy is byte-exact against 0x826DFE38 (exact 100.0, 148 B); its caller CreateVoiceInternal<GenericRwacMasterVoice> 0x826EB6B8 is byte-identical to ours apart from this call name, x360 physnd round 2 agent 10. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)"
+    },
+    "??$CreateVoiceInternal@VGenericRwacPlayerVoice@Playback@CgsSound@@@GenericRwacFactory@Playback@CgsSound@@AAA?AV?$Handle": {
+      "symbol": "CgsSound::Playback::GenericRwacFactory::CreateVoiceInternal<CgsSound::Playback::GenericRwacPlayerVoice>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826EB528",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (200 B) of the private member template GenericRwacFactory::CreateVoiceInternal<GenericRwacPlayerVoice>(const VoiceSpec&, uint32_t) (DWARF CgsGenericRwacFactory.h:949, locals lhVoice :951 / lBaseVoice :958). Our BrnSoundUnity copy is byte-exact against 0x826EB528 (exact 100.0, 200 B). Called by GenericRwacFactory::DoCreateVoice 0x826FA538 (sub_826FA468), x360 physnd round 2 agent 10. (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)"
+    },
+    "??$CreateVoiceInternal@VGenericRwacSubmixVoice@Playback@CgsSound@@@GenericRwacFactory@Playback@CgsSound@@AAA?AV?$Handle": {
+      "symbol": "CgsSound::Playback::GenericRwacFactory::CreateVoiceInternal<CgsSound::Playback::GenericRwacSubmixVoice>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826EB5F0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (200 B) of GenericRwacFactory::CreateVoiceInternal<GenericRwacSubmixVoice> (DWARF CgsGenericRwacFactory.h:949). Byte-identical to ours apart from the call to the truncated FactoryNew<GenericRwacSubmixVoice> 0x826DFDA0 (requested above); called by GenericRwacFactory::DoCreateVoice 0x826FA510, x360 physnd round 2 agent 10."
+    },
+    "??$CreateVoiceInternal@VGenericRwacMasterVoice@Playback@CgsSound@@@GenericRwacFactory@Playback@CgsSound@@AAA?AV?$Handle": {
+      "symbol": "CgsSound::Playback::GenericRwacFactory::CreateVoiceInternal<CgsSound::Playback::GenericRwacMasterVoice>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826EB6B8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated raw decoration (200 B) of GenericRwacFactory::CreateVoiceInternal<GenericRwacMasterVoice> (DWARF CgsGenericRwacFactory.h:949). Byte-identical to ours apart from the call to the truncated FactoryNew<GenericRwacMasterVoice> 0x826DFE38 (requested above); called by GenericRwacFactory::DoCreateVoice 0x826FA4E8, x360 physnd round 2 agent 10."
+    },
+    "BrnEffects::BloomData>::Add": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::BloomData>::Add",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6810",
+      "byte_match": true,
+      "evidence": "IDA truncated the template symbol. DecFIGS BrnPfxHookBlender.h:60/:69 declares PfxContainer<T>::Add(const T*, float); _compile/BrnGuiUnity.cpp lists PfxContainer<BrnEffects::BloomData>::Add with BloomData::SetToBlend inlined; PS3 0x5ABDE4 _ZN6BrnGui12PfxContainerIN10BrnEffects9BloomDataEE3AddEPKS2_f has the same 'lfWeight <= 1.0f' assert at BrnPfxHookBlender.cpp:84 as ARTIST (0x824F6870 li r5,0x54). Our x360 body (BrnPfxHookBlender.cpp, with BrnEffectsData.h's header-inline 2-way SetToBlend and the sdk lane's Vector4 x float operator) matches all 344 bytes. Callers PFXHookNodeBlender::Update 0x824FB7AC, EffectsArbitrator::GenerateEffectFrameEvents."
+    },
+    "BrnEffects::VignetteData>::Construct": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::VignetteData>::Construct",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6968",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:64 PfxContainer<T>::Construct; _compile/BrnGuiUnity.cpp lists PfxContainer<BrnEffects::VignetteData>::Construct calling VignetteData::Construct. Our x360 body (BrnPfxHookBlender.cpp) matches all 124 bytes (VignetteData::Construct stores, then mfWeight/mfCount at +0x50/+0x54). Caller EffectsArbitrator::GenerateEffectFrameEvents."
+    },
+    "BrnEffects::VignetteData>::Add": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::VignetteData>::Add",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F69E8",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:69 PfxContainer<T>::Add; PS3 0x5AC154 _ZN6BrnGui12PfxContainerIN10BrnEffects12VignetteDataEE3AddEPKS2_f. Our x360 body matches all 232 bytes (assert cpp:84, 80-byte ld/std copy, VignetteData::SetToBlend 0x823F35B8 with r3 = r4 = this). Callers PFXHookNodeBlender::Update 0x824FB804, GenerateEffectFrameEvents."
+    },
+    "BrnEffects::BlurData>::Construct": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::BlurData>::Construct",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6AD0",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:64; PS3 0x5AB714 _ZN6BrnGui12PfxContainerIN10BrnEffects8BlurDataEE9ConstructEv. Our x360 body matches all 160 bytes. Callers PFXHookNodeBlender::Initialise 0x82504628 / Update 0x824FB678 (mBlendedBlurData at +0xA30), GenerateEffectFrameEvents."
+    },
+    "BrnEffects::BlurData>::Add": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::BlurData>::Add",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6B70",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:69; PS3 0x5AB9F4 _ZN6BrnGui12PfxContainerIN10BrnEffects8BlurDataEE3AddEPKS2_f. Our x360 body matches all 208 bytes (assert cpp:84, BlurData::SetToBlend 0x823F3A50). Callers PFXHookNodeBlender::Update 0x824FB85C, GenerateEffectFrameEvents."
+    },
+    "BrnEffects::DepthOfFieldData>::Add": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::DepthOfFieldData>::Add",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6C40",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:69; PS3 0x5AB834 _ZN6BrnGui12PfxContainerIN10BrnEffects16DepthOfFieldDataEE3AddEPKS2_f (assert cpp:84, five-word copy, four-plane blend). Our x360 body is the same length (288 B) and differs only by the operand order of one fmuls (ARTIST 0x824F6D10 fmuls f0,f0,f9; ours fmuls f0,f9,f0). Caller PFXHookNodeBlender::Update 0x824FB8B4."
+    },
+    "BrnEffects::TintData2d>::Add": {
+      "symbol": "BrnGui::PfxContainer<BrnEffects::TintData2d>::Add",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
+      "x360_address": "0x824F6D60",
+      "byte_match": true,
+      "evidence": "DecFIGS BrnPfxHookBlender.h:69; PS3 0x5ABFB8 _ZN6BrnGui12PfxContainerIN10BrnEffects10TintData2dEE3AddEPKS2_f. Our x360 body (header-inline TintData2d::SetToBlend, Vector4 x float) matches all 280 bytes (assert cpp:84, 16-byte ld/std copy, the two zero-padded float splats at 0x50/0x60). Caller PFXHookNodeBlender::Update 0x824FB90C."
+    },
+    "BrnResource::GameDataEventSlot,": {
+      "symbol": "CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short>::GetObject",
+      "file": "GameSource/Resource/IndexedPool_GameDataEventSlot.cpp",
+      "x360_address": "0x82663010",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Left-truncated export name (IDA cut it at the comma) of the IndexedPool<GameDataEventSlot,short> instantiation, whose siblings 0x82662F50 GetObjectIndex / 0x82663180 PushIndex / 0x826638D0 Clear / 0x82665F80 Pop carry the full CgsContainers::IndexedPool<BrnResource::GameDataEventSlot,short> name. DecFIGS CgsIndexedPool.h:238 declares `T* GetObject(IndexType)`; ARTIST's body asserts \"Object not in pool\\n\" at CgsIndexedPool.h:241 (li r5,0xF1 @0x826630A4, range test lsIndex >= 0 && < capacity at +0xC) and \"Object is free\\n\" at :250 (li r5,0xFA @0x8266314C, the inlined DebugIsIndexFree walk over the s16 free list), then returns maElements + 48*index. Every GameDataModule handler calls it with r3 = this+0x6B410 (the pool) and r4 = the sign-extended slot index, then stores the event type at +0x28 of the result (ProcessGetPVSRequest 0x82670930, ProcessGetTrafficLanesRequest 0x82670460, ...). Our template body (CgsIndexedPool.h GetObject, instantiated in IndexedPool_GameDataEventSlot.cpp and emitted by BrnGameDataModule.cpp) is byte-identical to ARTIST's 364 bytes (forced pairing, 11 data relocations unchecked). With this name the GetObject body and the GameDataModule callers whose only remaining difference is this call become exact (x360 ae2d0dc38)."
+    },
+    "CgsDev::DebugComponent>::Add": {
+      "symbol": "CgsDev::Internal::DebugLinkedList<CgsDev::DebugComponent>::Add",
+      "file": "GameShared/GameClasses/Development/CgsDevelopmentUnity.cpp",
+      "x360_address": "0x82820EA0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Left-truncated export name of the DebugLinkedList<DebugComponent> instantiation: its siblings 0x82820F98 (CgsDev::Internal::DebugLinkedList<CgsDev::DebugUI::Window>::Add) and 0x828211B8 (...<CgsDev::DebugUI::MenuItem>::Add) carry the full name and the same 248-byte size. Its only two callers are DebugManager::RegisterComponentSimple 0x8282E2AC and RegisterComponent 0x82832094, both on mComponentList (this+0x816C) with r4 = the component, and DecFIGS lists Internal::DebugLinkedList<CgsDev::DebugComponent>::Add as the call in both (CgsDebugManager.cpp:127/:171 dumps). RegisterComponentSimple (292 B) differs from ours (CgsDevelopmentUnity object) only in this call's name with KPC_DEFAULTCOMPONENTPATH (x360 ae2d0dc38). Our Add body scores 80.6 against it (not byte-identical yet)."
     }
   },
   "sdk_entry_groups": {
@@ -36985,6 +37141,55 @@
       "size": 168,
       "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp",
       "evidence": "Export hole (IDA sub_827119A0). Sole caller TrafficEntityModule::HandleContactPoints 0x827342DC passes r3 = lpInput (the InputBuffer_PostPhysics) and uses the result as the ContactSpyInterface (`lwz r11,0(r31)` mpData, `addi r29,r11,0x70A0` GetTrafficContacts, assert text \"lpContactSpyInterface\" at line 6552); DWARF BrnTrafficEntityModuleIO.h:365 declares InputBuffer_PostPhysics::GetContactSpyInterface() const; the body's read-lock test and streamed 'Not locked for reading' assert at the header's line 369 (li r5,0x171) and `addis r3,r28,2 ; addi r3,r3,-0x6110` (this+0x19EF0 = &mContactSpyInterface) are the IO getter shape. Our exact HandleContactPoints calls this symbol at that site; our getter body is not yet exact (27.3, 96 vs 168 B: the streamed assert)."
+    },
+    "0x823B5CC0": {
+      "exported_name": "sub_823B5CC0",
+      "symbol": "BrnWorldIO::UpdateOutputBuffer::GetReplayActiveRaceCarOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp",
+      "evidence": "Read-lock streamed assert at line 0x223 = 547 with file 0x82035F0C '..\\..\\..\\GameSource\\World/BrnWorldModuleIO.h'; DWARF BrnWorldModuleIO.h:547 declares const UpdateOutputBuffer::GetReplayActiveRaceCarOutputInterface() const (the tree's header already cites 0x823B5CC0 at :547). ARTIST BridgeWorldToSound 0x823CD5A4 calls it with r3 = the world output buffer before RootInputBuffer::SetVehicleData (DWARF BrnGameModule call list order). Native body exact (168 B)."
+    },
+    "0x823B5C18": {
+      "exported_name": "sub_823B5C18",
+      "symbol": "BrnWorldIO::UpdateOutputBuffer::GetActiveRaceCarOutputInterface",
+      "size": 164,
+      "tu": "src/GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp",
+      "evidence": "Read-lock streamed assert at line 0x220 = 544, file 0x82035F0C BrnWorldModuleIO.h; DWARF BrnWorldModuleIO.h:544 declares UpdateOutputBuffer::GetActiveRaceCarOutputInterface() const. Called by BridgeWorldToSound 0x823CD5AC (the non-replay arm of the same select). Native body exact (164 B)."
+    },
+    "0x823B67E8": {
+      "exported_name": "sub_823B67E8",
+      "symbol": "BrnWorldIO::UpdateOutputBuffer::GetAudioCarLoadedDataQueue",
+      "size": 168,
+      "tu": "src/GameSource/World/BrnWorldModuleIO_UpdateOutputBuffer.cpp",
+      "evidence": "Read-lock streamed assert at line 0x25C = 604, file 0x82035F0C BrnWorldModuleIO.h; DWARF BrnWorldModuleIO.h:604 declares const UpdateOutputBuffer::GetAudioCarLoadedDataQueue() const (:605 is the write twin). Called by BridgeWorldToSound 0x823CD63C; its result is the Append source at 0x823CD650 (BaseEventQueue<AudioCarDataLoadedEvent>::Append). Native const body exact (168 B; the non-const twin scores 92.9 there, so the pairing is the const overload)."
+    },
+    "0x826FA468": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::GenericRwacFactory::DoCreateVoice",
+      "size": 268,
+      "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
+      "evidence": "Unnamed export hole (268 B) that IDA names in its callees' xrefs_to (CreateVoiceInternal<GenericRwacPlayerVoice> 0x826EB528 / <GenericRwacSubmixVoice> 0x826EB5F0 list 'CgsSound::Playback::GenericRwacFactory::DoCreateVoice@0x826FA468'). Body: release the out-handle (Handle<Voice>() assign), switch on VoiceSpec+0xF (GetVoiceType) to the three CreateVoiceInternal<T> calls, each assigned through Handle<Voice>::operator= (0x826A7640), assert 'BAD VOICE' (0x820B7C58) at CgsGenericRwacFactory.cpp:280 (li r5,0x118, PS3 GenericRwacFactory::DoCreateVoice 0x8A9BD0 asserts the same text at line 280), return the handle's validity. Ours is byte-identical apart from the three truncated CreateVoiceInternal call names (requested above), x360 physnd round 2 agent 10."
+    },
+    "0x826DD950": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Factory::FactoryNew<CgsSound::Playback::AemsContent,CgsSound::Playback::ContentSpec,unsigned int>",
+      "size": 200,
+      "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
+      "evidence": "Unnamed export (200 B) between FactoryNew<CsisContent> 0x826DD888 and FactoryNew<SplicerContent> 0x826DDA18, of the same shape (Content::operator new, the inlined content constructor, Handle(T*)'s store + acquire); AemsFactory::DoCreateContent's xrefs_from name it '??$FactoryNew@VAemsContent@Playback@CgsSound@@VContentSpec@23@I@Factory@Playback...@0x826DD950', and the BrnSoundUnity DWARF of AemsFactory::DoCreateContent lists FactoryNew<AemsContent, ContentSpec, uint32_t>. Called at 0x826E9C3C for the AemsContent::SK_CONTENT_TYPE branch; that caller is byte-identical to ours apart from the two FactoryNew call names, x360 physnd round 2 agent 10."
+    },
+    "0x82680AA8": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Content::StallUnload",
+      "size": 100,
+      "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
+      "evidence": "Unnamed export (100 B). DWARF CgsContent.h:215 Content::StallUnload() (local lbResult :217); the BrnSoundUnity DWARF of Environment::~Environment lists Handle<Content>::operator-> then Content::StallUnload, and ARTIST ~Environment 0x826D77D8 calls 0x82680AA8 on each live mphContent slot right after the operator-> assert. Body: while mu8ContentState (+0x1E) == E_CONTENT_STATE_LOADED repeat the vtable +0x14 hook (DoOnPreUnload) until it returns true, then store E_CONTENT_STATE_UNLOADED (PS3 ~Environment 0x851D14 inlines the same loop). Our header-inline Content::StallUnload is byte-exact against 0x82680AA8 (exact 100.0, 100 B), x360 physnd round 2 agent 10."
+    },
+    "0x826A7640": {
+      "exported_name": "sub_826A7640",
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::Voice>::operator=",
+      "size": 104,
+      "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
+      "evidence": "Unnamed export (104 B), the CgsHandle.h:226 operator= of Handle<Voice>: acquire the other handle's object, release ours through Object::Release, copy the pointer, return *this (the same 104-byte shape as Handle<Content>::operator= 0x826A7070). GenericRwacFactory::DoCreateVoice 0x826FA4F4 / 0x826FA51C / 0x826FA544 calls it with r3 = the Handle<Voice>& out-parameter and r4 = each CreateVoiceInternal<T> result. Our BrnSoundUnity Handle<Voice>::operator= is byte-exact against 0x826A7640 (exact 100.0, 104 B), x360 physnd round 2 agent 10."
     }
   },
   "native_leaf_functions": {
