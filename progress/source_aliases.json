@@ -21310,6 +21310,14 @@
       "byte_match": false,
       "evidence": "IDA truncated the demangled name after the class prefix. The body allocates an 8-byte cell from the shared Apt pool (off_8324D808, DOGMA_PoolManager::Allocate 0x82AE1B98), zeroes it on a non-null block, takes an atomic reference on the item passed in r3 (+0x24) and stores {item, 0}: a static factory with no `this`, not a constructor. Its only caller is AptRenderTreeManager::Update_SetRootItem 0x82AE5598 (`bl 0x82AE1B78; stw r3,0(r31)`: the new head cell). Our static _AptRenderItemRootList::Create (src/SDKs/EATech/include/Apt/AptRenderTreeManager.cpp, via BB_runtime.Apt.cpp) is exact against 0x82AE1B78 (124 B) with the ledger comparator. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 4e2a2590d at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnTraffic::BrnTrafficIO:": {
+      "symbol": "CgsContainers::Array<BrnTraffic::BrnTrafficIO::VehicleScoreData,20>::Grow",
+      "file": "GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO.cpp",
+      "x360_address": "0x827094F0",
+      "byte_match": false,
+      "evidence": "Export name truncated ('BrnTraffic::BrnTrafficIO:'). Asserts CgsArray.h lines 289/290 (li r5,0x121/0x122 = Grow's constructed + capacity asserts); only caller AddPotentialScoree 0x8271D360 (the not-full arm: mPotentialScorees.Grow()). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -36470,6 +36478,24 @@
       "symbol": "MassiveAdClient3::CMassiveAsset::Suspend",
       "size": 36,
       "evidence": "Unnamed (sub_82BDA330). Our CMassiveAsset::Suspend is exact at the address. Caller: CMassiveZoneManager::Suspend 0x82BD2FE0 calls 0x82BDA330 where ours calls CMassiveAsset::Suspend."
+    },
+    "0x8270C170": {
+      "exported_name": "sub_8270C170",
+      "symbol": "CgsContainers::Array<BrnTraffic::BrnTrafficIO::VehicleScoreData,20>::GetItem",
+      "size": 264,
+      "evidence": "Unnamed. Asserts CgsArray.h lines 556/557 (li r5,0x22C/0x22D: the non-const GetItem, cf. agent 7's CgsArray const 538/539 vs non-const 556/557); called twice by AddPotentialScoree (0x8271D3A4, 0x8271D3DC) through operator[] on the non-const mPotentialScorees."
+    },
+    "0x8276B148": {
+      "exported_name": "sub_8276B148",
+      "symbol": "BrnAI::RouteMapModuleIO::OutputBuffer::GetRouteResponseQueue",
+      "size": 164,
+      "evidence": "Unnamed. Read-lock bit (rlwinm 0x1c), streamed 'Not locked for reading\n' at BrnRouteMapModuleIO.h:624 (li r5,0x270; path 0x820C5AF8), returns this+4 (mRouteResponseQueue). Our in-class const GetRouteResponseQueue (h:624) emitted out of line from BrnAIModule.cpp is exact 100.0 against it (world-cmpaddr.py). Callers: AIModule::UpdateCarRoutes 0x82795638 (exact apart from this call)."
+    },
+    "0x82894F58": {
+      "exported_name": "sub_82894F58",
+      "symbol": "CgsNetwork::HostMigrationManager::UnregisterMessages",
+      "size": 200,
+      "evidence": "Unnamed export hole; the no-argument overload (DWARF CgsHostMigrationManager.cpp:968, beside UnregisterMessages(NetworkPlayerID)). Our body walks PlayerManager::GetNextPlayerID(&lPlayerID, E_CONSIDER_ALL_PLAYERS), GetPlayerByID, and calls UnregisterMessages(lPlayerID) per player; exact at the address. Caller: CgsNetwork::HostMigrationManager::Release 0x82899878 calls 0x82894F58 at 0x828998BC (r3 = this), where ours calls UnregisterMessages(). Overload note: the one-argument UnregisterMessages(NetworkPlayerID) is already named at 0x82883880 (312 B, ours ?UnregisterMessages@HostMigrationManager@CgsNetwork@@AAAXH@Z); ours for this one is ?UnregisterMessages@HostMigrationManager@CgsNetwork@@AAAXXZ, so the pairing needs the signature to tell them apart."
     }
   },
   "native_leaf_functions": {
@@ -37713,6 +37739,14 @@
       "caller": "0x82876BC8",
       "call_site": "0x82876C2C",
       "evidence": "Frameless 88-byte leaf in an export hole, ending with blr at 0x82876B3C right before EndAction 0x82876B40; ServerInterfaceConnection::ServerLogin 0x82876BC8 calls it at 0x82876C2C (also Update 0x82886484, ServerConnect 0x8288661C). Export hole between ServerInterfaceConnection::Release 0x82876A88 (96 B, ends 0x82876AE4) and EndAction 0x82876B40. The (LobbyLoginAlertE, EAction) overload DWARF declares beside ConvertError(s32, EAction) (the s32 one is inlined into EndAction): li r3,1 default (unhandled); alert 0 -> return 0; else walk the 16 {alert, error} rows of the .rdata table at 0x820F8CE0 (lis 0x820F / addi 0x8CE0, row stride 8, 0x80 bytes) and return the row's error. Our 88-byte body is word-identical over all 22 words; the only two differing words are the lis/addi our object relocates to the table (offsets 20, 28). Caller: ServerInterfaceConnection::ServerLoginCallback 0x82876BC8 calls 0x82876AE8 at 0x82876C2C where ours calls this overload (ServerLoginCallback is exact apart from that unverified call)."
+    },
+    "0x82883440": {
+      "symbol": "CgsNetwork::HostMigrationManager::Destruct",
+      "size": 92,
+      "file": "GameShared/GameClasses/Network/Players/CgsHostMigrationManager.cpp",
+      "caller": "0x828997D0",
+      "call_site": "0x82899844",
+      "evidence": "Frameless 92-byte leaf in an export hole, ending with a tail branch at 0x82883498 before 0x828834A0; CgsNetwork::NetworkManager::Destruct 0x828997D0 calls it at 0x82899844. Unnamed export hole. Our HostMigrationManager::Destruct (meFrameRate = -1; the three keep-alive timeouts = KU16_INVALID_FRAME; ClearAllCallbacks, CgsHostMigrationManager.cpp:1348, inlined; HostMigrationDebugComponent::Destruct, DWARF CgsNetworkHostMigrationDebugComponent.cpp:62, inlined, which ends in CgsDev::DebugComponent::Destruct) is word-identical at the address. Caller: CgsNetwork::NetworkManager::Destruct 0x828997D0 calls 0x82883440 at 0x82899844 with r3 = this + 0x2578 (mHostMigrationManager), where ours calls HostMigrationManager::Destruct; NetworkManager::Destruct is exact in CgsNetworkUnity once the callee is named."
     }
   },
   "sdk_archive_splits": {
