@@ -592,7 +592,8 @@
         "CgsNetwork::ServerInterfaceRankings::Update": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceRankings.cpp",
         "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "src/GameSource/Network/Debug Components/BrnNetworkImageManagerDebugComponent.cpp",
         "BrnNetwork::LiveRevengeManager::OnGameFinish": "src/GameSource/Network/Managers/BrnNetworkLiveRevengeManager.cpp",
-        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "src/GameSource/Network/Managers/BrnNetworkPlayerStatsManager.cpp"
+        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "src/GameSource/Network/Managers/BrnNetworkPlayerStatsManager.cpp",
+        "BrnReplays::SoundSerialiser::Destruct": "src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -629,7 +630,8 @@
         "CgsNetwork::ServerInterfaceRankings::Update": "Both bodies are empty (a bare blr, the 4 bytes at 0x8284CB38; DWARF CgsServerInterfaceServerInfo.h:138 and CgsServerInterfaceRankings.h:159 declare `void Update()`). BrnNetwork::BrnServerInterfaceBase::Update (0x825935D8) calls 0x8284CB38 at 0x82593678 (on this+0x6C8 = mServerInfo) and at 0x825936AC (on this+0xB88 = mRankings), exactly where ours calls mServerInfo.Update() and mRankings.Update() between the PM6 and PM8 monitor pairs. (BrnServerInterfaceBase::Update's remaining difference is the empty BrnNetwork::ServerInterfaceCustomCommands::Update, DWARF BrnServerInterfaceCustomCommands.cpp:1117, which ARTIST inlines away inside the BrnNetworkUnity TU.)",
         "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
         "BrnNetwork::LiveRevengeManager::OnGameFinish": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
-        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart)."
+        "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
+        "BrnReplays::SoundSerialiser::Destruct": "The fold body 0x8284CB38 is a bare blr; the native SoundSerialiser::Destruct is an empty body (4-byte blr, no relocations). SoundSerialiser is X360-only (no DWARF); its DWARF siblings GameModuleSerialiser::Destruct (BrnReplayGameModuleSerialiser.cpp:51, PS3 0x7B6864) and RaceCarEntitySerialiser::Destruct (cpp:52, PS3 0x7B6858) are public, out of line and empty (bare blr), as is BaseSerialiser::Destruct (cpp:79, PS3 0x7B6850). ARTIST BrnSound::Module::SoundLogicModule::Destruct 0x82697850 calls 0x8284CB38 at 0x82697870 with r3 = this+0x13600 = mSoundSerialiser (the member SoundLogicModule::Construct builds with SoundSerialiser::Construct 0x8264C9F8), right after ModuleSingleBuffered::Destruct. With the alias SoundLogicModule::Destruct (76 B) is exact: in the physnd tree its only difference is this call's name (score 94.7, wrong call at +0x20 = SoundSerialiser::Destruct vs the fold's exported name)."
       }
     },
     "0x829646E0": {
@@ -3463,10 +3465,11 @@
       "evidence": "Array<BehaviourHelperIndex,28>::operator[] const: CgsArray.h:556/557 asserts, count at +0x70, 4-byte stride; callers BehaviourManager::GenerateSceneQueries/ProcessSceneQueryResults/PostCollisionUpdateAllBehaviours/UpdateAllBehaviours/CheckNoBehavioursAreAllocatedByState iterating mBehaviourHelperIndexArray."
     },
     "BrnDirector::Camera::BehaviourAfterto": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsReadyToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourAftertouchCrash>::IsBehaviourPrepared",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x8222D0E8",
-      "evidence": "BehaviourHandle<BehaviourAftertouchCam>::IsBehaviourPrepared (tree name IsReadyToPrepare): mbIsAllocated assert (h:517), IsBehaviourWaitingToPrepare(key) then the cntlzw/extrwi boolean negation; caller ArbStateCrashMode::Prepare."
+      "evidence": "BehaviourHandle<BehaviourAftertouchCam>::IsBehaviourPrepared (tree name IsReadyToPrepare): mbIsAllocated assert (h:517), IsBehaviourWaitingToPrepare(key) then the cntlzw/extrwi boolean negation; caller ArbStateCrashMode::Prepare. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourB": {
       "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourBystanderCam,BrnDirector::Camera::BehaviourBystanderCam::Parameters,2>::Shot,2>::Append",
@@ -3476,10 +3479,11 @@
       "name_evidence": true
     },
     "BrnDirector::Camera::BehaviourBystand": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourBystanderCam>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
       "x360_address": "0x8222F688",
-      "evidence": "BehaviourHandle<BehaviourBystanderCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourBystanderCam>."
+      "evidence": "BehaviourHandle<BehaviourBystanderCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourBystanderCam>. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourDebugFl": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::AttachTweaker",
@@ -3494,10 +3498,11 @@
       "evidence": "BehaviourHandle<BehaviourDebugOrbitPlayer>::AttachTweaker: asserts IsAllocated() (h:623), forwards +0x04 key to BehaviourManager::AttachTweaker on the +0x0C manager; byte-identical to the other two siblings; caller Arbitrator::UpdateDebugCameras."
     },
     "BrnDirector::Camera::BehaviourFailsaf": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourFailsafe>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
       "x360_address": "0x822302F8",
-      "evidence": "BehaviourHandle<BehaviourFailsafe>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourFailsafe>."
+      "evidence": "BehaviourHandle<BehaviourFailsafe>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourFailsafe>. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourFixedCa": {
       "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::AttachTweaker",
@@ -3512,16 +3517,18 @@
       "evidence": "BehaviourHandle<BehaviourGameplayExternal>::SetUpdatesDuringPause (caller ArbStateTestbed::Update): asserts IsAllocated() (h:676), forwards +0x04 key and the flag to BehaviourManager::SetBehaviourUpdatesDuringPause on the +0x0C manager."
     },
     "BrnDirector::Camera::BehaviourGyroCam": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGyroCam>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x82212510",
-      "evidence": "BehaviourHandle<BehaviourGyroCam>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourGyroCam>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourHeliCam": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourHeliCam>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
       "x360_address": "0x82230240",
-      "evidence": "BehaviourHandle<BehaviourHeliCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourHeliCam>."
+      "evidence": "BehaviourHandle<BehaviourHeliCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourHeliCam>. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourHelperIndex,28": {
       "symbol": "Array::Append",
@@ -3544,28 +3551,32 @@
       "evidence": "ARTIST 0x822511F4 calls the capacity-five IceAnim Shot Append. The XDK relocation in MomentPlayerJumping::Prepare names the same typed Append; the original bound, count at +0x78 and 24-byte Shot copy corroborate its identity. Restoring the original BehaviourHelperIndex assignment makes all four typed Shot Append copies match the native instruction stream."
     },
     "BrnDirector::Camera::BehaviourIceAnim": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourIceAnim>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x822128A0",
-      "evidence": "BehaviourHandle<BehaviourIceAnim>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourIceAnim>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourInterpo": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourInterpolate>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x82212150",
-      "evidence": "BehaviourHandle<BehaviourInterpolate>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourInterpolate>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourLooseAt": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourLooseAttachment>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x82212A68",
-      "evidence": "BehaviourHandle<BehaviourLooseAttachment>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourLooseAttachment>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourPasseng": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourPassengerCam>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
       "x360_address": "0x8222F5D0",
-      "evidence": "BehaviourHandle<BehaviourPassengerCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourPassengerCam>."
+      "evidence": "BehaviourHandle<BehaviourPassengerCam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourPassengerCam>. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourR": {
       "symbol": "CgsContainers::Array<BrnDirector::BehaviourCollection<BrnDirector::Camera::BehaviourRig,BrnDirector::Camera::BehaviourRig::Parameters,4>::Shot,4>::Append",
@@ -3575,10 +3586,11 @@
       "name_evidence": true
     },
     "BrnDirector::Camera::BehaviourRenderM": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRenderMetrics>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp",
       "x360_address": "0x822303B0",
-      "evidence": "Only caller is NewBehaviour<BehaviourRenderMetrics> (0x82258B90, right after lrHelper.Prepare) passing (handle, helperID, &helperPool, manager); body is the BehaviourHandle::Prepare shape (UnSet if allocated, store key/pool/manager, SetBehaviourUsedByHandle, IsAllocated assert at BrnBehaviourManager.h:589, mpBehaviour = helper slot word) - the BehaviourHandle<BehaviourRenderMetrics> instantiation of the generic body, like the BehaviourFailsaf/BehaviourHeliCam siblings."
+      "evidence": "Only caller is NewBehaviour<BehaviourRenderMetrics> (0x82258B90, right after lrHelper.Prepare) passing (handle, helperID, &helperPool, manager); body is the BehaviourHandle::Prepare shape (UnSet if allocated, store key/pool/manager, SetBehaviourUsedByHandle, IsAllocated assert at BrnBehaviourManager.h:589, mpBehaviour = helper slot word) - the BehaviourHandle<BehaviourRenderMetrics> instantiation of the generic body, like the BehaviourFailsaf/BehaviourHeliCam siblings. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourRenderMe": {
       "symbol": "BrnDirector::Camera::BehaviourRenderMetrics::GetParameters",
@@ -3588,16 +3600,18 @@
       "evidence": "Slot 9 of the BehaviourRenderMetrics vtable at 0x82007790 (slot 0 Construct 0x8222BE28, slot 7 GetName 0x821FB2F0, slot 8 SetParameters 0x821FB288); body lwz r3,0xB8(r3) returns the +0xB8 word SetParameters stores (mpParameters), matching DWARF's virtual GetParameters() const."
     },
     "BrnDirector::Camera::BehaviourRoadRun": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x82212AC8",
-      "evidence": "BehaviourHandle<BehaviourRoadRunner>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourRoadRunner>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourRotateA": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::IsWaitingToPrepare",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRotateAboutVehicle>::IsBehaviourWaitingToPrepare",
       "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
       "x360_address": "0x82212B98",
-      "evidence": "BehaviourHandle<BehaviourRotateAboutVehicle>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument."
+      "evidence": "BehaviourHandle<BehaviourRotateAboutVehicle>::IsWaitingToPrepare (DWARF name IsBehaviourWaitingToPrepare): byte-identical 24-insn sibling of the other five instantiations; asserts mbIsAllocated (h:517), loads +0x04 key and +0x0C manager, calls BehaviourManager::IsBehaviourWaitingToPrepare. IDB name is the truncated template argument. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourRotateAb": {
       "symbol": "BrnDirector::Camera::BehaviourRotateAboutVehicle::GetParameters",
@@ -3607,10 +3621,11 @@
       "evidence": "Slot 9 of the BehaviourRotateAboutVehicle vtable at 0x8200A640 (slot 0 Construct, 2 Update, 7 GetName, 8 the tag-18 virtual SetParameters quoting BrnBehaviourRotateAboutVehicle.cpp:299); body is lwz +0x374 (mpParameters); class shape lists the virtual GetParameters."
     },
     "BrnDirector::Camera::BehaviourSpirall": {
-      "symbol": "BrnDirector::Camera::BehaviourHandle<TBehaviour>::Prepare",
-      "file": "GameSource/Director/Camera/BrnBehaviourManager.h",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourSpirallingDeathcam>::Prepare",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp",
       "x360_address": "0x8222FF60",
-      "evidence": "BehaviourHandle<BehaviourSpirallingDeathcam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourSpirallingDeathcam>."
+      "evidence": "BehaviourHandle<BehaviourSpirallingDeathcam>::Prepare: byte-identical 46-insn sibling (unset-if-allocated, store key/pool/manager/allocated, SetBehaviourUsedByHandle, IsAllocated() assert h:589, mpBehaviour = first word of pool[key]); sole caller BehaviourManager::NewBehaviour<BehaviourSpirallingDeathcam>. Re-pointed from the template-parameter spelling BehaviourHandle<TBehaviour> to the concrete instantiation the objects emit (state lane round 2 agent 5, msgs/state-r2e-requests.json; namecheck.py).",
+      "byte_match": true
     },
     "BrnDirector::Camera::BehaviourSpiralli": {
       "symbol": "BrnDirector::Camera::BehaviourSpirallingDeathcam::GetParameters",
@@ -21318,6 +21333,28 @@
       "byte_match": false,
       "evidence": "Export name truncated ('BrnTraffic::BrnTrafficIO:'). Asserts CgsArray.h lines 289/290 (li r5,0x121/0x122 = Grow's constructed + capacity asserts); only caller AddPotentialScoree 0x8271D360 (the not-full arm: mPotentialScorees.Grow()). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnDirector::Camera::BehaviourManager::BehaviourHandle": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner>::Get",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashNav.cpp",
+      "x360_address": "0x821FDBF0",
+      "byte_match": true,
+      "evidence": "IDA truncated the name after 'BehaviourManager::BehaviourHandle'. DWARF h:574 Get(). ArbStateCrashNav::Prepare 0x822661CC calls it on mRoadRunnerCam and stores Timestep 2 at +4 of the result (Behaviour::SetTimestepType, in the PS3 unity dump's call list); other callers ArbStateRoaming::Update, ArbStateTestbed::Update, ArbStateCrashNav::Update. Our instantiation is exact at the address (net_cmpaddr 100 B). (Check that no other alias already uses this truncated key.)"
+    },
+    "BrnDirector::SharedCameraContainer::GetGameplayCameraHe": {
+      "symbol": "BrnDirector::SharedCameraContainer::GetGameplayCameraHelperIndex",
+      "file": "GameSource/Director/Camera/BrnSharedCameraContainer.cpp",
+      "x360_address": "0x82219718",
+      "byte_match": true,
+      "evidence": "IDA truncated the name; DWARF BrnDirectorArbitratorSharedCameraContainer.h:61 GetGameplayCameraHelperIndex() const (PS3 unity dump lists it in B3ClassicTakedownPlayer::Update / CrashNav::Prepare). Body: bool (external selected and no lookback override), then each arm's handle GetBehaviourHelperIndex into the caller's sret. Exact at the address on x360 this batch (bool local + if/else returns). Callers: ArbStateRoaming::Update, B3ClassicTakedownPlayer::Update/Prepare, ShutdownTakedownPlayer::Prepare, ArbStateCrashNav::Prepare."
+    },
+    "`public: virtual void * __cdecl BrnParticle::ParticleDescriptionResourceType::Serialise": {
+      "symbol": "`BrnParticle::ParticleDescriptionResourceType::Serialise'::`2'::SerialMemoryWriter::Write",
+      "file": "SharedClasses/Graphics/ParticleDescriptionResourceType.cpp",
+      "x360_address": "0x82675808",
+      "byte_match": false,
+      "evidence": "The export truncates the name of the local class's virtual Write at the first backquote. DWARF _compile/BrnSharedClassesUnity.cpp (ParticleDescriptionResourceType.cpp:347-368) declares `struct SerialMemoryWriter : public iLionBinWriter` local to ParticleDescriptionResourceType::Serialise, with `virtual void Write(void *apData, U32 aSize)` at :352; the PS3 symtab names its body ._ZZNK11BrnParticle31ParticleDescriptionResourceType9Serialise...EN18SerialMemoryWriter5WriteEPvj and its vtable _ZTVZNK...E18SerialMemoryWriter. ARTIST's vtable 0x820A7F30 (IDA off_820A7F30), stored by Serialise 0x8267C220, has this function as its only slot. The local class compiled from src/SharedClasses/Graphics/ParticleDescriptionResourceType.cpp (x360, names lane) equals this 80-byte function word for word (memcpy call, size rounded up to 16 with clrrwi); Serialise itself is now exact against 0x8267C220. (Landed as name evidence: the conductor's compiled objects predated the names lane's commit at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -36496,6 +36533,77 @@
       "symbol": "CgsNetwork::HostMigrationManager::UnregisterMessages",
       "size": 200,
       "evidence": "Unnamed export hole; the no-argument overload (DWARF CgsHostMigrationManager.cpp:968, beside UnregisterMessages(NetworkPlayerID)). Our body walks PlayerManager::GetNextPlayerID(&lPlayerID, E_CONSIDER_ALL_PLAYERS), GetPlayerByID, and calls UnregisterMessages(lPlayerID) per player; exact at the address. Caller: CgsNetwork::HostMigrationManager::Release 0x82899878 calls 0x82894F58 at 0x828998BC (r3 = this), where ours calls UnregisterMessages(). Overload note: the one-argument UnregisterMessages(NetworkPlayerID) is already named at 0x82883880 (312 B, ours ?UnregisterMessages@HostMigrationManager@CgsNetwork@@AAAXH@Z); ours for this one is ?UnregisterMessages@HostMigrationManager@CgsNetwork@@AAAXXZ, so the pairing needs the signature to tell them apart."
+    },
+    "0x825B59B0": {
+      "exported_name": "sub_825B59B0",
+      "symbol": "BrnPhysics::ContactGenList::AddEntry",
+      "size": 200,
+      "evidence": "Unnamed in ARTIST (200 B), right after the named VolumeInstanceId overload ContactGenList::AddEntry 0x825B58F0 (192 B) and the same body with the ids built as (u64)EntityId << 32 (sldi 32): DWARF BrnContactGenerationList.h:73 declares the second overload `void AddEntry(EntityId, EntityId, uint8_t, uint8_t)` (h:58 is the VolumeInstanceId one), and the body asserts \"miNumEntries < miMaxEntries\" on BrnContactGenerationList.h:75 (li r5,0x4B at 0x825B59E4, file 0x82091448) where the named overload asserts on h:60. Callers: VehicleManager::DoRaceCarWorldContactGeneration 0x825EB140, DoCarCarContactGeneration 0x8261BB38, StartVehicleContactGeneration 0x8262AEE8, StartPartContactGeneration 0x8262C220. Our overload compares exact against 0x825B59B0 (msgs/physnd_cmp.py: exact 100.0, 200 B, calls_wrong=[], unverified=0) in the physnd tree (x360 round 2 agent 6)."
+    },
+    "0x821FDE00": {
+      "exported_name": "sub_821FDE00",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourAftertouchCrash>::Get",
+      "size": 100,
+      "evidence": "ArbStateCrashMode::Prepare 0x82265FD8 calls it on mAftertouch (+0x180) straight after NewBehaviour<BehaviourAftertouchCrash> (0x82265FCC) and hands the result to BehaviourAftertouchCrash::SetParameters (0x82265FE0); other callers ArbStateCrashMode::Update 0x82235488, ArbStateTestbed::Update 0x8226B638, ArbStateTakedown::Prepare 0x8226D828. DWARF BrnBehaviourManager.h Get() (the PS3 unity dump lists BehaviourHandle<BehaviourAftertouchCrash>::Get after CrashMode::Prepare's block). Our BehaviourHandle<BehaviourAftertouchCrash>::Get (CrashMode object) compares exact at the address (net_cmpaddr: exact 100.0, 100 B, calls_wrong=[]). With it and 0x8222D0E8 named, ArbStateCrashMode::Prepare 0x82265F70 (156 B) is exact on x360 (this batch)."
+    },
+    "0x822122F0": {
+      "exported_name": "sub_822122F0",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGameplayExternal>::GetBehaviourHelperIndex",
+      "size": 108,
+      "evidence": "DWARF BrnBehaviourManager.h:629 `BehaviourHelperIndex GetBehaviourHelperIndex() const` (IsAllocated assert, returns the +0x04 index through the sret). SharedCameraContainer::GetGameplayCameraHelperIndex 0x82219718 calls it for mGameplayExternal (this+4, 0x8221975C) and 0x822124A0 for mGameplayBumper (this+0x18); also ArbStateTakedown::Prepare 0x8226D828. Our instantiation (SharedCameraContainer object) is exact at the address (net_cmpaddr 108 B, calls_wrong=[])."
+    },
+    "0x822124A0": {
+      "exported_name": "sub_822124A0",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGameplayBumper>::GetBehaviourHelperIndex",
+      "size": 108,
+      "evidence": "Same accessor for the bumper handle (this+0x18, 0x82219768/6C); sole caller GetGameplayCameraHelperIndex 0x82219718. Exact at the address (net_cmpaddr 108 B)."
+    },
+    "0x82212B28": {
+      "exported_name": "sub_82212B28",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRoadRunner>::SetUpdatesDuringPause",
+      "size": 112,
+      "evidence": "DWARF BrnBehaviourManager.h:662 SetUpdatesDuringPause(bool) (IsAllocated assert h:676, then BehaviourManager::SetBehaviourUpdatesDuringPause); sole caller ArbStateCrashNav::Prepare 0x822661C4 on mRoadRunnerCam (+0x864) with r4 = 1 right after NewBehaviour<BehaviourRoadRunner>. Exact at the address (net_cmpaddr 112 B); the PS3 unity dump lists BehaviourHandle<BehaviourRoadRunner>::SetUpdatesDuringPause in CrashNav::Prepare."
+    },
+    "0x821FDED0": {
+      "exported_name": "sub_821FDED0",
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourRotateAboutVehicle>::Get",
+      "size": 100,
+      "evidence": "DWARF BrnBehaviourManager.h:574 Get(). ArbStateOnlineCarSelect::Prepare 0x822710F8 calls it on mLookAroundCarCam (+0x194) right after NewBehaviour<BehaviourRotateAboutVehicle> and passes the result to BehaviourRotateAboutVehicle::SetParameters (PS3 unity dump call list: BehaviourHandle<BehaviourRotateAboutVehicle>::Get, SetParameters); other callers ArbStateTestbed::Update, ArbStateCarSelect::Prepare/Update. Our instantiation is exact at the address (net_cmpaddr 100 B)."
+    },
+    "0x82AD2F38": {
+      "exported_name": "sub_82AD2F38",
+      "symbol": "rw::graphics::postfx::VMXBlend3",
+      "size": 792,
+      "tu": "src/GameShared/Jobs/TintBlend/TintBlend.cpp",
+      "evidence": "PROVISIONAL NAME (no DWARF/PS3/SDK name exists: the PS3 build runs TintBlend on the SPU and its embedded job ELF has no symbol table; the Xbox One and PC exports have no TintBlend names). The 3-source VMX tint-cube blend kernel: its only caller is rw::graphics::postfx::Blend3Cubes 0x82AD4280, and it is the 3-source sibling of the ARTIST-named 2-source kernel rw::graphics::postfx::VMXBlend 0x82AD2CF0 (Blend2Cubes' callee). The source function was named sub_82AD2F38 and paired with this export by that name; x360 renames it VMXBlend3, so this entry keeps the pairing."
+    },
+    "0x82AD3250": {
+      "exported_name": "sub_82AD3250",
+      "symbol": "rw::graphics::postfx::VMXBlend4",
+      "size": 1044,
+      "tu": "src/GameShared/Jobs/TintBlend/TintBlend.cpp",
+      "evidence": "PROVISIONAL NAME, as 0x82AD2F38: the 4-source kernel, only caller rw::graphics::postfx::Blend4Cubes 0x82AD43D0. Renamed from sub_82AD3250 in TintBlend.cpp."
+    },
+    "0x82AD3668": {
+      "exported_name": "sub_82AD3668",
+      "symbol": "rw::graphics::postfx::VMXBlend5",
+      "size": 1164,
+      "tu": "src/GameShared/Jobs/TintBlend/TintBlend.cpp",
+      "evidence": "PROVISIONAL NAME, as 0x82AD2F38: the 5-source kernel, only caller rw::graphics::postfx::Blend5Cubes 0x82AD4528. Renamed from sub_82AD3668 in TintBlend.cpp."
+    },
+    "0x82AD3AF8": {
+      "exported_name": "sub_82AD3AF8",
+      "symbol": "rw::graphics::postfx::VMXBlend6",
+      "size": 1404,
+      "tu": "src/GameShared/Jobs/TintBlend/TintBlend.cpp",
+      "evidence": "PROVISIONAL NAME, as 0x82AD2F38: the 6-source kernel, only caller rw::graphics::postfx::Blend6Cubes 0x82AD46B0. Renamed from sub_82AD3AF8 in TintBlend.cpp."
+    },
+    "0x82B61F90": {
+      "exported_name": null,
+      "symbol": "renderengine::Device::UnSetResource",
+      "size": 76,
+      "tu": "src/SDKs/RenderEngineClub/MAIN/components/src/device.cpp",
+      "evidence": "PROVISIONAL NAME (no DWARF/PS3/SDK name: the PS3 renderengine is the GCM one, and no other build names it). Export hole; ppcdis: loads the descriptor's D3DVertexDeclaration (lwz r3,0(r3)), tests D3DResource_IsSet against the captured device 0x83271608 and clears the binding with D3DDevice_SetVertexDeclaration(device, 0). It lies in device.cpp's run of resource unbinders, between the ARTIST-named Device::UnSetResource(D3DResource*) 0x82B61F08 and the ProgramBufferData overload 0x82B62088 (identified as UnSetResource), with their shape; its caller is renderengine::VertexDescriptor::Release 0x82B63250. Declared as a third static UnSetResource overload (const VertexDescriptorData*), so the ledger pairs it among the overloads by body."
     }
   },
   "native_leaf_functions": {
