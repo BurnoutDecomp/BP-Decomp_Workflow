@@ -21042,6 +21042,38 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA cut the name (460 B). GetSelection 0x8222EE38 calls it; asserts h:704 ('mOriginalWeights.GetLength() > 0') and h:715 ('!rw::math::fpu::IsZero(lfWeightsSum)', message 0x82007594). Ours 86.8: ARTIST inlines IsZero. ARTIST's assert strings in it cite ..\\..\\..\\GameSource\\Director/MomentController/BrnMomentSelector.h (0x820039C8), where DWARF homes BrnDirector::Selector<uint32_t,10u> (BrnMomentSelector.h:175, members Construct h:54, AddElement h:327, GetSelection h:66, CalculateIntervals h:74); the only instantiation is the one MomentSelector::SelectBestRandomMomentWithExclusion (0x8223A668) builds on its stack. Our instance compiles in src/GameSource/Director/MomentController/BrnMomentSelector.cpp's object (the template lives in BrnMomentSelectorSelector.h)."
+    },
+    "BrnSound::Vehicles::Environment::AmbienceEffect::CreateObj": {
+      "symbol": "BrnSound::Vehicles::Environment::AmbienceEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnAmbienceEffect.cpp",
+      "x360_address": "0x826D0CC0",
+      "byte_match": false,
+      "evidence": "IDA truncated the name to \"CreateObj\". The 92-byte body is the RTTI factory every sound effect has: operator new 0x826AB5C8 with sTypeInfo.typeName (0x82F2F7A8+4) and the allocator flag, then the out-of-line AmbienceEffect::AmbienceEffect 0x826B9600 and the +4 EffectObject view. DWARF declares `EffectObject* CreateObject(uint32_t)` (BrnAmbienceEffect.cpp:70) and the class's ClassTypeInfo {0x10080, \"AmbienceEffect\", BrnEffectObject, CreateObject} points at this address. Our CreateObject is word-identical with every call named (scratch/BYTEMATCH_1123/msgs/physnd_cmp.py, x360 91616ccb7); the tree's invented CreateObj(u32) that held the truncated name is removed. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 91616ccb7 at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnSound::Vehicles::Environment::SpeedStreamEffect::Create": {
+      "symbol": "BrnSound::Vehicles::Environment::SpeedStreamEffect::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Environment/BrnSpeedStreamEffect.cpp",
+      "x360_address": "0x826D13D8",
+      "byte_match": false,
+      "evidence": "IDA truncated the name to \"Create\". Same 92-byte factory: operator new 0x826AB5C8 with SpeedStreamEffect::sTypeInfo.typeName (0x82F2F7E8), SpeedStreamEffect::SpeedStreamEffect 0x826BA148, +4 view; DWARF CreateObject(uint32_t) at BrnSpeedStreamEffect.cpp:55. Ours is word-identical (physnd_cmp.py); the invented Create(int) is removed. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 91616ccb7 at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnPhysics::Vehicle::VehicleOutputInterface::GetRaceCar": {
+      "symbol": "BrnPhysics::Vehicle::VehicleOutputInterface::GetRaceCarState",
+      "file": "GameSource/Physics/VehicleManager/SharedIO/BrnVehicleOutputInterface.cpp",
+      "x360_address": "0x822B4860",
+      "byte_match": false,
+      "evidence": "IDA truncated the name to \"GetRaceCar\". DWARF declares two overloads, const GetRaceCarState(int32_t) at BrnVehicleOutputInterface.h:343 and non-const at h:347, inline below the class. 0x822B4860 asserts \"mUsedRaceCars.IsBitSet( liRaceCarIndex )\" on h:834 (the first definition, the const one) and its callers hold a const interface (CrashingRaceCarInterface::SetFromVehicleOutputInterface 0x823625C0, DWARF const VehicleOutputInterface*); 0x825C08D0 (ledger name GetRaceCarState) asserts on h:842 and is called by the writers VehicleManager::UpdateFatalCrashFlags / WriteOutVehicleStats. Our const overload is word-identical to 0x822B4860 and our non-const to 0x825C08D0 (physnd_cmp.py); the invented GetRaceCar(u32) const is removed. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 91616ccb7 at naming time; the recording measures the body.)",
+      "name_evidence": true
+    },
+    "BrnSound::Vehicles::Engines::HybridExhaustControl::Create": {
+      "symbol": "BrnSound::Vehicles::Engines::HybridExhaustControl::CreateObject",
+      "file": "GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp",
+      "x360_address": "0x826B34E0",
+      "byte_match": false,
+      "evidence": "IDA truncated the name to \"Create\". 92-byte RTTI factory: operator new 0x826AB5C8 with HybridExhaustControl::sTypeInfo.typeName (0x82F2F5A8), the out-of-line HybridExhaustControl::HybridExhaustControl 0x826AF938, +4 view; ClassTypeInfo {0x10050, \"HybridExhaustControl\", BrnEffectControl, CreateObject}. Ours word-identical (physnd_cmp.py, x360 91616ccb7); the invented Create(bool) is removed. (Landed as name evidence: the conductor's compiled objects predated the lane's commit 91616ccb7 at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -33796,6 +33828,12 @@
       "symbol": "BrnReplays::TrafficEntitySerialiser::GetStaticLayout",
       "size": 212,
       "evidence": "0x82707090 (212 bytes, an export hole) is instruction for instruction the body of ARTIST's named BrnReplays::TrafficEntitySerialiser::GetStaticLayout 0x8264C710: static buffer size at +0x24 compared with 0x2D480, buffer at +0x20 non-null, asserts on lines 0x1AE/0x1AF (430/431). Only the assert file string differs: 0x820BB268 is the traffic unity TU's relative include spelling `..\\..\\GameSource\\Replays/Serialisers/BrnReplayTrafficEntitySerialiser.h`, 0x8209E020 the absolute path of the same header. So it is the out-of-line copy of a header-inline accessor emitted in the traffic TU (not foldable because the path strings differ). Its caller TrafficEntityModule::AddVehiclesToTargetList 0x8272261C calls it on mTrafficEntitySerialiser (this+0x724C0) and reads the player hull at +0x94; our source calls mTrafficEntitySerialiser.GetStaticLayout() there. Byte-matching it needs GetStaticLayout moved header-inline in BrnReplayTrafficEntitySerialiser.h (Replays, not the world lane's file)."
+    },
+    "0x8276B998": {
+      "exported_name": null,
+      "symbol": "BrnAI::AICar::GetRight",
+      "size": 232,
+      "evidence": "Unnamed (export hole). Returns the vector at this+0x1450 after two asserts on the relative header path ..\\..\\..\\GameSource\\World/AI/BrnAICar.h (0x820C4AE0) at lines 1320/1321 with the messages `RwMath::IsValid( mUnitRight )` (0x820C5C20) and `BrnMath::IsNormal( mUnitRight )` (0x820C5C00): the DWARF accessor AICar::GetRight() const. Our AICar::GetRight compiled from BrnAICar.cpp (world tree, CGS_ASSERT_AT with those lines) equals its 232 bytes word for word outside relocations. Callers include AIAggression::GetAcrossSeparation 0x827711CC, which is exact apart from this call once named."
     }
   },
   "native_leaf_functions": {
