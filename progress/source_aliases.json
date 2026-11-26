@@ -21130,6 +21130,14 @@
       "byte_match": false,
       "evidence": "IDA truncated the demangled name. Our recursive BucketListNode<Job*,6>::operator[] is exact against 0x82BCA0E8 (36 B) with the ledger comparator; PS3 DecFIGS 0xDA5BC8 _ZNK2EA4Jobs6Detail14BucketListNodeIPNS0_3JobELi6EEixEi (index - 6 per node). (Landed as name evidence: the conductor's compiled objects predated the lane's commit at naming time; the recording measures the body.)",
       "name_evidence": true
+    },
+    "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetActi": {
+      "symbol": "BrnWorld::RaceCarEntityModuleIO::RCEntityGlobalRaceCarOutputInterface::GetActiveRaceCarIndex",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BrnRCEntityGlobalRaceCarOutputInterface.cpp",
+      "x360_address": "0x821F46C8",
+      "byte_match": false,
+      "evidence": "IDA cut the name to '...::GetActi' (120 B). Asserts 'leGlobalRaceCarIndex >= E_GLOBAL_RACE_CAR_INDEX_0' / '< E_GLOBAL_RACE_CAR_INDEX_COUNT' (BrnRaceCarEntityModuleOutputInterface.h:1512/1513) and returns maeActiveRaceCarIndices[idx] (+0x834). Its only sibling with that prefix and signature is GetActiveRaceCarIndex(EGlobalRaceCarIndex) (DWARF BrnRaceCarEntityModuleOutputInterface.h); our body is byte-identical after this batch (udiff exact). Callers MainDirector::ProcessInputQueue, BurningRouteMode::PreWorldUpdate, ModeManager::CheckForOutOfRangeCarsReachingFinish (0x823408B4). (Landed as name evidence: the conductor's compiled objects predated the lane's commit 2dc9c8f42 at naming time; the recording measures the body.)",
+      "name_evidence": true
     }
   },
   "sdk_entry_groups": {
@@ -36224,6 +36232,12 @@
       "symbol": "BrnGui::GuiCache::GetOnlinePlayerInfo",
       "size": 156,
       "evidence": "Unnamed 0x82482738 is the NetworkPlayerID overload of GuiCache::GetOnlinePlayerInfo (DWARF BrnGuiCache.h:780/945 `const InGamePlayerStatusData* GetOnlinePlayerInfo(RoadRulesRecvData::NetworkPlayerID) const`): asserts the id != -1 at BrnGuiCache.h:3597 (li r5,0xe0d @0x82482764, file string 0x8204D808 = BrnGuiCache.h), walks the 8 InGamePlayerStatusData records (stride 0x138) from this+0xAC80 comparing each record's network id word (+0x110), returns the matching record or NULL. DecFIGS names the callee of HudMessageAnalyzer::HandlePlayerJoinedLobby GuiCache::GetOnlinePlayerInfo; ARTIST HandlePlayerJoinedLobby 0x8251F458 (bl 0x82482738 @0x8251F54C) is exact on x360 216c01bb9 apart from that call's name. Our tree still names the function GetOnlinePlayerInfoFromPlayerId (17 references): the gui lane will rename it to the DWARF overload; the alias is valid as a name either way (gui lane, agent 8)."
+    },
+    "0x8231D368": {
+      "exported_name": "sub_8231D368",
+      "symbol": "BrnGameState::GameStateModuleIO::PostWorldInputBuffer::GetGlobalRaceCarOutputInterface",
+      "size": 168,
+      "evidence": "Unnamed export, 168 B. Read-lock streamed assert at BrnGameStateModuleIO.h:213 (li r5,0xD5 at 0x8231D3EC) and returns this+0x9B40 (the global race-car interface); its sibling at 0x8231D2C0 (named PostWorldInputBuffer::GetActiveRaceCarOutputInterface, h:210) and 0x8231D410 (GetAICarOutputInterface, h:216) have the same shape. Our const GetGlobalRaceCarOutputInterface in BrnGameStateModuleIO.cpp's object is byte-identical (state-tools/r2/udiff.py: exact). Callers: ModeManager::CheckForOutOfRangeCarsReachingFinish (0x82340818, otherwise exact after this batch) and the other PostWorld readers."
     }
   },
   "native_leaf_functions": {
