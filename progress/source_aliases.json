@@ -21473,6 +21473,214 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA truncated the name (160 B, universe row 'CgsSound::Logic::StateManager::RegisteredContent,4,int>::~ObjectPool<cl'). The body is the implicit destructor of CgsStateManager.h's mContentPool (ObjectPool<RegisteredContent, KI_NUM_CONTENT_SLOTS = 4, int>): a reverse loop over the four 16-byte elements (li r26,3 ... addi r30,r30,-0x10 ... bge), each installing Logic::Content's vtable 0x820B3250 and dropping the held handle through the inlined Object::Release (assert 'mu32RefCount > 0', CgsObject.h:117, strings 0x820AA960 / 0x820AA924). Every StateManager-derived destructor calls it right after restoring StateManager's vtable 0x820B66E4 on this+0x30's pool; BrnSoundUnity's StreamingStateManager scalar deleting destructor 0x826FC1B0 (160 B) is byte-identical to ours apart from this one call (bl 0x826eac90 at 0x826FC1DC; wrong call ours '...ObjectPool<RegisteredContent,4,int>::~ObjectPool' vs ARTIST's truncated name), x360 physnd round 2 agent 8. Our own copy compares 95.0 against 0x826EAC90 (cmpwi vs cmplwi on the handle pointer: the interim Handle model)."
+    },
+    "CgsSound::Playback::Module::Module::C": {
+      "symbol": "CgsSound::Playback::Module::Module::CreateVoice",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826D7B00",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (636 B, universe row 'CgsSound::Playback::Module::Module::C'). DWARF CgsSoundPlaybackModule.h:318 / cpp:1022 declares Handle<Voice> CreateVoice(uint32_t, uint32_t, uint32_t); the body asserts 'GenericRwacFactory::SK_NAME == lFactoryName' (string 0x820B5190, line 1051) and streams 'E_COMMAND_VOICE_CREATE failed: VoiceSpec' (0x820B5164, line 1063) from CgsSoundPlaybackModule.cpp. Its caller Logic::Voice::Construct 0x826DC3E0 (112 B, BrnSoundUnity) is byte-identical to ours apart from this one call (bl 0x826d7b00 at 0x826DC44C; wrong call ours 'Module::CreateVoice' vs ARTIST's truncated name), x360 physnd round 2 agent 9."
+    },
+    "CgsSound::Playback::Module::Module:": {
+      "symbol": "CgsSound::Playback::Module::Module::CreateContent",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826C12A8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (564 B, universe row 'CgsSound::Playback::Module::Module:'). DWARF CgsSoundPlaybackModule.h:327 / cpp:1075 declares Handle<Content> CreateContent(uint32_t, uint32_t, uint32_t); the body streams 'E_COMMAND_CONTENT_CREATE failed with content spec ' (0x820B2D64, CgsSoundPlaybackModule.cpp:1108) and calls Registry::GetEntity<ContentSpec>. Its callers Logic::Content::Construct 0x826C4CA0 (248 B) and Logic::VoiceWrapper::Create 0x826EAEB0 (472 B), BrnSoundUnity, are byte-identical to ours apart from this one call (bl 0x826c12a8 at 0x826C4D1C / 0x826EAFC4; wrong call ours 'Module::CreateContent' vs ARTIST's truncated name), x360 physnd round 2 agent 9."
+    },
+    "CgsSound::Playback::Environment::GetV": {
+      "symbol": "CgsSound::Playback::Environment::GetVoice",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BFAF0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (220 B, universe row 'CgsSound::Playback::Environment::GetV'). DWARF CgsEnvironment.h:289 Handle<Voice> GetVoice(uint32_t): a loop over mphVoice (+0x44) for mu32VoiceCount (+0x38) comparing each live voice's ident (+0x0C) with the argument and returning a copy of the handle (store + acquire, 0x826BFB98..0x826BFBBC). Its caller Playback::Module::ConnectVoice 0x826C14E0 (460 B, BrnSoundUnity) is byte-identical to ours apart from this one call (bl 0x826bfaf0 at 0x826C153C; wrong call ours 'Environment::GetVoice' vs ARTIST 'Environment::GetV'), x360 physnd round 2 agent 9. Our own Environment::GetVoice is byte-exact against 0x826BFAF0 (net_cmpaddr exact 100.0, 216 B) after this agent's batch 2."
+    },
+    "CgsSound::Playback::Factory>::oper": {
+      "symbol": "CgsSound::Playback::Handle<CgsSound::Playback::Factory>::operator->",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x8268E178",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (88 B, universe row 'CgsSound::Playback::Factory>::oper'). The body is the CgsHandle.h:285 operator-> (assert 'mpObject' at CgsHandle.h:287, strings 0x820AE00C / 0x820AE018; return mpObject), the same 88-byte shape as Handle<Content>::operator-> 0x8268E0C8 and Handle<Voice>::operator-> 0x8268E1D0. Playback::Module::CreateVoice 0x826D7BF4 and CreateContent 0x826C1398 call it on their Handle<Factory> lhFactory and pass the result as `this` to Factory::CreateVoice<Voice> / Factory::CreateContent. Our BrnSoundUnity Handle<Factory>::operator-> is byte-exact against 0x8268E178 (net_cmpaddr: exact 100.0), x360 a7ed47884."
+    },
+    "??$GetEntity@VVoiceSpec@Playback@CgsSound@@@Registry@Playback@CgsSound@@QBAPBVVoiceSpec@12@VName@12@@Z": {
+      "symbol": "CgsSound::Playback::Registry::GetEntity<CgsSound::Playback::VoiceSpec>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x8268F988",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The universe row for 0x8268F988 (360 B) carries the raw MSVC decoration (IDA did not demangle it): it is CgsSound::Playback::Registry::GetEntity<CgsSound::Playback::VoiceSpec>(Name) const. Playback::Module::CreateVoice 0x826D7BD8 calls it after GetEnvironment().GetRegistry(); with this name and the Handle<Factory>::operator-> alias (0x8268E178) our Module::CreateVoice / CreateContent are byte-identical to 0x826D7B00 / 0x826C12A8 (net_cmpaddr lists only these two call names as differences), x360 physnd round 2 agent 9."
+    },
+    "??$GetEntity@VContentSpec@Playback@CgsSound@@@Registry@Playback@CgsSound@@QBAPBVContentSpec@12@VName@12@@Z": {
+      "symbol": "CgsSound::Playback::Registry::GetEntity<CgsSound::Playback::ContentSpec>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x8268FAF0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The universe row for 0x8268FAF0 (360 B) carries the raw MSVC decoration (IDA did not demangle it): it is CgsSound::Playback::Registry::GetEntity<CgsSound::Playback::ContentSpec>(Name) const. Playback::Module::CreateContent 0x826C137C calls it after GetEnvironment().GetRegistry(); with this name and the Handle<Factory>::operator-> alias (0x8268E178) our Module::CreateVoice / CreateContent are byte-identical to 0x826D7B00 / 0x826C12A8 (net_cmpaddr lists only these two call names as differences), x360 physnd round 2 agent 9."
+    },
+    "CgsSound::Playback::Environment::GetR": {
+      "symbol": "CgsSound::Playback::Environment::GetRwacVoiceByPlugin",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BFE50",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (612 B, universe row 'CgsSound::Playback::Environment::GetR'). DWARF BrnSoundUnity: GetRwacVoiceByPlugin(const rw::audio::core::PlugIn* lpPlugin) with locals luVoice (CgsEnvironment.cpp:353), Handle<GenericRwacPlayerVoice> lRwacVoice (:361), lu32PlugInCount (:363), lu32PlugIn (:364): the voice loop comparing each voice's factory name with GenericRwacFactory::SK_NAME (0x83008650), FindNamedSlot(PlayerVoice::SK_PLAYER_SLOT_NAME), the plug-in walk (GenericRwacVoice::GetPlugin asserts CgsGenericRwacVoice.h:469/470) and the copied handle returned. Called by Playback::Module::DoOpenStream 0x826FA020. Our body compares 96.1 (one lwzx operand order in the plug-in index)."
+    },
+    "BrnSound::Logic::BrnEffectControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::BrnEffectControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826AEF68",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826AEF68 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826AEF98); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::BrnEffectControl in BrnSoundUnity.cpp is byte-exact against 0x826AEF68, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Logic::BrnEffectObject::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::BrnEffectObject::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826AF4C8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826AF4C8 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826AF4F8); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::BrnEffectObject in BrnSoundUnity.cpp is byte-exact against 0x826AF4C8, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Engines::PhysicsControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Engines::PhysicsControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826AF8B0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826AF8B0 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~PhysicsControl and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Engines::PhysicsControl in BrnSoundUnity.cpp is byte-exact against 0x826AF8B0, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Engines::HybridExhaustControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Engines::HybridExhaustControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826AFA60",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826AFA60 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~HybridExhaustControl and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Engines::HybridExhaustControl in BrnSoundUnity.cpp is byte-exact against 0x826AFA60, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Engines::EngineControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Engines::EngineControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826B2BA0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826B2BA0 says `vector deleting destructor', but the 180-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826B2BD0); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Engines::EngineControl in BrnSoundUnity.cpp is byte-exact against 0x826B2BA0, 180 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Engines::AIPhysicsControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Engines::AIPhysicsControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826B49F8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826B49F8 says `vector deleting destructor', but the 156-byte body is a scalar one: it calls the out-of-line ~PhysicsControl and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Engines::AIPhysicsControl in BrnSoundUnity.cpp is byte-exact against 0x826B49F8, 156 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Environment::EnclosureControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Environment::EnclosureControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826B94A8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826B94A8 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826B94D8); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Environment::EnclosureControl in BrnSoundUnity.cpp is byte-exact against 0x826B94A8, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Vehicles::Environment::StaticPassbyControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Environment::StaticPassbyControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826B9B48",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826B9B48 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826B9B78); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Environment::StaticPassbyControl in BrnSoundUnity.cpp is byte-exact against 0x826B9B48, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Vehicles::Environment::SpeedStreamControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Environment::SpeedStreamControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BA0A0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826BA0A0 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826BA0D0); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Environment::SpeedStreamControl in BrnSoundUnity.cpp is byte-exact against 0x826BA0A0, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Vehicles::Environment::ReverbEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Environment::ReverbEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BA4E8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826BA4E8 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826BA518); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Environment::ReverbEffect in BrnSoundUnity.cpp is byte-exact against 0x826BA4E8, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Logic::MixerControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::MixerControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BAED8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826BAED8 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826BAF08); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::MixerControl in BrnSoundUnity.cpp is byte-exact against 0x826BAED8, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Logic::Collision::CollisionControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::Collision::CollisionControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826BD4D8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826BD4D8 says `vector deleting destructor', but the 168-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826BD508); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::Collision::CollisionControl in BrnSoundUnity.cpp is byte-exact against 0x826BD4D8, 168 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Logic::Collision::CollisionEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::Collision::CollisionEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826C90D8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826C90D8 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~CollisionEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::Collision::CollisionEffect in BrnSoundUnity.cpp is byte-exact against 0x826C90D8, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Wheels::WheelControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Wheels::WheelControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826D00A0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826D00A0 says `vector deleting destructor', but the 180-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826D00D0); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Wheels::WheelControl in BrnSoundUnity.cpp is byte-exact against 0x826D00A0, 180 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Environment::CrashStreamEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Environment::CrashStreamEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826D0E98",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826D0E98 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~CrashStreamEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Environment::CrashStreamEffect in BrnSoundUnity.cpp is byte-exact against 0x826D0E98, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Logic::HUDEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::HUDEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826E1E00",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826E1E00 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~HUDEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::HUDEffect in BrnSoundUnity.cpp is byte-exact against 0x826E1E00, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Engines::SweetenersEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Engines::SweetenersEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826E4B18",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826E4B18 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~SweetenersEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Engines::SweetenersEffect in BrnSoundUnity.cpp is byte-exact against 0x826E4B18, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
+    },
+    "BrnSound::Vehicles::Wheels::AIWheelControl::`vector deleting destructor'": {
+      "symbol": "BrnSound::Vehicles::Wheels::AIWheelControl::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826E5608",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826E5608 says `vector deleting destructor', but the 180-byte body is a scalar one: it inlines the (implicit) destructor chain, restoring the base vtables and resetting the EffectBase state, and tests only bit 0 of the flag (clrlwi at 0x826E5638); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Vehicles::Wheels::AIWheelControl in BrnSoundUnity.cpp is byte-exact against 0x826E5608, 180 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420."
+    },
+    "BrnSound::Logic::PresentationEffect::`vector deleting destructor'": {
+      "symbol": "BrnSound::Logic::PresentationEffect::`scalar deleting destructor'",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826E78A8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "ARTIST's name for 0x826E78A8 says `vector deleting destructor', but the 132-byte body is a scalar one: it calls the out-of-line ~PresentationEffect and then tests only bit 0 of the flag (clrlwi r11,r30,31 right after the call); there is no array-cookie loop and no `vector destructor iterator' call, and the delete path frees through CgsSound::MemBase's allocator (0x82FFB954, vtable +0x14 DoFree on a {this,0,0,0,0} resource). Our compiler-generated `scalar deleting destructor' (??_G) of BrnSound::Logic::PresentationEffect in BrnSoundUnity.cpp is byte-exact against 0x826E78A8, 132 B (scratch/BYTEMATCH_1123/msgs/net_cmpaddr.py: exact, 100.0, calls_wrong=[]), x360 physnd round 2 agent 9; the record currently pairs ARTIST's body with our 8-byte `[thunk]: vector deleting destructor'{4} of the same demangled name (0.0). Same deleting-dtor naming class as EA::Jobs::LocalBackend 0x82BCC420. (Not in the agent-8 handoff's list of six; found by the same scan of BrnSoundUnity's `vector deleting destructor' rows whose ARTIST size differs from our 8-byte thunk.)"
     }
   },
   "sdk_entry_groups": {
@@ -36763,6 +36971,20 @@
       "size": 160,
       "tu": "vendor/dirtysdk/src/x360/lobbylogin.cpp",
       "evidence": "PROVISIONAL NAME. Export hole (no JSON; universe row sub_82B1FCE0 unnamed, 160 B). Walks NetConnStatus('serv', i) for i < 4 and returns SocketHtonl of the matching service's address, else logs 'lobbylogin: could not map serviceID 0x%08x - using fallback method' and returns NetConnStatus('host'). Called by 0x82B1FD80 and 0x82B20070. Ours is EXACT at the address (net_cmpaddr: exact 100.0, 160/160 B)."
+    },
+    "0x826BFA10": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Environment::GetFactory",
+      "size": 220,
+      "tu": "src/GameShared/GameClasses/Sound/Playback/CgsEnvironment.cpp",
+      "evidence": "Unnamed export (220 B) directly before Environment::GetVoice 0x826BFAF0 and of the same shape: a loop over mphFactory (+0x40) for mu32FactoryCount (+0x34), the inlined Handle::operator-> assert ('mpObject', CgsHandle.h:287) on each live entry, a compare of the factory's mName (+0x08) with the by-value Name argument (r5), and the copied handle returned (store + acquire). DWARF CgsEnvironment.h:280 Handle<Factory> GetFactory(Name) (DecFIGS PS3 0x441058). Called with the factory name from Playback::Module::CreateVoice 0x826D7B64 and CreateContent 0x826C1308, whose first statement is GetEnvironment().GetFactory(Name(...)) (DWARF cpp:1022 / 1075). Our Environment::GetFactory is byte-exact against 0x826BFA10 (net_cmpaddr exact 100.0, 220 B) after this agent's batch 2."
+    },
+    "0x827119A0": {
+      "exported_name": "sub_827119A0",
+      "symbol": "BrnTraffic::BrnTrafficIO::InputBuffer_PostPhysics::GetContactSpyInterface",
+      "size": 168,
+      "tu": "src/GameSource/World/EntityModules/TrafficEntityModule/BrnTrafficEntityModuleIO_InputBuffer_Getters.cpp",
+      "evidence": "Export hole (IDA sub_827119A0). Sole caller TrafficEntityModule::HandleContactPoints 0x827342DC passes r3 = lpInput (the InputBuffer_PostPhysics) and uses the result as the ContactSpyInterface (`lwz r11,0(r31)` mpData, `addi r29,r11,0x70A0` GetTrafficContacts, assert text \"lpContactSpyInterface\" at line 6552); DWARF BrnTrafficEntityModuleIO.h:365 declares InputBuffer_PostPhysics::GetContactSpyInterface() const; the body's read-lock test and streamed 'Not locked for reading' assert at the header's line 369 (li r5,0x171) and `addis r3,r28,2 ; addi r3,r3,-0x6110` (this+0x19EF0 = &mContactSpyInterface) are the IO getter shape. Our exact HandleContactPoints calls this symbol at that site; our getter body is not yet exact (27.3, 96 vs 168 B: the streamed assert)."
     }
   },
   "native_leaf_functions": {
