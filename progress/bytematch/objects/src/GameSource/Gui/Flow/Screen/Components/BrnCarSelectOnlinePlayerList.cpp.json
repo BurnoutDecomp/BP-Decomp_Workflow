@@ -1,24 +1,26 @@
 {
  "blob": "b91818d5df006298bd670aeac3db795fdbd27ddd",
- "commit": "8bb8f1b1f088837a8d67dc670841c807c02f6525",
+ "commit": "20ea8092cc79804648e3f9ca8dbfdaad5f607bf4",
  "compiled": true,
- "measured": "2026-11-26T08:36:57Z",
+ "measured": "2026-11-26T11:26:32Z",
  "schema": 1,
  "source": "src/GameSource/Gui/Flow/Screen/Components/BrnCarSelectOnlinePlayerList.cpp",
  "tool": 1,
  "toolchain": "cl 14.00.6502 flags a0a99e090ba0",
- "unpaired": 6,
+ "unpaired": 8,
  "functions": [
   {"artist": "821F0000", "artist_size": 72, "name": "`vector constructor iterator'", "score": 100.0, "size": 72, "status": "exact", "symbol": "??_H@YAXPAXIHP6APAX0@Z@Z"},
   {"artist": "8240E388", "artist_size": 88, "data_unchecked": 2, "name": "CgsGui::GuiAccessPointers::GetGuiCache", "score": 100.0, "size": 88, "status": "exact", "symbol": "?GetGuiCache@GuiAccessPointers@CgsGui@@QAAPAVGuiCache@BrnGui@@XZ"},
   {"artist": "8240E3E0", "artist_size": 88, "data_unchecked": 2, "name": "CgsGui::StateInterface::GetAccessPointers", "score": 100.0, "size": 88, "status": "exact", "symbol": "?GetAccessPointers@StateInterface@CgsGui@@QAAPAUGuiAccessPointers@2@XZ"},
-  {"artist": "8241AF88", "artist_size": 320, "first_diff": 212, "name": "BrnGui::CarSelectOnlinePlayerList::Construct", "score": 88.6, "size": 276, "status": "nonmatching", "symbol": "?Construct@CarSelectOnlinePlayerList@BrnGui@@UAAXPBDPAUStateInterface@CgsGui@@0@Z"},
+  {"artist": "8240F110", "artist_size": 88, "data_unchecked": 2, "name": "BrnGui::GuiCache::GetWorldDataController", "score": 100.0, "size": 88, "status": "exact", "symbol": "?GetWorldDataController@GuiCache@BrnGui@@QBAPAUWorldDataController@2@XZ"},
+  {"artist": "8241AF88", "artist_size": 320, "calls_wrong": [{"artist": "CgsCore::SnPrintf", "at": 60, "ours": "CgsCore::SPrintf"}], "data_unchecked": 9, "first_diff": 60, "name": "BrnGui::CarSelectOnlinePlayerList::Construct", "score": 98.8, "size": 320, "status": "nonmatching", "symbol": "?Construct@CarSelectOnlinePlayerList@BrnGui@@UAAXPBDPAUStateInterface@CgsGui@@0@Z"},
   {"artist": "8241B0C8", "artist_size": 252, "first_diff": 8, "name": "BrnGui::CarSelectOnlinePlayerList::SetFinalSelection", "score": 33.7, "size": 128, "status": "nonmatching", "symbol": "?SetFinalSelection@CarSelectOnlinePlayerList@BrnGui@@QAAXH_N@Z"},
   {"artist": "8241B1C8", "artist_size": 216, "first_diff": 4, "name": "BrnGui::CarSelectOnlinePlayerList::Show", "score": 24.1, "size": 116, "status": "nonmatching", "symbol": "?Show@CarSelectOnlinePlayerList@BrnGui@@QAAXH@Z"},
   {"artist": "8241B2A0", "artist_size": 240, "first_diff": 4, "name": "BrnGui::CarSelectOnlinePlayerList::Hide", "score": 29.2, "size": 144, "status": "nonmatching", "symbol": "?Hide@CarSelectOnlinePlayerList@BrnGui@@QAAXH@Z"},
   {"artist": "82427948", "artist_size": 240, "first_diff": 8, "name": "BrnGui::CarSelectOnlinePlayerList::SetPlayerName", "score": 31.5, "size": 116, "status": "nonmatching", "symbol": "?SetPlayerName@CarSelectOnlinePlayerList@BrnGui@@QAAXHPBD@Z"},
   {"artist": "82427A38", "artist_size": 104, "first_diff": 12, "name": "BrnGui::CarSelectOnlinePlayerList::HandleLoadNotification", "score": 26.9, "size": 104, "status": "nonmatching", "symbol": "?HandleLoadNotification@CarSelectOnlinePlayerList@BrnGui@@QAA_NPBD@Z"},
   {"artist": "82434B70", "artist_size": 340, "first_diff": 8, "name": "BrnGui::CarSelectOnlinePlayerList::SetPlayerCar", "score": 33.8, "size": 204, "status": "nonmatching", "symbol": "?SetPlayerCar@CarSelectOnlinePlayerList@BrnGui@@QAAXH_K@Z"},
-  {"artist": "82482950", "artist_size": 212, "first_diff": 4, "name": "BrnGui::CarSelectOnlinePlayerList::IsShowing", "score": 22.2, "size": 112, "status": "nonmatching", "symbol": "?IsShowing@CarSelectOnlinePlayerList@BrnGui@@QBA_NH@Z"}
+  {"artist": "82482950", "artist_size": 212, "first_diff": 4, "name": "BrnGui::CarSelectOnlinePlayerList::IsShowing", "score": 22.2, "size": 112, "status": "nonmatching", "symbol": "?IsShowing@CarSelectOnlinePlayerList@BrnGui@@QBA_NH@Z"},
+  {"artist": "82820810", "artist_size": 112, "first_diff": 0, "name": "CgsDev::Assert::FireAssert", "score": 0.0, "size": 16, "status": "nonmatching", "symbol": "?FireAssert@Assert@CgsDev@@YAXABUMessageAt@12@PBDH@Z"}
  ]
 }
