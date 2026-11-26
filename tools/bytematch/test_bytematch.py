@@ -1117,6 +1117,15 @@ def test_exported_native_leaf_can_recover_a_fallthrough_tail():
     with pytest.raises(ValueError, match="does not fall through"):
         recover(unreached, proof)
 
+    # A kept body that ends with a return still owns a tail its own forward branch enters
+    # (a switch's bounds check reaching the default arm IDA left out) ...
+    branched = [0x41990008, BLR, 0x3860FFFF, BLR]                 # bgt cr6,+8 -> the li; blr | li r3,-1; blr
+    assert recover(branched, {**proof, "size": 16}).size(leaf) == (16, "native_leaf")
+    # ... but not a block only a later backward branch reaches (a neighbour's own loop).
+    looped = [0x60000000, BLR, 0x3860FFFF, 0x4BFFFFFC, BLR]       # nop; blr | li; b -4 (back to li); blr
+    with pytest.raises(ValueError, match="does not fall through"):
+        recover(looped, {**proof, "size": 20})
+
     # ... except the XDK's dead epilogue blr right after a closing bctr.
     epilogue = body + [BLR]
     assert recover(epilogue, {**proof, "size": 4 * len(epilogue)}).size(leaf) == (24, "native_leaf")

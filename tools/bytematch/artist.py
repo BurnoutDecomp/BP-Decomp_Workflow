@@ -494,13 +494,14 @@ class Artist:
         return linked == described
 
     def _falls_into_tail(self, occupied, address, tail, end):
-        """Check that a clipped export's last kept instruction runs straight on into its omitted tail.
+        """Check that a clipped export continues into its omitted tail.
 
-        The instruction before the tail must be able to fall through (no blr, bctr or b), the tail
-        must hold no zero word and end with one of those unconditional transfers, every tail
-        instruction that follows an unconditional transfer must be a branch or jump-table target from
-        inside the extent, and the extent must stop at alignment padding or at the next known
-        function, so the tail cannot be a neighbour.
+        Control must reach every block of the tail from the function itself: the tail's first
+        instruction by falling through from the last kept one (no blr, bctr or b) or as the target of
+        a branch or jump-table entry in the kept body, and every later tail instruction that follows
+        an unconditional transfer as a target from an instruction before it (so a neighbour's own
+        loop cannot vouch for it). The tail must hold no zero word and end with an unconditional
+        transfer, and the extent must stop at alignment padding or at the next known function.
         """
         from compare import branch_target
 
@@ -508,19 +509,27 @@ class Artist:
             return word in (BLR, BCTR) or (word >> 26 == 18 and not word & 1)
 
         body = [word for (word,) in struct.iter_unpack(">I", self.bytes(address, end - address))]
-        targets = set(body)
+        reached_by = {}  # target address -> index of the first word that names it
         for index, word in enumerate(body):
+            reached_by.setdefault(word, index)  # an absolute jump-table entry
             if word >> 26 in (16, 18) and not word & 2:
-                targets.add(branch_target(word, address + 4 * index, 0x03FFFFFC if word >> 26 == 18 else 0x0000FFFC))
+                target = branch_target(word, address + 4 * index, 0x03FFFFFC if word >> 26 == 18 else 0x0000FFFC)
+                reached_by.setdefault(target, index)
+
+        def reached_before(index):
+            return reached_by.get(address + 4 * index, len(body)) < index
+
         cut = (tail - address) // 4
         words = body[cut:]
         last = body[cut - 1]
-        if not words or not last or unconditional(last) or not all(words) or not unconditional(words[-1]):
+        if not words or not last or not all(words) or not unconditional(words[-1]):
+            return False
+        if unconditional(last) and not reached_before(cut):
             return False
         # The XDK closes a switch whose arms all tail-call through ctr with a dead epilogue blr
         # right after the last bctr; that one unreached word is the function's own.
         dead_epilogue = len(body) - 1 if body[-1] == BLR and body[-2] == BCTR else None
-        if any(unconditional(body[index - 1]) and address + 4 * index not in targets and index != dead_epilogue
+        if any(unconditional(body[index - 1]) and not reached_before(index) and index != dead_epilogue
                for index in range(cut + 1, len(body))):
             return False
         following = self.bytes(end, 4) if end < TEXT_END else b"\0\0\0\0"
