@@ -20701,6 +20701,162 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "IDA cut the name. ArbStateCrashing::Prepare 0x82265678 calls it on mDeathcam straight after NewBehaviour<BehaviourSpirallingDeathcam> (0x82265668) and hands the result to BehaviourSpirallingDeathcam::SetParameters. Body equals our BehaviourHandle<T>::Get (h:589 assert + pool lookup), 100 bytes."
+    },
+    "BrnResource::GameDataIO::InputBuffer::GetAttribSysRequestInterface": {
+      "symbol": "BrnResource::GameDataIO::InputBuffer::GetAttribSysRequestInterface",
+      "file": "GameSource/Resource/BrnGameDataModuleIO.cpp",
+      "x360_address": "0x823B1830",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA cut the export name after `InputBuffe`. 168 bytes: write-lock stream assert (bit 3, 'Not locked for writing', line 0xE2 = 226 = DWARF BrnGameDataModuleIO.h:226 for the non-const GetAttribSysRequestInterface, as our header comment cites), then returns this+0x8014. BrnGame::BrnGameModule::BridgeWorldToResource 0x823E5300 (100 B) is byte-identical to ours except this call (0x823E5340); our source calls InputBuffer::GetAttribSysRequestInterface() there. Our body (core lane, Resource) is 96 B: it lacks the lock assert, so it stays nonmatching until core restores it."
+    },
+    "??$NewBehaviour@VBehaviourGameplayBumper@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHa": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGameplayBumper>",
+      "file": "GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp",
+      "x360_address": "0x82257048",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourGameplayBumper@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHa`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGameplayBumper> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourHeliCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VB": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourHeliCam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x822575D8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourHeliCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VB`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourHeliCam> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourPassengerCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHand": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourPassengerCam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x82257B68",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourPassengerCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHand`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourPassengerCam> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourRoadRunner@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRoadRunner>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateAttractMode.cpp",
+      "x360_address": "0x822580F8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourRoadRunner@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRoadRunner> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateAttractMode.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourRenderMetrics@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHan": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRenderMetrics>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp",
+      "x360_address": "0x82258688",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourRenderMetrics@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHan`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRenderMetrics> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateRenderMetrics.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourInterpolate@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandl": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourInterpolate>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp",
+      "x360_address": "0x8225F968",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourInterpolate@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandl`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourInterpolate> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourGameplayExternal@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behaviour": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGameplayExternal>",
+      "file": "GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp",
+      "x360_address": "0x8225FEF8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourGameplayExternal@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behaviour`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGameplayExternal> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/BrnDirectorArbitratorSharedCameraContainer.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourAftertouchCrash@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourH": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourAftertouchCrash>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashMode.cpp",
+      "x360_address": "0x82260488",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourAftertouchCrash@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourH`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourAftertouchCrash> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateCrashMode.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourFailsafe@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@V": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourFailsafe>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x82261538",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourFailsafe@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@V`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourFailsafe> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourLooseAttachment@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourH": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourLooseAttachment>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp",
+      "x360_address": "0x82261AC8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourLooseAttachment@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourH`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourLooseAttachment> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourFixedCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@V": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourFixedCam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x82262058",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourFixedCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@V`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourFixedCam> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourRotateAboutVehicle@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behavio": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRotateAboutVehicle>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp",
+      "x360_address": "0x822625E8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourRotateAboutVehicle@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$Behavio`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourRotateAboutVehicle> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateCarSelect.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourAftertouchCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHan": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourAftertouchCam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x822685A8",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourAftertouchCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHan`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourAftertouchCam> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "??$NewBehaviour@VBehaviourGyroCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VB": {
+      "symbol": "BrnDirector::Camera::BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGyroCam>",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp",
+      "x360_address": "0x82268B38",
+      "byte_match": false,
+      "evidence": "IDA truncated the mangled export to `??$NewBehaviour@VBehaviourGyroCam@Camera@BrnDirector@@@BehaviourManager@Camera@BrnDirector@@QAAXAAV?$BehaviourHandle@VB`, which spells BehaviourManager::NewBehaviour<BrnDirector::Camera::BehaviourGyroCam> in BrnDirector::Camera. The instance compiled from src/GameSource/Director/Arbitrator/States/BrnArbStateTakedown.cpp differs from ARTIST's body only in the names of its still-unnamed callees (BehaviourHandle<T>::Prepare, AllocateBehaviour<T>, ObjectPool<BehaviourHelper,28,BehaviourHelperIndex>::AllocateObject) at the time of naming (state lane round 2, x360 5b426951f / 9f571bf70).",
+      "name_evidence": true
+    },
+    "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGyroCam>::Get": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourGyroCam>::Get",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentTumbling.cpp",
+      "x360_address": "0x821FCE78",
+      "byte_match": true,
+      "evidence": "IDA cut the template argument. MomentTumbling::SignalIsGoodTimeToPlant 0x8220A0CC and MomentHitTraffic::Update 0x82271E38 call it on their GyroCam handles (tumbling +0x190; hit-traffic mHeliCamHandle is a BehaviourHandle<BehaviourGyroCam>, allocated by NewBehaviour<BehaviourGyroCam>). DWARF BrnBehaviourManager.h:574 Get(). Our ?Get@?$BehaviourHandle@VBehaviourGyroCam@... (h:589 assert, helper-pool lookup) equals the 100 bytes word for word (state-tools/cmpaddr.py); named, SignalIsGoodTimeToPlant is exact (its only difference is this call)."
+    },
+    "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourSpirallingDeathcam>::Get": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourSpirallingDeathcam>::Get",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateCrashing.cpp",
+      "x360_address": "0x821FDD30",
+      "byte_match": true,
+      "evidence": "IDA cut the name. ArbStateCrashing::Prepare 0x82265678 calls it on mDeathcam straight after NewBehaviour<BehaviourSpirallingDeathcam> (0x82265668) and hands the result to BehaviourSpirallingDeathcam::SetParameters. Body equals our BehaviourHandle<T>::Get (h:589 assert + pool lookup), 100 bytes."
+    },
+    "BrnDirector::Camera::BehaviourManager::BehaviourHandle<c": {
+      "symbol": "BrnDirector::Camera::BehaviourHandle<BrnDirector::Camera::BehaviourFixedCam>::Get",
+      "file": "GameSource/Director/MomentController/Moments/BrnMomentStaticCamImpact.cpp",
+      "x360_address": "0x821FD648",
+      "byte_match": true,
+      "evidence": "IDA cut the template argument. MomentStaticCamImpact::Update 0x82266AB0 calls it (0x82266B48, 0x82266B7C) on mFixedCam (+0x180), allocated by NewBehaviour<BehaviourFixedCam> 0x82262058; ArbStateTestbed::Update is the other caller. Same 100-byte body as the named Get<IceAnim> 0x821FD3E8 / Get<GyroCam> 0x821FCE78 (h:589 IsAllocated assert + helper-pool lookup). Unblocks StaticCamImpact::Update (94.8, call names only)."
+    },
+    "Brn": {
+      "symbol": "CgsContainers::ObjectPool<BrnDirector::Camera::BehaviourManager::BehaviourHelper,28,BrnDirector::Camera::BehaviourHelperIndex>::AllocateObject",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x821FC2B8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA kept only `Brn`. 380 bytes: pops the free queue (count +0x2A70, queue +0x2A00 = 0xA80 words), asserts index < 0x1C ('Array index out of bounds: ', CgsObjectPool.h:193), SetBit on +0x2A78 (CgsBitArray.h:222), returns the index in r3 or -1: ObjectPool<T,28,TIndex>::AllocateObject on the manager's helper pool (r3 = BehaviourManager+0xFAB0 in every NewBehaviour<T>, e.g. 0x82260A34..0x82260A44). Name evidence only: our body is 396 B (78.4): ARTIST streams the first assert through the out-of-line StrStreamBase::operator<<(const char*) 0x821F01A8 and the %d operator<< 0x821F0E50; ours inlines the first insertion. Same residual in every AllocateObject instance (e.g. 0x822009B0, core's CgsObjectPool.h)."
+    },
+    "CgsContainers::Array<c": {
+      "symbol": "CgsContainers::Array<CgsContainers::Array<BrnDirector::Camera::BehaviourHelperIndex,28>,28>::GetItem",
+      "file": "GameSource/Director/Arbitrator/States/BrnArbStateTestbed.cpp",
+      "x360_address": "0x82200140",
+      "byte_match": true,
+      "evidence": "IDA cut the template arguments. Every NewBehaviour<T> calls it at +0x494 on manager+0x14B44 (mDebugBehaviourRefCountIndexLog) with the helper index, then clears the returned inner array's count (+0x70 = 28 entries * 4). Our ?GetItem@?$Array@V?$Array@VBehaviourHelperIndex... compares exact against the 264 bytes (state-tools/cmpaddr.py)."
     }
   },
   "sdk_entry_groups": {
@@ -34465,6 +34621,51 @@
       "caller": "0x828F4808",
       "call_site": "0x828F48D0",
       "evidence": "ARTIST Heap::Malloc calls the fixed-address selector at 0x828F48D0, 0x828F48E8 and 0x828F4908 with the Heap, typed node, native size and address. The native Malloc names this method and DecFIGS CgsResourceHeap.h line 445 declares the same signature. The ARTIST leaf searches the node chain then wraps once; its final blr is at 0x828EB42C before FindFreeNodeBestFit at 0x828EB430. The native body matches all 296 bytes without relocations."
+    },
+    "0x82684C78": {
+      "symbol": "BrnSound::Vehicles::Engines::ClutchControl::GetController",
+      "previous_size": 88,
+      "size": 100,
+      "file": "GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp",
+      "caller": "0x82684C78",
+      "call_site": "0x82684C7C",
+      "evidence": "The bounds branch at 0x82684C7C (cmplwi cr6 against 4) reaches the switch's default arm `li r3,-1; blr` at 0x82684CD4, beyond the 88-byte clipped export. All 5 absolute jump-table cases at 0x82684C98 land inside the complete 100-byte body, which ends at its final blr; the word after it is zero alignment. The native body compiled from src/GameSource/Sound/Vehicles/Engines/BrnClutchControl.cpp has the same length (physnd lane)."
+    },
+    "0x826845C0": {
+      "symbol": "BrnSound::Vehicles::Engines::EngineControl::GetController",
+      "previous_size": 88,
+      "size": 100,
+      "file": "GameSource/Sound/Vehicles/Engines/BrnEngineControl.cpp",
+      "caller": "0x826845C0",
+      "call_site": "0x826845C4",
+      "evidence": "The bounds branch at 0x826845C4 (cmplwi cr6 against 4) reaches the switch's default arm `li r3,-1; blr` at 0x8268461C, beyond the 88-byte clipped export. All 5 absolute jump-table cases at 0x826845E0 land inside the complete 100-byte body, which ends at its final blr; the word after it is zero alignment. The native body compiled from src/GameSource/Sound/Vehicles/Engines/BrnEngineControl.cpp has the same length (physnd lane)."
+    },
+    "0x82685B68": {
+      "symbol": "BrnSound::Vehicles::Wheels::WheelControl::GetController",
+      "previous_size": 88,
+      "size": 100,
+      "file": "GameSource/Sound/Vehicles/Wheels/BrnWheelControl.cpp",
+      "caller": "0x82685B68",
+      "call_site": "0x82685B6C",
+      "evidence": "The bounds branch at 0x82685B6C (cmplwi cr6 against 4) reaches the switch's default arm `li r3,-1; blr` at 0x82685BC4, beyond the 88-byte clipped export. All 5 absolute jump-table cases at 0x82685B88 land inside the complete 100-byte body, which ends at its final blr; the word after it is zero alignment. The native body compiled from src/GameSource/Sound/Vehicles/Wheels/BrnWheelControl.cpp has the same length (physnd lane)."
+    },
+    "0x82684AB0": {
+      "symbol": "BrnSound::Vehicles::Engines::HybridEngineControl::GetController",
+      "previous_size": 92,
+      "size": 112,
+      "file": "GameSource/Sound/Vehicles/Engines/BrnHybridEngineControl.cpp",
+      "caller": "0x82684AB0",
+      "call_site": "0x82684AB4",
+      "evidence": "The bounds branch at 0x82684AB4 (cmplwi cr6 against 5) reaches the switch's default arm `li r3,-1; blr` at 0x82684B18, beyond the 92-byte clipped export. All 6 absolute jump-table cases at 0x82684AD0 land inside the complete 112-byte body, which ends at its final blr; the word after it is the next function. The native body compiled from src/GameSource/Sound/Vehicles/Engines/BrnHybridEngineControl.cpp has the same length (physnd lane)."
+    },
+    "0x826849B0": {
+      "symbol": "BrnSound::Vehicles::Engines::HybridExhaustControl::GetController",
+      "previous_size": 96,
+      "size": 112,
+      "file": "GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp",
+      "caller": "0x826849B0",
+      "call_site": "0x826849B4",
+      "evidence": "The bounds branch at 0x826849B4 (cmplwi cr6 against 4) reaches the switch's default arm `li r3,-1; blr` at 0x82684A18, beyond the 96-byte clipped export. All 5 absolute jump-table cases at 0x826849D0 land inside the complete 112-byte body, which ends at its final blr; the word after it is the next function. The native body compiled from src/GameSource/Sound/Vehicles/Engines/BrnHybridExhaustControl.cpp has the same length (physnd lane)."
     }
   },
   "sdk_archive_splits": {
