@@ -21837,6 +21837,54 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "Left-truncated export name of the DebugLinkedList<DebugComponent> instantiation: its siblings 0x82820F98 (CgsDev::Internal::DebugLinkedList<CgsDev::DebugUI::Window>::Add) and 0x828211B8 (...<CgsDev::DebugUI::MenuItem>::Add) carry the full name and the same 248-byte size. Its only two callers are DebugManager::RegisterComponentSimple 0x8282E2AC and RegisterComponent 0x82832094, both on mComponentList (this+0x816C) with r4 = the component, and DecFIGS lists Internal::DebugLinkedList<CgsDev::DebugComponent>::Add as the call in both (CgsDebugManager.cpp:127/:171 dumps). RegisterComponentSimple (292 B) differs from ours (CgsDevelopmentUnity object) only in this call's name with KPC_DEFAULTCOMPONENTPATH (x360 ae2d0dc38). Our Add body scores 80.6 against it (not byte-identical yet)."
+    },
+    "??$?6VCsisSetClassHandleCommand@Playback@CgsSound@@@CsisCommandQueue@Playback@CgsSound@@QAAAAV012@ABVCsisSetClassHandle": {
+      "symbol": "CgsSound::Playback::CsisCommandQueue::operator<<<CgsSound::Playback::CsisSetClassHandleCommand>",
+      "file": "GameShared/GameClasses/Sound/Playback/AEMS/CgsCsisCommandQueue.cpp",
+      "x360_address": "0x826C64A0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826C64A0 (172 B) is the raw MSVC decoration of the member template CsisCommandQueue::operator<< <CsisSetClassHandleCommand>(const CsisSetClassHandleCommand&) (DWARF CgsAemsFactory.h:240, local lbResult :244, streamed assert :248): PostCommand(5 words) then the streamed 'Possibly need to increase CsisCommandQueue::E_QUEUE_LENGTH' assert (0x820B337C, CgsAemsFactory.h:248). Our CgsCsisCommandQueue.cpp instance is byte-identical to it apart from the call to the truncated 'int>::PostCommand' 0x826AAAB8 (requested below); AemsPlayerVoice::Play / Update / Stop (BrnSoundUnity) are byte-identical apart from this call name, x360 physnd round 2 agent 10."
+    },
+    "??$?6VCsisUpdateCommand@Playback@CgsSound@@@CsisCommandQueue@Playback@CgsSound@@QAAAAV012@ABVCsisUpdateCommand@12@@Z": {
+      "symbol": "CgsSound::Playback::CsisCommandQueue::operator<<<CgsSound::Playback::CsisUpdateCommand>",
+      "file": "GameShared/GameClasses/Sound/Playback/AEMS/CgsCsisCommandQueue.cpp",
+      "x360_address": "0x826C6550",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826C6550 (172 B) is the raw MSVC decoration of the member template CsisCommandQueue::operator<< <CsisUpdateCommand>(const CsisUpdateCommand&) (DWARF CgsAemsFactory.h:240, local lbResult :244, streamed assert :248): PostCommand(3 words) then the streamed 'Possibly need to increase CsisCommandQueue::E_QUEUE_LENGTH' assert (0x820B337C, CgsAemsFactory.h:248). Our CgsCsisCommandQueue.cpp instance is byte-identical to it apart from the call to the truncated 'int>::PostCommand' 0x826AAAB8 (requested below); AemsPlayerVoice::Play / Update / Stop (BrnSoundUnity) are byte-identical apart from this call name, x360 physnd round 2 agent 10."
+    },
+    "??$?6VCsisCreateCommand@Playback@CgsSound@@@CsisCommandQueue@Playback@CgsSound@@QAAAAV012@ABVCsisCreateCommand@12@@Z": {
+      "symbol": "CgsSound::Playback::CsisCommandQueue::operator<<<CgsSound::Playback::CsisCreateCommand>",
+      "file": "GameShared/GameClasses/Sound/Playback/AEMS/CgsCsisCommandQueue.cpp",
+      "x360_address": "0x826C6600",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826C6600 (172 B) is the raw MSVC decoration of the member template CsisCommandQueue::operator<< <CsisCreateCommand>(const CsisCreateCommand&) (DWARF CgsAemsFactory.h:240, local lbResult :244, streamed assert :248): PostCommand(4 words) then the streamed 'Possibly need to increase CsisCommandQueue::E_QUEUE_LENGTH' assert (0x820B337C, CgsAemsFactory.h:248). Our CgsCsisCommandQueue.cpp instance is byte-identical to it apart from the call to the truncated 'int>::PostCommand' 0x826AAAB8 (requested below); AemsPlayerVoice::Play / Update / Stop (BrnSoundUnity) are byte-identical apart from this call name, x360 physnd round 2 agent 10."
+    },
+    "??$?6VCsisReleaseCommand@Playback@CgsSound@@@CsisCommandQueue@Playback@CgsSound@@QAAAAV012@ABVCsisReleaseCommand@12@@Z": {
+      "symbol": "CgsSound::Playback::CsisCommandQueue::operator<<<CgsSound::Playback::CsisReleaseCommand>",
+      "file": "GameShared/GameClasses/Sound/Playback/AEMS/CgsCsisCommandQueue.cpp",
+      "x360_address": "0x826C66B0",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826C66B0 (172 B) is the raw MSVC decoration of the member template CsisCommandQueue::operator<< <CsisReleaseCommand>(const CsisReleaseCommand&) (DWARF CgsAemsFactory.h:240, local lbResult :244, streamed assert :248): PostCommand(2 words) then the streamed 'Possibly need to increase CsisCommandQueue::E_QUEUE_LENGTH' assert (0x820B337C, CgsAemsFactory.h:248). Our CgsCsisCommandQueue.cpp instance is byte-identical to it apart from the call to the truncated 'int>::PostCommand' 0x826AAAB8 (requested below); AemsPlayerVoice::Play / Update / Stop (BrnSoundUnity) are byte-identical apart from this call name, x360 physnd round 2 agent 10."
+    },
+    "int>::PostCommand": {
+      "symbol": "CgsSound::Playback::CommandQueue<255,unsigned int>::PostCommand",
+      "file": "GameShared/GameClasses/Sound/Playback/CgsCommandQueue.cpp",
+      "x360_address": "0x826AAAB8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "IDA truncated the name (272 B, universe row 'int>::PostCommand'): CommandQueue<255, uintptr_t>::PostCommand(unsigned int, const uintptr_t*) (CgsCommandQueue.h, the CSIS queue's ring of CgsAemsFactory.h:265). The four CsisCommandQueue::operator<< <T> instances 0x826C64A0..0x826C66B0 call it with r3 = the queue, r4 = the record's word count (5/3/4/2) and r5 = the record; they are byte-identical to ours apart from this call name, x360 physnd round 2 agent 10."
+    },
+    "BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent": {
+      "symbol": "CgsModule::BaseEventQueue<BrnWorld::RaceCarEntityModuleIO::RemoveRivalFromTrafficSystemEvent>::Append",
+      "file": "GameSource/World/EntityModules/RaceCarEntityModule/SharedIO/BaseEventQueue_RemoveRivalFromTrafficSystemEvent_Append.cpp",
+      "x360_address": "0x827A7BA8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "The export truncates the specialization name to its template argument, exactly as its sibling 0x827A7AB8 ('...CreateRivalInTrafficSystemEvent>:', already aliased to BaseEventQueue<CreateRivalInTrafficSystemEvent>::Append). Its only caller is SetRaceCarToTrafficInterface 0x827ACF6C, which runs the implicit RaceCarToTrafficInterface::operator= (DWARF BrnRaceCarToTrafficInterface.h:114..:175 declares none): EventQueue<CreateRival,34>::operator= (length store, bl 0x827A7AB8 with r3 = this+0x2F60, r4 = src) then EventQueue<RemoveRival,34>::operator= (`addi r3, r31, 0x670 ; addi r4, r27, 0x670 ; stw r28, 8(r3) ; bl 0x827A7BA8`): the second queue's Append, CgsEventQueue.h:194. Our setter calls this symbol at that site; the native body is compiled from the file named here."
     }
   },
   "sdk_entry_groups": {
@@ -37190,6 +37238,13 @@
       "size": 104,
       "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
       "evidence": "Unnamed export (104 B), the CgsHandle.h:226 operator= of Handle<Voice>: acquire the other handle's object, release ours through Object::Release, copy the pointer, return *this (the same 104-byte shape as Handle<Content>::operator= 0x826A7070). GenericRwacFactory::DoCreateVoice 0x826FA4F4 / 0x826FA51C / 0x826FA544 calls it with r3 = the Handle<Voice>& out-parameter and r4 = each CreateVoiceInternal<T> result. Our BrnSoundUnity Handle<Voice>::operator= is byte-exact against 0x826A7640 (exact 100.0, 104 B), x360 physnd round 2 agent 10."
+    },
+    "0x8268FCC8": {
+      "exported_name": null,
+      "symbol": "CgsSound::Playback::Registry::GetEntity<CgsSound::Playback::AemsVoiceCsisClass>",
+      "size": 360,
+      "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
+      "evidence": "Unnamed export (360 B), the third instance beside Registry::GetEntity<VoiceSpec> 0x8268F988 / <ContentSpec> 0x8268FAF0 (both 360 B, the same shape). IDA's xrefs of AemsPlayerVoice::AemsPlayerVoice 0x826DA52C / GetClientAllocationSize 0x826A2BC4 name the callee '??$GetEntity@VAemsVoiceCsisClass@Playback@CgsSound@@@Registry@Playback...' (Registry::GetEntity<AemsVoiceCsisClass>(Name) const), called on the AEMS factory's registry with the voice schema's name, and the result is the voice's CSIS class (lhz +0xC user parameter start, +0x10/+0x14 CRCs, +0x18 class name), x360 physnd round 2 agent 10."
     }
   },
   "native_leaf_functions": {
