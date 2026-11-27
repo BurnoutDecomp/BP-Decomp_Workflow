@@ -3397,11 +3397,12 @@
       "evidence": "GinsuPlayer.h and cpp identify vt[1] at this address; Event queues play/stop handlers with host-sized deferred records. EventEvent is the ledger spelling."
     },
     "rw::graphics::postfx::ColourCub": {
-      "symbol": "CgsResource::ResourcePtr::GetMemoryResource",
-      "const": false,
-      "file": "GameShared/GameClasses/System/Resource/CgsResourcePtr.h",
+      "symbol": "CgsResource::ResourcePtr<rw::graphics::postfx::ColourCube>::GetMemoryResource",
+      "file": "GameSource/Gui/PFX/BrnPfxHookBlender.cpp",
       "x360_address": "0x824FBE78",
-      "evidence": "CgsResourcePtr_rw_graphics_postfx_ColourCube.cpp explicitly instantiates GetMemoryResource; baked assertion line 581 identifies the accessor, rather than operator-> or operator*."
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Truncated export name (unique in the universe) of the const ResourcePtr<T>::GetMemoryResource instantiation for the post-fx colour cube. Callers: BrnGui::PFXNodeFader::LookupColourCube (0x8250435C, r3 = the matched slot after the inlined NULLResourcePtr compare; DecFIGS cpp:230-238 names GetMemoryResource there) and BrnWorld::EnvironmentSettings::EnvironmentManager::Prepare. The 160-byte body is the CgsResourcePtr.h streamed 'no main memory resource' assert then the cached word, the same shape as 0x82678F80. Our out-of-line copy (emitted by BrnPfxHookBlender.cpp) is byte-identical to ARTIST's 160 bytes (forced pairing, 7 data relocations unchecked). LookupColourCube is 94.3 with this call its only wrong call (core round 5, BaseResourcePtr::IsEqual header-inline). (Replaces an inert entry that named the symbol without its template argument; earlier evidence: CgsResourcePtr_rw_graphics_postfx_ColourCube.cpp explicitly instantiates GetMemoryResource; baked assertion line 581 identifies the accessor, rather than operator-> or operator*.)"
     },
     "rw::math::vpu::Vector3>::Push": {
       "symbol": "CgsContainers::RingBuffer<rw::math::vpu::Vector3>::Push",
@@ -21885,6 +21886,14 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "The export truncates the specialization name to its template argument, exactly as its sibling 0x827A7AB8 ('...CreateRivalInTrafficSystemEvent>:', already aliased to BaseEventQueue<CreateRivalInTrafficSystemEvent>::Append). Its only caller is SetRaceCarToTrafficInterface 0x827ACF6C, which runs the implicit RaceCarToTrafficInterface::operator= (DWARF BrnRaceCarToTrafficInterface.h:114..:175 declares none): EventQueue<CreateRival,34>::operator= (length store, bl 0x827A7AB8 with r3 = this+0x2F60, r4 = src) then EventQueue<RemoveRival,34>::operator= (`addi r3, r31, 0x670 ; addi r4, r27, 0x670 ; stw r28, 8(r3) ; bl 0x827A7BA8`): the second queue's Append, CgsEventQueue.h:194. Our setter calls this symbol at that site; the native body is compiled from the file named here."
+    },
+    "CgsConta": {
+      "symbol": "CgsResource::ResourcePtr<CgsContainers::Dictionary<ICE::ICETakeData>>::GetMemoryResource",
+      "file": "SharedClasses/DataLists/ICEList.cpp",
+      "x360_address": "0x82678F80",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Left-truncated export name (unique in the universe) of the const ResourcePtr<T>::GetMemoryResource instantiation for the ICE take dictionary. Its only two ARTIST callers are BrnResource::ICEList::GetICETakeData (0x8267BE50) and GetICETakeDataFromGuid (0x8267BF30), each with r3 = the slot (this + 32*i) right after the inlined NULLResourcePtr compare; DecFIGS ICEList.cpp:125 / :145 name ResourcePtr<CgsContainers::Dictionary<ICE::ICETakeData> >::GetMemoryResource as that call. The 160-byte body is the streamed 'Can not dereference resource pointer - it has no main memory resource' assert of CgsResourcePtr.h then the cached word. Our out-of-line copy (CgsResourcePtr.h template, emitted by ICEList.cpp) is byte-identical to ARTIST's 160 bytes (forced pairing, 7 data relocations unchecked). With this name GetICETakeData (94.1) and GetICETakeDataFromGuid (95.2) differ from ARTIST in nothing else (core round 5 batch)."
     }
   },
   "sdk_entry_groups": {
