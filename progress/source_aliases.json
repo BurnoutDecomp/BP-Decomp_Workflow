@@ -593,7 +593,8 @@
         "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "src/GameSource/Network/Debug Components/BrnNetworkImageManagerDebugComponent.cpp",
         "BrnNetwork::LiveRevengeManager::OnGameFinish": "src/GameSource/Network/Managers/BrnNetworkLiveRevengeManager.cpp",
         "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "src/GameSource/Network/Managers/BrnNetworkPlayerStatsManager.cpp",
-        "BrnReplays::SoundSerialiser::Destruct": "src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp"
+        "BrnReplays::SoundSerialiser::Destruct": "src/GameSource/Replays/Serialisers/BrnReplaySoundSerialiser.cpp",
+        "BrnNetwork::ImageManagerDebugComponent::SetImageToEncode": "src/GameSource/Network/Debug Components/BrnNetworkImageManagerDebugComponent.cpp"
       },
       "call_evidence": {
         "BrnNetwork::LiveRevengeManager::OnLeaveGame": "The existing compiled method matches all 4 bytes and the aligned native branch at 0x82581D68 lands here.",
@@ -631,7 +632,8 @@
         "BrnNetwork::ImageManagerDebugComponent::PreWorldUpdate": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
         "BrnNetwork::LiveRevengeManager::OnGameFinish": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
         "BrnNetwork::NetworkPlayerStatsManager::OnGameStart": "The fold body is a bare blr; each native is an empty body, exact at the address (measured in src/GameSource/Unity/BrnNetworkManagerUnity.cpp for the two managers). Callers: NetworkImageManager::GetCompressedTexture 0x8256BC38 and ProcessBeforeSimulation 0x8256F6E8 (ImageManagerDebugComponent::PreWorldUpdate), BrnNetworkManager::OnGameFinish 0x82582070 (LiveRevengeManager::OnGameFinish), BrnNetworkManager::OnGameStart 0x82588980 (NetworkPlayerStatsManager::OnGameStart).",
-        "BrnReplays::SoundSerialiser::Destruct": "The fold body 0x8284CB38 is a bare blr; the native SoundSerialiser::Destruct is an empty body (4-byte blr, no relocations). SoundSerialiser is X360-only (no DWARF); its DWARF siblings GameModuleSerialiser::Destruct (BrnReplayGameModuleSerialiser.cpp:51, PS3 0x7B6864) and RaceCarEntitySerialiser::Destruct (cpp:52, PS3 0x7B6858) are public, out of line and empty (bare blr), as is BaseSerialiser::Destruct (cpp:79, PS3 0x7B6850). ARTIST BrnSound::Module::SoundLogicModule::Destruct 0x82697850 calls 0x8284CB38 at 0x82697870 with r3 = this+0x13600 = mSoundSerialiser (the member SoundLogicModule::Construct builds with SoundSerialiser::Construct 0x8264C9F8), right after ModuleSingleBuffered::Destruct. With the alias SoundLogicModule::Destruct (76 B) is exact: in the physnd tree its only difference is this call's name (score 94.7, wrong call at +0x20 = SoundSerialiser::Destruct vs the fold's exported name)."
+        "BrnReplays::SoundSerialiser::Destruct": "The fold body 0x8284CB38 is a bare blr; the native SoundSerialiser::Destruct is an empty body (4-byte blr, no relocations). SoundSerialiser is X360-only (no DWARF); its DWARF siblings GameModuleSerialiser::Destruct (BrnReplayGameModuleSerialiser.cpp:51, PS3 0x7B6864) and RaceCarEntitySerialiser::Destruct (cpp:52, PS3 0x7B6858) are public, out of line and empty (bare blr), as is BaseSerialiser::Destruct (cpp:79, PS3 0x7B6850). ARTIST BrnSound::Module::SoundLogicModule::Destruct 0x82697850 calls 0x8284CB38 at 0x82697870 with r3 = this+0x13600 = mSoundSerialiser (the member SoundLogicModule::Construct builds with SoundSerialiser::Construct 0x8264C9F8), right after ModuleSingleBuffered::Destruct. With the alias SoundLogicModule::Destruct (76 B) is exact: in the physnd tree its only difference is this call's name (score 94.7, wrong call at +0x20 = SoundSerialiser::Destruct vs the fold's exported name).",
+        "BrnNetwork::ImageManagerDebugComponent::SetImageToEncode": "ICF fold of the empty-body `blr` (4 B) already aliased at this address. ARTIST BrnNetwork::NetworkImageManager::GetCompressedTexture 0x8256BC38 calls 0x8284CB38 at 0x8256BD78 with r3 = this+0x217C (mDebugComponent) and r4 = the texture's +0x14 (lpTexture->GetTexture()), exactly where our GetCompressedTexture calls mDebugComponent.SetImageToEncode(lpTexture->GetTexture()); our SetImageToEncode is the same 4-byte blr with no relocations. D7 condition met: an ARTIST caller lands on the shared address where our counterpart names the folded function."
       }
     },
     "0x829646E0": {
@@ -1523,6 +1525,16 @@
       },
       "call_evidence": {
         "HLBBudIsBlocked": "ARTIST CgsNetwork::BuddyManagerBase::IsBuddyBlocked 0x8287D5A8 calls 0x82B0F1B8 at 0x8287D5CC where our IsBuddyBlocked calls HLBBudIsBlocked; HLBBudIsBlocked's `return 0` body is byte-identical to 0x82B0F1B8 (li r3,0; blr)."
+      }
+    },
+    "0x82836DC8": {
+      "exported_name": "EA::GameTalk::GameTalkMessage::GetNumKeys",
+      "evidence": "ICF fold of `lwz r3,0xC(r3); blr` (8 B; 0x82836DC8 is an export hole, ppcdis). ServerInterfaceComponent::GetLastError (DWARF CgsServerInterfaceComponent.h:144, body in the CgsNetworkUnity CU before ClearLastError) returns miLastError at +0xC: the same 8 bytes. ARTIST callers outside the network unity call 0x82836DC8 where our source calls GetLastError on a component: BrnNetwork::ScoreboardManager::ProcessBeforeSimulation 0x825688F8 (r3 = mpRankings, the 'Downloading of scoreboard failed: ' assert), BrnNetwork::BuddyManagerBase::_GetFriendsListFromServerComplete 0x82549C58 (custom-commands component), BrnNetwork::NetworkGamerCardManagerX360::PlayerInfoIdle 0x8254CED0. The other callers of 0x82836DC8 are GameTalk handlers (the real GetNumKeys). D7 condition met.",
+      "aliases": {
+        "CgsNetwork::ServerInterfaceComponent::GetLastError": "src/GameShared/GameClasses/Network/ServerInterface/DirtySock/Components/CgsServerInterfaceComponent.cpp"
+      },
+      "call_evidence": {
+        "CgsNetwork::ServerInterfaceComponent::GetLastError": "ICF fold of `lwz r3,0xC(r3); blr` (8 B; 0x82836DC8 is an export hole, ppcdis). ServerInterfaceComponent::GetLastError (DWARF CgsServerInterfaceComponent.h:144, body in the CgsNetworkUnity CU before ClearLastError) returns miLastError at +0xC: the same 8 bytes. ARTIST callers outside the network unity call 0x82836DC8 where our source calls GetLastError on a component: BrnNetwork::ScoreboardManager::ProcessBeforeSimulation 0x825688F8 (r3 = mpRankings, the 'Downloading of scoreboard failed: ' assert), BrnNetwork::BuddyManagerBase::_GetFriendsListFromServerComplete 0x82549C58 (custom-commands component), BrnNetwork::NetworkGamerCardManagerX360::PlayerInfoIdle 0x8254CED0. The other callers of 0x82836DC8 are GameTalk handlers (the real GetNumKeys). D7 condition met."
       }
     }
   },
@@ -21894,6 +21906,21 @@
       "byte_match": false,
       "name_evidence": true,
       "evidence": "Left-truncated export name (unique in the universe) of the const ResourcePtr<T>::GetMemoryResource instantiation for the ICE take dictionary. Its only two ARTIST callers are BrnResource::ICEList::GetICETakeData (0x8267BE50) and GetICETakeDataFromGuid (0x8267BF30), each with r3 = the slot (this + 32*i) right after the inlined NULLResourcePtr compare; DecFIGS ICEList.cpp:125 / :145 name ResourcePtr<CgsContainers::Dictionary<ICE::ICETakeData> >::GetMemoryResource as that call. The 160-byte body is the streamed 'Can not dereference resource pointer - it has no main memory resource' assert of CgsResourcePtr.h then the cached word. Our out-of-line copy (CgsResourcePtr.h template, emitted by ICEList.cpp) is byte-identical to ARTIST's 160 bytes (forced pairing, 7 data relocations unchecked). With this name GetICETakeData (94.1) and GetICETakeDataFromGuid (95.2) differ from ARTIST in nothing else (core round 5 batch)."
+    },
+    "BrnNetwork::BrnNetwo": {
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::NetworkOutScoreboardHeadingList::GetHeadingType",
+      "file": "GameSource/Network/SharedIO/BrnNetworkOutScoreboardHeadingList.h",
+      "x360_address": "0x823A62F8",
+      "byte_match": true,
+      "evidence": "IDA-truncated name. The body asserts 'meHeadingType != E_HEADING_COUNT' at ..\\..\\..\\GameSource\\Network/BrnNetworkOutEventTypeDefs.h:1778 and returns +4 (meHeadingType); its two callers are BrnGame::BrnGameModule::TranslateNetworkEventsToGuiEvents and BrnNetwork::ScoreboardDebugComponent::HandleScoreboardHeadingEvent, whose DWARF (BrnNetworkUnity CU) lists NetworkOutScoreboardHeadingList::GetHeadingType inside the default arm's streamed message exactly where ARTIST calls 0x823A62F8 (0x82585B5C)."
+    },
+    "??$AddEvent@V?$Message@VVehicleImpactEvent@GameStateModuleIO@BrnGameState@@@Io@CgsSound@@@?$VariableEventQueue@$0CAAA@$": {
+      "symbol": "CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGameState::GameStateModuleIO::VehicleImpactEvent>>",
+      "file": "GameSource/Unity/BrnSoundUnity.cpp",
+      "x360_address": "0x826DE0B8",
+      "byte_match": false,
+      "name_evidence": true,
+      "evidence": "Universe row 0x826DE0B8 (196 B) is IDA's truncated raw MSVC decoration of VariableEventQueue<0x2000,16>::AddEvent<Message<VehicleImpactEvent>> (the decoration spells $0CAAA@ = 8192). Its caller BrnSound::Module::SoundLogicModule::ProcessGameEventQueue 0x826EC340 (192 B, BrnSoundUnity) is byte-identical to ours apart from this one call (bl 0x826de0b8 at 0x826EC3D4; our call names CgsModule::VariableEventQueue<8192,16>::AddEvent<CgsSound::Io::Message<BrnGameState::GameStateModuleIO::VehicleImpactEvent>>), x360 physnd round 2 agent 11. Our AddEvent instance itself scores 75.8 against 0x826DE0B8 (net_cmpaddr)."
     }
   },
   "sdk_entry_groups": {
@@ -37254,6 +37281,90 @@
       "size": 360,
       "tu": "src/GameSource/Unity/BrnSoundUnity.cpp",
       "evidence": "Unnamed export (360 B), the third instance beside Registry::GetEntity<VoiceSpec> 0x8268F988 / <ContentSpec> 0x8268FAF0 (both 360 B, the same shape). IDA's xrefs of AemsPlayerVoice::AemsPlayerVoice 0x826DA52C / GetClientAllocationSize 0x826A2BC4 name the callee '??$GetEntity@VAemsVoiceCsisClass@Playback@CgsSound@@@Registry@Playback...' (Registry::GetEntity<AemsVoiceCsisClass>(Name) const), called on the AEMS factory's registry with the voice schema's name, and the result is the voice's CSIS class (lhz +0xC user parameter start, +0x10/+0x14 CRCs, +0x18 class name), x360 physnd round 2 agent 10."
+    },
+    "0x8254EAD0": {
+      "exported_name": "sub_8254EAD0",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetGameActionQueue",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for reading' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 582, then returns this+0x9D6C. Our const GetGameActionQueue (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x82587D48": {
+      "exported_name": "sub_82587D48",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::PostSimulationInputBuffer::GetGameStateToNetworkInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for reading' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 617, then returns this+0xD17C. Our const GetGameStateToNetworkInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x82588150": {
+      "exported_name": "sub_82588150",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetVehicleDriverInputInterface",
+      "size": 164,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 848, then returns this+0x10. Our non-const GetVehicleDriverInputInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x825882A0": {
+      "exported_name": "sub_825882A0",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetTrafficNetworkInputInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 876, then returns this+0x27CB0. Our non-const GetTrafficNetworkInputInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x82588348": {
+      "exported_name": "sub_82588348",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGameStateInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 883, then returns this+0x27D20. Our non-const GetNetworkToGameStateInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x8254F010": {
+      "exported_name": "sub_8254F010",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetStatsOutputInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 925, then returns this+0x2A1A4. Our non-const GetStatsOutputInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x823BC450": {
+      "exported_name": "sub_823BC450",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetInGamePlayerStatusInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for reading' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 932, then returns this+0x2C280. Our const GetInGamePlayerStatusInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x825883F0": {
+      "exported_name": "sub_825883F0",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetInGamePlayerStatusInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 939, then returns this+0x2C280. Our non-const GetInGamePlayerStatusInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x823BC4F8": {
+      "exported_name": "sub_823BC4F8",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetPlayerResultsInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for reading' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 948, then returns this+0x2CE30. Our const GetPlayerResultsInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x8254F0B8": {
+      "exported_name": "sub_8254F0B8",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetNetworkToGuiInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 971, then returns this+0x2A158. Our non-const GetNetworkToGuiInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x82588540": {
+      "exported_name": "sub_82588540",
+      "symbol": "BrnNetwork::BrnNetworkModuleIO::OutputBuffer::GetOnlineLobbyPlayerStatusInterface",
+      "size": 168,
+      "tu": "src/GameSource/Network/BrnNetworkModuleIO.cpp",
+      "evidence": "Unnamed export of the IO-accessor shape: streamed 'Not locked for writing' assert at d:/p4/b5_main/burnout/main/code/gamesource/network/BrnNetworkModuleIO.h line 979, then returns this+0x2CC70. Our non-const GetOnlineLobbyPlayerStatusInterface (the member at that offset, its assert at the same line) compiles to the same words: compare() exact against this address in the net tree (msgs/net_r8_bodyeq.py). The header's line order matches our declaration order (848 VehicleDriverInput < 876 TrafficNetworkInput < 883 NetworkToGameState < 925 StatsOutput < 932/939 InGamePlayerStatus < 948/957 PlayerResults < 971 NetworkToGui < 979 OnlineLobbyPlayerStatus; 957 is the named non-const GetPlayerResultsInterface 0x82588528)."
+    },
+    "0x82546D68": {
+      "exported_name": "sub_82546D68",
+      "symbol": "BrnNetwork::NetworkPlayerStatsResults::GetPlayerStats",
+      "size": 156,
+      "tu": "src/GameSource/Network/Managers/BrnNetworkPlayerStatsResults.cpp",
+      "evidence": "Unnamed export beside the named overload GetPlayerStats(const char*) 0x82546CF8: asserts 'lPlayerID != CgsNetwork::K_INVALID_PLAYER_ID' at ../../../GameSource/Network/Managers/BrnNetworkPlayerStatsResults.cpp:176 and scans the record cache by player id. DWARF declares both overloads (DecFIGS BrnNetworkPlayerStatsResults.cpp dump, GetPlayerStats(NetworkPlayerID) and GetPlayerStats(const char*)). Our GetPlayerStats(NetworkPlayerID) (?GetPlayerStats@NetworkPlayerStatsResults@BrnNetwork@@QAAPAVNetworkPlayerStats@2@H@Z) is compare()-exact against this address."
     }
   },
   "native_leaf_functions": {
@@ -38505,6 +38616,14 @@
       "caller": "0x828997D0",
       "call_site": "0x82899844",
       "evidence": "Frameless 92-byte leaf in an export hole, ending with a tail branch at 0x82883498 before 0x828834A0; CgsNetwork::NetworkManager::Destruct 0x828997D0 calls it at 0x82899844. Unnamed export hole. Our HostMigrationManager::Destruct (meFrameRate = -1; the three keep-alive timeouts = KU16_INVALID_FRAME; ClearAllCallbacks, CgsHostMigrationManager.cpp:1348, inlined; HostMigrationDebugComponent::Destruct, DWARF CgsNetworkHostMigrationDebugComponent.cpp:62, inlined, which ends in CgsDev::DebugComponent::Destruct) is word-identical at the address. Caller: CgsNetwork::NetworkManager::Destruct 0x828997D0 calls 0x82883440 at 0x82899844 with r3 = this + 0x2578 (mHostMigrationManager), where ours calls HostMigrationManager::Destruct; NetworkManager::Destruct is exact in CgsNetworkUnity once the callee is named."
+    },
+    "0x828309F8": {
+      "symbol": "CgsDev::DebugComponent::SetSelectCallback",
+      "size": 20,
+      "caller": "0x82585A88",
+      "call_site": "0x82585D10",
+      "source": "src/GameShared/GameClasses/Development/DebugSystem/Core/CgsDebugComponent.cpp",
+      "evidence": "Export hole (ppcdis): loads the debug singleton (0x83018EF4) +0x140, adds 0x110 (the VariableManager) and tail-branches to CgsDev::DebugUI::VariableManager::SetSelectCallback 0x82830478. It sits between CgsDev::DebugComponent::SetChangeCallback 0x828309E0 and CgsDev::DebugComponent::UnregisterVariable 0x82830A10, which have the same 20-byte shape and forward to the VariableManager method of their name, the order of CgsDebugComponent.cpp (SetChangeCallback, SetSelectCallback, UnregisterVariable). ARTIST callers call it where our source calls DebugComponent::SetSelectCallback: ScoreboardDebugComponent::HandleScoreboardHeadingEvent 0x82585D10 / 0x82585EC0 / 0x8258607C (the select callback of each registered heading); the state lane notes the same call in ProgressionDebugComponent::OnActivate. Our body is 56 B (GetUI() not inlined; core lane), so it pairs but does not match yet. Extent: five words (lis/lwz/lwz/addi/b 0x82830478) then a zero pad word before 0x82830A10."
     }
   },
   "sdk_archive_splits": {
